@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<html>
+<head>
+  <title>Order Template</title>
+</head>
+<body>
+  <h1>Order</h1>
+    {% block content %}
+      <table>
+        {% if booking %}
+        <tr>
+          <td>
+            Date:
+          </td>
+          <td>
+            <p>{{ booking.date }}</p>
+          </td>
+        <tr>
+        {% endif %}
+      </table>
+    {% endblock %}
+</body>
+</html>

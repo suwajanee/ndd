@@ -1,0 +1,96 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>Demo</title>
+        <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
+
+        <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        </style>
+
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
+        </div>
+        <form name="booking-filter" method="POST" action="{% url 'booking-table' %}">
+            {% csrf_token %}
+            <p>Date: {{ form.date }}</p>
+        </form>
+        <table>
+            <th rowspan="2">Time</th>
+            <th rowspan="2">Date</th>
+            <th rowspan="2">Principal</th>
+
+            <th colspan="6">FORWARD TRIP</th>
+
+            <th rowspan="2">CONTAINER NO</th>
+            <th rowspan="2">SEAL NO</th>
+
+            <th colspan="5">BACKWARD TRIP</th>
+
+            <th rowspan="2">REMARK</th>
+            <th rowspan="2">สถานที่บรรจุ</th>
+            <th rowspan="2">เลขที่ใบงาน</th>
+            <th rowspan="2">PICK UP</th>
+            <th rowspan="2">FACTORY</th>
+            <th rowspan="2">RETURN</th>
+            <th rowspan="2">Print</th>
+            <tr>
+                <th>SHIPPER</th>
+                <th>AGENT</th>
+                <th>SIZE</th>
+                <th>BOOKING</th>
+                <th>TR</th>
+                <th>FM</th>
+            
+                <th>TR</th>
+                <th>TO</th>
+                <th>VESSEL</th>
+                <th>PORT</th>
+                <th>CLOSING</th>
+            </tr>
+
+        {% block content %}
+        {% for booking in bookings %}
+            <tr>
+                {% if booking.time %}
+                    <td>{{ booking.time }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                <td>{{ booking.date }}</td>
+                <td>{{ booking.principal }}</td>
+                <td>{{ booking.shipper }}</td>
+                <td>{{ booking.agent }}</td>
+                <td>{{ booking.size }}</td>
+                <td>{{ booking.booking_no }}</td>
+                <td>{{ booking.fw_tr }}</td>
+                <td>{{ booking.fw_fm }}</td>
+                <td>{{ booking.container_no }}</td>
+                <td>{{ booking.seal_no }}</td>
+                <td>{{ booking.bw_tr }}</td>
+                <td>{{ booking.bw_to }}</td>
+                <td>{{ booking.vessel }}</td>
+                <td>{{ booking.port }}</td>
+                <td>{{ booking.closing_time }}</td>
+                <td>{{ booking.remark }}</td>
+                <td>{{ booking.loading }}</td>
+                <td>{{ booking.work_id }}</td>
+                <td>{{ booking.pickup_date }}</td>
+                <td>{{ booking.factory_date }}</td>
+                <td>{{ booking.return_date }}</td>
+
+                <td><a href="{% url 'booking-print' pk=booking.pk %}">print</a></td>
+            </tr>
+        {% endfor %}
+        {% endblock %}
+        </table>
+    </body>
+</html>
