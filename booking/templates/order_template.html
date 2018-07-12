@@ -1,26 +1,145 @@
 {% load staticfiles %}
 
+
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
   <title>Order Template</title>
+  
+  <link rel="stylesheet" href="{{ base_dir }}\..\static\style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type='text/css'>
+    @font-face {
+      font-family: THSarabunNew; 
+      src: url("{{ base_dir }}\..\static\fonts\thsarabunnew-webfont.ttf"); 
+    } 
+
+    html {
+    font-family: THSarabunNew;
+    }
+
+    
+    @page {
+      size: a4 portrait;
+      @frame header_frame {           /* Static Frame */
+        -pdf-frame-content: header_content;
+        left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+      }
+      @frame content_frame {          /* Content Frame */
+      -pdf-frame-content: left_content;
+        left: 30pt; width: 267.5pt; top: 90pt; height: 632pt;
+      }
+      @frame content_frame {          /* Content Frame */
+      -pdf-frame-content: right_content;
+      left: 297.5pt; width: 267.5pt; top: 90pt; height: 632pt;
+      }
+      @frame footer_frame {           /* Another static Frame */
+        -pdf-frame-content: footer_content;
+        left: 50pt; width: 100%; top: 772pt; height: 20pt;
+      }
+    }
+    
+    
+
+</style>
+
 </head>
+
 <body>
-  <h1>Order</h1>
+  <h1>Orderrrr</h1>
 
     {% block content %}
-    <table>
     {% if booking %}
-    <tr>
-      <td>
-        Date:
-      </td>
-      <td>
-        <p>{{ booking.date }}</p>
-      </td>
-    </tr>
-    {% endif %}
-    </table>
-    {% endblock %}
+
+    <div id="header_content">Lyrics-R-Us</div>
+    <!-- HTML Content -->
+    <div id="left_content">
+        <table>
+            
+            <tr>
+              <td style="white-space: nowrap; ">วันที่</td>
+              <td colspan=3 rowspan=2><p>{{ booking.date }}</p></td>
+            </tr>
+            <tr>
+              <td>DATE:</td>
+              <!-- <td colspan=3 class="dots"><p>................................</p></td> -->
+            </tr>
+            <tr>
+              <td>พนักงานขับรถชื่อ</td>
+              <td colspan=3></td>
+            </tr>
+            <tr>
+              <td>DRIVER NAME</td>
+              <td colspan=3><p>................................</p></td>
+            </tr>
+            <tr>
+              <td>ทะเบียน / เบอร์รถ</td>
+              <td colspan=3></td>
+            </tr>
+            <tr>
+              <td>TRUCK NO.</td>
+              <td colspan=3><p>................................</p></td>
+            </tr>
+            <tr>
+                <td><i class="fa fa-square-o"></i></td>
+                <td>ไปกลับ(Sameday Return)</td>
+                <td><i class="fa fa-square-o"></i></td>
+                <td>เที่ยวเดียว (Single Trip)</td>
+              </tr>
+            {% endif %}
+            </table>
+    </div>
+
+    <!-- HTML Content -->
+    <div id="right_content">
+        <table>
+            {% if booking %}
+            <tr>
+                <td></td><td></td>
+              <td>เลขที่</td>
+              <td><p>{{ booking.work_id }}</p></td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td></td><td></td>
+              <td>ราคา</td>
+              <td>................................</td>
+            </tr>
+            <tr>
+              <td>เบอร์หาง</td>
+              <td></td>
+              <td>Gate รับตู้</td>
+              <td><p>................................</p></td>
+            </tr>
+            <tr>
+              <td>CHASSIS NO.</td>
+              <td><p>................................</p></td>
+              <td></td><td></td>
+            </tr>
+            <tr>
+              <td>ทะเบียน</td>
+              <td></td>
+              <td>Gate คืนตู้</td>
+              <td><p>................................</p></td>
+            </tr>
+            <tr>
+              <td>Shipment</td>
+              <td></td>
+              <td>อื่น ๆ</td>
+              <td><p>................................</p></td>
+            </tr>
+            <tr>
+              <td>TMP.</td>
+              <td></td><td></td><td></td>
+            </tr>
+            
+            </table>
+        </div>
+        {% endif %}
+        {% endblock %}
+
 
 </body>
 </html>

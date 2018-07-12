@@ -3,15 +3,13 @@
 <html>
     <head>
         <title>Demo</title>
-        <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <style>
-        table, th, td {
-            border: 1px solid black;
-        }
+            tbody tr:hover {
+                background: yellow;
+            }   
         </style>
 
     </head>
@@ -24,6 +22,7 @@
             <p>Date: {{ form.date }}</p>
         </form>
         <table>
+            <thead> 
             <th rowspan="2">Time</th>
             <th rowspan="2">Date</th>
             <th rowspan="2">Principal</th>
@@ -56,7 +55,8 @@
                 <th>PORT</th>
                 <th>CLOSING</th>
             </tr>
-
+        </thead> 
+        <tbody> 
         {% block content %}
         {% for booking in bookings %}
             <tr>
@@ -91,6 +91,7 @@
             </tr>
         {% endfor %}
         {% endblock %}
+        </tbody> 
         </table>
     </body>
 </html>
