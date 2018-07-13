@@ -3,17 +3,18 @@
 <html>
     <head>
         <title>Demo</title>
-        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <link rel="stylesheet" href="{% static 'style-table.css' %}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
         <style>
             tbody tr:hover {
                 background: yellow;
             }   
+            
         </style>
 
     </head>
-    <body>
+    <body style="overflow-x:scroll; width:100%;">
         <div class="page-header">
             <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
         </div>
@@ -21,7 +22,8 @@
             {% csrf_token %}
             <p>Date: {{ form.date }}</p>
         </form>
-        <table>
+        <div>
+        <table class="booking-table">
             <thead> 
             <th rowspan="2">Time</th>
             <th rowspan="2">Date</th>
@@ -65,27 +67,27 @@
                 {% else %}
                     <td>-</td>
                 {% endif %}
-                <td>{{ booking.date }}</td>
-                <td>{{ booking.principal }}</td>
-                <td>{{ booking.shipper }}</td>
-                <td>{{ booking.agent }}</td>
-                <td>{{ booking.size }}</td>
-                <td>{{ booking.booking_no }}</td>
-                <td>{{ booking.fw_tr }}</td>
-                <td>{{ booking.fw_fm }}</td>
-                <td>{{ booking.container_no }}</td>
-                <td>{{ booking.seal_no }}</td>
-                <td>{{ booking.bw_tr }}</td>
-                <td>{{ booking.bw_to }}</td>
-                <td>{{ booking.vessel }}</td>
-                <td>{{ booking.port }}</td>
-                <td>{{ booking.closing_time }}</td>
-                <td>{{ booking.remark }}</td>
-                <td>{{ booking.loading }}</td>
-                <td>{{ booking.work_id }}</td>
-                <td>{{ booking.pickup_date }}</td>
-                <td>{{ booking.factory_date }}</td>
-                <td>{{ booking.return_date }}</td>
+                <td class="nowrap">{{ booking.date }}</td>
+                <td class="nowrap">{{ booking.principal }}</td>
+                <td class="nowrap">{{ booking.shipper }}</td>
+                <td class="nowrap">{{ booking.agent }}</td>
+                <td class="nowrap">{{ booking.size }}</td>
+                <td class="nowrap">{{ booking.booking_no }}</td>
+                <td class="nowrap">{{ booking.fw_tr }}</td>
+                <td class="nowrap">{{ booking.fw_fm }}</td>
+                <td class="nowrap">{{ booking.container_no }}</td>
+                <td class="nowrap">{{ booking.seal_no }}</td>
+                <td class="nowrap">{{ booking.bw_tr }}</td>
+                <td class="nowrap">{{ booking.bw_to }}</td>
+                <td class="nowrap">{{ booking.vessel }}</td>
+                <td class="nowrap">{{ booking.port }}</td>
+                <td class="nowrap">{{ booking.closing_time }}</td>
+                <td><div class="remark">{{ booking.remark }}</div></td>
+                <td class="nowrap">{{ booking.loading }}</td>
+                <td class="nowrap">{{ booking.work_id }}</td>
+                <td class="nowrap">{{ booking.pickup_date }}</td>
+                <td class="nowrap">{{ booking.factory_date }}</td>
+                <td class="nowrap">{{ booking.return_date }}</td>
 
                 <td><a href="{% url 'booking-print' pk=booking.pk %}">print</a></td>
             </tr>
@@ -93,5 +95,6 @@
         {% endblock %}
         </tbody> 
         </table>
+        </div>
     </body>
 </html>
