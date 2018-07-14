@@ -3,18 +3,28 @@
 <html>
     <head>
         <title>Demo</title>
-        <link rel="stylesheet" href="{% static 'style-table.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
-        <style>
-            tbody tr:hover {
-                background: yellow;
-            }   
-            
-        </style>
 
+        <script>
+window.onload = function(){
+  var tableCont = document.querySelector('#table-cont')
+  /**
+   * scroll handle
+   * @param {event} e -- scroll event
+   */
+  function scrollHandle (e){
+    var scrollTop = this.scrollTop;
+    this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+  }
+  
+  tableCont.addEventListener('scroll',scrollHandle)
+}
+        </script>
     </head>
-    <body style="overflow-x:scroll; width:100%;">
+    <!-- <body style="overflow-x:scroll;"> -->
+    <body style="overflow-x:auto;">
         <div class="page-header">
             <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
         </div>
@@ -22,9 +32,10 @@
             {% csrf_token %}
             <p>Date: {{ form.date }}</p>
         </form>
-        <div>
-        <table class="booking-table">
+        <div class='table-cont' id='table-cont'>
+        <table>
             <thead> 
+            <th rowspan="2">Print</th>
             <th rowspan="2">Time</th>
             <th rowspan="2">Date</th>
             <th rowspan="2">Principal</th>
@@ -42,7 +53,6 @@
             <th rowspan="2">PICK UP</th>
             <th rowspan="2">FACTORY</th>
             <th rowspan="2">RETURN</th>
-            <th rowspan="2">Print</th>
             <tr>
                 <th>SHIPPER</th>
                 <th>AGENT</th>
@@ -62,10 +72,12 @@
         {% block content %}
         {% for booking in bookings %}
             <tr>
+                <td><a href="{% url 'booking-print' pk=booking.pk %}">print</a></td>
+
                 {% if booking.time %}
-                    <td>{{ booking.time }}</td>
+                    <td class="nowrap">{{ booking.time }}</td>
                 {% else %}
-                    <td>-</td>
+                    <td class="nowrap">-</td>
                 {% endif %}
                 <td class="nowrap">{{ booking.date }}</td>
                 <td class="nowrap">{{ booking.principal }}</td>
@@ -88,8 +100,6 @@
                 <td class="nowrap">{{ booking.pickup_date }}</td>
                 <td class="nowrap">{{ booking.factory_date }}</td>
                 <td class="nowrap">{{ booking.return_date }}</td>
-
-                <td><a href="{% url 'booking-print' pk=booking.pk %}">print</a></td>
             </tr>
         {% endfor %}
         {% endblock %}

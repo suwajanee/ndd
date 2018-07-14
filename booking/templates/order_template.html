@@ -7,7 +7,7 @@
 
   <title>Order Template</title>
   
-  <link rel="stylesheet" href="{{ base_dir }}\..\static\style-pdf.css" />
+  <link rel="stylesheet" href="{{ base_dir }}\..\static\css\style-pdf.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type='text/css'>
     @font-face {
@@ -19,7 +19,6 @@
     font-family: THSarabunNew;
     }
 
-
     @page {
       /* size: a4 portrait; */
       size: 8.5in 11in;
@@ -30,15 +29,15 @@
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: left_content;
-        left: 0.5in; width: 3.75in; top: 105pt; height: auto;
+        left: 0.5in; width: 3.75in; top: 100pt; height: auto;
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: right_content;
-      left: 4.25in; width: 3.75in; top: 105pt; height: auto; 
+      left: 4.25in; width: 3.75in; top: 100pt; height: auto; 
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: table_content;
-      left: 0.5in; width: 7.5in; top: 235pt; height: auto; 
+      left: 0.5in; width: 7.5in; top: 230pt; height: auto; 
       }
       @frame footer_frame {           /* Another static Frame */
         -pdf-frame-content: footer_content;
@@ -46,8 +45,7 @@
       }
     }
 
-
-</style>
+  </style>
 
 </head>
 
@@ -125,7 +123,7 @@
             </tr>
             <tr class="small">
               <td>CHASSIS NO.</td>
-              <td class="center">.......................</td>
+              <td class="center">..............................</td>
               <td></td><td colspan=2></td>
             </tr>
             <tr class="big">

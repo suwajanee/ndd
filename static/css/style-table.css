@@ -1,0 +1,49 @@
+@import url(../fonts/thsarabunnew.css);
+
+body{ 
+    font-family: THSarabunNew, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+table, th, td {
+    border: 1px solid blue;
+  }
+
+th, td {
+    padding: 10px;
+}
+  
+tbody tr:hover {
+    background: #ffff99;
+}   
+
+.remark {
+    /* table-layout: fixed; */
+    width: 100%;
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.remark:hover {
+    overflow: visible;
+    /* text-overflow: ellipsis; */
+    white-space: nowrap;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+
+.table-cont{
+    /**make table can scroll**/
+    overflow: auto;
+    box-shadow: 0 0 1px 3px #ddd;
+  }
+  thead{
+    background-color:white;
+  }
