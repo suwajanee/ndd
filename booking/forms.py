@@ -10,3 +10,4 @@ class BookingFilterForm(forms.Form):
 			}
 		),
 	)
+	

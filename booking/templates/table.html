@@ -4,27 +4,13 @@
     <head>
         <title>Demo</title>
         <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
-
-        <script>
-window.onload = function(){
-  var tableCont = document.querySelector('#table-cont')
-  /**
-   * scroll handle
-   * @param {event} e -- scroll event
-   */
-  function scrollHandle (e){
-    var scrollTop = this.scrollTop;
-    this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
-  }
-  
-  tableCont.addEventListener('scroll',scrollHandle)
-}
-        </script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="{% static 'js/fixed-header.js' %}"></script>
+        <script src="{% static 'js/clickable-dropdown.js' %}"></script>
     </head>
-    <!-- <body style="overflow-x:scroll;"> -->
     <body style="overflow-x:auto;">
+    <!-- <body style="overflow:auto;"> -->
+    <!-- <body> -->
         <div class="page-header">
             <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
         </div>
@@ -32,9 +18,11 @@ window.onload = function(){
             {% csrf_token %}
             <p>Date: {{ form.date }}</p>
         </form>
+        {% if bookings %}
         <div class='table-cont' id='table-cont'>
         <table>
-            <thead> 
+            <thead class="nowrap"> 
+            <th rowspan="2"></th>
             <th rowspan="2">Print</th>
             <th rowspan="2">Time</th>
             <th rowspan="2">Date</th>
@@ -53,6 +41,9 @@ window.onload = function(){
             <th rowspan="2">PICK UP</th>
             <th rowspan="2">FACTORY</th>
             <th rowspan="2">RETURN</th>
+            <th colspan="2">ลานรับตู้</th>
+            <th colspan="4">Factory</th>
+            <th colspan="2">ลานส่งตู้</th>
             <tr>
                 <th>SHIPPER</th>
                 <th>AGENT</th>
@@ -66,45 +57,78 @@ window.onload = function(){
                 <th>VESSEL</th>
                 <th>PORT</th>
                 <th>CLOSING</th>
+
+                <th>In</th>
+                <th>Out</th>
+
+                <th>In</th>
+                <th>Start</th>
+                <th>Finish</th>
+                <th>Out</th>
+
+                <th>In</th>
+                <th>Out</th>
             </tr>
         </thead> 
         <tbody> 
         {% block content %}
-        {% for booking in bookings %}
-            <tr>
-                <td><a href="{% url 'booking-print' pk=booking.pk %}">print</a></td>
+            {% for booking in bookings %}
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button onclick="myFunction({{ booking.pk }})" class="dropbtn"><i class="material-icons">more_horiz</i></button>
+                            <div id="myDropdown{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
+                                <a href=".">Edit</a>
+                                <a href=".">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <td onclick="document.location = '{% url 'booking-print' pk=booking.pk %}';"><a href="{% url 'booking-print' pk=booking.pk %}"><i class="material-icons">print</i></a></td>
 
-                {% if booking.time %}
-                    <td class="nowrap">{{ booking.time }}</td>
-                {% else %}
-                    <td class="nowrap">-</td>
-                {% endif %}
-                <td class="nowrap">{{ booking.date }}</td>
-                <td class="nowrap">{{ booking.principal }}</td>
-                <td class="nowrap">{{ booking.shipper }}</td>
-                <td class="nowrap">{{ booking.agent }}</td>
-                <td class="nowrap">{{ booking.size }}</td>
-                <td class="nowrap">{{ booking.booking_no }}</td>
-                <td class="nowrap">{{ booking.fw_tr }}</td>
-                <td class="nowrap">{{ booking.fw_fm }}</td>
-                <td class="nowrap">{{ booking.container_no }}</td>
-                <td class="nowrap">{{ booking.seal_no }}</td>
-                <td class="nowrap">{{ booking.bw_tr }}</td>
-                <td class="nowrap">{{ booking.bw_to }}</td>
-                <td class="nowrap">{{ booking.vessel }}</td>
-                <td class="nowrap">{{ booking.port }}</td>
-                <td class="nowrap">{{ booking.closing_time }}</td>
-                <td><div class="remark">{{ booking.remark }}</div></td>
-                <td class="nowrap">{{ booking.loading }}</td>
-                <td class="nowrap">{{ booking.work_id }}</td>
-                <td class="nowrap">{{ booking.pickup_date }}</td>
-                <td class="nowrap">{{ booking.factory_date }}</td>
-                <td class="nowrap">{{ booking.return_date }}</td>
-            </tr>
-        {% endfor %}
+                    {% if booking.time %}
+                        <td class="nowrap">{{ booking.time }}</td>
+                    {% else %}
+                        <td class="nowrap">-</td>
+                    {% endif %}
+                    
+                    <td class="nowrap">{{ booking.date }}</td>
+                    <td class="nowrap">{{ booking.principal }}</td>
+                    <td class="nowrap">{{ booking.shipper }}</td>
+                    <td class="nowrap">{{ booking.agent }}</td>
+                    <td class="nowrap">{{ booking.size }}</td>
+                    <td style="background-color: {{ booking.booking_color }}" class="nowrap">{{ booking.booking_no }}</td>
+                    <td class="nowrap">{{ booking.fw_tr }}</td>
+                    <td class="nowrap">{{ booking.fw_fm }}</td>
+                    <td class="nowrap">{{ booking.container_no }}</td>
+                    <td class="nowrap">{{ booking.seal_no }}</td>
+                    <td class="nowrap">{{ booking.bw_tr }}</td>
+                    <td class="nowrap">{{ booking.bw_to }}</td>
+                    <td class="nowrap">{{ booking.vessel }}</td>
+                    <td class="nowrap">{{ booking.port }}</td>
+                    <td class="nowrap">{{ booking.closing_time }}</td>
+                    <td><div class="remark">{{ booking.remark }}</div></td>
+                    <td class="nowrap">{{ booking.loading }}</td>
+                    <td class="nowrap">{{ booking.work_id }}</td>
+                    <td class="nowrap">{{ booking.pickup_date }}</td>
+                    <td class="nowrap">{{ booking.factory_date }}</td>
+                    <td class="nowrap">{{ booking.return_date }}</td>
+                    <td class="nowrap">{{ booking.pickup_in_time }}</td>
+                    <td class="nowrap">{{ booking.pickup_out_time }}</td>
+                    <td class="nowrap">{{ booking.factory_in_time }}</td>
+                    <td class="nowrap">{{ booking.factory_load_start_time }}</td>
+                    <td class="nowrap">{{ booking.factory_load_finish_time }}</td>
+                    <td class="nowrap">{{ booking.factory_out_finish }}</td>
+                    <td class="nowrap">{{ booking.return_in_time }}</td>
+                    <td class="nowrap">{{ booking.return_out_time }}</td>
+                </tr>
+            {% endfor %}
         {% endblock %}
         </tbody> 
         </table>
         </div>
+        {% else %}
+            <h1> NOOO </h1>
+        {% endif %}
     </body>
 </html>

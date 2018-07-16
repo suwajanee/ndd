@@ -19,7 +19,7 @@ class BookingPrintView(TemplateView):
         
     def get(self, request, pk):
         booking = get_object_or_404(Booking, pk=pk)
-        base_dir = os.path.dirname(os.path.dirname(__file__)) 
+        base_dir = os.path.dirname(os.path.dirname(__file__))
         return self.render(self.template_name, {'booking': booking, 'base_dir': base_dir})
 
     def render(self, path, params):

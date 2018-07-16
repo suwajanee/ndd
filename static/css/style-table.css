@@ -2,22 +2,31 @@
 
 body{ 
     font-family: THSarabunNew, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
+    /* width: 100%; */
 }
 
 table, th, td {
+    font-size: 12px;
     border: 1px solid blue;
+    text-align: center;    
   }
 
 th, td {
-    padding: 10px;
+    padding: 5px;
+    min-width: 50px;
 }
   
 tbody tr:hover {
     background: #ffff99;
 }   
 
+.nowrap {
+    white-space: nowrap;
+}
+
+/* Hide too long text in Remark field */
 .remark {
     /* table-layout: fixed; */
     width: 100%;
@@ -28,22 +37,65 @@ tbody tr:hover {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;  
 }
-.remark:hover {
+.remark:active {
     overflow: visible;
-    /* text-overflow: ellipsis; */
+    /* text-overflow: inherit; */
     white-space: nowrap;
 }
 
-.nowrap {
-    white-space: nowrap;
-}
-
-
+/* Fix header table when scroll */
 .table-cont{
     /**make table can scroll**/
-    overflow: auto;
+    /* max-height: 200px; */
+    overflow-y: auto;
+    /* overflow-x: hidden; */
     box-shadow: 0 0 1px 3px #ddd;
-  }
-  thead{
+}
+
+thead{
     background-color:white;
-  }
+}
+
+
+/* Clickable dropdown */
+.dropbtn {
+    background-color: #c0c0c0;
+    color: white;
+    padding: 5px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.dropbtn:hover {
+    background-color: #ddd;
+}
+
+/* .dropdown {
+    position: relative;
+    display: inline-block;
+} */
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 120px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
+
+.show {display: block;}

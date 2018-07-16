@@ -19,31 +19,6 @@
     font-family: THSarabunNew;
     }
 
-    @page {
-      /* size: a4 portrait; */
-      size: 8.5in 11in;
-      margin: 30pt;
-      @frame header_frame {           /* Static Frame */
-        -pdf-frame-content: header_content;
-        left: 0.5in; width: 7.5in; top: 10pt; height: auto;
-      }
-      @frame content_frame {          /* Content Frame */
-      -pdf-frame-content: left_content;
-        left: 0.5in; width: 3.75in; top: 100pt; height: auto;
-      }
-      @frame content_frame {          /* Content Frame */
-      -pdf-frame-content: right_content;
-      left: 4.25in; width: 3.75in; top: 100pt; height: auto; 
-      }
-      @frame content_frame {          /* Content Frame */
-      -pdf-frame-content: table_content;
-      left: 0.5in; width: 7.5in; top: 230pt; height: auto; 
-      }
-      @frame footer_frame {           /* Another static Frame */
-        -pdf-frame-content: footer_content;
-        left: 50pt; width: 100%; top: 772pt; height: 20pt;
-      }
-    }
 
   </style>
 
@@ -329,15 +304,15 @@
               <td colspan=4>Verified to recive container in good condition and seal in tact</td>
             </tr>
             <tr>
-              <td colspan=8 style="height:40px;"></td>
+              <td colspan=8 style="height:30px;"></td>
             </tr>
-            <tr class="text-center">
+            <tr class="text-center text-footer">
               <td colspan=8>ลายเซ็นผู้ว่าจ้างหรือตัวแทน</td>
             </tr>
-            <tr class="text-center">
+            <tr class="small text-center">
               <td colspan=8>AGENT/SHIPPER/CONSIGNEE 'S SIGNATURE</td>
             </tr>
-            <tr class="big text-right">
+            <tr class="text-right text-footer">
               <td colspan=3>วันที่</td>
               <td colspan=5></td>
             </tr>
