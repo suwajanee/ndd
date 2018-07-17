@@ -15,12 +15,16 @@ import os
 
 class BookingPrintView(TemplateView):
     
-    template_name = 'order_template.html'
-        
-    def get(self, request, pk):
+    def get(self, request, pk, template):
+        if template == 'forward':
+            template_name = 'fw_template.html'
+        elif template == 'backward':
+            template_name = 'bw_template.html'
+        else:
+            template_name = 'full_template.html'
         booking = get_object_or_404(Booking, pk=pk)
         base_dir = os.path.dirname(os.path.dirname(__file__))
-        return self.render(self.template_name, {'booking': booking, 'base_dir': base_dir})
+        return self.render(template_name, {'booking': booking, 'base_dir': base_dir})
 
     def render(self, path, params):
         template = get_template(path)

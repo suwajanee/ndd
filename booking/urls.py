@@ -6,8 +6,7 @@ from .views.print_view import BookingPrintView
 
 urlpatterns = [
     url(r'^$', BookingTableView.get_table, name='booking-table'),
-    url(r'^id/(?P<pk>\d+)/$', BookingPrintView.as_view(), name='booking-print'),
-
+    url(r'^id/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
 ]
 
 

@@ -57,19 +57,19 @@ thead{
 }
 
 
-/* Clickable dropdown */
+/* Clickable dropdown edit/delete*/
 .dropbtn {
-    background-color: #c0c0c0;
-    color: white;
-    padding: 5px 12px;
+    background-color: #ddd;
+    /* color: white; */
+    /* padding: 5px 12px;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 8px; */
     cursor: pointer;
 }
 
 .dropbtn:hover {
-    background-color: #ddd;
+    background-color: gray;
 }
 
 /* .dropdown {
@@ -94,7 +94,7 @@ thead{
     display: block;
 }
 
-.dropdown a:hover {
+.dropdown-content a:hover {
     background-color: #ddd;
 }
 

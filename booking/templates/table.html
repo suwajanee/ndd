@@ -6,7 +6,8 @@
         <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="{% static 'js/fixed-header.js' %}"></script>
-        <script src="{% static 'js/clickable-dropdown.js' %}"></script>
+        <script src="{% static 'js/dropdown-edit.js' %}"></script>
+        <script src="{% static 'js/dropdown-print.js' %}"></script>
     </head>
     <body style="overflow-x:auto;">
     <!-- <body style="overflow:auto;"> -->
@@ -74,17 +75,23 @@
         {% block content %}
             {% for booking in bookings %}
                 <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button onclick="myFunction({{ booking.pk }})" class="dropbtn"><i class="material-icons">more_horiz</i></button>
-                            <div id="myDropdown{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
-                                <a href=".">Edit</a>
-                                <a href=".">Delete</a>
-                            </div>
+                    <td onclick="dropdownEdit({{ booking.pk }})" class="dropbtn">
+                        <i class="material-icons">more_horiz</i></button>
+                        <div id="dropdownEdit{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
+                            <a href=".">Edit</a>
+                            <a href=".">Delete</a> 
                         </div>
                     </td>
                     
-                    <td onclick="document.location = '{% url 'booking-print' pk=booking.pk %}';"><a href="{% url 'booking-print' pk=booking.pk %}"><i class="material-icons">print</i></a></td>
+                    <!-- <td onclick="document.location = '{% url 'booking-print' pk=booking.pk template='full' %}';"><a href="{% url 'booking-print' pk=booking.pk template='full' %}"><i class="material-icons">print</i></a></td> -->
+                    <td onclick="dropdownPrint({{ booking.pk }})" class="dropbtn">
+                        <i class="material-icons">print</i>
+                        <div id="dropdownPrint{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
+                            <a href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
+                            <a href="{% url 'booking-print' pk=booking.pk template='forward' %}">Forward</a>
+                            <a href="{% url 'booking-print' pk=booking.pk template='backward' %}">Backward</a>
+                        </div>
+                    </td>
 
                     {% if booking.time %}
                         <td class="nowrap">{{ booking.time }}</td>

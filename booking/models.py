@@ -36,13 +36,6 @@ class Booking(models.Model):
     return_in_time = models.CharField(max_length=20, blank=True, default='')
     return_out_time = models.CharField(max_length=20, blank=True, default='')
 
-    TEMPLATE_CHOICES = (
-        ('full', 'Full'),
-        ('forward', 'Forward'),
-        ('backward', 'Backward'),
-    )
-    template_pdf = models.CharField(max_length=10, choices=TEMPLATE_CHOICES, default='full')
-
     ADDRESS_CHOICES = (
         ('shipper', 'Shipper'),
         ('other', 'Other'),
