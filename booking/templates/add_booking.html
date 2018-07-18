@@ -1,0 +1,121 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>Demo</title>
+        <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    </head>
+    <body>
+{% block content %}
+<form method="POST" class="add-booking-form">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td> TIME :</td>
+            <td> {{ form.time }} </td>
+        </tr>
+        <tr>
+            <td> DATE :</td>
+            <td> {{ form.date }} </td>
+        </tr>
+    
+        <form method="POST">
+            {% csrf_token %}
+            <tr>
+                <td> PRINCIPAL :</td>
+                <td>
+                    <select id="id_principal" name="principal" class="add-edit-form" onchange="this.form.submit();" >
+                        <option value=""> -------- </option>
+                        {% for p in principals %}
+                            {% ifequal p.pk|stringformat:"s" principal %}
+                                <option value="{{ p.pk }}" selected="selected"> {{ p.name }} </option>
+                            {% else %}
+                                <option value="{{ p.pk }}"> {{ p.name }} </option>
+                            {% endifequal %}
+                        {% endfor %}
+                    </select>
+                </td>  
+            </tr>
+            <tr>
+                <td> SHIPPER :</td>
+                <td>
+                    <select id="id_shipper" name="shipper" class="add-edit-form">
+                        <option value=""> -------- </option>
+                        {% for s in shippers %}
+                            <option value="{{ s.name }}"> {{ s.name }} </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        </form>
+
+        <tr>
+            <td> AGENT :</td>
+            <td> {{ form.agent }} </td>
+        </tr>
+        <tr>
+            <td> SIZE :</td>
+            <td> {{ form.size }} </td>
+        </tr>
+        <tr>
+            <td> BOOKING NO. :</td>
+            <td> {{ form.booking_no }} </td>
+        </tr>
+        <tr>
+            <td> COLOR :</td>
+            <td> {{ form.booking_color }} </td>
+        </tr>
+        <tr>
+            <td> CONTAINER NO. :</td>
+            <td> {{ form.container_no }} </td>
+        </tr>
+        <tr>
+            <td> SEAL NO. :</td>
+            <td> {{ form.seal_no }} </td>
+        </tr>
+</table>
+<table>
+    <thead>
+        <th colspan=2>FORWARD TRIP</th>
+        <th colspan=5>BACKWARD TRIP</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>TR</td>
+            <td>FM</td>
+            <td>TR</td>
+            <td>TO</td>
+            <td>VESSEL</td>
+            <td>PORT</td>
+            <td>CLOSING</td>
+        </tr>
+        <tr>
+            <td>{{ form.fw_tr }}</td>
+            <td>{{ form.fw_fm }}</td>
+            <td>{{ form.bw_tr }}</td>
+            <td>{{ form.bw_to }}</td>
+            <td>{{ form.vessel }}</td>
+            <td>{{ form.port }}</td>
+            <td>{{ form.closing_time }}</td>
+        </tr>
+    </tbody>
+
+</table>
+<table>
+    <tr>
+        <td> REMARK : </td>
+        <td>{{ form.remark }}</td>
+    </tr>
+    <tr>
+        <td> สถานที่บรรจุ : </td>
+        <td>{{ form.loading }}</td>
+    </tr>
+
+</table>
+</form>
+
+{% endblock %}
+
+    </body>

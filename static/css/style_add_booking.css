@@ -1,0 +1,30 @@
+@import url(../fonts/thsarabunnew.css);
+
+body{ 
+    font-family: THSarabunNew, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    /* width: 100%; */
+}
+
+table, th, td {
+    font-size: 12px;
+    border: 1px solid red;
+    text-align: center;    
+  }
+
+th, td {
+    padding: 5px;
+    min-width: 50px;
+}
+
+.add-edit-form {
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+option {
+    height: 40px;
+}

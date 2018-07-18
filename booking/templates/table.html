@@ -8,16 +8,25 @@
         <script src="{% static 'js/fixed-header.js' %}"></script>
         <script src="{% static 'js/dropdown-edit.js' %}"></script>
         <script src="{% static 'js/dropdown-print.js' %}"></script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        
     </head>
     <body style="overflow-x:auto;">
     <!-- <body style="overflow:auto;"> -->
     <!-- <body> -->
+            <div class="add-button">
+                    <a href="{% url 'booking-add' %}"><i class="material-icons add-icon-size">add_circle</i></a>
+                </div>
         <div class="page-header">
             <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
         </div>
+        
         <form name="booking-filter" method="POST" action="{% url 'booking-table' %}">
             {% csrf_token %}
-            <p>Date: {{ form.date }}</p>
+            <table>
+                {{ form.as_table }}
+            </table>
         </form>
         {% if bookings %}
         <div class='table-cont' id='table-cont'>

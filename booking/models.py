@@ -1,12 +1,15 @@
 from django.db import models
 from datetime import datetime
+# from customer.models import Principal, Shipper
+from customer.models import Principal, Shipper
 
 # Create your models here.
+
 class Booking(models.Model):
     time = models.CharField(max_length=50, blank=True, default='')
     date = models.DateField(default=datetime.now)
-    principal = models.CharField(max_length=50, blank=True)
-    shipper = models.CharField(max_length=50, blank=True)
+    principal = models.ForeignKey(Principal, on_delete=models.SET_NULL, null=True, blank=True)
+    shipper = models.ForeignKey(Shipper, on_delete=models.SET_NULL, null=True, blank=True)
     agent = models.CharField(max_length=50, blank=True)
     size = models.CharField(max_length=50, blank=True)
     booking_no = models.CharField(max_length=50, blank=True)

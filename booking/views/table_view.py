@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.utils import timezone
 from ..models import Booking
+from customer.models import Principal, Shipper
 from ..forms import BookingFilterForm
+from django.shortcuts import render_to_response
 
 class BookingTableView(TemplateView):
     
