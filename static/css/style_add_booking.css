@@ -9,8 +9,9 @@ body{
 
 table, th, td {
     font-size: 12px;
-    border: 1px solid red;
-    text-align: center;    
+    /* border: 1px solid red; */
+    text-align: center;
+    font-weight: bold;   
   }
 
 th, td {
@@ -25,6 +26,36 @@ th, td {
     border-radius: 10px;
 }
 
-option {
-    height: 40px;
+/* select {
+    -webkit-appearance: none;
+      -moz-appearance: none;
+} */
+
+fieldset {
+    float:left;
+    width: 0%;
 }
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#booking-container {
+    margin: 30px;
+}
+
+i {
+    cursor: pointer;
+}
+
+/* .add-address {
+    width:
+} */

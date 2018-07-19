@@ -2,7 +2,7 @@ from django import forms
 from datetime import datetime
 from customer.models import Principal, Shipper
 from .models import Booking
-from django_select2.forms import ModelSelect2Widget
+
 
 class BookingFilterForm(forms.Form):
 	date = forms.DateField(
@@ -50,6 +50,16 @@ class BookingAddForm(forms.Form):
 			}
 		),
 		required=False
+	)
+
+	quantity = forms.CharField(
+		widget=forms.TextInput(
+			attrs={
+				'type': 'number',
+				'min': 1,
+				'class': 'add-edit-form add-quantity',
+			}
+		)
 	)
 
 	booking_no = forms.CharField(
@@ -289,9 +299,9 @@ class BookingAddForm(forms.Form):
 	address = forms.ChoiceField(
 		choices=ADDRESS_CHOICES,
 		initial="shipper",
-		widget=forms.Select(
+		widget=forms.RadioSelect(
 			attrs={
-				'class': 'add-edit-form add-address',
+				'class': 'add-address',
 			}
 		),
 		required=False

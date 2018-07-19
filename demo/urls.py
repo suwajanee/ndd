@@ -21,7 +21,6 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('booking/', include('booking.urls')),
-    url(r'^select2/', include('django_select2.urls')),
 ]
 
 

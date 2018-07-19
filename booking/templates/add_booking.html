@@ -5,117 +5,170 @@
         <title>Demo</title>
         <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
+        <script>
+
+            $(function() {
+                var div = $('#booking-container');
+                // var i = $('#booking-container p').size() + 1;
+                
+                $('#addMore').live('click', function() {
+                        $('<div class="add">SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></div>').appendTo(div);
+                        // i++;
+                        // return false;
+                });
+                
+                $('#removeThis').live('click', function() { 
+                        // if( i > 2 ) {
+                        $(this).parents('div.add').remove();
+                                // i--;
+                        // }
+                        return false;
+                });
+            });
+
+            function updateradio() {
+                var pt = document.getElementsByName("address");
+                if (pt[1].checked) {
+                    document.getElementById("id_address_other").disabled = false;
+                } else {
+                    document.getElementById("id_address_other").disabled = true;
+                }
+
+            }
+        </script>
     </head>
     <body>
-{% block content %}
-<form method="POST" class="add-booking-form">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <td> TIME :</td>
-            <td> {{ form.time }} </td>
-        </tr>
-        <tr>
-            <td> DATE :</td>
-            <td> {{ form.date }} </td>
-        </tr>
-    
-        <form method="POST">
-            {% csrf_token %}
-            <tr>
-                <td> PRINCIPAL :</td>
-                <td>
-                    <select id="id_principal" name="principal" class="add-edit-form" onchange="this.form.submit();" >
-                        <option value=""> -------- </option>
-                        {% for p in principals %}
-                            {% ifequal p.pk|stringformat:"s" principal %}
-                                <option value="{{ p.pk }}" selected="selected"> {{ p.name }} </option>
-                            {% else %}
-                                <option value="{{ p.pk }}"> {{ p.name }} </option>
-                            {% endifequal %}
-                        {% endfor %}
-                    </select>
-                </td>  
-            </tr>
-            <tr>
-                <td> SHIPPER :</td>
-                <td>
-                    <select id="id_shipper" name="shipper" class="add-edit-form">
-                        <option value=""> -------- </option>
-                        {% for s in shippers %}
-                            <option value="{{ s.name }}"> {{ s.name }} </option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-        </form>
+        {% block content %}
+        <div align="center">
+            <form method="POST" class="add-booking-form">
+                {% csrf_token %}
+                    <table>
+                    
+                        <form method="POST">
+                            {% csrf_token %}
+                            <tr>
+                                <td> CUSTOMER : </td>
+                                <td>
+                                    <select id="id_principal" name="principal" class="add-edit-form" onchange="this.form.submit();" >
+                                        <option value=""> -------- </option>
+                                        {% for p in principals %}
+                                            {% ifequal p.pk|stringformat:"s" principal %}
+                                                <option value="{{ p.pk }}" selected="selected"> {{ p.name }} </option>
+                                            {% else %}
+                                                <option value="{{ p.pk }}"> {{ p.name }} </option>
+                                            {% endifequal %}
+                                        {% endfor %}
+                                    </select>
+                                </td>  
+                            </tr>
+                            <tr>
+                                <td> SHIPPER : </td>
+                                <td>
+                                    <select id="id_shipper" name="shipper" class="add-edit-form">
+                                        <option value=""> -------- </option>
+                                        {% for s in shippers %}
+                                            <option value="{{ s.pk }}"> {{ s.name }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        </form>
 
-        <tr>
-            <td> AGENT :</td>
-            <td> {{ form.agent }} </td>
-        </tr>
-        <tr>
-            <td> SIZE :</td>
-            <td> {{ form.size }} </td>
-        </tr>
-        <tr>
-            <td> BOOKING NO. :</td>
-            <td> {{ form.booking_no }} </td>
-        </tr>
-        <tr>
-            <td> COLOR :</td>
-            <td> {{ form.booking_color }} </td>
-        </tr>
-        <tr>
-            <td> CONTAINER NO. :</td>
-            <td> {{ form.container_no }} </td>
-        </tr>
-        <tr>
-            <td> SEAL NO. :</td>
-            <td> {{ form.seal_no }} </td>
-        </tr>
-</table>
-<table>
-    <thead>
-        <th colspan=2>FORWARD TRIP</th>
-        <th colspan=5>BACKWARD TRIP</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>TR</td>
-            <td>FM</td>
-            <td>TR</td>
-            <td>TO</td>
-            <td>VESSEL</td>
-            <td>PORT</td>
-            <td>CLOSING</td>
-        </tr>
-        <tr>
-            <td>{{ form.fw_tr }}</td>
-            <td>{{ form.fw_fm }}</td>
-            <td>{{ form.bw_tr }}</td>
-            <td>{{ form.bw_to }}</td>
-            <td>{{ form.vessel }}</td>
-            <td>{{ form.port }}</td>
-            <td>{{ form.closing_time }}</td>
-        </tr>
-    </tbody>
+                        <tr>
+                            <td> AGENT : </td>
+                            <td> {{ form.agent }} </td>
+                        </tr>
 
-</table>
-<table>
-    <tr>
-        <td> REMARK : </td>
-        <td>{{ form.remark }}</td>
-    </tr>
-    <tr>
-        <td> สถานที่บรรจุ : </td>
-        <td>{{ form.loading }}</td>
-    </tr>
+                        <tr>
+                            <td> BOOKING NO. : </td>
+                            <td> {{ form.booking_no }} </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td> {{ form.booking_color }} </td>
+                        </tr>
+                    </table>
+                
+                    <div id="booking-container">
+                        <div>
+                            SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} 
+                        </div>
+                    </div>
+                        <!-- <a onclick="myFunction()"><i class="material-icons" style="font-size: 30px; margin-bottom:30px;">add_circle</i></a> -->
+                        <i id="addMore" class="material-icons" style="font-size: 35px; margin-bottom:30px;">add_circle</i>
 
-</table>
-</form>
+                    <div style="margin:5px;">
+                        FROM : {{ form.fw_fm }} FACTORY : {{ form.loading }} TO : {{ form.bw_to }}
+                    </div>
 
-{% endblock %}
+                <table>
+                    <tr>
+                        <td>
+                            VESSEL :
+                        </td>
+                        <td>
+                            {{ form.vessel }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            PORT :
+                        </td>
+                        <td>
+                            {{ form.port }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            CLOSING :
+                        </td>
+                        <td>
+                            {{ form.closing_time }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            REMARK :
+                        </td>
+                        <td>
+                            {{ form.remark }}
+                        </td>   
+                    </tr>
+                    <tr>
+                        <td>
+                            ADDRESS :
+                        </td>
+                        <td>
+                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="shipper" checked> Shipper
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="other"> Other
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <textarea class="add-edit-form" id="id_address_other" name="address_other" disabled></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="none"> None
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        {% endblock %}
 
     </body>
