@@ -10,21 +10,23 @@
         <script>
 
             $(function() {
-                var div = $('#booking-container');
+                // var div = $('#booking-container');
+                var table = $('#booking-container');
                 // var i = $('#booking-container p').size() + 1;
                 
                 $('#addMore').live('click', function() {
-                        $('<div class="add">SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></div>').appendTo(div);
-                        // i++;
-                        // return false;
+                    // $('<div class="add">SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></div>').appendTo(div);
+                    $('<tr class="add"><td> {{ form.size }} </td><td> {{ form.quantity }} </td><td> {{ form.date }} </td><td> <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i> </td></tr>').appendTo(table);
+                    // i++;
+                    return false;
                 });
                 
                 $('#removeThis').live('click', function() { 
-                        // if( i > 2 ) {
-                        $(this).parents('div.add').remove();
-                                // i--;
-                        // }
-                        return false;
+                    // if( i > 2 ) {
+                    $(this).parents('tr.add').remove();
+                            // i--;
+                    // }
+                    return false;
                 });
             });
 
@@ -41,17 +43,17 @@
     </head>
     <body>
         {% block content %}
-        <div align="center">
+        <div align='center' style="background-color: whitesmoke; width:80%; margin:auto;">
             <form method="POST" class="add-booking-form">
                 {% csrf_token %}
                     <table>
                     
-                        <form method="POST">
+                        <form id="customer" method="POST">
                             {% csrf_token %}
                             <tr>
-                                <td> CUSTOMER : </td>
+                                <td class="col-label"> CUSTOMER : </td>
                                 <td>
-                                    <select id="id_principal" name="principal" class="add-edit-form" onchange="this.form.submit();" >
+                                    <select id="id_principal" name="principal" class="add-edit-form add-principal" onchange="this.form.submit();" >
                                         <option value=""> -------- </option>
                                         {% for p in principals %}
                                             {% ifequal p.pk|stringformat:"s" principal %}
@@ -61,51 +63,89 @@
                                             {% endifequal %}
                                         {% endfor %}
                                     </select>
-                                </td>  
+                                </td>
+                                <td></td> 
                             </tr>
                             <tr>
-                                <td> SHIPPER : </td>
+                                <td class="col-label"> SHIPPER : </td>
                                 <td>
-                                    <select id="id_shipper" name="shipper" class="add-edit-form">
+                                    <select id="id_shipper" name="shipper" class="add-edit-form add-shipper">
                                         <option value=""> -------- </option>
                                         {% for s in shippers %}
                                             <option value="{{ s.pk }}"> {{ s.name }} </option>
                                         {% endfor %}
                                     </select>
                                 </td>
+                                <td></td> 
                             </tr>
                         </form>
 
                         <tr>
-                            <td> AGENT : </td>
+                            <td class="col-label"> AGENT : </td>
                             <td> {{ form.agent }} </td>
+                            <td></td> 
                         </tr>
 
                         <tr>
-                            <td> BOOKING NO. : </td>
+                            <td class="col-label"> BOOKING NO. : </td>
                             <td> {{ form.booking_no }} </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td> {{ form.booking_color }} </td>
+                            <td width=15%> {{ form.booking_color }} </td>
                         </tr>
                     </table>
-                
+<!--                 
                     <div id="booking-container">
                         <div>
                             SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} 
                         </div>
-                    </div>
-                        <!-- <a onclick="myFunction()"><i class="material-icons" style="font-size: 30px; margin-bottom:30px;">add_circle</i></a> -->
-                        <i id="addMore" class="material-icons" style="font-size: 35px; margin-bottom:30px;">add_circle</i>
+                    </div> -->
+                    <table id="booking-container">
+                        <tr>
+                            <th> SIZE </th>
+                            <th> QUANTITY </th>
+                            <th> DATE </th>
+                            <th> </th>
+                        </tr>
+                        {% if size or quantity or date %}
 
-                    <div style="margin:5px;">
-                        FROM : {{ form.fw_fm }} FACTORY : {{ form.loading }} TO : {{ form.bw_to }}
+                            {% for s, q, d in zip %}
+                                <tr class="add">
+                                    <td class="col-label"> <input name="size" class="add-edit-form add-size" id="id_size" value="{{ s }}"> </td>
+                                    <td> <input type="number" name="quantity" min="1" class="add-edit-form add-quantity" id="id_quantity" value="{{ q }}"> </td>
+                                    <td> <input type="date" name="date" class="add-edit-form add-date" id="id_date" value="{{ d }}"> </td>
+                                    {% if forloop.counter == 1 %}
+                                        <td></td>
+                                    {% else %}
+                                        <td> <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr class="add">
+                            <td> {{ form.size }} </td>
+                            <td> {{ form.quantity }} </td>
+                            <td> {{ form.date }} </td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                        <!-- <a onclick="myFunction()"><i class="material-icons" style="font-size: 30px; margin-bottom:30px;">add_circle</i></a> -->
+                        <i id="addMore" class="material-icons add-more-button" style="font-size: 40px;">add_circle</i>
+
+                    <table>
+                        <tr>
+                            <td> FROM </td>
+                            <td> FACTORY </td>
+                            <td> TO </td>
+                        </tr>
+                        <tr>
+                            <td> {{ form.fw_fm }} </td>
+                            <td> {{ form.loading }} </td>
+                            <td> {{ form.bw_to }} </td>
                     </div>
 
                 <table>
                     <tr>
-                        <td>
+                        <td class="col-label">
                             VESSEL :
                         </td>
                         <td>
@@ -113,7 +153,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="col-label">
                             PORT :
                         </td>
                         <td>
@@ -121,7 +161,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="col-label">
                             CLOSING :
                         </td>
                         <td>
@@ -129,7 +169,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="col-label">
                             REMARK :
                         </td>
                         <td>
@@ -137,35 +177,30 @@
                         </td>   
                     </tr>
                     <tr>
-                        <td>
+                        <td class="col-label">
                             ADDRESS :
                         </td>
-                        <td>
-                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="shipper" checked> Shipper
+                        <td class="add-address">
+                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="shipper" checked> Shipper
                         </td>
                     </tr>
                     <tr>
                         <td>
                         </td>
-                        <td>
-                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="other"> Other
+                        <td class="add-address">
+                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="other"> Other
+                            <textarea class="add-edit-form add-address-other" id="id_address_other" name="address_other" disabled></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         </td>
-                        <td>
-                            <textarea class="add-edit-form" id="id_address_other" name="address_other" disabled></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            <input type="radio" id="id_address" name="address" onchange="updateradio();" value="none"> None
+                        <td class="add-address">
+                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="none"> None
                         </td>
                     </tr>
                 </table>
+                <input type="submit" value="SAVE">
             </form>
         </div>
 

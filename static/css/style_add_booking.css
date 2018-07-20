@@ -2,39 +2,45 @@
 
 body{ 
     font-family: THSarabunNew, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     /* width: 100%; */
 }
 
 table, th, td {
-    font-size: 12px;
-    /* border: 1px solid red; */
+    font-size: 14px;
+    /* border: 1px solid black; */
     text-align: center;
-    font-weight: bold;   
+    font-weight: bold;
+    margin: 20px;   
   }
+
+table {
+    width: 40%;
+}
 
 th, td {
     padding: 5px;
     min-width: 50px;
 }
 
+.col-label {
+    width: 20%;
+    text-align: right;
+}
+
 .add-edit-form {
-    width: 150px;
-    height: 40px;
+    width: 85%;
+    height: 35px;
     text-align: center;
     border-radius: 10px;
+    padding: 5px 10px;
 }
 
 /* select {
     -webkit-appearance: none;
       -moz-appearance: none;
 } */
-
-fieldset {
-    float:left;
-    width: 0%;
-}
 
 .float-left {
     float: left;
@@ -44,18 +50,34 @@ fieldset {
     float: right;
 }
 
-.inline-block {
-    display: inline-block;
-}
-
-#booking-container {
-    margin: 30px;
-}
-
 i {
     cursor: pointer;
 }
 
-/* .add-address {
-    width:
-} */
+.add-quantity {
+    width: 50%;
+}
+
+.add-address {
+    text-align: left;
+}
+
+.add-address-other {
+    width: 80%;
+    min-height: 80px;
+    resize:vertical;
+    float:right;
+    text-align: left;
+    padding: 5px 10px;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}

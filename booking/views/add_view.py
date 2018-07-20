@@ -20,8 +20,8 @@ class BookingAddView(TemplateView):
         template_name = 'add_booking.html'
         context = {}
         context['form'] = BookingAddForm()
+        # form = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
-
         if 'principal' in request.POST:
             context['principal'] = request.POST.get('principal')
             if context['principal']:
@@ -29,6 +29,17 @@ class BookingAddView(TemplateView):
             else:
                 context['shippers'] = []
 
+            request.POST._mutable = True
+            context['size'] = request.POST.getlist('size')
+            context['quantity'] = request.POST.getlist('quantity')
+            context['date'] = request.POST.getlist('date')
+            context['zip'] = zip(context['size'], context['quantity'], context['date'])
+
+            request.POST.update({'size':'', 'quantity':'', 'date':''})
+            context['form'] = BookingAddForm(request.POST)
+
+
         return render(request, template_name, context)
+        # return render_to_response(template_name, {"form":form}, context)
 
 

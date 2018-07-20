@@ -56,6 +56,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'type': 'number',
+				'value': 1,
 				'min': 1,
 				'class': 'add-edit-form add-quantity',
 			}
@@ -81,46 +82,10 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	fw_tr = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-fw-tr',
-			}
-		),
-		required=False
-	)
-
 	fw_fm = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'add-edit-form add-fw-fm',
-			}
-		),
-		required=False
-	)
-
-	container_no = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-container-no',
-			}
-		),
-		required=False
-	)
-
-	seal_no = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-seal-no',
-			}
-		),
-		required=False
-	)
-
-	bw_tr = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-bw-tr',
 			}
 		),
 		required=False
@@ -175,117 +140,6 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'add-edit-form add-loading',
-			}
-		),
-		required=False
-	)
-
-	work_id = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-work-id',
-			}
-		),
-		required=False
-	)
-
-	pickup_date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'add-edit-form add-pickup-date',
-			}
-		),
-		required=False
-	)
-
-	factory_date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'add-edit-form add-factory-date',
-			}
-		),
-		required=False
-	)
-
-	return_date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'add-edit-form add-return-date',
-			}
-		),
-		required=False
-	)
-
-	pickup_in_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-pickup-in-time',
-			}
-		),
-		required=False
-	)
-	
-	pickup_out_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-pickup-out-time',
-			}
-		),
-		required=False
-	)
-	
-	factory_in_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-factory-in-time',
-			}
-		),
-		required=False
-	)
-	
-	factory_load_start_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-factory-load-start-time',
-			}
-		),
-		required=False
-	)
-
-	factory_load_finish_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-factory-load-finish-time',
-			}
-		),
-		required=False
-	)
-
-	factory_out_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-factory-out-time',
-			}
-		),
-		required=False
-	)
-
-	return_in_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-return-in-time',
-			}
-		),
-		required=False
-	)
-	
-	return_out_time = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'add-edit-form add-return-out-time',
 			}
 		),
 		required=False
