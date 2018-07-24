@@ -19,7 +19,7 @@ class BookingAddForm(forms.Form):
 	time = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-time',
+				'class': 'add-edit-form add-time form-control',
 			}
 		),
 		required=False
@@ -29,7 +29,8 @@ class BookingAddForm(forms.Form):
 		widget=forms.DateInput(
 			attrs={
 				'type': 'date',
-				'class': 'add-edit-form add-date',
+				'class': 'add-edit-form add-date form-control',
+				'placeholder': 'DATE',
 			}
 		)
 	)
@@ -37,7 +38,7 @@ class BookingAddForm(forms.Form):
 	agent = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-agent',
+				'class': 'add-edit-form add-agent form-control',
 			}
 		),
 		required=False
@@ -46,19 +47,19 @@ class BookingAddForm(forms.Form):
 	size = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-size',
+				'class': 'add-edit-form add-size form-control',
+				'placeholder': 'SIZE',
 			}
 		),
-		required=False
 	)
 
 	quantity = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'type': 'number',
-				'value': 1,
 				'min': 1,
-				'class': 'add-edit-form add-quantity',
+				'placeholder': 'QUANTITY',
+				'class': 'add-edit-form add-quantity form-control',
 			}
 		)
 	)
@@ -66,7 +67,8 @@ class BookingAddForm(forms.Form):
 	booking_no = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-booking-no',
+				'class': 'add-edit-form add-booking-no form-control',
+				'autocomplete': 'off',
 			}
 		),
 		required=False
@@ -76,7 +78,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'type': 'color',
-				'class': 'add-edit-form add-booking-color',
+				'class': 'add-edit-form add-booking-color form-control',
 			}
 		),
 		required=False
@@ -85,7 +87,7 @@ class BookingAddForm(forms.Form):
 	fw_fm = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-fw-fm',
+				'class': 'add-edit-form add-fw-fm form-control',
 			}
 		),
 		required=False
@@ -94,7 +96,7 @@ class BookingAddForm(forms.Form):
 	bw_to = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-bw-to',
+				'class': 'add-edit-form add-bw-to form-control',
 			}
 		),
 		required=False
@@ -103,7 +105,7 @@ class BookingAddForm(forms.Form):
 	vessel = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-vessel',
+				'class': 'add-edit-form add-vessel form-control',
 			}
 		),
 		required=False
@@ -112,7 +114,17 @@ class BookingAddForm(forms.Form):
 	port = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-port',
+				'class': 'add-edit-form add-port form-control',
+			}
+		),
+		required=False
+	)
+
+	closing_date = forms.CharField(
+		widget=forms.TextInput(
+			attrs={
+				'type': 'date',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -121,7 +133,17 @@ class BookingAddForm(forms.Form):
 	closing_time = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-closing-time',
+				'type': 'time',
+				'class': 'form-control',
+			}
+		),
+		required=False
+	)
+
+	ref = forms.CharField(
+		widget=forms.TextInput(
+			attrs={
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -130,7 +152,7 @@ class BookingAddForm(forms.Form):
 	remark = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-remark',
+				'class': 'add-edit-form add-remark form-control',
 			}
 		),
 		required=False
@@ -139,7 +161,7 @@ class BookingAddForm(forms.Form):
 	loading = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-loading',
+				'class': 'add-edit-form add-loading form-control',
 			}
 		),
 		required=False
@@ -155,7 +177,7 @@ class BookingAddForm(forms.Form):
 		initial="shipper",
 		widget=forms.RadioSelect(
 			attrs={
-				'class': 'add-address',
+				'class': 'add-address form-control',
 			}
 		),
 		required=False
@@ -164,7 +186,7 @@ class BookingAddForm(forms.Form):
 	address_other = forms.CharField(
 		widget=forms.Textarea(
 			attrs={
-				'class': 'add-edit-form add-address-other',
+				'class': 'add-edit-form add-address-other form-control',
 			}
 		),
 		required=False

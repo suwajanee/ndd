@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', BookingTableView.get_table, name='booking-table'),
     url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
     url(r'^add/$', BookingAddView.add_booking, name='booking-add'),
+    url(r'^save/$', BookingAddView.save_booking, name='booking-save'),
 
 ]
 

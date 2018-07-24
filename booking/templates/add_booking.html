@@ -4,31 +4,47 @@
     <head>
         <title>Demo</title>
         <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+        
         <script>
 
-            $(function() {
-                // var div = $('#booking-container');
-                var table = $('#booking-container');
-                // var i = $('#booking-container p').size() + 1;
-                
-                $('#addMore').live('click', function() {
-                    // $('<div class="add">SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></div>').appendTo(div);
-                    $('<tr class="add"><td> {{ form.size }} </td><td> {{ form.quantity }} </td><td> {{ form.date }} </td><td> <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i> </td></tr>').appendTo(table);
-                    // i++;
-                    return false;
-                });
-                
-                $('#removeThis').live('click', function() { 
-                    // if( i > 2 ) {
-                    $(this).parents('tr.add').remove();
-                            // i--;
-                    // }
-                    return false;
-                });
-            });
+    $(function() {
+        $(document).on('click', '.add-more', function(e)
+        {
+            e.preventDefault();
+
+            var controlForm = $('.control:first'),
+                currentEntry = $(this).parents('.entry:first'),
+                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+            newEntry.find('input').val('');
+            controlForm.find('.entry:not(:last) .add-more')
+                .removeClass('add-more').addClass('remove')
+                .removeClass('btn-success').addClass('btn-danger')
+                .html('<span><i class="fa fa-minus"></i></span>');
+        }).on('click', '.remove', function(e)
+        {
+            $(this).parents('.entry:first').remove();
+
+            e.preventDefault();
+            return false;
+        });
+    });
 
             function updateradio() {
                 var pt = document.getElementsByName("address");
@@ -39,168 +55,180 @@
                 }
 
             }
+            
         </script>
+        <style>
+    fieldset {
+    border: 1px solid #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    border-radius: 8px;
+}
+
+legend {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+        </style>
     </head>
     <body>
         {% block content %}
-        <div align='center' style="background-color: whitesmoke; width:80%; margin:auto;">
+        <div class="container col-sm-4 mt-3">
             <form method="POST" class="add-booking-form">
                 {% csrf_token %}
-                    <table>
-                    
-                        <form id="customer" method="POST">
-                            {% csrf_token %}
-                            <tr>
-                                <td class="col-label"> CUSTOMER : </td>
-                                <td>
-                                    <select id="id_principal" name="principal" class="add-edit-form add-principal" onchange="this.form.submit();" >
+                        <!-- <form id="customer" method="POST"> -->
+                            <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">CUSTOMER</span>
+                                    </div>
+                                    <select id="id_principal" name="principal" class="custom-select" onchange="this.form.submit();" >
                                         <option value=""> -------- </option>
                                         {% for p in principals %}
                                             {% ifequal p.pk|stringformat:"s" principal %}
-                                                <option value="{{ p.pk }}" selected="selected"> {{ p.name }} </option>
+                                                <option value="{{ p.pk }}" selected> {{ p.name }} </option>
                                             {% else %}
                                                 <option value="{{ p.pk }}"> {{ p.name }} </option>
                                             {% endifequal %}
                                         {% endfor %}
                                     </select>
-                                </td>
-                                <td></td> 
-                            </tr>
-                            <tr>
-                                <td class="col-label"> SHIPPER : </td>
-                                <td>
-                                    <select id="id_shipper" name="shipper" class="add-edit-form add-shipper">
-                                        <option value=""> -------- </option>
-                                        {% for s in shippers %}
-                                            <option value="{{ s.pk }}"> {{ s.name }} </option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                                <td></td> 
-                            </tr>
-                        </form>
-
-                        <tr>
-                            <td class="col-label"> AGENT : </td>
-                            <td> {{ form.agent }} </td>
-                            <td></td> 
-                        </tr>
-
-                        <tr>
-                            <td class="col-label"> BOOKING NO. : </td>
-                            <td> {{ form.booking_no }} </td>
-                            <td width=15%> {{ form.booking_color }} </td>
-                        </tr>
-                    </table>
-<!--                 
-                    <div id="booking-container">
-                        <div>
-                            SIZE : {{ form.size }} QUANTITY : {{ form.quantity }} DATE : {{ form.date }} 
+                            </div>
+                            <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">SHIPPER</span>
+                                    </div>
+                                <select id="id_shipper" name="shipper" class="custom-select">
+                                    <option value=""> -------- </option>
+                                    {% for s in shippers %}
+                                        <option value="{{ s.pk }}"> {{ s.name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        <!-- </form> -->
+                        <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">AGENT</span>
+                                </div>
+                            {{ form.agent }} 
                         </div>
-                    </div> -->
-                    <table id="booking-container">
-                        <tr>
-                            <th> SIZE </th>
-                            <th> QUANTITY </th>
-                            <th> DATE </th>
-                            <th> </th>
-                        </tr>
+                    
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">BOOKING NO.</span>
+                            </div>
+                            {{ form.booking_no }}
+                            {{ form.booking_color }}
+                        </div>
+                        
+                        <fieldset>
+                                <legend>CONTAINER</legend>
                         {% if size or quantity or date %}
-
-                            {% for s, q, d in zip %}
-                                <tr class="add">
-                                    <td class="col-label"> <input name="size" class="add-edit-form add-size" id="id_size" value="{{ s }}"> </td>
-                                    <td> <input type="number" name="quantity" min="1" class="add-edit-form add-quantity" id="id_quantity" value="{{ q }}"> </td>
-                                    <td> <input type="date" name="date" class="add-edit-form add-date" id="id_date" value="{{ d }}"> </td>
-                                    {% if forloop.counter == 1 %}
-                                        <td></td>
+                            <div class="control">
+                                    {% for s, q, d in zip %}
+                                    <div class="entry input-group control-group after-add-more mb-2">
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}">
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}">
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}">
+                                        <div class="input-group-append">
+                                    {% if forloop.last %}
+                                        <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
                                     {% else %}
-                                        <td> <i id="removeThis" class="material-icons" style="font-size: 25px;">delete</i></td>
+                                        <button class="btn btn-danger remove" type="button"><span><i class="fa fa-minus"></i></span></button>
                                     {% endif %}
-                                </tr>
+                                        </div>
+                                    </div>
                             {% endfor %}
+                        </div>
                         {% else %}
-                        <tr class="add">
-                            <td> {{ form.size }} </td>
-                            <td> {{ form.quantity }} </td>
-                            <td> {{ form.date }} </td>
-                            <td></td>
-                        </tr>
+                            <div class="control">
+                                <div class="entry input-group control-group after-add-more mb-2">
+                                        {{ form.size }}
+                                        {{ form.quantity }}
+                                        {{ form.date }}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
-                    </table>
-                        <!-- <a onclick="myFunction()"><i class="material-icons" style="font-size: 30px; margin-bottom:30px;">add_circle</i></a> -->
-                        <i id="addMore" class="material-icons add-more-button" style="font-size: 40px;">add_circle</i>
-
-                    <table>
-                        <tr>
-                            <td> FROM </td>
-                            <td> FACTORY </td>
-                            <td> TO </td>
-                        </tr>
-                        <tr>
-                            <td> {{ form.fw_fm }} </td>
-                            <td> {{ form.loading }} </td>
-                            <td> {{ form.bw_to }} </td>
+                    </fieldset>
+                            
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">FROM</span>
+                        </div>
+                        {{ form.fw_fm }}
+                        <div class="input-group-append">
+                            <span class="input-group-text">FACTORY</span>
+                        </div>
+                        {{ form.loading }}
+                        <div class="input-group-append">
+                            <span class="input-group-text">TO</span>
+                        </div>
+                        {{ form.bw_to }}
                     </div>
 
-                <table>
-                    <tr>
-                        <td class="col-label">
-                            VESSEL :
-                        </td>
-                        <td>
-                            {{ form.vessel }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-label">
-                            PORT :
-                        </td>
-                        <td>
-                            {{ form.port }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-label">
-                            CLOSING :
-                        </td>
-                        <td>
-                            {{ form.closing_time }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-label">
-                            REMARK :
-                        </td>
-                        <td>
-                            {{ form.remark }}
-                        </td>   
-                    </tr>
-                    <tr>
-                        <td class="col-label">
-                            ADDRESS :
-                        </td>
-                        <td class="add-address">
-                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="shipper" checked> Shipper
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td class="add-address">
-                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="other"> Other
-                            <textarea class="add-edit-form add-address-other" id="id_address_other" name="address_other" disabled></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td class="add-address">
-                            <input type="radio" id="id_address" name="address" class="add-address" onchange="updateradio();" value="none"> None
-                        </td>
-                    </tr>
-                </table>
-                <input type="submit" value="SAVE">
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">VESSEL</span>
+                            </div>
+                        {{ form.vessel }} 
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">PORT</span>
+                        </div>
+                        {{ form.port }} 
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CLOSING</span>
+                        </div>
+                        {{ form.closing_date }}
+                        {{ form.closing_time }} 
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">REF.</span>
+                        </div>
+                        {{ form.ref }} 
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">REMARK</span>
+                        </div>
+                        {{ form.remark }} 
+                    </div>
+
+
+                    <fieldset>
+                            <legend>ADDRESS</legend>
+                    <div class="custom-control custom-radio mb-3">
+                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio();" value="shipper" checked>
+                        <label class="custom-control-label" for="id_address_1">Shipper</label>
+                    </div>
+
+                    <div class="custom-control custom-radio mb-3">
+                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio();" value="other">
+                        <label class="custom-control-label" for="id_address_2">Other</label><br />
+                        <textarea class="form-control" rows="3" id="id_address_other" name="address_other" disabled></textarea>
+                    </div>
+
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio();" value="none">
+                        <label class="custom-control-label" for="id_address_3">None</label>
+                    </div>
+                    </fieldset>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg pull-right" formaction="{% url 'booking-save' %}">SUBMIT</button>
+                <!-- <input type="submit" value="SAVE"> -->
             </form>
         </div>
 

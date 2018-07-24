@@ -2,82 +2,22 @@
 
 body{ 
     font-family: THSarabunNew, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
+    /* font-size: 14px; */
+    /* font-weight: bold; */
     /* width: 100%; */
+} 
+
+#id_booking_color {
+    max-width: 15%;
+    height: 38px;
 }
-
-table, th, td {
-    font-size: 14px;
-    /* border: 1px solid black; */
-    text-align: center;
-    font-weight: bold;
-    margin: 20px;   
-  }
-
-table {
-    width: 40%;
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
 }
-
-th, td {
-    padding: 5px;
-    min-width: 50px;
-}
-
-.col-label {
-    width: 20%;
-    text-align: right;
-}
-
-.add-edit-form {
-    width: 85%;
-    height: 35px;
-    text-align: center;
-    border-radius: 10px;
-    padding: 5px 10px;
-}
-
-/* select {
-    -webkit-appearance: none;
-      -moz-appearance: none;
-} */
-
-.float-left {
-    float: left;
-}
-
-.float-right {
-    float: right;
-}
-
-i {
-    cursor: pointer;
-}
-
-.add-quantity {
-    width: 50%;
-}
-
-.add-address {
-    text-align: left;
+input[type="color"]::-webkit-color-swatch {
+    border: none;
 }
 
 .add-address-other {
-    width: 80%;
-    min-height: 80px;
     resize:vertical;
-    float:right;
-    text-align: left;
-    padding: 5px 10px;
-}
-
-input[type="color"] {
-	-webkit-appearance: none;
-	border: none;
-}
-input[type="color"]::-webkit-color-swatch-wrapper {
-	padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-	border: none;
 }
