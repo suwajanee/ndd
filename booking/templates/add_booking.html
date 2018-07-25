@@ -22,6 +22,12 @@
 
         
         <script>
+            window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+}, 2000);
+
 
     $(function() {
         $(document).on('click', '.add-more', function(e)
@@ -77,6 +83,14 @@ legend {
     </head>
     <body>
         {% block content %}
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="container col-sm-4 mt-3">
             <form method="POST" class="add-booking-form">
                 {% csrf_token %}
@@ -85,7 +99,7 @@ legend {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">CUSTOMER</span>
                                     </div>
-                                    <select id="id_principal" name="principal" class="custom-select" onchange="this.form.submit();" >
+                                    <select id="id_principal" name="principal" class="custom-select" onchange="this.form.submit();" required>
                                         <option value=""> -------- </option>
                                         {% for p in principals %}
                                             {% ifequal p.pk|stringformat:"s" principal %}
@@ -100,7 +114,7 @@ legend {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">SHIPPER</span>
                                     </div>
-                                <select id="id_shipper" name="shipper" class="custom-select">
+                                <select id="id_shipper" name="shipper" class="custom-select" required>
                                     <option value=""> -------- </option>
                                     {% for s in shippers %}
                                         <option value="{{ s.pk }}"> {{ s.name }} </option>

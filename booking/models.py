@@ -7,7 +7,7 @@ from customer.models import Principal, Shipper
 
 class Booking(models.Model):
     time = models.CharField(max_length=50, blank=True, default='')
-    date = models.DateField(default=datetime.now)
+    date = models.DateField(default=datetime.now, null=True)
     principal = models.ForeignKey(Principal, on_delete=models.SET_NULL, null=True, blank=True)
     shipper = models.ForeignKey(Shipper, on_delete=models.SET_NULL, null=True, blank=True)
     agent = models.CharField(max_length=50, blank=True)
@@ -22,14 +22,17 @@ class Booking(models.Model):
     bw_to = models.CharField(max_length=50, blank=True)
     vessel = models.CharField(max_length=50, blank=True)
     port = models.CharField(max_length=50, blank=True)
-    closing_date = models.DateField(blank=True)
+    closing_date = models.CharField(max_length=20, blank=True)
     closing_time = models.CharField(max_length=20, blank=True)
     remark = models.CharField(max_length=200, blank=True)
     loading = models.CharField(max_length=50, blank=True)
+
     work_id = models.CharField(max_length=50, blank=True)
-    pickup_date = models.DateField( blank=True)
-    factory_date = models.DateField(blank=True)
-    return_date = models.DateField(blank=True)
+    work_number = models.IntegerField(default=0)
+
+    pickup_date = models.DateField( blank=True, null=True)
+    factory_date = models.DateField(blank=True, null=True)
+    return_date = models.DateField(blank=True, null=True)
 
     pickup_in_time = models.CharField(max_length=20, blank=True, default='')
     pickup_out_time = models.CharField(max_length=20, blank=True, default='')

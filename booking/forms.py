@@ -19,7 +19,7 @@ class BookingAddForm(forms.Form):
 	time = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-time form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -29,7 +29,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.DateInput(
 			attrs={
 				'type': 'date',
-				'class': 'add-edit-form add-date form-control',
+				'class': 'form-control',
 				'placeholder': 'DATE',
 			}
 		)
@@ -38,7 +38,7 @@ class BookingAddForm(forms.Form):
 	agent = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-agent form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -47,7 +47,7 @@ class BookingAddForm(forms.Form):
 	size = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-size form-control',
+				'class': 'form-control',
 				'placeholder': 'SIZE',
 			}
 		),
@@ -59,7 +59,7 @@ class BookingAddForm(forms.Form):
 				'type': 'number',
 				'min': 1,
 				'placeholder': 'QUANTITY',
-				'class': 'add-edit-form add-quantity form-control',
+				'class': 'form-control',
 			}
 		)
 	)
@@ -67,7 +67,7 @@ class BookingAddForm(forms.Form):
 	booking_no = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-booking-no form-control',
+				'class': 'form-control',
 				'autocomplete': 'off',
 			}
 		),
@@ -78,7 +78,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'type': 'color',
-				'class': 'add-edit-form add-booking-color form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -87,7 +87,7 @@ class BookingAddForm(forms.Form):
 	fw_fm = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-fw-fm form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -96,7 +96,7 @@ class BookingAddForm(forms.Form):
 	bw_to = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-bw-to form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -105,7 +105,7 @@ class BookingAddForm(forms.Form):
 	vessel = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-vessel form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -114,7 +114,7 @@ class BookingAddForm(forms.Form):
 	port = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-port form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -152,7 +152,7 @@ class BookingAddForm(forms.Form):
 	remark = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-remark form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -161,7 +161,7 @@ class BookingAddForm(forms.Form):
 	loading = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'class': 'add-edit-form add-loading form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -177,7 +177,7 @@ class BookingAddForm(forms.Form):
 		initial="shipper",
 		widget=forms.RadioSelect(
 			attrs={
-				'class': 'add-address form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False
@@ -186,7 +186,7 @@ class BookingAddForm(forms.Form):
 	address_other = forms.CharField(
 		widget=forms.Textarea(
 			attrs={
-				'class': 'add-edit-form add-address-other form-control',
+				'class': 'form-control',
 			}
 		),
 		required=False

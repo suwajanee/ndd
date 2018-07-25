@@ -9,12 +9,34 @@
         <script src="{% static 'js/dropdown-edit.js' %}"></script>
         <script src="{% static 'js/dropdown-print.js' %}"></script>
 
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         
+        <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 2000);
+    </script>
     </head>
     <body style="overflow-x:auto;">
     <!-- <body style="overflow:auto;"> -->
     <!-- <body> -->
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
             <div class="add-button">
                     <a href="{% url 'booking-add' %}"><i class="material-icons add-icon-size">add_circle</i></a>
                 </div>
@@ -122,7 +144,7 @@
                     <td class="nowrap">{{ booking.bw_to }}</td>
                     <td class="nowrap">{{ booking.vessel }}</td>
                     <td class="nowrap">{{ booking.port }}</td>
-                    <td class="nowrap">{{ booking.closing_time }}</td>
+                    <td class="nowrap">{{ booking.closing_date }}</td>
                     <td><div class="remark">{{ booking.remark }}</div></td>
                     <td class="nowrap">{{ booking.loading }}</td>
                     <td class="nowrap">{{ booking.work_id }}</td>

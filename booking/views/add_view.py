@@ -7,6 +7,10 @@ from customer.models import Principal, Shipper
 from ..forms import BookingAddForm
 from django.shortcuts import render_to_response
 from datetime import datetime
+from django.db.models import Max
+from django.urls import reverse
+from django.shortcuts import redirect
+from django.contrib import messages
 
 # class BookingAddView(CreateView):
 #     model = Booking
@@ -17,30 +21,41 @@ from datetime import datetime
 class BookingAddView(TemplateView):
 
     def add_booking(request):
+        add_booking = BookingAddView()
         template_name = 'add_booking.html'
         context = {}
         context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
-        if 'principal' in request.POST:
+        if request.method == 'POST':
+            context = add_booking.create_context(request.POST)
+            
+        return render(request, template_name, context)
+
+    def create_context(self, req):
+        context = {}
+        # context['form'] = BookingAddForm()
+        context['principals'] = Principal.objects.all().order_by('name')
+        if 'principal' in req:
             # print(request.POST)
-            context['principal'] = request.POST.get('principal')
+            context['principal'] = req.get('principal')
             if context['principal']:
                 context['shippers'] = Shipper.objects.filter(principal=context['principal']).order_by('name')
             else:
                 context['shippers'] = []
 
-            request.POST._mutable = True
-            context['size'] = request.POST.getlist('size')
-            context['quantity'] = request.POST.getlist('quantity')
-            context['date'] = request.POST.getlist('date')
+            req._mutable = True
+            context['size'] = req.getlist('size')
+            context['quantity'] = req.getlist('quantity')
+            context['date'] = req.getlist('date')
             context['zip'] = zip(context['size'], context['quantity'], context['date'])
 
-            request.POST.update({'size':'', 'quantity':'', 'date':''})
-            context['form'] = BookingAddForm(request.POST)
-        return render(request, template_name, context)
+            req.update({'size':'', 'quantity':'', 'date':''})
+            context['form'] = BookingAddForm(req)
+        return context
 
 
     def save_booking(request):
+        add_booking = BookingAddView()
         if request.method == 'POST':
             form = BookingAddForm(request.POST)
             if form.is_valid():
@@ -62,20 +77,70 @@ class BookingAddView(TemplateView):
                 ref = request.POST['ref']
                 remark = request.POST['remark']
                 address = request.POST['address']
-                # address_other = request.POST['address_other']
-                # print(datetime.strptime(date))
+                if address == 'other':
+                    address_other = request.POST['address_other']
 
-                for d in date :
-                    
-                    dd = datetime.strptime(d, "%Y-%m-%d")
-                    print('11111111111111111111111111')
-                    print(dd)
+                container = zip(size, quantity, date)
+                for s, q, d in container:
+                    for i in range(int(q)):
+                        
+                        work_id, work_number = add_booking.run_work_id(d)
 
-                data = {
-                    principal: principal,
+                        data = {
+                            'principal': Principal.objects.get(pk=principal),
+                            'shipper': Shipper.objects.get(pk=shipper),
+                            'agent': agent,
+                            'booking_no': booking_no,
+                            'booking_color': booking_color,
+                            'size': s,
+                            'date': d,
+                            'fw_fm': fw_fm,
+                            'loading': loading,
+                            'bw_to': bw_to,
+                            'vessel': vessel,
+                            'port': port,
+                            'closing_date': closing_date,
+                            'closing_time': closing_time,
+                            'ref': ref,
+                            'remark': remark,
+                            'work_id': work_id,
+                            'work_number': work_number,
+                            'pickup_date': d,
+                            'factory_date': d,
+                            'return_date': d,
+                            'address': address
+                        }
+                        if address == 'other':
+                            data['address_other'] = address_other
 
-                }
+                        booking = Booking(**data)
+                        booking.save()
+
+                messages.success(request, "Added Booking")
+                return redirect('booking-table')
+                # return render(request, 'table.html')
+            messages.error(request, "Error")
+        return redirect('booking-add')
+
+                        
+                
+                
+
+                
 
 
-        # p = Publisher(name='Apress', city='Berkeley')
-        # p.save()
+    def run_work_id(self, date):
+        # print(date)
+        work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
+        # print(work['work_number__max'])
+        if work['work_number__max'] == None:
+            work_number = 0
+        else:
+            work_number = work['work_number__max'] + 1
+        work = str("{:03d}".format(work_number))
+        # print(work)
+        print('11111111111111111111111111')
+        d = datetime.strptime(date, "%Y-%m-%d")
+        work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work
+        print(work_id)
+        return work_id, work_number
