@@ -14,19 +14,24 @@ class Booking(models.Model):
     size = models.CharField(max_length=50, blank=True)
     booking_no = models.CharField(max_length=50, blank=True)
     booking_color = models.CharField(max_length=20, blank=True, default='')
-    fw_tr = models.CharField(max_length=50, blank=True)
-    fw_fm = models.CharField(max_length=50, blank=True)
+
+    pickup_tr = models.CharField(max_length=20, blank=True, default='')
+    pickup_from = models.CharField(max_length=20, blank=True, default='')
+    forward_tr = models.CharField(max_length=20, blank=True, default='')
+    factory = models.CharField(max_length=20, blank=True, default='')
+    backward_tr = models.CharField(max_length=20, blank=True, default='')
+    return_tr = models.CharField(max_length=20, blank=True, default='')
+    return_to = models.CharField(max_length=20, blank=True, default='')
+
     container_no = models.CharField(max_length=50, blank=True)
     seal_no = models.CharField(max_length=50, blank=True)
-    bw_tr = models.CharField(max_length=50, blank=True)
-    bw_to = models.CharField(max_length=50, blank=True)
     vessel = models.CharField(max_length=50, blank=True)
     port = models.CharField(max_length=50, blank=True)
     closing_date = models.CharField(max_length=20, blank=True)
     closing_time = models.CharField(max_length=20, blank=True)
+    ref = models.CharField(max_length=50, blank=True, default='')
     remark = models.CharField(max_length=200, blank=True)
-    loading = models.CharField(max_length=50, blank=True)
-
+    
     work_id = models.CharField(max_length=50, blank=True)
     work_number = models.IntegerField(default=0)
 
@@ -42,8 +47,6 @@ class Booking(models.Model):
     factory_out_finish = models.CharField(max_length=20, blank=True, default='')
     return_in_time = models.CharField(max_length=20, blank=True, default='')
     return_out_time = models.CharField(max_length=20, blank=True, default='')
-
-    ref = models.CharField(max_length=50, blank=True, default='')
 
     ADDRESS_CHOICES = (
         ('shipper', 'Shipper'),

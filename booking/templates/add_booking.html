@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>Demo</title>
+        <title>demo</title>
         <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -143,9 +143,9 @@ legend {
                             <div class="control">
                                     {% for s, q, d in zip %}
                                     <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}">
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}">
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}">
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}" required>
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}" required>
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}" required>
                                         <div class="input-group-append">
                                     {% if forloop.last %}
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
@@ -159,9 +159,9 @@ legend {
                         {% else %}
                             <div class="control">
                                 <div class="entry input-group control-group after-add-more mb-2">
-                                        {{ form.size }}
-                                        {{ form.quantity }}
-                                        {{ form.date }}
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" required>
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" required>
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" required>
                                     <div class="input-group-append">
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
                                     </div>
@@ -174,15 +174,15 @@ legend {
                         <div class="input-group-prepend">
                             <span class="input-group-text">FROM</span>
                         </div>
-                        {{ form.fw_fm }}
+                        {{ form.pickup_from }}
                         <div class="input-group-append">
                             <span class="input-group-text">FACTORY</span>
                         </div>
-                        {{ form.loading }}
+                        {{ form.factory }}
                         <div class="input-group-append">
                             <span class="input-group-text">TO</span>
                         </div>
-                        {{ form.bw_to }}
+                        {{ form.return_to }}
                     </div>
 
                     <div class="input-group mb-3">
@@ -242,7 +242,6 @@ legend {
                     </fieldset>
                     
                     <button type="submit" class="btn btn-primary btn-lg pull-right" formaction="{% url 'booking-save' %}">SUBMIT</button>
-                <!-- <input type="submit" value="SAVE"> -->
             </form>
         </div>
 

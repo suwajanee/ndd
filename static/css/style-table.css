@@ -9,9 +9,9 @@ body{
     /* width: 100%; */
 }
 
-table, th, td {
+table, td {
     font-size: 12px;
-    border: 1px solid blue;
+    border: 2px solid black;
     text-align: center;    
   }
 
@@ -24,9 +24,9 @@ tbody tr:hover {
     background: #ffff99;
 }   
 
-.nowrap {
+/* .nowrap {
     white-space: nowrap;
-}
+} */
 
 /* Hide too long text in Remark field */
 .remark {
@@ -45,77 +45,37 @@ tbody tr:hover {
     white-space: nowrap;
 }
 
+
 /* Fix header table when scroll */
 .table-cont{
-    /**make table can scroll**/
-    /* max-height: 200px; */
     height: 85%;
     overflow-y: auto;
-    /* overflow-x: hidden; */
+    position: absolute;
+    top: auto;
+    bottom:0px;
     box-shadow: 0 0 1px 3px #ddd;
-
+    width:100%;
 }
 
 thead{
     background-color:white;
+    box-shadow: 0 0 8px 2px gray;
+    
 }
-
-
-/* Clickable dropdown edit/delete*/
-.dropbtn {
-    background-color: #ddd;
-    /* color: white; */
-    /* padding: 5px 12px;
-    font-size: 14px;
-    border: none;
-    border-radius: 8px; */
-    cursor: pointer;
-}
-
-.dropbtn:hover {
-    background-color: gray;
-}
-
-/* .dropdown {
-    position: relative;
-    display: inline-block;
-} */
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 120px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 10px 5px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #ddd;
-}
-
-.show {display: block;}
 
 
 /* Add Booking Button */
-.add-button {
-    /* float: right; */
+/* .add-button {
     position: fixed;
     bottom: 0px;
     right: 0px;
-}
+} */
 
-.add-button i {
-    font-size:900%;
-    color: green;
-    padding: 20px;
-    text-shadow: 2px 2px 10px gray
+.add-btn {
+    font-size:200%;
+    position: absolute;
+    right: 20px;
+    top: 20px;
 }
+    
+      

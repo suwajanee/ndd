@@ -5,10 +5,10 @@ from django.utils import timezone
 from ..models import Booking
 from customer.models import Principal, Shipper
 from ..forms import BookingAddForm
-from django.shortcuts import render_to_response
+# from django.shortcuts import render_to_response
 from datetime import datetime
 from django.db.models import Max
-from django.urls import reverse
+# from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -67,9 +67,9 @@ class BookingAddView(TemplateView):
                 size = request.POST.getlist('size')
                 quantity = request.POST.getlist('quantity')
                 date = request.POST.getlist('date')
-                fw_fm = request.POST['fw_fm']
-                loading = request.POST['loading']
-                bw_to = request.POST['bw_to']
+                pickup_from = request.POST['pickup_from']
+                factory = request.POST['factory']
+                return_to = request.POST['return_to']
                 vessel = request.POST['vessel']
                 port = request.POST['port']
                 closing_date = request.POST['closing_date']
@@ -94,9 +94,9 @@ class BookingAddView(TemplateView):
                             'booking_color': booking_color,
                             'size': s,
                             'date': d,
-                            'fw_fm': fw_fm,
-                            'loading': loading,
-                            'bw_to': bw_to,
+                            'pickup_from': pickup_from,
+                            'factory': factory,
+                            'return_to': return_to,
                             'vessel': vessel,
                             'port': port,
                             'closing_date': closing_date,
@@ -116,17 +116,11 @@ class BookingAddView(TemplateView):
                         booking = Booking(**data)
                         booking.save()
 
-                messages.success(request, "Added Booking")
+                messages.success(request, "Added Booking.")
                 return redirect('booking-table')
                 # return render(request, 'table.html')
-            messages.error(request, "Error")
+            messages.error(request, "Form not validate.")
         return redirect('booking-add')
-
-                        
-                
-                
-
-                
 
 
     def run_work_id(self, date):
@@ -139,8 +133,8 @@ class BookingAddView(TemplateView):
             work_number = work['work_number__max'] + 1
         work = str("{:03d}".format(work_number))
         # print(work)
-        print('11111111111111111111111111')
+        # print('11111111111111111111111111')
         d = datetime.strptime(date, "%Y-%m-%d")
         work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work
-        print(work_id)
+        # print(work_id)
         return work_id, work_number

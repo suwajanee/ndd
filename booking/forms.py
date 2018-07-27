@@ -4,14 +4,16 @@ from customer.models import Principal, Shipper
 from .models import Booking
 
 
-class BookingFilterForm(forms.Form):
+class BookingFilterSortForm(forms.Form):
 	date = forms.DateField(
 		widget=forms.DateInput(
 			attrs={
 				'type': 'date',
+				'class': 'form-control',
 				'onchange': 'this.form.submit();'
 			}
 		),
+		required=False
 	)
 
 class BookingAddForm(forms.Form):
@@ -25,15 +27,15 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'form-control',
-				'placeholder': 'DATE',
-			}
-		)
-	)
+	# date = forms.DateField(
+	# 	widget=forms.DateInput(
+	# 		attrs={
+	# 			'type': 'date',
+	# 			'class': 'form-control',
+	# 			'placeholder': 'DATE',
+	# 		}
+	# 	)
+	# )
 
 	agent = forms.CharField(
 		widget=forms.TextInput(
@@ -44,25 +46,25 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 	
-	size = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'class': 'form-control',
-				'placeholder': 'SIZE',
-			}
-		),
-	)
+	# size = forms.CharField(
+	# 	widget=forms.TextInput(
+	# 		attrs={
+	# 			'class': 'form-control',
+	# 			'placeholder': 'SIZE',
+	# 		}
+	# 	),
+	# )
 
-	quantity = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'type': 'number',
-				'min': 1,
-				'placeholder': 'QUANTITY',
-				'class': 'form-control',
-			}
-		)
-	)
+	# quantity = forms.CharField(
+	# 	widget=forms.TextInput(
+	# 		attrs={
+	# 			'type': 'number',
+	# 			'min': 1,
+	# 			'placeholder': 'QUANTITY',
+	# 			'class': 'form-control',
+	# 		}
+	# 	)
+	# )
 
 	booking_no = forms.CharField(
 		widget=forms.TextInput(
@@ -84,7 +86,7 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	fw_fm = forms.CharField(
+	pickup_from = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
@@ -93,7 +95,7 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 	
-	bw_to = forms.CharField(
+	return_to = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
@@ -158,7 +160,7 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	loading = forms.CharField(
+	factory = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',

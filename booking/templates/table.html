@@ -2,94 +2,107 @@
 
 <html>
     <head>
-        <title>Demo</title>
+        <title>demo</title>
         <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="{% static 'js/fixed-header.js' %}"></script>
-        <script src="{% static 'js/dropdown-edit.js' %}"></script>
-        <script src="{% static 'js/dropdown-print.js' %}"></script>
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+        
+        
         <!-- Popper JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        
+        <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove(); 
             });
         }, 2000);
+
+
     </script>
     </head>
-    <body style="overflow-x:auto;">
+    <body>
     <!-- <body style="overflow:auto;"> -->
     <!-- <body> -->
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
-            <div class="add-button">
-                    <a href="{% url 'booking-add' %}"><i class="material-icons add-icon-size">add_circle</i></a>
-                </div>
+            <a class="btn btn-primary add-btn" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
         <div class="page-header">
-            <h1><a href="{% url 'booking-table' %}">Demo booking</a></h1>
+            <h1><a href="{% url 'booking-table' %}">Booking</a></h1>
         </div>
-        
-        <form name="booking-filter" method="POST" action="{% url 'booking-table' %}">
+        <div class="container col-sm-12 mt-3">
+        <form name="booking-filter-sort" method="POST" action="{% url 'booking-table' %}" class="form-inline">
             {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-            </table>
+            <div class="input-group mb-3 ml-sm-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">DATE</span>
+                </div>
+                {{ form.date }} 
+            </div>
+            <div class="btn-group btn-group-sm mb-3 ml-sm-2">
+                <button class="btn btn-light ml-sm-2" name="sort" value="shipper" onclick="this.form.submit();">Sort by Shipper</button>
+                <button class="btn btn-light ml-sm-2" name="sort" value="booking_no" onclick="this.form.submit();">Sort by Booking</button>
+                <button class="btn btn-light ml-sm-2" name="sort" value="work_id" onclick="this.form.submit();">Sort by Work ID</button>
+            </div>
         </form>
+        
+        </div>
         {% if bookings %}
-        <div class='table-cont' id='table-cont'>
+        <!-- <div class='table-cont' id='table-cont'> -->
+    <!-- <div class="container"> -->
+        <!-- <div class="row"> -->
+            <div id='table-cont' class="table-responsive-sm table-cont"> 
         <table>
-            <thead class="nowrap"> 
-            <th rowspan="2"></th>
-            <th rowspan="2">Print</th>
-            <th rowspan="2">Time</th>
-            <th rowspan="2">Date</th>
-            <th rowspan="2">Principal</th>
+            <thead class="text-nowrap"> 
+            <th rowspan="2">EDIT</th>
+            <th rowspan="2">PRINT</th>
+            <th rowspan="2">TIME</th>
+            <th rowspan="2">DATE</th>
+            <th rowspan="2">PRINCIPAL</th>
+            <th rowspan="2">SHIPPER</th>
+            <th rowspan="2">AGENT</th>
+            <th rowspan="2">SIZE</th>
+            <th rowspan="2">BOOKING</th>
 
-            <th colspan="6">FORWARD TRIP</th>
+            <th rowspan="2">TR</th>
+            <th rowspan="2">FM</th>
+            <th rowspan="2">TR</th>
+            <th rowspan="2">FACTORY</th>
+            <th rowspan="2">TR</th>
+            <th rowspan="2">TR</th>
+            <th rowspan="2">TO</th>
 
             <th rowspan="2">CONTAINER NO</th>
             <th rowspan="2">SEAL NO</th>
+            <th rowspan="2">VESSEL</th>
+            <th rowspan="2">PORT</th>
+            <th rowspan="2">CLOSING</th>
 
-            <th colspan="5">BACKWARD TRIP</th>
-
+            <th rowspan="2">REF.</th>
             <th rowspan="2">REMARK</th>
-            <th rowspan="2">สถานที่บรรจุ</th>
             <th rowspan="2">เลขที่ใบงาน</th>
+
             <th rowspan="2">PICK UP</th>
             <th rowspan="2">FACTORY</th>
             <th rowspan="2">RETURN</th>
+
             <th colspan="2">ลานรับตู้</th>
             <th colspan="4">Factory</th>
             <th colspan="2">ลานส่งตู้</th>
             <tr>
-                <th>SHIPPER</th>
-                <th>AGENT</th>
-                <th>SIZE</th>
-                <th>BOOKING</th>
-                <th>TR</th>
-                <th>FM</th>
-            
-                <th>TR</th>
-                <th>TO</th>
-                <th>VESSEL</th>
-                <th>PORT</th>
-                <th>CLOSING</th>
-
                 <th>In</th>
                 <th>Out</th>
 
@@ -106,65 +119,78 @@
         {% block content %}
             {% for booking in bookings %}
                 <tr>
-                    <td onclick="dropdownEdit({{ booking.pk }})" class="dropbtn">
-                        <i class="material-icons">more_horiz</i></button>
-                        <div id="dropdownEdit{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
-                            <a href=".">Edit</a>
-                            <a href=".">Delete</a> 
+                    <td>
+                        <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_horiz</i></button>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href=".">Edit</a>
+                            <a class="dropdown-item" href="{% url 'booking-delete' pk=booking.pk %}">Delete</a>
                         </div>
                     </td>
                     
-                    <!-- <td onclick="document.location = '{% url 'booking-print' pk=booking.pk template='full' %}';"><a href="{% url 'booking-print' pk=booking.pk template='full' %}"><i class="material-icons">print</i></a></td> -->
-                    <td onclick="dropdownPrint({{ booking.pk }})" class="dropbtn">
-                        <i class="material-icons">print</i>
-                        <div id="dropdownPrint{{ booking.pk }}" class="dropdown-content{{ booking.pk }} dropdown-content">
-                            <a href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
-                            <a href="{% url 'booking-print' pk=booking.pk template='forward' %}">Forward</a>
-                            <a href="{% url 'booking-print' pk=booking.pk template='backward' %}">Backward</a>
+                    <td>
+                        <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">print</i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
+                            <a class="dropdown-item" href="{% url 'booking-print' pk=booking.pk template='forward' %}">Forward</a>
+                            <a class="dropdown-item" href="{% url 'booking-print' pk=booking.pk template='backward' %}">Backward</a>
                         </div>
                     </td>
 
                     {% if booking.time %}
-                        <td class="nowrap">{{ booking.time }}</td>
+                        <td class="text-nowrap">{{ booking.time }}</td>
                     {% else %}
-                        <td class="nowrap">-</td>
+                        <td class="text-nowrap">-</td>
                     {% endif %}
                     
-                    <td class="nowrap">{{ booking.date }}</td>
-                    <td class="nowrap">{{ booking.principal }}</td>
-                    <td class="nowrap">{{ booking.shipper }}</td>
-                    <td class="nowrap">{{ booking.agent }}</td>
-                    <td class="nowrap">{{ booking.size }}</td>
-                    <td style="background-color: {{ booking.booking_color }}" class="nowrap">{{ booking.booking_no }}</td>
-                    <td class="nowrap">{{ booking.fw_tr }}</td>
-                    <td class="nowrap">{{ booking.fw_fm }}</td>
-                    <td class="nowrap">{{ booking.container_no }}</td>
-                    <td class="nowrap">{{ booking.seal_no }}</td>
-                    <td class="nowrap">{{ booking.bw_tr }}</td>
-                    <td class="nowrap">{{ booking.bw_to }}</td>
-                    <td class="nowrap">{{ booking.vessel }}</td>
-                    <td class="nowrap">{{ booking.port }}</td>
-                    <td class="nowrap">{{ booking.closing_date }}</td>
+                    <td class="text-nowrap">{{ booking.date }}</td>
+                    <td class="text-nowrap">{{ booking.principal }}</td>
+                    <td class="text-nowrap">{{ booking.shipper }}</td>
+                    <td class="text-nowrap">{{ booking.agent }}</td>
+                    <td class="text-nowrap">{{ booking.size }}</td>
+                    <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">{{ booking.booking_no }}</td>
+
+                    <td class="text-nowrap">{{ booking.pickup_tr }}</td>
+                    <td class="text-nowrap">{{ booking.pickup_from }}</td>
+                    <td class="text-nowrap">{{ booking.forward_tr }}</td>
+                    <td class="text-nowrap">{{ booking.factory }}</td>
+                    <td class="text-nowrap">{{ booking.backward_tr }}</td>
+                    <td class="text-nowrap">{{ booking.return_tr }}</td>
+                    <td class="text-nowrap">{{ booking.return_to }}</td>
+
+                    <td class="text-nowrap">{{ booking.container_no }}</td>
+                    <td class="text-nowrap">{{ booking.seal_no }}</td>
+                    <td class="text-nowrap">{{ booking.vessel }}</td>
+                    <td class="text-nowrap">{{ booking.port }}</td>
+                    <td class="text-nowrap">{{ booking.closing_date }}</td>
+                    <td class="text-nowrap">{{ booking.ref }}</td>
                     <td><div class="remark">{{ booking.remark }}</div></td>
-                    <td class="nowrap">{{ booking.loading }}</td>
-                    <td class="nowrap">{{ booking.work_id }}</td>
-                    <td class="nowrap">{{ booking.pickup_date }}</td>
-                    <td class="nowrap">{{ booking.factory_date }}</td>
-                    <td class="nowrap">{{ booking.return_date }}</td>
-                    <td class="nowrap">{{ booking.pickup_in_time }}</td>
-                    <td class="nowrap">{{ booking.pickup_out_time }}</td>
-                    <td class="nowrap">{{ booking.factory_in_time }}</td>
-                    <td class="nowrap">{{ booking.factory_load_start_time }}</td>
-                    <td class="nowrap">{{ booking.factory_load_finish_time }}</td>
-                    <td class="nowrap">{{ booking.factory_out_finish }}</td>
-                    <td class="nowrap">{{ booking.return_in_time }}</td>
-                    <td class="nowrap">{{ booking.return_out_time }}</td>
+
+                    <td class="text-nowrap">{{ booking.work_id }}</td>
+                    
+                    <td class="text-nowrap">{{ booking.pickup_date }}</td>
+                    <td class="text-nowrap">{{ booking.factory_date }}</td>
+                    <td class="text-nowrap">{{ booking.return_date }}</td>
+
+                    <td class="text-nowrap">{{ booking.pickup_in_time }}</td>
+                    <td class="text-nowrap">{{ booking.pickup_out_time }}</td>
+                    <td class="text-nowrap">{{ booking.factory_in_time }}</td>
+                    <td class="text-nowrap">{{ booking.factory_load_start_time }}</td>
+                    <td class="text-nowrap">{{ booking.factory_load_finish_time }}</td>
+                    <td class="text-nowrap">{{ booking.factory_out_finish }}</td>
+                    <td class="text-nowrap">{{ booking.return_in_time }}</td>
+                    <td class="text-nowrap">{{ booking.return_out_time }}</td>
                 </tr>
             {% endfor %}
         {% endblock %}
         </tbody> 
         </table>
         </div>
+    <!-- </div> -->
+<!-- </div> -->
         {% else %}
             <h1> NOOO </h1>
         {% endif %}
