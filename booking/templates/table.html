@@ -43,7 +43,7 @@
         <div class="page-header">
             <h1><a href="{% url 'booking-table' %}">Booking</a></h1>
         </div>
-        <div class="container col-sm-12 mt-3">
+        <div class="container col-sm-12 mt-4">
         <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
             {% csrf_token %}
             <div class="input-group mb-3 ml-sm-2">

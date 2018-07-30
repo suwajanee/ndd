@@ -77,7 +77,7 @@ class BookingAddView(TemplateView):
 
                 container = zip(size, quantity, date)
                 for s, q, d in container:
-                    add_booking.run_new_work_id(d, shipper, int(q))
+                    add_booking.work_id_after_add(d, shipper, int(q))
                     for i in range(int(q)):
                         work_id, work_number = add_booking.run_work_id(d, shipper)
                         data = {
@@ -133,7 +133,7 @@ class BookingAddView(TemplateView):
         return work_id, work_number
 
 
-    def run_new_work_id(self, date, shipper, quantity):
+    def work_id_after_add(self, date, shipper, quantity):
         max_work = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
         if max_work['work_number__max']:
             work_gt = Booking.objects.filter(date=date, work_number__gt=max_work['work_number__max'])
