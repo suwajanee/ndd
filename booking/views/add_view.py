@@ -147,6 +147,7 @@ class BookingAddView(TemplateView):
                 booking.work_id = work_id
                 booking.work_number = new_work_number
                 booking.save()
+        return None
 
             
 
