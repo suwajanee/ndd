@@ -11,12 +11,6 @@ from django.db.models import Max
 # from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.db.models import Q
-
-# class BookingAddView(CreateView):
-#     model = Booking
-#     fields = ('time', 'date', 'principal', 'shipper')
-    # success_url = reverse_lazy('booking-add')
 
 
 class BookingAddView(TemplateView):
@@ -142,7 +136,7 @@ class BookingAddView(TemplateView):
     def run_new_work_id(self, date, shipper, quantity):
         max_work = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
         if max_work['work_number__max']:
-            work_gt = Booking.objects.filter(~Q(shipper=shipper), date=date, work_number__gt=max_work['work_number__max'])
+            work_gt = Booking.objects.filter(date=date, work_number__gt=max_work['work_number__max'])
             for work in work_gt:               
                 new_work_number = work.work_number + quantity
                 work_str = str("{:03d}".format(new_work_number))
