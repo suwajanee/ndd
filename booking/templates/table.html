@@ -44,7 +44,7 @@
             <h1><a href="{% url 'booking-table' %}">Booking</a></h1>
         </div>
         <div class="container col-sm-12 mt-3">
-        <form name="booking-filter-sort" method="POST" action="{% url 'booking-table' %}" class="form-inline">
+        <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
             {% csrf_token %}
             <div class="input-group mb-3 ml-sm-2">
                 <div class="input-group-prepend">
@@ -52,11 +52,11 @@
                 </div>
                 {{ form.date }} 
             </div>
-            <div class="btn-group btn-group-sm mb-3 ml-sm-2">
+            <!-- <div class="btn-group btn-group-sm mb-3 ml-sm-2">
                 <button class="btn btn-light ml-sm-2" name="sort" value="shipper" onclick="this.form.submit();">Sort by Shipper</button>
                 <button class="btn btn-light ml-sm-2" name="sort" value="booking_no" onclick="this.form.submit();">Sort by Booking</button>
                 <button class="btn btn-light ml-sm-2" name="sort" value="work_id" onclick="this.form.submit();">Sort by Work ID</button>
-            </div>
+            </div> -->
         </form>
         
         </div>
@@ -125,7 +125,10 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href=".">Edit</a>
-                            <a class="dropdown-item" href="{% url 'booking-delete' pk=booking.pk %}">Delete</a>
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('delete-form{{ booking.pk }}').submit();">Delete</a>
+                            <form id="delete-form{{ booking.pk }}" method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
+                                <input type="hidden" name="date" value="{{ date }}">
+                            </form>
                         </div>
                     </td>
                     
