@@ -11,6 +11,7 @@ from django.db.models import Max
 # from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.db.models import Q
 
 # class BookingAddView(CreateView):
 #     model = Booking
@@ -82,10 +83,9 @@ class BookingAddView(TemplateView):
 
                 container = zip(size, quantity, date)
                 for s, q, d in container:
+                    add_booking.run_new_work_id(d, shipper, int(q))
                     for i in range(int(q)):
-                        
-                        work_id, work_number = add_booking.run_work_id(d)
-
+                        work_id, work_number = add_booking.run_work_id(d, shipper)
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
@@ -115,26 +115,44 @@ class BookingAddView(TemplateView):
 
                         booking = Booking(**data)
                         booking.save()
-
+                 
                 messages.success(request, "Added Booking.")
                 return redirect('booking-table')
-                # return render(request, 'table.html')
             messages.error(request, "Form not validate.")
         return redirect('booking-add')
 
 
-    def run_work_id(self, date):
-        # print(date)
+    def run_work_id(self, date, shipper):
         work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
-        # print(work['work_number__max'])
         if work['work_number__max'] == None:
             work_number = 0
         else:
-            work_number = work['work_number__max'] + 1
+            work_shipper = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
+            if work_shipper['work_number__max'] == None:
+                work_number = work['work_number__max'] + 1
+            else:
+                work_number = work_shipper['work_number__max'] + 1
+
         work = str("{:03d}".format(work_number))
-        # print(work)
-        # print('11111111111111111111111111')
         d = datetime.strptime(date, "%Y-%m-%d")
         work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work
-        # print(work_id)
         return work_id, work_number
+
+
+    def run_new_work_id(self, date, shipper, quantity):
+        max_work = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
+        if max_work['work_number__max']:
+            work_gt = Booking.objects.filter(~Q(shipper=shipper), date=date, work_number__gt=max_work['work_number__max'])
+            for work in work_gt:               
+                new_work_number = work.work_number + quantity
+                work_str = str("{:03d}".format(new_work_number))
+                d = datetime.strptime(date, "%Y-%m-%d")
+                work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work_str
+
+                booking = Booking.objects.get(pk=work.pk)
+                booking.work_id = work_id
+                booking.work_number = new_work_number
+                booking.save()
+
+            
+
