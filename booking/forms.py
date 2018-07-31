@@ -27,16 +27,6 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	# date = forms.DateField(
-	# 	widget=forms.DateInput(
-	# 		attrs={
-	# 			'type': 'date',
-	# 			'class': 'form-control',
-	# 			'placeholder': 'DATE',
-	# 		}
-	# 	)
-	# )
-
 	agent = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
@@ -45,26 +35,6 @@ class BookingAddForm(forms.Form):
 		),
 		required=False
 	)
-	
-	# size = forms.CharField(
-	# 	widget=forms.TextInput(
-	# 		attrs={
-	# 			'class': 'form-control',
-	# 			'placeholder': 'SIZE',
-	# 		}
-	# 	),
-	# )
-
-	# quantity = forms.CharField(
-	# 	widget=forms.TextInput(
-	# 		attrs={
-	# 			'type': 'number',
-	# 			'min': 1,
-	# 			'placeholder': 'QUANTITY',
-	# 			'class': 'form-control',
-	# 		}
-	# 	)
-	# )
 
 	booking_no = forms.CharField(
 		widget=forms.TextInput(

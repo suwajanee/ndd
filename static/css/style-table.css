@@ -10,23 +10,21 @@ body{
 }
 
 table, td {
-    font-size: 12px;
+    font-size: 14px;
     border: 2px solid black;
     text-align: center;    
+    
   }
 
 th, td {
     padding: 5px;
     min-width: 50px;
+    background: white;
 }
   
 tbody tr:hover {
     background: #ffff99;
 }   
-
-/* .nowrap {
-    white-space: nowrap;
-} */
 
 /* Hide too long text in Remark field */
 .remark {
@@ -48,34 +46,25 @@ tbody tr:hover {
 
 /* Fix header table when scroll */
 .table-cont{
-    height: 85%;
+    /* height: 85%; */
     overflow-y: auto;
     position: absolute;
-    top: auto;
     bottom:0px;
     box-shadow: 0 0 1px 3px #ddd;
     width:100%;
+    top: 15%;
 }
 
 thead{
     background-color:white;
-    box-shadow: 0 0 8px 2px gray;
+    box-shadow: 0 0 5px 2px gray;
     
 }
 
 
 /* Add Booking Button */
-/* .add-button {
-    position: fixed;
-    bottom: 0px;
-    right: 0px;
-} */
-
 .add-btn {
-    font-size:200%;
-    position: absolute;
-    right: 20px;
-    top: 20px;
+    font-size:1vw;
 }
     
       

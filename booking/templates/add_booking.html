@@ -1,97 +1,68 @@
+{% extends 'base.html' %}
+
 {% load staticfiles %}
 
-<html>
-    <head>
-        <title>demo</title>
-        <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
 
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-        <!-- Popper JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-
+{% block title %} Add Booking {% endblock %}
         
-        <script>
-            window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
-    });
-}, 2000);
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
+
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 2000);
 
 
-    $(function() {
-        $(document).on('click', '.add-more', function(e)
-        {
-            e.preventDefault();
+        $(function() {
+            $(document).on('click', '.add-more', function(e) {
+                e.preventDefault();
 
-            var controlForm = $('.control:first'),
+                var controlForm = $('.control:first'),
                 currentEntry = $(this).parents('.entry:first'),
                 newEntry = $(currentEntry.clone()).appendTo(controlForm);
 
-            newEntry.find('input').val('');
-            controlForm.find('.entry:not(:last) .add-more')
+                newEntry.find('input').val('');
+                controlForm.find('.entry:not(:last) .add-more')
                 .removeClass('add-more').addClass('remove')
                 .removeClass('btn-success').addClass('btn-danger')
                 .html('<span><i class="fa fa-minus"></i></span>');
-        }).on('click', '.remove', function(e)
-        {
-            $(this).parents('.entry:first').remove();
+            }).on('click', '.remove', function(e) {
+                $(this).parents('.entry:first').remove();
 
-            e.preventDefault();
-            return false;
+                e.preventDefault();
+                return false;
+            });
         });
-    });
 
-            function updateradio() {
-                var pt = document.getElementsByName("address");
-                if (pt[1].checked) {
-                    document.getElementById("id_address_other").disabled = false;
-                } else {
-                    document.getElementById("id_address_other").disabled = true;
-                }
-
+        function updateradio() {
+            var pt = document.getElementsByName("address");
+            if (pt[1].checked) {
+                document.getElementById("id_address_other").disabled = false;
+            } else {
+                document.getElementById("id_address_other").disabled = true;
             }
-            
-        </script>
-        <style>
-    fieldset {
-    border: 1px solid #ddd !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
-    margin: 0 0 1.5em 0 !important;
-    border-radius: 8px;
-}
+        }
+    </script>
+{% endblock %}
 
-legend {
-    font-size: 1.2em !important;
-    font-weight: bold !important;
-    text-align: left !important;
-    width:auto;
-    padding:0 10px;
-    border-bottom:none;
-}
-        </style>
-    </head>
-    <body>
-        {% block content %}
-        {% for message in messages %}
-            <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
+{% block content %}
+    {% for message in messages %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="container col-sm-6 shadow" style="background-color: white;">
+        <div class="container col-sm-9">
+            <div class="container text-center pt-4 pb-2">
+            <h2>Add Booking</h2>
+            <hr>
             </div>
-        {% endfor %}
-        <div class="container col-sm-4 mt-3">
             <form method="POST" class="add-booking-form">
                 {% csrf_token %}
                         <!-- <form id="customer" method="POST"> -->
@@ -240,11 +211,15 @@ legend {
                         <label class="custom-control-label" for="id_address_3">None</label>
                     </div>
                     </fieldset>
-                    
-                    <button type="submit" class="btn btn-primary btn-lg pull-right" formaction="{% url 'booking-save' %}">SUBMIT</button>
+                    <div class="text-right pb-4">
+                    <button class="btn btn-light btn-lg mr-sm-1" onclick="window.location='{% url 'booking-table' %}'">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-lg" formaction="{% url 'booking-save' %}">SUBMIT</button>
+                </div>
             </form>
+            
         </div>
-
+        
+        </div>
         {% endblock %}
-
-    </body>
+    
+   

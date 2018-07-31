@@ -1,70 +1,44 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 
-<html>
-    <head>
-        <title>demo</title>
-        <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="{% static 'js/fixed-header.js' %}"></script>
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% block title %} NDD Booking {% endblock %}
         
-        
-        <!-- Popper JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-
-        <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script>
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
+    <script src="{% static 'js/fixed-header.js' %}"></script>
+    <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove(); 
             });
         }, 2000);
-
-
     </script>
-    </head>
-    <body>
-    <!-- <body style="overflow:auto;"> -->
-    <!-- <body> -->
-        {% for message in messages %}
-            <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-            <a class="btn btn-primary add-btn" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
-        <div class="page-header">
-            <h1><a href="{% url 'booking-table' %}">Booking</a></h1>
-        </div>
-        <div class="container col-sm-12 mt-4">
-        <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
-            {% csrf_token %}
-            <div class="input-group mb-3 ml-sm-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">DATE</span>
-                </div>
-                {{ form.date }} 
+{% endblock %}
+        
+{% block content %}
+<br>
+    {% for message in messages %}
+        <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    <div class="container col-sm-12">
+        <a class="btn btn-primary add-btn float-right" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+    
+    <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
+        {% csrf_token %}
+        <div class="input-group mb-3 ml-sm-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text">DATE</span>
             </div>
-            <!-- <div class="btn-group btn-group-sm mb-3 ml-sm-2">
-                <button class="btn btn-light ml-sm-2" name="sort" value="shipper" onclick="this.form.submit();">Sort by Shipper</button>
-                <button class="btn btn-light ml-sm-2" name="sort" value="booking_no" onclick="this.form.submit();">Sort by Booking</button>
-                <button class="btn btn-light ml-sm-2" name="sort" value="work_id" onclick="this.form.submit();">Sort by Work ID</button>
-            </div> -->
-        </form>
+            {{ form.date }} 
+        </div>
+    </form>
         
         </div>
         {% if bookings %}
         <!-- <div class='table-cont' id='table-cont'> -->
     <!-- <div class="container"> -->
         <!-- <div class="row"> -->
-            <div id='table-cont' class="table-responsive-sm table-cont"> 
+            <div id='table-cont' class="table-cont"> 
         <table>
             <thead class="text-nowrap"> 
             <th rowspan="2">EDIT</th>
@@ -116,7 +90,6 @@
             </tr>
         </thead> 
         <tbody> 
-        {% block content %}
             {% for booking in bookings %}
                 <tr>
                     <td>
@@ -188,7 +161,7 @@
                     <td class="text-nowrap">{{ booking.return_out_time }}</td>
                 </tr>
             {% endfor %}
-        {% endblock %}
+       
         </tbody> 
         </table>
         </div>
@@ -197,5 +170,9 @@
         {% else %}
             <h1> NOOO </h1>
         {% endif %}
+
+        
+    {% endblock %}
     </body>
+
 </html>
