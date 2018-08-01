@@ -12,6 +12,7 @@ import xhtml2pdf.pisa as pisa
 from django.utils.six import BytesIO
 import os
 
+# from weasyprint import HTML, CSS
 
 class BookingPrintView(TemplateView):
     
@@ -22,6 +23,7 @@ class BookingPrintView(TemplateView):
             template_name = 'bw_template.html'
         else:
             template_name = 'full_template.html'
+
         booking = get_object_or_404(Booking, pk=pk)
         base_dir = os.path.dirname(os.path.dirname(__file__))
         return self.render(template_name, {'booking': booking, 'base_dir': base_dir})

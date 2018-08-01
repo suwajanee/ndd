@@ -19,6 +19,10 @@ table, td {
 th, td {
     padding: 5px;
     min-width: 50px;
+    /* background: white; */
+}
+
+tbody {
     background: white;
 }
   
@@ -66,5 +70,5 @@ thead{
 .add-btn {
     font-size:1vw;
 }
-    
+
       

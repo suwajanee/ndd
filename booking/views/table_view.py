@@ -6,15 +6,21 @@ from ..models import Booking
 from customer.models import Principal, Shipper
 from ..forms import BookingFilterSortForm
 # from django.shortcuts import render_to_response
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import redirect
 from django.urls import reverse
-import requests
 
 class BookingTableView(TemplateView):
     
     def get_table(request):
         template_name = 'table.html'
+
+        closing_alert = datetime.now() + timedelta(days=1)
+        closing_string = closing_alert.strftime("%Y-%m-%d")
+
+        print(closing_alert)
+        print(closing_string)
+
         if request.method == "GET":
             form = BookingFilterSortForm(request.GET)
             date = request.GET.get("date")
@@ -23,11 +29,13 @@ class BookingTableView(TemplateView):
                 date = ''
 
             if not date:
-                bookings = Booking.objects.order_by('work_id')
+                bookings = Booking.objects.order_by('date', 'work_id')
             else:
                 bookings = Booking.objects.filter(date=date).order_by('work_id')
+        else:
+            bookings = Booking.objects.order_by('date', 'work_id')
 
-        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date})
+        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'alert': closing_string})
 
     def delete_data(request, pk):
         delete_booking = BookingTableView()
