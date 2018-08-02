@@ -7,14 +7,13 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
-
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove(); 
             });
         }, 2000);
-
 
         $(function() {
             $(document).on('click', '.add-more', function(e) {
@@ -43,6 +42,20 @@
                 document.getElementById("id_address_other").disabled = false;
             } else {
                 document.getElementById("id_address_other").disabled = true;
+            }
+        }
+
+        $('#cut').on('change', function(){
+        this.value = this.checked ? 1 : 0;
+        // alert(this.value);
+        }).change();
+
+        function updateCut() {
+            var cut = document.getElementById("cut");
+            if (cut.checked) {
+                document.getElementById("id_return_date").disabled = false;
+            } else {
+                document.getElementById("id_return_date").disabled = true;
             }
         }
     </script>
@@ -157,9 +170,9 @@
                     </div>
 
                     <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">VESSEL</span>
-                            </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">VESSEL</span>
+                        </div>
                         {{ form.vessel }} 
                     </div>
 
@@ -169,6 +182,25 @@
                         </div>
                         {{ form.port }} 
                     </div>
+
+                    <fieldset>
+                        <legend>ตัดหาง</legend>
+                        
+                        <div class="container input-group mb-2 col-sm-8">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="hidden" name="cut" value=0 />
+                                        <input type="checkbox" class="custom-control-input" id="cut" name="cut" value=1 onchange="updateCut();">
+                                        <label class="custom-control-label" for="cut"></label>
+                                    </div>
+                                </div>
+                                <span class="input-group-text">RETURN DATE</span>
+                            </div>
+                                <!-- <input type="date" name="return_date" class="form-control" id="id_return_date" disabled> -->
+                                    {{ form.return_date }}
+                            </div>
+                    </fieldset>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">

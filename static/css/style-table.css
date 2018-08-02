@@ -1,24 +1,31 @@
 @import url(../fonts/thsarabunnew.css);
 
-body{ 
+body { 
     font-family: THSarabunNew, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
     height: 100%;
 
     /* width: 100%; */
 }
 
 table, td {
+    font-family: THSarabunNew, sans-serif;
     font-size: 14px;
     border: 2px solid black;
     text-align: center;    
-    
   }
 
-th, td {
+thead{
+    background-color:white;
+    box-shadow: 0 0 5px 2px gray; 
+}
+
+th {
+    padding: 15 5px;
+}
+
+td {
     padding: 5px;
-    min-width: 50px;
+    min-width: 60px;
     /* background: white; */
 }
 
@@ -59,16 +66,19 @@ tbody tr:hover {
     top: 15%;
 }
 
-thead{
-    background-color:white;
-    box-shadow: 0 0 5px 2px gray;
-    
+input:not([type]), input[type="text"] {
+    min-width: 50px;
+    padding: 4px;
+    font-size: 12px;
 }
 
-
-/* Add Booking Button */
-.add-btn {
-    font-size:1vw;
+td input[type="date"] {
+    max-width: 130px;
+    padding: 4px;
+    font-size: 12px;
 }
 
-      
+/* textarea {
+    padding: 4px;
+    font-size: 12px;
+} */

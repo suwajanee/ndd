@@ -6,20 +6,24 @@ from ..models import Booking
 from customer.models import Principal, Shipper
 from ..forms import BookingFilterSortForm
 # from django.shortcuts import render_to_response
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.db.models import Q
 
 class BookingTableView(TemplateView):
+
+    @property
+    def is_past_due(self):
+        return date.today() > self.date
     
     def get_table(request):
         template_name = 'table.html'
 
-        closing_alert = datetime.now() + timedelta(days=1)
-        closing_string = closing_alert.strftime("%Y-%m-%d")
-
-        print(closing_alert)
-        print(closing_string)
+        tmr = datetime.now() + timedelta(days=1)
+        closing_tmr = tmr.strftime("%Y-%m-%d")
+        today = datetime.now()
+        closing_today = today.strftime("%Y-%m-%d")
 
         if request.method == "GET":
             form = BookingFilterSortForm(request.GET)
@@ -31,11 +35,11 @@ class BookingTableView(TemplateView):
             if not date:
                 bookings = Booking.objects.order_by('date', 'work_id')
             else:
-                bookings = Booking.objects.filter(date=date).order_by('work_id')
+                bookings = Booking.objects.filter(Q(date=date) | ((Q(closing_date=closing_tmr) | Q(closing_date=closing_today) | Q(date__lte=today)) & Q(return_tr=''))).order_by('date', 'work_id')
         else:
             bookings = Booking.objects.order_by('date', 'work_id')
 
-        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'alert': closing_string})
+        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'today': today, 'closing': [closing_tmr, closing_today]})
 
     def delete_data(request, pk):
         delete_booking = BookingTableView()

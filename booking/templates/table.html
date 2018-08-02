@@ -21,7 +21,8 @@
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
     <div class="container col-sm-12">
-        <a class="btn btn-primary add-btn float-right" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+        <a class="btn btn-primary float-right" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+        <a class="btn btn-primary float-right mr-sm-2" href="{% url 'booking-edit' %}" role="button"><i class="fa fa-edit"></i>&nbsp;Edit</a>
     
     <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
         {% csrf_token %}
@@ -38,42 +39,42 @@
         <!-- <div class='table-cont' id='table-cont'> -->
     <!-- <div class="container"> -->
         <!-- <div class="row"> -->
-            <div id='table-cont' class="table-cont"> 
+            <div id='table-cont' class="table-cont table-responsive"> 
         <table>
             <thead class="text-nowrap"> 
-            <th rowspan="2">EDIT</th>
-            <th rowspan="2">PRINT</th>
-            <th rowspan="2">TIME</th>
-            <th rowspan="2">DATE</th>
-            <th rowspan="2">PRINCIPAL</th>
-            <th rowspan="2">SHIPPER</th>
-            <th rowspan="2">AGENT</th>
-            <th rowspan="2">SIZE</th>
-            <th rowspan="2">BOOKING</th>
+            <th>EDIT</th>
+            <th>PRINT</th>
+            <th>TIME</th>
+            <th>DATE</th>
+            <th>PRINCIPAL</th>
+            <th>SHIPPER</th>
+            <th>AGENT</th>
+            <th>SIZE</th>
+            <th>BOOKING</th>
 
-            <th rowspan="2">TR</th>
-            <th rowspan="2">FM</th>
-            <th rowspan="2">TR</th>
-            <th rowspan="2">FACTORY</th>
-            <th rowspan="2">TR</th>
-            <th rowspan="2">TR</th>
-            <th rowspan="2">TO</th>
+            <th>TR</th>
+            <th>FM</th>
+            <th>TR</th>
+            <th>FACTORY</th>
+            <th>TR</th>
+            <th>TR</th>
+            <th>TO</th>
 
-            <th rowspan="2">CONTAINER NO</th>
-            <th rowspan="2">SEAL NO</th>
-            <th rowspan="2">VESSEL</th>
-            <th rowspan="2">PORT</th>
-            <th rowspan="2">CLOSING</th>
+            <th>CONTAINER NO</th>
+            <th>SEAL NO</th>
+            <th>VESSEL</th>
+            <th>PORT</th>
+            <th>CLOSING</th>
 
-            <th rowspan="2">REF.</th>
-            <th rowspan="2">REMARK</th>
-            <th rowspan="2">เลขที่ใบงาน</th>
+            <th>REF.</th>
+            <th>REMARK</th>
+            <th>เลขที่ใบงาน</th>
 
-            <th rowspan="2">PICK UP</th>
-            <th rowspan="2">FACTORY</th>
-            <th rowspan="2">RETURN</th>
+            <th>PICK UP</th>
+            <th>FACTORY</th>
+            <th>RETURN</th>
 
-            <th colspan="2">ลานรับตู้</th>
+            <!-- <th colspan="2">ลานรับตู้</th>
             <th colspan="4">Factory</th>
             <th colspan="2">ลานส่งตู้</th>
             <tr>
@@ -87,18 +88,20 @@
 
                 <th>In</th>
                 <th>Out</th>
-            </tr>
+            </tr> -->
         </thead> 
         <tbody> 
             {% for booking in bookings %}
-            {% if booking.closing_date == alert %}
+            {% if booking.closing_date in closing and not booking.return_tr %}
                 <tr class="alert-danger">
+            {% elif booking.date <= today.date and not booking.return_tr %}
+                <tr class="alert-warning">
             {% else %}
                 <tr>
             {% endif %}
                     <td>
                 
-                        <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_horiz</i></button>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -111,7 +114,7 @@
                     </td>
                     
                     <td>
-                        <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">print</i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -139,7 +142,11 @@
                     <td class="text-nowrap">{{ booking.forward_tr }}</td>
                     <td class="text-nowrap">{{ booking.factory }}</td>
                     <td class="text-nowrap">{{ booking.backward_tr }}</td>
-                    <td class="text-nowrap">{{ booking.return_tr }}</td>
+                    {% if not booking.return_tr %}
+                        <td class="text-nowrap bg-warning">{{ booking.return_tr }}</td>
+                    {% else %}
+                        <td class="text-nowrap">{{ booking.return_tr }}</td>
+                    {% endif %}
                     <td class="text-nowrap">{{ booking.return_to }}</td>
 
                     <td class="text-nowrap">{{ booking.container_no }}</td>
@@ -147,23 +154,35 @@
                     <td class="text-nowrap">{{ booking.vessel }}</td>
                     <td class="text-nowrap">{{ booking.port }}</td>
                     <td class="text-nowrap">{{ booking.closing_date }}</td>
-                    <td class="text-nowrap">{{ booking.ref }}</td>
+                    <td><div class="remark">{{ booking.ref }}</div></td>
                     <td><div class="remark">{{ booking.remark }}</div></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
                     
                     <td class="text-nowrap">{{ booking.pickup_date }}</td>
-                    <td class="text-nowrap">{{ booking.factory_date }}</td>
-                    <td class="text-nowrap">{{ booking.return_date }}</td>
+                    {% if booking.factory_date != booking.return_date %}
+                    <td class="text-nowrap bg-info">
+                    {% else %}
+                    <td class="text-nowrap">
+                    {% endif %}
+                        {{ booking.factory_date }}
+                    </td>
+                    {% if booking.factory_date != booking.return_date %}
+                    <td class="text-nowrap bg-info">
+                    {% else %}
+                    <td class="text-nowrap">
+                    {% endif %}
+                        {{ booking.return_date }}
+                    </td>
 
-                    <td class="text-nowrap">{{ booking.pickup_in_time }}</td>
+                    <!-- <td class="text-nowrap">{{ booking.pickup_in_time }}</td>
                     <td class="text-nowrap">{{ booking.pickup_out_time }}</td>
                     <td class="text-nowrap">{{ booking.factory_in_time }}</td>
                     <td class="text-nowrap">{{ booking.factory_load_start_time }}</td>
                     <td class="text-nowrap">{{ booking.factory_load_finish_time }}</td>
                     <td class="text-nowrap">{{ booking.factory_out_finish }}</td>
                     <td class="text-nowrap">{{ booking.return_in_time }}</td>
-                    <td class="text-nowrap">{{ booking.return_out_time }}</td>
+                    <td class="text-nowrap">{{ booking.return_out_time }}</td> -->
                 </tr>
             {% endfor %}
        

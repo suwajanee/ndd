@@ -54,6 +54,7 @@ class BookingAddView(TemplateView):
         if request.method == 'POST':
             form = BookingAddForm(request.POST)
             if form.is_valid():
+                # print(request.POST)
                 principal = request.POST['principal']
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
@@ -72,12 +73,21 @@ class BookingAddView(TemplateView):
                 ref = request.POST['ref']
                 remark = request.POST['remark']
                 address = request.POST['address']
+
+                cut = request.POST['cut']
+
                 if address == 'other':
                     address_other = request.POST['address_other']
 
                 container = zip(size, quantity, date)
                 for s, q, d in container:
                     add_booking.work_id_after_add(d, shipper, int(q))
+                    
+                    if cut == '1':
+                        return_date = request.POST['return_date']
+                    else:
+                        return_date = d
+
                     for i in range(int(q)):
                         work_id, work_number = add_booking.run_work_id(d, shipper)
                         data = {
@@ -101,7 +111,7 @@ class BookingAddView(TemplateView):
                             'work_number': work_number,
                             'pickup_date': d,
                             'factory_date': d,
-                            'return_date': d,
+                            'return_date': return_date,
                             'address': address
                         }
                         if address == 'other':

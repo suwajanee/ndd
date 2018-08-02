@@ -74,6 +74,17 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
+	return_date = forms.CharField(
+		widget=forms.TextInput(
+			attrs={
+				'type': 'date',
+				'class': 'form-control',
+			}
+		),
+		required=False,
+		disabled=True,
+	)
+
 	vessel = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
