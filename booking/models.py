@@ -27,7 +27,7 @@ class Booking(models.Model):
     seal_no = models.CharField(max_length=50, blank=True)
     vessel = models.CharField(max_length=50, blank=True)
     port = models.CharField(max_length=50, blank=True)
-    closing_date = models.CharField(max_length=20, blank=True)
+    closing_date = models.DateField(max_length=20, null=True, blank=True, default=None)
     closing_time = models.CharField(max_length=20, blank=True)
     ref = models.CharField(max_length=50, blank=True, default='')
     remark = models.CharField(max_length=200, blank=True)

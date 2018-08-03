@@ -22,7 +22,10 @@
     {% endfor %}
     <div class="container col-sm-12">
         <a class="btn btn-primary float-right" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
-        <a class="btn btn-primary float-right mr-sm-2" href="{% url 'booking-edit' %}" role="button"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+        <a class="btn btn-primary float-right mr-sm-2" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+        <form id="edit-filter" method="GET" action="{% url 'booking-edit' %}" style="display:none;">
+            <input type="hidden" name="date" value="{{ date }}">
+        </form>
     
     <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
         {% csrf_token %}
@@ -64,7 +67,7 @@
             <th>SEAL NO</th>
             <th>VESSEL</th>
             <th>PORT</th>
-            <th>CLOSING</th>
+            <th colspan=2>CLOSING (DATE / TIME)</th>
 
             <th>REF.</th>
             <th>REMARK</th>
@@ -92,7 +95,9 @@
         </thead> 
         <tbody> 
             {% for booking in bookings %}
-            {% if booking.closing_date in closing and not booking.return_tr %}
+            {% if booking.closing_date < today.date and not booking.return_tr %}
+                <tr class="bg-danger">
+            {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
                 <tr class="alert-danger">
             {% elif booking.date <= today.date and not booking.return_tr %}
                 <tr class="alert-warning">
@@ -100,7 +105,6 @@
                 <tr>
             {% endif %}
                     <td>
-                
                         <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_horiz</i></button>
                         </button>
@@ -142,18 +146,19 @@
                     <td class="text-nowrap">{{ booking.forward_tr }}</td>
                     <td class="text-nowrap">{{ booking.factory }}</td>
                     <td class="text-nowrap">{{ booking.backward_tr }}</td>
-                    {% if not booking.return_tr %}
-                        <td class="text-nowrap bg-warning">{{ booking.return_tr }}</td>
-                    {% else %}
-                        <td class="text-nowrap">{{ booking.return_tr }}</td>
-                    {% endif %}
+                    <td class="text-nowrap">{{ booking.return_tr }}</td>
                     <td class="text-nowrap">{{ booking.return_to }}</td>
 
                     <td class="text-nowrap">{{ booking.container_no }}</td>
                     <td class="text-nowrap">{{ booking.seal_no }}</td>
                     <td class="text-nowrap">{{ booking.vessel }}</td>
                     <td class="text-nowrap">{{ booking.port }}</td>
-                    <td class="text-nowrap">{{ booking.closing_date }}</td>
+                    {% if booking.closing_date %}
+                        <td class="text-nowrap">{{ booking.closing_date }}</td>
+                    {% else %}
+                        <td class="text-nowrap">-</td>
+                    {% endif %}
+                    <td class="text-nowrap">{{ booking.closing_time }}</td>
                     <td><div class="remark">{{ booking.ref }}</div></td>
                     <td><div class="remark">{{ booking.remark }}</div></td>
 

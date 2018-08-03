@@ -76,6 +76,8 @@ class BookingAddView(TemplateView):
 
                 cut = request.POST['cut']
 
+                if not closing_date:
+                    closing_date = None
                 if address == 'other':
                     address_other = request.POST['address_other']
 
