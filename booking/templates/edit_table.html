@@ -5,24 +5,35 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
     <script src="{% static 'js/fixed-header.js' %}"></script>
     <script>
         window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove(); 
             });
-        }, 2000);
+        }, 1500);
     </script>
 {% endblock %}
         
 {% block content %}
 <br>
-    {% for message in messages %}
+    <!-- {% for message in messages %}
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
+    {% endfor %} -->
     <div class="container col-sm-12">
-        <button class="btn btn-success float-right" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>
-        <button class="btn float-right mr-sm-2" onclick="window.location='{% url 'booking-table' %}'">Cancel</button>
+        <!-- <button class="btn float-right" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Done</button> -->
+        <button class="btn btn-primary float-right" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
+        <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
+            <input type="hidden" name="date" value="{{ date }}">
+        </form>
+        {% for message in messages %}
+            <div class="save-msg float-right mr-sm-4 pt-2 text-secondary"><i class="fa w3-spin fa-spinner"></i>&nbsp;{{ message }}</div>
+        {% endfor %}
+        <!-- <button class="btn float-right mr-sm-2" onclick="document.forms['table-filter'].submit();">Cancel</button>
+        <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
+            <input type="hidden" name="date" value="{{ date }}">
+        </form> -->
     
     <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
         {% csrf_token %}
@@ -41,7 +52,7 @@
         <!-- <div class="row"> -->
             <div id='table-cont' class="table-cont table-responsive"> 
         <table>
-            <thead class="text-nowrap">
+            <thead class="text-nowrap bg-lightgray">
             <th>TIME</th>
             <th>DATE</th>
             <th>PRINCIPAL</th>
@@ -89,10 +100,13 @@
             </tr> -->
         </thead> 
         <tbody> 
-            <form name="edit-form" method="POST" action="{% url 'booking-edit-save' %}">
-                {% csrf_token %}
+            <!-- <form name="edit-form" method="POST" action="{% url 'booking-edit-save' %}">
+                {% csrf_token %} -->
             {% for booking in bookings %}
+            <form name="edit-form{{ booking.pk }}" method="POST" action="{% url 'booking-edit-save' %}">
+                {% csrf_token %}
             <input type="hidden" name="pk" value="{{ booking.pk }}">
+            <input type="hidden" name="date_filter" value="{{ date }}">
             {% load parse_iso %}
             {% if booking.closing_date < today.date and not booking.return_tr %}
                 <tr class="bg-danger">
@@ -104,33 +118,33 @@
                 <tr>
             {% endif %}
                     
-                    <td><input name="time" class="form-control" value="{{ booking.time }}" autocomplete=off></td>
+                    <td><input name="time" class="form-control" value="{{ booking.time }}" onchange="this.form.submit();" autocomplete=off></td>
                     
-                    <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off></td>
+                    <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off></td>
                     <td class="text-nowrap">{{ booking.principal }}</td>
                     <td class="text-nowrap">{{ booking.shipper }}</td>
                     <td class="text-nowrap">{{ booking.agent }}</td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">{{ booking.booking_no }}</td>
 
-                    <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" autocomplete=off></td>
-                    <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" autocomplete=off></td>
-                    <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" autocomplete=off></td>
-                    <td><input name="factory" class="form-control" value="{{ booking.factory }}" autocomplete=off></td>
-                    <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" autocomplete=off></td>
-                    <td><input name="return_tr" class="form-control" value="{{ booking.return_tr }}" autocomplete=off></td>
+                    <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="factory" class="form-control" value="{{ booking.factory }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="return_tr" class="form-control" value="{{ booking.return_tr }}" onchange="this.form.submit();" autocomplete=off></td>
                     
-                    <td><input name="return_to" class="form-control" value="{{ booking.return_to }}" autocomplete=off></td>
+                    <td><input name="return_to" class="form-control" value="{{ booking.return_to }}" onchange="this.form.submit();" autocomplete=off></td>
 
-                    <td><input name="container_no" class="form-control" value="{{ booking.container_no }}" autocomplete=off></td>
-                    <td><input name="seal_no" class="form-control" value="{{ booking.seal_no }}" autocomplete=off></td>
+                    <td><input name="container_no" class="form-control" value="{{ booking.container_no }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input name="seal_no" class="form-control" value="{{ booking.seal_no }}" onchange="this.form.submit();" autocomplete=off></td>
                     <!-- <td class="text-nowrap">{{ booking.vessel }}</td>
                     <td class="text-nowrap">{{ booking.port }}</td> -->
-                    <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" autocomplete=off></td>
-                    <td><input type="time" name="closing_time" class="form-control" value="{{ booking.closing_time }}" autocomplete=off></td>
+                    <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><input type="time" name="closing_time" class="form-control" value="{{ booking.closing_time }}" onchange="this.form.submit();" autocomplete=off></td>
 
-                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 4px; font-size: 12px;">{{ booking.remark }}</textarea></td>
+                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" onchange="this.form.submit();" autocomplete=off></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 4px; font-size: 12px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 
@@ -149,7 +163,7 @@
                     {% else %}
                     <td>
                     {% endif %}
-                        <input type="date" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}" autocomplete=off>
+                        <input type="date" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off>
                     </td>
 
                     <!-- <td class="text-nowrap">{{ booking.pickup_in_time }}</td>
@@ -161,8 +175,9 @@
                     <td class="text-nowrap">{{ booking.return_in_time }}</td>
                     <td class="text-nowrap">{{ booking.return_out_time }}</td> -->
                 </tr>
-            {% endfor %}
             </form>
+            {% endfor %}
+            
         </tbody> 
         </table>
         </div>

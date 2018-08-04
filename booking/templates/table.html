@@ -43,8 +43,8 @@
     <!-- <div class="container"> -->
         <!-- <div class="row"> -->
             <div id='table-cont' class="table-cont table-responsive"> 
-        <table>
-            <thead class="text-nowrap"> 
+        <table class="table-hover">
+            <thead class="text-nowrap bg-lightgray"> 
             <th>EDIT</th>
             <th>PRINT</th>
             <th>TIME</th>
@@ -65,8 +65,8 @@
 
             <th>CONTAINER NO</th>
             <th>SEAL NO</th>
-            <th>VESSEL</th>
-            <th>PORT</th>
+            <!-- <th>VESSEL</th>
+            <th>PORT</th> -->
             <th colspan=2>CLOSING (DATE / TIME)</th>
 
             <th>REF.</th>
@@ -96,17 +96,17 @@
         <tbody> 
             {% for booking in bookings %}
             {% if booking.closing_date < today.date and not booking.return_tr %}
-                <tr class="bg-danger">
+                <tr class="bg-danger clickable" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
-                <tr class="alert-danger">
+                <tr class="alert-danger clickable" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% elif booking.date <= today.date and not booking.return_tr %}
-                <tr class="alert-warning">
+                <tr class="alert-warning clickable" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% else %}
-                <tr>
+                <tr class="clickable" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% endif %}
                     <td>
                         <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">more_horiz</i></button>
+                            <i class="material-icons text-dark">more_horiz</i></button>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href=".">Edit</a>
@@ -119,7 +119,7 @@
                     
                     <td>
                         <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">print</i>
+                            <i class="material-icons text-dark">print</i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
@@ -151,8 +151,8 @@
 
                     <td class="text-nowrap">{{ booking.container_no }}</td>
                     <td class="text-nowrap">{{ booking.seal_no }}</td>
-                    <td class="text-nowrap">{{ booking.vessel }}</td>
-                    <td class="text-nowrap">{{ booking.port }}</td>
+                    <!-- <td class="text-nowrap">{{ booking.vessel }}</td>
+                    <td class="text-nowrap">{{ booking.port }}</td> -->
                     {% if booking.closing_date %}
                         <td class="text-nowrap">{{ booking.closing_date }}</td>
                     {% else %}
@@ -160,7 +160,7 @@
                     {% endif %}
                     <td class="text-nowrap">{{ booking.closing_time }}</td>
                     <td><div class="remark">{{ booking.ref }}</div></td>
-                    <td><div class="remark">{{ booking.remark }}</div></td>
+                    <td><div  class="remark">{{ booking.remark }}</div></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
                     
@@ -188,6 +188,40 @@
                     <td class="text-nowrap">{{ booking.factory_out_finish }}</td>
                     <td class="text-nowrap">{{ booking.return_in_time }}</td>
                     <td class="text-nowrap">{{ booking.return_out_time }}</td> -->
+                </tr>
+                <tr id="accordion{{ booking.pk }}" class="collapse bg-light">
+                    <!-- <td colspan="4"></td> -->
+                    <!-- <td colspan="18"> -->
+                        <td colspan="26">
+                            <table class="container w-25 my-2" style="border-collapse: separate; border:none;">
+                                <tr class="bg-white">
+                                    <td class="w-25 bg-lightgray">VESSEL</td>
+                                    <td>{{ booking.vessel }}</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="bg-lightgray">PORT</td>
+                                    <td>{{ booking.port }}</td>
+                                </tr>
+                            </table>
+                            <fieldset class="w-25 my-2">
+                                    <legend>ADDRESS</legend>
+                            <div class="custom-control custom-radio mb-3">
+                                <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio();" value="shipper" checked>
+                                <label class="custom-control-label" for="id_address_1">Shipper</label>
+                            </div>
+        
+                            <div class="custom-control custom-radio mb-3">
+                                <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio();" value="other">
+                                <label class="custom-control-label" for="id_address_2">Other</label><br />
+                                <textarea class="form-control" rows="3" id="id_address_other" name="address_other" disabled></textarea>
+                            </div>
+        
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio();" value="none">
+                                <label class="custom-control-label" for="id_address_3">None</label>
+                            </div>
+                            </fieldset>
+                    </td>
                 </tr>
             {% endfor %}
        
