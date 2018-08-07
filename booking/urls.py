@@ -9,10 +9,12 @@ from .views.edit_table_view import BookingEditTableView
 urlpatterns = [
     url(r'^$', BookingTableView.get_table, name='booking-table'),
     url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
+
     url(r'^add/$', BookingAddView.add_booking, name='booking-add'),
     url(r'^save/$', BookingAddView.save_booking, name='booking-save'),
 
     url(r'^delete/(?P<pk>\d+)/$', BookingTableView.delete_data, name='booking-delete'),
+    url(r'^update/$', BookingTableView.update_data, name='booking-update'),
 
     url(r'^edit/$', BookingEditTableView.get_edit_table, name='booking-edit'),
     url(r'^edit/save$', BookingEditTableView.save_edit_table, name='booking-edit-save'),

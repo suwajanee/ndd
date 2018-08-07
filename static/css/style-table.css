@@ -9,9 +9,10 @@ body {
 
 table, td {
     font-family: THSarabunNew, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     border: 1px solid gray;
     text-align: center;    
+    width:100%
   }
 
 thead {
@@ -37,6 +38,17 @@ tbody {
     background: white;
 }
 
+.w-1 {
+    width: 1%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.hiddenRow {
+    padding: 0 !important;
+}
 
 
 /* Hide too long text in Remark field */
@@ -64,4 +76,26 @@ tbody {
     box-shadow: 0 0 1px 1px gray;
     width:100%;
     top: 15%;
+}
+
+[data-toggle="collapse"] .toggle-icon .fa:before {  
+    content: "\f068";
+    font-size: 14px;
+    font-weight: bold;
+}
+  
+[data-toggle="collapse"].collapsed .toggle-icon .fa:before {
+    content: "\f067";
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hiddenRow td {
+    font-size: 14px;
+}
+
+.hiddenRow .cancel-label {
+    color:red;
+    font-size: 18px;
+    font-weight: bold;
 }

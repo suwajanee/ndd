@@ -39,55 +39,6 @@ class BookingEditTableView(TemplateView):
 
     def save_edit_table(request):
         if request.method == 'POST':
-            # pk = dict(request.POST)['pk']
-            # time = dict(request.POST)['time']
-            # date = dict(request.POST)['date']
-            # pickup_tr = dict(request.POST)['pickup_tr']
-            # pickup_from = dict(request.POST)['pickup_from']
-            # forward_tr = dict(request.POST)['forward_tr']
-            # factory = dict(request.POST)['factory']
-            # backward_tr = dict(request.POST)['backward_tr']
-            # return_tr = dict(request.POST)['return_tr']
-            # return_to = dict(request.POST)['return_to']
-            # container_no = dict(request.POST)['container_no']
-            # seal_no = dict(request.POST)['seal_no']
-            # closing_date = dict(request.POST)['closing_date']
-            # closing_time = dict(request.POST)['closing_time']
-            # ref = dict(request.POST)['ref']
-            # remark = dict(request.POST)['remark']
-            # return_date = dict(request.POST)['return_date']
-
-            # print(request.POST['date'])
-
-            # for i in range(0,len(pk)):
-            #     if not date[i]:
-            #         date[i] = None
-            #     if not closing_date[i]:
-            #         closing_date[i] = None
-            #     if not return_date[i]:
-            #         return_date[i] = None
-
-            #     booking = Booking.objects.get(pk=pk[i])
-            #     booking.time = time[i]
-            #     booking.date = date[i]
-            #     booking.pickup_tr = pickup_tr[i]
-            #     booking.pickup_from = pickup_from[i]
-            #     booking.forward_tr = forward_tr[i]
-            #     booking.factory = factory[i]
-            #     booking.backward_tr = backward_tr[i]
-            #     booking.return_tr = return_tr[i]
-            #     booking.return_to = return_to[i]
-            #     booking.container_no = container_no[i]
-            #     booking.seal_no = seal_no[i]
-            #     booking.closing_date = closing_date[i]
-            #     booking.closing_time = closing_time[i]
-            #     booking.ref = ref[i]
-            #     booking.remark = remark[i]
-            #     booking.return_date = return_date[i]
-            #     booking.save()
-            # messages.success(request, "Saved Booking.")
-
-
             pk = request.POST['pk']
             time = request.POST['time']
             date = request.POST['date']

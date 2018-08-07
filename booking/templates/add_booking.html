@@ -7,6 +7,7 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
+    <script src="{% static 'js/add-form.js' %}"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script>
         window.setTimeout(function() {
@@ -14,7 +15,7 @@
                 $(this).remove(); 
             });
         }, 2000);
-
+        
         $(function() {
             $(document).on('click', '.add-more', function(e) {
                 e.preventDefault();
@@ -36,28 +37,6 @@
             });
         });
 
-        function updateradio() {
-            var pt = document.getElementsByName("address");
-            if (pt[1].checked) {
-                document.getElementById("id_address_other").disabled = false;
-            } else {
-                document.getElementById("id_address_other").disabled = true;
-            }
-        }
-
-        $('#cut').on('change', function(){
-        this.value = this.checked ? 1 : 0;
-        // alert(this.value);
-        }).change();
-
-        function updateCut() {
-            var cut = document.getElementById("cut");
-            if (cut.checked) {
-                document.getElementById("id_return_date").disabled = false;
-            } else {
-                document.getElementById("id_return_date").disabled = true;
-            }
-        }
     </script>
 {% endblock %}
 
@@ -228,18 +207,18 @@
                     <fieldset>
                             <legend>ADDRESS</legend>
                     <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio();" value="shipper" checked>
+                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
                         <label class="custom-control-label" for="id_address_1">Shipper</label>
                     </div>
 
                     <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio();" value="other">
+                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
                         <label class="custom-control-label" for="id_address_2">Other</label><br />
                         <textarea class="form-control" rows="3" id="id_address_other" name="address_other" disabled></textarea>
                     </div>
 
                     <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio();" value="none">
+                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
                         <label class="custom-control-label" for="id_address_3">None</label>
                     </div>
                     </fieldset>

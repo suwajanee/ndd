@@ -35,17 +35,17 @@
             <input type="hidden" name="date" value="{{ date }}">
         </form> -->
     
-    <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
-        {% csrf_token %}
-        <div class="input-group mb-3 ml-sm-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">DATE</span>
+        <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
+            {% csrf_token %}
+            <div class="input-group mb-3 ml-sm-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">DATE</span>
+                </div>
+                {{ form.date }} 
             </div>
-            {{ form.date }} 
-        </div>
-    </form>
+        </form>
         
-        </div>
+    </div>
         {% if bookings %}
         <!-- <div class='table-cont' id='table-cont'> -->
     <!-- <div class="container"> -->
@@ -108,14 +108,16 @@
             <input type="hidden" name="pk" value="{{ booking.pk }}">
             <input type="hidden" name="date_filter" value="{{ date }}">
             {% load parse_iso %}
-            {% if booking.closing_date < today.date and not booking.return_tr %}
-                <tr class="bg-danger">
+            {% if booking.cancel == '1' %}
+                <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+            {% elif booking.closing_date < today.date and not booking.return_tr %}
+                <tr class="bg-danger collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
-                <tr class="alert-danger">
+                <tr class="alert-danger collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% elif booking.date <= today.date and not booking.return_tr %}
-                <tr class="alert-warning">
+                <tr class="alert-warning collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% else %}
-                <tr>
+                <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% endif %}
                     
                     <td><input name="time" class="form-control" value="{{ booking.time }}" onchange="this.form.submit();" autocomplete=off></td>
@@ -125,7 +127,13 @@
                     <td class="text-nowrap">{{ booking.shipper }}</td>
                     <td class="text-nowrap">{{ booking.agent }}</td>
                     <td class="text-nowrap">{{ booking.size }}</td>
-                    <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">{{ booking.booking_no }}</td>
+                    {% if booking.cancel == '1' %}
+                        <td class="bg-secondary text-nowrap">
+                    {% else %}
+                        <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">
+                    {% endif %}
+                            {{ booking.booking_no }}
+                        </td>
 
                     <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" onchange="this.form.submit();" autocomplete=off></td>
                     <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" onchange="this.form.submit();" autocomplete=off></td>
