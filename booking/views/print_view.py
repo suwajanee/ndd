@@ -18,11 +18,11 @@ class BookingPrintView(TemplateView):
     
     def get(self, request, pk, template):
         if template == 'forward':
-            template_name = 'fw_template.html'
+            template_name = 'pdf_template/fw_template.html'
         elif template == 'backward':
-            template_name = 'bw_template.html'
+            template_name = 'pdf_template/bw_template.html'
         else:
-            template_name = 'full_template.html'
+            template_name = 'pdf_template/full_template.html'
 
         booking = get_object_or_404(Booking, pk=pk)
         base_dir = os.path.dirname(os.path.dirname(__file__))

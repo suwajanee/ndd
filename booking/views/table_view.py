@@ -15,7 +15,7 @@ from django.contrib import messages
 class BookingTableView(TemplateView):
 
     def get_table(request):
-        template_name = 'table.html'
+        template_name = 'booking/table.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()

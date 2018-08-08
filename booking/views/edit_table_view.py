@@ -15,7 +15,7 @@ from django.db.models import Q
 class BookingEditTableView(TemplateView):
     
     def get_edit_table(request):
-        template_name = 'edit_table.html'
+        template_name = 'booking/edit_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()

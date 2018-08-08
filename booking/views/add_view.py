@@ -17,7 +17,7 @@ class BookingAddView(TemplateView):
 
     def add_booking(request):
         add_booking = BookingAddView()
-        template_name = 'add_booking.html'
+        template_name = 'booking/add_booking.html'
         context = {}
         context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
