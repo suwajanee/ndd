@@ -21,6 +21,12 @@
                 e.stopPropagation();
             });
         });
+
+        $(function() {
+            $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
+
+            $(".class-collapse").css({width: $( window ).width()})
+        });
         
     </script>
 {% endblock %}
@@ -31,7 +37,8 @@
 
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
-    <div class="container col-sm-12">
+    <!-- <div class="position-sticky" style="top:0px; bottom:0;"> -->
+    <div id="filter-date" class="container col-sm-12">
         <a class="btn btn-primary float-right" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
         <a class="btn btn-primary float-right mr-sm-2" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
         <form id="edit-filter" method="GET" action="{% url 'booking-edit' %}" style="display:none;">
@@ -53,6 +60,7 @@
         <!-- <div class='table-cont' id='table-cont'> -->
     <!-- <div class="container"> -->
         <!-- <div class="row"> --> 
+        <!-- <div class="position-relative h-75">  -->
         <div id='table-cont' class="table-cont table-responsive"> 
         <table class="table-hover" id="accordion">
             <thead class="text-nowrap bg-lightgray"> 
@@ -178,6 +186,7 @@
                             <td colspan="26" class="hiddenRow">
                                 <!-- <div id="accordion{{ booking.pk }}" class="collapse"  data-parent="#accordion"> -->
                                 <div id="accordion{{ booking.pk }}" class="collapse">
+                                    <div class="class-collapse">
                                     <div class="float-left ml-sm-2 mt-2">
                                         <button class="btn btn-danger" href="#" onclick="document.getElementById('delete-form{{ booking.pk }}').submit();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                         <form id="delete-form{{ booking.pk }}" method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
@@ -189,7 +198,7 @@
                                             {% csrf_token %}
                                             <input type="hidden" name="pk" value="{{ booking.pk }}">
                                             <input type="hidden" name="date_filter" value="{{ date }}">
-                                            <table class="mb-2" style="border-collapse: separate; border:none;">
+                                            <table class="w-100 mb-2" style="border-collapse: separate; border:none;">
                                                 <tr class="bg-white">
                                                     <td class="w-20 bg-lightgray">VESSEL</td>
                                                     <td><input class="form-control" name="vessel" value="{{ booking.vessel }}"></td>
@@ -272,7 +281,9 @@
                                         </form>
                                     </div>
                                 </div>
+                                </div>
                             </td>
+                            <!-- <td colspan="6" class="hiddenRow"></td> -->
                         </tr>
                     {% endfor %}
             </tbody> 

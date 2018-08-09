@@ -3,7 +3,6 @@
 body { 
     font-family: THSarabunNew, sans-serif;
     height: 100%;
-
     /* width: 100%; */
 }
 
@@ -12,7 +11,7 @@ table, td {
     font-size: 12px;
     border: 1px solid gray;
     text-align: center;    
-    width:100%
+    /* width:100% */
   }
 
 thead {
@@ -72,10 +71,9 @@ tbody {
     /* height: 85%; */
     overflow-y: auto;
     position: absolute;
-    bottom:0px;
+    bottom:0;
     box-shadow: 0 0 1px 1px gray;
     width:100%;
-    top: 15%;
 }
 
 [data-toggle="collapse"] .toggle-icon .fa:before {  

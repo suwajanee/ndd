@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
     <script src="{% static 'js/fixed-header.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script>
         window.setTimeout(function() {
             $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove(); 
             });
         }, 1500);
+
+        $(function() {
+            $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
+        });
     </script>
 {% endblock %}
         
@@ -21,7 +26,7 @@
     <!-- {% for message in messages %}
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %} -->
-    <div class="container col-sm-12">
+    <div id="filter-date" class="container col-sm-12">
         <!-- <button class="btn float-right" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Done</button> -->
         <button class="btn btn-primary float-right" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
         <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
