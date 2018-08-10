@@ -8,13 +8,15 @@ from ..forms import BookingAddForm
 # from django.shortcuts import render_to_response
 from datetime import datetime
 from django.db.models import Max
-# from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 class BookingAddView(TemplateView):
 
+    @login_required(login_url=reverse_lazy('login'))
     def add_booking(request):
         add_booking = BookingAddView()
         template_name = 'booking/add_booking.html'
@@ -48,7 +50,7 @@ class BookingAddView(TemplateView):
             context['form'] = BookingAddForm(req)
         return context
 
-
+    @login_required(login_url=reverse_lazy('login'))
     def save_booking(request):
         add_booking = BookingAddView()
         if request.method == 'POST':

@@ -8,12 +8,14 @@ from ..forms import BookingFilterSortForm
 # from django.shortcuts import render_to_response
 from datetime import datetime, timedelta, date
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 class BookingTableView(TemplateView):
 
+    @login_required(login_url=reverse_lazy('login'))
     def get_table(request):
         template_name = 'booking/table.html'
 
@@ -28,20 +30,19 @@ class BookingTableView(TemplateView):
                 date = ''
 
             if not date:
-                bookings = Booking.objects.order_by('date', 'work_id')
+                bookings = Booking.objects.filter(Q(date__month=today.month) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
                 bookings = Booking.objects.filter(Q(date=date) | ((Q(closing_date__lte=tmr) | Q(date__lte=today)) & (Q(return_tr='') & ~Q(cancel='1')))).order_by('date', 'work_id')
         else:
-            bookings = Booking.objects.order_by('date', 'work_id')
+            bookings = Booking.objects.filter(date__month=today.month | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
         return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'today': today, 'tmr': tmr})
 
+    @login_required(login_url=reverse_lazy('login'))
     def delete_data(request, pk):
         delete_booking = BookingTableView()
         booking = Booking.objects.get(pk=pk)
         booking.delete()
-
-        # delete_booking.work_id_after_delete(booking)
 
         if request.method == "GET":
             date = request.GET.get("date")
@@ -64,7 +65,7 @@ class BookingTableView(TemplateView):
     #             booking.work_number = new_work_number
     #             booking.save()
     #     return None
-
+    @login_required(login_url=reverse_lazy('login'))
     def update_data(request):
         if request.method == 'POST':
             pk = request.POST['pk']
@@ -76,10 +77,8 @@ class BookingTableView(TemplateView):
                 address_other = request.POST['address_other']
 
             cancel = request.POST['cancel']
-            print(type(cancel))
 
             date_filter = request.POST['date_filter']
-
 
             booking = Booking.objects.get(pk=pk)
             booking.vessel = vessel

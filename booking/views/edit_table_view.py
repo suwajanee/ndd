@@ -8,12 +8,14 @@ from ..forms import BookingFilterSortForm
 # from django.shortcuts import render_to_response
 from datetime import datetime, timedelta
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 class BookingEditTableView(TemplateView):
     
+    @login_required(login_url=reverse_lazy('login'))
     def get_edit_table(request):
         template_name = 'booking/edit_table.html'
 
@@ -28,15 +30,15 @@ class BookingEditTableView(TemplateView):
                 date = ''
 
             if not date:
-                bookings = Booking.objects.order_by('date', 'work_id')
+                bookings = Booking.objects.filter(Q(date__month=today.month) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
-                bookings = Booking.objects.filter(Q(date=date) | ((Q(closing_date__lte=tmr) | Q(date__lte=today)) & Q(return_tr=''))).order_by('date', 'work_id')
+                bookings = Booking.objects.filter(Q(date=date) | ((Q(closing_date__lte=tmr) | Q(date__lte=today)) & (Q(return_tr='') & ~Q(cancel='1')))).order_by('date', 'work_id')
         else:
-            bookings = Booking.objects.order_by('date', 'work_id')
+            bookings = Booking.objects.filter(date__month=today.month | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
         return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'today': today, 'tmr': tmr})
 
-
+    @login_required(login_url=reverse_lazy('login'))
     def save_edit_table(request):
         if request.method == 'POST':
             pk = request.POST['pk']
