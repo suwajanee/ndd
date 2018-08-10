@@ -33,7 +33,7 @@
         <table width=100%>
             <tr class="big" width=50px>
               <td>วันที่</td>
-              <td colspan=3 class="center text-blue">{{ booking.date }}</td>
+              <td colspan=3 class="center text-blue">{{ booking.date | date:'d - m - Y' }}</td>
             </tr>
             <tr class="small" >
               <td>DATE</td>
@@ -197,9 +197,9 @@
             </tr>
             <tr class="big">
               <td class="border-left">จาก</td>
-              <td class="center text-blue">{{ booking.fw_fm }}</td>
+              <td class="center text-blue">{{ booking.pickup_from }}</td>
               <td class="text-center">ถึง</td>
-              <td class="center text-blue border-right">{{ booking.loading }}</td>
+              <td class="center text-blue border-right">{{ booking.factory }}</td>
               <td class="border-left">จาก</td>
               <td class="center text-blue"></td>
               <td class="text-center">ถึง</td>
@@ -217,9 +217,9 @@
             </tr>
             <tr class="big">
               <td width=350px class="border-left">วันปฏิบัติงาน</td>
-              <td width=350px class="center text-blue">{{ booking.pickup_date }}</td>
+              <td width=350px class="center text-blue">{{ booking.pickup_date | date:'d-m-Y' }}</td>
               <td width=250px class="text-center">ถึง</td>
-              <td width=350px class="center text-blue border-right">{{ booking.factory_date }}</td>
+              <td width=350px class="center text-blue border-right">{{ booking.factory_date | date:'d-m-Y' }}</td>
               <td width=350px class="border-left">วันปฏิบัติงาน</td>
               <td width=350px class="center text-blue"></td>
               <td width=250px class="text-center">ถึง</td>
@@ -271,7 +271,7 @@
             </tr>
             <tr class="big">
               <td colspan=2 class="center border-left">เวลาปิดรับตู้</td>
-              <td colspan=2 class="center text-red border-right">{{ booking.closing_time }}</td>
+              <td colspan=2 class="center text-red border-right">{{ booking.closing_date | date:'d-m-Y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
               <td colspan=2 class="center border-left">เวลาปิดรับตู้</td>
               <td colspan=2 class="center text-red border-right"></td>
             </tr>
@@ -303,7 +303,7 @@
               <td colspan=4>Verified to recive container in good condition and seal in tact</td>
             </tr>
             <tr>
-              <td colspan=8 style="height:30px;"></td>
+              <td colspan=8 style="height:40px;"></td>
             </tr>
             <tr class="text-center text-footer">
               <td colspan=8>ลายเซ็นผู้ว่าจ้างหรือตัวแทน</td>
@@ -321,6 +321,18 @@
                 <td colspan=3></td>
             </tr>
           </table>
+          <div style="margin-top:10px;">
+            <table width=80%>
+              <tr>
+                <td width=20% style="vertical-align: top;">
+                  ออกใบเสร็จ
+                </td>
+                <td class="test-right text-blue">
+                  {{ address | linebreaks }}
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
         
         {% endif %}

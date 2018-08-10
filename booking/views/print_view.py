@@ -5,8 +5,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 from django.utils import timezone
 from django.template.loader import get_template
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 from ..models import Booking
+from customer.models import Shipper
 
 import xhtml2pdf.pisa as pisa
 from django.utils.six import BytesIO
@@ -26,7 +29,16 @@ class BookingPrintView(TemplateView):
 
         booking = get_object_or_404(Booking, pk=pk)
         base_dir = os.path.dirname(os.path.dirname(__file__))
-        return self.render(template_name, {'booking': booking, 'base_dir': base_dir})
+
+        if booking.address == 'other':
+            address = booking.address_other
+        elif booking.address == 'shipper':
+            shipper = Shipper.objects.get(name=booking.shipper)
+            address = shipper.address
+        else:
+            address = ''
+
+        return self.render(template_name, {'booking': booking, 'address': address,'base_dir': base_dir})
 
     def render(self, path, params):
         template = get_template(path)
