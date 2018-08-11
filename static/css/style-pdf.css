@@ -22,7 +22,7 @@ body {
     }
     @frame content_frame {          /* Content Frame */
     -pdf-frame-content: table_content;
-    left: 0.5in; width: 7.5in; top: 215pt; height: auto; 
+    left: 0.5in; width: 7.5in; top: 210pt; height: auto; 
     }
     /* @frame footer_frame {           Another static Frame
       -pdf-frame-content: footer_content;

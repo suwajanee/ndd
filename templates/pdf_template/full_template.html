@@ -30,7 +30,7 @@
     <div id="header_content"><img src="{{ base_dir }}\..\static\images\head.jpg" style="width:100%; height:auto;"></div>
     <!-- HTML Content -->
     <div id="left_content">
-        <table width=100%>
+        <table>
             <tr class="big" width=50px>
               <td>วันที่</td>
               <td colspan=3 class="center text-blue">{{ booking.date | date:'d - m - Y' }}</td>
@@ -82,13 +82,16 @@
               <td width=150px class="center text-blue">{{ booking.work_id }}</td>
             </tr>
             <tr class="small">
+              <td colspan=5></td>
             </tr>
             <tr class="big">
                 <td></td><td></td>
               <td class="text-right">ราคา</td>
               <td colspan=2 class="left">..............................</td>
             </tr>
-            <tr class="small"></tr>
+            <tr class="small">
+              <td colspan=5></td>
+            </tr>
             <tr class="big">
               <td>เบอร์หาง</td>
               <td></td>
