@@ -1,11 +1,13 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views.generic import TemplateView
 from django.contrib import auth
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_protect
+from django.views.generic import TemplateView
 
 
+@csrf_protect
 class AuthenticationView(TemplateView):
 
     def login(request):

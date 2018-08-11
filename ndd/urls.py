@@ -17,11 +17,16 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
 
+from booking.views.authentication_view import AuthenticationView
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('booking.urls')),
+    path('booking/', include('booking.urls')),
+
+    url(r'^login/$', AuthenticationView.login, name='login'),
+    url(r'^logout/$', AuthenticationView.logout, name='logout'),
 
 ]
 

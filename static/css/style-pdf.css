@@ -10,24 +10,24 @@ body {
     margin: 30pt;
     @frame header_frame {           /* Static Frame */
       -pdf-frame-content: header_content;
-      left: 0.5in; width: 7.5in; top: 10pt; height: auto;
+      left: 0.5in; width: 7.5in; top: 5pt; height: auto;
     }
     @frame content_frame {          /* Content Frame */
     -pdf-frame-content: left_content;
-      left: 0.5in; width: 3.75in; top: 100pt; height: auto;
+      left: 0.5in; width: 3.75in; top: 90pt; height: auto;
     }
     @frame content_frame {          /* Content Frame */
     -pdf-frame-content: right_content;
-    left: 4.25in; width: 3.75in; top: 100pt; height: auto; 
+    left: 4.25in; width: 3.75in; top: 90pt; height: auto; 
     }
     @frame content_frame {          /* Content Frame */
     -pdf-frame-content: table_content;
-    left: 0.5in; width: 7.5in; top: 225pt; height: auto; 
+    left: 0.5in; width: 7.5in; top: 215pt; height: auto; 
     }
-    @frame footer_frame {           /* Another static Frame */
+    /* @frame footer_frame {           Another static Frame
       -pdf-frame-content: footer_content;
-      left: 50pt; width: 100%; top: 772pt; height: 20pt;
-    }
+      left: 50pt; width: 100%; top: 600pt; height: 20pt;
+    } */
   }
 
 /* Border */
@@ -75,6 +75,10 @@ body {
     font-size: 10px;
     font-weight: bold;
     height: 14px;
+}
+
+.text-12 {
+    font-size: 12px;
 }
 
 .text-blue {

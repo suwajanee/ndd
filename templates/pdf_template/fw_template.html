@@ -281,6 +281,15 @@
               <td colspan=2 class="border-left"></td>
               <td colspan=2 class="center border-right">.............................................</td>
             </tr>
+
+            <tr class="big">
+              <td class="border-left">Ref.</td>
+              <td colspan=7 class="center text-blue border-right">{{ booking.ref }}</td>
+            </tr>
+            <tr class="small">
+              <td class="border-left">&nbsp;</td>
+              <td colspan=7 class="center border-right">..................................................................................................................................................................................</td>
+            </tr>
             <tr class="big">
               <td class="border-left">หมายเหตุ</td>
               <td colspan=7 class="center text-blue border-right">{{ booking.remark }}</td>
@@ -289,6 +298,7 @@
               <td class="border-left">REMARK</td>
               <td colspan=7 class="center border-right">..................................................................................................................................................................................</td>
             </tr>
+            
             <tr class="big">
               <td colspan=2 class="center border-left"><img src="{{ base_dir }}\..\static\images\square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้สะอาด</td>
               <td colspan=2 class="center"><img src="{{ base_dir }}\..\static\images\square.png" style="width:14px; height:auto;">&nbsp;พื้นตู้สะอาด,ไม่มีเสี้ยน,คราบน้ำมัน</td>
@@ -303,7 +313,7 @@
               <td colspan=4>Verified to recive container in good condition and seal in tact</td>
             </tr>
             <tr>
-              <td colspan=8 style="height:40px;"></td>
+              <td colspan=8 style="height:20px;"></td>
             </tr>
             <tr class="text-center text-footer">
               <td colspan=8>ลายเซ็นผู้ว่าจ้างหรือตัวแทน</td>
@@ -321,13 +331,13 @@
                 <td colspan=3></td>
             </tr>
           </table>
-          <div style="margin-top:10px;">
+          <div style="margin-top:5px;">
             <table width=80%>
               <tr>
                 <td width=20% style="vertical-align: top;">
                   ออกใบเสร็จ
                 </td>
-                <td class="test-right text-blue">
+                <td class="text-12 text-blue">
                   {{ address | linebreaks }}
                 </td>
               </tr>
