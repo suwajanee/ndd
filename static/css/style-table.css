@@ -52,7 +52,7 @@ tbody {
 
 /* Hide too long text in Remark field */
 .remark {
-    width: 110px;
+    width: 120px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;

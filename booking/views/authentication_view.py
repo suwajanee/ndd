@@ -32,6 +32,7 @@ class AuthenticationView(TemplateView):
 
         return render(request, template_name)
 
+
     
     def logout(request):
         auth.logout(request)

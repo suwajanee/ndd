@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import datetime
-# from customer.models import Principal, Shipper
 from customer.models import Principal, Shipper
 
 # Create your models here.

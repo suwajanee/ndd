@@ -24,6 +24,7 @@ from booking.views.authentication_view import AuthenticationView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('booking/', include('booking.urls')),
+    path('agent-transport/', include('agent_transport.urls')),
 
     url(r'^login/$', AuthenticationView.login, name='login'),
     url(r'^logout/$', AuthenticationView.logout, name='logout'),
