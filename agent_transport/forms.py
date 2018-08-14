@@ -83,15 +83,15 @@ class AgentTransportAddForm(forms.Form):
 	)
 
 	WORK_CHOICES = (
-		('empty', 'Empty'),
-		('full', 'Full'),
+		('ep', 'Empty'),
+		('fc', 'Full'),
 	)
 	work_type = forms.ChoiceField(
 		choices=WORK_CHOICES,
 		initial="empty",
 		widget=forms.Select(
 			attrs={
-				'class': 'form-control',
+				'class': 'custom-select w-15',
 			}
 		),
 		required=False

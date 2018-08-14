@@ -24,10 +24,10 @@ class AgentTransport(models.Model):
     remark = models.CharField(max_length=200, blank=True, default='')
     
     WORK_CHOICES = (
-        ('empty', 'Empty'),
-        ('full', 'Full'),
+        ('ep', 'Empty'),
+        ('fc', 'Full'),
     )
-    work_type = models.CharField(max_length=10, choices=WORK_CHOICES, default='empty')
+    work_type = models.CharField(max_length=10, choices=WORK_CHOICES, default='ep')
     work_id = models.CharField(max_length=50, blank=True, default='')
     work_number = models.IntegerField(default=0)
 

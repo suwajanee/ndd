@@ -49,13 +49,13 @@
             {{ message }}
         </div>
     {% endfor %}
-    <div class="container col-sm-6 shadow" style="background-color: white;">
+    <div class="container col-sm-6 shadow bg-white">
         <div class="container col-sm-9">
             <div class="container text-center pt-4 pb-2">
             <h2>Add Booking</h2>
             <hr>
             </div>
-            <form method="POST" class="add-booking-form">
+            <form method="POST" class="add-form">
                 {% csrf_token %}
                         <!-- <form id="customer" method="POST"> -->
                             <div class="input-group mb-3">
