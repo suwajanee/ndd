@@ -38,6 +38,7 @@
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
         <div id="filter-date" class="container col-sm-12">     
+            <a class="btn btn-primary float-right" href="{% url 'agent-transport-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
             <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
                 {% csrf_token %}
                 <div class="input-group mb-3 ml-sm-2">
