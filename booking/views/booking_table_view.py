@@ -17,7 +17,7 @@ class BookingTableView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
     def get_table(request):
-        template_name = 'booking/table.html'
+        template_name = 'booking/booking_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()

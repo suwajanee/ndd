@@ -19,7 +19,7 @@ class BookingAddView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def add_booking(request):
         add_booking = BookingAddView()
-        template_name = 'booking/add_booking.html'
+        template_name = 'booking/booking_add.html'
         context = {}
         context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
-from .views.table_view import AgentTransportTableView
+from .views.agent_transport_table_view import AgentTransportTableView
 # from .views.print_view import BookingPrintView
 # from .views.add_view import BookingAddView
 # from .views.edit_table_view import BookingEditTableView

@@ -1,9 +1,9 @@
 from django.urls import path
 from django.conf.urls import url
-from .views.table_view import BookingTableView
-from .views.print_view import BookingPrintView
-from .views.add_view import BookingAddView
-from .views.edit_table_view import BookingEditTableView
+from .views.booking_table_view import BookingTableView
+from .views.booking_print_view import BookingPrintView
+from .views.booking_add_view import BookingAddView
+from .views.booking_edit_table_view import BookingEditTableView
 # from .views.authentication_view import AuthenticationView
 
 

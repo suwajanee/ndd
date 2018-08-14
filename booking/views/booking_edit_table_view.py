@@ -17,7 +17,7 @@ class BookingEditTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
     def get_edit_table(request):
-        template_name = 'booking/edit_table.html'
+        template_name = 'booking/booking_edit_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()

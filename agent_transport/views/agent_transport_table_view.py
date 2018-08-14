@@ -1,11 +1,7 @@
-# from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-# from django.utils import timezone
 from ..models import AgentTransport
-# from customer.models import Principal, Shipper
 from ..forms import AgentTransportFilterSortForm
-# from django.shortcuts import render_to_response
 from datetime import datetime, timedelta
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -17,7 +13,7 @@ class AgentTransportTableView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
     def get_table(request):
-        template_name = 'agent_transport/table.html'
+        template_name = 'agent_transport/agent_transport_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()
@@ -40,7 +36,6 @@ class AgentTransportTableView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
     def delete_data(request, pk):
-        # delete_agent_transport = AgentTransportTableView()
         agent_transport = AgentTransport.objects.get(pk=pk)
         agent_transport.delete()
 
