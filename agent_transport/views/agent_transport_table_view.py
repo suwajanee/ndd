@@ -28,7 +28,7 @@ class AgentTransportTableView(TemplateView):
             if not date:
                 agent_transports = AgentTransport.objects.filter(Q(date__month=today.month) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
-                agent_transports = AgentTransport.objects.filter(Q(date=date) | (Q(date__lte=today) & (Q(return_tr='') & ~Q(cancel='1')))).order_by('date', 'work_id')
+                agent_transports = AgentTransport.objects.filter(Q(date=date) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
         else:
             agent_transports = AgentTransport.objects.filter(date__month=today.month | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
