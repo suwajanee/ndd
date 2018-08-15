@@ -39,9 +39,13 @@
     {% endfor %}
         <div id="filter-date" class="container col-sm-12">     
             <a class="btn btn-primary float-right" href="{% url 'agent-transport-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+            <a class="btn btn-primary float-right mr-sm-2" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+            <form id="edit-filter" method="GET" action="{% url 'agent-transport-edit' %}" style="display:none;">
+                <input type="hidden" name="date" value="{{ date }}">
+            </form>
             <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
                 {% csrf_token %}
-                <div class="input-group mb-3 ml-sm-2">
+                <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                     </div>
@@ -220,9 +224,9 @@
             </tbody> 
         </table>
     </div>
-{% else %}
-    <h1> NOOO </h1>
-{% endif %}
+    {% else %}
+        <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
+    {% endif %}
 
         
 {% endblock %}

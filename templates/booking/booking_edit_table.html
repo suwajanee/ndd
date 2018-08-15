@@ -42,7 +42,7 @@
     
         <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
             {% csrf_token %}
-            <div class="input-group mb-3 ml-sm-2">
+            <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                 </div>
@@ -64,7 +64,7 @@
             <th>SHIPPER</th>
             <th>AGENT</th>
             <th>SIZE</th>
-            <th>BOOKING</th>
+            <th class="px-2">BOOKING</th>
 
             <th>TR</th>
             <th>FM</th>
@@ -74,7 +74,7 @@
             <th>TR</th>
             <th>TO</th>
 
-            <th class="px-3">CONTAINER NO</th>
+            <th class="px-2">CONTAINER NO</th>
             <th class="px-4">SEAL NO</th>
             <!-- <th rowspan="2">VESSEL</th>
             <th rowspan="2">PORT</th> -->
@@ -112,7 +112,6 @@
                 {% csrf_token %}
             <input type="hidden" name="pk" value="{{ booking.pk }}">
             <input type="hidden" name="date_filter" value="{{ date }}">
-            {% load parse_iso %}
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
             {% elif booking.closing_date < today.date and not booking.return_tr %}
@@ -157,7 +156,7 @@
                     <td><input type="time" name="closing_time" class="form-control" value="{{ booking.closing_time }}" onchange="this.form.submit();" autocomplete=off></td>
 
                     <td><input name="ref" class="form-control" value="{{ booking.ref }}" onchange="this.form.submit();" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 4px; font-size: 12px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 
@@ -197,7 +196,7 @@
     <!-- </div> -->
 <!-- </div> -->
         {% else %}
-            <h1> NOOO </h1>
+            <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         {% endif %}
 
         

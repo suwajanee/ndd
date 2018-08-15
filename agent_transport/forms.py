@@ -96,28 +96,4 @@ class AgentTransportAddForm(forms.Form):
 		),
 		required=False
 	)
-
-	# ADDRESS_CHOICES = (
-	# 	('shipper', 'Shipper'),
-	# 	('other', 'Other'),
-	# 	('none', 'None'),
-	# )
-	# address = forms.ChoiceField(
-	# 	choices=ADDRESS_CHOICES,
-	# 	initial="shipper",
-	# 	widget=forms.RadioSelect(
-	# 		attrs={
-	# 			'class': 'form-control',
-	# 		}
-	# 	),
-	# 	required=False
-	# )
-
-	# address_other = forms.CharField(
-	# 	widget=forms.Textarea(
-	# 		attrs={
-	# 			'class': 'form-control',
-	# 		}
-	# 	),
-	# 	required=False
-	# )
+	

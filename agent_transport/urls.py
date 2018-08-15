@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf.urls import url
 from .views.agent_transport_table_view import AgentTransportTableView
 from .views.agent_transport_add_view import AgentTransportAddView
+from .views.agent_transport_edit_table_view import AgentTransportEditTableView
 
 
 urlpatterns = [
@@ -14,8 +15,8 @@ urlpatterns = [
     url(r'^delete/(?P<pk>\d+)/$', AgentTransportTableView.delete_data, name='agent-transport-delete'), #delete in table page
     url(r'^update/$', AgentTransportTableView.update_data, name='agent-transport-update'), #update in table page
 
-    # url(r'^edit/$', BookingEditTableView.get_edit_table, name='booking-edit'),
-    # url(r'^edit/save$', BookingEditTableView.save_edit_table, name='booking-edit-save'),
+    url(r'^edit/$', AgentTransportEditTableView.get_edit_table, name='agent-transport-edit'),
+    url(r'^edit/save$', AgentTransportEditTableView.save_edit_table, name='agent-transport-edit-save'),
 ]
 
 
