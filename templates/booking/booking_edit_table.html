@@ -129,7 +129,7 @@
                     
                     <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off></td>
                     <td class="text-nowrap">{{ booking.principal }}</td>
-                    <td class="text-nowrap">{{ booking.shipper }}</td>
+                    <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ booking.shipper }}</div></td>
                     <td class="text-nowrap">{{ booking.agent }}</td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     {% if booking.cancel == '1' %}

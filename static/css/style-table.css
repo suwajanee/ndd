@@ -52,14 +52,14 @@ tbody {
 
 
 /* Hide too long text in Remark field */
-.remark {
+.long-text {
     width: 120px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;  
 }
-.remark:active {
+.long-text:active {
     overflow: visible;
     width: auto;
     /* text-overflow: inherit; */

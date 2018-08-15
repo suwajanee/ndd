@@ -15,7 +15,6 @@ class AgentTransportTableView(TemplateView):
     def get_table(request):
         template_name = 'agent_transport/agent_transport_table.html'
 
-        tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()
 
         if request.method == "GET":
@@ -32,7 +31,7 @@ class AgentTransportTableView(TemplateView):
         else:
             agent_transports = AgentTransport.objects.filter(date__month=today.month | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
-        return render(request, template_name, {'agent_transports': agent_transports, 'form': form, 'date': date, 'today': today, 'tmr': tmr})
+        return render(request, template_name, {'agent_transports': agent_transports, 'form': form, 'date': date, 'today': today})
 
     @login_required(login_url=reverse_lazy('login'))
     def delete_data(request, pk):

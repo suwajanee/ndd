@@ -5,7 +5,7 @@ input:not([type]), input[type="text"], td input[type="time"] {
 }
 
 td input[type="date"] {
-    max-width: 130px;
+    max-width: 125px;
     padding: 4px;
     font-size: 12px;
 }
