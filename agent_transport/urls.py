@@ -3,11 +3,12 @@ from django.conf.urls import url
 from .views.agent_transport_table_view import AgentTransportTableView
 from .views.agent_transport_add_view import AgentTransportAddView
 from .views.agent_transport_edit_table_view import AgentTransportEditTableView
+from .views.agent_transport_print_view import AgentTransportPrintView
 
 
 urlpatterns = [
     url(r'^$', AgentTransportTableView.get_table, name='agent-transport-table'),
-    # url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
+    url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', AgentTransportPrintView.as_view(), name='agent-transport-print'),
 
     url(r'^add/$', AgentTransportAddView.add_agent_transport, name='agent-transport-add'),
     url(r'^save/$', AgentTransportAddView.save_data, name='agent-transport-save'), 

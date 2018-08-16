@@ -54,7 +54,7 @@
     <!-- HTML Content -->
     <div id="left_content">
         <table width=100%>
-            <tr class="big" width=50px>
+            <tr class="big">
               <td>วันที่</td>
               <td colspan=3 class="center text-blue">{{ booking.date | date:'d - m - Y' }}</td>
             </tr>
@@ -91,14 +91,14 @@
               <td class="center"><img src="{{ base_dir }}\..\static\images\square.png" style="width:14px; height:auto;"></td>
               <td>ซอยตู้</td>
             </tr>
-            {% endif %}
+            <!-- {% endif %} -->
             </table>
     </div>
 
     <!-- HTML Content -->
     <div id="right_content">
         <table>
-            {% if booking %}
+            <!-- {% if booking %} -->
             <tr class="big">
                 <td></td><td></td><td></td>
               <td width=60px class="text-right">เลขที่</td>
@@ -310,7 +310,7 @@
 
             <tr class="big">
               <td class="pl-5">Ref.</td>
-              <td colspan=7 class="center text-blue pr-5">{{ booking.ref }}</td>
+              <td colspan=7 class="text-blue pr-5">{{ booking.ref }}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">&nbsp;</td>
@@ -318,7 +318,7 @@
             </tr>
             <tr class="big">
               <td class="pl-5">หมายเหตุ</td>
-              <td colspan=7 class="center text-blue pr-5">{{ booking.remark }}</td>
+              <td colspan=7 class="text-blue pr-5">{{ booking.remark }}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">REMARK</td>
@@ -358,7 +358,7 @@
                 <td colspan=3></td>
             </tr>
           </table>
-          <div style="margin-top:5px;">
+          <div class="mt-5">
             <table width=80%>
               <tr>
                 <td width=20% style="vertical-align: top;">

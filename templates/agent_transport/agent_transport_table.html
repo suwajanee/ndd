@@ -99,6 +99,11 @@
                                 <a class="btn btn-link d-block" id="dropdownMenuPrint" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-print font-weight-bold"></i>
                                 </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuPrint">
+                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='full' %}">Full</a>
+                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='forward' %}">Forward</a>
+                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='backward' %}">Backward</a>
+                                </div>
                             </td>
                             
                             <td class="text-nowrap">{{ agent_transport.date }}</td>
