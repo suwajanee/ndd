@@ -4,6 +4,7 @@ from .views.booking_table_view import BookingTableView
 from .views.booking_print_view import BookingPrintView
 from .views.booking_add_view import BookingAddView
 from .views.booking_edit_table_view import BookingEditTableView
+from .views.booking_time_table_view import BookingTimeTableView
 # from .views.authentication_view import AuthenticationView
 
 
@@ -19,6 +20,9 @@ urlpatterns = [
 
     url(r'^edit/$', BookingEditTableView.get_edit_table, name='booking-edit'),
     url(r'^edit/save$', BookingEditTableView.save_edit_table, name='booking-edit-save'),
+
+    url(r'^time/$', BookingTimeTableView.time_table, name='booking-time'),
+    url(r'^time/save$', BookingTimeTableView.save_time_table, name='booking-time-save'),
 ]
 
 

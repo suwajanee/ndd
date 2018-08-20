@@ -38,21 +38,26 @@
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
         <div id="filter-date" class="container col-sm-12">     
-            <a class="btn btn-primary float-right" href="{% url 'agent-transport-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
-            <a class="btn btn-primary float-right mr-sm-2" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
-            <form id="edit-filter" method="GET" action="{% url 'agent-transport-edit' %}" style="display:none;">
-                <input type="hidden" name="date" value="{{ date }}">
-            </form>
-            <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                    </div>
-                    {{ form.date }} 
+            <div class="row">
+                <div class="col-sm">
+                    <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                            {{ form.date }} 
+                        </div>
+                    </form>
                 </div>
-            </form>
-            
+                <div class="col-sm text-right">
+                    <a class="btn btn-primary mr-sm-1" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                    <form id="edit-filter" method="GET" action="{% url 'agent-transport-edit' %}" style="display:none;">
+                        <input type="hidden" name="date" value="{{ date }}">
+                    </form>
+                    <a class="btn btn-primary" href="{% url 'agent-transport-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+                </div>
+            </div>
         </div>
     {% if agent_transports %}
         <div id='table-cont' class="table-cont"> 
@@ -106,7 +111,7 @@
                                 </div>
                             </td>
                             
-                            <td class="text-nowrap">{{ agent_transport.date }}</td>
+                            <td class="text-nowrap px-3">{{ agent_transport.date | date:'d/m/y' }}</td>
                             <td class="text-nowrap">{{ agent_transport.principal }}</td>
                             <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
                             <td class="text-nowrap">{{ agent_transport.agent }}</td>
@@ -132,8 +137,8 @@
 
                             <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                             
-                            <td class="text-nowrap">{{ agent_transport.pickup_date }}</td>
-                            <td class="text-nowrap">{{ agent_transport.return_date }}</td>
+                            <td class="text-nowrap px-3">{{ agent_transport.pickup_date | date:'d/m/y' }}</td>
+                            <td class="text-nowrap px-3">{{ agent_transport.return_date | date:'d/m/y' }}</td>
                         </tr>
                         <tr class="bg-light p-0">
                             <td colspan="26" class="hiddenRow">
