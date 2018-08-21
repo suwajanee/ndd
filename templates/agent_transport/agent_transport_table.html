@@ -183,7 +183,7 @@
                                                     <tr class="bg-light">
                                                         <td class="w-1"></td>
                                                         <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other">{{ agent_transport.address_other }}</textarea>
+                                                            <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;">{{ agent_transport.address_other }}</textarea>
                                                         {% else %}
                                                             <input type="radio" name="address{{ agent_transport.pk }}" onchange="updateradio({{ agent_transport.pk }});" value="other">
                                                         </td>
@@ -194,7 +194,7 @@
                                                     <tr class="bg-light">
                                                         <td class="w-1"></td>
                                                         <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" disabled>{{ agent_transport.address_other }}</textarea>
+                                                            <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;" disabled>{{ agent_transport.address_other }}</textarea>
                                                         {% endif %}
                                                         </td>
                                                     </tr>

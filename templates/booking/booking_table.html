@@ -302,7 +302,7 @@
                                                     <tr class="bg-light">
                                                         <td class="w-1"></td>
                                                         <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other">{{ booking.address_other }}</textarea>
+                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;">{{ booking.address_other }}</textarea>
                                                         {% else %}
                                                             <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="other">
                                                         </td>
@@ -313,7 +313,7 @@
                                                     <tr class="bg-light">
                                                         <td class="w-1"></td>
                                                         <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" disabled>{{ booking.address_other }}</textarea>
+                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" disabled>{{ booking.address_other }}</textarea>
                                                         {% endif %}
                                                         </td>
                                                     </tr>

@@ -36,7 +36,7 @@ class BookingTableView(TemplateView):
         else:
             bookings = Booking.objects.filter(date__month=today.month | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
-        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'today': today, 'tmr': tmr})
+        return render(request, template_name, {'bookings': bookings, 'form': form, 'date': date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
 
     @login_required(login_url=reverse_lazy('login'))
     def delete_data(request, pk):

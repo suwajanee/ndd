@@ -20,6 +20,7 @@ class AgentTransportAddView(TemplateView):
         context = {}
         context['form'] = AgentTransportAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
+        context['nbar'] = 'agent-transport-table'
         if request.method == 'POST':
             context = agent_transport_add.create_context(request.POST)
             

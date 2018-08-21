@@ -23,6 +23,7 @@ class BookingAddView(TemplateView):
         context = {}
         context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
+        context['nbar'] = 'booking-table'
         if request.method == 'POST':
             context = add_booking.create_context(request.POST)
             

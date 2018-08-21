@@ -42,7 +42,7 @@ class BookingTimeTableView(TemplateView):
                 request.session['pk_list'] = pk_list
                 request.session['date'] = date
 
-                return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr})
+                return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
             else:
                 date = request.GET.get("date")
                 if not date:
