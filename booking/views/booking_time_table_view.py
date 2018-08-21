@@ -32,7 +32,7 @@ class BookingTimeTableView(TemplateView):
             request.session['pk_list'] = pk_list
             request.session['date'] = date
 
-            return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr})
+            return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
         else:
             if request.session['pk_list']:
                 pk_list = request.session['pk_list']
@@ -56,14 +56,29 @@ class BookingTimeTableView(TemplateView):
     def save_time_table(request):
         if request.method == 'POST':
             pk = request.POST.getlist('pk')
-            pickup_in_time = request.POST.getlist('pickup_in_time')
-            pickup_out_time = request.POST.getlist('pickup_out_time')
-            factory_in_time = request.POST.getlist('factory_in_time')
-            factory_load_start_time = request.POST.getlist('factory_load_start_time')
-            factory_load_finish_time = request.POST.getlist('factory_load_finish_time')
-            factory_out_finish = request.POST.getlist('factory_out_finish')
-            return_in_time = request.POST.getlist('return_in_time')
-            return_out_time = request.POST.getlist('return_out_time')
+            pickup_in_time_1 = request.POST.getlist('pickup_in_time_1')
+            pickup_in_time_2 = request.POST.getlist('pickup_in_time_2')
+
+            pickup_out_time_1 = request.POST.getlist('pickup_out_time_1')
+            pickup_out_time_2 = request.POST.getlist('pickup_out_time_2')
+
+            factory_in_time_1 = request.POST.getlist('factory_in_time_1')
+            factory_in_time_2 = request.POST.getlist('factory_in_time_2')
+
+            factory_load_start_time_1 = request.POST.getlist('factory_load_start_time_1')
+            factory_load_start_time_2 = request.POST.getlist('factory_load_start_time_2')
+
+            factory_load_finish_time_1 = request.POST.getlist('factory_load_finish_time_1')
+            factory_load_finish_time_2 = request.POST.getlist('factory_load_finish_time_2')
+
+            factory_out_finish_1 = request.POST.getlist('factory_out_finish_1')
+            factory_out_finish_2 = request.POST.getlist('factory_out_finish_2')
+
+            return_in_time_1 = request.POST.getlist('return_in_time_1')
+            return_in_time_2 = request.POST.getlist('return_in_time_2')
+
+            return_out_time_1 = request.POST.getlist('return_out_time_1')
+            return_out_time_2 = request.POST.getlist('return_out_time_2')
 
             # pk = request.POST['pk']
             # pickup_in_time = request.POST['pickup_in_time']
@@ -80,14 +95,14 @@ class BookingTimeTableView(TemplateView):
 
             for i in range(0,len(pk)):
                 booking = Booking.objects.get(pk=pk[i])
-                booking.pickup_in_time = pickup_in_time[i]
-                booking.pickup_out_time = pickup_out_time[i]
-                booking.factory_in_time = factory_in_time[i]
-                booking.factory_load_start_time = factory_load_start_time[i]
-                booking.factory_load_finish_time = factory_load_finish_time[i]
-                booking.factory_out_finish = factory_out_finish[i]
-                booking.return_in_time = return_in_time[i]
-                booking.return_out_time = return_out_time[i]
+                booking.pickup_in_time = pickup_in_time_1[i] + '//' + pickup_in_time_2[i]
+                booking.pickup_out_time = pickup_out_time_1[i] + '//' + pickup_out_time_2[i]
+                booking.factory_in_time = factory_in_time_1[i] + '//' + factory_in_time_2[i]
+                booking.factory_load_start_time = factory_load_start_time_1[i] + '//' + factory_load_start_time_2[i]
+                booking.factory_load_finish_time = factory_load_finish_time_1[i] + '//' + factory_load_finish_time_2[i]
+                booking.factory_out_finish = factory_out_finish_1[i] + '//' + factory_out_finish_2[i]
+                booking.return_in_time = return_in_time_1[i] + '//' + return_in_time_2[i]
+                booking.return_out_time = return_out_time_1[i] + '//' + return_out_time_2[i]
                 
                 booking.save()
 

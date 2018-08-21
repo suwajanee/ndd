@@ -150,15 +150,97 @@
                     
 
                     <!-- <td class="text-nowrap">{{ booking.return_date }}</td> -->
+                    {% load split %}
+                    <td>
+                        {% with booking.pickup_in_time|split:"//" as pickup_in_time %}
+                        {% if pickup_in_time.0 %}
+                            <input type="date" name="pickup_in_time_1" class="form-control" value="{{ pickup_in_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="pickup_in_time_1" class="form-control" value="{{ booking.pickup_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="pickup_in_time_2" class="form-control" value="{{ pickup_in_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with booking.pickup_out_time|split:"//" as pickup_out_time %}
+                        {% if pickup_out_time.0 %}
+                            <input type="date" name="pickup_out_time_1" class="form-control" value="{{ pickup_out_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="pickup_out_time_1" class="form-control" value="{{ booking.pickup_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="pickup_out_time_2" class="form-control" value="{{ pickup_out_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with booking.factory_in_time|split:"//" as factory_in_time %}
+                        {% if factory_in_time.0 %}
+                            <input type="date" name="factory_in_time_1" class="form-control" value="{{ factory_in_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="factory_in_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="factory_in_time_2" class="form-control" value="{{ factory_in_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with booking.factory_load_start_time|split:"//" as factory_load_start_time %}
+                        {% if factory_load_start_time.0 %}
+                            <input type="date" name="factory_load_start_time_1" class="form-control" value="{{ factory_load_start_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="factory_load_start_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="factory_load_start_time_2" class="form-control" value="{{ factory_load_start_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with booking.factory_load_finish_time|split:"//" as factory_load_finish_time %}
+                        {% if factory_load_finish_time.0 %}
+                            <input type="date" name="factory_load_finish_time_1" class="form-control" value="{{ factory_load_finish_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="factory_load_finish_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="factory_load_finish_time_2" class="form-control" value="{{ factory_load_finish_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with booking.factory_out_finish|split:"//" as factory_out_finish %}
+                        {% if factory_out_finish.0 %}
+                            <input type="date" name="factory_out_finish_1" class="form-control" value="{{ factory_out_finish.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="factory_out_finish_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="factory_out_finish_2" class="form-control" value="{{ factory_out_finish.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
+                    
+                    {% if booking.factory_date != booking.return_date %}
+                    <td class="bg-info">
+                    {% else %}
+                    <td>
+                    {% endif %}
+                        {% with booking.return_in_time|split:"//" as return_in_time %}
+                        {% if return_in_time.0 %}
+                            <input type="date" name="return_in_time_1" class="form-control" value="{{ return_in_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="return_in_time_1" class="form-control" value="{{ booking.return_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="return_in_time_2" class="form-control" value="{{ return_in_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
 
-                    <td><input type="time" name="pickup_in_time" class="form-control" value="{{ booking.pickup_in_time }}" autocomplete=off></td>
-                    <td><input type="time" name="pickup_out_time" class="form-control" value="{{ booking.pickup_out_time }}" autocomplete=off></td>
-                    <td><input type="time" name="factory_in_time" class="form-control" value="{{ booking.factory_in_time }}" autocomplete=off></td>
-                    <td><input type="time" name="factory_load_start_time" class="form-control" value="{{ booking.factory_load_start_time }}" autocomplete=off></td>
-                    <td><input type="time" name="factory_load_finish_time" class="form-control" value="{{ booking.factory_load_finish_time }}" autocomplete=off></td>
-                    <td><input type="time" name="factory_out_finish" class="form-control" value="{{ booking.factory_out_finish }}" autocomplete=off></td>
-                    <td><input type="time" name="return_in_time" class="form-control" value="{{ booking.return_in_time }}" autocomplete=off></td>
-                    <td><input type="time" name="return_out_time" class="form-control" value="{{ booking.return_out_time }}" autocomplete=off></td>
+                    {% if booking.factory_date != booking.return_date %}
+                    <td class="bg-info">
+                    {% else %}
+                    <td>
+                    {% endif %}
+                        {% with booking.return_out_time|split:"//" as return_out_time %}
+                        {% if return_out_time.0 %}
+                            <input type="date" name="return_out_time_1" class="form-control" value="{{ return_out_time.0 }}" autocomplete=off>
+                        {% else %}
+                            <input type="date" name="return_out_time_1" class="form-control" value="{{ booking.return_date | date:'Y-m-d'}}" autocomplete=off>
+                        {% endif %}
+                        <input type="time" name="return_out_time_2" class="form-control" value="{{ return_out_time.1 }}" autocomplete=off>
+                        {% endwith %}
+                    </td>
                 </tr>
             
             {% endfor %}
