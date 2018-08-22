@@ -19,10 +19,10 @@ urlpatterns = [
     url(r'^update/$', BookingTableView.update_data, name='booking-update'), #update in table page
 
     url(r'^edit/$', BookingEditTableView.get_edit_table, name='booking-edit'),
-    url(r'^edit/save$', BookingEditTableView.save_edit_table, name='booking-edit-save'),
+    url(r'^edit/save/$', BookingEditTableView.save_edit_table, name='booking-edit-save'),
 
     url(r'^time/$', BookingTimeTableView.time_table, name='booking-time'),
-    url(r'^time/save$', BookingTimeTableView.save_time_table, name='booking-time-save'),
+    url(r'^time/save/$', BookingTimeTableView.save_time_table, name='booking-time-save'),
 ]
 
 

@@ -14,7 +14,7 @@
     @page {
       size: a4 portrait;
       /* size: 8.5in 11in; */
-      margin: 30pt;
+      margin: 10pt;
       @frame content_frame {           /* Static Frame */
         -pdf-frame-content: content_table;
         left: 0.5in; width: 7.3in; top: 0.5in; height: auto;
@@ -39,7 +39,7 @@
     {% if agent_transport %}
 
     <div id="content_table">
-      <table border=1 class="border-out">
+      <table class="border-out">
         <tr>
           <td colspan=8>
             <img src="{{ base_dir }}\..\static\images\head.jpg" style="width:100%; height:auto;">

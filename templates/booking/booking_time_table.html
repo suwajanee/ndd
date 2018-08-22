@@ -24,14 +24,21 @@
 {% block content %}
 <br>
     <div id="filter-date" class="container col-sm-12">
-        <button class="btn btn-success float-right" onclick="document.forms['TimeForm'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>
-        <button class="btn btn-danger float-right mr-sm-2" onclick="document.forms['TableFilter'].submit();"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
-        <form id="TableFilter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-            <input type="hidden" name="date" value="{{ date }}">
-        </form>
-        {% for message in messages %}
-            <div class="save-msg float-right mr-sm-4 pt-2 text-secondary"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
-        {% endfor %}
+        <div class="row">
+            <div class="col-sm">
+                <button class="btn btn-primary" ><i class="fa fa-print"></i>&nbsp;Print</button>
+            </div>
+            <div class="col-sm text-right">
+                {% for message in messages %}
+                    <div class="save-msg mr-sm-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
+                {% endfor %}
+                <button class="btn btn-danger mr-sm-1" onclick="document.forms['TableFilter'].submit();"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
+                <form id="TableFilter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
+                    <input type="hidden" name="date" value="{{ date }}">
+                </form>
+                <button class="btn btn-success" onclick="document.forms['TimeForm'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>
+            </div>
+        </div>
     </div>
         {% if bookings %}
         <!-- <div class='table-cont' id='table-cont'> -->
@@ -211,7 +218,7 @@
                         <input type="time" name="factory_out_finish_2" class="form-control" value="{{ factory_out_finish.1 }}" autocomplete=off>
                         {% endwith %}
                     </td>
-                    
+
                     {% if booking.factory_date != booking.return_date %}
                     <td class="bg-info">
                     {% else %}
@@ -227,7 +234,9 @@
                         {% endwith %}
                     </td>
 
-                    {% if booking.factory_date != booking.return_date %}
+                    {% if booking.cancel == '1' %}
+                    <td class="bg-secondary">
+                    {% elif booking.factory_date != booking.return_date %}
                     <td class="bg-info">
                     {% else %}
                     <td>
