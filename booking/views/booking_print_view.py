@@ -13,7 +13,7 @@ from customer.models import Shipper
 
 import xhtml2pdf.pisa as pisa
 from django.utils.six import BytesIO
-import os
+from ndd.settings import STATICFILES_DIRS
 
 # from weasyprint import HTML, CSS
 
@@ -28,7 +28,6 @@ class BookingPrintView(TemplateView):
             template_name = 'pdf_template/full_template.html'
 
         booking = get_object_or_404(Booking, pk=pk)
-        base_dir = os.path.dirname(os.path.dirname(__file__))
 
         if booking.address == 'other':
             address = booking.address_other
@@ -38,7 +37,8 @@ class BookingPrintView(TemplateView):
         else:
             address = ''
 
-        return self.render(template_name, {'booking': booking, 'address': address,'base_dir': base_dir})
+        return self.render(template_name, {'booking': booking, 'address': address, 'static_dir': STATICFILES_DIRS[0]})
+
 
     def render(self, path, params):
         template = get_template(path)

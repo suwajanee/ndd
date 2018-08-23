@@ -13,7 +13,8 @@ from customer.models import Shipper
 
 import xhtml2pdf.pisa as pisa
 from django.utils.six import BytesIO
-import os
+
+from ndd.settings import STATICFILES_DIRS
 
 # from weasyprint import HTML, CSS
 
@@ -28,7 +29,6 @@ class AgentTransportPrintView(TemplateView):
             template_name = 'pdf_template/agent_transport_full_template.html'
 
         agent_transport = get_object_or_404(AgentTransport, pk=pk)
-        base_dir = os.path.dirname(os.path.dirname(__file__))
 
         if agent_transport.address == 'other':
             address = agent_transport.address_other
@@ -38,7 +38,7 @@ class AgentTransportPrintView(TemplateView):
         else:
             address = ''
 
-        return self.render(template_name, {'agent_transport': agent_transport, 'address': address,'base_dir': base_dir})
+        return self.render(template_name, {'agent_transport': agent_transport, 'address': address,'static_dir': STATICFILES_DIRS[0]})
 
     def render(self, path, params):
         template = get_template(path)
