@@ -57,7 +57,7 @@ tbody {
 
 /* Hide too long text in Remark field */
 .long-text {
-    width: 100px;
+    width: 80px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -115,3 +115,4 @@ tbody {
 input:not([type]), input[type="text"], td input[type="time"] {
     font-size: 12px;
 }
+

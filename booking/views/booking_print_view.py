@@ -40,6 +40,23 @@ class BookingPrintView(TemplateView):
         return self.render(template_name, {'booking': booking, 'address': address, 'static_dir': STATICFILES_DIRS[0]})
 
 
+    def print_time(request):
+        booking_print_view = BookingPrintView()
+        template_name = 'pdf_template/time_table_template.html'
+        if request.method == "POST":
+            pk_list = request.POST.getlist("pk")
+            bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
+            request.session['pk_list'] = pk_list
+        else:
+            if request.session['pk_list']:
+                pk_list = request.session['pk_list']
+                bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
+
+                request.session['pk_list'] = pk_list
+
+        return booking_print_view.render(template_name, {'bookings': bookings, 'static_dir': STATICFILES_DIRS[0]})
+
+
     def render(self, path, params):
         template = get_template(path)
         html = template.render(params)

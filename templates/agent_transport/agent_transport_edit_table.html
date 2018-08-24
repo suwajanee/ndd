@@ -88,9 +88,9 @@
                 {% endif %}
                                         
                     <td><input type="date" name="date" class="form-control" value="{{ agent_transport.date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off></td>
-                    <td class="text-nowrap">{{ agent_transport.principal }}</td>
-                    <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
-                    <td class="text-nowrap">{{ agent_transport.agent }}</td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.principal }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
                     <td class="text-nowrap">{{ agent_transport.size }}</td>
                     {% if agent_transport.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">

@@ -63,6 +63,8 @@
                 return false;
 
             });
+
+           
         });
         
     </script>
@@ -83,6 +85,7 @@
                 <form name="booking-filter-sort" method="GET" action="{% url 'booking-table' %}" class="form-inline">
                     {% csrf_token %}
                     <div class="input-group">
+
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                         </div>
@@ -189,10 +192,9 @@
                             <td class="text-nowrap">{{ booking.time }}</td>
                             
                             <td class="text-nowrap px-3">{{ booking.date | date:'d/m/y' }}</td>
-                            <td class="text-nowrap">{{ booking.principal }}</td>
-                            <!-- <td class="text-nowrap">{{ booking.shipper }}</td> -->
-                            <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ booking.shipper }}</div></td>
-                            <td class="text-nowrap">{{ booking.agent }}</td>
+                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.principal }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.shipper }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
                             {% if booking.cancel == '1' %}
                                 <td class="text-nowrap">
@@ -218,8 +220,8 @@
                                 <td class="text-nowrap">-</td>
                             {% endif %}
                             <td class="text-nowrap">{{ booking.closing_time }}</td>
-                            <td class="no-collapsable text-left pl-2"><div class="long-text">{{ booking.ref }}</div></td>
-                            <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ booking.remark }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.ref }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.remark }}</div></td>
 
                             <td class="text-nowrap">{{ booking.work_id }}</td>
                             

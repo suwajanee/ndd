@@ -96,8 +96,8 @@
                     {% else %}
                         <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
                     {% endif %}
-                            <td class="p-0 toggle-icon w-1">
-                                <i class="fa"></i>
+                            <td class="p-0  no-collapsable toggle-color w-1">
+                                <!-- <input type="checkbox" class="check" name="check" value="{{ booking.pk }}"> -->
                             </td>
                             
                             <td class="p-0 w-1">
@@ -112,9 +112,9 @@
                             </td>
                             
                             <td class="text-nowrap px-3">{{ agent_transport.date | date:'d/m/y' }}</td>
-                            <td class="text-nowrap">{{ agent_transport.principal }}</td>
-                            <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
-                            <td class="text-nowrap">{{ agent_transport.agent }}</td>
+                            <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.principal }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
                             <td class="text-nowrap">{{ agent_transport.size }}</td>
                             {% if agent_transport.cancel == '1' %}
                                 <td class="text-nowrap">
@@ -132,8 +132,8 @@
                             <td class="text-nowrap">{{ agent_transport.container_1 }}</td>
                             <td class="text-nowrap">{{ agent_transport.container_2 }}</td>
 
-                            <td class="no-collapsable text-left pl-2"><div class="long-text">{{ agent_transport.ref }}</div></td>
-                            <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ agent_transport.remark }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ agent_transport.ref }}</div></td>
+                            <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.remark }}</div></td>
 
                             <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                             

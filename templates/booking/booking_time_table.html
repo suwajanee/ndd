@@ -18,6 +18,22 @@
         $(function() {
             $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
         });
+
+
+        $(function() {
+            $("button#print").click(function(){
+                
+                $("input.pk").each(function() {
+                    // var input = $("<input>")
+                    //                 .attr("type", "hidden")
+                    //                 .attr("name", "pk").val($(this).val());
+                        $('form#PrintTime').append($(this)); 
+                });
+                
+                    $('form#PrintTime').submit();
+                    // return false;
+            });
+        });
     </script>
 {% endblock %}
         
@@ -26,7 +42,10 @@
     <div id="filter-date" class="container col-sm-12">
         <div class="row">
             <div class="col-sm">
-                <button class="btn btn-primary" ><i class="fa fa-print"></i>&nbsp;Print</button>
+                <form id="PrintTime" method="POST" action="{% url 'booking-print-time' %}">
+                    {% csrf_token %}
+                    <button id="print" class="btn btn-primary" ><i class="fa fa-print"></i>&nbsp;Print</button>
+                </form>
             </div>
             <div class="col-sm text-right">
                 {% for message in messages %}
@@ -97,7 +116,7 @@
             {% for booking in bookings %}
             <!-- <form name="time-form{{ booking.pk }}" method="POST" action="{% url 'booking-time-save' %}">
                     {% csrf_token %} -->
-            <input type="hidden" name="pk" value="{{ booking.pk }}">
+            <input type="hidden" name="pk" class="pk" value="{{ booking.pk }}">
             <input type="hidden" name="date_filter" value="{{ date }}">
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
@@ -113,9 +132,9 @@
                     <!-- <td>{{ booking.time }}</td> -->
                     
                     <td class="text-nowrap px-3">{{ booking.date | date:'d/m/y' }}</td>
-                    <td class="text-nowrap">{{ booking.principal }}</td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.shipper }}</div></td>
-                    <td class="text-nowrap">{{ booking.agent }}</td>
+                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.principal }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.shipper }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.agent }}</div></td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">

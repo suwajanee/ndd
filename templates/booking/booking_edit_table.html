@@ -127,9 +127,9 @@
                     <td><input name="time" class="form-control" value="{{ booking.time }}" onchange="this.form.submit();" autocomplete=off></td>
                     
                     <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off></td>
-                    <td class="text-nowrap">{{ booking.principal }}</td>
-                    <td class="no-collapsable text-left pl-2"><div  class="long-text">{{ booking.shipper }}</div></td>
-                    <td class="text-nowrap">{{ booking.agent }}</td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.principal }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.shipper }}</div></td>
+                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.agent }}</div></td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
@@ -156,7 +156,7 @@
                     <td><input type="time" name="closing_time" class="form-control" value="{{ booking.closing_time }}" onchange="this.form.submit();" autocomplete=off></td>
 
                     <td><input name="ref" class="form-control" value="{{ booking.ref }}" onchange="this.form.submit();" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 

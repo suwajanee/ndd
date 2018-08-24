@@ -23,6 +23,8 @@ urlpatterns = [
 
     url(r'^time/$', BookingTimeTableView.time_table, name='booking-time'),
     url(r'^time/save/$', BookingTimeTableView.save_time_table, name='booking-time-save'),
+
+    url(r'^time/print/$', BookingPrintView.print_time, name='booking-print-time'),
 ]
 
 

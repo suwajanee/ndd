@@ -96,8 +96,27 @@ td.border-b {
     white-space: nowrap;
 }
 
-.square {
-    height: 50px;
-    width: 50px;
-    border: 1px solid black;
-}
+
+.time-table {
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .time-table th {
+    background-color: lightgray;
+    border:1px solid black;
+    padding:1px;
+    vertical-align: middle;
+    height: 0.25in;
+  }
+
+
+  .time-table td {
+    vertical-align: bottom;
+    padding:1px;
+    border:1px solid black;
+    height: 35px;
+
+  }
+
+
