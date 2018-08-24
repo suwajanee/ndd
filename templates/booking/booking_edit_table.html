@@ -17,6 +17,16 @@
 
         $(function() {
             $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
+
+            $('select[name="filter_by"]').change(function() {
+                if($(this).val() == "month"){
+                    $('input#id_date').attr("type", "month")
+                }
+                else {
+                    $('input#id_date').attr("type", "date")
+                }
+                
+            });
         });
     </script>
 {% endblock %}
@@ -26,30 +36,48 @@
     <!-- {% for message in messages %}
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %} -->
-    <div id="filter-date" class="container col-sm-12">
-        <!-- <button class="btn float-right" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Done</button> -->
-        <button class="btn btn-primary float-right" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
-        <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-            <input type="hidden" name="date" value="{{ date }}">
-        </form>
-        {% for message in messages %}
-            <div class="save-msg float-right mr-sm-4 pt-2 text-secondary"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
-        {% endfor %}
-        <!-- <button class="btn float-right mr-sm-2" onclick="document.forms['table-filter'].submit();">Cancel</button>
-        <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-            <input type="hidden" name="date" value="{{ date }}">
-        </form> -->
-    
-        <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                </div>
-                {{ form.date }} 
-            </div>
-        </form>
+    <div id="filter-date" class="container col-12">
+            <div class="row">
         
+
+        <div class="col">
+            <form name="booking-filter-sort" method="GET" action="{% url 'booking-edit' %}" class="form-inline">
+                {% csrf_token %}
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select name="filter_by" class="btn" style="background-color: #CED4DA;">
+                                <option value="date" class="bg-white">Date</option>
+                                <option value="month" class="bg-white" {% if filter_by == 'month' %}selected{% endif %}>Month</option>
+                            </select>
+
+                        </div>
+
+                    {% if filter_by == 'month' %}
+                        <input id="id_date" name="date" type="month" class="form-control mr-2" value="{{ date }}">
+                    {% else %}
+                        <input id="id_date" name="date" type="date" class="form-control mr-2" value="{{ date }}">
+                    {% endif %}
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">OK</button>
+            </form>
+        </div>
+
+        <div class="col text-right">
+                {% for message in messages %}
+                    <div class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
+                {% endfor %}
+
+                <button class="btn btn-primary" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
+                <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
+                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                </form>
+                
+
+        </div>
+        </div>
     </div>
         {% if bookings %}
         <!-- <div class='table-cont' id='table-cont'> -->
@@ -112,6 +140,7 @@
                 {% csrf_token %}
             <input type="hidden" name="pk" value="{{ booking.pk }}">
             <input type="hidden" name="date_filter" value="{{ date }}">
+            <input type="hidden" name="filter_by" value="{{ filter_by }}">
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
             {% elif booking.closing_date < today.date and not booking.return_tr %}

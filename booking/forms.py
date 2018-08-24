@@ -10,7 +10,18 @@ class BookingFilterSortForm(forms.Form):
 			attrs={
 				'type': 'date',
 				'class': 'form-control',
-				'onchange': 'this.form.submit();'
+				# 'onchange': 'this.form.submit();'
+			}
+		),
+		required=False
+	)
+
+	month = forms.DateField(
+		widget=forms.DateInput(
+			attrs={
+				'type': 'month',
+				'class': 'form-control',
+				# 'onchange': 'this.form.submit();'
 			}
 		),
 		required=False

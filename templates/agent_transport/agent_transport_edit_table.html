@@ -16,31 +16,64 @@
         }, 1500);
 
         $(function() {
-            $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
+            $("#table-cont").css({top: $("#filter-date").offset().top + 60 });
+
+            $('select[name="filter_by"]').change(function() {
+                if($(this).val() == "month"){
+                    $('input#id_date').attr("type", "month")
+                }
+                else {
+                    $('input#id_date').attr("type", "date")
+                }
+                
+            });
         });
     </script>
 {% endblock %}
         
 {% block content %}
 <br>
-    <div id="filter-date" class="container col-sm-12">
-        <button class="btn btn-primary float-right" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
-        <form id="table-filter" method="GET" action="{% url 'agent-transport-table' %}" style="display:none;">
-            <input type="hidden" name="date" value="{{ date }}">
-        </form>
-        {% for message in messages %}
-            <div class="save-msg float-right mr-sm-4 pt-2 text-secondary"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
-        {% endfor %}
-
-        <form name="booking-filter-sort" method="GET" action="{% url 'agent-transport-edit' %}" class="form-inline">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+    <div id="filter-date" class="container col-12">
+            <div class="row">
+        
+                <div class="col">
+                    <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-edit' %}" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <select name="filter_by" class="btn" style="background-color: #CED4DA;">
+                                        <option value="date" class="bg-white">Date</option>
+                                        <option value="month" class="bg-white" {% if filter_by == 'month' %}selected{% endif %}>Month</option>
+                                    </select>
+        
+                                </div>
+        
+                            {% if filter_by == 'month' %}
+                                <input id="id_date" name="date" type="month" class="form-control mr-2" value="{{ date }}">
+                            {% else %}
+                                <input id="id_date" name="date" type="date" class="form-control mr-2" value="{{ date }}">
+                            {% endif %}
+        
+                        </div>
+        
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </form>
                 </div>
-                {{ form.date }} 
-            </div>
-        </form>
+        
+                <div class="col text-right">
+                        {% for message in messages %}
+                            <div class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;{{ message }}</div>
+                        {% endfor %}
+        
+                        <button class="btn btn-primary" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
+                        <form id="table-filter" method="GET" action="{% url 'agent-transport-table' %}" style="display:none;">
+                            <input type="hidden" name="date" value="{{ date }}">
+                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        </form>
+                        
+        
+                </div>
+                </div>
         
     </div>
         {% if agent_transports %}
@@ -79,6 +112,7 @@
                     {% csrf_token %}
                 <input type="hidden" name="pk" value="{{ agent_transport.pk }}">
                 <input type="hidden" name="date_filter" value="{{ date }}">
+                <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 {% if agent_transport.cancel == '1' %}
                     <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
                 {% elif not agent_transport.return_tr %}

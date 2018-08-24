@@ -26,6 +26,16 @@
             $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
 
             $(".class-collapse").css({width: $( window ).width()})
+
+            $('select[name="filter_by"]').change(function() {
+                if($(this).val() == "month"){
+                    $('input#id_date').attr("type", "month")
+                }
+                else {
+                    $('input#id_date').attr("type", "date")
+                }
+                
+            });
         });
         
     </script>
@@ -37,23 +47,36 @@
 
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
-        <div id="filter-date" class="container col-sm-12">     
+        <div id="filter-date" class="container col-12">     
             <div class="row">
-                <div class="col-sm">
+                <div class="col">
                     <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
                         {% csrf_token %}
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                            </div>
-                            {{ form.date }} 
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <select name="filter_by" class="btn" style="background-color: #CED4DA;">
+                                        <option value="date" class="bg-white">Date</option>
+                                        <option value="month" class="bg-white" {% if filter_by == 'month' %}selected{% endif %}>Month</option>
+                                    </select>
+    
+                                </div>
+    
+                            {% if filter_by == 'month' %}
+                                <input id="id_date" name="date" type="month" class="form-control mr-2" value="{{ date }}">
+                            {% else %}
+                                <input id="id_date" name="date" type="date" class="form-control mr-2" value="{{ date }}">
+                            {% endif %}
+
                         </div>
+    
+                        <button type="submit" class="btn btn-primary">OK</button>
                     </form>
                 </div>
-                <div class="col-sm text-right">
-                    <a class="btn btn-primary mr-sm-1" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                <div class="col text-right">
+                    <a class="btn btn-primary mr-1" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                     <form id="edit-filter" method="GET" action="{% url 'agent-transport-edit' %}" style="display:none;">
                         <input type="hidden" name="date" value="{{ date }}">
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
                     </form>
                     <a class="btn btn-primary" href="{% url 'agent-transport-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
                 </div>
@@ -149,6 +172,7 @@
                                         <button class="btn btn-danger" href="#" onclick="document.getElementById('delete-form{{ agent_transport.pk }}').submit();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                         <form id="delete-form{{ agent_transport.pk }}" method="GET" action="{% url 'agent-transport-delete' pk=agent_transport.pk %}" style="display:none;">
                                             <input type="hidden" name="date" value="{{ date }}">
+                                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
                                         </form>
                                     </div>
                                     <div class="container w-25 pt-2">
@@ -156,6 +180,7 @@
                                             {% csrf_token %}
                                             <input type="hidden" name="pk" value="{{ agent_transport.pk }}">
                                             <input type="hidden" name="date_filter" value="{{ date }}">
+                                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
                                             <fieldset>
                                                 <legend>ADDRESS</legend>
                                                 <table class="container table-borderless" style="border-collapse: separate; border:none;">

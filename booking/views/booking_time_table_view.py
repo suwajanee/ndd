@@ -26,29 +26,33 @@ class BookingTimeTableView(TemplateView):
             
             pk_list = request.POST.getlist("check")
             date = request.POST['date']
+            filter_by = request.POST['filter_by']
 
             bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
 
             request.session['pk_list'] = pk_list
             request.session['date'] = date
+            request.session['filter_by'] = filter_by
 
-            return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
+            return render(request, template_name, {'bookings': bookings, 'filter_by': filter_by, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
         else:
             if request.session['pk_list']:
                 pk_list = request.session['pk_list']
                 date = request.session['date']
+                filter_by = request.session['filter_by']
                 bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
 
                 request.session['pk_list'] = pk_list
                 request.session['date'] = date
+                request.session['filter_by'] = filter_by
 
-                return render(request, template_name, {'bookings': bookings, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
+                return render(request, template_name, {'bookings': bookings, 'filter_by': filter_by, 'date':date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
             else:
                 date = request.GET.get("date")
                 if not date:
                     return redirect('booking-table')
                 else:
-                    return redirect('booking-table' + '?date=' + date)
+                    return redirect('booking-table' + '?filter_by=' + filter_by + '&date=' + date)
 
 
 
@@ -90,6 +94,7 @@ class BookingTimeTableView(TemplateView):
             # return_in_time = request.POST['return_in_time']
             # return_out_time = request.POST['return_out_time']
             
+            filter_by = request.POST['filter_by']
             date_filter = request.POST['date_filter']
 
 
@@ -107,6 +112,6 @@ class BookingTimeTableView(TemplateView):
                 booking.save()
 
             messages.success(request, "Saving Booking.")
-            return redirect(reverse('booking-time'))
+            return redirect('booking-time')
         else:
             return redirect('booking-table')

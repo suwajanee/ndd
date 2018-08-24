@@ -116,3 +116,7 @@ input:not([type]), input[type="text"], td input[type="time"] {
     font-size: 12px;
 }
 
+input#id_date {
+    width: 200px;
+}
+
