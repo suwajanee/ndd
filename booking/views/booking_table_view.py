@@ -25,7 +25,7 @@ class BookingTableView(TemplateView):
         if request.method == "GET":
             filter_by = request.GET.get("filter_by")
             date = request.GET.get("date")
-
+            
             if date == None:
                 date = ''
 
@@ -44,19 +44,19 @@ class BookingTableView(TemplateView):
         return render(request, template_name, {'bookings': bookings, 'filter_by': filter_by, 'date': date, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
 
 
-    @login_required(login_url=reverse_lazy('login'))
-    def delete_data(request, pk):
-        delete_booking = BookingTableView()
-        booking = Booking.objects.get(pk=pk)
-        booking.delete()
+    # @login_required(login_url=reverse_lazy('login'))
+    # def delete_data(request, pk):
+    #     delete_booking = BookingTableView()
+    #     booking = Booking.objects.get(pk=pk)
+    #     booking.delete()
 
-        if request.method == "GET":
-            filter_by = request.GET.get("filter_by")
-            date = request.GET.get("date")
-            if not date:
-                return redirect(reverse('booking-table'))
-            else:
-                return redirect(reverse('booking-table') + '?filter_by=' + filter_by + '&date=' + date)
+    #     if request.method == "GET":
+    #         filter_by = request.GET.get("filter_by")
+    #         date = request.GET.get("date")
+    #         if not date:
+    #             return redirect(reverse('booking-table'))
+    #         else:
+    #             return redirect(reverse('booking-table') + '?filter_by=' + filter_by + '&date=' + date)
     
     # def work_id_after_delete(self, booking):
     #     date = booking.date

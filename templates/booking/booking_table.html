@@ -45,19 +45,20 @@
                     });
                 }
                 else {
-                    alert("เลือก Booking");
+                    alert("เลือกงานที่ต้องการ");
                     return false;
                 }
                 
                 var action = $('select[name="action"]').val();
-
+                
                 if(action == 'time'){
-                    $('form#action').attr("action", "{% url 'booking-time' %}")
+                    $('form#action').attr("action", "{% url 'booking-time' %}");
                     $('form#action').submit();
                 }
                 else if(action == 'delete'){
-                    if (confirm("Are you sure?")){
-
+                    if (confirm('Are you sure?')){
+                        $('form#action').attr("action", "{% url 'booking-delete-multiple' %}");
+                        $('form#action').submit();
                     }
                 }
                 return false;

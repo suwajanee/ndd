@@ -36,6 +36,35 @@
                 }
                 
             });
+
+            $("button.action").click(function(){
+                
+                if($("input.check:checked").length != 0) {
+                    $("input.check:checked").each(function() {
+                        
+                        var input = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "check").val($(this).val());
+                        $('form#action').append($(input));
+                    });
+                }
+                else {
+                    alert("เลือกงานที่ต้องการ");
+                    return false;
+                }
+                
+                var action = $('select[name="action"]').val();
+                
+                if(action == 'delete'){
+                    if (confirm('Are you sure?')){
+                        $('form#action').attr("action", "{% url 'agent-transport-delete-multiple' %}");
+                        $('form#action').submit();
+                    }
+                }
+                return false;
+
+            });
+
         });
         
     </script>
@@ -72,6 +101,20 @@
                         <button type="submit" class="btn btn-primary">OK</button>
                     </form>
                 </div>
+
+                <div class="col text-center">
+                    <select name="action" class="custom-select col-3 mr-1">
+                        <option value=""> -------- </option>
+                        <option value="delete"> ลบ </option>
+                    </select>
+                    <form id="action" method="POST" class="d-inline"> 
+                            {% csrf_token %}
+                            <input type="hidden" name="date" value="{{ date }}">
+                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        <button class="btn btn-primary action">GO</button>
+                    </form>
+                </div>
+
                 <div class="col text-right">
                     <a class="btn btn-primary mr-1" href="#" role="button" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                     <form id="edit-filter" method="GET" action="{% url 'agent-transport-edit' %}" style="display:none;">
@@ -120,7 +163,8 @@
                         <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
                     {% endif %}
                             <td class="p-0  no-collapsable toggle-color w-1">
-                                <!-- <input type="checkbox" class="check" name="check" value="{{ booking.pk }}"> -->
+                                <input type="checkbox" class="check" name="check" value="{{ agent_transport.pk }}">
+                                <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
                             </td>
                             
                             <td class="p-0 w-1">

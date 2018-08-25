@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 class BookingTimeTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
-    def time_table(request):
+    def get_time_table(request):
         template_name = 'booking/booking_time_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
