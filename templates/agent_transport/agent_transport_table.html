@@ -65,6 +65,10 @@
 
             });
 
+            $("#checkAll").click(function(){
+                $('input.check:checkbox').not(this).prop('checked', this.checked);
+            });
+
         });
         
     </script>
@@ -129,7 +133,7 @@
         <div id='table-cont' class="table-cont"> 
         <table class="table-hover" id="accordion table-responsive">
             <thead class="text-nowrap bg-lightgray"> 
-                <th>EDIT</th>
+                <th><input type="checkbox" id="checkAll"></th>
                 <th>PRINT</th>
                 <th>DATE</th>
                 <th>PRINCIPAL</th>

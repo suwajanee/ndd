@@ -36,20 +36,6 @@ class AgentTransportTableView(TemplateView):
             agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
         return render(request, template_name, {'agent_transports': agent_transports, 'filter_by': filter_by, 'date': date, 'today': today, 'nbar': 'agent-transport-table'})
-
-
-    @login_required(login_url=reverse_lazy('login'))
-    def delete_data(request, pk):
-        agent_transport = AgentTransport.objects.get(pk=pk)
-        agent_transport.delete()
-
-        if request.method == "GET":
-            filter_by = request.GET.get("filter_by")
-            date = request.GET.get("date")
-            if not date:
-                return redirect(reverse('agent-transport-table'))
-            else:
-                return redirect(reverse('agent-transport-table') + '?filter_by=' + filter_by + '&date=' + date)
     
 
     @login_required(login_url=reverse_lazy('login'))
