@@ -32,6 +32,22 @@ $(document).ready(function(){
     });
   });
 });
+
+    $(function() {
+        $("button.shipper-delete").click(function(){
+            if (confirm('Are you sure?')){
+                $(this).next().submit();
+            }
+            return false;
+        });
+
+        $("button#buttonDeleteCustomer").click(function(){
+            if (confirm('Are you sure?')){
+                $(this).next().submit();
+            }
+            return false;
+        });
+    });
 </script>
 
 <style>
@@ -164,7 +180,8 @@ $(document).ready(function(){
                     </div>
                     <div class="col-4 text-right">
                         <button class="btn btn-info mr-1" data-toggle="modal" data-target="#modalEditCustomer"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger" onclick="document.getElementById('formDeleteCustomer').submit();"><i class="fa fa-trash"></i> Delete</button>
+                        <!-- <button class="btn btn-danger" onclick="document.getElementById('formDeleteCustomer').submit();"><i class="fa fa-trash"></i> Delete</button> -->
+                        <button id="buttonDeleteCustomer" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
                         <form id="formDeleteCustomer" method="POST" action="{% url 'customer-delete' %}">
                             {% csrf_token %}
                             <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
@@ -278,8 +295,9 @@ $(document).ready(function(){
                         <td class="col-7 text-truncate">{{ shipper.address | linebreaks }}</td>
                         <td class="text-right col-3 text-right">
                             <button class="btn btn-outline-info" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-outline-danger" onclick="document.getElementById('formDeleteShipper').submit();"><i class="fa fa-trash"></i></button>
-                            <form id="formDeleteShipper" method="POST" action="{% url 'shipper-delete' %}">
+                            <!-- <button class="btn btn-outline-danger" onclick="document.getElementById('formDeleteShipper{{ shipper.pk }}').submit();"><i class="fa fa-trash"></i></button> -->
+                            <button class="btn btn-outline-danger shipper-delete"><i class="fa fa-trash"></i></button>
+                            <form id="formDeleteShipper{{ shipper.pk }}" method="POST" action="{% url 'shipper-delete' %}" class="shipper-delete">
                                 {% csrf_token %}
                                 <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
                                 <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
