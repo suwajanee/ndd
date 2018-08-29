@@ -8,41 +8,36 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-class CustomerAddView(TemplateView):
+class CustomerEditView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
-    def add_customer(request):
+    def edit_customer(request):
         if request.method == 'POST':
-            customer_name = request.POST['customer_add']
-            work_type = request.POST['work_type_add']
+            pk = request.POST['pk']
+            customer_name = request.POST['customer_edit']
+            work_type = request.POST['work_type_edit']
 
-            data = {
-                'name': customer_name,
-                'work_type': work_type
-            }
-
-            customer = Principal(**data)
+            customer = Principal.objects.get(pk=pk)
+            customer.name = customer_name
+            customer.work_type = work_type
             customer.save()
             
-            return redirect('customer-detail', pk=customer.pk)
+            return redirect('customer-detail', pk=pk)
         else:
             return redirect('customer-list')
 
 
     @login_required(login_url=reverse_lazy('login'))
-    def add_shipper(request):
+    def edit_shipper(request):
         if request.method == 'POST':
             customer_pk = request.POST['customer_pk']
-            shipper = request.POST['shipper_add']
-            address = request.POST['address_add']
+            shipper_pk = request.POST['shipper_pk']
+            shipper_name = request.POST['shipper_edit']
+            address = request.POST['address_edit']
 
-            data = {
-                'principal': Principal.objects.get(pk=customer_pk),
-                'name': shipper,
-                'address': address
-            }
-
-            shipper = Shipper(**data)
+            shipper = Shipper.objects.get(pk=shipper_pk)
+            shipper.name = shipper_name
+            shipper.address = address
             shipper.save()
             
             return redirect('customer-detail', pk=customer_pk)

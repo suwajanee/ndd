@@ -135,10 +135,16 @@ $(document).ready(function(){
                     <div id="myList" class="list-group">
                         {% for principal in principals %}
                         <a href="{% url 'customer-detail' pk=principal.pk %}" class="list-group-item list-group-item-action">
-                            {{ principal.name }}
-                            {% if principal.work_type == "agent-transport" %}
-                                <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
-                            {% endif %}
+                            <div class="row p-0">
+                                <div class="col-8 text-truncate">
+                                    {{ principal.name }}
+                                </div>
+                                <div class="col-4 float-right">
+                                {% if principal.work_type == "agent-transport" %}
+                                    <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
+                                {% endif %}
+                                </div>
+                            </div>
                         </a>                      
                         {% endfor %}
                     </div>
@@ -168,49 +174,54 @@ $(document).ready(function(){
             </div>
 
             <!-- POPUP: Edit customer -->
-            <div class="modal fade" id="modalEditCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="modalEditCustomer" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header text-center">
-                                <h4 class="modal-title w-100 font-weight-bold">Edit Customer</h4>
-                                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body mx-3">
-                                <div class="input-group my-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">NAME</span>
+                        <form method="POST" action="{% url 'customer-edit' %}">
+                            {% csrf_token %}
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold">Edit Customer</h4>
+                                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <input name="name" class="form-control" value="{{ customer.name }}" autocomplete=off>
+                                    <div class="modal-body mx-3">
+                                        <input type="hidden" name="pk" value="{{ customer.pk }}">
+
+                                        <div class="input-group my-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">NAME</span>
+                                            </div>
+                                            <input name="customer_edit" class="form-control" value="{{ customer.name }}" autocomplete=off required>
+                                        </div>
+                        
+                                        <div class="md-form mb-3 float-right text-secondary">
+                                                <em>&mdash;&nbsp;WORK TYPE :</em>
+                                            <div class="custom-control custom-radio ml-4 d-inline">
+                                                {% if customer.work_type == 'normal' %}
+                                                    <input type="radio" class="custom-control-input" id="workTypeEdit1" name="work_type_edit" value="normal" checked>
+                                                {% else %}
+                                                    <input type="radio" class="custom-control-input" id="workTypeEdit1" name="work_type_edit" value="normal">
+                                                {% endif %}
+                                                <label class="custom-control-label" for="workTypeEdit1">Normal</label>
+                                            </div> 
+                        
+                                            <div class="custom-control custom-radio ml-4 d-inline">
+                                                {% if customer.work_type == 'agent-transport' %}
+                                                    <input type="radio" class="custom-control-input" id="workTypeEdit2" name="work_type_edit" value="agent-transport" checked>
+                                                {% else %}
+                                                    <input type="radio" class="custom-control-input" id="workTypeEdit2" name="work_type_edit" value="agent-transport">
+                                                {% endif %}
+                                                <label class="custom-control-label" for="workTypeEdit2">สายเรือ</label>
+                                            </div> 
+                                        </div>
+                        
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
                                 </div>
-                
-                                <div class="md-form mb-3 float-right text-secondary">
-                                        <em>&mdash;&nbsp;WORK TYPE :</em>
-                                    <div class="custom-control custom-radio ml-4 d-inline">
-                                        {% if customer.work_type == 'normal' %}
-                                            <input type="radio" class="custom-control-input" name="example2" value="customEx" checked>
-                                        {% else %}
-                                            <input type="radio" class="custom-control-input" name="example2" value="customEx">
-                                        {% endif %}
-                                        <label class="custom-control-label" for="customRadio">Normal</label>
-                                    </div> 
-                
-                                    <div class="custom-control custom-radio ml-4 d-inline">
-                                        {% if customer.work_type == 'agent-transport' %}
-                                            <input type="radio" class="custom-control-input" name="example2" value="customEx" checked>
-                                        {% else %}
-                                            <input type="radio" class="custom-control-input" name="example2" value="customEx">
-                                        {% endif %}
-                                        <label class="custom-control-label" for="customRadio2">สายเรือ</label>
-                                    </div> 
-                                </div>
-                
-                            </div>
-                            <div class="modal-footer d-flex justify-content-center">
-                                <button class="btn btn-primary">Save</button>
-                            </div>
-                        </div>
+                            </form>
                     </div>
                 </div>
 
@@ -252,8 +263,8 @@ $(document).ready(function(){
                         <thead class="bg-light">
                         <tr class="row m-0">
                             <th class="col-2"> SHIPPER </th>
-                            <th class="col-8"> ADDRESS </th>
-                            <th class="col-2 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
+                            <th class="col-7"> ADDRESS </th>
+                            <th class="col-3 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
                         </tr>
                    </thead>
                    <tbody>
@@ -261,8 +272,8 @@ $(document).ready(function(){
                     {% for shipper in shippers %}
                     <tr class="row m-0">
                         <td class="col-2 text-truncate" >{{ shipper.name }}</td>
-                        <td class="col-8 text-truncate">{{ shipper.address | linebreaks }}</td>
-                        <td class="text-right col-2 text-right">
+                        <td class="col-7 text-truncate">{{ shipper.address | linebreaks }}</td>
+                        <td class="text-right col-3 text-right">
                             <button class="btn btn-outline-info" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                         </td>
@@ -272,43 +283,38 @@ $(document).ready(function(){
                     <!-- POPUP : Edit shipper -->
                     <div class="modal fade" id="modalEditShipper{{ shipper.pk }}" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header text-center">
-                                        <h4 class="modal-title w-100 font-weight-bold">Edit Shipper Detail</h4>
-                                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body mx-3">
-                                        <!-- <div class="input-group my-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">NAME</span>
-                                            </div> -->
+                                <form method="POST" action="{% url 'shipper-edit' %}">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h4 class="modal-title w-100 font-weight-bold">Edit Shipper Detail</h4>
+                                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body mx-3">
+                                            <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
+                                            <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
+
                                             <div class="text-secondary">NAME :</div>
-                                            <input name="name" class="form-control" value="{{ shipper.name }}" autocomplete=off>
-                                        <!-- </div> -->
-                                        <!-- <div class="input-group my-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="writing-mode: vertical-rl; text-orientation: mixed;">ADDRESS</span>
-                                            </div> -->
+                                            <input name="shipper_edit" class="form-control" value="{{ shipper.name }}" autocomplete=off required>
+
                                             <div class="text-secondary mt-3">ADDRESS :</div>
-                                            <textarea name="name" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
-                                        <!-- </div> -->
-                                        
-                        
+                                            <textarea name="address_edit" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                        <!-- <div class="modal-footer text-right"> -->
+                                            <button class="btn btn-primary">Save</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-footer d-flex justify-content-center">
-                                    <!-- <div class="modal-footer text-right"> -->
-                                        <button class="btn btn-primary">Save</button>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     {% endfor %}
                     {% else %}
                     <tr>
                         <td colspan=3 class="text-center text-secondary">
-                            ไม่พบข้อมูล
+                            <h5>ไม่พบข้อมูล</h5>
                         </td>
                     </tr>
                     {% endif %}
