@@ -8,7 +8,7 @@ class ShipperForm(forms.ModelForm):
     address = forms.CharField(widget=forms.Textarea)
 
 class PrincipalAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'work_type')
 
 class ShipperAdmin(admin.ModelAdmin):
     form = ShipperForm
