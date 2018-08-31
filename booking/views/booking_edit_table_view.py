@@ -50,6 +50,7 @@ class BookingEditTableView(TemplateView):
             pk = request.POST['pk']
             time = request.POST['time']
             date = request.POST['date']
+            booking_no = request.POST['booking_no']
             pickup_tr = request.POST['pickup_tr']
             pickup_from = request.POST['pickup_from']
             forward_tr = request.POST['forward_tr']
@@ -78,6 +79,7 @@ class BookingEditTableView(TemplateView):
             booking = Booking.objects.get(pk=pk)
             booking.time = time
             booking.date = date
+            booking.booking_no = booking_no
             booking.pickup_tr = pickup_tr
             booking.pickup_from = pickup_from
             booking.forward_tr = forward_tr

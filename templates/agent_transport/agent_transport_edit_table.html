@@ -131,7 +131,7 @@
                     {% else %}
                         <td style="background-color: {{ agent_transport.booking_color }}" class="text-nowrap">
                     {% endif %}
-                            {{ agent_transport.booking_no }}
+                        <input name="booking_no" class="form-control" value="{{ agent_transport.booking_no }}" onchange="this.form.submit();" autocomplete=off>
                         </td>
 
                     <td><input name="pickup_tr" class="form-control" value="{{ agent_transport.pickup_tr }}" onchange="this.form.submit();" autocomplete=off></td>

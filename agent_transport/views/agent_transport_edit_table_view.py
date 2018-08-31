@@ -43,6 +43,7 @@ class AgentTransportEditTableView(TemplateView):
         if request.method == 'POST':
             pk = request.POST['pk']
             date = request.POST['date']
+            booking_no = request.POST['booking_no']
             pickup_tr = request.POST['pickup_tr']
             pickup_from = request.POST['pickup_from']
             return_tr = request.POST['return_tr']
@@ -66,6 +67,7 @@ class AgentTransportEditTableView(TemplateView):
 
             agent_transport = AgentTransport.objects.get(pk=pk)
             agent_transport.date = date
+            agent_transport.booking_no = booking_no
             agent_transport.pickup_tr = pickup_tr
             agent_transport.pickup_from = pickup_from
             agent_transport.return_tr = return_tr

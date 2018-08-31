@@ -92,7 +92,7 @@
             <th>SHIPPER</th>
             <th>AGENT</th>
             <th>SIZE</th>
-            <th class="px-2">BOOKING</th>
+            <th class="px-4">BOOKING</th>
 
             <th>TR</th>
             <th>FM</th>
@@ -156,16 +156,16 @@
                     <td><input name="time" class="form-control" value="{{ booking.time }}" onchange="this.form.submit();" autocomplete=off></td>
                     
                     <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" onchange="this.form.submit();" autocomplete=off required></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.principal }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.shipper }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ booking.agent }}</div></td>
+                    <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
+                    <td class="no-collapsable text-left"><div  class="long-text">{{ booking.shipper }}</div></td>
+                    <td class="no-collapsable text-left"><div  class="long-text">{{ booking.agent }}</div></td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
                         <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">
                     {% endif %}
-                            {{ booking.booking_no }}
+                            <input name="booking_no" class="form-control" value="{{ booking.booking_no }}" onchange="this.form.submit();" autocomplete=off>
                         </td>
 
                     <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" onchange="this.form.submit();" autocomplete=off></td>

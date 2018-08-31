@@ -29,6 +29,7 @@ class AgentTransportAddView(TemplateView):
     def create_context(self, req):
         context = {}
         context['principals'] = Principal.objects.all().order_by('name')
+        context['nbar'] = 'agent-transport-table'
         if 'principal' in req:
             # print(request.POST)
             context['principal'] = req.get('principal')

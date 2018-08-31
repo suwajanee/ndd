@@ -234,11 +234,11 @@
                             <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
                             {% if booking.cancel == '1' %}
-                                <td class="text-nowrap">
+                                <td class="no-collapsable text-left px-2">
                             {% else %}
-                                <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">
+                                <td style="background-color: {{ booking.booking_color }}" class="no-collapsable text-left px-2">
                             {% endif %}
-                                    {{ booking.booking_no }}
+                                    <div class="long-text">{{ booking.booking_no }}</div>
                                 </td>
 
                             <td class="text-nowrap">{{ booking.pickup_tr }}</td>

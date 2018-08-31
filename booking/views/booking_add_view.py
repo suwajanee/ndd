@@ -33,6 +33,7 @@ class BookingAddView(TemplateView):
         context = {}
         # context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
+        context['nbar'] = 'booking-table'
         if 'principal' in req:
             # print(request.POST)
             context['principal'] = req.get('principal')
