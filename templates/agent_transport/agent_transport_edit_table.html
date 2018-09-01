@@ -125,7 +125,8 @@
                     <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.principal }}</div></td>
                     <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
                     <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
-                    <td class="text-nowrap">{{ agent_transport.size }}</td>
+                    <!-- <td class="text-nowrap">{{ agent_transport.size }}</td> -->
+                    <td><input name="size" class="form-control" value="{{ agent_transport.size }}" onchange="this.form.submit();" autocomplete=off></td>
                     {% if agent_transport.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}

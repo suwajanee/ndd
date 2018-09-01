@@ -159,7 +159,8 @@
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.shipper }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.agent }}</div></td>
-                    <td class="text-nowrap">{{ booking.size }}</td>
+                    <!-- <td class="text-nowrap">{{ booking.size }}</td> -->
+                    <td><input name="size" class="form-control" value="{{ booking.size }}" onchange="this.form.submit();" autocomplete=off></td>
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
