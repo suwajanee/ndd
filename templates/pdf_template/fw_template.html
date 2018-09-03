@@ -7,8 +7,8 @@
 
   <title>Order Template</title>
   
-  <link rel="stylesheet" href="{{ static_dir }}\css\style-pdf.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ static_dir }}/css/style-pdf.css" />
+
   <style type='text/css'>
     /* Size and frame */
     @page {
@@ -35,7 +35,7 @@
     
     @font-face {
       font-family: THSarabunNew; 
-      src: url("{{ static_dir }}\fonts\thsarabunnew-webfont.ttf"); 
+      src: url("{{ static_dir }}/fonts/thsarabunnew-webfont.ttf"); 
     } 
 
     html {
@@ -50,7 +50,7 @@
     {% block content %}
     {% if booking %}
 
-    <div id="header_content"><img src="{{ static_dir }}\images\head.jpg" style="width:100%; height:auto;"></div>
+    <div id="header_content"><img src="{{ static_dir }}/images/head.jpg" style="width:100%; height:auto;"></div>
     <!-- HTML Content -->
     <div id="left_content">
         <table>
@@ -79,16 +79,16 @@
               <td colspan=3 class="center">...........................................................</td>
             </tr>
             <tr class="big">
-              <td class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;"></td>
+              <td class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;"></td>
               <td>ไปกลับ</td>
-              <td class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;"></td>
+              <td class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;"></td>
               <td>เที่ยวเดียว</td>
             </tr>
             
             <tr class="big">
-              <td class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;"></td>
+              <td class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;"></td>
               <td>ไปแจ้งกลับ</td>
-              <td class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;"></td>
+              <td class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;"></td>
               <td>ซอยตู้</td>
             </tr>
             <!-- {% endif %} -->
@@ -326,10 +326,10 @@
             </tr>
             
             <tr class="big">
-              <td colspan=2 class="center pl-5"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้สะอาด</td>
-              <td colspan=2 class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;">&nbsp;พื้นตู้สะอาด,ไม่มีเสี้ยน,คราบน้ำมัน</td>
-              <td colspan=2 class="center"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;">&nbsp;ตู้ไม่เป็นสนิม</td>
-              <td colspan=2 class="center pr-5"><img src="{{ static_dir }}\images\square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้ไม่บุบยุบ,ฉีกขาด</td>
+              <td colspan=2 class="center pl-5"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้สะอาด</td>
+              <td colspan=2 class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;พื้นตู้สะอาด,ไม่มีเสี้ยน,คราบน้ำมัน</td>
+              <td colspan=2 class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;ตู้ไม่เป็นสนิม</td>
+              <td colspan=2 class="center pr-5"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้ไม่บุบยุบ,ฉีกขาด</td>
             </tr>
             <tr class="small pr-5-left border-bottom">
               <td colspan=8></td>

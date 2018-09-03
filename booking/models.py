@@ -43,7 +43,7 @@ class Booking(models.Model):
     factory_in_time = models.CharField(max_length=20, blank=True, default='')
     factory_load_start_time = models.CharField(max_length=20, blank=True, default='')
     factory_load_finish_time = models.CharField(max_length=20, blank=True, default='')
-    factory_out_finish = models.CharField(max_length=20, blank=True, default='')
+    factory_out_time = models.CharField(max_length=20, blank=True, default='')
     return_in_time = models.CharField(max_length=20, blank=True, default='')
     return_out_time = models.CharField(max_length=20, blank=True, default='')
 
