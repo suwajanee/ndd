@@ -164,7 +164,13 @@
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
-                        <td style="background-color: {{ booking.booking_color }}" class="text-nowrap">
+                        <!-- <td style="background-color: {{ booking.booking_color }}" class="text-nowrap"> -->
+                                <td style="background-color:
+                                {% ifchanged booking.booking_no %}
+                                    {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                                {% else %}
+                                    {{ rowcolors }}
+                                {% endifchanged %}">
                     {% endif %}
                             <input name="booking_no" class="form-control" value="{{ booking.booking_no }}" onchange="this.form.submit();" autocomplete=off>
                         </td>
