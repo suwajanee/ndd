@@ -20,9 +20,17 @@ services:
         - "8000"
     links:
         - postgres
+    restart: always
+        
 
 
 # This defines a service for the Postgres database
   postgres:
     image: postgres:10.5
+    volumes:
+      - ./database-ndd:/var/lib/postgresql/data
+    environment:
+        POSTGRES_PASSWORD: password123
+    restart: always
+      
   
