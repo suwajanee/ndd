@@ -236,7 +236,14 @@
                             {% if booking.cancel == '1' %}
                                 <td class="no-collapsable text-left px-2">
                             {% else %}
-                                <td style="background-color: {{ booking.booking_color }}" class="no-collapsable text-left px-2">
+                                <!-- <td style="background-color: {{ booking.booking_color }}" class="no-collapsable text-left px-2"> -->
+                                <td style="background-color:
+                                    {% ifchanged booking.booking_no %}
+                                        {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                                    {% else %}
+                                        {{ rowcolors }}
+                                    {% endifchanged %}"
+                                class="no-collapsable text-left px-2">
                             {% endif %}
                                     <div class="long-text">{{ booking.booking_no }}</div>
                                 </td>
