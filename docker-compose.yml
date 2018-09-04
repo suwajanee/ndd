@@ -26,11 +26,16 @@ services:
 
 # This defines a service for the Postgres database
   postgres:
+    container_name: postgres
     image: postgres:10.5
     volumes:
-      - ./database-ndd:/var/lib/postgresql/data
+        - database:/var/lib/postgresql/data/
+    ports:
+        - "5432:5432"
     environment:
         POSTGRES_PASSWORD: password123
-    restart: always
+
+volumes:      
+    database:
       
-  
+    

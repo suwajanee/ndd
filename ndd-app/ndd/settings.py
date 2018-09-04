@@ -96,14 +96,13 @@ WSGI_APPLICATION = 'ndd.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ndd-database',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'password123',
         'HOST': 'postgres',
         'PORT': 5432,
     }
 }
-
 
 
 # Password validation
