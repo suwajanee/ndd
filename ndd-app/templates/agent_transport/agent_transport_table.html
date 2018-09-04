@@ -190,7 +190,14 @@
                             {% if agent_transport.cancel == '1' %}
                                 <td class="no-collapsable text-left px-2">
                             {% else %}
-                                <td style="background-color: {{ agent_transport.booking_color }}" class="no-collapsable text-left px-2">
+                                <!-- <td style="background-color: {{ agent_transport.booking_color }}" class="no-collapsable text-left px-2"> -->
+                                <td style="background-color:
+                                {% ifchanged agent_transport.booking_no %}
+                                    {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                                {% else %}
+                                    {{ rowcolors }}
+                                {% endifchanged %}"
+                                class="no-collapsable text-left px-2">
                             {% endif %}
                                 <div  class="long-text">{{ agent_transport.booking_no }}</div>
                                 </td>

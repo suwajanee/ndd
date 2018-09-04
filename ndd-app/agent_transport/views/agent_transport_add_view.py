@@ -59,7 +59,7 @@ class AgentTransportAddView(TemplateView):
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
                 booking_no = request.POST['booking_no']
-                booking_color = request.POST['booking_color']
+                # booking_color = request.POST['booking_color']
                 work_type = request.POST['work_type']
                 size = request.POST.getlist('size')
                 quantity = request.POST.getlist('quantity')
@@ -84,7 +84,7 @@ class AgentTransportAddView(TemplateView):
                             'shipper': Shipper.objects.get(pk=shipper),
                             'agent': agent,
                             'booking_no': booking_no,
-                            'booking_color': booking_color,
+                            # 'booking_color': booking_color,
                             'work_type': work_type,
                             'size': s,
                             'date': d,

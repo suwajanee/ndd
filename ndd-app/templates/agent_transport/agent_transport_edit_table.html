@@ -130,7 +130,13 @@
                     {% if agent_transport.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
-                        <td style="background-color: {{ agent_transport.booking_color }}" class="text-nowrap">
+                        <!-- <td style="background-color: {{ agent_transport.booking_color }}" class="text-nowrap"> -->
+                        <td style="background-color:
+                        {% ifchanged agent_transport.booking_no %}
+                            {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                        {% else %}
+                            {{ rowcolors }}
+                        {% endifchanged %}">
                     {% endif %}
                         <input name="booking_no" class="form-control" value="{{ agent_transport.booking_no }}" onchange="this.form.submit();" autocomplete=off>
                         </td>
