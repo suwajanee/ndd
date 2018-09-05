@@ -44,58 +44,59 @@ class BookingEditTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def save_edit_data_booking(request):
         if request.method == 'POST':
-            pk = request.POST['pk']
-            time = request.POST['time']
-            date = request.POST['date']
-            size = request.POST['size']
-            booking_no = request.POST['booking_no']
-            pickup_tr = request.POST['pickup_tr']
-            pickup_from = request.POST['pickup_from']
-            forward_tr = request.POST['forward_tr']
-            factory = request.POST['factory']
-            backward_tr = request.POST['backward_tr']
-            return_tr = request.POST['return_tr']
-            return_to = request.POST['return_to']
-            container_no = request.POST['container_no']
-            seal_no = request.POST['seal_no']
-            closing_date = request.POST['closing_date']
-            closing_time = request.POST['closing_time']
-            ref = request.POST['ref']
-            remark = request.POST['remark']
-            return_date = request.POST['return_date']
+            pk = request.POST.getlist('pk')
+            time = request.POST.getlist('time')
+            date = request.POST.getlist('date')
+            size = request.POST.getlist('size')
+            booking_no = request.POST.getlist('booking_no')
+            pickup_tr = request.POST.getlist('pickup_tr')
+            pickup_from = request.POST.getlist('pickup_from')
+            forward_tr = request.POST.getlist('forward_tr')
+            factory = request.POST.getlist('factory')
+            backward_tr = request.POST.getlist('backward_tr')
+            return_tr = request.POST.getlist('return_tr')
+            return_to = request.POST.getlist('return_to')
+            container_no = request.POST.getlist('container_no')
+            seal_no = request.POST.getlist('seal_no')
+            closing_date = request.POST.getlist('closing_date')
+            closing_time = request.POST.getlist('closing_time')
+            ref = request.POST.getlist('ref')
+            remark = request.POST.getlist('remark')
+            return_date = request.POST.getlist('return_date')
 
             filter_by = request.POST['filter_by']
             date_filter = request.POST['date_filter']
 
-            if not date:
-                date = None
-            if not closing_date:
-                closing_date = None
-            if not return_date:
-                return_date = None
+            for i in range(len(pk)):
+                if not date[i]:
+                    date[i] = None
+                if not closing_date[i]:
+                    closing_date[i] = None
+                if not return_date[i]:
+                    return_date[i] = None
 
-            booking = Booking.objects.get(pk=pk)
-            booking.time = time
-            booking.date = date
-            booking.size = size
-            booking.booking_no = booking_no
-            booking.pickup_tr = pickup_tr
-            booking.pickup_from = pickup_from
-            booking.forward_tr = forward_tr
-            booking.factory = factory
-            booking.backward_tr = backward_tr
-            booking.return_tr = return_tr
-            booking.return_to = return_to
-            booking.container_no = container_no
-            booking.seal_no = seal_no
-            booking.closing_date = closing_date
-            booking.closing_time = closing_time
-            booking.ref = ref
-            booking.remark = remark
-            booking.pickup_date = date
-            booking.factory_date = date
-            booking.return_date = return_date
-            booking.save()
+                booking = Booking.objects.get(pk=pk[i])
+                booking.time = time[i]
+                booking.date = date[i]
+                booking.size = size[i]
+                booking.booking_no = booking_no[i]
+                booking.pickup_tr = pickup_tr[i]
+                booking.pickup_from = pickup_from[i]
+                booking.forward_tr = forward_tr[i]
+                booking.factory = factory[i]
+                booking.backward_tr = backward_tr[i]
+                booking.return_tr = return_tr[i]
+                booking.return_to = return_to[i]
+                booking.container_no = container_no[i]
+                booking.seal_no = seal_no[i]
+                booking.closing_date = closing_date[i]
+                booking.closing_time = closing_time[i]
+                booking.ref = ref[i]
+                booking.remark = remark[i]
+                booking.pickup_date = date[i]
+                booking.factory_date = date[i]
+                booking.return_date = return_date[i]
+                booking.save()
 
             messages.success(request, "Saving Booking.")
             return redirect(reverse('booking-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
