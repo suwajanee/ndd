@@ -7,15 +7,18 @@ $(function () {
 
     $(function () {
         $("#table-cont").css({ top: $("#filter-date").offset().top + 60 })
+    });
 
-        $('select[name="filter_by"]').change(function () {
-            if ($(this).val() == "month") {
-                $('input#id_date').attr("type", "month")
-            }
-            else {
-                $('input#id_date').attr("type", "date")
-            }
 
+    $(function () {
+        $("button#print").click(function () {
+
+            $("input.pk").each(function () {
+
+                $('form#PrintTime').append($(this));
+            });
+
+            $('form#PrintTime').submit();
         });
     });
 

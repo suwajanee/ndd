@@ -15,7 +15,7 @@ from ..models import Booking
 class BookingEditTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
-    def render_edit_booking(request):
+    def render_edit_booking_page(request):
         template_name = 'booking/booking_edit.html'
 
         tmr = datetime.now() + timedelta(days=1)

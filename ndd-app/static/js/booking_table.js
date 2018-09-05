@@ -1,7 +1,7 @@
-$(function() {
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove(); 
+$(function () {
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
         });
     }, 2000);
 
@@ -9,24 +9,24 @@ $(function() {
         e.stopPropagation();
     });
 
-    $("#table-cont").css({top: $("#filter-date").offset().top + 60 });
+    $("#table-cont").css({ top: $("#filter-date").offset().top + 60 });
 
-    $(".class-collapse").css({width: $( window ).width()});
+    $(".class-collapse").css({ width: $(window).width() });
 
-    $("#checkAll").click(function(){
+    $("#checkAll").click(function () {
         $('input.check:checkbox').not(this).prop('checked', this.checked);
     });
 
-    
 
-    $('select[name="filter_by"]').change(function() {
-        if($(this).val() == "month"){
+
+    $('select[name="filter_by"]').change(function () {
+        if ($(this).val() == "month") {
             $('input#id_date').attr("type", "month")
         }
         else {
             $('input#id_date').attr("type", "date")
         }
-        
+
     });
 
 });

@@ -38,7 +38,7 @@ class BookingPrintView(TemplateView):
 
     def print_time(request):
         booking_print_view = BookingPrintView()
-        template_name = 'pdf_template/booking_time_table_template.html'
+        template_name = 'pdf_template/booking_time_template.html'
         if request.method == "POST":
             pk_list = request.POST.getlist("pk")
             bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
