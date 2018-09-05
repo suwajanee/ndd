@@ -53,9 +53,9 @@
                         </div>
 
                     {% if filter_by == 'month' %}
-                        <input id="id_date" name="date" type="month" class="form-control mr-2" value="{{ date }}">
+                        <input id="id_date" name="date_filter" type="month" class="form-control mr-2" value="{{ date_filter }}">
                     {% else %}
-                        <input id="id_date" name="date" type="date" class="form-control mr-2" value="{{ date }}">
+                        <input id="id_date" name="date_filter" type="date" class="form-control mr-2" value="{{ date_filter }}">
                     {% endif %}
 
                 </div>
@@ -71,7 +71,7 @@
 
                 <button class="btn btn-primary" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
                 <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="date_filter" value="{{ date_filter }}">
                     <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 </form>
                 
@@ -139,7 +139,7 @@
             <form name="edit-form{{ booking.pk }}" method="POST" action="{% url 'booking-edit-save' %}">
                 {% csrf_token %}
             <input type="hidden" name="pk" value="{{ booking.pk }}">
-            <input type="hidden" name="date_filter" value="{{ date }}">
+            <input type="hidden" name="date_filter" value="{{ date_filter }}">
             <input type="hidden" name="filter_by" value="{{ filter_by }}">
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
