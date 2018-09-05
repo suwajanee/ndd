@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -29,10 +30,10 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
                 if filter_by == "month":
-                    month_year = datetime.strptime(date, '%Y-%m')
+                    month_year = datetime.strptime(date_filter, '%Y-%m')
                     agent_transports = AgentTransport.objects.filter((Q(date__month=month_year.month) & Q(date__year=month_year.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
                 else:
-                    agent_transports = AgentTransport.objects.filter(Q(date=date) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
+                    agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
         else:
             agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
@@ -84,6 +85,6 @@ class AgentTransportEditTableView(TemplateView):
             agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
-            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date-filter=' + date_filter)
+            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
         else:
             return redirect('agent-transport-edit')
