@@ -8,38 +8,7 @@
 {% block extra_head %}
 
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
-    <script src="{% static 'js/add-form.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 2000);
-        
-        $(function() {
-            $(document).on('click', '.add-more', function(e) {
-                e.preventDefault();
-
-                var controlForm = $('.control:first'),
-                currentEntry = $(this).parents('.entry:first'),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-                newEntry.find('input').val('');
-                controlForm.find('.entry:not(:last) .add-more')
-                .removeClass('add-more').addClass('remove')
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('<span><i class="fa fa-minus"></i></span>');
-            }).on('click', '.remove', function(e) {
-                $(this).parents('.entry:first').remove();
-
-                e.preventDefault();
-                return false;
-            });
-
-        });
-
-    </script>
+     
 {% endblock %}
 
 {% block content %}
@@ -232,6 +201,13 @@
         </div>
         
         </div>
-        {% endblock %}
+
+
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="{% static 'js/add_form.js' %}"></script>
+<script src="{% static 'js/booking_add.js' %}"></script>
+
+{% endblock %}
     
    

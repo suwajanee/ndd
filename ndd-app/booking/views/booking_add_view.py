@@ -1,29 +1,28 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.utils import timezone
-from ..models import Booking
-from customer.models import Principal, Shipper
-from ..forms import BookingAddForm
-# from django.shortcuts import render_to_response
 from datetime import datetime
-from django.db.models import Max
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+
+from ..forms import BookingAddForm
+from ..models import Booking
+from customer.models import Principal, Shipper
 
 
 class BookingAddView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
-    def add_booking(request):
+    def render_add_booking_page(request):
         add_booking = BookingAddView()
         template_name = 'booking/booking_add.html'
         context = {}
         context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
         context['nbar'] = 'booking-table'
+
         if request.method == 'POST':
             context = add_booking.create_context(request.POST)
             
@@ -31,11 +30,9 @@ class BookingAddView(TemplateView):
 
     def create_context(self, req):
         context = {}
-        # context['form'] = BookingAddForm()
         context['principals'] = Principal.objects.all().order_by('name')
         context['nbar'] = 'booking-table'
         if 'principal' in req:
-            # print(request.POST)
             context['principal'] = req.get('principal')
             if context['principal']:
                 context['shippers'] = Shipper.objects.filter(principal=context['principal']).order_by('name')
@@ -53,20 +50,18 @@ class BookingAddView(TemplateView):
         return context
 
     @login_required(login_url=reverse_lazy('login'))
-    def save_booking(request):
+    def save_data_booking(request):
         add_booking = BookingAddView()
         if request.method == 'POST':
             form = BookingAddForm(request.POST)
             if form.is_valid():
-                # print(request.POST)
                 principal = request.POST['principal']
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
                 booking_no = request.POST['booking_no']
-                # booking_color = request.POST['booking_color']
-                size = request.POST.getlist('size')
-                quantity = request.POST.getlist('quantity')
-                date = request.POST.getlist('date')
+                size_list = request.POST.getlist('size')
+                quantity_list = request.POST.getlist('quantity')
+                date_list = request.POST.getlist('date')
                 pickup_from = request.POST['pickup_from']
                 factory = request.POST['factory']
                 return_to = request.POST['return_to']
@@ -85,25 +80,25 @@ class BookingAddView(TemplateView):
                 if address == 'other':
                     address_other = request.POST['address_other']
 
-                container = zip(size, quantity, date)
-                for s, q, d in container:
-                    add_booking.work_id_after_add(d, shipper, int(q))
+                container = zip(size_list, quantity_list, date_list)
+                for size, quantity, date in container:
+                    add_booking.work_id_after_add(date, shipper, int(quantity))
                     
                     if cut == '1':
                         return_date = request.POST['return_date']
                     else:
-                        return_date = d
+                        return_date = date
 
-                    for i in range(int(q)):
-                        work_id, work_number = add_booking.run_work_id(d, shipper)
+                    for i in range(int(quantity)):
+                        work_id, work_number = add_booking.run_work_id(date, shipper)
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
                             'agent': agent,
                             'booking_no': booking_no,
                             # 'booking_color': booking_color,
-                            'size': s,
-                            'date': d,
+                            'size': size,
+                            'date': date,
                             'pickup_from': pickup_from,
                             'factory': factory,
                             'return_to': return_to,
@@ -115,8 +110,8 @@ class BookingAddView(TemplateView):
                             'remark': remark,
                             'work_id': work_id,
                             'work_number': work_number,
-                            'pickup_date': d,
-                            'factory_date': d,
+                            'pickup_date': date,
+                            'factory_date': date,
                             'return_date': return_date,
                             'address': address
                         }
@@ -131,7 +126,6 @@ class BookingAddView(TemplateView):
             messages.error(request, "Form not validate.")
         return redirect('booking-add')
 
-
     def run_work_id(self, date, shipper):
         work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
         if work['work_number__max'] == None:
@@ -144,10 +138,9 @@ class BookingAddView(TemplateView):
                 work_number = work_shipper['work_number__max'] + 1
 
         work = str("{:03d}".format(work_number))
-        d = datetime.strptime(date, "%Y-%m-%d")
-        work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work
+        date = datetime.strptime(date, "%Y-%m-%d")
+        work_id = date.strftime('%d%m%y') + work
         return work_id, work_number
-
 
     def work_id_after_add(self, date, shipper, quantity):
         max_work = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
@@ -156,14 +149,14 @@ class BookingAddView(TemplateView):
             for work in work_gt:               
                 new_work_number = work.work_number + quantity
                 work_str = str("{:03d}".format(new_work_number))
-                d = datetime.strptime(date, "%Y-%m-%d")
-                work_id = d.strftime('%d')+d.strftime('%m')+d.strftime('%y')+work_str
+                date = datetime.strptime(date, "%Y-%m-%d")
+                work_id = date.strftime('%d%m%y') + work_str
 
                 booking = Booking.objects.get(pk=work.pk)
                 booking.work_id = work_id
                 booking.work_number = new_work_number
                 booking.save()
-        return None
+        return
 
             
 

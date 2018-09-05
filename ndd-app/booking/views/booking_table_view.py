@@ -1,16 +1,19 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from ..models import Booking
 from datetime import datetime, timedelta
-from django.urls import reverse_lazy
-from django.db.models import Q
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
+
+from ..models import Booking
+
 
 class BookingTableView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
-    def render_table_booking(request):
+    def render_table_booking_page(request):
         template_name = 'booking/booking_table.html'
 
         tmr = datetime.now() + timedelta(days=1)
