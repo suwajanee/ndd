@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^delete/(?P<pk>\d+)/$', AgentTransportDeleteView.delete_data_agent_transport, name='agent-transport-delete'), #delete in table page
     url(r'^delete/$', AgentTransportDeleteView.delete_multiple_data_agent_transport, name='agent-transport-delete-multiple'),
 
-    url(r'^edit/$', AgentTransportEditTableView.render_edit_agent_transport, name='agent-transport-edit'),
+    url(r'^edit/$', AgentTransportEditTableView.render_edit_agent_transport_page, name='agent-transport-edit'),
     url(r'^edit/save$', AgentTransportEditTableView.save_edit_data_agent_transport, name='agent-transport-edit-save'),
 ]
 
