@@ -15,7 +15,7 @@ class AgentTransportEditTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
     def render_edit_agent_transport(request):
-        template_name = 'agent_transport/agent_transport_edit_table.html'
+        template_name = 'agent_transport/agent_transport_edit.html'
 
         today = datetime.now()
 

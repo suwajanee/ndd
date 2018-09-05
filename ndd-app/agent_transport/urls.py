@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf.urls import url
 from .views.agent_transport_table_view import AgentTransportTableView
 from .views.agent_transport_add_view import AgentTransportAddView
-from .views.agent_transport_edit_table_view import AgentTransportEditTableView
+from .views.agent_transport_edit_view import AgentTransportEditTableView
 from .views.agent_transport_update_view import AgentTransportUpdateView
 from .views.agent_transport_print_view import AgentTransportPrintView
 from .views.agent_transport_delete_view import AgentTransportDeleteView
