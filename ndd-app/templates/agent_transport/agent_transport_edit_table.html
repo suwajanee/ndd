@@ -6,29 +6,7 @@
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
-    <script src="{% static 'js/fixed-header.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 1500);
 
-        $(function() {
-            $("#table-cont").css({top: $("#filter-date").offset().top + 60 });
-
-            $('select[name="filter_by"]').change(function() {
-                if($(this).val() == "month"){
-                    $('input#id_date').attr("type", "month")
-                }
-                else {
-                    $('input#id_date').attr("type", "date")
-                }
-                
-            });
-        });
-    </script>
 {% endblock %}
         
 {% block content %}
@@ -166,7 +144,28 @@
         {% else %}
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         {% endif %}
+    <script src="{% static 'js/fixed-header.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        window.setTimeout(function() {
+            $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 1500);
 
+        $(function() {
+            $("#table-cont").css({top: $("#filter-date").offset().top + 60 });
+
+            $('select[name="filter_by"]').change(function() {
+                if($(this).val() == "month"){
+                    $('input#id_date').attr("type", "month")
+                }
+                else {
+                    $('input#id_date').attr("type", "date-filter")
+                }
+            });
+        });
+    </script>
         
     {% endblock %}
     </body>
