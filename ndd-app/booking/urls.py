@@ -17,12 +17,14 @@ urlpatterns = [
     url(r'^add/$', BookingAddView.render_add_booking_page, name='booking-add'),
     url(r'^save/$', BookingAddView.save_data_booking, name='booking-save'), 
 
+    url(r'^delete/(?P<pk>\d+)/$', BookingDeleteView.delete_data_booking, name='booking-delete'), #delete in table page
+    url(r'^delete/$', BookingDeleteView.delete_multiple_data_booking, name='booking-delete-multiple'),
+
 
 
     url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
 
-    url(r'^delete/(?P<pk>\d+)/$', BookingDeleteView.delete_data, name='booking-delete'), #delete in table page
-    url(r'^delete/$', BookingDeleteView.delete_multiple, name='booking-delete-multiple'),
+
 
     url(r'^edit/$', BookingEditTableView.get_edit_table, name='booking-edit'),
     url(r'^edit/save/$', BookingEditTableView.save_edit_table, name='booking-edit-save'),

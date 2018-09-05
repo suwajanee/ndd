@@ -72,13 +72,13 @@
                         
                         <fieldset>
                                 <legend>CONTAINER</legend>
-                        {% if size or quantity or date %}
+                        {% if size_list or quantity_list or date_list %}
                             <div class="control">
-                                    {% for s, q, d in zip %}
+                                    {% for size, quantity, date in zip %}
                                     <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}" required>
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}" required>
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}" required>
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" required>
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                         <div class="input-group-append">
                                     {% if forloop.last %}
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     

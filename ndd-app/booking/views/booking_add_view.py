@@ -40,10 +40,10 @@ class BookingAddView(TemplateView):
                 context['shippers'] = []
 
             req._mutable = True
-            context['size'] = req.getlist('size')
-            context['quantity'] = req.getlist('quantity')
-            context['date'] = req.getlist('date')
-            context['zip'] = zip(context['size'], context['quantity'], context['date'])
+            context['size_list'] = req.getlist('size')
+            context['quantity_list'] = req.getlist('quantity')
+            context['date_list'] = req.getlist('date')
+            context['zip'] = zip(context['size_list'], context['quantity_list'], context['date_list'])
 
             req.update({'size':'', 'quantity':'', 'date':''})
             context['form'] = BookingAddForm(req)
