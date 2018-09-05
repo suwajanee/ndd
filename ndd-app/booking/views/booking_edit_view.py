@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -14,7 +16,7 @@ class BookingEditTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
     def render_edit_booking(request):
-        template_name = 'booking/booking_edit_table.html'
+        template_name = 'booking/booking_edit.html'
 
         tmr = datetime.now() + timedelta(days=1)
         today = datetime.now()
@@ -39,7 +41,6 @@ class BookingEditTableView(TemplateView):
             bookings = Booking.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
         return render(request, template_name, {'bookings': bookings, 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
-
 
     @login_required(login_url=reverse_lazy('login'))
     def save_edit_data_booking(request):

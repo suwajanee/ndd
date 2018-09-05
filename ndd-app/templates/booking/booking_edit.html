@@ -6,29 +6,7 @@
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
-    <script src="{% static 'js/fixed-header.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 1500);
-
-        $(function() {
-            $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
-
-            $('select[name="filter_by"]').change(function() {
-                if($(this).val() == "month"){
-                    $('input#id_date').attr("type", "month")
-                }
-                else {
-                    $('input#id_date').attr("type", "date")
-                }
-                
-            });
-        });
-    </script>
+    
 {% endblock %}
         
 {% block content %}
@@ -73,14 +51,7 @@
                     <input type="hidden" name="date_filter" value="{{ date_filter }}">
                     <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 </form>
-                <button class="btn btn-success" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>
-
-                <!-- <button class="btn btn-primary" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
-                <form id="table-filter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-                    <input type="hidden" name="date_filter" value="{{ date_filter }}">
-                    <input type="hidden" name="filter_by" value="{{ filter_by }}">
-                </form> -->
-                
+                <button class="btn btn-success" onclick="document.forms['edit-form'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>                
 
         </div>
         </div>
@@ -121,8 +92,7 @@
             <input type="hidden" name="date_filter" value="{{ date_filter }}">
             <input type="hidden" name="filter_by" value="{{ filter_by }}">
             {% for booking in bookings %}
-            <!-- <form name="edit-form{{ booking.pk }}" method="POST" action="{% url 'booking-edit-save' %}">
-                {% csrf_token %} -->
+
             <input type="hidden" name="pk" value="{{ booking.pk }}">
             
             {% if booking.cancel == '1' %}
@@ -205,7 +175,10 @@
         {% endif %}
 
         
-    {% endblock %}
-    </body>
 
-</html>
+        
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="{% static 'js/fixed_header.js' %}"></script>
+    <script src="{% static 'js/booking_edit.js' %}"></script>
+ 
+    {% endblock %}

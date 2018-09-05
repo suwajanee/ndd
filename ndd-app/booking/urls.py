@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views.booking_add_view import BookingAddView
 from .views.booking_delete_view import BookingDeleteView
-from .views.booking_edit_table_view import BookingEditTableView
+from .views.booking_edit_view import BookingEditTableView
 from .views.booking_print_view import BookingPrintView
 from .views.booking_table_view import BookingTableView
 from .views.booking_time_table_view import BookingTimeTableView

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -9,7 +11,7 @@ from ..models import Booking
 
 
 class BookingUpdateView(TemplateView):
-    
+
     @login_required(login_url=reverse_lazy('login'))
     def update_data_booking(request):
         if request.method == 'POST':
