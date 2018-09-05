@@ -43,46 +43,48 @@ class AgentTransportEditTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def save_edit_data_agent_transport(request):
         if request.method == 'POST':
-            pk = request.POST['pk']
-            date = request.POST['date']
-            size = request.POST['size']
-            booking_no = request.POST['booking_no']
-            pickup_tr = request.POST['pickup_tr']
-            pickup_from = request.POST['pickup_from']
-            return_tr = request.POST['return_tr']
-            return_to = request.POST['return_to']
-            container_1 = request.POST['container_1']
-            container_2 = request.POST['container_2']
-            ref = request.POST['ref']
-            remark = request.POST['remark']
-            pickup_date = request.POST['pickup_date']
-            return_date = request.POST['return_date']
+            pk = request.POST.getlist('pk')
+            date = request.POST.getlist('date')
+            size = request.POST.getlist('size')
+            booking_no = request.POST.getlist('booking_no')
+            pickup_tr = request.POST.getlist('pickup_tr')
+            pickup_from = request.POST.getlist('pickup_from')
+            return_tr = request.POST.getlist('return_tr')
+            return_to = request.POST.getlist('return_to')
+            container_1 = request.POST.getlist('container_1')
+            container_2 = request.POST.getlist('container_2')
+            ref = request.POST.getlist('ref')
+            remark = request.POST.getlist('remark')
+            pickup_date = request.POST.getlist('pickup_date')
+            return_date = request.POST.getlist('return_date')
 
             filter_by = request.POST['filter_by']
             date_filter = request.POST['date_filter']
 
-            if not date:
-                date = None
-            if not pickup_date:
-                pickup_date = None
-            if not return_date:
-                return_date = None
+            for i in range(len(pk)):
+    
+                if not date[i]:
+                    date[i] = None
+                if not pickup_date[i]:
+                    pickup_date[i] = None
+                if not return_date[i]:
+                    return_date[i] = None
 
-            agent_transport = AgentTransport.objects.get(pk=pk)
-            agent_transport.date = date
-            agent_transport.size = size
-            agent_transport.booking_no = booking_no
-            agent_transport.pickup_tr = pickup_tr
-            agent_transport.pickup_from = pickup_from
-            agent_transport.return_tr = return_tr
-            agent_transport.return_to = return_to
-            agent_transport.container_1 = container_1
-            agent_transport.container_2 = container_2
-            agent_transport.ref = ref
-            agent_transport.remark = remark
-            agent_transport.pickup_date = pickup_date
-            agent_transport.return_date = return_date
-            agent_transport.save()
+                agent_transport = AgentTransport.objects.get(pk=pk[i])
+                agent_transport.date = date[i]
+                agent_transport.size = size[i]
+                agent_transport.booking_no = booking_no[i]
+                agent_transport.pickup_tr = pickup_tr[i]
+                agent_transport.pickup_from = pickup_from[i]
+                agent_transport.return_tr = return_tr[i]
+                agent_transport.return_to = return_to[i]
+                agent_transport.container_1 = container_1[i]
+                agent_transport.container_2 = container_2[i]
+                agent_transport.ref = ref[i]
+                agent_transport.remark = remark[i]
+                agent_transport.pickup_date = pickup_date[i]
+                agent_transport.return_date = return_date[i]
+                agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
             return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
