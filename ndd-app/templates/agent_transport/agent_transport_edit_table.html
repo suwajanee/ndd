@@ -45,7 +45,7 @@
         
                         <button class="btn btn-primary" onclick="document.forms['table-filter'].submit();"><i class="fa fa-check"></i>&nbsp;Done</button>
                         <form id="table-filter" method="GET" action="{% url 'agent-transport-table' %}" style="display:none;">
-                            <input type="hidden" name="date" value="{{ date }}">
+                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
                         </form>
                         

@@ -18,8 +18,8 @@ urlpatterns = [
     url(r'^add/$', AgentTransportAddView.render_add_agent_transport_page, name='agent-transport-add'),
     url(r'^save/$', AgentTransportAddView.save_data_agent_transport, name='agent-transport-save'), 
 
-    url(r'^delete/(?P<pk>\d+)/$', AgentTransportDeleteView.delete_data, name='agent-transport-delete'), #delete in table page
-    url(r'^delete/$', AgentTransportDeleteView.delete_multiple, name='agent-transport-delete-multiple'),
+    url(r'^delete/(?P<pk>\d+)/$', AgentTransportDeleteView.delete_data_agent_transport, name='agent-transport-delete'), #delete in table page
+    url(r'^delete/$', AgentTransportDeleteView.delete_multiple_data_agent_transport, name='agent-transport-delete-multiple'),
 
     url(r'^edit/$', AgentTransportEditTableView.get_edit_table, name='agent-transport-edit'),
     url(r'^edit/save$', AgentTransportEditTableView.save_edit_table, name='agent-transport-edit-save'),

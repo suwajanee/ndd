@@ -102,7 +102,7 @@
                         <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
                     {% endif %}
                             <td class="p-0  no-collapsable toggle-color w-1">
-                                <input type="checkbox" class="check" name="check" value="{{ agent_transport.pk }}">
+                                <input type="checkbox" class="check" name="pk" value="{{ agent_transport.pk }}">
                                 <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
                             </td>
                             
@@ -159,7 +159,7 @@
                                 <div id="accordion{{ agent_transport.pk }}" class="collapse">
                                     <div class="class-collapse">
                                     <div class="float-left ml-sm-2 mt-2">
-                                        <button class="btn btn-danger" href="#" onclick="document.getElementById('delete-form{{ agent_transport.pk }}').submit();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                                        <button id="delete-data{{ agent_transport.pk }}" class="btn btn-danger" href="#" ><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                         <form id="delete-form{{ agent_transport.pk }}" method="GET" action="{% url 'agent-transport-delete' pk=agent_transport.pk %}" style="display:none;">
                                             <input type="hidden" name="date_filter" value="{{ date_filter }}">
                                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
@@ -245,10 +245,20 @@
                                 </div>
                             </td>
                         </tr>
+                        <script>
+                            $(function() {
+                                $("button#delete-data{{ agent_transport.pk }}").click(function(){
+                                    if (confirm('Are you sure?')){
+                                        $('form#delete-form{{ agent_transport.pk }}').submit();
+                                    }
+                                });
+                            });
+                        </script>
                     {% endfor %}
             </tbody> 
         </table>
     </div>
+
     {% else %}
         <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
     {% endif %}
@@ -258,7 +268,7 @@
     <script src="{% static 'js/add_form.js' %}"></script>
     <script src="{% static 'js/agent_transport_table.js' %}"></script>
     <script>
-    $(document).ready(function () {    
+    $(function () {    
         $("button.action").click(function () {
 
             if ($("input.check:checked").length != 0) {
@@ -266,7 +276,7 @@
 
                     var input = $("<input>")
                         .attr("type", "hidden")
-                        .attr("name", "check").val($(this).val());
+                        .attr("name", "pk").val($(this).val());
                     $('form#action').append($(input));
                 });
             } else {

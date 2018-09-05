@@ -6,23 +6,24 @@ $(document).ready(function () {
         });
     }, 2000);
 
-    $(document).on('click', '.add-more', function (e) {
-        e.preventDefault();
+});
 
-        var controlForm = $('.control:first'),
-            currentEntry = $(this).parents('.entry:first'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+$(document).on('click', '.add-more', function (e) {
+    e.preventDefault();
 
-        newEntry.find('input').val('');
-        controlForm.find('.entry:not(:last) .add-more')
-            .removeClass('add-more').addClass('remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span><i class="fa fa-minus"></i></span>');
-    }).on('click', '.remove', function (e) {
-        $(this).parents('.entry:first').remove();
+    var controlForm = $('.control:first'),
+        currentEntry = $(this).parents('.entry:first'),
+        newEntry = $(currentEntry.clone()).appendTo(controlForm);
 
-        e.preventDefault();
-        return false;
-    });
+    newEntry.find('input').val('');
+    controlForm.find('.entry:not(:last) .add-more')
+        .removeClass('add-more').addClass('remove')
+        .removeClass('btn-success').addClass('btn-danger')
+        .html('<span><i class="fa fa-minus"></i></span>');
+}).on('click', '.remove', function (e) {
+    $(this).parents('.entry:first').remove();
+
+    e.preventDefault();
+    return false;
 
 });

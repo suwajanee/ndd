@@ -7,8 +7,33 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
-
- 
+    <script src="{% static 'js/add-form.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 2000);
+        
+        $(function() {
+            $(document).on('click', '.add-more', function(e) {
+                e.preventDefault();
+                var controlForm = $('.control:first'),
+                currentEntry = $(this).parents('.entry:first'),
+                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+                newEntry.find('input').val('');
+                controlForm.find('.entry:not(:last) .add-more')
+                .removeClass('add-more').addClass('remove')
+                .removeClass('btn-success').addClass('btn-danger')
+                .html('<span><i class="fa fa-minus"></i></span>');
+            }).on('click', '.remove', function(e) {
+                $(this).parents('.entry:first').remove();
+                e.preventDefault();
+                return false;
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -73,13 +98,13 @@
                         
                         <fieldset>
                                 <legend>CONTAINER</legend>
-                        {% if size or quantity or date %}
+                        {% if size_list or quantity_list or date_list %}
                             <div class="control">
-                                    {% for s, q, d in zip %}
+                                    {% for size, quantity, date in zip %}
                                     <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}" required>
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}" required>
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}" required>
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" required>
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                         <div class="input-group-append">
                                     {% if forloop.last %}
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
@@ -109,6 +134,12 @@
                             <span class="input-group-text">FROM</span>
                         </div>
                         {{ form.pickup_from }}
+                        <div class="input-group-append">
+                            <span class="input-group-text">TO</span>
+                        </div>
+                        {{ form.return_to }}
+                    </div>
+
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -152,11 +183,5 @@
         </div>
         
         </div>
-
-        <script src="{% static 'js/add_form.js' %}"></script>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="{% static 'js/agent_transport_add.js' %}"></script>
-        
         {% endblock %}
     
-   
