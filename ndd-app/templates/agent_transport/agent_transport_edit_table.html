@@ -89,7 +89,7 @@
                 <form name="edit-form{{ agent_transport.pk }}" method="POST" action="{% url 'agent-transport-edit-save' %}">
                     {% csrf_token %}
                 <input type="hidden" name="pk" value="{{ agent_transport.pk }}">
-                <input type="hidden" name="date_filter" value="{{ date }}">
+                <input type="hidden" name="date_filter" value="{{ date_filter }}">
                 <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 {% if agent_transport.cancel == '1' %}
                     <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">

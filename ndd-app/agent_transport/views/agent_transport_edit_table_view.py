@@ -1,30 +1,31 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from ..models import AgentTransport
-from ..forms import AgentTransportFilterSortForm
 from datetime import datetime, timedelta
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.contrib import messages
-from django.db.models import Q
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+
+from ..forms import AgentTransportFilterSortForm
+from ..models import AgentTransport
+
 
 class AgentTransportEditTableView(TemplateView):
     
     @login_required(login_url=reverse_lazy('login'))
-    def get_edit_table(request):
+    def render_edit_agent_transport(request):
         template_name = 'agent_transport/agent_transport_edit_table.html'
 
         today = datetime.now()
 
         if request.method == "GET":
             filter_by = request.GET.get("filter_by")
-            date = request.GET.get("date")
+            date_filter = request.GET.get("date_filter")
 
-            if date == None:
-                date = ''
+            if date_filter == None:
+                date_filter = ''
 
-            if not date:
+            if not date_filter:
                 agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
                 if filter_by == "month":
@@ -35,11 +36,11 @@ class AgentTransportEditTableView(TemplateView):
         else:
             agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
 
-        return render(request, template_name, {'agent_transports': agent_transports, 'filter_by': filter_by, 'date': date, 'today': today, 'nbar': 'agent-transport-table'})
+        return render(request, template_name, {'agent_transports': agent_transports, 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'nbar': 'agent-transport-table'})
 
 
     @login_required(login_url=reverse_lazy('login'))
-    def save_edit_table(request):
+    def save_edit_data_agent_transport(request):
         if request.method == 'POST':
             pk = request.POST['pk']
             date = request.POST['date']
@@ -83,6 +84,6 @@ class AgentTransportEditTableView(TemplateView):
             agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
-            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date=' + date_filter)
+            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date-filter=' + date_filter)
         else:
             return redirect('agent-transport-edit')
