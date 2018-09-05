@@ -7,37 +7,8 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
-    <script src="{% static 'js/add-form.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 2000);
-        
-        $(function() {
-            $(document).on('click', '.add-more', function(e) {
-                e.preventDefault();
 
-                var controlForm = $('.control:first'),
-                currentEntry = $(this).parents('.entry:first'),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-                newEntry.find('input').val('');
-                controlForm.find('.entry:not(:last) .add-more')
-                .removeClass('add-more').addClass('remove')
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('<span><i class="fa fa-minus"></i></span>');
-            }).on('click', '.remove', function(e) {
-                $(this).parents('.entry:first').remove();
-
-                e.preventDefault();
-                return false;
-            });
-        });
-
-    </script>
+ 
 {% endblock %}
 
 {% block content %}
@@ -138,56 +109,6 @@
                             <span class="input-group-text">FROM</span>
                         </div>
                         {{ form.pickup_from }}
-                        <!-- <div class="input-group-append">
-                            <span class="input-group-text">FACTORY</span>
-                        </div>
-                        {{ form.factory }} -->
-                        <div class="input-group-append">
-                            <span class="input-group-text">TO</span>
-                        </div>
-                        {{ form.return_to }}
-                    </div>
-
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">VESSEL</span>
-                        </div>
-                        {{ form.vessel }} 
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">PORT</span>
-                        </div>
-                        {{ form.port }} 
-                    </div> -->
-
-                    <!-- <fieldset>
-                        <legend>ตัดหาง</legend>
-                        
-                        <div class="container input-group mb-2 col-sm-8">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="hidden" name="cut" value=0 />
-                                        <input type="checkbox" class="custom-control-input" id="cut" name="cut" value=1 onchange="updateCut();">
-                                        <label class="custom-control-label" for="cut"></label>
-                                    </div>
-                                </div>
-                                <span class="input-group-text">RETURN DATE</span>
-                            </div>
-                                <input type="date" name="return_date" class="form-control" id="id_return_date" disabled>
-                                    {{ form.return_date }}
-                            </div>
-                    </fieldset> -->
-
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">CLOSING</span>
-                        </div>
-                        {{ form.closing_date }}
-                        {{ form.closing_time }} 
-                    </div> -->
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -231,6 +152,11 @@
         </div>
         
         </div>
+
+        <script src="{% static 'js/add_form.js' %}"></script>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="{% static 'js/agent_transport_add.js' %}"></script>
+        
         {% endblock %}
     
    

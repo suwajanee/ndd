@@ -1,9 +1,10 @@
-from django.views.generic import TemplateView
-from ..models import AgentTransport
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+
+from ..models import AgentTransport
 
 
 class AgentTransportUpdateView(TemplateView):

@@ -9,14 +9,14 @@ from .views.agent_transport_delete_view import AgentTransportDeleteView
 
 
 urlpatterns = [
-    url(r'^$', AgentTransportTableView.render_table_agent_transport, name='agent-transport-table'),
+    url(r'^$', AgentTransportTableView.render_table_agent_transport_page, name='agent-transport-table'),
     url(r'^update/$', AgentTransportUpdateView.update_data_agent_transport, name='agent-transport-update'), #update in table page
 
 
     url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', AgentTransportPrintView.as_view(), name='agent-transport-print'),
 
-    url(r'^add/$', AgentTransportAddView.add_agent_transport, name='agent-transport-add'),
-    url(r'^save/$', AgentTransportAddView.save_data, name='agent-transport-save'), 
+    url(r'^add/$', AgentTransportAddView.render_add_agent_transport_page, name='agent-transport-add'),
+    url(r'^save/$', AgentTransportAddView.save_data_agent_transport, name='agent-transport-save'), 
 
     url(r'^delete/(?P<pk>\d+)/$', AgentTransportDeleteView.delete_data, name='agent-transport-delete'), #delete in table page
     url(r'^delete/$', AgentTransportDeleteView.delete_multiple, name='agent-transport-delete-multiple'),

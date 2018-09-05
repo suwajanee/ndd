@@ -1,18 +1,20 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from ..models import AgentTransport
-from ..forms import AgentTransportFilterSortForm
 from datetime import datetime, timedelta
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.db.models import Q
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+
+from ..models import AgentTransport
+
 
 class AgentTransportTableView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
-    def render_table_agent_transport(request):
+    def render_table_agent_transport_page(request):
         template_name = 'agent_transport/agent_transport_table.html'
 
         today = datetime.now()
