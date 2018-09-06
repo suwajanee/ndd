@@ -1,12 +1,12 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from ..models import Principal, Shipper
-
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+
+from ..models import Principal, Shipper
+
 
 class CustomerDeleteView(TemplateView):
 
@@ -19,7 +19,6 @@ class CustomerDeleteView(TemplateView):
             customer.delete()
             
         return redirect('customer-list')
-
 
     @login_required(login_url=reverse_lazy('login'))
     def delete_shipper(request):
