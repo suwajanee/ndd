@@ -29,8 +29,11 @@ class BookingPrintView(TemplateView):
         if booking.address == 'other':
             address = booking.address_other
         elif booking.address == 'shipper':
-            shipper = Shipper.objects.get(name=booking.shipper)
-            address = shipper.address
+            try:
+                shipper = Shipper.objects.get(name=booking.shipper)
+                address = shipper.address
+            except Shipper.DoesNotExist:
+                address = ''
         else:
             address = ''
 
