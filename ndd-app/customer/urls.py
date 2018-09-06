@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views.customer_add_view import CustomerAddView
-from .views.customer_delete_view import CustomerDeleteView
+from .views.customer_cancel_view import CustomerCancelView
 from .views.customer_edit_view import CustomerEditView
 from .views.customer_table_view import CustomerListView
 
@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^edit-customer/$', CustomerEditView.edit_customer, name='customer-edit'),
     url(r'^edit-shipper/$', CustomerEditView.edit_shipper, name='shipper-edit'),
 
-    url(r'^delete-customer/$', CustomerDeleteView.delete_customer, name='customer-delete'),
-    url(r'^delete-shipper/$', CustomerDeleteView.delete_shipper, name='shipper-delete'),
+    url(r'^cancel-customer/$', CustomerCancelView.cancel_customer, name='customer-cancel'),
+    url(r'^cancel-shipper/$', CustomerCancelView.cancel_shipper, name='shipper-cancel'),
 ]
 
 
