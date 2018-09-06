@@ -12,7 +12,6 @@ class Booking(models.Model):
     agent = models.CharField(max_length=50, blank=True)
     size = models.CharField(max_length=50, blank=True)
     booking_no = models.CharField(max_length=50, blank=True)
-    booking_color = models.CharField(max_length=20, blank=True, default='')
 
     pickup_tr = models.CharField(max_length=20, blank=True, default='')
     pickup_from = models.CharField(max_length=20, blank=True, default='')
