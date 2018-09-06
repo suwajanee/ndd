@@ -2,9 +2,7 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.db.models import Q, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 

@@ -29,6 +29,6 @@ class AgentTransportUpdateView(TemplateView):
             agent_transport.save()
 
             messages.success(request, "Updated Agent Transport.")
-            return redirect(reverse('agent-transport-table') + '?filter_by=' + filter_by + '&date=' + date_filter)
+            return redirect(reverse('agent-transport-table') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
         else:
             return redirect('agent-transport-table')

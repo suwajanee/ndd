@@ -17,7 +17,7 @@ class AgentTransportEditTableView(TemplateView):
     def render_edit_agent_transport_page(request):
         template_name = 'agent_transport/agent_transport_edit.html'
 
-        today = datetime.now()
+        today = datetime.now()  
 
         if request.method == "GET":
             filter_by = request.GET.get("filter_by")
@@ -30,7 +30,7 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
             else:
                 if filter_by == "month":
-                    month_year = datetime.strptime(date_filter, '%Y-%m')
+                    month_of_year = datetime.strptime(date_filter, '%Y-%m')
                     agent_transports = AgentTransport.objects.filter((Q(date__month=month_year.month) & Q(date__year=month_year.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
                 else:
                     agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
