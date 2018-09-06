@@ -14,15 +14,15 @@ class CustomerListView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))
     def render_customer_list(request):
-        principals = Principal.objects.all().order_by('name')
+        principals = Principal.objects.all().order_by('cancel', 'name')
         return render(request, template_name, {'principals': principals, 'nbar': 'customer'})
 
     @login_required(login_url=reverse_lazy('login'))
     def render_customer_detail(request, pk):
-        principals = Principal.objects.all().order_by('name')
+        principals = Principal.objects.all().order_by('cancel', 'name')
 
         customer = Principal.objects.get(pk=pk)
-        shippers = Shipper.objects.filter(principal=pk).order_by('name')
+        shippers = Shipper.objects.filter(principal=pk).order_by('cancel', 'name')
 
         return render(request, template_name, {'principals': principals, 'customer': customer, 'shippers': shippers, 'nbar': 'customer'})
 

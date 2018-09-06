@@ -20,7 +20,10 @@ class CustomerCancelView(TemplateView):
             else:
                 customer.cancel = '0'
             customer.save()
-        return redirect('customer-list')
+            
+            return redirect('customer-detail', pk=customer_pk)
+        else:
+            return redirect('customer-list')
 
     @login_required(login_url=reverse_lazy('login'))
     def cancel_shipper(request):
