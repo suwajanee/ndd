@@ -4,54 +4,8 @@
 {% block title %} Customer Data {% endblock %}
 
 {% block extra_head %}
-<!-- <link rel="stylesheet" href="{% static 'css/style-table.css' %}" /> -->
-    <!-- <script src="{% static 'js/fixed-header.js' %}"></script> -->
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script>
-$(function() {
-
-        $("#customerList").css({top: $("#search-box").offset().top + 55 });
-
-        // $("#side").css({top: $("#nbar").offset().top });
-
-        // $("div#sidebarList").css({'min-height': $( window ).height()-$("#nbar").height()-20});
-
-        // $("#sidebarList").resize(function()  {
-        //     $("#customerList").css({height: $( window ).height()-$("#nbar").height()-20});
-        // });
-
-
-    });
-
-
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myList a").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-
-    $(function() {
-        $("button.shipper-delete").click(function(){
-            if (confirm('Are you sure?')){
-                $(this).next().submit();
-            }
-            return false;
-        });
-
-        $("button#buttonDeleteCustomer").click(function(){
-            if (confirm('Are you sure?')){
-                $(this).next().submit();
-            }
-            return false;
-        });
-    });
-</script>
+    
 
 <style>
 
@@ -191,8 +145,7 @@ $(document).ready(function(){
                         </form>
                     </div>
                </div>
-               <!-- <a href="#" class="badge badge-secondary badge-pill d-inline ml-3">Edit</a>
-               <a href="#" class="badge badge-secondary badge-pill d-inline ml-3">Delete</a> -->
+
                <hr class="m-0">
             </div>
 
@@ -282,7 +235,6 @@ $(document).ready(function(){
                
                <div class="my-5 col-6 container">
                <table class="table bg-white border-bottom">
-                   <!-- <thead style="background: lightgray;"> -->
                         <thead class="bg-light">
                         <tr class="row m-0">
                             <th class="col-2"> SHIPPER </th>
@@ -298,7 +250,6 @@ $(document).ready(function(){
                         <td class="col-7 text-truncate">{{ shipper.address | linebreaks }}</td>
                         <td class="text-right col-3 text-right">
                             <button class="btn btn-outline-info" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
-                            <!-- <button class="btn btn-outline-danger" onclick="document.getElementById('formDeleteShipper{{ shipper.pk }}').submit();"><i class="fa fa-trash"></i></button> -->
                             <button class="btn btn-outline-danger shipper-delete"><i class="fa fa-trash"></i></button>
                             <form id="formDeleteShipper{{ shipper.pk }}" method="POST" action="{% url 'shipper-delete' %}" class="shipper-delete">
                                 {% csrf_token %}
@@ -332,7 +283,7 @@ $(document).ready(function(){
                                             <textarea name="address_edit" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
                                         </div>
                                         <div class="modal-footer d-flex justify-content-center">
-                                        <!-- <div class="modal-footer text-right"> -->
+                                        
                                             <button class="btn btn-primary">Save</button>
                                         </div>
                                     </div>
@@ -356,5 +307,11 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+
+
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="{% static 'js/customer_table.js' %}"></script>
+
 {% endblock %}
 
