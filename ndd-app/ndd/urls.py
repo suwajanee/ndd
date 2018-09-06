@@ -27,7 +27,7 @@ urlpatterns = [
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
 
-    url(r'^login/$', AuthenticationView.login, name='login'),
+    url(r'^$', AuthenticationView.login, name='login'),
     url(r'^logout/$', AuthenticationView.logout, name='logout'),
 
 ]

@@ -57,7 +57,7 @@
             </div>
             <form method="POST" class="add-form">
                 {% csrf_token %}
-                        <!-- <form id="customer" method="POST"> -->
+
                             <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">CUSTOMER</span>
@@ -84,7 +84,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                        <!-- </form> -->
+
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
@@ -138,56 +138,14 @@
                             <span class="input-group-text">FROM</span>
                         </div>
                         {{ form.pickup_from }}
-                        <!-- <div class="input-group-append">
-                            <span class="input-group-text">FACTORY</span>
-                        </div>
-                        {{ form.factory }} -->
+
                         <div class="input-group-append">
                             <span class="input-group-text">TO</span>
                         </div>
                         {{ form.return_to }}
                     </div>
 
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">VESSEL</span>
-                        </div>
-                        {{ form.vessel }} 
-                    </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">PORT</span>
-                        </div>
-                        {{ form.port }} 
-                    </div> -->
-
-                    <!-- <fieldset>
-                        <legend>ตัดหาง</legend>
-                        
-                        <div class="container input-group mb-2 col-sm-8">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="hidden" name="cut" value=0 />
-                                        <input type="checkbox" class="custom-control-input" id="cut" name="cut" value=1 onchange="updateCut();">
-                                        <label class="custom-control-label" for="cut"></label>
-                                    </div>
-                                </div>
-                                <span class="input-group-text">RETURN DATE</span>
-                            </div>
-                                <input type="date" name="return_date" class="form-control" id="id_return_date" disabled>
-                                    {{ form.return_date }}
-                            </div>
-                    </fieldset> -->
-
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">CLOSING</span>
-                        </div>
-                        {{ form.closing_date }}
-                        {{ form.closing_time }} 
-                    </div> -->
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
