@@ -184,10 +184,10 @@
                             
                             <td class="text-nowrap px-3">{{ booking.pickup_date | date:'d/m/y' }}</td>
                             {% if booking.factory_date != booking.return_date and booking.cancel != '1' %}
-                                <td class="text-nowrap bg-info px-3">
+                                <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.factory_date | date:'d/m/y' }}
                                 </td>
-                                <td class="text-nowrap bg-info px-3">
+                                <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.return_date | date:'d/m/y' }}
                                 </td>
                             {% else %}
