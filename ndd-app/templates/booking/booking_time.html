@@ -6,35 +6,7 @@
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
-    <script src="{% static 'js/fixed-header.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        window.setTimeout(function() {
-            $(".save-msg").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 1500);
 
-        $(function() {
-            $("#table-cont").css({top: $("#filter-date").offset().top + 60 })
-        });
-
-
-        $(function() {
-            $("button#print").click(function(){
-                
-                $("input.pk").each(function() {
-                    // var input = $("<input>")
-                    //                 .attr("type", "hidden")
-                    //                 .attr("name", "pk").val($(this).val());
-                        $('form#PrintTime').append($(this)); 
-                });
-                
-                    $('form#PrintTime').submit();
-                    // return false;
-            });
-        });
-    </script>
 {% endblock %}
         
 {% block content %}
@@ -61,13 +33,11 @@
         </div>
     </div>
         {% if bookings %}
-        <!-- <div class='table-cont' id='table-cont'> -->
-    <!-- <div class="container"> -->
-        <!-- <div class="row"> -->
+ 
             <div id='table-cont' class="table-cont table-responsive"> 
         <table class="w-100 time">
             <thead class="text-nowrap bg-lightgray">
-            <!-- <th rowspan=2>TIME</th> -->
+
             <th rowspan=2>DATE</th>
             <th rowspan=2>PRINCIPAL</th>
             <th rowspan=2>SHIPPER</th>
@@ -85,15 +55,8 @@
 
             <th rowspan=2 class="px-2">CONTAINER NO</th>
             <th rowspan=2 class="px-4">SEAL NO</th>
-            <!-- <th rowspan=2 colspan=2>CLOSING (DATE / TIME)</th> -->
 
-            <!-- <th class="px-5">REF.</th>
-            <th class="px-5">REMARK</th> -->
             <th rowspan="2">เลขที่ใบงาน</th>
-
-            <!-- <th rowspan="2">PICK UP</th>
-            <th rowspan="2">FACTORY</th>
-            <th rowspan="2">RETURN</th> -->
 
             <th colspan="2">ลานรับตู้</th>
             <th colspan="4">Factory</th>
@@ -118,7 +81,7 @@
             <!-- <form name="time-form{{ booking.pk }}" method="POST" action="{% url 'booking-time-save' %}">
                     {% csrf_token %} -->
             <input type="hidden" name="pk" class="pk" value="{{ booking.pk }}">
-            <input type="hidden" name="date_filter" value="{{ date }}">
+            <input type="hidden" name="date_filter" value="{{ date_filter }}">
             <input type="hidden" name="filter_by" value="{{ filter_by }}">
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
@@ -163,28 +126,9 @@
 
                     <td>{{ booking.container_no }}</td>
                     <td>{{ booking.seal_no }}</td>
-                    <!-- <td class="text-nowrap">{{ booking.vessel }}</td>
-                    <td class="text-nowrap">{{ booking.port }}</td> -->
-                    <!-- <td class="text-nowrap">{{ booking.closing_date }}</td>
-                    <td>{{ booking.closing_time }}</td> -->
-
-                    <!-- <td><input name="ref" class="form-control" value="{{ booking.ref }}" onchange="this.form.submit();" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" onchange="this.form.submit();">{{ booking.remark }}</textarea></td> -->
-
+                 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 
-                    <!-- <td class="text-nowrap">{{ booking.pickup_date }}</td>
-
-                    {% if booking.factory_date != booking.return_date %}
-                    <td class="text-nowrap bg-info">
-                    {% else %}
-                    <td class="text-nowrap">
-                    {% endif %}
-                        {{ booking.factory_date }}
-                    </td> -->
-                    
-
-                    <!-- <td class="text-nowrap">{{ booking.return_date }}</td> -->
                     {% load split %}
                     <td>
                         {% with booking.pickup_in_time|split:"//" as pickup_in_time %}
@@ -237,13 +181,13 @@
                         {% endwith %}
                     </td>
                     <td>
-                        {% with booking.factory_out_finish|split:"//" as factory_out_finish %}
-                        {% if factory_out_finish.0 %}
-                            <input type="date" name="factory_out_finish_1" class="form-control" value="{{ factory_out_finish.0 }}" autocomplete=off>
+                        {% with booking.factory_out_time|split:"//" as factory_out_time %}
+                        {% if factory_out_time.0 %}
+                            <input type="date" name="factory_out_time_1" class="form-control" value="{{ factory_out_time.0 }}" autocomplete=off>
                         {% else %}
-                            <input type="date" name="factory_out_finish_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
+                            <input type="date" name="factory_out_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="factory_out_finish_2" class="form-control" value="{{ factory_out_finish.1 }}" autocomplete=off>
+                        <input type="time" name="factory_out_time_2" class="form-control" value="{{ factory_out_time.1 }}" autocomplete=off>
                         {% endwith %}
                     </td>
 
@@ -291,8 +235,12 @@
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         {% endif %}
 
+
+        
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="{% static 'js/fixed_header.js' %}"></script>
+        <script src="{% static 'js/booking_time.js' %}"></script>
+  
         
     {% endblock %}
-    </body>
-
-</html>
+ 

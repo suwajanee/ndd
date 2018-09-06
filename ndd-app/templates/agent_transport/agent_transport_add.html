@@ -53,7 +53,7 @@
             </div>
             <form method="POST" class="add-form">
                 {% csrf_token %}
-                        <!-- <form id="customer" method="POST"> -->
+
                             <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">CUSTOMER</span>
@@ -80,7 +80,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                        <!-- </form> -->
+
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
@@ -134,12 +134,12 @@
                             <span class="input-group-text">FROM</span>
                         </div>
                         {{ form.pickup_from }}
+
                         <div class="input-group-append">
                             <span class="input-group-text">TO</span>
                         </div>
                         {{ form.return_to }}
                     </div>
-
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">

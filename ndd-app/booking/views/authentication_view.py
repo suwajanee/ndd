@@ -1,13 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import auth
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_protect
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 
 
-@csrf_protect
 class AuthenticationView(TemplateView):
 
     def login(request):
@@ -31,8 +30,6 @@ class AuthenticationView(TemplateView):
                 messages.error(request, 'Incorrect Username or Password')
 
         return render(request, template_name)
-
-
     
     def logout(request):
         auth.logout(request)
