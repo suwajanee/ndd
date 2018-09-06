@@ -29,4 +29,11 @@ $(function () {
 
     });
 
+    $("button.delete-booking").click(function(){
+        if (confirm('Are you sure?')){
+            $(this).next().submit();
+        }
+        return false;
+    });
+
 });

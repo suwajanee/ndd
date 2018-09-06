@@ -208,7 +208,7 @@
                                 <div id="accordion{{ booking.pk }}" class="collapse">
                                     <div class="class-collapse">
                                     <div class="float-left ml-sm-2 mt-2">
-                                        <button id="delete-data{{ booking.pk }}" class="btn btn-danger" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                                        <button id="delete-data{{ booking.pk }}" class="btn btn-danger delete-booking" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                         <form id="delete-form{{ booking.pk }}" method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
                                             <input type="hidden" name="date_filter" value="{{ date_filter }}">
                                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
@@ -307,7 +307,7 @@
                             </td>
                             <!-- <td colspan="6" class="hiddenRow"></td> -->
                         </tr>
-                        <script>
+                        <!-- <script>
                             $(function() {
                                 $("button#delete-data{{ booking.pk }}").click(function(){
                                     if (confirm('Are you sure?')){
@@ -315,7 +315,7 @@
                                     }
                                 });
                             });
-                        </script>
+                        </script> -->
                     {% endfor %}
             </tbody> 
         </table>
@@ -333,6 +333,8 @@
 
     <script>
         $(function() {
+            
+            
             $("button.action").click(function(){
                 if($("input.check:checked").length != 0) {
                     $("input.check:checked").each(function() {
