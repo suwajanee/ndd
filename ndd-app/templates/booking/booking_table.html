@@ -201,15 +201,13 @@
                         </tr>
                         <!-- <tr id="accordion{{ booking.pk }}" class="collapse bg-light"> -->
                         <tr class="bg-light p-0">
-                            <!-- <td colspan="4"></td> -->
-                            <!-- <td colspan="18"> -->
                             <td colspan="26" class="hiddenRow">
                                 <!-- <div id="accordion{{ booking.pk }}" class="collapse"  data-parent="#accordion"> -->
                                 <div id="accordion{{ booking.pk }}" class="collapse">
                                     <div class="class-collapse">
                                     <div class="float-left ml-sm-2 mt-2">
-                                        <button id="delete-data{{ booking.pk }}" class="btn btn-danger delete-booking" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
-                                        <form id="delete-form{{ booking.pk }}" method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
+                                        <button class="btn btn-danger delete-booking" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                                        <form method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
                                             <input type="hidden" name="date_filter" value="{{ date_filter }}">
                                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
                                         </form>
@@ -233,7 +231,6 @@
                                         
                                             <fieldset>
                                                 <legend>ADDRESS</legend>
-                                            <!-- <div class="form-check mb-3"> -->
                                                 <table class="container table-borderless" style="border-collapse: separate; border:none;">
                                                     <tr class="bg-light">
                                                         <td class="w-1">
@@ -305,17 +302,7 @@
                                 </div>
                                 </div>
                             </td>
-                            <!-- <td colspan="6" class="hiddenRow"></td> -->
                         </tr>
-                        <!-- <script>
-                            $(function() {
-                                $("button#delete-data{{ booking.pk }}").click(function(){
-                                    if (confirm('Are you sure?')){
-                                        $('form#delete-form{{ booking.pk }}').submit();
-                                    }
-                                });
-                            });
-                        </script> -->
                     {% endfor %}
             </tbody> 
         </table>
