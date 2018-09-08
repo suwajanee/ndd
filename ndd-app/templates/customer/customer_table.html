@@ -55,7 +55,7 @@
 <!-- POPUP: Add customer -->
 <div class="modal fade" id="modalAddCustomer" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
-    <form method="POST" action="{% url 'customer-add-new' %}">
+    <form method="POST" calss="form-add-customer" action="{% url 'customer-add-new' %}">
             {% csrf_token %}
         <div class="modal-content">
             <div class="modal-header text-center">
@@ -64,6 +64,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            
             <div class="modal-body mx-3">
                 <div class="input-group my-3">
                     <div class="input-group-prepend">
@@ -86,11 +87,13 @@
                 </div>
 
             </div>
+        
             <div class="modal-footer d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button class="btn btn-primary btn-add-customer">Add</button>
             </div>
-        </div>
         </form>
+        </div>
+        
     </div>
 </div>
 
@@ -208,7 +211,7 @@
                         
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-primary btn-edit-customer">Save</button>
                                     </div>
                                 </div>
                             </form>
@@ -238,7 +241,7 @@
                                     <textarea name="address_add" rows=4 class="form-control" autocomplete=off></textarea>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary">Add</button>
+                                    <button type="submit" class="btn btn-primary btn-add-shipper">Add</button>
                                 </div>
                             </div>
                         </form>
@@ -285,34 +288,62 @@
 
                     <!-- POPUP : Edit shipper -->
                     <div class="modal fade" id="modalEditShipper{{ shipper.pk }}" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <form method="POST" action="{% url 'shipper-edit' %}">
-                                    {% csrf_token %}
-                                    <div class="modal-content">
-                                        <div class="modal-header text-center">
-                                            <h4 class="modal-title w-100 font-weight-bold">Edit Shipper Detail</h4>
-                                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body mx-3">
-                                            <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
-                                            <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
-
-                                            <div class="text-secondary">NAME :</div>
-                                            <input name="shipper_edit" class="form-control" value="{{ shipper.name }}" autocomplete=off required>
-
-                                            <div class="text-secondary mt-3">ADDRESS :</div>
-                                            <textarea name="address_edit" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
-                                        </div>
-                                        <div class="modal-footer d-flex justify-content-center">
-                                        
-                                            <button class="btn btn-primary">Save</button>
-                                        </div>
+                        <div class="modal-dialog" role="document">
+                            <form method="POST" action="{% url 'shipper-edit' %}">
+                                {% csrf_token %}
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold">Edit Shipper Detail</h4>
+                                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="modal-body mx-3">
+                                        <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
+                                        <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
+                                        <input type="hidden" class="shipper_old{{ shipper.pk }}" value="{{ shipper.name }}">
+
+                                        <div class="text-secondary">NAME :</div>
+                                        <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" autocomplete=off required>
+
+                                        <div class="text-secondary mt-3">ADDRESS :</div>
+                                        <textarea name="address_edit" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                    
+                                        <button class="btn btn-primary btn-edit-shipper{{ shipper.pk }}">Save</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+
+                    <!-- Check shipper when edit -->
+                    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+                    <script>
+                        $(function () {
+                            $("button.btn-edit-shipper{{ shipper.pk }}").click(function(){
+
+                                {% for shipper_check in shippers %}
+                    
+                                    var name = "{{ shipper_check.name }}";
+                                    var old_name = $("input.shipper_old{{ shipper.pk }}").val();
+                        
+                                    if ($("input.shipper_edit{{ shipper.pk }}").val() == old_name){
+                                        return true;
+                                    }
+                                    else if ($("input.shipper_edit{{ shipper.pk }}").val() == name) {
+                                        alert('This shipper name is existing.');
+                                        return false;
+                                    }
+
+                                {% endfor %}
+
+                            });
+                        });
+
+                    </script>
+
                     {% endfor %}
                     {% else %}
                     <tr>
@@ -332,9 +363,70 @@
 </div>
 
 
-
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="{% static 'js/customer_table.js' %}"></script>
+
+<script>
+
+    $(function () {
+
+        // Check customer when add
+        $("button.btn-add-customer").click(function(){
+            {% for principal in principals %}
+
+            var name = "{{ principal.name }}";
+            var work_type = "{{ principal.work_type }}";
+
+            if ($("input[name='customer_add']").val() == name & $("input[name='work_type_add']:checked").val() == work_type) {
+                alert('This customer name is existing.');
+                return false;
+            }
+
+            {% endfor %}
+        });
+
+        // Check customer when edit
+        $("button.btn-edit-customer").click(function(){
+            {% for principal in principals %}
+            {% if customer %}
+
+            var name = "{{ principal.name }}";
+            var work_type = "{{ principal.work_type }}";
+
+            var old_name = "{{ customer.name }}"
+            var old_work_type = "{{ customer.work_type }}";
+
+            if ($("input[name='customer_edit']").val() == old_name & $("input[name='work_type_edit']:checked").val() == old_work_type){
+                return true;
+            }
+            else if ($("input[name='customer_edit']").val() == name & $("input[name='work_type_edit']:checked").val() == work_type) {
+                alert('This customer name is existing.');
+                return false;
+            }
+            
+            {% endif %}
+            {% endfor %}
+        });
+
+        // Check shipper when add
+        $("button.btn-add-shipper").click(function(){
+            {% if shippers %}
+            {% for shipper in shippers %}
+
+            var name = "{{ shipper.name }}";
+
+            if ($("input[name='shipper_add']").val() == name) {
+                alert('This shipper name is existing.');
+                return false;
+            }
+
+            {% endfor %}
+            {% endif %}
+        });
+
+    });
+
+</script>
 
 {% endblock %}
 
