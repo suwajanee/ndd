@@ -94,8 +94,6 @@ class BookingEditTableView(TemplateView):
                 booking.closing_time = closing_time[i]
                 booking.ref = ref[i].strip()
                 booking.remark = remark[i].strip()
-                booking.pickup_date = date[i]
-                booking.factory_date = date[i]
                 booking.return_date = return_date[i]
                 booking.save()
 
