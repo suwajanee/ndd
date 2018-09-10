@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+     - image: python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Print the Current Time 5s
+          command: date
+      - run: ssh-keyscan -H 178.128.95.3 >> ~/.ssh/known_hosts
+      - deploy:
+          name: Deploy Master to Peoductions
+          branch: ["master"]
+          command: |
+            git push test@178.128.95.3:repository master

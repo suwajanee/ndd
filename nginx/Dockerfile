@@ -1,5 +1,5 @@
 # Set nginx base image
-FROM nginx:latest
+FROM nginx:1.15.3
 
 # File Author / Maintainer
 MAINTAINER hoikhong
