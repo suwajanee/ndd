@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+     - image: python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Print the Current Time 5s
+          command: date
+      - run: ssh-keyscan -H 178.128.95.3 >> ~/.ssh/known_hosts
+      - run:
+          command: |
+            if ! [ ${CIRCLE_BRANCH} == "master" ]; then
+             echo "Circle Branch is not master ... exiting"
+             exit 0
+            fi
+             git push test@178.128.95.3:repository master 
