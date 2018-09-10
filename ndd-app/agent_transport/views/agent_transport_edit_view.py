@@ -72,16 +72,16 @@ class AgentTransportEditTableView(TemplateView):
 
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
                 agent_transport.date = date[i]
-                agent_transport.size = size[i]
-                agent_transport.booking_no = booking_no[i]
-                agent_transport.pickup_tr = pickup_tr[i]
-                agent_transport.pickup_from = pickup_from[i]
-                agent_transport.return_tr = return_tr[i]
-                agent_transport.return_to = return_to[i]
-                agent_transport.container_1 = container_1[i]
-                agent_transport.container_2 = container_2[i]
-                agent_transport.ref = ref[i]
-                agent_transport.remark = remark[i]
+                agent_transport.size = size[i].strip()
+                agent_transport.booking_no = booking_no[i].strip()
+                agent_transport.pickup_tr = pickup_tr[i].strip()
+                agent_transport.pickup_from = pickup_from[i].strip()
+                agent_transport.return_tr = return_tr[i].strip()
+                agent_transport.return_to = return_to[i].strip()
+                agent_transport.container_1 = container_1[i].strip()
+                agent_transport.container_2 = container_2[i].strip()
+                agent_transport.ref = ref[i].strip()
+                agent_transport.remark = remark[i].strip()
                 agent_transport.pickup_date = pickup_date[i]
                 agent_transport.return_date = return_date[i]
                 agent_transport.save()
