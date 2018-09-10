@@ -17,7 +17,7 @@ class CustomerEditView(TemplateView):
             work_type = request.POST['work_type_edit']
 
             customer = Principal.objects.get(pk=pk)
-            customer.name = customer_name
+            customer.name = customer_name.strip()
             customer.work_type = work_type
             customer.save()
             
@@ -34,7 +34,7 @@ class CustomerEditView(TemplateView):
             address = request.POST['address_edit']
 
             shipper = Shipper.objects.get(pk=shipper_pk)
-            shipper.name = shipper_name
+            shipper.name = shipper_name.strip()
             shipper.address = address
             shipper.save()
             
