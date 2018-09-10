@@ -29,8 +29,8 @@ class BookingUpdateView(TemplateView):
             date_filter = request.POST['date_filter']
 
             booking = Booking.objects.get(pk=pk)
-            booking.vessel = vessel
-            booking.port = port
+            booking.vessel = vessel.strip()
+            booking.port = port.strip()
             booking.address = address
             if address == 'other':
                 booking.address_other = address_other
