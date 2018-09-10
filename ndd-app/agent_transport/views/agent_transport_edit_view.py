@@ -27,15 +27,15 @@ class AgentTransportEditTableView(TemplateView):
                 date_filter = ''
 
             if not date_filter:
-                agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
+                agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
             else:
                 if filter_by == "month":
                     month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                    agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
+                    agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
                 else:
-                    agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
+                    agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
         else:
-            agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & ~Q(cancel='1'))).order_by('date', 'work_id')
+            agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
         return render(request, template_name, {'agent_transports': agent_transports, 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'nbar': 'agent-transport-table'})
 

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
@@ -20,7 +20,7 @@ class AgentTransportAddView(TemplateView):
         template_name = 'agent_transport/agent_transport_add.html'
         context = {}
         context['form'] = AgentTransportAddForm()
-        context['principals'] = Principal.objects.all().order_by('name')
+        context['principals'] = Principal.objects.filter(Q(work_type='agent-transport') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'agent-transport-table'
         if request.method == 'POST':
             context = add_agent_transport.create_context(request.POST)
@@ -29,13 +29,13 @@ class AgentTransportAddView(TemplateView):
 
     def create_context(self, req):
         context = {}
-        context['principals'] = Principal.objects.all().order_by('name')
+        context['principals'] = Principal.objects.filter(Q(work_type='agent-transport') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'agent-transport-table'
         if 'principal' in req:
             # print(request.POST)
             context['principal'] = req.get('principal')
             if context['principal']:
-                context['shippers'] = Shipper.objects.filter(principal=context['principal']).order_by('name')
+                context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
             else:
                 context['shippers'] = []
             req._mutable = True

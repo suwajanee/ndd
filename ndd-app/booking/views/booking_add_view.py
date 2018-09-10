@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
@@ -22,7 +22,7 @@ class BookingAddView(TemplateView):
         template_name = 'booking/booking_add.html'
         context = {}
         context['form'] = BookingAddForm()
-        context['principals'] = Principal.objects.all().order_by('name')
+        context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'booking-table'
 
         if request.method == 'POST':
@@ -32,12 +32,12 @@ class BookingAddView(TemplateView):
 
     def create_context(self, req):
         context = {}
-        context['principals'] = Principal.objects.all().order_by('name')
+        context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'booking-table'
         if 'principal' in req:
             context['principal'] = req.get('principal')
             if context['principal']:
-                context['shippers'] = Shipper.objects.filter(principal=context['principal']).order_by('name')
+                context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
             else:
                 context['shippers'] = []
 

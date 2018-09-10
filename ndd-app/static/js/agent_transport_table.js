@@ -32,6 +32,13 @@ $(document).ready(function () {
         $('input.check:checkbox').not(this).prop('checked', this.checked);
     });
 
+    $("button.delete-agent-transport").click(function(){
+        if (confirm('Are you sure?')){
+            $(this).next().submit();
+        }
+        return false;
+    });
+
 });
 
 

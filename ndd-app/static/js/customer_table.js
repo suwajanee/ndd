@@ -9,14 +9,14 @@ $(function () {
         });
     });
 
-    $("button.shipper-delete").click(function(){
+    $("button.btn-cancel-shipper").click(function(){
         if (confirm('Are you sure?')){
             $(this).next().submit();
         }
         return false;
     });
 
-    $("button#buttonDeleteCustomer").click(function(){
+    $("button.btn-cancel-customer").click(function(){
         if (confirm('Are you sure?')){
             $(this).next().submit();
         }

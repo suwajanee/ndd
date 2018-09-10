@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -29,8 +30,11 @@ class AgentTransportPrintView(TemplateView):
         if agent_transport.address == 'other':
             address = agent_transport.address_other
         elif agent_transport.address == 'shipper':
-            shipper = Shipper.objects.get(name=agent_transport.shipper)
-            address = shipper.address
+            try:
+                shipper = Shipper.objects.get(name=agent_transport.shipper)
+                address = shipper.address
+            except Shipper.DoesNotExist:
+                address = ''
         else:
             address = ''
 
