@@ -15,4 +15,4 @@ jobs:
              echo "Circle Branch is not master ... exiting"
              exit 0
             fi
-             git push test@178.128.95.3:blue master 
+             git push test@178.128.95.3:test-deploy master 
