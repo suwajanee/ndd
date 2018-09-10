@@ -57,16 +57,6 @@ class BookingAddForm(forms.Form):
 		required=False
 	)
 
-	booking_color = forms.CharField(
-		widget=forms.TextInput(
-			attrs={
-				'type': 'color',
-				'class': 'form-control',
-			}
-		),
-		required=False
-	)
-
 	pickup_from = forms.CharField(
 		widget=forms.TextInput(
 			attrs={

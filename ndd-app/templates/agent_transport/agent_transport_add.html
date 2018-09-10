@@ -19,11 +19,9 @@
         $(function() {
             $(document).on('click', '.add-more', function(e) {
                 e.preventDefault();
-
                 var controlForm = $('.control:first'),
                 currentEntry = $(this).parents('.entry:first'),
                 newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
                 newEntry.find('input').val('');
                 controlForm.find('.entry:not(:last) .add-more')
                 .removeClass('add-more').addClass('remove')
@@ -31,12 +29,10 @@
                 .html('<span><i class="fa fa-minus"></i></span>');
             }).on('click', '.remove', function(e) {
                 $(this).parents('.entry:first').remove();
-
                 e.preventDefault();
                 return false;
             });
         });
-
     </script>
 {% endblock %}
 
@@ -57,7 +53,7 @@
             </div>
             <form method="POST" class="add-form">
                 {% csrf_token %}
-                        <!-- <form id="customer" method="POST"> -->
+
                             <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">CUSTOMER</span>
@@ -84,7 +80,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                        <!-- </form> -->
+
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
@@ -102,13 +98,13 @@
                         
                         <fieldset>
                                 <legend>CONTAINER</legend>
-                        {% if size or quantity or date %}
+                        {% if size_list or quantity_list or date_list %}
                             <div class="control">
-                                    {% for s, q, d in zip %}
+                                    {% for size, quantity, date in zip %}
                                     <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ s }}" required>
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ q }}" required>
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ d }}" required>
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" required>
+                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
+                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                         <div class="input-group-append">
                                     {% if forloop.last %}
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
@@ -138,56 +134,12 @@
                             <span class="input-group-text">FROM</span>
                         </div>
                         {{ form.pickup_from }}
-                        <!-- <div class="input-group-append">
-                            <span class="input-group-text">FACTORY</span>
-                        </div>
-                        {{ form.factory }} -->
+
                         <div class="input-group-append">
                             <span class="input-group-text">TO</span>
                         </div>
                         {{ form.return_to }}
                     </div>
-
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">VESSEL</span>
-                        </div>
-                        {{ form.vessel }} 
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">PORT</span>
-                        </div>
-                        {{ form.port }} 
-                    </div> -->
-
-                    <!-- <fieldset>
-                        <legend>ตัดหาง</legend>
-                        
-                        <div class="container input-group mb-2 col-sm-8">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="hidden" name="cut" value=0 />
-                                        <input type="checkbox" class="custom-control-input" id="cut" name="cut" value=1 onchange="updateCut();">
-                                        <label class="custom-control-label" for="cut"></label>
-                                    </div>
-                                </div>
-                                <span class="input-group-text">RETURN DATE</span>
-                            </div>
-                                <input type="date" name="return_date" class="form-control" id="id_return_date" disabled>
-                                    {{ form.return_date }}
-                            </div>
-                    </fieldset> -->
-
-                    <!-- <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">CLOSING</span>
-                        </div>
-                        {{ form.closing_date }}
-                        {{ form.closing_time }} 
-                    </div> -->
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -233,4 +185,3 @@
         </div>
         {% endblock %}
     
-   

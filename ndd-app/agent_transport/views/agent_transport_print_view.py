@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView
-# from django.utils import timezone
 from django.template.loader import get_template
 from django.urls import reverse, reverse_lazy
-from django.contrib.auth.decorators import login_required
+from django.utils.six import BytesIO
+from django.views.generic import TemplateView
+
+import xhtml2pdf.pisa as pisa
 
 from ..models import AgentTransport
 from customer.models import Shipper
-
-import xhtml2pdf.pisa as pisa
-from django.utils.six import BytesIO
-
 from ndd.settings import STATICFILES_DIRS
 
-# from weasyprint import HTML, CSS
 
 class AgentTransportPrintView(TemplateView):
     
@@ -33,8 +30,11 @@ class AgentTransportPrintView(TemplateView):
         if agent_transport.address == 'other':
             address = agent_transport.address_other
         elif agent_transport.address == 'shipper':
-            shipper = Shipper.objects.get(name=agent_transport.shipper)
-            address = shipper.address
+            try:
+                shipper = Shipper.objects.get(name=agent_transport.shipper)
+                address = shipper.address
+            except Shipper.DoesNotExist:
+                address = ''
         else:
             address = ''
 

@@ -5,88 +5,7 @@
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
-    <script src="{% static 'js/fixed-header.js' %}"></script>
-    <script src="{% static 'js/add-form.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
-    <script>
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove(); 
-            });
-        }, 2000);
-
-
-        $(function() {
-            $('.no-collapsable').on('click', function (e) {
-                e.stopPropagation();
-            });
-
-            $("#table-cont").css({top: $("#filter-date").offset().top + 60 });
-
-            $(".class-collapse").css({width: $( window ).width()});
-
-            $("#checkAll").click(function(){
-                $('input.check:checkbox').not(this).prop('checked', this.checked);
-            });
-        });
-        
-            
-        $(function() {
-            $("button.action").click(function(){
-                
-                if($("input.check:checked").length != 0) {
-                    $("input.check:checked").each(function() {
-                        
-                        var input = $("<input>")
-                                    .attr("type", "hidden")
-                                    .attr("name", "check").val($(this).val());
-                        $('form#action').append($(input));
-                    });
-                }
-                else {
-                    alert("เลือกงานที่ต้องการ");
-                    return false;
-                }
-                
-                var action = $('select[name="action"]').val();
-                
-                if(action == 'time'){
-                    $('form#action').attr("action", "{% url 'booking-time' %}");
-                    $('form#action').submit();
-                }
-                else if(action == 'delete'){
-                    if (confirm('Are you sure?')){
-                        $('form#action').attr("action", "{% url 'booking-delete-multiple' %}");
-                        $('form#action').submit();
-                    }
-                }
-                return false;
-
-            });
-
-            $('select[name="filter_by"]').change(function() {
-                if($(this).val() == "month"){
-                    $('input#id_date').attr("type", "month")
-                }
-                else {
-                    $('input#id_date').attr("type", "date")
-                }
-                
-            });
-
-            // $('a.filter-date').click(function() {
-            //     $('input#id_date').attr("type", "date");
-            //     $("#filterType").html('Date');
-            // });
-
-            // $('a.filter-month').click(function() {
-            //     $('input#id_date').attr("type", "month");
-            //     $("#filterType").html('Month');
-            // });
-        });
-        
-    </script>
+    
 {% endblock %}
         
 {% block content %}
@@ -116,13 +35,11 @@
                         </div> -->
 
                         {% if filter_by == 'month' %}
-                            <input id="id_date" name="date" type="month" class="form-control mr-2" value="{{ date }}">
+                            <input id="id_date" name="date_filter" type="month" class="form-control mr-2" value="{{ date_filter }}">
                         {% else %}
-                            <input id="id_date" name="date" type="date" class="form-control mr-2" value="{{ date }}">
+                            <input id="id_date" name="date_filter" type="date" class="form-control mr-2" value="{{ date_filter }}">
                         {% endif %}
-                        <!-- <div class="input-group-append"> -->
-                                
-                            <!-- </div> -->
+
                     </div>
 
                     <button type="submit" class="btn btn-primary">OK</button>
@@ -137,7 +54,7 @@
                 </select>
                 <form id="action" method="POST" class="d-inline"> 
                         {% csrf_token %}
-                        <input type="hidden" name="date" value="{{ date }}">
+                        <input type="hidden" name="date_filter" value="{{ date_filter }}">
                         <input type="hidden" name="filter_by" value="{{ filter_by }}">
                     <button class="btn btn-primary action">GO</button>
                 </form>
@@ -146,7 +63,7 @@
             <div class="col text-right">
                 <button class="btn btn-primary mr-1" onclick="document.getElementById('edit-filter').submit();"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                 <form id="edit-filter" method="GET" action="{% url 'booking-edit' %}" style="display:none;">
-                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="date_filter" value="{{ date_filter }}">
                     <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 </form>
                 <a class="btn btn-primary" href="{% url 'booking-add' %}" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
@@ -155,15 +72,11 @@
         </div>
     </div>
     {% if bookings %}
-        <!-- <div class='table-cont' id='table-cont'> -->
-    <!-- <div class="container"> -->
-        <!-- <div class="row"> --> 
-        <!-- <div class="position-relative h-75">  -->
+
         <div id='table-cont' class="table-cont table-responsive"> 
         <table class="table-hover" id="accordion">
             <thead class="text-nowrap bg-lightgray"> 
                 <th><input type="checkbox" id="checkAll"></th>
-                <!-- <th>EDIT</th> -->
                 <th>PRINT</th>
                 <th>TIME</th>
                 <th>DATE</th>
@@ -207,7 +120,7 @@
                         <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
                     {% endif %}
                             <td class="p-0  no-collapsable toggle-color w-1">
-                                <input type="checkbox" class="check" name="check" value="{{ booking.pk }}">
+                                <input type="checkbox" class="check" name="pk" value="{{ booking.pk }}">
                                 <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
                             </td>
                             <!-- <td class="p-0 toggle-icon w-1">
@@ -271,10 +184,10 @@
                             
                             <td class="text-nowrap px-3">{{ booking.pickup_date | date:'d/m/y' }}</td>
                             {% if booking.factory_date != booking.return_date and booking.cancel != '1' %}
-                                <td class="text-nowrap bg-info px-3">
+                                <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.factory_date | date:'d/m/y' }}
                                 </td>
-                                <td class="text-nowrap bg-info px-3">
+                                <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.return_date | date:'d/m/y' }}
                                 </td>
                             {% else %}
@@ -288,16 +201,14 @@
                         </tr>
                         <!-- <tr id="accordion{{ booking.pk }}" class="collapse bg-light"> -->
                         <tr class="bg-light p-0">
-                            <!-- <td colspan="4"></td> -->
-                            <!-- <td colspan="18"> -->
                             <td colspan="26" class="hiddenRow">
                                 <!-- <div id="accordion{{ booking.pk }}" class="collapse"  data-parent="#accordion"> -->
                                 <div id="accordion{{ booking.pk }}" class="collapse">
                                     <div class="class-collapse">
                                     <div class="float-left ml-sm-2 mt-2">
-                                        <button class="btn btn-danger" href="#" onclick="document.getElementById('delete-form{{ booking.pk }}').submit();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
-                                        <form id="delete-form{{ booking.pk }}" method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
-                                            <input type="hidden" name="date" value="{{ date }}">
+                                        <button class="btn btn-danger delete-booking" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                                        <form method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
+                                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
                                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
                                         </form>
                                     </div>
@@ -305,7 +216,7 @@
                                         <form method="POST" action="{% url 'booking-update' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="pk" value="{{ booking.pk }}">
-                                            <input type="hidden" name="date_filter" value="{{ date }}">
+                                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
                                             <input type="hidden" name="filter_by" value="{{ filter_by }}">
                                             <table class="w-100 mb-2" style="border-collapse: separate; border:none;">
                                                 <tr class="bg-white">
@@ -320,7 +231,6 @@
                                         
                                             <fieldset>
                                                 <legend>ADDRESS</legend>
-                                            <!-- <div class="form-check mb-3"> -->
                                                 <table class="container table-borderless" style="border-collapse: separate; border:none;">
                                                     <tr class="bg-light">
                                                         <td class="w-1">
@@ -392,7 +302,6 @@
                                 </div>
                                 </div>
                             </td>
-                            <!-- <td colspan="6" class="hiddenRow"></td> -->
                         </tr>
                     {% endfor %}
             </tbody> 
@@ -404,6 +313,49 @@
     <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
 {% endif %}
 
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="{% static 'js/fixed_header.js' %}"></script>
+    <script src="{% static 'js/add_form.js' %}"></script>
+    <script src="{% static 'js/booking_table.js' %}"></script>
+
+    <script>
+        $(function() {
+            
+            
+            $("button.action").click(function(){
+                if($("input.check:checked").length != 0) {
+                    $("input.check:checked").each(function() {
+                        
+                        var input = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "pk").val($(this).val());
+                        $('form#action').append($(input));
+                    });
+                }
+                else {
+                    alert("เลือกงานที่ต้องการ");
+                    return false;
+                }
+                
+                var action = $('select[name="action"]').val();
+                
+                if(action == 'time'){
+                    $('form#action').attr("action", "{% url 'booking-time' %}");
+                    $('form#action').submit();
+                }
+                else if(action == 'delete'){
+                    if (confirm('Are you sure?')){
+                        $('form#action').attr("action", "{% url 'booking-delete-multiple' %}");
+                        $('form#action').submit();
+                    }
+                }
+                return false;
+
+            });
+
+            
+        });
+</script> 
         
 {% endblock %}
 
