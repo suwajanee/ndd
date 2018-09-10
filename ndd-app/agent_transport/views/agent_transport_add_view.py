@@ -59,7 +59,6 @@ class AgentTransportAddView(TemplateView):
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
                 booking_no = request.POST['booking_no']
-                # booking_color = request.POST['booking_color']
                 work_type = request.POST['work_type']
                 size_list = request.POST.getlist('size')
                 quantity_list = request.POST.getlist('quantity')
@@ -82,16 +81,15 @@ class AgentTransportAddView(TemplateView):
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
-                            'agent': agent,
-                            'booking_no': booking_no,
-                            # 'booking_color': booking_color,
+                            'agent': agent.strip(),
+                            'booking_no': booking_no.strip(),
                             'work_type': work_type,
-                            'size': size,
+                            'size': size.strip(),
                             'date': date,
-                            'pickup_from': pickup_from,
-                            'return_to': return_to,
-                            'ref': ref,
-                            'remark': remark,
+                            'pickup_from': pickup_from.strip(),
+                            'return_to': return_to.strip(),
+                            'ref': ref.strip(),
+                            'remark': remark.strip(),
                             'work_id': work_id,
                             'work_number': work_number,
                             'pickup_date': date,

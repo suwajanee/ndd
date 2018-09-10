@@ -16,7 +16,7 @@ class CustomerAddView(TemplateView):
             work_type = request.POST['work_type_add']
 
             data = {
-                'name': customer_name,
+                'name': customer_name.strip(),
                 'work_type': work_type
             }
 
@@ -36,7 +36,7 @@ class CustomerAddView(TemplateView):
 
             data = {
                 'principal': Principal.objects.get(pk=customer_pk),
-                'name': shipper,
+                'name': shipper.strip(),
                 'address': address
             }
 
