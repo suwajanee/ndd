@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Print the Current Time 5s
+          name: run unit test.
           command: date
       - run: ssh-keyscan -H 178.128.95.3 >> ~/.ssh/known_hosts
       - run:
