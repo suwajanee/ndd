@@ -11,6 +11,6 @@ jobs:
       - run: ssh-keyscan -H 178.128.95.3 >> ~/.ssh/known_hosts
       - deploy:
           name: Deploy Master to Peoductions
-          branch: ["master"]
+          branch: ["feature/config_ci"]
           command: |
             git push test@178.128.95.3:repository master
