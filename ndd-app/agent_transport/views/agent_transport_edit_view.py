@@ -60,8 +60,8 @@ class AgentTransportEditTableView(TemplateView):
             pickup_date = request.POST.getlist('pickup_date')
             return_date = request.POST.getlist('return_date')
 
-            context['filter_by'] = request.POST['filter_by']
-            context['date_filter'] = request.POST['date_filter']
+            filter_by = request.POST['filter_by']
+            date_filter = request.POST['date_filter']
 
             for i in range(len(pk)):
     
@@ -89,6 +89,6 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
-            return redirect(reverse('agent-transport-edit') + '?filter_by=' + context['filter_by'] + '&date_filter=' + context['date_filter'])
+            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
         else:
             return redirect('agent-transport-edit')
