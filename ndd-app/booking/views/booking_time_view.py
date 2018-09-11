@@ -26,7 +26,7 @@ class BookingTimeView(TemplateView):
             context['filter_by'] = request.POST['filter_by']
             context['date_filter'] = request.POST['date_filter']
 
-            context['bookings'] = Booking.objects.filter(pk__in = pk_list).order_by('date', 'work_id')
+            context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
 
             request.session['pk_list'] = pk_list
             request.session['filter_by'] = context['filter_by']
