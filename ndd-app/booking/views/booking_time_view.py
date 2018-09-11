@@ -23,21 +23,21 @@ class BookingTimeView(TemplateView):
 
         if request.method == "POST":
             pk_list = request.POST.getlist("pk")
-            context['date_filter'] = request.POST['date_filter']
             context['filter_by'] = request.POST['filter_by']
+            context['date_filter'] = request.POST['date_filter']
 
             context['bookings'] = Booking.objects.filter(pk__in = pk_list).order_by('date', 'work_id')
 
             request.session['pk_list'] = pk_list
-            request.session['date_filter'] = context['date_filter']
             request.session['filter_by'] = context['filter_by']
+            request.session['date_filter'] = context['date_filter']
 
             return render(request, template_name, context)
         else:
             if request.session['pk_list']:
                 pk_list = request.session['pk_list']
-                context['date_filter'] = request.session['date_filter']
                 context['filter_by'] = request.session['filter_by']
+                context['date_filter'] = request.session['date_filter']
                 context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
 
                 request.session['pk_list'] = pk_list
@@ -46,11 +46,12 @@ class BookingTimeView(TemplateView):
 
                 return render(request, template_name, context)
             else:
+                filter_by = request.GET.get("filter_by")
                 date_filter = request.GET.get("date_filter")
                 if not date_filter:
                     return redirect('booking-table')
                 else:
-                    return redirect('booking-table' + '?filter_by=' + context['filter_by'] + '&date_filter=' + date_filter'])
+                    return redirect('booking-table' + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
 
     @login_required(login_url=reverse_lazy('login'))
     def save_time_booking(request):

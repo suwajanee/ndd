@@ -41,6 +41,7 @@ class AgentTransportPrintView(TemplateView):
             context['address'] = ''
 
         return self.render(template_name, context)
+        
     def render(self, path, params):
         template = get_template(path)
         html = template.render(params)

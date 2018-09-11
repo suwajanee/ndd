@@ -18,7 +18,7 @@ class BookingTableView(TemplateView):
     def render_table_booking_page(request):
         template_name = 'booking/booking_table.html'
 
-        context = { }
+        context = {}
         context['tmr'] = datetime.now() + timedelta(days=1)
         context['today'] = datetime.now()
         context['nbar'] = 'booking-table'
@@ -42,6 +42,5 @@ class BookingTableView(TemplateView):
         else:
             context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
-        # return render(request, template_name, {'context['bookings']': context['bookings'], 'filter_by': filter_by, 'date_filter': date_filter, 'context['today']': context['today'], 'context['tmr']': context['tmr'], 'nbar': 'booking-table'})
         return render(request, template_name, context)
 

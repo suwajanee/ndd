@@ -15,7 +15,7 @@ class AgentTransportTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def render_table_agent_transport_page(request):
         template_name = 'agent_transport/agent_transport_table.html'
-        context = { }
+        context = {}
         context['nbar'] = 'agent-transport-table'
         context['today'] = datetime.now()
 
@@ -37,7 +37,6 @@ class AgentTransportTableView(TemplateView):
         else:
             context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
-        # return render(request, template_name, {'context['agent_transports']': context['agent_transports'], 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'nbar': 'agent-transport-table'})
         return render(request, template_name, context)
     
 
