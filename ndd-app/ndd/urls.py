@@ -16,19 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
+from django.views.generic import RedirectView
 
 from booking.views.authentication_view import AuthenticationView
 
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('ndd-admin/', admin.site.urls),
     path('booking/', include('booking.urls')),
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
 
-    url(r'^$', AuthenticationView.login, name='login'),
+    url(r'^staff/$', AuthenticationView.login, name='login'),
     url(r'^logout/$', AuthenticationView.logout, name='logout'),
+
+    url(r'^$', RedirectView.as_view(url='/staff/')),
 
 ]
 
