@@ -16,7 +16,7 @@ class AgentTransportEditTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def render_edit_agent_transport_page(request):
         template_name = 'agent_transport/agent_transport_edit.html'
-        context = { }
+        context = {}
         context['nbar'] = 'agent-transport-table'
         context['today'] = datetime.now()  
 
@@ -38,9 +38,7 @@ class AgentTransportEditTableView(TemplateView):
         else:
             context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
-        # return render(request, template_name, {'context['agent_transports']': context['agent_transports'], 'filter_by': context['filter_by'], 'context['date_filter']': context['date_filter'], 'today': today, 'nbar': 'agent-transport-table'})
         return render(request, template_name, context)        
-
 
     @login_required(login_url=reverse_lazy('login'))
     def save_edit_data_agent_transport(request):
