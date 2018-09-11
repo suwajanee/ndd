@@ -29,7 +29,7 @@ class BookingPrintView(TemplateView):
         context['static_dir'] = STATICFILES_DIRS[0]
 
         if context['booking'].address == 'other':
-            context['address'] = booking.address_other
+            context['address'] = context['booking'].address_other
         elif context['booking'].address == 'shipper':
             try:
                 shipper = Shipper.objects.get(name=context['booking'].shipper)
