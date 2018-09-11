@@ -80,9 +80,6 @@ class BookingTimeView(TemplateView):
 
             return_out_time_1 = request.POST.getlist('return_out_time_1')
             return_out_time_2 = request.POST.getlist('return_out_time_2')
-            
-            filter_by = request.POST['filter_by']
-            date_filter = request.POST['date_filter']
 
             for i in range(0,len(pk)):
                 booking = Booking.objects.get(pk=pk[i])
