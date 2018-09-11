@@ -14,7 +14,7 @@ $(function () {
         if ($(this).val() == "month") {
             $('input#id_date').attr("type", "month")
         } else {
-            $('input#id_date').attr("type", "date-filter")
+            $('input#id_date').attr("type", "date")
         }
     });
 });
