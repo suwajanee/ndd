@@ -16,28 +16,30 @@ class AgentTransportEditTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def render_edit_agent_transport_page(request):
         template_name = 'agent_transport/agent_transport_edit.html'
-
-        today = datetime.now()  
+        context = { }
+        context['nbar'] = 'agent-transport-table'
+        context['today'] = datetime.now()  
 
         if request.method == "GET":
-            filter_by = request.GET.get("filter_by")
-            date_filter = request.GET.get("date_filter")
+            context['filter_by'] = request.GET.get("filter_by")
+            context['date_filter'] = request.GET.get("date_filter")
 
-            if date_filter == None:
-                date_filter = ''
+            if context['date_filter'] == None:
+                context['date_filter'] = ''
 
-            if not date_filter:
-                agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+            if not context['date_filter']:
+                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
             else:
-                if filter_by == "month":
-                    month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                    agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+                if context['filter_by'] == "month":
+                    month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
+                    context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
                 else:
-                    agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+                    context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
         else:
-            agent_transports = AgentTransport.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
-        return render(request, template_name, {'agent_transports': agent_transports, 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'nbar': 'agent-transport-table'})
+        # return render(request, template_name, {'context['agent_transports']': context['agent_transports'], 'filter_by': context['filter_by'], 'context['date_filter']': context['date_filter'], 'today': today, 'nbar': 'agent-transport-table'})
+        return render(request, template_name, context)        
 
 
     @login_required(login_url=reverse_lazy('login'))
@@ -58,8 +60,8 @@ class AgentTransportEditTableView(TemplateView):
             pickup_date = request.POST.getlist('pickup_date')
             return_date = request.POST.getlist('return_date')
 
-            filter_by = request.POST['filter_by']
-            date_filter = request.POST['date_filter']
+            context['filter_by'] = request.POST['filter_by']
+            context['date_filter'] = request.POST['date_filter']
 
             for i in range(len(pk)):
     
@@ -87,6 +89,6 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
-            return redirect(reverse('agent-transport-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
+            return redirect(reverse('agent-transport-edit') + '?filter_by=' + context['filter_by'] + '&date_filter=' + context['date_filter'])
         else:
             return redirect('agent-transport-edit')
