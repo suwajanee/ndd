@@ -23,37 +23,41 @@ class BookingPrintView(TemplateView):
             template_name = 'pdf_template/booking_bw_template.html'
         else:
             template_name = 'pdf_template/booking_full_template.html'
+            
+        context = {}
+        context['booking'] = get_object_or_404(Booking, pk=pk)
+        context['static_dir'] = STATICFILES_DIRS[0]
 
-        booking = get_object_or_404(Booking, pk=pk)
-
-        if booking.address == 'other':
-            address = booking.address_other
-        elif booking.address == 'shipper':
+        if context['booking'].address == 'other':
+            context['address'] = booking.address_other
+        elif context['booking'].address == 'shipper':
             try:
-                shipper = Shipper.objects.get(name=booking.shipper)
-                address = shipper.address
+                shipper = Shipper.objects.get(name=context['booking'].shipper)
+                context['address'] = shipper.address
             except Shipper.DoesNotExist:
-                address = ''
+                context['address'] = ''
         else:
-            address = ''
+            context['address'] = ''
 
-        return self.render(template_name, {'booking': booking, 'address': address, 'static_dir': STATICFILES_DIRS[0]})
+        return self.render(template_name, context)
 
     def print_time(request):
         booking_print_view = BookingPrintView()
         template_name = 'pdf_template/booking_time_template.html'
+        context = {}
+        context['static_dir'] = STATICFILES_DIRS[0]
         if request.method == "POST":
             pk_list = request.POST.getlist("pk")
-            bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
+            context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
             request.session['pk_list'] = pk_list
         else:
             if request.session['pk_list']:
                 pk_list = request.session['pk_list']
-                bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
+                context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
 
                 request.session['pk_list'] = pk_list
-
-        return booking_print_view.render(template_name, {'bookings': bookings, 'static_dir': STATICFILES_DIRS[0]})
+        
+        return booking_print_view.render(template_name, context)
 
     def render(self, path, params):
         template = get_template(path)

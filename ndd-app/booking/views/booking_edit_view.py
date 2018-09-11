@@ -17,30 +17,32 @@ class BookingEditTableView(TemplateView):
     @login_required(login_url=reverse_lazy('login'))
     def render_edit_booking_page(request):
         template_name = 'booking/booking_edit.html'
-
-        tmr = datetime.now() + timedelta(days=1)
-        today = datetime.now()
+        context = {}
+        context['tmr'] = datetime.now() + timedelta(days=1)
+        context['today'] = datetime.now()
 
         if request.method == "GET":
-            filter_by = request.GET.get("filter_by")
-            date_filter = request.GET.get("date_filter")
+            
+            context['filter_by'] = request.GET.get("filter_by")
+            context['date_filter'] = request.GET.get("date_filter")
+            context['nbar'] = 'booking-table'
 
-            if date_filter == None:
-                date_filter = ''
+            if context['date_filter'] == None:
+                context['date_filter'] = ''
 
-            if not date_filter:
-                bookings = Booking.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+            if not context['date_filter']:
+                context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
             else:
-                if filter_by == "month":
-                    month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                    bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=tmr) | Q(date__lte=today)) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
+                if context['filter_by']  == "month":
+                    month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
+                    bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
                 else:
-                    bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=tmr) | Q(date__lte=today)) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
+                    bookings = Booking.objects.filter(Q(date=['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
 
         else:
-            bookings = Booking.objects.filter((Q(date__month=today.month) & Q(date__year=today.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+            bookings = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
 
-        return render(request, template_name, {'bookings': bookings, 'filter_by': filter_by, 'date_filter': date_filter, 'today': today, 'tmr': tmr, 'nbar': 'booking-table'})
+        return render(request, template_name, context)        
 
     @login_required(login_url=reverse_lazy('login'))
     def save_edit_data_booking(request):

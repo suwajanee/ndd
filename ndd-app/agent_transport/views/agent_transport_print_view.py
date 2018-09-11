@@ -25,21 +25,23 @@ class AgentTransportPrintView(TemplateView):
         else:
             template_name = 'pdf_template/agent_transport_full_template.html'
 
-        agent_transport = get_object_or_404(AgentTransport, pk=pk)
+        context = {}    
+        context['agent_transport'] = get_object_or_404(AgentTransport, pk=pk)
+        context['static_dir'] = STATICFILES_DIRS[0]
 
-        if agent_transport.address == 'other':
-            address = agent_transport.address_other
-        elif agent_transport.address == 'shipper':
+        if context['agent_transport'].address == 'other':
+            context['address'] = context['agent_transport'].address_other
+        elif context['agent_transport'].address == 'shipper':
             try:
-                shipper = Shipper.objects.get(name=agent_transport.shipper)
-                address = shipper.address
+                shipper = Shipper.objects.get(name=context['agent_transport'].shipper)
+                context['address'] = shipper.address
             except Shipper.DoesNotExist:
-                address = ''
+                context['address'] = ''
         else:
-            address = ''
+            context['address'] = ''
 
-        return self.render(template_name, {'agent_transport': agent_transport, 'address': address,'static_dir': STATICFILES_DIRS[0]})
-
+        return self.render(template_name, context)
+        
     def render(self, path, params):
         template = get_template(path)
         html = template.render(params)
