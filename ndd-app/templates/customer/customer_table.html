@@ -328,10 +328,10 @@
                                     var name = "{{ shipper_check.name }}";
                                     var old_name = "{{ shipper.name }}";
                         
-                                    if ($("input.shipper_edit{{ shipper.pk }}").val().replace(/\s/g, "") == old_name.replace(/\s/g, "")){
+                                    if ($("input.shipper_edit{{ shipper.pk }}").val().replace(/\s/g, "").toLowerCase() == old_name.replace(/\s/g, "").toLowerCase()){
                                         return true;
                                     }
-                                    else if ($("input.shipper_edit{{ shipper.pk }}").val().replace(/\s/g, "") == name.replace(/\s/g, "")){
+                                    else if ($("input.shipper_edit{{ shipper.pk }}").val().replace(/\s/g, "").toLowerCase() == name.replace(/\s/g, "").toLowerCase()){
                                         alert('This shipper name is existing.');
                                         return false;
                                     }
@@ -376,7 +376,7 @@
             var name = "{{ principal.name }}";
             var work_type = "{{ principal.work_type }}";
 
-            if ($("input[name='customer_add']").val().replace(/\s/g, "") == name.replace(/\s/g, "") & $("input[name='work_type_add']:checked").val() == work_type) {
+            if ($("input[name='customer_add']").val().replace(/\s/g, "").toLowerCase() == name.replace(/\s/g, "").toLowerCase() & $("input[name='work_type_add']:checked").val() == work_type) {
                 alert('This customer name is existing.');
                 return false;
             }
@@ -395,10 +395,10 @@
             var old_name = "{{ customer.name }}"
             var old_work_type = "{{ customer.work_type }}";
 
-            if ($("input[name='customer_edit']").val().replace(/\s/g, "") == old_name.replace(/\s/g, "") & $("input[name='work_type_edit']:checked").val() == old_work_type){
+            if ($("input[name='customer_edit']").val().replace(/\s/g, "").toLowerCase() == old_name.replace(/\s/g, "").toLowerCase() & $("input[name='work_type_edit']:checked").val() == old_work_type){
                 return true;
             }
-            else if ($("input[name='customer_edit']").val().replace(/\s/g, "") == name.replace(/\s/g, "") & $("input[name='work_type_edit']:checked").val() == work_type) {
+            else if ($("input[name='customer_edit']").val().replace(/\s/g, "").toLowerCase() == name.replace(/\s/g, "").toLowerCase() & $("input[name='work_type_edit']:checked").val() == work_type) {
                 alert('This customer name is existing.');
                 return false;
             }
@@ -414,7 +414,7 @@
 
             var name = "{{ shipper.name }}";
 
-            if ($("input[name='shipper_add']").val().replace(/\s/g, "") == name.replace(/\s/g, "")) {
+            if ($("input[name='shipper_add']").val().replace(/\s/g, "").toLowerCase() == name.replace(/\s/g, "").toLowerCase()) {
                 alert('This shipper name is existing.');
                 return false;
             }
