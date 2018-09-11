@@ -8,11 +8,11 @@ jobs:
       - run:
           name: run unit test.
           command: date
-      - run: ssh-keyscan -H 178.128.95.3 >> ~/.ssh/known_hosts
+      - run: ssh-keyscan -H 178.128.18.54 >> ~/.ssh/known_hosts
       - run:
           command: |
             if ! [ ${CIRCLE_BRANCH} == "master" ]; then
              echo "Circle Branch is not master ... exiting"
              exit 0
             fi
-             git push test@178.128.95.3:test-deploy master 
+             git push blue@178.128.18.54:repository-ndd master 
