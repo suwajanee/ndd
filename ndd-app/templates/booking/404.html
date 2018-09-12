@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>404 not found</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+    <style>
+        .bg-img {
+            /*background-image: url("{% static 'images/bg-ndd.jpg' %}"); */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("{% static 'images/bg-ndd.jpg' %}");
+            background-position: center;
+            background-size: cover;
+        }
+
+        h1 {
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 240%;
+            word-spacing: 4px;
+            letter-spacing: 1px;
+        }
+
+        .notdound-text-box {
+            position: absolute;
+            width: 1140px;
+            top: 40%;
+            left: 78%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+</head>
+
+<body class="bg-light bg-img">
+    <div class="notdound-text-box">
+        <h1>404 not found</h1>
+    </div>
+
+</body>
+
+</html>
