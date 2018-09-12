@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>server 500</title>
+    <title>404 not found</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 
@@ -26,21 +26,18 @@
         }
 
         .notdound-text-box {
-            position: absolute;
-            width: 1140px;
+            position: relative;
             top: 40%;
-            left: 78%;
-            -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+            text-align: center;
         }
     </style>
 
 </head>
 
 <body class="bg-light bg-img">
-    <div class="notdound-text-box">
-        <h1>server not response 500</h1>
+    <div class="container notdound-text-box">
+        <h1>404 not found</h1>
+        <h3 class="text-white">Back to <a href="{% url 'booking-table' %}" class="text-warning">>> Booking page <<</a></h3>
     </div>
 
 </body>
