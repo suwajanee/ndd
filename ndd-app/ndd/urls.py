@@ -13,13 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import handler404, handler500
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
 from django.views.generic import RedirectView
 
 from booking.views.authentication_view import AuthenticationView
-
+from booking.views.response_server import error_404, error_500
 
 
 urlpatterns = [
@@ -34,5 +35,8 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/staff/')),
 
 ]
+
+handler404 = error_404
+handler500 = error_500
 
 
