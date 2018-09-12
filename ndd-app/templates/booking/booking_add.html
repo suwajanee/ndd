@@ -80,7 +80,7 @@
                                         <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
                                         <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                         <div class="input-group-append">
-                                    {% if forloop.last %}
+                                    {% if forloop.first %}
                                         <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
                                     {% else %}
                                         <button class="btn btn-danger remove" type="button"><span><i class="fa fa-minus"></i></span></button>
@@ -207,6 +207,7 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="{% static 'js/add_form.js' %}"></script>
 <script src="{% static 'js/booking_add.js' %}"></script>
+
 
 {% endblock %}
     
