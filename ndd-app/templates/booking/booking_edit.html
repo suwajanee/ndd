@@ -151,7 +151,7 @@
 
      
                     
-                    {% if booking.factory_date != booking.return_date %}
+                    {% if booking.cut == '1' and booking.cancel != '1' %}
                     <td class="bg-info">
                     {% else %}
                     <td>
