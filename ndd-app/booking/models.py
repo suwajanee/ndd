@@ -54,6 +54,12 @@ class Booking(models.Model):
     address = models.CharField(max_length=10, choices=ADDRESS_CHOICES, default='shipper')
     address_other = models.CharField(max_length=500, blank=True, default='')
 
+    CUT_CHOICES = (
+        ('1', 'Cut'),
+        ('0', '-'),
+    )
+    cut = models.CharField(max_length=1, choices=CUT_CHOICES, default=0)
+
     CANCEL_CHOICES = (
         ('1', 'Cancel'),
         ('0', '-'),
