@@ -112,6 +112,7 @@ class BookingAddView(TemplateView):
                             'remark': remark.strip(),
                             'work_id': work_id,
                             'work_number': work_number,
+                            'cut': cut,
                             'pickup_date': date,
                             'factory_date': date,
                             'return_date': return_date,
