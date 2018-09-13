@@ -102,7 +102,7 @@ class BookingEditTableView(TemplateView):
                     booking.return_date = return_date[i]
                 else:
                     booking.pickup_date = date[i]
-                    booking.factory = date[i]
+                    booking.factory_date = date[i]
                     booking.return_date = date[i]
                 booking.save()
 
