@@ -182,7 +182,7 @@
 
                             <td class="text-nowrap">{{ booking.work_id }}</td>
                             
-                            {% if booking.cut == '1' and booking.cancel != '1' %}
+                            {% if booking.nextday == '1' and booking.cancel != '1' %}
                                 <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.pickup_date | date:'d/m/y' }}
                                 </td>

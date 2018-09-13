@@ -75,7 +75,7 @@ class BookingAddView(TemplateView):
                 remark = request.POST['remark']
                 address = request.POST['address']
 
-                cut = request.POST['cut']
+                nextday = request.POST['nextday']
 
                 if not closing_date:
                     closing_date = None
@@ -86,7 +86,7 @@ class BookingAddView(TemplateView):
                 for size, quantity, date in container:
                     add_booking.work_id_after_add(date, shipper, int(quantity))
                     
-                    if cut == '1':
+                    if nextday == '1':
                         return_date = request.POST['return_date']
                     else:
                         return_date = date
@@ -112,7 +112,7 @@ class BookingAddView(TemplateView):
                             'remark': remark.strip(),
                             'work_id': work_id,
                             'work_number': work_number,
-                            'cut': cut,
+                            'nextday': nextday,
                             'pickup_date': date,
                             'factory_date': date,
                             'return_date': return_date,

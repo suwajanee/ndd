@@ -9,3 +9,10 @@ td input[type="date"] {
     padding: 2px 4px;
     font-size: 11px;
 }
+
+select.nextday {
+    min-width: 60px;
+    /* padding: 2px 4px; */
+    height: 25px;
+    font-size: 11px;
+}

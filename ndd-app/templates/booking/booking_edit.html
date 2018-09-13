@@ -83,6 +83,7 @@
             <th class="px-5">REF.</th>
             <th class="px-5">REMARK</th>
             <th>เลขที่ใบงาน</th>
+            <th>ตัดหาง</th>
             <th>RETURN</th>
 
         </thead> 
@@ -109,7 +110,7 @@
                     
                     <td><input name="time" class="form-control" value="{{ booking.time }}" autocomplete=off></td>
                     
-                    <td><input type="date" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off required></td>
+                    <td><input type="date" id="date{{ booking.pk }}" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off onchange="changeDate({{ booking.pk }});" required></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.shipper }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.agent }}</div></td>
@@ -151,13 +152,28 @@
 
      
                     
-                    {% if booking.cut == '1' and booking.cancel != '1' %}
+                    {% if booking.nextday == '1' and booking.cancel != '1' %}
                     <td class="bg-info">
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday" onchange="editNextDay({{ booking.pk }});">
+                            <option value="0"> - </option>
+                            <option value="1" selected> Yes </option>
+                        </select>
+                    </td>
+                    <td class="bg-info">
+                        <input type="date" id="return_date{{ booking.pk }}" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}">
+                    </td>
                     {% else %}
                     <td>
-                    {% endif %}
-                        <input type="date" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}" autocomplete=off>
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday" onchange="editNextDay({{ booking.pk }});">
+                            <option value="0"> - </option>
+                            <option value="1"> Yes </option>
+                        </select>
                     </td>
+                    <td>
+                        <input type="date" id="return_date{{ booking.pk }}" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}" readonly>
+                    </td>
+                    {% endif %}
+                        
 
 
                 </tr>
@@ -180,5 +196,6 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="{% static 'js/fixed_header.js' %}"></script>
     <script src="{% static 'js/booking_edit.js' %}"></script>
+    <script src="{% static 'js/add_form.js' %}"></script>
  
     {% endblock %}
