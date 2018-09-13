@@ -27,7 +27,7 @@ class Booking(models.Model):
     port = models.CharField(max_length=50, blank=True)
     closing_date = models.DateField(max_length=20, null=True, blank=True, default=None)
     closing_time = models.CharField(max_length=20, blank=True)
-    ref = models.CharField(max_length=50, blank=True, default='')
+    ref = models.CharField(max_length=200, blank=True, default='')
     remark = models.CharField(max_length=200, blank=True)
     
     work_id = models.CharField(max_length=50, blank=True)
@@ -37,14 +37,14 @@ class Booking(models.Model):
     factory_date = models.DateField(blank=True, null=True)
     return_date = models.DateField(blank=True, null=True)
 
-    pickup_in_time = models.CharField(max_length=20, blank=True, default='')
-    pickup_out_time = models.CharField(max_length=20, blank=True, default='')
-    factory_in_time = models.CharField(max_length=20, blank=True, default='')
-    factory_load_start_time = models.CharField(max_length=20, blank=True, default='')
-    factory_load_finish_time = models.CharField(max_length=20, blank=True, default='')
-    factory_out_time = models.CharField(max_length=20, blank=True, default='')
-    return_in_time = models.CharField(max_length=20, blank=True, default='')
-    return_out_time = models.CharField(max_length=20, blank=True, default='')
+    pickup_in_time = models.CharField(max_length=50, blank=True, default='')
+    pickup_out_time = models.CharField(max_length=50, blank=True, default='')
+    factory_in_time = models.CharField(max_length=50, blank=True, default='')
+    factory_load_start_time = models.CharField(max_length=50, blank=True, default='')
+    factory_load_finish_time = models.CharField(max_length=50, blank=True, default='')
+    factory_out_time = models.CharField(max_length=50, blank=True, default='')
+    return_in_time = models.CharField(max_length=50, blank=True, default='')
+    return_out_time = models.CharField(max_length=50, blank=True, default='')
 
     ADDRESS_CHOICES = (
         ('shipper', 'Shipper'),

@@ -19,7 +19,7 @@ class AgentTransport(models.Model):
 
     container_1 = models.CharField(max_length=50, blank=True, default='')
     container_2 = models.CharField(max_length=50, blank=True, default='')
-    ref = models.CharField(max_length=50, blank=True, default='')
+    ref = models.CharField(max_length=200, blank=True, default='')
     remark = models.CharField(max_length=200, blank=True, default='')
     
     WORK_CHOICES = (
