@@ -65,6 +65,7 @@ class BookingEditTableView(TemplateView):
             closing_time = request.POST.getlist('closing_time')
             ref = request.POST.getlist('ref')
             remark = request.POST.getlist('remark')
+            nextday = request.POST.getlist('nextday')
             return_date = request.POST.getlist('return_date')
 
             filter_by = request.POST['filter_by']
@@ -96,7 +97,13 @@ class BookingEditTableView(TemplateView):
                 booking.closing_time = closing_time[i]
                 booking.ref = ref[i].strip()
                 booking.remark = remark[i].strip()
-                booking.return_date = return_date[i]
+                booking.nextday = nextday[i]
+                if nextday[i] == '1':
+                    booking.return_date = return_date[i]
+                else:
+                    booking.pickup_date = date[i]
+                    booking.factory = date[i]
+                    booking.return_date = date[i]
                 booking.save()
 
             messages.success(request, "Saving Booking.")
