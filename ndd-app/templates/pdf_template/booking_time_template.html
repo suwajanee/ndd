@@ -106,8 +106,8 @@
               <td width=2.5%>{{ booking.return_tr }}</td>
               <td width=5%>{{ booking.return_to | truncatechars:8 }}</td>
 
-              <td width=7%>{{ booking.container_no }}</td>
-              <td width=6%>{{ booking.seal_no }}</td>
+              <td width=7%>{{ booking.container_no | truncatechars:12 }}</td>
+              <td width=6%>{{ booking.seal_no | truncatechars:12 }}</td>
 
               <td width=5.5%>{{ booking.work_id }}</td>
 
@@ -120,7 +120,7 @@
                         {% else %}
                           {{ booking.pickup_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ pickup_in_time.1 }}
+                        {{ pickup_in_time.1 | truncatechars:8 }}
                       {% endwith %}
                     </td>
                     <td width=4.5%>
@@ -130,7 +130,7 @@
                         {% else %}
                           {{ booking.pickup_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ pickup_out_time.1 }}
+                        {{ pickup_out_time.1 | truncatechars:8 }}
                       {% endwith %}
                     </td>
                     <td width=4.5%>
@@ -140,7 +140,7 @@
                         {% else %}
                           {{ booking.factory_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ factory_in_time.1 }}
+                        {{ factory_in_time.1 | truncatechars:8 }}
                       {% endwith %}  
                     </td>
                     <td width=4.5%>
@@ -150,7 +150,7 @@
                         {% else %}
                           {{ booking.factory_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ factory_load_start_time.1 }}
+                        {{ factory_load_start_time.1 | truncatechars:8 }}
                       {% endwith %}  
                     </td>
                     <td width=4.5%>
@@ -160,17 +160,17 @@
                         {% else %}
                           {{ booking.factory_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ factory_load_finish_time.1 }}
+                        {{ factory_load_finish_time.1 | truncatechars:8 }}
                       {% endwith %}  
                     </td>
                     <td width=4.5%>
-                      {% with booking.factory_out_finish|split:"//" as factory_out_finish %}
-                        {% if factory_out_finish.0 %}
-                          {{ factory_out_finish.0|parse_date | date:'d-m-y' }}
+                      {% with booking.factory_out_time|split:"//" as factory_out_time %}
+                        {% if factory_out_time.0 %}
+                          {{ factory_out_time.0|parse_date | date:'d-m-y' }}
                         {% else %}
                           {{ booking.factory_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ factory_out_finish.1 }}
+                        {{ factory_out_time.1 | truncatechars:8 }}
                       {% endwith %}  
                     </td>
 
@@ -181,7 +181,7 @@
                         {% else %}
                           {{ booking.return_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ return_in_time.1 }}
+                        {{ return_in_time.1 | truncatechars:8 }}
                       {% endwith %} 
                     </td>
                     <td width=4.5%>
@@ -191,7 +191,7 @@
                         {% else %}
                           {{ booking.return_date | date:'d-m-y'}}
                         {% endif %}
-                        {{ return_out_time.1 }}
+                        {{ return_out_time.1 | truncatechars:8 }}
                       {% endwith %} 
                     </td>
 

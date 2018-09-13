@@ -137,7 +137,7 @@
                         {% else %}
                             <input type="date" name="pickup_in_time_1" class="form-control" value="{{ booking.pickup_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="pickup_in_time_2" class="form-control" value="{{ pickup_in_time.1 }}" autocomplete=off>
+                        <input name="pickup_in_time_2" class="form-control" value="{{ pickup_in_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                     <td>
@@ -147,7 +147,7 @@
                         {% else %}
                             <input type="date" name="pickup_out_time_1" class="form-control" value="{{ booking.pickup_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="pickup_out_time_2" class="form-control" value="{{ pickup_out_time.1 }}" autocomplete=off>
+                        <input name="pickup_out_time_2" class="form-control" value="{{ pickup_out_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                     <td>
@@ -157,7 +157,7 @@
                         {% else %}
                             <input type="date" name="factory_in_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="factory_in_time_2" class="form-control" value="{{ factory_in_time.1 }}" autocomplete=off>
+                        <input name="factory_in_time_2" class="form-control" value="{{ factory_in_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                     <td>
@@ -167,7 +167,7 @@
                         {% else %}
                             <input type="date" name="factory_load_start_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="factory_load_start_time_2" class="form-control" value="{{ factory_load_start_time.1 }}" autocomplete=off>
+                        <input name="factory_load_start_time_2" class="form-control" value="{{ factory_load_start_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                     <td>
@@ -177,7 +177,7 @@
                         {% else %}
                             <input type="date" name="factory_load_finish_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="factory_load_finish_time_2" class="form-control" value="{{ factory_load_finish_time.1 }}" autocomplete=off>
+                        <input name="factory_load_finish_time_2" class="form-control" value="{{ factory_load_finish_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                     <td>
@@ -187,7 +187,7 @@
                         {% else %}
                             <input type="date" name="factory_out_time_1" class="form-control" value="{{ booking.factory_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="factory_out_time_2" class="form-control" value="{{ factory_out_time.1 }}" autocomplete=off>
+                        <input name="factory_out_time_2" class="form-control" value="{{ factory_out_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
 
@@ -202,7 +202,7 @@
                         {% else %}
                             <input type="date" name="return_in_time_1" class="form-control" value="{{ booking.return_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="return_in_time_2" class="form-control" value="{{ return_in_time.1 }}" autocomplete=off>
+                        <input name="return_in_time_2" class="form-control" value="{{ return_in_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
 
@@ -219,7 +219,7 @@
                         {% else %}
                             <input type="date" name="return_out_time_1" class="form-control" value="{{ booking.return_date | date:'Y-m-d'}}" autocomplete=off>
                         {% endif %}
-                        <input type="time" name="return_out_time_2" class="form-control" value="{{ return_out_time.1 }}" autocomplete=off>
+                        <input name="return_out_time_2" class="form-control" value="{{ return_out_time.1 }}" maxlength="10" autocomplete=off>
                         {% endwith %}
                     </td>
                 </tr>

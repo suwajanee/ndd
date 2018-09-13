@@ -108,45 +108,42 @@
                 <tr>
             {% endif %}
                     
-                    <td><input name="time" class="form-control" value="{{ booking.time }}" autocomplete=off></td>
+                    <td><input name="time" class="form-control" value="{{ booking.time }}" maxlength="10" autocomplete=off></td>
                     
                     <td><input type="date" id="date{{ booking.pk }}" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off onchange="changeDate({{ booking.pk }});" required></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.shipper }}</div></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.agent }}</div></td>
-                    <!-- <td class="text-nowrap">{{ booking.size }}</td> -->
-                    <td><input name="size" class="form-control" value="{{ booking.size }}" autocomplete=off></td>
+                    <td><input name="size" class="form-control" value="{{ booking.size }}" maxlength="10" autocomplete=off></td>
                     {% if booking.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
-                        <!-- <td style="background-color: {{ booking.booking_color }}" class="text-nowrap"> -->
-                                <td style="background-color:
-                                {% ifchanged booking.booking_no %}
-                                    {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
-                                {% else %}
-                                    {{ rowcolors }}
-                                {% endifchanged %}">
+                        <td style="background-color:
+                            {% ifchanged booking.booking_no %}
+                                {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                            {% else %}
+                                {{ rowcolors }}
+                            {% endifchanged %}">
                     {% endif %}
-                            <input name="booking_no" class="form-control" value="{{ booking.booking_no }}" autocomplete=off>
+                            <input name="booking_no" class="form-control" value="{{ booking.booking_no }}" maxlength="50" autocomplete=off>
                         </td>
 
-                    <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" autocomplete=off></td>
-                    <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" autocomplete=off></td>
-                    <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" autocomplete=off></td>
-                    <td><input name="factory" class="form-control" value="{{ booking.factory }}" autocomplete=off></td>
-                    <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" autocomplete=off></td>
-                    <td><input name="return_tr" class="form-control" value="{{ booking.return_tr }}" autocomplete=off></td>
-                    
-                    <td><input name="return_to" class="form-control" value="{{ booking.return_to }}" autocomplete=off></td>
+                    <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="factory" class="form-control" value="{{ booking.factory }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="return_tr" class="form-control" value="{{ booking.return_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="return_to" class="form-control" value="{{ booking.return_to }}" maxlength="20" autocomplete=off></td>
 
-                    <td><input name="container_no" class="form-control" value="{{ booking.container_no }}" autocomplete=off></td>
-                    <td><input name="seal_no" class="form-control" value="{{ booking.seal_no }}" autocomplete=off></td>
+                    <td><input name="container_no" class="form-control" value="{{ booking.container_no }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="seal_no" class="form-control" value="{{ booking.seal_no }}" maxlength="20" autocomplete=off></td>
          
                     <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" autocomplete=off></td>
-                    <td><input type="time" name="closing_time" class="form-control" value="{{ booking.closing_time }}" autocomplete=off></td>
+                    <td><input name="closing_time" class="form-control" value="{{ booking.closing_time }}" maxlength="5" autocomplete=off></td>
 
-                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" >{{ booking.remark }}</textarea></td>
+                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" maxlength="50" autocomplete=off></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" maxlength="50">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 
