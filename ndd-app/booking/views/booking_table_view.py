@@ -40,7 +40,7 @@ class BookingTableView(TemplateView):
                     context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
 
         else:
-            context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+            context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(return_tr='')).order_by('date', 'work_id')
 
         return render(request, template_name, context)
 
