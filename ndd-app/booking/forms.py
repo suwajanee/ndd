@@ -4,35 +4,13 @@ from customer.models import Principal, Shipper
 from .models import Booking
 
 
-class BookingFilterSortForm(forms.Form):
-	date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'form-control',
-				# 'onchange': 'this.form.submit();'
-			}
-		),
-		required=False
-	)
-
-	month = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'month',
-				'class': 'form-control',
-				# 'onchange': 'this.form.submit();'
-			}
-		),
-		required=False
-	)
-
 class BookingAddForm(forms.Form):
 
 	time = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '10',
 			}
 		),
 		required=False
@@ -42,6 +20,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -52,6 +31,7 @@ class BookingAddForm(forms.Form):
 			attrs={
 				'class': 'form-control',
 				'autocomplete': 'off',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -61,6 +41,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '20',
 			}
 		),
 		required=False
@@ -70,6 +51,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '20',
 			}
 		),
 		required=False
@@ -90,6 +72,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -99,6 +82,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -117,8 +101,8 @@ class BookingAddForm(forms.Form):
 	closing_time = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				'type': 'time',
 				'class': 'form-control',
+				'maxlength': '5',
 			}
 		),
 		required=False
@@ -128,6 +112,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -137,6 +122,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -146,6 +132,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '20',
 			}
 		),
 		required=False

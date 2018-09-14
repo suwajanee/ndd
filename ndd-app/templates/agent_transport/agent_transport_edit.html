@@ -105,7 +105,7 @@
                     <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
                     <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
                     <!-- <td class="text-nowrap">{{ agent_transport.size }}</td> -->
-                    <td><input name="size" class="form-control" value="{{ agent_transport.size }}"  autocomplete=off></td>
+                    <td><input name="size" class="form-control" value="{{ agent_transport.size }}" maxlength="10" autocomplete=off></td>
                     {% if agent_transport.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
@@ -117,19 +117,19 @@
                             {{ rowcolors }}
                         {% endifchanged %}">
                     {% endif %}
-                        <input name="booking_no" class="form-control" value="{{ agent_transport.booking_no }}"  autocomplete=off>
+                        <input name="booking_no" class="form-control" value="{{ agent_transport.booking_no }}" maxlength="50" autocomplete=off>
                         </td>
 
-                    <td><input name="pickup_tr" class="form-control" value="{{ agent_transport.pickup_tr }}"  autocomplete=off></td>
-                    <td><input name="pickup_from" class="form-control" value="{{ agent_transport.pickup_from }}"  autocomplete=off></td>
-                    <td><input name="return_tr" class="form-control" value="{{ agent_transport.return_tr }}"  autocomplete=off></td>
-                    <td><input name="return_to" class="form-control" value="{{ agent_transport.return_to }}" autocomplete=off></td>
+                    <td><input name="pickup_tr" class="form-control" value="{{ agent_transport.pickup_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="pickup_from" class="form-control" value="{{ agent_transport.pickup_from }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="return_tr" class="form-control" value="{{ agent_transport.return_tr }}" maxlength="10" autocomplete=off></td>
+                    <td><input name="return_to" class="form-control" value="{{ agent_transport.return_to }}" maxlength="20" autocomplete=off></td>
 
-                    <td><input name="container_1" class="form-control" value="{{ agent_transport.container_1 }}" autocomplete=off></td>
-                    <td><input name="container_2" class="form-control" value="{{ agent_transport.container_2 }}"  autocomplete=off></td>
+                    <td><input name="container_1" class="form-control" value="{{ agent_transport.container_1 }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="container_2" class="form-control" value="{{ agent_transport.container_2 }}" maxlength="20" autocomplete=off></td>
 
-                    <td><input name="ref" class="form-control" value="{{ agent_transport.ref }}"  autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;">{{ agent_transport.remark }}</textarea></td>
+                    <td><input name="ref" class="form-control" value="{{ agent_transport.ref }}" maxlength="50" autocomplete=off></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" maxlength="50">{{ agent_transport.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ agent_transport.work_id }}</td>
 

@@ -76,7 +76,7 @@
                             <div class="control">
                                     {% for size, quantity, date in zip %}
                                     <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" required>
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
                                         <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
                                         <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                         <div class="input-group-append">
@@ -92,7 +92,7 @@
                         {% else %}
                             <div class="control">
                                 <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" required>
+                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" maxlength="10" required>
                                         <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" required>
                                         <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" required>
                                     <div class="input-group-append">
@@ -131,22 +131,22 @@
 
 
                     <fieldset>
-                            <legend>ADDRESS</legend>
-                    <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
-                        <label class="custom-control-label" for="id_address_1">Shipper</label>
-                    </div>
+                        <legend>ADDRESS</legend>
+                        <div class="custom-control custom-radio mb-3">
+                            <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
+                            <label class="custom-control-label" for="id_address_1">Shipper</label>
+                        </div>
 
-                    <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
-                        <label class="custom-control-label" for="id_address_2">Other</label><br />
-                        <textarea class="form-control" rows="3" id="id_address_other" name="address_other" disabled></textarea>
-                    </div>
+                        <div class="custom-control custom-radio mb-3">
+                            <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
+                            <label class="custom-control-label" for="id_address_2">Other</label><br />
+                            <textarea class="form-control" rows="3" id="id_address_other" name="address_other" maxlength="200" disabled></textarea>
+                        </div>
 
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
-                        <label class="custom-control-label" for="id_address_3">None</label>
-                    </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
+                            <label class="custom-control-label" for="id_address_3">None</label>
+                        </div>
                     </fieldset>
                     <div class="text-right pb-4">
                     <button class="btn btn-light btn-lg mr-sm-1" onclick="window.location='{% url 'agent-transport-table' %}'">Cancel</button>
@@ -159,7 +159,7 @@
         </div>
 
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="{% static 'js/add-form.js' %}"></script>
+        <script src="{% static 'js/add_form.js' %}"></script>
         <script src="{% static 'js/agent_transport_add.js' %}"></script>
         {% endblock %}
     

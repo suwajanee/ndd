@@ -3,24 +3,13 @@ from django import forms
 from .models import AgentTransport
 
 
-class AgentTransportFilterSortForm(forms.Form):
-	date = forms.DateField(
-		widget=forms.DateInput(
-			attrs={
-				'type': 'date',
-				'class': 'form-control',
-				'onchange': 'this.form.submit();'
-			}
-		),
-		required=False
-	)
-
-
 class AgentTransportAddForm(forms.Form):
+	
 	agent = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -31,6 +20,7 @@ class AgentTransportAddForm(forms.Form):
 			attrs={
 				'class': 'form-control',
 				'autocomplete': 'off',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -40,6 +30,7 @@ class AgentTransportAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '20',
 			}
 		),
 		required=False
@@ -49,6 +40,7 @@ class AgentTransportAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '20',
 			}
 		),
 		required=False
@@ -58,6 +50,7 @@ class AgentTransportAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False
@@ -67,6 +60,7 @@ class AgentTransportAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
+				'maxlength': '50',
 			}
 		),
 		required=False

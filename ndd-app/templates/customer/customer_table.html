@@ -70,7 +70,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">NAME</span>
                     </div>
-                    <input name="customer_add" class="form-control" autocomplete=off required>
+                    <input name="customer_add" class="form-control" autocomplete=off maxlength="40" required>
                 </div>
 
                 <div class="md-form mb-3 float-right text-secondary">
@@ -185,7 +185,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">NAME</span>
                                             </div>
-                                            <input name="customer_edit" class="form-control" value="{{ customer.name }}" autocomplete=off required>
+                                            <input name="customer_edit" class="form-control" value="{{ customer.name }}" maxlength="40" autocomplete=off required>
                                         </div>
                         
                                         <div class="md-form mb-3 float-right text-secondary">
@@ -235,10 +235,10 @@
                                     <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
 
                                     <div class="text-secondary">NAME :</div>
-                                    <input name="shipper_add" class="form-control" autocomplete=off required>
+                                    <input name="shipper_add" class="form-control" autocomplete=off maxlength="40" required>
 
                                     <div class="text-secondary mt-3">ADDRESS :</div>
-                                    <textarea name="address_add" rows=4 class="form-control" autocomplete=off></textarea>
+                                    <textarea name="address_add" rows=4 class="form-control" maxlength="200" autocomplete=off></textarea>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-center">
                                     <button type="submit" class="btn btn-primary btn-add-shipper">Add</button>
@@ -303,10 +303,10 @@
                                         <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
 
                                         <div class="text-secondary">NAME :</div>
-                                        <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" autocomplete=off required>
+                                        <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" maxlength="40" autocomplete=off required>
 
                                         <div class="text-secondary mt-3">ADDRESS :</div>
-                                        <textarea name="address_edit" rows=4 class="form-control"autocomplete=off>{{ shipper.address }}</textarea>
+                                        <textarea name="address_edit" rows=4 class="form-control" maxlength="200" autocomplete=off>{{ shipper.address }}</textarea>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
                                     
