@@ -54,8 +54,6 @@ class AgentTransportEditTableView(TemplateView):
             container_2 = request.POST.getlist('container_2')
             ref = request.POST.getlist('ref')
             remark = request.POST.getlist('remark')
-            pickup_date = request.POST.getlist('pickup_date')
-            return_date = request.POST.getlist('return_date')
 
             filter_by = request.POST['filter_by']
             date_filter = request.POST['date_filter']
@@ -64,10 +62,6 @@ class AgentTransportEditTableView(TemplateView):
     
                 if not date[i]:
                     date[i] = None
-                if not pickup_date[i]:
-                    pickup_date[i] = None
-                if not return_date[i]:
-                    return_date[i] = None
 
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
                 agent_transport.date = date[i]
@@ -81,8 +75,8 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transport.container_2 = container_2[i].strip()
                 agent_transport.ref = ref[i].strip()
                 agent_transport.remark = remark[i].strip()
-                agent_transport.pickup_date = pickup_date[i]
-                agent_transport.return_date = return_date[i]
+                agent_transport.pickup_date = date[i]
+                agent_transport.return_date = date[i]
                 agent_transport.save()
 
             messages.success(request, "Saving Agent Transport.")
