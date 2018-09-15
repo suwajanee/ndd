@@ -60,9 +60,9 @@
         <table>
             <thead class="text-nowrap bg-lightgray">
             <th>DATE</th>
-            <th>PRINCIPAL</th>
-            <th>SHIPPER</th>
-            <th>AGENT</th>
+            <th class="px-5">PRINCIPAL</th>
+            <th class="px-5">SHIPPER</th>
+            <th class="px-5">AGENT</th>
             <th>SIZE</th>
             <th class="px-4">BOOKING</th>
 
@@ -76,10 +76,7 @@
 
             <th class="px-5">REF.</th>
             <th class="px-5">REMARK</th>
-            <th>เลขที่ใบงาน</th>
-
-            <th>PICK UP</th>
-            <th>RETURN</th>
+            <th class="px-4">เลขที่ใบงาน</th>
 
         </thead> 
         <tbody> 
@@ -101,15 +98,13 @@
                 {% endif %}
                                         
                     <td><input type="date" name="date" class="form-control" value="{{ agent_transport.date | date:'Y-m-d' }}"  autocomplete=off></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.principal }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.shipper }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
-                    <!-- <td class="text-nowrap">{{ agent_transport.size }}</td> -->
+                    <td class="text-left px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
+                    <td class="text-left px-2"><div class="long-text">{{ agent_transport.shipper }}</div></td>
+                    <td class="text-left px-2"><div class="long-text">{{ agent_transport.agent }}</div></td>
                     <td><input name="size" class="form-control" value="{{ agent_transport.size }}" maxlength="10" autocomplete=off></td>
                     {% if agent_transport.cancel == '1' %}
                         <td class="bg-secondary text-nowrap">
                     {% else %}
-                        <!-- <td style="background-color: {{ agent_transport.booking_color }}" class="text-nowrap"> -->
                         <td style="background-color:
                         {% ifchanged agent_transport.booking_no %}
                             {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
@@ -133,8 +128,6 @@
 
                     <td class="text-nowrap">{{ agent_transport.work_id }}</td>
 
-                    <td><input type="date" name="pickup_date" class="form-control" value="{{ agent_transport.pickup_date | date:'Y-m-d' }}"  autocomplete=off></td>
-                    <td><input type="date" name="return_date" class="form-control" value="{{ agent_transport.return_date | date:'Y-m-d' }}"      autocomplete=off></td>
                 </tr>
             {% endfor %}
             </form>
