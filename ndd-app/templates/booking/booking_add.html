@@ -8,6 +8,12 @@
 {% block extra_head %}
 
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
+    
+<style>
+
+
+
+</style>
      
 {% endblock %}
 
@@ -26,24 +32,47 @@
             <h2>Add Booking</h2>
             <hr>
             </div>
-            <form method="POST" class="add-form">
-                {% csrf_token %}
-                        <!-- <form id="customer" method="POST"> -->
-                            <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">CUSTOMER</span>
-                                    </div>
-                                    <select id="id_principal" name="principal" class="custom-select" onchange="this.form.submit();" required>
-                                        <option value=""> -------- </option>
-                                        {% for p in principals %}
-                                            {% ifequal p.pk|stringformat:"s" principal %}
-                                                <option value="{{ p.pk }}" selected> {{ p.name }} </option>
-                                            {% else %}
-                                                <option value="{{ p.pk }}"> {{ p.name }} </option>
-                                            {% endifequal %}
-                                        {% endfor %}
-                                    </select>
-                            </div>
+            <form method="POST" id="addForm" class="add-form">
+                {% csrf_token %}            
+                        
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">CUSTOMER</span>
+                    </div>
+                    <button class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if principal %}
+                            {{ principal_name }}
+                        {% else %}
+                            --------
+                        {% endif %}
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-right w-100">                    
+                        <div class="dropdown-item">
+                            <input id="search-customer" class="form-control" placeholder="search">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="options-list">
+                            <input type="hidden" id="principal_selected" name="principal" value="{{ principal }}">
+                            <button class="dropdown-item" onclick="submitPrincipal('')"> -------- </button>
+                            
+                            {% for p in principals %}
+                                <button class="dropdown-item" onclick="submitPrincipal({{ p.pk }})">{{ p.name }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                                             
+                    <!-- <select id="id_principal" name="principal2" class="four-boot-select" onchange="this.form.submit();" required>
+                        <option value=""> -------- </option>
+                        {% for p in principals %}
+                            {% ifequal p.pk|stringformat:"s" principal %}
+                                <option value="{{ p.pk }}" selected> {{ p.name }} </option>
+                            {% else %}
+                                <option value="{{ p.pk }}"> {{ p.name }} </option>
+                            {% endifequal %}
+                        {% endfor %}
+                    </select> -->
+                </div>
                             <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">SHIPPER</span>
@@ -55,7 +84,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                        <!-- </form> -->
+
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
@@ -192,9 +221,12 @@
                         <label class="custom-control-label" for="id_address_3">None</label>
                     </div>
                     </fieldset>
+                    
+        
                     <div class="text-right pb-4">
                     <button class="btn btn-light btn-lg mr-sm-1" onclick="window.location='{% url 'booking-table' %}'">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-lg" formaction="{% url 'booking-save' %}">SUBMIT</button>
+
                 </div>
             </form>
             
@@ -207,6 +239,7 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="{% static 'js/add_form.js' %}"></script>
 <script src="{% static 'js/booking_add.js' %}"></script>
+
 
 
 {% endblock %}

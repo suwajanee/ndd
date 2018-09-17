@@ -31,3 +31,11 @@ function changeDate(pk) {
         document.getElementById("return_date"+pk).value = document.getElementById("date"+pk).value;
     }
 }
+
+// Selected customer to show shipper choices
+function submitPrincipal(value){
+    var principal=document.getElementById("principal_selected");
+    principal.value = value;
+
+    document.getElementById("addForm").submit();
+}

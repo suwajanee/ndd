@@ -25,6 +25,8 @@ class BookingAddView(TemplateView):
         context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'booking-table'
 
+        print(request.POST)
+
         if request.method == 'POST':
             context = add_booking.create_context(request.POST)
             
@@ -38,6 +40,7 @@ class BookingAddView(TemplateView):
             context['principal'] = req.get('principal')
             if context['principal']:
                 context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
+                context['principal_name'] = Principal.objects.get(pk=context['principal']).name
             else:
                 context['shippers'] = []
 
@@ -76,6 +79,9 @@ class BookingAddView(TemplateView):
                 address = request.POST['address']
 
                 nextday = request.POST['nextday']
+
+                print('4444444444444444444444444444444444')
+                print(principal)
 
                 if not closing_date:
                     closing_date = None
