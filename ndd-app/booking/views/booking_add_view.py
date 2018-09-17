@@ -80,9 +80,6 @@ class BookingAddView(TemplateView):
 
                 nextday = request.POST['nextday']
 
-                print('4444444444444444444444444444444444')
-                print(principal)
-
                 if not closing_date:
                     closing_date = None
                 if address == 'other':
