@@ -25,8 +25,6 @@ class BookingAddView(TemplateView):
         context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'booking-table'
 
-        print(request.POST)
-
         if request.method == 'POST':
             context = add_booking.create_context(request.POST)
             
