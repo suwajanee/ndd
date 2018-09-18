@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+import re
 from datetime import datetime
 
 from django.contrib import messages
@@ -82,15 +85,15 @@ class AgentTransportAddView(TemplateView):
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
-                            'agent': agent.strip(),
-                            'booking_no': booking_no.strip(),
+                            'agent': re.sub(' +', ' ', agent.strip()),
+                            'booking_no': re.sub(' +', ' ', booking_no.strip()),
                             'work_type': work_type,
-                            'size': size.strip(),
+                            'size': re.sub(' +', ' ', size.strip()),
                             'date': date,
-                            'pickup_from': pickup_from.strip(),
-                            'return_to': return_to.strip(),
-                            'ref': ref.strip(),
-                            'remark': remark.strip(),
+                            'pickup_from': re.sub(' +', ' ', pickup_from.strip()),
+                            'return_to': re.sub(' +', ' ', return_to.strip()),
+                            'ref': re.sub(' +', ' ', ref.strip()),
+                            'remark': re.sub(' +', ' ', remark.strip()),
                             'work_id': work_id,
                             'work_number': work_number,
                             'pickup_date': date,

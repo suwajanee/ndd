@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -82,21 +83,21 @@ class BookingEditTableView(TemplateView):
                 booking = Booking.objects.get(pk=pk[i])
                 booking.time = time[i]
                 booking.date = date[i]
-                booking.size = size[i].strip()
-                booking.booking_no = booking_no[i].strip()
-                booking.pickup_tr = pickup_tr[i].strip()
-                booking.pickup_from = pickup_from[i].strip()
-                booking.forward_tr = forward_tr[i].strip()
-                booking.factory = factory[i].strip()
-                booking.backward_tr = backward_tr[i].strip()
-                booking.return_tr = return_tr[i].strip()
-                booking.return_to = return_to[i].strip()
-                booking.container_no = container_no[i].strip()
-                booking.seal_no = seal_no[i].strip()
+                booking.size = re.sub(' +', ' ', size[i].strip())
+                booking.booking_no = re.sub(' +', ' ', booking_no[i].strip())
+                booking.pickup_tr = re.sub(' +', ' ', pickup_tr[i].strip())
+                booking.pickup_from = re.sub(' +', ' ', pickup_from[i].strip())
+                booking.forward_tr = re.sub(' +', ' ', forward_tr[i].strip())
+                booking.factory = re.sub(' +', ' ', factory[i].strip())
+                booking.backward_tr = re.sub(' +', ' ', backward_tr[i].strip())
+                booking.return_tr = re.sub(' +', ' ', return_tr[i].strip())
+                booking.return_to = re.sub(' +', ' ', return_to[i].strip())
+                booking.container_no = re.sub(' +', ' ', container_no[i].strip())
+                booking.seal_no = re.sub(' +', ' ', seal_no[i].strip())
                 booking.closing_date = closing_date[i]
                 booking.closing_time = closing_time[i]
-                booking.ref = ref[i].strip()
-                booking.remark = remark[i].strip()
+                booking.ref = re.sub(' +', ' ', ref[i].strip())
+                booking.remark = re.sub(' +', ' ', remark[i].strip())
                 booking.nextday = nextday[i]
                 if nextday[i] == '1':
                     booking.return_date = return_date[i]

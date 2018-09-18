@@ -112,7 +112,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
-				'maxlength': '50',
+				'maxlength': '150',
 			}
 		),
 		required=False
@@ -122,7 +122,7 @@ class BookingAddForm(forms.Form):
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control',
-				'maxlength': '50',
+				'maxlength': '150',
 			}
 		),
 		required=False
