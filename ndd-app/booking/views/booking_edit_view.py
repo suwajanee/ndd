@@ -51,6 +51,7 @@ class BookingEditTableView(TemplateView):
             pk = request.POST.getlist('pk')
             time = request.POST.getlist('time')
             date = request.POST.getlist('date')
+            agent = request.POST.getlist('agent')
             size = request.POST.getlist('size')
             booking_no = request.POST.getlist('booking_no')
             pickup_tr = request.POST.getlist('pickup_tr')
@@ -83,6 +84,7 @@ class BookingEditTableView(TemplateView):
                 booking = Booking.objects.get(pk=pk[i])
                 booking.time = time[i]
                 booking.date = date[i]
+                booking.agent = re.sub(' +', ' ', agent[i].strip())
                 booking.size = re.sub(' +', ' ', size[i].strip())
                 booking.booking_no = re.sub(' +', ' ', booking_no[i].strip())
                 booking.pickup_tr = re.sub(' +', ' ', pickup_tr[i].strip())
