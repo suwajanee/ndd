@@ -15,7 +15,7 @@ def export_xls(request):
     response['Content-Disposition'] = 'attachment; filename="booking.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Booking')
+    ws_booking = wb.add_sheet('Booking')
 
     # Sheet header, first row
     row_num = 1
@@ -25,15 +25,15 @@ def export_xls(request):
     columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', \
     'Vessel', 'Port', 'Closing', 'Ref.', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
 
-    ws.write_merge(0, 0, 25, 26, 'Pick up', style)
-    ws.write_merge(0, 0, 27, 30, 'Factory', style)
-    ws.write_merge(0, 0, 31, 32, 'Return', style)
+    ws_booking.write_merge(0, 0, 25, 26, 'Pick up', style)
+    ws_booking.write_merge(0, 0, 27, 30, 'Factory', style)
+    ws_booking.write_merge(0, 0, 31, 32, 'Return', style)
 
     for col_num in range(len(columns)):
         if col_num <= 24 :
-            ws.write_merge(0, 1, col_num, col_num, columns[col_num], style)
+            ws_booking.write_merge(0, 1, col_num, col_num, columns[col_num], style)
         else:
-            ws.write(1, col_num, columns[col_num], style)
+            ws_booking.write(1, col_num, columns[col_num], style)
 
     # Sheet body, remaining rows
 
@@ -51,7 +51,7 @@ def export_xls(request):
         row_num += 1
         if row_prev != None and row_prev != row[1]:
             style = style_xls.bg_black()
-            ws.write_merge(row_num, row_num, 0, len(row)-3, '', style)
+            ws_booking.write_merge(row_num, row_num, 0, len(row)-3, '', style)
             row_num += 1
         row_prev = row[1]
 
@@ -95,7 +95,7 @@ def export_xls(request):
                     time = date_time[1]
                     row[col_num] = date + ' - ' + time
 
-            ws.write(row_num, col_num, row[col_num], style)
+            ws_booking.write(row_num, col_num, row[col_num], style)
 
     wb.save(response)
     return response
