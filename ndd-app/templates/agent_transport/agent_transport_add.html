@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
-
 {% load staticfiles %}
 
 
 {% block title %} Add Booking {% endblock %}
-        
+
+
 {% block extra_head %}
+
     <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
 
 {% endblock %}
 
+
 {% block content %}
+
     {% for message in messages %}
         <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -19,147 +22,160 @@
             {{ message }}
         </div>
     {% endfor %}
+
     <div class="container col-sm-6 shadow bg-white">
         <div class="container col-sm-9">
             <div class="container text-center pt-4 pb-2">
-            <h2>Add Agent Transport</h2>
-            <hr>
+                <h2>Add Agent Transport</h2>
+                <hr>
             </div>
-            <form method="POST" class="add-form">
+
+            <form method="POST" id="addForm" class="add-form">
                 {% csrf_token %}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">CUSTOMER</span>
+                    </div>
+                    <button class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if principal %}
+                            {{ principal_name }}
+                        {% else %}
+                            --------
+                        {% endif %}
+                    </button>
 
-                            <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">CUSTOMER</span>
-                                    </div>
-                                    <select id="id_principal" name="principal" class="custom-select" onchange="this.form.submit();" required>
-                                        <option value=""> -------- </option>
-                                        {% for p in principals %}
-                                            {% ifequal p.pk|stringformat:"s" principal %}
-                                                <option value="{{ p.pk }}" selected> {{ p.name }} </option>
-                                            {% else %}
-                                                <option value="{{ p.pk }}"> {{ p.name }} </option>
-                                            {% endifequal %}
-                                        {% endfor %}
-                                    </select>
-                            </div>
-                            <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">SHIPPER</span>
-                                    </div>
-                                <select id="id_shipper" name="shipper" class="custom-select" required>
-                                    <option value=""> -------- </option>
-                                    {% for s in shippers %}
-                                        <option value="{{ s.pk }}"> {{ s.name }} </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                        <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">AGENT</span>
-                                </div>
-                            {{ form.agent }} 
+                    <div class="dropdown-menu dropdown-menu-right w-100">                    
+                        <div class="dropdown-item">
+                            <input id="search-customer" class="form-control" placeholder="search">
                         </div>
-                    
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">BOOKING NO.</span>
-                            </div>
-                            {{ form.booking_no }}
-                            {{ form.work_type }}
-                        </div>
-                        
-                    <fieldset>
-                                <legend>CONTAINER</legend>
-                        {% if size_list or quantity_list or date_list %}
-                            <div class="control">
-                                    {% for size, quantity, date in zip %}
-                                    <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
-                                        <div class="input-group-append">
-                                    {% if forloop.first %}
-                                        <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
-                                    {% else %}
-                                        <button class="btn btn-danger remove" type="button"><span><i class="fa fa-minus"></i></span></button>
-                                    {% endif %}
-                                        </div>
-                                    </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="options-list">
+                            <input type="hidden" id="principal_selected" name="principal" value="{{ principal }}">
+                            <button class="dropdown-item" onclick="submitPrincipal('')"> -------- </button>
+                            {% for p in principals %}
+                                <button class="dropdown-item" onclick="submitPrincipal({{ p.pk }})">{{ p.name }}</button>
                             {% endfor %}
                         </div>
-                        {% else %}
-                            <div class="control">
+                    </div>                    
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">SHIPPER</span>
+                    </div>
+                    <select id="id_shipper" name="shipper" class="custom-select" required>
+                        <option value=""> -------- </option>
+                            {% for s in shippers %}
+                                <option value="{{ s.pk }}"> {{ s.name }} </option>
+                            {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">AGENT</span>
+                    </div>
+                    {{ form.agent }} 
+                </div>
+                    
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">BOOKING NO.</span>
+                    </div>
+                    {{ form.booking_no }}
+                    {{ form.work_type }}
+                </div>
+                        
+                <fieldset>
+                    <legend>CONTAINER</legend>
+                    {% if size_list or quantity_list or date_list %}
+                        <div class="control">
+                            {% for size, quantity, date in zip %}
                                 <div class="entry input-group control-group after-add-more mb-2">
-                                        <input name="size" class="form-control" id="id_size" placeholder="SIZE" maxlength="10" required>
-                                        <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" required>
-                                        <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" required>
+                                    <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
+                                    <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
+                                    <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                     <div class="input-group-append">
-                                        <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
+                                        {% if forloop.first %}
+                                            <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
+                                        {% else %}
+                                            <button class="btn btn-danger remove" type="button"><span><i class="fa fa-minus"></i></span></button>
+                                        {% endif %}
                                     </div>
                                 </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="control">
+                            <div class="entry input-group control-group after-add-more mb-2">
+                                <input name="size" class="form-control" id="id_size" placeholder="SIZE" maxlength="10" required>
+                                <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" required>
+                                <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
+                                </div>
                             </div>
-                        {% endif %}
-                    </fieldset>
+                        </div>
+                    {% endif %}
+                </fieldset>
                             
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">FROM</span>
-                        </div>
-                        {{ form.pickup_from }}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">FROM</span>
+                    </div>
+                    {{ form.pickup_from }}
+                    <div class="input-group-append">
+                        <span class="input-group-text">TO</span>
+                    </div>
+                    {{ form.return_to }}
+                </div>
 
-                        <div class="input-group-append">
-                            <span class="input-group-text">TO</span>
-                        </div>
-                        {{ form.return_to }}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">REF.</span>
+                    </div>
+                    {{ form.ref }} 
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">REMARK</span>
+                    </div>
+                    {{ form.remark }} 
+                </div>
+
+                <fieldset>
+                    <legend>ADDRESS</legend>
+                    <div class="custom-control custom-radio mb-3">
+                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
+                        <label class="custom-control-label" for="id_address_1">Shipper</label>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">REF.</span>
-                        </div>
-                        {{ form.ref }} 
+                    <div class="custom-control custom-radio mb-3">
+                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
+                        <label class="custom-control-label" for="id_address_2">Other</label><br />
+                        <textarea class="form-control" rows="3" id="id_address_other" name="address_other" maxlength="200" disabled></textarea>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">REMARK</span>
-                        </div>
-                        {{ form.remark }} 
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
+                        <label class="custom-control-label" for="id_address_3">None</label>
                     </div>
+                </fieldset>
 
-
-                    <fieldset>
-                        <legend>ADDRESS</legend>
-                        <div class="custom-control custom-radio mb-3">
-                            <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
-                            <label class="custom-control-label" for="id_address_1">Shipper</label>
-                        </div>
-
-                        <div class="custom-control custom-radio mb-3">
-                            <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
-                            <label class="custom-control-label" for="id_address_2">Other</label><br />
-                            <textarea class="form-control" rows="3" id="id_address_other" name="address_other" maxlength="200" disabled></textarea>
-                        </div>
-
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
-                            <label class="custom-control-label" for="id_address_3">None</label>
-                        </div>
-                    </fieldset>
-                    <div class="text-right pb-4">
+                <div class="text-right pb-4">
                     <button class="btn btn-light btn-lg mr-sm-1" onclick="window.location='{% url 'agent-transport-table' %}'">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-lg" formaction="{% url 'agent-transport-save' %}">SUBMIT</button>
                 </div>
             </form>
             
-        </div>
-        
-        </div>
+        </div> 
+    </div>
 
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="{% static 'js/add_form.js' %}"></script>
-        <script src="{% static 'js/agent_transport_add.js' %}"></script>
-        {% endblock %}
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="{% static 'js/add_form.js' %}"></script>
+    <script src="{% static 'js/agent_transport_add.js' %}"></script>
+    
+{% endblock %}
     

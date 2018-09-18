@@ -38,6 +38,7 @@ class BookingAddView(TemplateView):
             context['principal'] = req.get('principal')
             if context['principal']:
                 context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
+                context['principal_name'] = Principal.objects.get(pk=context['principal']).name
             else:
                 context['shippers'] = []
 

@@ -22,4 +22,12 @@ $(function () {
         return false;
     });
 
+    // Filter customer choices
+    $("#search-customer").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("button.dropdown-item").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
 });
