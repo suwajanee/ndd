@@ -24,14 +24,14 @@ def export_xls(request):
     style = style_xls.header_style()
 
     columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', \
-    'Vessel', 'Port', 'Closing', 'Ref.', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
+    'Vessel', 'Port', 'Closing date', 'Closing time', 'Ref.', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
 
-    ws_booking.write_merge(0, 0, 25, 26, 'Pick up', style)
-    ws_booking.write_merge(0, 0, 27, 30, 'Factory', style)
-    ws_booking.write_merge(0, 0, 31, 32, 'Return', style)
+    ws_booking.write_merge(0, 0, 26, 27, 'Pick up', style)
+    ws_booking.write_merge(0, 0, 28, 31, 'Factory', style)
+    ws_booking.write_merge(0, 0, 32, 33, 'Return', style)
 
     for col_num in range(len(columns)):
-        if col_num <= 24 :
+        if col_num <= 25 :
             ws_booking.write_merge(0, 1, col_num, col_num, columns[col_num], style)
         else:
             ws_booking.write(1, col_num, columns[col_num], style)
@@ -39,7 +39,7 @@ def export_xls(request):
     # Sheet body, remaining rows
 
     rows = Booking.objects.all().values_list('time', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'vessel', 'port', 'closing_date', 'ref', 'remark', 'work_id', \
+    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'vessel', 'port', 'closing_date', 'closing_time', 'ref', 'remark', 'work_id', \
     'pickup_date', 'factory_date', 'return_date', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', \
     'factory_out_time', 'return_in_time', 'return_out_time', 'nextday', 'cancel').order_by('date', 'work_id')
 
@@ -77,7 +77,7 @@ def export_xls(request):
             if str(type(row[col_num])) == "<class 'datetime.date'>" :
                 style.num_format_str = 'dd/mm/yy'
 
-            if row[len(row)-2] == '1' and col_num >= 22 and col_num < 25:
+            if row[len(row)-2] == '1' and col_num > 22 and col_num < 26:
                 style.pattern = style_xls.bg_aqua()
             
             if booking_prev != row[6]:
@@ -93,7 +93,7 @@ def export_xls(request):
             if row[len(row)-1] == '1':
                 style.pattern = style_xls.cancel_row()
 
-            if col_num >= 25 :
+            if col_num >= 26 :
                 if row[col_num] != '':
                     date_time = row[col_num].split('//')
                     if date_time[0] == '':
@@ -111,7 +111,7 @@ def export_xls(request):
     # Sheet header
     style = style_xls.header_style()
 
-    columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'To', 'Container 1', 'Container 2', \
+    columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'TO', 'Container 1', 'Container 2', \
     'Ref.', 'Remark', 'Work ID', 'Pick up', 'Return']
 
     for col_num in range(len(columns)):
