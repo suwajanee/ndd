@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import xlwt
 from datetime import datetime
 
 from django.http import HttpResponse
 from ..models import Booking
+from agent_transport.models import AgentTransport
 
 from .utils import StyleXls
 from customer.models import Principal, Shipper
@@ -17,9 +20,7 @@ def export_xls(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws_booking = wb.add_sheet('Booking')
 
-    # Sheet header, first row
-    row_num = 1
-
+    # Sheet header
     style = style_xls.header_style()
 
     columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', \
@@ -42,6 +43,7 @@ def export_xls(request):
     'pickup_date', 'factory_date', 'return_date', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', \
     'factory_out_time', 'return_in_time', 'return_out_time', 'nextday', 'cancel').order_by('date', 'work_id')
 
+    row_num = 1
     row_prev = None
     booking_prev = None
     booking_status = True
@@ -61,10 +63,16 @@ def export_xls(request):
             style.alignment = style_xls.align_left()
 
             if col_num == 2:
-                row[col_num] = Principal.objects.get(pk=row[col_num]).name
+                try:
+                    row[col_num] = Principal.objects.get(pk=row[col_num]).name
+                except Principal.DoesNotExist:
+                    row[col_num] = ''
 
             if col_num == 3:
-                row[col_num] = Shipper.objects.get(pk=row[col_num]).name
+                try:
+                    row[col_num] = Shipper.objects.get(pk=row[col_num]).name
+                except Shipper.DoesNotExist:
+                    row[col_num] = ''
 
             if str(type(row[col_num])) == "<class 'datetime.date'>" :
                 style.num_format_str = 'dd/mm/yy'
@@ -96,6 +104,72 @@ def export_xls(request):
                     row[col_num] = date + ' - ' + time
 
             ws_booking.write(row_num, col_num, row[col_num], style)
+
+
+    ws_agent_transport = wb.add_sheet('สายเรือ')
+
+    # Sheet header
+    style = style_xls.header_style()
+
+    columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'To', 'Container 1', 'Container 2', \
+    'Ref.', 'Remark', 'Work ID', 'Pick up', 'Return']
+
+    for col_num in range(len(columns)):
+        ws_agent_transport.write(0, col_num, columns[col_num], style)
+
+    # Sheet body, remaining rows
+    rows = AgentTransport.objects.all().values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
+    'container_1', 'container_2', 'ref', 'remark', 'work_id', 'pickup_date', 'return_date', 'cancel').order_by('date', 'work_id')
+
+    row_num = 0
+    row_prev = None
+    booking_prev = None
+    booking_status = True
+    for row in rows:
+        row = list(row)
+        bg_black = False 
+        row_num += 1
+        if row_prev != None and row_prev != row[0]:
+            style = style_xls.bg_black()
+            ws_agent_transport.write_merge(row_num, row_num, 0, len(row)-2, '', style)
+            row_num += 1
+        row_prev = row[0]
+
+        for col_num in range(len(row)-1):
+            style = xlwt.XFStyle()
+            style.borders = style_xls.border_cell()
+            style.alignment = style_xls.align_left()
+
+            if col_num == 1:
+                try:
+                    row[col_num] = Principal.objects.get(pk=row[col_num]).name
+                except Principal.DoesNotExist:
+                    row[col_num] = ''
+
+            if col_num == 2:
+                try:
+                    row[col_num] = Shipper.objects.get(pk=row[col_num]).name
+                except Shipper.DoesNotExist:
+                    row[col_num] = ''
+
+            if str(type(row[col_num])) == "<class 'datetime.date'>" :
+                style.num_format_str = 'dd/mm/yy'
+
+            if booking_prev != row[5]:
+                booking_status = not(booking_status)
+            booking_prev = row[5]
+
+            if col_num == 5: 
+                if booking_status == True:
+                    style.pattern = style_xls.bg_light_orange()
+                else:
+                    style.pattern = style_xls.bright_green()
+
+            if row[len(row)-1] == '1':
+                style.pattern = style_xls.cancel_row()
+
+            ws_agent_transport.write(row_num, col_num, row[col_num], style)
+
 
     wb.save(response)
     return response
