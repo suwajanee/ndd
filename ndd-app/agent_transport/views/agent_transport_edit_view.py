@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+import re
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -44,6 +47,7 @@ class AgentTransportEditTableView(TemplateView):
         if request.method == 'POST':
             pk = request.POST.getlist('pk')
             date = request.POST.getlist('date')
+            agent = request.POST.getlist('agent')
             size = request.POST.getlist('size')
             booking_no = request.POST.getlist('booking_no')
             pickup_tr = request.POST.getlist('pickup_tr')
@@ -65,16 +69,17 @@ class AgentTransportEditTableView(TemplateView):
 
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
                 agent_transport.date = date[i]
-                agent_transport.size = size[i].strip()
-                agent_transport.booking_no = booking_no[i].strip()
-                agent_transport.pickup_tr = pickup_tr[i].strip()
-                agent_transport.pickup_from = pickup_from[i].strip()
-                agent_transport.return_tr = return_tr[i].strip()
-                agent_transport.return_to = return_to[i].strip()
-                agent_transport.container_1 = container_1[i].strip()
-                agent_transport.container_2 = container_2[i].strip()
-                agent_transport.ref = ref[i].strip()
-                agent_transport.remark = remark[i].strip()
+                agent_transport.agent = re.sub(' +', ' ', agent[i].strip())
+                agent_transport.size = re.sub(' +', ' ', size[i].strip())
+                agent_transport.booking_no = re.sub(' +', ' ', booking_no[i].strip())
+                agent_transport.pickup_tr = re.sub(' +', ' ', pickup_tr[i].strip())
+                agent_transport.pickup_from = re.sub(' +', ' ', pickup_from[i].strip())
+                agent_transport.return_tr = re.sub(' +', ' ', return_tr[i].strip())
+                agent_transport.return_to = re.sub(' +', ' ', return_to[i].strip())
+                agent_transport.container_1 = re.sub(' +', ' ', container_1[i].strip())
+                agent_transport.container_2 = re.sub(' +', ' ', container_2[i].strip())
+                agent_transport.ref = re.sub(' +', ' ', ref[i].strip())
+                agent_transport.remark = re.sub(' +', ' ', remark[i].strip())
                 agent_transport.pickup_date = date[i]
                 agent_transport.return_date = date[i]
                 agent_transport.save()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -83,14 +84,14 @@ class BookingTimeView(TemplateView):
 
             for i in range(0,len(pk)):
                 booking = Booking.objects.get(pk=pk[i])
-                booking.pickup_in_time = pickup_in_time_1[i] + '//' + pickup_in_time_2[i]
-                booking.pickup_out_time = pickup_out_time_1[i] + '//' + pickup_out_time_2[i]
-                booking.factory_in_time = factory_in_time_1[i] + '//' + factory_in_time_2[i]
-                booking.factory_load_start_time = factory_load_start_time_1[i] + '//' + factory_load_start_time_2[i]
-                booking.factory_load_finish_time = factory_load_finish_time_1[i] + '//' + factory_load_finish_time_2[i]
-                booking.factory_out_time = factory_out_time_1[i] + '//' + factory_out_time_2[i]
-                booking.return_in_time = return_in_time_1[i] + '//' + return_in_time_2[i]
-                booking.return_out_time = return_out_time_1[i] + '//' + return_out_time_2[i]
+                booking.pickup_in_time = pickup_in_time_1[i] + '//' + re.sub(' +', ' ', pickup_in_time_2[i].strip())
+                booking.pickup_out_time = pickup_out_time_1[i] + '//' + re.sub(' +', ' ', pickup_out_time_2[i].strip())
+                booking.factory_in_time = factory_in_time_1[i] + '//' + re.sub(' +', ' ', factory_in_time_2[i].strip())
+                booking.factory_load_start_time = factory_load_start_time_1[i] + '//' + re.sub(' +', ' ', factory_load_start_time_2[i].strip())
+                booking.factory_load_finish_time = factory_load_finish_time_1[i] + '//' + re.sub(' +', ' ', factory_load_finish_time_2[i].strip())
+                booking.factory_out_time = factory_out_time_1[i] + '//' + re.sub(' +', ' ', factory_out_time_2[i].strip())
+                booking.return_in_time = return_in_time_1[i] + '//' + re.sub(' +', ' ', return_in_time_2[i].strip())
+                booking.return_out_time = return_out_time_1[i] + '//' + re.sub(' +', ' ', return_out_time_2[i].strip())
                 
                 booking.save()
 

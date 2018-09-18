@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -17,7 +21,7 @@ class CustomerEditView(TemplateView):
             work_type = request.POST['work_type_edit']
 
             customer = Principal.objects.get(pk=pk)
-            customer.name = customer_name.strip()
+            customer.name = re.sub(' +', ' ', customer_name.strip())
             customer.work_type = work_type
             customer.save()
             
@@ -34,7 +38,7 @@ class CustomerEditView(TemplateView):
             address = request.POST['address_edit']
 
             shipper = Shipper.objects.get(pk=shipper_pk)
-            shipper.name = shipper_name.strip()
+            shipper.name = re.sub(' +', ' ', shipper_name.strip())
             shipper.address = address
             shipper.save()
             

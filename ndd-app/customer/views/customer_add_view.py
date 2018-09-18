@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -16,7 +20,7 @@ class CustomerAddView(TemplateView):
             work_type = request.POST['work_type_add']
 
             data = {
-                'name': customer_name.strip(),
+                'name': re.sub(' +', ' ', customer_name.strip()),
                 'work_type': work_type
             }
 
@@ -36,7 +40,7 @@ class CustomerAddView(TemplateView):
 
             data = {
                 'principal': Principal.objects.get(pk=customer_pk),
-                'name': shipper.strip(),
+                'name': re.sub(' +', ' ', shipper.strip()),
                 'address': address
             }
 

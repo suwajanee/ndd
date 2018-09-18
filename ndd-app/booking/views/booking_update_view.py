@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -29,8 +31,8 @@ class BookingUpdateView(TemplateView):
             date_filter = request.POST['date_filter']
 
             booking = Booking.objects.get(pk=pk)
-            booking.vessel = vessel.strip()
-            booking.port = port.strip()
+            booking.vessel = re.sub(' +', ' ', vessel.strip())
+            booking.port = re.sub(' +', ' ', port.strip())
             booking.address = address
             if address == 'other':
                 booking.address_other = address_other

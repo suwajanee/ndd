@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 from datetime import datetime
 
 from django.contrib import messages
@@ -97,20 +98,19 @@ class BookingAddView(TemplateView):
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
-                            'agent': agent.strip(),
-                            'booking_no': booking_no.strip(),
-                            # 'booking_color': booking_color,
-                            'size': size.strip(),
+                            'agent': re.sub(' +', ' ', agent.strip()),
+                            'booking_no': re.sub(' +', ' ', booking_no.strip()),
+                            'size': re.sub(' +', ' ', size.strip()),
                             'date': date,
-                            'pickup_from': pickup_from.strip(),
-                            'factory': factory.strip(),
-                            'return_to': return_to.strip(),
-                            'vessel': vessel.strip(),
-                            'port': port.strip(),
+                            'pickup_from': re.sub(' +', ' ', pickup_from.strip()),
+                            'factory': re.sub(' +', ' ', factory.strip()),
+                            'return_to': re.sub(' +', ' ', return_to.strip()),
+                            'vessel': re.sub(' +', ' ', vessel.strip()),
+                            'port': re.sub(' +', ' ', port.strip()),
                             'closing_date': closing_date,
                             'closing_time': closing_time,
-                            'ref': ref.strip(),
-                            'remark': remark.strip(),
+                            'ref': re.sub(' +', ' ', ref.strip()),
+                            'remark': re.sub(' +', ' ', remark.strip()),
                             'work_id': work_id,
                             'work_number': work_number,
                             'nextday': nextday,
