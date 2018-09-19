@@ -44,12 +44,13 @@ class BookingAddView(TemplateView):
                 context['shippers'] = []
 
             req._mutable = True
+            context['time_list'] = req.getlist('time')
             context['size_list'] = req.getlist('size')
             context['quantity_list'] = req.getlist('quantity')
             context['date_list'] = req.getlist('date')
-            context['zip'] = zip(context['size_list'], context['quantity_list'], context['date_list'])
+            context['zip'] = zip(context['time_list'], context['size_list'], context['quantity_list'], context['date_list'])
 
-            req.update({'size':'', 'quantity':'', 'date':''})
+            req.update({'time':'', 'size':'', 'quantity':'', 'date':''})
             context['form'] = BookingAddForm(req)
         return context
 
@@ -63,6 +64,7 @@ class BookingAddView(TemplateView):
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
                 booking_no = request.POST['booking_no']
+                time_list = request.POST.getlist('time')
                 size_list = request.POST.getlist('size')
                 quantity_list = request.POST.getlist('quantity')
                 date_list = request.POST.getlist('date')
@@ -84,8 +86,8 @@ class BookingAddView(TemplateView):
                 if address == 'other':
                     address_other = request.POST['address_other']
 
-                container = zip(size_list, quantity_list, date_list)
-                for size, quantity, date in container:
+                container = zip(time_list, size_list, quantity_list, date_list)
+                for time, size, quantity, date in container:
                     add_booking.work_id_after_add(date, shipper, int(quantity))
                     
                     if nextday == '1':
@@ -100,6 +102,7 @@ class BookingAddView(TemplateView):
                             'shipper': Shipper.objects.get(pk=shipper),
                             'agent': re.sub(' +', ' ', agent.strip()),
                             'booking_no': re.sub(' +', ' ', booking_no.strip()),
+                            'time': re.sub(' +', ' ', time.strip()),
                             'size': re.sub(' +', ' ', size.strip()),
                             'date': date,
                             'pickup_from': re.sub(' +', ' ', pickup_from.strip()),
