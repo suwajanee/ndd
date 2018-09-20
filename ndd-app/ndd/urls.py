@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 
 from booking.views.authentication_view import AuthenticationView
 from booking.views.response_server import error_404, error_500
+from booking.views.export_xls_view import ExportDataView
 
 
 urlpatterns = [
@@ -33,6 +34,9 @@ urlpatterns = [
     url(r'^logout/$', AuthenticationView.logout, name='logout'),
 
     url(r'^$', RedirectView.as_view(url='/staff/')),
+
+    url(r'^export/$', ExportDataView.render_export_page, name='export-page'),
+    url(r'^export/work/$', ExportDataView.export_xls, name='export-work'),
 
 ]
 
