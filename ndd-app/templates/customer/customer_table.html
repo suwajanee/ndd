@@ -250,13 +250,13 @@
 
 
                
-               <div class="my-5 col-6 container">
+               <div class="my-5 col-11 container">
                <table class="table bg-white border-bottom">
                         <thead class="bg-light">
                         <tr class="row m-0">
-                            <th class="col-2"> SHIPPER </th>
-                            <th class="col-7"> ADDRESS </th>
-                            <th class="col-3 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
+                            <th class="col-5"> SHIPPER </th>
+                            <th class="col-5"> ADDRESS </th>
+                            <th class="col-2 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
                         </tr>
                    </thead>
                    <tbody>
@@ -267,9 +267,9 @@
                     {% else %}
                         <tr class="row m-0 bg-light text-lightgray">
                     {% endif %}
-                        <td class="col-2 text-truncate" >{{ shipper.name }}</td>
-                        <td class="col-7 text-truncate">{{ shipper.address | linebreaks }}</td>
-                        <td class="text-right col-3 text-right">
+                        <td class="col-5 text-truncate" >{{ shipper.name }}</td>
+                        <td class="col-5 text-truncate">{{ shipper.address | linebreaks }}</td>
+                        <td class="text-right col-2 text-right">
                             <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
                             {% if shipper.cancel == '0' %}
                                 <button class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>

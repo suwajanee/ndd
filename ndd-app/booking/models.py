@@ -31,7 +31,7 @@ class Booking(models.Model):
     remark = models.CharField(max_length=200, blank=True)
     
     work_id = models.CharField(max_length=50, blank=True)
-    work_number = models.IntegerField(default=0)
+    work_number = models.IntegerField(default=1)
 
     pickup_date = models.DateField( blank=True, null=True)
     factory_date = models.DateField(blank=True, null=True)

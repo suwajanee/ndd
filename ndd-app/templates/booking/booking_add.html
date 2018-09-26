@@ -23,7 +23,7 @@
         </div>
     {% endfor %}
 
-    <div class="container col-md-7 shadow bg-white">
+    <div class="container col-md-8 shadow bg-white">
         <div class="container col-md-10">
             <div class="container text-center pt-4 pb-2">
                 <h2>Add Booking</h2>
@@ -91,10 +91,10 @@
                         <div class="control">
                             {% for time, size, quantity, date in zip %}
                                 <div class="entry input-group control-group after-add-more mb-2">
-                                    <input type="text" name="time" class="form-control" id="id_time" placeholder="TIME" value="{{ time }}" maxlength="10" required>
-                                    <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
-                                    <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
-                                    <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
+                                    <input type="text" name="time" class="form-control col-md-3 " id="id_time" placeholder="TIME" value="{{ time }}" maxlength="10" >
+                                    <input name="size" class="form-control col-md-2" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
+                                    <input type="number" name="quantity" min="1" class="form-control col-md-2" id="id_quantity" placeholder="QTY" value="{{ quantity }}" required>
+                                    <input type="date" name="date" class="form-control col-md-4" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                     <div class="input-group-append">
                                         {% if forloop.first %}
                                             <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
@@ -108,10 +108,10 @@
                     {% else %}
                         <div class="control">
                             <div class="entry input-group control-group after-add-more mb-2">
-                                <input type="text" name="time" class="form-control" id="id_time" placeholder="TIME" maxlength="10" required>
-                                <input name="size" class="form-control" id="id_size" placeholder="SIZE" maxlength="10" required>
-                                <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" required>
-                                <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" required>
+                                <input type="text" name="time" class="form-control col-md-3" id="id_time" placeholder="TIME" maxlength="10" >
+                                <input name="size" class="form-control col-md-2" id="id_size" placeholder="SIZE" maxlength="10" required>
+                                <input type="number" name="quantity" min="1" class="form-control col-md-2" id="id_quantity" placeholder="QTY" required>
+                                <input type="date" name="date" class="form-control col-md-4" id="id_date" placeholder="DATE" required>
                                 <div class="input-group-append">
                                     <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
                                 </div>

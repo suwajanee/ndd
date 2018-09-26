@@ -93,7 +93,7 @@
                             {% for size, quantity, date in zip %}
                                 <div class="entry input-group control-group after-add-more mb-2">
                                     <input name="size" class="form-control" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
-                                    <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QUANTITY" value="{{ quantity }}" required>
+                                    <input type="number" name="quantity" min="1" class="form-control" id="id_quantity" placeholder="QTY" value="{{ quantity }}" required>
                                     <input type="date" name="date" class="form-control" id="id_date" placeholder="DATE" value="{{ date }}" required>
                                     <div class="input-group-append">
                                         {% if forloop.first %}
