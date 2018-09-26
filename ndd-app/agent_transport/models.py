@@ -28,7 +28,7 @@ class AgentTransport(models.Model):
     )
     work_type = models.CharField(max_length=10, choices=WORK_CHOICES, default='ep')
     work_id = models.CharField(max_length=50, blank=True, default='')
-    work_number = models.IntegerField(default=0)
+    work_number = models.IntegerField(default=1)
 
     pickup_date = models.DateField(blank=True, null=True, default='')
     return_date = models.DateField(blank=True, null=True, default='')

@@ -70,7 +70,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">NAME</span>
                     </div>
-                    <input name="customer_add" class="form-control" autocomplete=off maxlength="40" required>
+                    <input name="customer_add" class="form-control" autocomplete=off maxlength="150" required>
                 </div>
 
                 <div class="md-form mb-3 float-right text-secondary">
@@ -185,7 +185,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">NAME</span>
                                             </div>
-                                            <input name="customer_edit" class="form-control" value="{{ customer.name }}" maxlength="40" autocomplete=off required>
+                                            <input name="customer_edit" class="form-control" value="{{ customer.name }}" maxlength="150" autocomplete=off required>
                                         </div>
                         
                                         <div class="md-form mb-3 float-right text-secondary">
@@ -235,7 +235,7 @@
                                     <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
 
                                     <div class="text-secondary">NAME :</div>
-                                    <input name="shipper_add" class="form-control" autocomplete=off maxlength="40" required>
+                                    <input name="shipper_add" class="form-control" autocomplete=off maxlength="150" required>
 
                                     <div class="text-secondary mt-3">ADDRESS :</div>
                                     <textarea name="address_add" rows=4 class="form-control" maxlength="400" autocomplete=off></textarea>
@@ -250,13 +250,13 @@
 
 
                
-               <div class="my-5 col-6 container">
+               <div class="my-5 col-11 container">
                <table class="table bg-white border-bottom">
                         <thead class="bg-light">
                         <tr class="row m-0">
-                            <th class="col-2"> SHIPPER </th>
-                            <th class="col-7"> ADDRESS </th>
-                            <th class="col-3 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
+                            <th class="col-5"> SHIPPER </th>
+                            <th class="col-5"> ADDRESS </th>
+                            <th class="col-2 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
                         </tr>
                    </thead>
                    <tbody>
@@ -267,9 +267,9 @@
                     {% else %}
                         <tr class="row m-0 bg-light text-lightgray">
                     {% endif %}
-                        <td class="col-2 text-truncate" >{{ shipper.name }}</td>
-                        <td class="col-7 text-truncate">{{ shipper.address | linebreaks }}</td>
-                        <td class="text-right col-3 text-right">
+                        <td class="col-5 text-truncate" >{{ shipper.name }}</td>
+                        <td class="col-5 text-truncate">{{ shipper.address | linebreaks }}</td>
+                        <td class="text-right col-2 text-right">
                             <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
                             {% if shipper.cancel == '0' %}
                                 <button class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>
@@ -303,7 +303,7 @@
                                         <input type="hidden" name="shipper_pk" value="{{ shipper.pk }}">
 
                                         <div class="text-secondary">NAME :</div>
-                                        <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" maxlength="40" autocomplete=off required>
+                                        <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" maxlength="150" autocomplete=off required>
 
                                         <div class="text-secondary mt-3">ADDRESS :</div>
                                         <textarea name="address_edit" rows=4 class="form-control" maxlength="400" autocomplete=off>{{ shipper.address }}</textarea>
