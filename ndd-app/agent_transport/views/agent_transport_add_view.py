@@ -114,7 +114,7 @@ class AgentTransportAddView(TemplateView):
     def run_work_id(self, date, shipper, work_type):
         work = AgentTransport.objects.filter(date=date, work_type=work_type).aggregate(Max('work_number'))
         if work['work_number__max'] == None:
-            work_number = 0
+            work_number = 1
         else:
             work_shipper = AgentTransport.objects.filter(date=date, shipper=shipper, work_type=work_type).aggregate(Max('work_number'))
             if work_shipper['work_number__max'] == None:

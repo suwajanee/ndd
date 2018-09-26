@@ -136,7 +136,7 @@ class BookingAddView(TemplateView):
     def run_work_id(self, date, shipper):
         work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
         if work['work_number__max'] == None:
-            work_number = 0
+            work_number = 1
         else:
             work_shipper = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
             if work_shipper['work_number__max'] == None:
