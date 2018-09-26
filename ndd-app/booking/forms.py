@@ -153,13 +153,3 @@ class BookingAddForm(forms.Form):
 		),
 		required=False
 	)
-
-	# address_other = forms.CharField(
-	# 	widget=forms.Textarea(
-	# 		attrs={
-	# 			'class': 'form-control',
-	# 			'maxlength': '400',
-	# 		}
-	# 	),
-	# 	required=False
-	# )
