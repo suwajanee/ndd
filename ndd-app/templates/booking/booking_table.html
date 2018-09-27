@@ -142,23 +142,23 @@
                             <td class="text-nowrap">{{ booking.time }}</td>
                             
                             <td class="text-nowrap px-3">{{ booking.date | date:'d/m/y' }}</td>
-                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.principal }}</div></td>
-                            <td style="max-lines:2; min-width:200px;">{{ booking.shipper }}</td>
-                            <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.agent }}</div></td>
+                            <td class="no-collapsable text-center px-1"><div class="long-text">{{ booking.principal }}</div></td>
+                            <td style="min-width:250px;">{{ booking.shipper }}</td>
+                            <td class="no-collapsable text-center px-1"><div class="long-text">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
                             {% if booking.cancel == '1' %}
-                                <td class="no-collapsable text-left px-2">
+                                <td style="min-width:150px;">
                             {% else %}
                                 <!-- <td style="background-color: {{ booking.booking_color }}" class="no-collapsable text-left px-2"> -->
-                                <td style="background-color:
+                                <td style="min-width:150px; background-color:
                                     {% ifchanged booking.booking_no %}
                                         {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
                                     {% else %}
                                         {{ rowcolors }}
                                     {% endifchanged %}"
-                                class="no-collapsable text-left px-2">
+                                class="text-center">
                             {% endif %}
-                                    <div class="long-text">{{ booking.booking_no }}</div>
+                                    {{ booking.booking_no }}
                                 </td>
 
                             <td class="text-nowrap">{{ booking.pickup_tr }}</td>
