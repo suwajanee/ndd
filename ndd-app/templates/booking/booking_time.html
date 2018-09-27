@@ -97,21 +97,21 @@
                     <!-- <td>{{ booking.time }}</td> -->
                     
                     <td class="text-nowrap px-3">{{ booking.date | date:'d/m/y' }}</td>
-                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.principal }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.shipper }}</div></td>
-                    <td class="no-collapsable text-left px-2"><div class="long-text">{{ booking.agent }}</div></td>
+                    <td class="no-collapsable text-center px-2"><div class="long-text">{{ booking.principal }}</div></td>
+                    <td style="min-width:250px;">{{ booking.shipper }}</td>
+                    <td class="no-collapsable text-center px-2"><div class="long-text">{{ booking.agent }}</div></td>
                     <td class="text-nowrap">{{ booking.size }}</td>
                     {% if booking.cancel == '1' %}
-                        <td class="bg-secondary text-nowrap">
+                        <td class="bg-secondary text-center" style="min-width:150px;">
                     {% else %}
                         <!-- <td style="background-color: {{ booking.booking_color }}" class="text-nowrap"> -->
-                                <td style="background-color:
+                                <td style="min-width:150px; background-color:
                                 {% ifchanged booking.booking_no %}
-                                    {% cycle "LightGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                                    {% cycle "#9977b4" "#dd86b9" "#f497a9" "#f9b489" "#fdcd79" "#fff68f" "#b6d884" "#81cbb5" "#6acade" "#72abdd" as rowcolors %}
                                 {% else %}
                                     {{ rowcolors }}
                                 {% endifchanged %}"
-                                class="text-left px-2">
+                                class="text-center">
                     {% endif %}
                             <div class="long-text">{{ booking.booking_no }}</div>
                         </td>

@@ -54,6 +54,10 @@ tbody {
     padding: 0 !important;
 }
 
+.dropdown-menu a.dropdown-item {
+    font-size: 12px;
+}
+
 
 /* Hide too long text in Remark field */
 .long-text {
@@ -64,6 +68,20 @@ tbody {
     -webkit-box-orient: vertical;  
 }
 .long-text:active {
+    overflow: visible;
+    width: auto;
+    /* text-overflow: inherit; */
+    white-space: nowrap;
+}
+
+.long-text-80 {
+    width: 80px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text-80:active {
     overflow: visible;
     width: auto;
     /* text-overflow: inherit; */

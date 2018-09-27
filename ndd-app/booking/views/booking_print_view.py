@@ -21,6 +21,14 @@ class BookingPrintView(TemplateView):
             template_name = 'pdf_template/booking_fw_template.html'
         elif template == 'backward':
             template_name = 'pdf_template/booking_bw_template.html'
+        elif template == 'yard_ndd':
+            template_name = 'pdf_template/booking_yard_ndd_template.html'
+        elif template == 'ndd_fac_return':
+            template_name = 'pdf_template/booking_ndd_fac_return_template.html'
+        elif template == 'ndd_fac_ndd':
+            template_name = 'pdf_template/booking_ndd_fac_ndd_template.html'
+        elif template == 'ndd_return':
+            template_name = 'pdf_template/booking_ndd_return_template.html'
         else:
             template_name = 'pdf_template/booking_full_template.html'
             

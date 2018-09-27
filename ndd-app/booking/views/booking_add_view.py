@@ -89,12 +89,14 @@ class BookingAddView(TemplateView):
                 container = zip(time_list, size_list, quantity_list, date_list)
                 for time, size, quantity, date in container:
                     add_booking.work_id_after_add(date, shipper, int(quantity))
-                    
+
                     if nextday == '1':
                         return_date = request.POST['return_date']
+                        if not return_date:
+                            return_date = date
                     else:
                         return_date = date
-
+                    
                     for i in range(int(quantity)):
                         work_id, work_number = add_booking.run_work_id(date, shipper)
                         data = {

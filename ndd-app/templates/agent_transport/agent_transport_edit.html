@@ -98,16 +98,16 @@
                 {% endif %}
                                         
                     <td><input type="date" name="date" class="form-control" value="{{ agent_transport.date | date:'Y-m-d' }}"  autocomplete=off></td>
-                    <td class="text-left px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
-                    <td class="text-left px-2"><div class="long-text">{{ agent_transport.shipper }}</div></td>
+                    <td class="text-center px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
+                    <td style="min-width:250px;">{{ agent_transport.shipper }}</td>
                     <td><input name="agent" class="form-control" value="{{ agent_transport.agent }}" maxlength="50" autocomplete=off></td>
                     <td><input name="size" class="form-control" value="{{ agent_transport.size }}" maxlength="10" autocomplete=off></td>
                     {% if agent_transport.cancel == '1' %}
-                        <td class="bg-secondary text-nowrap">
+                        <td class="bg-secondary text-center" style="min-width:150px;">
                     {% else %}
-                        <td style="background-color:
+                        <td style="min-width:150px; background-color:
                         {% ifchanged agent_transport.booking_no %}
-                            {% cycle "PaleGreen" "SandyBrown" "SkyBlue" as rowcolors %}
+                            {% cycle "#9977b4" "#dd86b9" "#f497a9" "#f9b489" "#fdcd79" "#fff68f" "#b6d884" "#81cbb5" "#6acade" "#72abdd" as rowcolors %}
                         {% else %}
                             {{ rowcolors }}
                         {% endifchanged %}">
