@@ -85,6 +85,8 @@
             <th>เลขที่ใบงาน</th>
             <th>ตัดหาง</th>
             <th>RETURN</th>
+            <th class="px-5">VESSEL</th>
+            <th class="px-5">PORT</th>
 
         </thead> 
         <tbody> 
@@ -99,7 +101,7 @@
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
             {% elif booking.closing_date < today.date and not booking.return_tr %}
-                <tr class="bg-danger">
+                <tr style="background: #D24D57;" >
             {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
                 <tr class="alert-danger">
             {% elif booking.date <= today.date and not booking.return_tr %}
@@ -170,7 +172,9 @@
                         <input type="date" id="return_date{{ booking.pk }}" name="return_date" class="form-control" value="{{ booking.return_date | date:'Y-m-d' }}" readonly>
                     </td>
                     {% endif %}
-                        
+                    
+                    <td><input name="vessel" class="form-control" value="{{ booking.vessel }}" maxlength="50" autocomplete=off></td>
+                    <td><input name="port" class="form-control" value="{{ booking.port }}" maxlength="50" autocomplete=off></td>
 
 
                 </tr>

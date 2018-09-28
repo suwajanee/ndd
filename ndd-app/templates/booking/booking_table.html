@@ -16,7 +16,7 @@
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
     <!-- <div class="position-sticky" style="top:0px; bottom:0;"> -->
-    <div id="filter-date" class="container col-12" style="height: auto;">
+    <div id="filter-date" class="container col-md-12" style="height: auto;">
         <div class="row">
 
             <div class="col">
@@ -47,7 +47,7 @@
             </div>
 
             <div class="col text-center">
-                <select name="action" class="custom-select col-3 mr-1">
+                <select name="action" class="custom-select col-md-3 mr-1">
                     <option value=""> -------- </option>
                     <option value="time"> ลงเวลา </option>
                     <option value="delete"> ลบ </option>
@@ -74,9 +74,9 @@
     {% if bookings %}
 
         <div id='table-cont' class="table-cont table-responsive"> 
-        <table class="table-hover" id="accordion">
+        <table class="table table-hover" >
             <thead class="text-nowrap bg-lightgray"> 
-                <th><input type="checkbox" id="checkAll"></th>
+                <th class="align-middle"><input type="checkbox" id="checkAll"></th>
                 <th>PRINT</th>
                 <th>TIME</th>
                 <th>DATE</th>
@@ -105,36 +105,35 @@
                 <th>PICK UP</th>
                 <th>FACTORY</th>
                 <th>RETURN</th>
+                <th>VESSEL</th>
+                <th>PORT</th>
             </thead> 
             <tbody> 
                 {% load time_color %}
                 {% for booking in bookings %}
-                
+
                     {% if booking.cancel == '1' %}
-                        <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+                        <tr class="bg-secondary">
                     {% elif booking.closing_date < today.date and not booking.return_tr %}
-                        <tr class="bg-danger collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+                        <tr style="background: #D24D57;">
                     {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
-                        <tr class="alert-danger collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+                        <tr class="alert-danger">
                     {% elif booking.date <= today.date and not booking.return_tr %}
-                        <tr class="alert-warning collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+                        <tr class="alert-warning">
                     {% else %}
-                        <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ booking.pk }}">
+                        <tr>
                     {% endif %}
-                            <td class="p-0 no-collapsable toggle-color">
+                            <td class="p-0 no-collapsable toggle-color align-middle">
                                 <input type="checkbox" class="check" name="pk" value="{{ booking.pk }}">
                                 <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
                             </td>
-                            <!-- <td class="p-0 toggle-icon w-1">
-                                <i class="fa"></i>
-                            </td> -->
                             
-                            <td class="p-0">
-                                <a class="btn btn-link d-block" id="dropdownMenuPrint" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <!-- <a class="btn btn-link d-block" data-toggle="modal" data-target="#modalPrint{{ booking.pk }}"> -->
+                            <td class="p-0 align-middle">
+                                <!-- <a class="btn btn-link d-block" id="dropdownMenuPrint" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                                <a class="btn btn-link" data-toggle="modal" data-target="#modalPrint{{ booking.pk }}">
                                     <i class="fa fa-print font-weight-bold"></i>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuPrint">
+                                <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuPrint">
                                     <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='forward' %}">Forward</a>
@@ -144,16 +143,16 @@
                                     <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_fac_return' %}">NDD-Factory-Return</a>
                                     <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_fac_ndd' %}">NDD-Factory-NDD</a>
                                     <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_return' %}">NDD-Return</a>
-                                </div>
+                                </div> -->
                             </td>
 
 
                             <td class="text-nowrap {{ booking.time | time_color }}">{{ booking.time }}</td>
                             
-                            <td class="text-nowrap px-3">{{ booking.date | date:'d/m/y' }}</td>
-                            <td class="no-collapsable text-center px-1"><div class="long-text">{{ booking.principal }}</div></td>
+                            <td class="text-nowrap px-3">{{ booking.date | date:'d M y' }}</td>
+                            <td class="text-center px-1"><div class="long-text">{{ booking.principal }}</div></td>
                             <td style="min-width:250px;">{{ booking.shipper }}</td>
-                            <td class="no-collapsable text-center px-1"><div class="long-text">{{ booking.agent }}</div></td>
+                            <td class="text-center px-1"><div class="long-text">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
                             {% if booking.cancel == '1' %}
                                 <td class="bg-secondary text-center" style="min-width:150px;">
@@ -193,165 +192,136 @@
                             
                             {% if booking.nextday == '1' and booking.cancel != '1' %}
                                 <td class="text-nowrap bg-info text-white px-3">
-                                    {{ booking.pickup_date | date:'d/m/y' }}
+                                    {{ booking.pickup_date | date:'d M y' }}
                                 </td>
                                 <td class="text-nowrap bg-info text-white px-3">
-                                    {{ booking.factory_date | date:'d/m/y' }}
+                                    {{ booking.factory_date | date:'d M y' }}
                                 </td>
                                 <td class="text-nowrap bg-info text-white px-3">
-                                    {{ booking.return_date | date:'d/m/y' }}
+                                    {{ booking.return_date | date:'d M y' }}
                                 </td>
                             {% else %}
                                 <td class="text-nowrap px-3">
-                                    {{ booking.pickup_date | date:'d/m/y' }}
+                                    {{ booking.pickup_date | date:'d M y' }}
                                 </td>
                                 <td class="text-nowrap px-3">
-                                    {{ booking.factory_date | date:'d/m/y' }}
+                                    {{ booking.factory_date | date:'d M y' }}
                                 </td>
                                 <td class="text-nowrap px-3">
-                                    {{ booking.return_date | date:'d/m/y' }}
+                                    {{ booking.return_date | date:'d M y' }}
                                 </td>
                             {% endif %}
+                            <td class="no-collapsable text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
+                            <td class="no-collapsable text-center px-2"><div class="long-text-80">{{ booking.port }}</div></td>
                         </tr>
-                        <!-- <tr id="accordion{{ booking.pk }}" class="collapse bg-light"> -->
-                        <tr class="bg-light p-0">
-                            <td colspan="26" class="hiddenRow">
-                                <!-- <div id="accordion{{ booking.pk }}" class="collapse"  data-parent="#accordion"> -->
-                                <div id="accordion{{ booking.pk }}" class="collapse">
-                                    <div class="class-collapse">
-                                    <div class="float-left ml-sm-2 mt-2">
-                                        <button class="btn btn-danger delete-booking" href="#"><i class="fa fa-trash"></i>&nbsp;Delete</button>
-                                        <form method="GET" action="{% url 'booking-delete' pk=booking.pk %}" style="display:none;">
-                                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
-                                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
-                                        </form>
-                                    </div>
-                                    <div class="container w-25 pt-2">
-                                        <form method="POST" action="{% url 'booking-update' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="pk" value="{{ booking.pk }}">
-                                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
-                                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
-                                            <table class="w-100 mb-2" style="border-collapse: separate; border:none;">
-                                                <tr class="bg-white">
-                                                    <td class="w-20 bg-lightgray">VESSEL</td>
-                                                    <td><input class="form-control" name="vessel" value="{{ booking.vessel }}" maxlength="50"></td>
-                                                </tr>
-                                                <tr class="bg-white">
-                                                    <td class="w-20 bg-lightgray">PORT</td>
-                                                    <td><input class="form-control" name="port" value="{{ booking.port }}" maxlength="50"></td>
-                                                </tr>
-                                            </table>
-                                        
-                                            <fieldset>
-                                                <legend>ADDRESS</legend>
-                                                <table class="container table-borderless" style="border-collapse: separate; border:none;">
-                                                    <tr class="bg-light">
-                                                        <td class="w-1">
-                                                            {% if booking.address == 'shipper' %}
-                                                                <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="shipper" checked>
-                                                            {% else %}
-                                                                <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="shipper">
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="text-left">
-                                                            Shipper
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="bg-light">
-                                                        <td class="w-1">
-                                                        {% if booking.address == 'other' %}
-                                                            <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="other" checked>
-                                                        </td>
-                                                        <td class="text-left">
-                                                            Other
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="bg-light">
-                                                        <td class="w-1"></td>
-                                                        <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="200">{{ booking.address_other }}</textarea>
-                                                        {% else %}
-                                                            <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="other">
-                                                        </td>
-                                                        <td class="text-left">
-                                                            Other
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="bg-light">
-                                                        <td class="w-1"></td>
-                                                        <td>
-                                                            <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="200" disabled>{{ booking.address_other }}</textarea>
-                                                        {% endif %}
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="bg-light">
-                                                        <td class="w-1">
-                                                            {% if booking.address == 'none' %}
-                                                                <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="none" checked>
-                                                            {% else %}
-                                                                <input type="radio" name="address{{ booking.pk }}" onchange="updateradio({{ booking.pk }});" value="none">
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="text-left">
-                                                            None
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </fieldset>
-                                            <div class="float-left">
-                                                <input type="hidden" name="cancel" value=0 />
-                                                {% if booking.cancel == '1' %}
-                                                    <input type="checkbox" id="cancel" name="cancel" value=1 checked>
-                                                {% else %}
-                                                    <input type="checkbox" id="cancel" name="cancel" value=1>
-                                                {% endif %}
-                                                <label class="cancel-label" for="cancel">&nbsp;CANCEL</label>
+                                
+                        <div class="modal fade" id="modalPrint{{ booking.pk }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form method="POST" action="{% url 'shipper-edit' %}">
+                                        {% csrf_token %}
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold">Print</h4>
+                                                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <div class="float-right mb-4">
-                                                <button type="submit" class="btn btn-primary">SAVE</button>
+                                            <div class="modal-body mx-3 ">
+                                                <div class="row">
+                                                    <div class="col-md-3">เต็มเที่ยว</div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="full" name="template" value="">
+                                                        <label class="custom-control-label" for="full">Full</label>
+                                                    </div>
+                                                    <div class="col"></div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        ตัดหาง
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="forward" name="template" value="">
+                                                        <label class="custom-control-label" for="forward">Forward</label>
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="backward" name="template" value="">
+                                                        <label class="custom-control-label" for="backward">Backward</label>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        ซอยตู้
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="yard-ndd" name="template" value="">
+                                                        <label class="custom-control-label" for="yard-ndd">Yard - NDD</label>
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="ndd-fac-return" name="template" value="">
+                                                        <label class="custom-control-label" for="ndd-fac-return">NDD - Fac - Return</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3"></div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="ndd-fac-ndd" name="template" value="">
+                                                        <label class="custom-control-label" for="ndd-fac-ndd">NDD - Fac - NDD</label>
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="ndd-return" name="template" value="">
+                                                        <label class="custom-control-label" for="ndd-return">NDD - Return</label>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-width: 3px;">
+                                                <div class="row mb-2">
+                                                    <div class="col">
+                                                        ADDRESS
+                                                    </div>
+                                                </div>
+                                                <div class="container col-md-11">
+                                                <div class="row">
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" id="address-shipper" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="shipper" checked>
+                                                        <label class="custom-control-label" for="address-shipper">Shipper</label>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" id="address-other" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="other">
+                                                        <label class="custom-control-label" for="address-other">Other</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="w-100 my-2">
+                                                        <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled>{{ booking.address_other }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" id="address-none" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="none">
+                                                        <label class="custom-control-label" for="address-none">None</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                                    
+                                            </div>
+                                            
+                                            <div class="modal-footer d-flex justify-content-center">
+                                            
+                                                <button class="btn btn-primary">Print</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- <div class="modal fade no-collapsable" id="modalPrint{{ booking.pk }}" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <form method="POST" action="{% url 'shipper-edit' %}">
-                                    {% csrf_token %}
-                                    <div class="modal-content">
-                                        <div class="modal-header text-center">
-                                            <h4 class="modal-title w-100 font-weight-bold">Print</h4>
-                                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body mx-3">
-                                            <input type="radio" name="template" value="{{ customer.pk }}"> Full
-                                            <input type="radio" name="template" value="{{ shipper.pk }}"> Forward
-        
-                                            <div class="text-secondary">NAME :</div>
-                                            <input name="shipper_edit" class="form-control shipper_edit{{ shipper.pk }}" value="{{ shipper.name }}" maxlength="150" autocomplete=off required>
-        
-                                            <div class="text-secondary mt-3">ADDRESS :</div>
-                                            <textarea name="address_edit" rows=4 class="form-control" maxlength="400" autocomplete=off>{{ shipper.address }}</textarea>
-                                        </div>
-                                        <div class="modal-footer d-flex justify-content-center">
-                                        
-                                            <button class="btn btn-primary btn-edit-shipper{{ shipper.pk }}">Save</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div> -->
+                            </div>  
                     {% endfor %}
             </tbody> 
         </table>
     </div>
     </div>
+   
 <!-- </div> -->
 {% else %}
     <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>

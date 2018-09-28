@@ -18,8 +18,6 @@ class BookingUpdateView(TemplateView):
     def update_data_booking(request):
         if request.method == 'POST':
             pk = request.POST['pk']
-            vessel = request.POST['vessel']
-            port = request.POST['port']
             
             address = request.POST['address'+pk]
             if address == 'other':
@@ -31,8 +29,6 @@ class BookingUpdateView(TemplateView):
             date_filter = request.POST['date_filter']
 
             booking = Booking.objects.get(pk=pk)
-            booking.vessel = re.sub(' +', ' ', vessel.strip())
-            booking.port = re.sub(' +', ' ', port.strip())
             booking.address = address
             if address == 'other':
                 booking.address_other = address_other

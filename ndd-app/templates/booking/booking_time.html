@@ -86,7 +86,7 @@
             {% if booking.cancel == '1' %}
                 <tr class="bg-secondary">
             {% elif booking.closing_date < today.date and not booking.return_tr %}
-                <tr class="bg-danger">
+                <tr style="background: #D24D57;">
             {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
                 <tr class="alert-danger">
             {% elif booking.date <= today.date and not booking.return_tr %}

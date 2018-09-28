@@ -33,7 +33,7 @@ th {
 
 td {
     padding: 5px;
-    min-width: 60px;
+    min-width: 50px;
     /* background: white; */
     /* text-align: center; */
 }
@@ -54,8 +54,8 @@ tbody {
     padding: 0 !important;
 }
 
-.dropdown-menu a.dropdown-item {
-    font-size: 12px;
+.modal-body, table.address td {
+    font-size: 14px;
 }
 
 

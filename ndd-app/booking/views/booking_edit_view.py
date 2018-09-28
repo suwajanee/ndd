@@ -69,6 +69,8 @@ class BookingEditTableView(TemplateView):
             remark = request.POST.getlist('remark')
             nextday = request.POST.getlist('nextday')
             return_date = request.POST.getlist('return_date')
+            vessel = request.POST.getlist('vessel')
+            port = request.POST.getlist('port')
 
             filter_by = request.POST['filter_by']
             date_filter = request.POST['date_filter']
@@ -107,6 +109,8 @@ class BookingEditTableView(TemplateView):
                     booking.pickup_date = date[i]
                     booking.factory_date = date[i]
                     booking.return_date = date[i]
+                booking.vessel = re.sub(' +', ' ', vessel[i].strip())
+                booking.port = re.sub(' +', ' ', port[i].strip())
                 booking.save()
 
             messages.success(request, "Saving Booking.")
