@@ -144,25 +144,6 @@
                     {{ form.remark }} 
                 </div>
 
-                <fieldset>
-                    <legend>ADDRESS</legend>
-                    <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_1" name="address" onchange="updateradio('');" value="shipper" checked>
-                        <label class="custom-control-label" for="id_address_1">Shipper</label>
-                    </div>
-
-                    <div class="custom-control custom-radio mb-3">
-                        <input type="radio" class="custom-control-input" id="id_address_2" name="address" onchange="updateradio('');" value="other">
-                        <label class="custom-control-label" for="id_address_2">Other</label><br />
-                        <textarea class="form-control" rows="3" id="id_address_other" name="address_other" maxlength="400" disabled></textarea>
-                    </div>
-
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="id_address_3" name="address" onchange="updateradio('');" value="none">
-                        <label class="custom-control-label" for="id_address_3">None</label>
-                    </div>
-                </fieldset>
-
                 <div class="text-right pb-4">
                     <button class="btn btn-light btn-lg mr-sm-1" onclick="window.location='{% url 'agent-transport-table' %}'">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-lg" formaction="{% url 'agent-transport-save' %}">SUBMIT</button>

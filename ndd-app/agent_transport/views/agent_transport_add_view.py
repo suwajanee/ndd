@@ -71,17 +71,12 @@ class AgentTransportAddView(TemplateView):
                 return_to = request.POST['return_to']
                 ref = request.POST['ref']
                 remark = request.POST['remark']
-                address = request.POST['address']
-
-                if address == 'other':
-                    address_other = request.POST['address_other']
 
                 container = zip(size_list, quantity_list, date_list)
                 for size, quantity, date in container:
-                    add_agent_transport.work_id_after_add(date, shipper, work_type, int(quantity))
 
                     for i in range(int(quantity)):
-                        work_id, work_number = add_agent_transport.run_work_id(date, shipper, work_type)
+                        work_id, work_number = add_agent_transport.run_work_id(date, work_type)
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
@@ -98,10 +93,7 @@ class AgentTransportAddView(TemplateView):
                             'work_number': work_number,
                             'pickup_date': date,
                             'return_date': date,
-                            'address': address
                         }
-                        if address == 'other':
-                            data['address_other'] = address_other
 
                         agent_transport = AgentTransport(**data)
                         agent_transport.save()
@@ -111,36 +103,24 @@ class AgentTransportAddView(TemplateView):
             messages.error(request, "Form not validate.")
         return redirect('agent-transport-add')
 
-    def run_work_id(self, date, shipper, work_type):
+    def run_work_id(self, date, work_type):
         work = AgentTransport.objects.filter(date=date, work_type=work_type).aggregate(Max('work_number'))
         if work['work_number__max'] == None:
             work_number = 1
         else:
-            work_shipper = AgentTransport.objects.filter(date=date, shipper=shipper, work_type=work_type).aggregate(Max('work_number'))
-            if work_shipper['work_number__max'] == None:
-                work_number = work['work_number__max'] + 1
-            else:
-                work_number = work_shipper['work_number__max'] + 1
+            work_number = work['work_number__max'] + 1
 
         work = str("{:03d}".format(work_number))
         date = datetime.strptime(date, "%Y-%m-%d")
         work_id = work_type.upper()+date.strftime('%d%m%y') + work
+
+        while True:
+            exist_id = AgentTransport.objects.filter(work_id=work_id)
+            if exist_id:
+                work_number = work_number + 1
+                work = str("{:03d}".format(work_number))
+                work_id = work_type.upper()+date.strftime('%d%m%y') + work
+            else:
+                break
+
         return work_id, work_number
-
-    def work_id_after_add(self, date, shipper, work_type, quantity):
-        max_work = AgentTransport.objects.filter(date=date, shipper=shipper, work_type=work_type).aggregate(Max('work_number'))
-        if max_work['work_number__max']:
-            work_gt = AgentTransport.objects.filter(date=date, work_type=work_type, work_number__gt=max_work['work_number__max'])
-            for work in work_gt:               
-                new_work_number = work.work_number + quantity
-                work_str = str("{:03d}".format(new_work_number))
-                date = datetime.strptime(date, "%Y-%m-%d")
-                work_id = work_type.upper() + date.strftime('%d%m%y')+work_str
-                agent_transport = AgentTransport.objects.get(pk=work.pk)
-                agent_transport.work_id = work_id
-                agent_transport.work_number = new_work_number
-                agent_transport.save()
-        return
-
-            
-

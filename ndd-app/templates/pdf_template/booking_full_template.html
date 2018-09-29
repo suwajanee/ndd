@@ -12,27 +12,27 @@
   <style type='text/css'>
     /* Size and frame */
     @page {
-      /* size: a4 portrait; */
-      size: 8.5in 11in;
+      size: a4 portrait;
+      /* size: 8.5in 11in; */
       margin: 10pt;
       @frame header_frame {           /* Static Frame */
         -pdf-frame-content: header_content;
-        left: 0.5in; width: 7.5in; top: 5pt; height: auto;
+        left: 0.5in; width: 7.3in; top: 5pt; height: auto;
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: left_content;
-        left: 0.5in; width: 3.75in; top: 90pt; height: auto;
+        left: 0.5in; width: 3.65in; top: 90pt; height: auto;
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: right_content;
-      left: 4.25in; width: 3.75in; top: 90pt; height: auto; 
+      left: 4.15in; width: 3.65in; top: 90pt; height: auto; 
       }
       @frame content_frame {          /* Content Frame */
       -pdf-frame-content: table_content;
-      left: 0.5in; width: 7.5in; top: 210pt; height: auto; 
+      left: 0.5in; width: 7.3in; top: 210pt; height: auto; 
       }
     }
-
+    
     @font-face {
       font-family: THSarabunNew; 
       src: url("{{ static_dir }}/fonts/thsarabunnew-webfont.ttf"); 
@@ -56,7 +56,7 @@
         <table>
             <tr class="big">
               <td>วันที่</td>
-              <td colspan=3 class="center text-blue">{{ booking.date | date:'d - m - Y' }}</td>
+              <td colspan=3 class="center text-blue">{{ booking.date | date:'d - M - y' }}</td>
             </tr>
             <tr class="small" >
               <td>DATE</td>
@@ -243,13 +243,13 @@
             </tr>
             <tr class="big">
               <td width=350px class="pl-5">วันปฏิบัติงาน</td>
-              <td width=350px class="center text-blue">{{ booking.pickup_date | date:'d-m-Y' }}</td>
+              <td width=350px class="center text-blue">{{ booking.pickup_date | date:'d-m-y' }}</td>
               <td width=250px class="text-center">ถึง</td>
-              <td width=350px class="center text-blue pr-5 border-r">{{ booking.factory_date | date:'d-m-Y' }}</td>
+              <td width=350px class="center text-blue pr-5 border-r">{{ booking.factory_date | date:'d-m-y' }}</td>
               <td width=350px class="pl-5">วันปฏิบัติงาน</td>
-              <td width=350px class="center text-blue">{{ booking.factory_date | date:'d-m-Y' }}</td>
+              <td width=350px class="center text-blue">{{ booking.factory_date | date:'d-m-y' }}</td>
               <td width=250px class="text-center">ถึง</td>
-              <td width=350px class="center text-blue pr-5">{{ booking.return_date | date:'d-m-Y' }}</td>
+              <td width=350px class="center text-blue pr-5">{{ booking.return_date | date:'d-m-y' }}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">Date of Work</td>
@@ -297,9 +297,9 @@
             </tr>
             <tr class="big">
               <td colspan=2 class="center pl-5">เวลาปิดรับตู้</td>
-              <td colspan=2 class="center text-red pr-5 border-r">{{ booking.closing_date | date:'d-m-Y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
+              <td colspan=2 class="center text-red pr-5 border-r">{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
               <td colspan=2 class="center pl-5">เวลาปิดรับตู้</td>
-              <td colspan=2 class="center text-red pr-5">{{ booking.closing_date | date:'d-m-Y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
+              <td colspan=2 class="center text-red pr-5">{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
             </tr>
             <tr class="small">
               <td colspan=2 class="pl-5"></td>
@@ -340,7 +340,7 @@
               <td colspan=4>Verified to recive container in good condition and seal in tact</td>
             </tr>
             <tr>
-              <td colspan=8 style="height:20px;"></td>
+              <td colspan=8 style="height:40px;"></td>
             </tr>
             <tr class="text-center text-footer">
               <td colspan=8>ลายเซ็นผู้ว่าจ้างหรือตัวแทน</td>

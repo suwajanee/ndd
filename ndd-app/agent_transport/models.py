@@ -33,19 +33,12 @@ class AgentTransport(models.Model):
     pickup_date = models.DateField(blank=True, null=True, default='')
     return_date = models.DateField(blank=True, null=True, default='')
 
-    ADDRESS_CHOICES = (
-        ('shipper', 'Shipper'),
-        ('other', 'Other'),
-        ('none', 'None'),
+    STATUS_CHOICES = (
+        ('2', 'Finished'),
+        ('1', '-'),
+        ('0', 'Cancel'),
     )
-    address = models.CharField(max_length=10, choices=ADDRESS_CHOICES, default='shipper')
-    address_other = models.CharField(max_length=500, blank=True, default='')
-
-    CANCEL_CHOICES = (
-        ('1', 'Cancel'),
-        ('0', '-'),
-    )
-    cancel = models.CharField(max_length=1, choices=CANCEL_CHOICES, default=0)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=1)
 
     def __str__(self) :
         return self.work_id

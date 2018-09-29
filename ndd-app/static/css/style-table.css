@@ -33,7 +33,7 @@ th {
 
 td {
     padding: 5px;
-    min-width: 60px;
+    min-width: 50px;
     /* background: white; */
     /* text-align: center; */
 }
@@ -54,16 +54,34 @@ tbody {
     padding: 0 !important;
 }
 
+.modal-body, table.address td {
+    font-size: 14px;
+}
+
 
 /* Hide too long text in Remark field */
 .long-text {
-    width: 80px;
+    width: 60px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;  
 }
 .long-text:active {
+    overflow: visible;
+    width: auto;
+    /* text-overflow: inherit; */
+    white-space: nowrap;
+}
+
+.long-text-80 {
+    width: 80px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text-80:active {
     overflow: visible;
     width: auto;
     /* text-overflow: inherit; */
