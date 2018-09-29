@@ -38,7 +38,7 @@ class AgentTransport(models.Model):
         ('1', '-'),
         ('0', 'Cancel'),
     )
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=1)
 
     def __str__(self) :
         return self.work_id
