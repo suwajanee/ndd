@@ -14,7 +14,7 @@ class Booking(models.Model):
     booking_no = models.CharField(max_length=50, blank=True)
 
     NDD_CHOICES = (
-        ('1', 'Yes'),
+        ('1', 'NDD'),
         ('0', '-'),
     )
     start = models.CharField(max_length=20, blank=True, default='')
