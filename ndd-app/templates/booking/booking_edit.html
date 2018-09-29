@@ -69,11 +69,14 @@
             <th>SIZE</th>
             <th class="px-4">BOOKING</th>
 
+            <th>START</th>
             <th>TR</th>
             <th>FM</th>
+            <th>NDD</th>
             <th>TR</th>
             <th>FACTORY</th>
             <th>TR</th>
+            <th>NDD</th>
             <th>TR</th>
             <th>TO</th>
 
@@ -137,12 +140,25 @@
                     {% endif %}
                             <input name="booking_no" class="form-control" value="{{ booking.booking_no }}" maxlength="50" autocomplete=off>
                         </td>
-
+                    
+                    <td><input name="start" class="form-control" value="{{ booking.start }}" maxlength="20" autocomplete=off></td>
                     <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" maxlength="10" autocomplete=off></td>
                     <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" maxlength="20" autocomplete=off></td>
+                    <td>
+                        <select name="yard_ndd" class="custom-select short py-1 px-2">
+                            <option value="1" {% if booking.yard_ndd == '1' %}selected{% endif %}> NDD </option>
+                            <option value="0" {% if booking.yard_ndd == '0' %}selected{% endif %}> - </option>
+                        </select>
+                    </td>
                     <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" maxlength="10" autocomplete=off></td>
                     <td><input name="factory" class="form-control" value="{{ booking.factory }}" maxlength="20" autocomplete=off></td>
                     <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" maxlength="10" autocomplete=off></td>
+                    <td>
+                        <select name="fac_ndd" class="custom-select short py-1 px-2">
+                            <option value="1" {% if booking.fac_ndd == '1' %}selected{% endif %}> NDD </option>
+                            <option value="0" {% if booking.fac_ndd == '0' %}selected{% endif %}> - </option>
+                        </select>
+                    </td>
                     <td><input name="return_tr" class="form-control" value="{{ booking.return_tr }}" maxlength="10" autocomplete=off></td>
                     <td><input name="return_to" class="form-control" value="{{ booking.return_to }}" maxlength="20" autocomplete=off></td>
 
@@ -161,7 +177,7 @@
                     
                     {% if booking.nextday == '1' and booking.status != '0' %}
                     <td class="bg-info">
-                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday py-1 px-2" onchange="editNextDay({{ booking.pk }});">
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select short py-1 px-2" onchange="editNextDay({{ booking.pk }});">
                             <option value="0"> - </option>
                             <option value="1" selected> Yes </option>
                         </select>
@@ -171,7 +187,7 @@
                     </td>
                     {% else %}
                     <td>
-                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday py-1 px-2" onchange="editNextDay({{ booking.pk }});">
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select short py-1 px-2" onchange="editNextDay({{ booking.pk }});">
                             <option value="0" {% if booking.nextday == '0' %}selected{% endif %}> - </option>
                             <option value="1" {% if booking.nextday == '1' %}selected{% endif %}> Yes </option>
                         </select>

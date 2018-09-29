@@ -5,12 +5,12 @@ input:not([type]), input[type="text"], td input[type="time"] {
 }
 
 td input[type="date"] {
-    max-width: 125px;
+    max-width: 115px;
     padding: 2px 4px;
     font-size: 11px;
 }
 
-select.nextday, select.status {
+select.short {
     min-width: 60px;
     /* padding: 2px 4px; */
     height: 25px;

@@ -86,11 +86,14 @@
                     <th>SIZE</th>
                     <th>BOOKING</th>
 
+                    <th>START</th>
                     <th>TR</th>
                     <th>FM</th>
+                    <th>NDD</th>
                     <th>TR</th>
                     <th>FACTORY</th>
                     <th>TR</th>
+                    <th>NDD</th>
                     <th>TR</th>
                     <th>TO</th>
 
@@ -158,11 +161,14 @@
                                     {{ booking.booking_no }}
                                 </td>
 
+                            <td class="text-nowrap">{{ booking.start }}</td>
                             <td class="text-nowrap">{{ booking.pickup_tr }}</td>
                             <td class="text-nowrap">{{ booking.pickup_from }}</td>
+                            <td class="text-nowrap">{% if booking.yard_ndd == '1' %}NDD{% endif %}</td>
                             <td class="text-nowrap">{{ booking.forward_tr }}</td>
                             <td class="text-nowrap">{{ booking.factory }}</td>
                             <td class="text-nowrap">{{ booking.backward_tr }}</td>
+                            <td class="text-nowrap">{% if booking.fac_ndd == '1' %}NDD{% endif %}</td>
                             <td class="text-nowrap">{{ booking.return_tr }}</td>
                             <td class="text-nowrap">{{ booking.return_to }}</td>
 
