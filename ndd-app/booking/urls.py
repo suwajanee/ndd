@@ -7,12 +7,10 @@ from .views.booking_edit_view import BookingEditTableView
 from .views.booking_print_view import BookingPrintView
 from .views.booking_table_view import BookingTableView
 from .views.booking_time_view import BookingTimeView
-from .views.booking_update_view import BookingUpdateView
 
 
 urlpatterns = [
     url(r'^$', BookingTableView.render_table_booking_page, name='booking-table'),
-    url(r'^update/$', BookingUpdateView.update_data_booking, name='booking-update'), #update in table page
 
     url(r'^add/$', BookingAddView.render_add_booking_page, name='booking-add'),
     url(r'^save/$', BookingAddView.save_data_booking, name='booking-save'), 

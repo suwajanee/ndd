@@ -32,16 +32,16 @@ class BookingEditTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(return_tr='')).order_by('date', 'work_id')
+                context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
             else:
-                if context['filter_by']  == "month":
+                if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
-                    context['bookings'] = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
+                    context['bookings'] = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & ~Q(status=2))).order_by('date', 'shipper', 'work_id')
                 else:
-                    context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & (Q(return_tr='') & Q(cancel=0)))).order_by('date', 'work_id')
+                    context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & ~Q(status=2))).order_by('date', 'shipper', 'work_id')
 
         else:
-           context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(return_tr='')).order_by('date', 'work_id')
+            context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
 
         return render(request, template_name, context)        
 
@@ -49,6 +49,7 @@ class BookingEditTableView(TemplateView):
     def save_edit_data_booking(request):
         if request.method == 'POST':
             pk = request.POST.getlist('pk')
+            status = request.POST.getlist('status')
             time = request.POST.getlist('time')
             date = request.POST.getlist('date')
             agent = request.POST.getlist('agent')
@@ -84,6 +85,7 @@ class BookingEditTableView(TemplateView):
                     return_date[i] = None
 
                 booking = Booking.objects.get(pk=pk[i])
+                booking.status = status[i]
                 booking.time = time[i]
                 booking.date = date[i]
                 booking.agent = re.sub(' +', ' ', agent[i].strip())

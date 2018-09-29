@@ -77,19 +77,14 @@ class BookingAddView(TemplateView):
                 closing_time = request.POST['closing_time']
                 ref = request.POST['ref']
                 remark = request.POST['remark']
-                address = request.POST['address']
 
                 nextday = request.POST['nextday']
 
                 if not closing_date:
                     closing_date = None
-                if address == 'other':
-                    address_other = request.POST['address_other']
-
+                
                 container = zip(time_list, size_list, quantity_list, date_list)
                 for time, size, quantity, date in container:
-                    add_booking.work_id_after_add(date, shipper, int(quantity))
-
                     if nextday == '1':
                         return_date = request.POST['return_date']
                         if not return_date:
@@ -98,7 +93,7 @@ class BookingAddView(TemplateView):
                         return_date = date
                     
                     for i in range(int(quantity)):
-                        work_id, work_number = add_booking.run_work_id(date, shipper)
+                        work_id, work_number = add_booking.run_work_id(date)
                         data = {
                             'principal': Principal.objects.get(pk=principal),
                             'shipper': Shipper.objects.get(pk=shipper),
@@ -122,10 +117,7 @@ class BookingAddView(TemplateView):
                             'pickup_date': date,
                             'factory_date': date,
                             'return_date': return_date,
-                            'address': address
                         }
-                        if address == 'other':
-                            data['address_other'] = address_other
 
                         booking = Booking(**data)
                         booking.save()
@@ -135,37 +127,28 @@ class BookingAddView(TemplateView):
             messages.error(request, "Form not validate.")
         return redirect('booking-add')
 
-    def run_work_id(self, date, shipper):
+    def run_work_id(self, date):
         work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
         if work['work_number__max'] == None:
             work_number = 1
         else:
-            work_shipper = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
-            if work_shipper['work_number__max'] == None:
-                work_number = work['work_number__max'] + 1
-            else:
-                work_number = work_shipper['work_number__max'] + 1
+            work_number = work['work_number__max'] + 1
 
         work = str("{:03d}".format(work_number))
         date = datetime.strptime(date, "%Y-%m-%d")
         work_id = date.strftime('%d%m%y') + work
+
+        while True:
+            exist_id = Booking.objects.filter(work_id=work_id)
+            if exist_id:
+                work_number = work_number + 1
+                work = str("{:03d}".format(work_number))
+                work_id = date.strftime('%d%m%y') + work
+            else:
+                break
+
         return work_id, work_number
 
-    def work_id_after_add(self, date, shipper, quantity):
-        max_work = Booking.objects.filter(date=date, shipper=shipper).aggregate(Max('work_number'))
-        if max_work['work_number__max']:
-            work_gt = Booking.objects.filter(date=date, work_number__gt=max_work['work_number__max'])
-            for work in work_gt:               
-                new_work_number = work.work_number + quantity
-                work_str = str("{:03d}".format(new_work_number))
-                date = datetime.strptime(date, "%Y-%m-%d")
-                work_id = date.strftime('%d%m%y') + work_str
-
-                booking = Booking.objects.get(pk=work.pk)
-                booking.work_id = work_id
-                booking.work_number = new_work_number
-                booking.save()
-        return
 
             
 

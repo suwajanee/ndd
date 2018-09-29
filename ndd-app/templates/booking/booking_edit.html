@@ -58,8 +58,9 @@
     </div>
         {% if bookings %}
             <div id='table-cont' class="table-cont table-responsive"> 
-        <table>
+        <table class="table-hover">
             <thead class="text-nowrap bg-lightgray">
+            <th>STATUS</th>
             <th>TIME</th>
             <th>DATE</th>
             <th>PRINCIPAL</th>
@@ -94,30 +95,37 @@
                 {% csrf_token %}
             <input type="hidden" name="date_filter" value="{{ date_filter }}">
             <input type="hidden" name="filter_by" value="{{ filter_by }}">
+            {% load time_color %}
             {% for booking in bookings %}
 
             <input type="hidden" name="pk" value="{{ booking.pk }}">
             
-            {% if booking.cancel == '1' %}
+            {% if booking.status == '0' %}
                 <tr class="bg-secondary">
-            {% elif booking.closing_date < today.date and not booking.return_tr %}
+            {% elif booking.closing_date < today.date and booking.status == '1' %}
                 <tr style="background: #D24D57;" >
-            {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
+            {% elif booking.closing_date <= tmr.date and booking.status == '1' %}
                 <tr class="alert-danger">
-            {% elif booking.date <= today.date and not booking.return_tr %}
+            {% elif booking.date <= today.date and booking.status == '1' %}
                 <tr class="alert-warning">
             {% else %}
                 <tr>
             {% endif %}
-                    
-                    <td><input name="time" class="form-control" value="{{ booking.time }}" maxlength="10" autocomplete=off></td>
+                    <td>
+                        <select name="status" class="custom-select status py-1 px-2">
+                            <option value="1" {% if booking.status == '1' %}selected{% endif %}> - </option>
+                            <option value="2" {% if booking.status == '2' %}selected{% endif %}> Finished </option>
+                            <option value="0" {% if booking.status == '0' %}selected{% endif %}> Cancel </option>
+                        </select>
+                    </td>
+                    <td class="{% if booking.status != '0' %}{{ booking.time | time_color }}{% endif %}"><input name="time" class="form-control" value="{{ booking.time }}" maxlength="10" autocomplete=off></td>
                     
                     <td><input type="date" id="date{{ booking.pk }}" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off onchange="changeDate({{ booking.pk }});" required></td>
                     <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
                     <td style="min-width:250px;">{{ booking.shipper }}</td>
                     <td><input name="agent" class="form-control" value="{{ booking.agent }}" maxlength="50" autocomplete=off></td>
                     <td><input name="size" class="form-control" value="{{ booking.size }}" maxlength="10" autocomplete=off></td>
-                    {% if booking.cancel == '1' %}
+                    {% if booking.status == '0' %}
                         <td class="bg-secondary" style="min-width:150px;">
                     {% else %}
                         <td style="min-width:150px; background-color:
@@ -151,9 +159,9 @@
 
      
                     
-                    {% if booking.nextday == '1' and booking.cancel != '1' %}
+                    {% if booking.nextday == '1' and booking.status != '0' %}
                     <td class="bg-info">
-                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday" onchange="editNextDay({{ booking.pk }});">
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday py-1 px-2" onchange="editNextDay({{ booking.pk }});">
                             <option value="0"> - </option>
                             <option value="1" selected> Yes </option>
                         </select>
@@ -163,9 +171,9 @@
                     </td>
                     {% else %}
                     <td>
-                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday" onchange="editNextDay({{ booking.pk }});">
-                            <option value="0"> - </option>
-                            <option value="1"> Yes </option>
+                        <select name="nextday" id="nextday{{ booking.pk }}" class="custom-select nextday py-1 px-2" onchange="editNextDay({{ booking.pk }});">
+                            <option value="0" {% if booking.nextday == '0' %}selected{% endif %}> - </option>
+                            <option value="1" {% if booking.nextday == '1' %}selected{% endif %}> Yes </option>
                         </select>
                     </td>
                     <td>

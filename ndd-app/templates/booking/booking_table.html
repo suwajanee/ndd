@@ -74,7 +74,7 @@
     {% if bookings %}
 
         <div id='table-cont' class="table-cont table-responsive"> 
-            <table class="table table-hover" >
+            <table class="table-hover" >
                 <thead class="text-nowrap bg-lightgray"> 
                     <th class="align-middle"><input type="checkbox" id="checkAll"></th>
                     <th>PRINT</th>
@@ -112,17 +112,17 @@
                     {% load time_color %}
                     {% for booking in bookings %}
 
-                        {% if booking.cancel == '1' %}
-                            <tr class="bg-secondary">
-                        {% elif booking.closing_date < today.date and not booking.return_tr %}
-                            <tr style="background: #D24D57;">
-                        {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
-                            <tr class="alert-danger">
-                        {% elif booking.date <= today.date and not booking.return_tr %}
-                            <tr class="alert-warning">
-                        {% else %}
-                            <tr>
-                        {% endif %}
+                    {% if booking.status == '0' %}
+                        <tr class="bg-secondary">
+                    {% elif booking.closing_date < today.date and booking.status == '1' %}
+                        <tr style="background: #D24D57;" >
+                    {% elif booking.closing_date <= tmr.date and booking.status == '1' %}
+                        <tr class="alert-danger">
+                    {% elif booking.date <= today.date and booking.status == '1' %}
+                        <tr class="alert-warning">
+                    {% else %}
+                        <tr>
+                    {% endif %}
                             <td class="p-0 no-collapsable toggle-color align-middle">
                                 <input type="checkbox" class="check" name="pk" value="{{ booking.pk }}">
                                 <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
@@ -136,14 +136,14 @@
                             </td>
 
 
-                            <td class="text-nowrap {{ booking.time | time_color }}">{{ booking.time }}</td>
+                            <td class="text-nowrap {% if booking.status != '0' %}{{ booking.time | time_color }}{% endif %}">{{ booking.time }}</td>
                             
                             <td class="text-nowrap px-3">{{ booking.date | date:'d M y' }}</td>
                             <td class="text-center px-1"><div class="long-text">{{ booking.principal }}</div></td>
                             <td style="min-width:250px;">{{ booking.shipper }}</td>
                             <td class="text-center px-1"><div class="long-text">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
-                            {% if booking.cancel == '1' %}
+                            {% if booking.status == '0' %}
                                 <td class="bg-secondary text-center" style="min-width:150px;">
                             {% else %}
                                 <!-- <td style="background-color: {{ booking.booking_color }}" class="no-collapsable text-left px-2"> -->
@@ -179,7 +179,7 @@
 
                             <td class="text-nowrap">{{ booking.work_id }}</td>
                             
-                            {% if booking.nextday == '1' and booking.cancel != '1' %}
+                            {% if booking.nextday == '1' and booking.status != '0' %}
                                 <td class="text-nowrap bg-info text-white px-3">
                                     {{ booking.pickup_date | date:'d M y' }}
                                 </td>

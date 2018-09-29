@@ -30,15 +30,15 @@ class AgentTransportEditTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(return_tr='')).order_by('date', 'work_id')
+                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
             else:
                 if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
-                    context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+                    context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ~Q(status=2)).order_by('date', 'shipper', 'work_id')
                 else:
-                    context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | (Q(return_tr='') & Q(cancel=0))).order_by('date', 'work_id')
+                    context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | ~Q(status=2)).order_by('date', 'shipper', 'work_id')
         else:
-            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(return_tr='')).order_by('date', 'work_id')
+            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
 
         return render(request, template_name, context)        
 
@@ -46,6 +46,7 @@ class AgentTransportEditTableView(TemplateView):
     def save_edit_data_agent_transport(request):
         if request.method == 'POST':
             pk = request.POST.getlist('pk')
+            status = request.POST.getlist('status')
             date = request.POST.getlist('date')
             agent = request.POST.getlist('agent')
             size = request.POST.getlist('size')
@@ -68,6 +69,7 @@ class AgentTransportEditTableView(TemplateView):
                     date[i] = None
 
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
+                agent_transport.status = status[i]
                 agent_transport.date = date[i]
                 agent_transport.agent = re.sub(' +', ' ', agent[i].strip())
                 agent_transport.size = re.sub(' +', ' ', size[i].strip())
