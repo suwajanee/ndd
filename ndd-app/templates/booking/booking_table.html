@@ -74,55 +74,55 @@
     {% if bookings %}
 
         <div id='table-cont' class="table-cont table-responsive"> 
-        <table class="table table-hover" >
-            <thead class="text-nowrap bg-lightgray"> 
-                <th class="align-middle"><input type="checkbox" id="checkAll"></th>
-                <th>PRINT</th>
-                <th>TIME</th>
-                <th>DATE</th>
-                <th>PRINCIPAL</th>
-                <th>SHIPPER</th>
-                <th>AGENT</th>
-                <th>SIZE</th>
-                <th>BOOKING</th>
+            <table class="table table-hover" >
+                <thead class="text-nowrap bg-lightgray"> 
+                    <th class="align-middle"><input type="checkbox" id="checkAll"></th>
+                    <th>PRINT</th>
+                    <th>TIME</th>
+                    <th>DATE</th>
+                    <th>PRINCIPAL</th>
+                    <th>SHIPPER</th>
+                    <th>AGENT</th>
+                    <th>SIZE</th>
+                    <th>BOOKING</th>
 
-                <th>TR</th>
-                <th>FM</th>
-                <th>TR</th>
-                <th>FACTORY</th>
-                <th>TR</th>
-                <th>TR</th>
-                <th>TO</th>
+                    <th>TR</th>
+                    <th>FM</th>
+                    <th>TR</th>
+                    <th>FACTORY</th>
+                    <th>TR</th>
+                    <th>TR</th>
+                    <th>TO</th>
 
-                <th>CONTAINER NO</th>
-                <th>SEAL NO</th>
-                <th colspan=2>CLOSING (DATE / TIME)</th>
+                    <th>CONTAINER NO</th>
+                    <th>SEAL NO</th>
+                    <th colspan=2>CLOSING (DATE / TIME)</th>
 
-                <th>REF.</th>
-                <th>REMARK</th>
-                <th>เลขที่ใบงาน</th>
+                    <th>REF.</th>
+                    <th>REMARK</th>
+                    <th>เลขที่ใบงาน</th>
 
-                <th>PICK UP</th>
-                <th>FACTORY</th>
-                <th>RETURN</th>
-                <th>VESSEL</th>
-                <th>PORT</th>
-            </thead> 
-            <tbody> 
-                {% load time_color %}
-                {% for booking in bookings %}
+                    <th>PICK UP</th>
+                    <th>FACTORY</th>
+                    <th>RETURN</th>
+                    <th>VESSEL</th>
+                    <th>PORT</th>
+                </thead> 
+                <tbody> 
+                    {% load time_color %}
+                    {% for booking in bookings %}
 
-                    {% if booking.cancel == '1' %}
-                        <tr class="bg-secondary">
-                    {% elif booking.closing_date < today.date and not booking.return_tr %}
-                        <tr style="background: #D24D57;">
-                    {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
-                        <tr class="alert-danger">
-                    {% elif booking.date <= today.date and not booking.return_tr %}
-                        <tr class="alert-warning">
-                    {% else %}
-                        <tr>
-                    {% endif %}
+                        {% if booking.cancel == '1' %}
+                            <tr class="bg-secondary">
+                        {% elif booking.closing_date < today.date and not booking.return_tr %}
+                            <tr style="background: #D24D57;">
+                        {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
+                            <tr class="alert-danger">
+                        {% elif booking.date <= today.date and not booking.return_tr %}
+                            <tr class="alert-warning">
+                        {% else %}
+                            <tr>
+                        {% endif %}
                             <td class="p-0 no-collapsable toggle-color align-middle">
                                 <input type="checkbox" class="check" name="pk" value="{{ booking.pk }}">
                                 <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
@@ -133,17 +133,6 @@
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modalPrint{{ booking.pk }}">
                                     <i class="fa fa-print font-weight-bold"></i>
                                 </a>
-                                <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuPrint">
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='full' %}">Full</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='forward' %}">Forward</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='backward' %}">Backward</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='yard_ndd' %}">Yard-NDD</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_fac_return' %}">NDD-Factory-Return</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_fac_ndd' %}">NDD-Factory-NDD</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'booking-print' pk=booking.pk template='ndd_return' %}">NDD-Return</a>
-                                </div> -->
                             </td>
 
 
@@ -216,113 +205,115 @@
                         </tr>
                                 
                         <div class="modal fade" id="modalPrint{{ booking.pk }}" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <form method="POST" action="{% url 'shipper-edit' %}">
-                                        {% csrf_token %}
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h4 class="modal-title w-100 font-weight-bold">Print</h4>
-                                                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                            <div class="modal-dialog" role="document">
+                                <form method="POST" action="{% url 'booking-print' pk=booking.pk %}">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h4 class="modal-title w-100 font-weight-bold">Print</h4>
+                                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body mx-3 ">
+                                            <div class="row">
+                                                <div class="col-md-3">เต็มเที่ยว</div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="full{{ booking.pk }}" name="template" value="full" checked>
+                                                    <label class="custom-control-label" for="full{{ booking.pk }}">Full</label>
+                                                </div>
+                                                <div class="col"></div>
                                             </div>
-                                            <div class="modal-body mx-3 ">
-                                                <div class="row">
-                                                    <div class="col-md-3">เต็มเที่ยว</div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="full" name="template" value="">
-                                                        <label class="custom-control-label" for="full">Full</label>
-                                                    </div>
-                                                    <div class="col"></div>
+
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    ตัดหาง
                                                 </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        ตัดหาง
-                                                    </div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="forward" name="template" value="">
-                                                        <label class="custom-control-label" for="forward">Forward</label>
-                                                    </div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="backward" name="template" value="">
-                                                        <label class="custom-control-label" for="backward">Backward</label>
-                                                    </div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="forward{{ booking.pk }}" name="template" value="forward">
+                                                    <label class="custom-control-label" for="forward{{ booking.pk }}">Forward</label>
                                                 </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        ซอยตู้
-                                                    </div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="yard-ndd" name="template" value="">
-                                                        <label class="custom-control-label" for="yard-ndd">Yard - NDD</label>
-                                                    </div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="ndd-fac-return" name="template" value="">
-                                                        <label class="custom-control-label" for="ndd-fac-return">NDD - Fac - Return</label>
-                                                    </div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="backward{{ booking.pk }}" name="template" value="backward">
+                                                    <label class="custom-control-label" for="backward{{ booking.pk }}">Backward</label>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-3"></div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="ndd-fac-ndd" name="template" value="">
-                                                        <label class="custom-control-label" for="ndd-fac-ndd">NDD - Fac - NDD</label>
-                                                    </div>
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="ndd-return" name="template" value="">
-                                                        <label class="custom-control-label" for="ndd-return">NDD - Return</label>
-                                                    </div>
+                                            </div>
+
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    ซอยตู้
                                                 </div>
-                                                <hr style="border-width: 3px;">
-                                                <div class="row mb-2">
-                                                    <div class="col">
-                                                        ADDRESS
-                                                    </div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="yard-ndd{{ booking.pk }}" name="template" value="yard_ndd">
+                                                    <label class="custom-control-label" for="yard-ndd{{ booking.pk }}">Yard - NDD</label>
                                                 </div>
-                                                <div class="container col-md-11">
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="ndd-fac-return{{ booking.pk }}" name="template" value="ndd_fac_return">
+                                                    <label class="custom-control-label" for="ndd-fac-return{{ booking.pk }}">NDD - Fac - Return</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3"></div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="ndd-fac-ndd{{ booking.pk }}" name="template" value="ndd_fac_ndd">
+                                                    <label class="custom-control-label" for="ndd-fac-ndd{{ booking.pk }}">NDD - Fac - NDD</label>
+                                                </div>
+                                                <div class="col custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="ndd-return{{ booking.pk }}" name="template" value="ndd_return">
+                                                    <label class="custom-control-label" for="ndd-return{{ booking.pk }}">NDD - Return</label>
+                                                </div>
+                                            </div>
+
+                                            <hr style="border-width: 3px;">
+
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    ADDRESS
+                                                </div>
+                                            </div>
+                                            <div class="container col-md-11">
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-shipper" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="shipper" checked>
-                                                        <label class="custom-control-label" for="address-shipper">Shipper</label>
+                                                        <input type="radio" id="address-shipper{{ booking.pk }}" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="shipper" checked>
+                                                        <label class="custom-control-label" for="address-shipper{{ booking.pk }}">Shipper</label>
                                                     </div> 
                                                 </div>
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-other" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="other">
-                                                        <label class="custom-control-label" for="address-other">Other</label>
+                                                        <input type="radio" id="address-other{{ booking.pk }}" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="other">
+                                                        <label class="custom-control-label" for="address-other{{ booking.pk }}">Other</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="w-100 my-2">
-                                                        <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled>{{ booking.address_other }}</textarea>
+                                                        <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-none" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="none">
-                                                        <label class="custom-control-label" for="address-none">None</label>
+                                                        <input type="radio" id="address-none{{ booking.pk }}" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="none">
+                                                        <label class="custom-control-label" for="address-none{{ booking.pk }}">None</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                                    
-                                            </div>
-                                            
-                                            <div class="modal-footer d-flex justify-content-center">
-                                            
-                                                <button class="btn btn-primary">Print</button>
-                                            </div>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>  
+                                        
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button class="btn btn-primary">Print</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>  
                     {% endfor %}
-            </tbody> 
-        </table>
+                </tbody> 
+            </table>
+        </div>
     </div>
-    </div>
-   
-<!-- </div> -->
 {% else %}
     <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
 {% endif %}

@@ -12,7 +12,6 @@
 {% block content %}
 <br>
     {% for message in messages %}
-
         <div class="fixed-top alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
         <div id="filter-date" class="container col-12">     
@@ -21,20 +20,17 @@
                     <form name="agent-transport-filter-sort" method="GET" action="{% url 'agent-transport-table' %}" class="form-inline">
                         {% csrf_token %}
                         <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <select name="filter_by" class="btn" style="background-color: #CED4DA;">
-                                        <option value="date" class="bg-white">Date</option>
-                                        <option value="month" class="bg-white" {% if filter_by == 'month' %}selected{% endif %}>Month</option>
-                                    </select>
-    
-                                </div>
-    
+                            <div class="input-group-prepend">
+                                <select name="filter_by" class="btn" style="background-color: #CED4DA;">
+                                    <option value="date" class="bg-white">Date</option>
+                                    <option value="month" class="bg-white" {% if filter_by == 'month' %}selected{% endif %}>Month</option>
+                                </select>
+                            </div>
                             {% if filter_by == 'month' %}
                                 <input id="id_date" name="date_filter" type="month" class="form-control mr-2" value="{{ date_filter }}">
                             {% else %}
                                 <input id="id_date" name="date_filter" type="date" class="form-control mr-2" value="{{ date_filter }}">
                             {% endif %}
-
                         </div>
     
                         <button type="submit" class="btn btn-primary">OK</button>
@@ -47,9 +43,9 @@
                         <option value="delete"> ลบ </option>
                     </select>
                     <form id="action" method="POST" class="d-inline"> 
-                            {% csrf_token %}
-                            <input type="hidden" name="date_filter" value="{{ date_filter }}">
-                            <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="date_filter" value="{{ date_filter }}">
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
                         <button class="btn btn-primary action">GO</button>
                     </form>
                 </div>
@@ -66,67 +62,58 @@
         </div>
     {% if agent_transports %}
         <div id='table-cont' class="table-cont"> 
-        <table class="table-hover" id="accordion table-responsive">
-            <thead class="text-nowrap bg-lightgray"> 
-                <th><input type="checkbox" id="checkAll"></th>
-                <th>PRINT</th>
-                <th>DATE</th>
-                <th>PRINCIPAL</th>
-                <th>SHIPPER</th>
-                <th>AGENT</th>
-                <th>SIZE</th>
-                <th>BOOKING</th>
+            <table class="table table-hover" id="accordion table-responsive">
+                <thead class="text-nowrap bg-lightgray"> 
+                    <th class="align-middle"><input type="checkbox" id="checkAll"></th>
+                    <th>PRINT</th>
+                    <th>DATE</th>
+                    <th>PRINCIPAL</th>
+                    <th>SHIPPER</th>
+                    <th>AGENT</th>
+                    <th>SIZE</th>
+                    <th>BOOKING</th>
 
-                <th>TR</th>
-                <th>FM</th>
-                <th>TR</th>
-                <th>TO</th>
+                    <th>TR</th>
+                    <th>FM</th>
+                    <th>TR</th>
+                    <th>TO</th>
 
-                <th>CONTAINER 1</th>
-                <th>CONTAINER 2</th>
+                    <th>CONTAINER 1</th>
+                    <th>CONTAINER 2</th>
 
-                <th>REF.</th>
-                <th>REMARK</th>
-                <th>เลขที่ใบงาน</th>
+                    <th>REF.</th>
+                    <th>REMARK</th>
+                    <th>เลขที่ใบงาน</th>
 
-                <th>PICK UP</th>
-                <th>RETURN</th>
-            </thead> 
-            <tbody> 
-                {% for agent_transport in agent_transports %}
-                    {% if agent_transport.cancel == '1' %}
-                        <tr class="bg-secondary collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
-                    {% elif not agent_transport.return_tr %}
-                        <tr class="alert-warning collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
-                    {% else %}
-                        <tr class="collapsed" data-toggle="collapse" data-target="#accordion{{ agent_transport.pk }}">
-                    {% endif %}
-                            <td class="p-0  no-collapsable toggle-color w-1">
+                    <th>PICK UP</th>
+                    <th>RETURN</th>
+                </thead> 
+                <tbody> 
+                    {% for agent_transport in agent_transports %}
+                        {% if agent_transport.cancel == '1' %}
+                            <tr class="bg-secondary">
+                        {% elif not agent_transport.return_tr %}
+                            <tr class="alert-warning">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                            <td class="p-0 w-1 align-middle">
                                 <input type="checkbox" class="check" name="pk" value="{{ agent_transport.pk }}">
-                                <!-- <label class="custom-control-label" for="cut{{ booking.pk }}"></label> -->
                             </td>
-                            
-                            <td class="p-0 w-1">
-                                <!-- <a class="btn btn-link d-block" id="dropdownMenuPrint" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
-                                <a class="btn btn-link" data-toggle="modal" data-target="#modalPrint{{ booking.pk }}">
+                            <td class="p-0 w-1 align-middle">
+                                <a class="btn btn-link d-block" data-toggle="modal" data-target="#modalPrint{{ agent_transport.pk }}">
                                     <i class="fa fa-print font-weight-bold"></i>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuPrint">
-                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='full' %}">Full</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='forward' %}">Forward</a>
-                                    <a class="dropdown-item no-collapsable" href="{% url 'agent-transport-print' pk=agent_transport.pk template='backward' %}">Backward</a>
-                                </div>
                             </td>
                             
-                            <td class="text-nowrap px-3">{{ agent_transport.date | date:'d M y' }}</td>
-                            <td class="no-collapsable text-center px-2"><div  class="long-text">{{ agent_transport.principal }}</div></td>
+                            <td class="text-nowrap px-2">{{ agent_transport.date | date:'d M y' }}</td>
+                            <td class="text-center px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
                             <td style="min-width:250px;">{{ agent_transport.shipper }}</td>
-                            <td class="no-collapsable text-center px-2"><div  class="long-text">{{ agent_transport.agent }}</div></td>
+                            <td class="text-center px-2"><div class="long-text">{{ agent_transport.agent }}</div></td>
                             <td class="text-nowrap">{{ agent_transport.size }}</td>
                             {% if agent_transport.cancel == '1' %}
                                 <td class="bg-secondary text-center" style="min-width:150px;">
                             {% else %}
-                                <!-- <td style="background-color: {{ agent_transport.booking_color }}" class="no-collapsable text-left px-2"> -->
                                 <td style="min-width:150px; background-color:
                                     {% ifchanged agent_transport.booking_no %}
                                         {% cycle "#9977b4" "#dd86b9" "#f497a9" "#f9b489" "#fdcd79" "#fff68f" "#b6d884" "#81cbb5" "#6acade" "#72abdd" as rowcolors %}
@@ -134,9 +121,9 @@
                                         {{ rowcolors }}
                                     {% endifchanged %}"
                                     class="text-center">
-                                {% endif %}
-                                    <div>{{ agent_transport.booking_no }}</div>
-                                </td>
+                            {% endif %}
+                                <div>{{ agent_transport.booking_no }}</div>
+                            </td>
 
                             <td class="text-nowrap">{{ agent_transport.pickup_tr }}</td>
                             <td class="text-nowrap">{{ agent_transport.pickup_from }}</td>
@@ -146,18 +133,18 @@
                             <td class="text-nowrap">{{ agent_transport.container_1 }}</td>
                             <td class="text-nowrap">{{ agent_transport.container_2 }}</td>
 
-                            <td class="no-collapsable text-center px-2"><div class="long-text">{{ agent_transport.ref }}</div></td>
-                            <td class="no-collapsable text-center px-2"><div  class="long-text-80">{{ agent_transport.remark }}</div></td>
+                            <td class="text-center px-1"><div class="long-text">{{ agent_transport.ref }}</div></td>
+                            <td class="text-center px-1"><div  class="long-text-80">{{ agent_transport.remark }}</div></td>
 
                             <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                             
-                            <td class="text-nowrap px-3">{{ agent_transport.pickup_date | date:'d M y' }}</td>
-                            <td class="text-nowrap px-3">{{ agent_transport.return_date | date:'d M y' }}</td>
+                            <td class="text-nowrap px-2">{{ agent_transport.pickup_date | date:'d M y' }}</td>
+                            <td class="text-nowrap px-2">{{ agent_transport.return_date | date:'d M y' }}</td>
                         </tr>
                         
-                        <div class="modal fade" id="modalPrint{{ booking.pk }}" aria-hidden="true">
+                        <div class="modal fade" id="modalPrint{{ agent_transport.pk }}" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                                <form method="POST" action="{% url 'shipper-edit' %}">
+                                <form method="POST" action="{% url 'agent-transport-print' pk=agent_transport.pk %}">
                                     {% csrf_token %}
                                     <div class="modal-content">
                                         <div class="modal-header text-center">
@@ -168,58 +155,57 @@
                                         </div>
                                         <div class="modal-body mx-3">
                                             <div class="container col-md-11">
-                                            <div class="row mb-4 mt-3">
-                                                <div class="col custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="full" name="template" value="">
-                                                    <label class="custom-control-label" for="full">Full</label>
+                                                <div class="row mb-4 mt-3">
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="full{{ agent_transport.pk }}" name="template" value="full" checked>
+                                                        <label class="custom-control-label" for="full{{ agent_transport.pk }}">Full</label>
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="forward{{ agent_transport.pk }}" name="template" value="forward">
+                                                        <label class="custom-control-label" for="forward{{ agent_transport.pk }}">Forward</label>
+                                                    </div>
+                                                    <div class="col custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="backward{{ agent_transport.pk }}" name="template" value="backward">
+                                                        <label class="custom-control-label" for="backward{{ agent_transport.pk }}">Backward</label>
+                                                    </div>
                                                 </div>
-                                                <div class="col custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="forward" name="template" value="">
-                                                    <label class="custom-control-label" for="forward">Forward</label>
-                                                </div>
-                                                <div class="col custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="backward" name="template" value="">
-                                                    <label class="custom-control-label" for="backward">Backward</label>
-                                                </div>
-                                            </div>
                                             </div>
                                             
                                             <hr style="border-width: 3px;">
+
                                             <div class="row mb-2">
                                                 <div class="col">
                                                     ADDRESS
                                                 </div>
-                                                </div>
-                                                <div class="container col-md-11">
+                                            </div>
+                                            <div class="container col-md-11">
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-shipper" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="shipper" checked>
-                                                        <label class="custom-control-label" for="address-shipper">Shipper</label>
+                                                        <input type="radio" id="address-shipper{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="shipper" checked>
+                                                        <label class="custom-control-label" for="address-shipper{{ agent_transport.pk }}">Shipper</label>
                                                     </div> 
                                                 </div>
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-other" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="other">
-                                                        <label class="custom-control-label" for="address-other">Other</label>
+                                                        <input type="radio" id="address-other{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="other">
+                                                        <label class="custom-control-label" for="address-other{{ agent_transport.pk }}">Other</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="w-100 my-2">
-                                                        <textarea class="form-control" rows="3" id="id_address_other{{ booking.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled>{{ booking.address_other }}</textarea>
+                                                        <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-none" class="custom-control-input" name="address{{ booking.pk }}" onchange="updateradio('{{ booking.pk }}');" value="none">
-                                                        <label class="custom-control-label" for="address-none">None</label>
+                                                        <input type="radio" id="address-none{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="none">
+                                                        <label class="custom-control-label" for="address-none{{ agent_transport.pk }}">None</label>
                                                     </div>
                                                 </div>
-                                        </div>
-                                                
+                                            </div>        
                                         </div>
                                         
                                         <div class="modal-footer d-flex justify-content-center">
-                                        
                                             <button class="btn btn-primary">Print</button>
                                         </div>
                                     </div>
@@ -227,9 +213,9 @@
                             </div>
                         </div>  
                     {% endfor %}
-            </tbody> 
-        </table>
-    </div>
+                </tbody> 
+            </table>
+        </div>
 
     {% else %}
         <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>

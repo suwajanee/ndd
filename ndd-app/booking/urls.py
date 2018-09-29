@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^edit/$', BookingEditTableView.render_edit_booking_page, name='booking-edit'),
     url(r'^edit/save/$', BookingEditTableView.save_edit_data_booking, name='booking-edit-save'),
 
-    url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
+    # url(r'^print/(?P<pk>\d+)/(?P<template>\w+)/$', BookingPrintView.as_view(), name='booking-print'),
+    url(r'^print/(?P<pk>\d+)/$', BookingPrintView.as_view(), name='booking-print'),
 
     url(r'^time/$', BookingTimeView.render_time_booking_page, name='booking-time'),
     url(r'^time/save/$', BookingTimeView.save_time_booking, name='booking-time-save'),

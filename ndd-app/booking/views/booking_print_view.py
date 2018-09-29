@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
@@ -16,7 +17,10 @@ from ndd.settings import STATICFILES_DIRS
 
 class BookingPrintView(TemplateView):
     
-    def get(self, request, pk, template):
+    def post(self, request, pk):
+        template = request.POST["template"]
+        address = request.POST["address"+pk]
+
         if template == 'forward':
             template_name = 'pdf_template/booking_fw_template.html'
         elif template == 'backward':
@@ -36,11 +40,11 @@ class BookingPrintView(TemplateView):
         context['booking'] = get_object_or_404(Booking, pk=pk)
         context['static_dir'] = STATICFILES_DIRS[0]
 
-        if context['booking'].address == 'other':
-            context['address'] = context['booking'].address_other
-        elif context['booking'].address == 'shipper':
+        if address == 'other':
+            context['address'] = request.POST["address_other"]
+        elif address == 'shipper':
             try:
-                shipper = Shipper.objects.get(name=context['booking'].shipper)
+                shipper = Shipper.objects.get(Q(principal=context['booking'].principal) & Q(name=context['booking'].shipper))
                 context['address'] = shipper.address
             except Shipper.DoesNotExist:
                 context['address'] = ''
