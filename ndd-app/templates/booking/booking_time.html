@@ -25,7 +25,7 @@
                 {% endfor %}
                 <button class="btn btn-danger mr-1" onclick="document.forms['TableFilter'].submit();"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
                 <form id="TableFilter" method="GET" action="{% url 'booking-table' %}" style="display:none;">
-                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="date_filter" value="{{ date_filter }}">
                     <input type="hidden" name="filter_by" value="{{ filter_by }}">
                 </form>
                 <button class="btn btn-success" onclick="document.forms['TimeForm'].submit();"><i class="fa fa-save"></i>&nbsp;Save</button>
@@ -83,13 +83,13 @@
             <input type="hidden" name="pk" class="pk" value="{{ booking.pk }}">
             <input type="hidden" name="date_filter" value="{{ date_filter }}">
             <input type="hidden" name="filter_by" value="{{ filter_by }}">
-            {% if booking.cancel == '1' %}
+            {% if booking.status == '0' %}
                 <tr class="bg-secondary">
-            {% elif booking.closing_date < today.date and not booking.return_tr %}
+            {% elif booking.closing_date < today.date and booking.status == '1' %}
                 <tr style="background: #D24D57;">
-            {% elif booking.closing_date <= tmr.date and not booking.return_tr %}
+            {% elif booking.closing_date <= tmr.date and booking.status == '1' %}
                 <tr class="alert-danger">
-            {% elif booking.date <= today.date and not booking.return_tr %}
+            {% elif booking.date <= today.date and booking.status == '1' %}
                 <tr class="alert-warning">
             {% else %}
                 <tr>
