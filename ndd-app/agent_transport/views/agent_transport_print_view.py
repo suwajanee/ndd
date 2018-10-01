@@ -17,32 +17,50 @@ from ndd.settings import STATICFILES_DIRS
 
 
 class AgentTransportPrintView(TemplateView):
+
+    def get(self, request, pk):
+        context = {}
+        context['static_dir'] = STATICFILES_DIRS[0]
+        context['agent_transport'] = get_object_or_404(AgentTransport, pk=pk)
+
+        if request.session['template_name'+pk]:               
+            template_name = request.session['template_name'+pk]
+            context['address'] = request.session['address'+pk]
+
+            request.session['template_name'+pk] = template_name
+            request.session['address'+pk] = context['address']
+
+        return self.render(template_name, context)
     
     def post(self, request, pk):
-        template = request.POST["template"]
-        address = request.POST["address"+pk]
-
-        if template == 'forward':
-            template_name = 'pdf_template/agent_transport_fw_template.html'
-        elif template == 'backward':
-            template_name = 'pdf_template/agent_transport_bw_template.html'
-        else:
-            template_name = 'pdf_template/agent_transport_full_template.html'
-
-        context = {}    
-        context['agent_transport'] = get_object_or_404(AgentTransport, pk=pk)
+        context = {}
         context['static_dir'] = STATICFILES_DIRS[0]
+        context['agent_transport'] = get_object_or_404(AgentTransport, pk=pk)
 
-        if address == 'other':
-            context['address'] = request.POST["address_other"]
-        elif address == 'shipper':
-            try:
-                shipper = Shipper.objects.get(Q(principal=context['agent_transport'].principal) & Q(name=context['agent_transport'].shipper))
-                context['address'] = shipper.address
-            except Shipper.DoesNotExist:
+        if request.method == "POST":
+            template = request.POST["template"]
+            address = request.POST["address"+pk]
+
+            if template == 'forward':
+                template_name = 'pdf_template/agent_transport_fw_template.html'
+            elif template == 'backward':
+                template_name = 'pdf_template/agent_transport_bw_template.html'
+            else:
+                template_name = 'pdf_template/agent_transport_full_template.html'
+
+            if address == 'other':
+                context['address'] = request.POST["address_other"]
+            elif address == 'shipper':
+                try:
+                    shipper = Shipper.objects.get(Q(principal=context['agent_transport'].principal) & Q(name=context['agent_transport'].shipper))
+                    context['address'] = shipper.address
+                except Shipper.DoesNotExist:
+                    context['address'] = ''
+            else:
                 context['address'] = ''
-        else:
-            context['address'] = ''
+
+        request.session['template_name'+pk] = template_name
+        request.session['address'+pk] = context['address']
 
         return self.render(template_name, context)
         
