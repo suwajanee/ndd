@@ -22,24 +22,12 @@ class BookingPrintView(TemplateView):
         context['static_dir'] = STATICFILES_DIRS[0]
         context['booking'] = get_object_or_404(Booking, pk=pk)
 
-        if request.session['template_name']:               
-            template_name = request.session['template_name']
-            address = request.session['address']
+        if request.session['template_name'+pk]:               
+            template_name = request.session['template_name'+pk]
+            context['address'] = request.session['address'+pk]
 
-            if address == 'other':
-                context['address'] = request.session['address_other']
-                request.session['address_other'] = context['address']
-            elif address == 'shipper':
-                try:
-                    shipper = Shipper.objects.get(Q(principal=context['booking'].principal) & Q(name=context['booking'].shipper))
-                    context['address'] = shipper.address
-                except Shipper.DoesNotExist:
-                    context['address'] = ''
-            else:
-                context['address'] = ''
-
-            request.session['template_name'] = template_name
-            request.session['address'] = address
+            request.session['template_name'+pk] = template_name
+            request.session['address'+pk] = context['address']
 
         return self.render(template_name, context)
     
@@ -69,7 +57,6 @@ class BookingPrintView(TemplateView):
             
             if address == 'other':
                 context['address'] = request.POST["address_other"]
-                request.session['address_other'] = context['address']
             elif address == 'shipper':
                 try:
                     shipper = Shipper.objects.get(Q(principal=context['booking'].principal) & Q(name=context['booking'].shipper))
@@ -79,8 +66,8 @@ class BookingPrintView(TemplateView):
             else:
                 context['address'] = ''
 
-        request.session['template_name'] = template_name
-        request.session['address'] = address
+        request.session['template_name'+pk] = template_name
+        request.session['address'+pk] = context['address'] 
 
         return self.render(template_name, context)
 
