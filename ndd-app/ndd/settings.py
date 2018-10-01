@@ -32,7 +32,6 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = [ '*' ]
 
 
@@ -139,3 +138,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+#_MAX_NUMBER_FIELDS
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 102400
