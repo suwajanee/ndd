@@ -124,7 +124,7 @@
                     <td class="{% if booking.status != '0' %}{{ booking.time | time_color }}{% endif %}"><input name="time" class="form-control" value="{{ booking.time }}" maxlength="10" autocomplete=off></td>
                     
                     <td><input type="date" id="date{{ booking.pk }}" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off onchange="changeDate({{ booking.pk }});" required></td>
-                    <td class="no-collapsable text-left"><div  class="long-text">{{ booking.principal }}</div></td>
+                    <td class="no-collapsable text-center"><div  class="long-text">{{ booking.principal }}</div></td>
                     <td style="min-width:250px;">{{ booking.shipper }}</td>
                     <td><input name="agent" class="form-control" value="{{ booking.agent }}" maxlength="50" autocomplete=off></td>
                     <td><input name="size" class="form-control" value="{{ booking.size }}" maxlength="10" autocomplete=off></td>

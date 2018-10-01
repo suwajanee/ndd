@@ -93,18 +93,18 @@
             <tr>
               <td width=4.5%>{{ booking.date | date:'d-m-y' }}</td>
               <td width=5%>{{ booking.principal | truncatechars:8 }}</td>
-              <td width=5%>{{ booking.shipper | truncatechars:8 }}</td>
+              <td width=5%>{{ booking.shipper }}</td>
               <td width=5%>{{ booking.agent | truncatechars:8 }}</td>
               <td width=3.5%>{{ booking.size }}</td>
               <td width=7% >{{ booking.booking_no }}</td>
 
               <td width=2.5%>{{ booking.pickup_tr }}</td>
-              <td width=5%>{{ booking.pickup_from | truncatechars:8 }}</td>
+              <td width=5%>{{ booking.pickup_from | truncatechars:10 }}</td>
               <td width=2.5%>{{ booking.forward_tr }}</td>
-              <td width=5%>{{ booking.factory | truncatechars:8 }}</td>
+              <td width=5%>{{ booking.factory | truncatechars:10 }}</td>
               <td width=2.5%>{{ booking.backward_tr }}</td>
               <td width=2.5%>{{ booking.return_tr }}</td>
-              <td width=5%>{{ booking.return_to | truncatechars:8 }}</td>
+              <td width=5%>{{ booking.return_to | truncatechars:10 }}</td>
 
               <td width=7%>{{ booking.container_no | truncatechars:12 }}</td>
               <td width=6%>{{ booking.seal_no | truncatechars:12 }}</td>
