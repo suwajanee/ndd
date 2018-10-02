@@ -113,19 +113,19 @@
                                 {% endifchanged %}"
                                 class="text-center">
                     {% endif %}
-                            <div class="long-text">{{ booking.booking_no }}</div>
+                            {{ booking.booking_no }}
                         </td>
 
-                    <td>{{ booking.pickup_tr }}</td>
+                    <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.yard_ndd == '1' %}bg-gold{% endif %}">{{ booking.pickup_tr }}</td>
                     <td>{{ booking.pickup_from }}</td>
                     <td>{{ booking.forward_tr }}</td>
-                    <td>{{ booking.factory }}</td>
-                    <td>{{ booking.backward_tr }}</td>
+                    <td class="text-nowrap">{{ booking.factory }}</td>
+                    <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.fac_ndd == '1' %}bg-gold{% endif %}">{{ booking.backward_tr }}</td>
                     <td>{{ booking.return_tr }}</td>
                     <td>{{ booking.return_to }}</td>
 
-                    <td>{{ booking.container_no }}</td>
-                    <td>{{ booking.seal_no }}</td>
+                    <td class="text-nowrap">{{ booking.container_no }}</td>
+                    <td class="text-nowrap">{{ booking.seal_no }}</td>
                  
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 

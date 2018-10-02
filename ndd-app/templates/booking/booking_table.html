@@ -89,11 +89,9 @@
                     <th>START</th>
                     <th>TR</th>
                     <th>FM</th>
-                    <th>NDD</th>
                     <th>TR</th>
                     <th>FACTORY</th>
                     <th>TR</th>
-                    <th>NDD</th>
                     <th>TR</th>
                     <th>TO</th>
 
@@ -118,7 +116,7 @@
                     {% if booking.status == '0' %}
                         <tr class="bg-secondary">
                     {% elif booking.closing_date < today.date and booking.status == '1' %}
-                        <tr style="background: #D24D57;" >
+                        <tr style="background: #D24D57;">
                     {% elif booking.closing_date <= tmr.date and booking.status == '1' %}
                         <tr class="alert-danger">
                     {% elif booking.date <= today.date and booking.status == '1' %}
@@ -161,16 +159,14 @@
                                     {{ booking.booking_no }}
                                 </td>
 
-                            <td class="text-nowrap">{{ booking.start }}</td>
-                            <td class="text-nowrap">{{ booking.pickup_tr }}</td>
-                            <td class="text-nowrap">{{ booking.pickup_from }}</td>
-                            <td class="text-nowrap">{% if booking.yard_ndd == '1' %}NDD{% endif %}</td>
+                            <td>{{ booking.start }}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.yard_ndd == '1' %}bg-gold{% endif %}">{{ booking.pickup_tr }}</td>
+                            <td>{{ booking.pickup_from }}</td>
                             <td class="text-nowrap">{{ booking.forward_tr }}</td>
                             <td class="text-nowrap">{{ booking.factory }}</td>
-                            <td class="text-nowrap">{{ booking.backward_tr }}</td>
-                            <td class="text-nowrap">{% if booking.fac_ndd == '1' %}NDD{% endif %}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.fac_ndd == '1' %}bg-gold{% endif %}">{{ booking.backward_tr }}</td>
                             <td class="text-nowrap">{{ booking.return_tr }}</td>
-                            <td class="text-nowrap">{{ booking.return_to }}</td>
+                            <td>{{ booking.return_to }}</td>
 
                             <td class="text-nowrap">{{ booking.container_no }}</td>
                             <td class="text-nowrap">{{ booking.seal_no }}</td>
