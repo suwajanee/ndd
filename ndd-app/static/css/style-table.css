@@ -23,7 +23,11 @@ table.time th {
 }
 
 .bg-lightgray {
-    background-color:LightGray;
+    background:LightGray;
+}
+
+.bg-gold{
+    background: gold;
 }
 
 th {
@@ -59,7 +63,7 @@ tbody {
 }
 
 
-/* Hide too long text in Remark field */
+/* Hide too long text in field */
 .long-text {
     width: 60px;
     overflow: hidden;

@@ -142,7 +142,7 @@
                         </td>
                     
                     <td><input name="start" class="form-control" value="{{ booking.start }}" maxlength="20" autocomplete=off></td>
-                    <td><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" maxlength="10" autocomplete=off></td>
+                    <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.yard_ndd == '1' %}bg-gold{% endif %}"><input name="pickup_tr" class="form-control" value="{{ booking.pickup_tr }}" maxlength="10" autocomplete=off></td>
                     <td><input name="pickup_from" class="form-control" value="{{ booking.pickup_from }}" maxlength="20" autocomplete=off></td>
                     <td>
                         <select name="yard_ndd" class="custom-select short py-1 px-2">
@@ -152,7 +152,7 @@
                     </td>
                     <td><input name="forward_tr" class="form-control" value="{{ booking.forward_tr }}" maxlength="10" autocomplete=off></td>
                     <td><input name="factory" class="form-control" value="{{ booking.factory }}" maxlength="20" autocomplete=off></td>
-                    <td><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" maxlength="10" autocomplete=off></td>
+                    <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.fac_ndd == '1' %}bg-gold{% endif %}"><input name="backward_tr" class="form-control" value="{{ booking.backward_tr }}" maxlength="10" autocomplete=off></td>
                     <td>
                         <select name="fac_ndd" class="custom-select short py-1 px-2">
                             <option value="1" {% if booking.fac_ndd == '1' %}selected{% endif %}> NDD </option>
