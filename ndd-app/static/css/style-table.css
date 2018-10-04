@@ -88,6 +88,7 @@ tbody {
 
 .long-text-80 {
     width: 80px;
+    font-size: 11px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;

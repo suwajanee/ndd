@@ -34,6 +34,8 @@ class Booking(models.Model):
 
     container_no = models.CharField(max_length=50, blank=True)
     seal_no = models.CharField(max_length=50, blank=True)
+    tare = models.CharField(max_length=100, blank=True, default='')
+
     vessel = models.CharField(max_length=50, blank=True)
     port = models.CharField(max_length=50, blank=True)
     closing_date = models.DateField(max_length=20, null=True, blank=True, default=None)
