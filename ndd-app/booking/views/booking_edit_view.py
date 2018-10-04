@@ -32,16 +32,16 @@ class BookingEditTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
+                context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper__name', 'work_id')
             else:
                 if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
-                    context['bookings'] = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'shipper', 'work_id')
+                    context['bookings'] = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'shipper__name', 'work_id')
                 else:
-                    context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'shipper', 'work_id')
+                    context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'shipper__name', 'work_id')
 
         else:
-            context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper', 'work_id')
+            context['bookings'] = Booking.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'shipper__name', 'work_id')
 
         return render(request, template_name, context)        
 
