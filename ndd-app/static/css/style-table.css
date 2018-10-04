@@ -26,9 +26,17 @@ table.time th {
     background:LightGray;
 }
 
-.bg-gold{
+.bg-gold {
     background: gold;
 }
+
+.bg-lime {
+    background: Lime;
+}
+
+.bg-cyan {
+    background: Cyan;
+} 
 
 th {
     padding: 10 5px;

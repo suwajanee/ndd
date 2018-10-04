@@ -160,12 +160,12 @@
                                 </td>
 
                             <td>{{ booking.start }}</td>
-                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.yard_ndd == '1' %}bg-gold{% endif %}">{{ booking.pickup_tr }}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.yard_ndd == '1' %}bg-gold{% elif booking.pickup_tr %}bg-cyan{% else %}{% endif %}">{{ booking.pickup_tr }}</td>
                             <td>{{ booking.pickup_from }}</td>
-                            <td class="text-nowrap">{{ booking.forward_tr }}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.forward_tr %}bg-cyan{% else %}{% endif %}">{{ booking.forward_tr }}</td>
                             <td class="text-nowrap">{{ booking.factory }}</td>
-                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.fac_ndd == '1' %}bg-gold{% endif %}">{{ booking.backward_tr }}</td>
-                            <td class="text-nowrap">{{ booking.return_tr }}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.fac_ndd == '1' %}bg-gold{% elif booking.backward_tr %}bg-cyan{% else %}{% endif %}">{{ booking.backward_tr }}</td>
+                            <td class="text-nowrap {% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.return_tr %}bg-cyan{% else %}{% endif %}">{{ booking.return_tr }}</td>
                             <td>{{ booking.return_to }}</td>
 
                             <td class="text-nowrap">{{ booking.container_no }}</td>
