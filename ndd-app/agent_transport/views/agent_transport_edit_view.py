@@ -30,7 +30,7 @@ class AgentTransportEditTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+                context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
             else:
                 if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
@@ -38,7 +38,7 @@ class AgentTransportEditTableView(TemplateView):
                 else:
                     context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
         else:
-            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+            context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
 
         return render(request, template_name, context)        
 
