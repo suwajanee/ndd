@@ -67,6 +67,7 @@ class BookingEditTableView(TemplateView):
             return_to = request.POST.getlist('return_to')
             container_no = request.POST.getlist('container_no')
             seal_no = request.POST.getlist('seal_no')
+            tare = request.POST.getlist('tare')
             closing_date = request.POST.getlist('closing_date')
             closing_time = request.POST.getlist('closing_time')
             ref = request.POST.getlist('ref')
@@ -106,6 +107,7 @@ class BookingEditTableView(TemplateView):
                 booking.return_to = re.sub(' +', ' ', return_to[i].strip())
                 booking.container_no = re.sub(' +', ' ', container_no[i].strip())
                 booking.seal_no = re.sub(' +', ' ', seal_no[i].strip())
+                booking.tare = re.sub(' +', ' ', tare[i].strip())
                 booking.closing_date = closing_date[i]
                 booking.closing_time = closing_time[i]
                 booking.ref = re.sub(' +', ' ', ref[i].strip())

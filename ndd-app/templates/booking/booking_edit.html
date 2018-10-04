@@ -82,6 +82,7 @@
 
             <th class="px-2">CONTAINER NO</th>
             <th class="px-4">SEAL NO</th>
+            <th class="px-5">TARE</th>
             <th colspan=2>CLOSING (DATE / TIME)</th>
 
             <th class="px-5">REF.</th>
@@ -164,6 +165,7 @@
 
                     <td><input name="container_no" class="form-control" value="{{ booking.container_no }}" maxlength="20" autocomplete=off></td>
                     <td><input name="seal_no" class="form-control" value="{{ booking.seal_no }}" maxlength="20" autocomplete=off></td>
+                    <td><input name="tare" class="form-control" value="{{ booking.tare }}" maxlength="80" autocomplete=off></td>
          
                     <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" autocomplete=off></td>
                     <td><input name="closing_time" class="form-control" value="{{ booking.closing_time }}" maxlength="5" autocomplete=off></td>
