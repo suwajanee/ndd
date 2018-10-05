@@ -68,6 +68,9 @@ class AgentTransportEditTableView(TemplateView):
                 if not date[i]:
                     date[i] = None
 
+                if not return_tr[i]:
+                    return_tr[i] = pickup_tr[i]
+
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
                 agent_transport.status = status[i]
                 agent_transport.date = date[i]

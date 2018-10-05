@@ -122,9 +122,13 @@
                             <input name="booking_no" class="form-control" value="{{ agent_transport.booking_no }}" maxlength="50" autocomplete=off>
                             </td>
 
-                        <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.pickup_tr %}bg-cyan{% else %}{% endif %}"><input name="pickup_tr" class="form-control" value="{{ agent_transport.pickup_tr }}" maxlength="10" autocomplete=off></td>
+                        <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.pickup_tr %}bg-cyan{% else %}{% endif %}">
+                            <input name="pickup_tr" class="form-control" value="{{ agent_transport.pickup_tr }}" maxlength="15" autocomplete=off>
+                        </td>
                         <td><input name="pickup_from" class="form-control" value="{{ agent_transport.pickup_from }}" maxlength="20" autocomplete=off></td>
-                        <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.return_tr %}bg-cyan{% else %}{% endif %}"><input name="return_tr" class="form-control" value="{{ agent_transport.return_tr }}" maxlength="10" autocomplete=off></td>
+                        <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.return_tr %}bg-cyan{% else %}{% endif %}">
+                            <input name="return_tr" class="form-control" value="{{ agent_transport.return_tr }}" maxlength="15" autocomplete=off>
+                        </td>
                         <td><input name="return_to" class="form-control" value="{{ agent_transport.return_to }}" maxlength="20" autocomplete=off></td>
 
                         <td><input name="container_1" class="form-control" value="{{ agent_transport.container_1 }}" maxlength="20" autocomplete=off></td>
