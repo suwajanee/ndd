@@ -20,8 +20,12 @@ function editNextDay(pk) {
     var nextday = document.getElementById("nextday"+pk);
     if (nextday.options[nextday.selectedIndex].value == '1') {
         document.getElementById("return_date"+pk).readOnly = false;
+        document.getElementById("backward_tr"+pk).readOnly = false;
+        document.getElementById('backward_tr'+pk).value = ''
+        document.getElementById('return_tr'+pk).value = ''
     } else {
         document.getElementById("return_date"+pk).readOnly = true;
+        document.getElementById("backward_tr"+pk).readOnly = true;
     }
 }
 
@@ -29,6 +33,29 @@ function changeDate(pk) {
     var nextday = document.getElementById("nextday"+pk);
     if (nextday.options[nextday.selectedIndex].value == '0') {
         document.getElementById("return_date"+pk).value = document.getElementById("date"+pk).value;
+    }
+}
+
+
+function editTrForward(pk) {
+    var yard_ndd = document.getElementById("yard_ndd"+pk);
+    if (yard_ndd.options[yard_ndd.selectedIndex].value == '1') {
+        document.getElementById("forward_tr"+pk).readOnly = false;
+        document.getElementById('forward_tr'+pk).value = ''
+        document.getElementById('backward_tr'+pk).value = ''
+        document.getElementById('return_tr'+pk).value = ''
+    } else {
+        document.getElementById("forward_tr"+pk).readOnly = true;
+    }
+}
+
+function editTrReturn(pk) {
+    var fac_ndd = document.getElementById("fac_ndd"+pk);
+    if (fac_ndd.options[fac_ndd.selectedIndex].value == '1') {
+        document.getElementById("return_tr"+pk).readOnly = false;
+        document.getElementById('return_tr'+pk).value = ''
+    } else {
+        document.getElementById("return_tr"+pk).readOnly = true;
     }
 }
 
