@@ -125,9 +125,9 @@
                                 <div>{{ agent_transport.booking_no }}</div>
                             </td>
 
-                            <td class="text-nowrap {% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.pickup_tr %}bg-cyan{% else %}{% endif %}">{{ agent_transport.pickup_tr }}</td>
+                            <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.pickup_tr %}bg-cyan{% else %}{% endif %}">{{ agent_transport.pickup_tr }}</td>
                             <td>{{ agent_transport.pickup_from }}</td>
-                            <td class="text-nowrap {% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.return_tr %}bg-cyan{% else %}{% endif %}">{{ agent_transport.return_tr }}</td>
+                            <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.return_tr %}bg-cyan{% else %}{% endif %}">{{ agent_transport.return_tr }}</td>
                             <td>{{ agent_transport.return_to }}</td>
 
                             <td class="text-nowrap">{{ agent_transport.container_1 }}</td>
