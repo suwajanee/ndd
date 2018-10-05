@@ -56,14 +56,14 @@ class BookingEditTableView(TemplateView):
             size = request.POST.getlist('size')
             booking_no = request.POST.getlist('booking_no')
             start = request.POST.getlist('start')
-            pickup_tr = request.POST.getlist('pickup_tr')
+            pickup_tr_list = request.POST.getlist('pickup_tr')
             pickup_from = request.POST.getlist('pickup_from')
             yard_ndd = request.POST.getlist('yard_ndd')
-            forward_tr = request.POST.getlist('forward_tr')
+            forward_tr_list = request.POST.getlist('forward_tr')
             factory = request.POST.getlist('factory')
-            backward_tr = request.POST.getlist('backward_tr')
+            backward_tr_list = request.POST.getlist('backward_tr')
             fac_ndd = request.POST.getlist('fac_ndd')
-            return_tr = request.POST.getlist('return_tr')
+            return_tr_list = request.POST.getlist('return_tr')
             return_to = request.POST.getlist('return_to')
             container_no = request.POST.getlist('container_no')
             seal_no = request.POST.getlist('seal_no')
@@ -87,6 +87,20 @@ class BookingEditTableView(TemplateView):
                     closing_date[i] = None
                 if not return_date[i]:
                     return_date[i] = None
+                
+                pickup_tr = pickup_tr_list[i]
+                forward_tr = pickup_tr_list[i]
+                backward_tr = pickup_tr_list[i]
+                return_tr = pickup_tr_list[i]
+                if yard_ndd[i] == '1':
+                    forward_tr = forward_tr_list[i]
+                    backward_tr = forward_tr_list[i]
+                    return_tr = forward_tr_list[i]
+                if nextday[i] == '1':
+                    backward_tr = backward_tr_list[i]
+                    return_tr = backward_tr_list[i]
+                if fac_ndd[i] == '1':
+                    return_tr = return_tr_list[i]
 
                 booking = Booking.objects.get(pk=pk[i])
                 booking.status = status[i]
@@ -96,14 +110,14 @@ class BookingEditTableView(TemplateView):
                 booking.size = re.sub(' +', ' ', size[i].strip())
                 booking.booking_no = re.sub(' +', ' ', booking_no[i].strip())
                 booking.start = re.sub(' +', ' ', start[i].strip())
-                booking.pickup_tr = re.sub(' +', ' ', pickup_tr[i].strip())
+                booking.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
                 booking.pickup_from = re.sub(' +', ' ', pickup_from[i].strip())
                 booking.yard_ndd = yard_ndd[i]
-                booking.forward_tr = re.sub(' +', ' ', forward_tr[i].strip())
+                booking.forward_tr = re.sub(' +', ' ', forward_tr.strip())
                 booking.factory = re.sub(' +', ' ', factory[i].strip())
-                booking.backward_tr = re.sub(' +', ' ', backward_tr[i].strip())
+                booking.backward_tr = re.sub(' +', ' ', backward_tr.strip())
                 booking.fac_ndd = fac_ndd[i]
-                booking.return_tr = re.sub(' +', ' ', return_tr[i].strip())
+                booking.return_tr = re.sub(' +', ' ', return_tr.strip())
                 booking.return_to = re.sub(' +', ' ', return_to[i].strip())
                 booking.container_no = re.sub(' +', ' ', container_no[i].strip())
                 booking.seal_no = re.sub(' +', ' ', seal_no[i].strip())
