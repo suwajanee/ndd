@@ -82,7 +82,6 @@ tbody {
 .long-text:active {
     overflow: visible;
     width: auto;
-    /* text-overflow: inherit; */
     white-space: nowrap;
 }
 
@@ -97,7 +96,6 @@ tbody {
 .long-text-80:active {
     overflow: visible;
     width: auto;
-    /* text-overflow: inherit; */
     white-space: nowrap;
 }
 
