@@ -7,7 +7,7 @@ body {
 }
 
 table, td {
-    font-family: THSarabunNew, sans-serif;
+    /* font-family: THSarabunNew, sans-serif; */
     font-size: 12px;
     border: 1px solid gray;
     text-align: center;    

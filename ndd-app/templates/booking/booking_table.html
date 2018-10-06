@@ -169,7 +169,7 @@
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.return_tr %}bg-cyan{% else %}{% endif %}">{{ booking.return_tr }}</td>
                             <td>{{ booking.return_to }}</td>
 
-                            <td class="text-nowrap">{{ booking.container_no }}</td>
+                            <td class="text-nowrap"><div style="font-weight: 800;">{{ booking.container_no }}</div></td>
                             <td class="text-nowrap">{{ booking.seal_no }}</td>
                             <td class="text-center px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
                             {% if booking.closing_date %}
