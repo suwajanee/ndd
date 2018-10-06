@@ -90,11 +90,26 @@
                     {% if size_list or quantity_list or date_list %}
                         <div class="control">
                             {% for time, size, quantity, date in zip %}
-                                <div class="entry input-group control-group after-add-more mb-2">
-                                    <input type="text" name="time" class="form-control col-md-3 " id="id_time" placeholder="TIME" value="{{ time }}" maxlength="10" >
-                                    <input name="size" class="form-control col-md-2" id="id_size" placeholder="SIZE" value="{{ size }}" maxlength="10" required>
-                                    <input type="number" name="quantity" min="1" class="form-control col-md-2" id="id_quantity" placeholder="QTY" value="{{ quantity }}" required>
-                                    <input type="date" name="date" class="form-control col-md-5" id="id_date" placeholder="DATE" value="{{ date }}" required>
+                                <div class="entry input-group control-group mb-2">
+                                    <input type="text" name="time" class="form-control col-md-3 " placeholder="TIME" value="{{ time }}" maxlength="10" >
+
+                                    <select name="size" class="custom-select col-md-3" style="height: 40px;">
+                                        <option value="" {% if size == "" %}selected{% endif %}> -------- </option>
+                                        <option value="20'" {% if size == "20'" %}selected{% endif %}>20'</option>
+                                        <option value="20'RF" {% if size == "20'RF" %}selected{% endif %}>20'RF</option>
+                                        <option value="40'" {% if size == "40'" %}selected{% endif %}>40'</option>
+                                        <option value="40'HC" {% if size == "40'HC" %}selected{% endif %}>40'HC</option>
+                                        <option value="40'OT" {% if size == "40'OT" %}selected{% endif %}>40'OT</option>
+                                        <option value="40'GOH" {% if size == "40'GOH" %}selected{% endif %}>40'GOH</option>
+                                        <option value="40'RF" {% if size == "40'RF" %}selected{% endif %}>40'RF</option>
+                                        <option value="45'" {% if size == "45'" %}selected{% endif %}>45'</option>
+                                        <option value="" disabled> -------- </option>
+                                        <option value="2X20'" {% if size == "2X20'" %}selected{% endif %}>2X20'</option>
+                                        <option value="2X20'RF" {% if size == "2X20'RF" %}selected{% endif %}>2X20'RF</option>
+                                    </select>
+
+                                    <input type="number" name="quantity" min="1" class="form-control col-md-2" placeholder="QTY" value="{{ quantity }}" required>
+                                    <input type="date" name="date" class="form-control col-md-4" placeholder="DATE" value="{{ date }}" required>
                                     <div class="input-group-append">
                                         {% if forloop.first %}
                                             <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>     
@@ -107,11 +122,26 @@
                         </div>
                     {% else %}
                         <div class="control">
-                            <div class="entry input-group control-group after-add-more mb-2">
-                                <input type="text" name="time" class="form-control col-md-3" id="id_time" placeholder="TIME" maxlength="10" >
-                                <input name="size" class="form-control col-md-2" id="id_size" placeholder="SIZE" maxlength="10" required>
-                                <input type="number" name="quantity" min="1" class="form-control col-md-2" id="id_quantity" placeholder="QTY" required>
-                                <input type="date" name="date" class="form-control col-md-5" id="id_date" placeholder="DATE" required>
+                            <div class="entry input-group control-group mb-2">
+                                <input type="text" name="time" class="form-control col-md-3" placeholder="TIME" maxlength="10" >
+
+                                <select name="size" class="custom-select col-md-3" style="height: 40px;">
+                                    <option value=""> -------- </option>
+                                    <option value="20'">20'</option>
+                                    <option value="20'RF">20'RF</option>
+                                    <option value="40'">40'</option>
+                                    <option value="40'HC">40'HC</option>
+                                    <option value="40'OT">40'OT</option>
+                                    <option value="40'GOH">40'GOH</option>
+                                    <option value="40'RF">40'RF</option>
+                                    <option value="45'">45'</option>
+                                    <option value="" disabled> -------- </option>
+                                    <option value="2X20'">2X20'</option>
+                                    <option value="2X20'RF">2X20'RF</option>
+                                </select>
+
+                                <input type="number" name="quantity" min="1" class="form-control col-md-2" placeholder="QTY" required>
+                                <input type="date" name="date" class="form-control col-md-4" placeholder="DATE" required>
                                 <div class="input-group-append">
                                     <button class="btn btn-success add-more" type="button"><span><i class="fa fa-plus"></i></span></button>
                                 </div>

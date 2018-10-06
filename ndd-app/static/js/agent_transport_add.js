@@ -13,6 +13,7 @@ $(function () {
             currentEntry = $(this).parents('.entry:first'),
             newEntry = $(currentEntry.clone()).appendTo(controlForm);
         newEntry.find('input').val('');
+        newEntry.find('select').val('');
         controlForm.find('.entry:not(:first) .add-more')
             .removeClass('add-more').addClass('remove')
             .removeClass('btn-success').addClass('btn-danger')
