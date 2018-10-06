@@ -194,8 +194,8 @@
                     <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" autocomplete=off></td>
                     <td><input name="closing_time" class="form-control" value="{{ booking.closing_time }}" maxlength="5" autocomplete=off></td>
 
-                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" maxlength="50" autocomplete=off></td>
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" maxlength="50">{{ booking.remark }}</textarea></td>
+                    <td><input name="ref" class="form-control" value="{{ booking.ref }}" maxlength="150" autocomplete=off></td>
+                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" maxlength="200">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 
