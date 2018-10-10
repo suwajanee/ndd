@@ -18,6 +18,7 @@ class AgentTransportTableView(TemplateView):
         context = {}
         context['nbar'] = 'agent-transport-table'
         context['today'] = datetime.now()
+        prev_7_days = datetime.now() - timedelta(days=7)
 
         if request.method == "GET":
             context['filter_by'] = request.GET.get("filter_by")
@@ -27,7 +28,7 @@ class AgentTransportTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(date__gte=prev_7_days) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
             else:
                 if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
@@ -35,7 +36,7 @@ class AgentTransportTableView(TemplateView):
                 else:
                     context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
         else:
-            context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(date__gte=prev_7_days) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
 
         return render(request, template_name, context)
     
