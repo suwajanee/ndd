@@ -86,7 +86,6 @@
                     <th>SIZE</th>
                     <th>BOOKING</th>
 
-                    <th>START</th>
                     <th>TR</th>
                     <th>FM</th>
                     <th>TR</th>
@@ -160,7 +159,6 @@
                                     {{ booking.booking_no }}
                                 </td>
 
-                            <td>{{ booking.start }}</td>
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.yard_ndd == '1' %}bg-gold{% elif booking.pickup_tr %}bg-cyan{% else %}{% endif %}">{{ booking.pickup_tr }}</td>
                             <td>{{ booking.pickup_from }}</td>
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.forward_tr %}bg-cyan{% else %}{% endif %}">{{ booking.forward_tr }}</td>
