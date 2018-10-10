@@ -99,6 +99,20 @@ tbody {
     white-space: nowrap;
 }
 
+.long-text-100 {
+    width: 100px;
+    font-size: 11px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text-100:active {
+    overflow: visible;
+    width: auto;
+    white-space: nowrap;
+}
+
 
 /* Fix header table when scroll */
 .table-cont{
