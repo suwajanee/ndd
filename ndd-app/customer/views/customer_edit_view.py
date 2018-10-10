@@ -40,6 +40,9 @@ class CustomerEditView(TemplateView):
             address_type = request.POST.getlist('address_type_edit')
             address = request.POST.getlist('address_edit')
 
+            address_type_new = request.POST.getlist('address_type_new')
+            address_new = request.POST.getlist('address_new')
+
             shipper = Shipper.objects.get(pk=shipper_pk)
             shipper.name = re.sub(' +', ' ', shipper_name.strip())
             shipper.save()
@@ -50,23 +53,26 @@ class CustomerEditView(TemplateView):
                     shipper_address = ShipperAddress.objects.get(pk=pk)
                     shipper_address.delete()
 
-
-            for i in range(len(address_type)):
+            for i in range(len(shipper_address_pk)):
                 if address_type[i].strip() == '' and address[i].strip() == '':
                     continue
-                if i < len(shipper_address_pk):
-                    shipper_address = ShipperAddress.objects.get(pk=int(shipper_address_pk[i]))
-                    shipper_address.address_type = re.sub(' +', ' ', address_type[i].strip())
-                    shipper_address.address = address[i]
-                    shipper_address.save()
-                else:
-                    data = {
-                        'shipper': Shipper.objects.get(pk=shipper_pk),
-                        'address_type': re.sub(' +', ' ', address_type[i].strip()),
-                        'address': address[i]
-                    }
-                    shipper_address = ShipperAddress(**data)
-                    shipper_address.save()
+
+                shipper_address = ShipperAddress.objects.get(pk=int(shipper_address_pk[i]))
+                shipper_address.address_type = re.sub(' +', ' ', address_type[i].strip())
+                shipper_address.address = address[i]
+                shipper_address.save()
+
+            for i in range(len(address_type_new)):
+                if address_type_new[i].strip() == '' and address_new[i].strip() == '':
+                    continue
+                    
+                data = {
+                    'shipper': Shipper.objects.get(pk=shipper_pk),
+                    'address_type': re.sub(' +', ' ', address_type_new[i].strip()),
+                    'address': address_new[i]
+                }
+                shipper_address = ShipperAddress(**data)
+                shipper_address.save()
             
             return redirect('customer-detail', pk=customer_pk)
         else:
