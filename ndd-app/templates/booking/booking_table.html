@@ -86,7 +86,6 @@
                     <th>SIZE</th>
                     <th>BOOKING</th>
 
-                    <th>START</th>
                     <th>TR</th>
                     <th>FM</th>
                     <th>TR</th>
@@ -160,7 +159,6 @@
                                     {{ booking.booking_no }}
                                 </td>
 
-                            <td>{{ booking.start }}</td>
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.yard_ndd == '1' %}bg-gold{% elif booking.pickup_tr %}bg-cyan{% else %}{% endif %}">{{ booking.pickup_tr }}</td>
                             <td>{{ booking.pickup_from }}</td>
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.forward_tr %}bg-cyan{% else %}{% endif %}">{{ booking.forward_tr }}</td>
@@ -169,9 +167,9 @@
                             <td class="{% if booking.status == '0' %}bg-secondary{% elif booking.status == '2' %}bg-lime{% elif booking.return_tr %}bg-cyan{% else %}{% endif %}">{{ booking.return_tr }}</td>
                             <td>{{ booking.return_to }}</td>
 
-                            <td class="text-nowrap"><div style="font-weight: 800;">{{ booking.container_no }}</div></td>
-                            <td class="text-nowrap">{{ booking.seal_no }}</td>
-                            <td class="text-center px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
+                            <td class="text-nowrap" style="font-weight: 800;">{{ booking.container_no }}</td>
+                            <td class="text-nowrap" style="font-weight: 800;">{{ booking.seal_no }}</td>
+                            <td class="px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
                             {% if booking.closing_date %}
                                 <td class="text-nowrap px-2">{{ booking.closing_date | date:'d/m/y' }}</td>
                             {% else %}
