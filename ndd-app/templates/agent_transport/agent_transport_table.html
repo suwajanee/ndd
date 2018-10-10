@@ -130,8 +130,8 @@
                             <td class="{% if agent_transport.status == '0' %}bg-secondary{% elif agent_transport.status == '2' %}bg-lime{% elif agent_transport.return_tr %}bg-cyan{% else %}{% endif %}">{{ agent_transport.return_tr }}</td>
                             <td>{{ agent_transport.return_to }}</td>
 
-                            <td class="text-nowrap">{{ agent_transport.container_1 }}</td>
-                            <td class="text-nowrap">{{ agent_transport.container_2 }}</td>
+                            <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_1 }}</td>
+                            <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_2 }}</td>
 
                             <td class="text-center px-1"><div class="long-text">{{ agent_transport.ref }}</div></td>
                             <td class="text-center px-1"><div  class="long-text-80">{{ agent_transport.remark }}</div></td>

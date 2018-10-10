@@ -20,7 +20,8 @@ class AgentTransportEditTableView(TemplateView):
         template_name = 'agent_transport/agent_transport_edit.html'
         context = {}
         context['nbar'] = 'agent-transport-table'
-        context['today'] = datetime.now()  
+        context['today'] = datetime.now()
+        prev_7_days = datetime.now() - timedelta(days=7)
 
         if request.method == "GET":
             context['filter_by'] = request.GET.get("filter_by")
@@ -30,7 +31,7 @@ class AgentTransportEditTableView(TemplateView):
                 context['date_filter'] = ''
 
             if not context['date_filter']:
-                context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+                context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(date__gte=prev_7_days) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
             else:
                 if context['filter_by'] == "month":
                     month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
@@ -38,7 +39,7 @@ class AgentTransportEditTableView(TemplateView):
                 else:
                     context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['date_filter']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
         else:
-            context['agent_transports'] = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+            context['agent_transports'] = AgentTransport.objects.filter((Q(date__month=context['today'].month) & Q(date__year=context['today'].year)) | Q(date__gte=prev_7_days) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
 
         return render(request, template_name, context)        
 
@@ -74,13 +75,13 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transport = AgentTransport.objects.get(pk=pk[i])
                 agent_transport.status = status[i]
                 agent_transport.date = date[i]
-                agent_transport.agent = re.sub(' +', ' ', agent[i].strip())
+                agent_transport.agent = re.sub(' +', ' ', agent[i].strip().upper())
                 agent_transport.size = re.sub(' +', ' ', size[i].strip())
                 agent_transport.booking_no = re.sub(' +', ' ', booking_no[i].strip())
                 agent_transport.pickup_tr = re.sub(' +', ' ', pickup_tr[i].strip())
-                agent_transport.pickup_from = re.sub(' +', ' ', pickup_from[i].strip())
+                agent_transport.pickup_from = re.sub(' +', ' ', pickup_from[i].strip().upper())
                 agent_transport.return_tr = re.sub(' +', ' ', return_tr[i].strip())
-                agent_transport.return_to = re.sub(' +', ' ', return_to[i].strip())
+                agent_transport.return_to = re.sub(' +', ' ', return_to[i].strip().upper())
                 agent_transport.container_1 = re.sub(' +', ' ', container_1[i].strip())
                 agent_transport.container_2 = re.sub(' +', ' ', container_2[i].strip())
                 agent_transport.ref = re.sub(' +', ' ', ref[i].strip())
