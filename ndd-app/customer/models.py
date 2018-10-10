@@ -31,3 +31,9 @@ class Shipper(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ShipperAddress(models.Model):
+    shipper = models.ForeignKey(Shipper, on_delete=models.SET_NULL, null=True, blank=True)
+    address_type = models.CharField(max_length=50, blank=True, default='')
+    address = models.CharField(max_length=500, blank=True, default='')

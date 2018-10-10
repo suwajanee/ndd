@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 
-from ..models import Principal, Shipper
+from ..models import Principal, Shipper, ShipperAddress
 
 
 class CustomerListView(TemplateView):
@@ -26,6 +26,7 @@ class CustomerListView(TemplateView):
         context['principals'] = Principal.objects.all().order_by('cancel', 'name')
         context['customer'] = Principal.objects.get(pk=pk)
         context['shippers'] = Shipper.objects.filter(principal=pk).order_by('cancel', 'name')
+        # context['addresses'] = ShipperAddress.objects.filter(shipper__in=context['shippers']).order_by('address_type')
 
         # return render(request, template_name, {'principals': principals, 'customer': customer, 'shippers': shippers, 'nbar': 'customer'})
         return render(request, template_name, context)

@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 
-from ..models import Principal, Shipper
+from ..models import Principal, Shipper, ShipperAddress
 
 
 class CustomerAddView(TemplateView):
@@ -35,17 +35,32 @@ class CustomerAddView(TemplateView):
     def add_shipper(request):
         if request.method == 'POST':
             customer_pk = request.POST['customer_pk']
-            shipper = request.POST['shipper_add']
-            address = request.POST['address_add']
+            shipper_name = request.POST['shipper_add']
+
+            address_type = request.POST.getlist('address_type_add')
+            address = request.POST.getlist('address_add')
 
             data = {
                 'principal': Principal.objects.get(pk=customer_pk),
-                'name': re.sub(' +', ' ', shipper.strip()),
-                'address': address
+                'name': re.sub(' +', ' ', shipper_name.strip()),
+                # 'address': address
             }
 
             shipper = Shipper(**data)
             shipper.save()
+
+            for i in range(len(address_type)):
+
+                if address_type[i].strip() == '' and address[i].strip() == '':
+                    continue
+                data = {
+                    'shipper': Shipper.objects.get(pk=shipper.pk),
+                    'address_type': re.sub(' +', ' ', address_type[i].strip()),
+                    'address': address[i]
+                }
+                shipper_address = ShipperAddress(**data)
+                shipper_address.save()
+
             
             return redirect('customer-detail', pk=customer_pk)
         else:
