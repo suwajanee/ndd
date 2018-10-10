@@ -29,7 +29,7 @@ $(function () {
             currentEntry = $(this).parents('.entry:first'),
             newEntry = $(currentEntry.clone()).appendTo(controlForm);
         newEntry.find('input').val('');
-        newEntry.find('textarea').val('').prop('required',false);
+        newEntry.find('textarea').val('');
         controlForm.find('.entry:not(:first) .add-more')
             .removeClass('add-more').addClass('remove')
             .removeClass('btn-outline-success').addClass('btn-outline-danger')

@@ -243,15 +243,12 @@
                                     <div class="row mt-3">
                                             <div class="container">
                                                 <div class="table">
-                                                    <!-- <thead> -->
                                                     <hr>
                                                     <div class="row">
                                                         <div class="col-md-2">TYPE</div>
                                                         <div class="col-md-10">ADDRESS</div>
                                                     </div>
                                                     <hr>
-                                                    <!-- </thead> -->
-                                                    <!-- <tbody class="control"> -->
                                                     <div class="control">
                                                         <div class="row entry mt-2">
                                                             <div class="col-md-2"><input name="address_type_add" class="form-control" autocomplete=off maxlength="50"></div>
@@ -259,8 +256,6 @@
                                                             <div class="col-md-1"><button class="btn btn-outline-success add-more"><i class="fa fa-plus"></i></button></div>
                                                         </div>
                                                     </div>
-                                                    <!-- </tbody> -->
-    
     
                                                 </div>
                                             </div> 
@@ -378,10 +373,9 @@
                                                         <div class="col-md-10">ADDRESS</div>
                                                     </div>
                                                     <hr>
-                                                    <div class="control{{ shipper.pk }}">
-                                                        
-                                                        {% with shipper.pk|check_address as addresses %}
+                                                    {% with shipper.pk|check_address as addresses %}
                                                             {% if addresses %}
+                                                    <div class="control">
                                                                 {% for address in addresses %}
                                                                 <div class="row entry mt-2">
                                                                     <input type="hidden" name="shipper_address_pk" value="{{ address.pk }}">
@@ -389,22 +383,22 @@
                                                                     <div class="col-md-9"><textarea name="address_edit" rows=3 class="form-control" maxlength="500" autocomplete=off>{{ address.address }}</textarea></div>
                                                                     <div class="col-md-1"><button class="btn btn-outline-danger remove" type="button"><i class="fa fa-minus"></i></button></div>
                                                                 </div>
-                                                            {% endfor %}
-                                                            <div class="row entry mt-2">
-                                                                <div class="col-md-2"><input name="address_type_edit" class="form-control" autocomplete=off maxlength="50"></div>
-                                                                <div class="col-md-9"><textarea name="address_edit" rows=3 class="form-control" maxlength="500" autocomplete=off></textarea></div>
-                                                                <div class="col-md-1"><button class="btn btn-outline-danger remove" type="button"><i class="fa fa-minus"></i></button></div>
-                                                            </div>
-                                                            {% else %}
+                                                                {% endfor %}
                                                                 <div class="row entry mt-2">
                                                                     <div class="col-md-2"><input name="address_type_edit" class="form-control" autocomplete=off maxlength="50"></div>
                                                                     <div class="col-md-9"><textarea name="address_edit" rows=3 class="form-control" maxlength="500" autocomplete=off></textarea></div>
-                                                                    <div class="col-md-1"><button class="btn btn-outline-danger remove" type="button"><i class="fa fa-minus"></i></button></div>
                                                                 </div>
-                                                            {% endif %}
-                                                        {% endwith %}
-                                                        
+                                                            
                                                     </div>
+                                                    {% else %}
+                                                    <div class="control">
+                                                        <div class="row entry mt-2">
+                                                            <div class="col-md-2"><input name="address_type_edit" class="form-control" autocomplete=off maxlength="50"></div>
+                                                            <div class="col-md-9"><textarea name="address_edit" rows=3 class="form-control" maxlength="500" autocomplete=off></textarea></div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                {% endwith %}
     
     
                                                 </div>
@@ -445,28 +439,6 @@
 
                             });
 
-                            $('.control{{ shipper.pk }}').find('.entry:first .remove')
-                                    .removeClass('remove').addClass('add-more')
-                                    .removeClass('btn-outline-danger').addClass('btn-outline-success')
-                                    .html('<span><i class="fa fa-plus"></i></span>');
-
-                            $(document).on('click', '.add-more', function (e) {
-                                e.preventDefault();
-                                var controlForm = $('.control{{ shipper.pk }}:first'),
-                                    currentEntry = $(this).parents('.entry:first'),
-                                    newEntry = $(currentEntry.clone()).appendTo(controlForm);
-                                newEntry.find('input[type=hidden]').remove();
-                                newEntry.find('input').val('');
-                                newEntry.find('textarea').empty();
-                                controlForm.find('.entry:not(:first) .add-more')
-                                    .removeClass('add-more').addClass('remove')
-                                    .removeClass('btn-outline-success').addClass('btn-outline-danger')
-                                    .html('<span><i class="fa fa-minus"></i></span>');
-                            }).on('click', '.remove', function (e) {
-                                $(this).parents('.entry:first').remove();
-                                e.preventDefault();
-                                return false;
-                            });
                         });
 
                     </script>

@@ -44,10 +44,6 @@ class CustomerEditView(TemplateView):
             shipper.name = re.sub(' +', ' ', shipper_name.strip())
             shipper.save()
 
-            print('1111111111111111111111')
-            print(shipper_address_pk)
-            print(address_type)
-
             shipper_address_pk_old = ShipperAddress.objects.filter(shipper=shipper_pk).values_list('pk', flat=True)
             for pk in shipper_address_pk_old:
                 if str(pk) not in shipper_address_pk:
