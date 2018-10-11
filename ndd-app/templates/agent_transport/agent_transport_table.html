@@ -89,6 +89,7 @@
                     <th>RETURN</th>
                 </thead> 
                 <tbody> 
+                    {% load check_shipper_address %}
                     {% for agent_transport in agent_transports %}
                         {% if agent_transport.status == '0' %}
                             <tr class="bg-secondary">
@@ -144,7 +145,7 @@
                         
                         <div class="modal fade" id="modalPrint{{ agent_transport.pk }}" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                                <form method="POST" action="{% url 'agent-transport-print' pk=agent_transport.pk %}">
+                                <form method="POST" action="{% url 'agent-transport-print' pk=agent_transport.pk %}" target="_blank">
                                     {% csrf_token %}
                                     <div class="modal-content">
                                         <div class="modal-header text-center">
@@ -178,24 +179,51 @@
                                                     ADDRESS
                                                 </div>
                                             </div>
-                                            <div class="container col-md-11">
-                                                <div class="row">
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-shipper{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="shipper" checked>
-                                                        <label class="custom-control-label" for="address-shipper{{ agent_transport.pk }}">Shipper</label>
-                                                    </div> 
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col custom-control custom-radio">
-                                                        <input type="radio" id="address-other{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="other">
-                                                        <label class="custom-control-label" for="address-other{{ agent_transport.pk }}">Other</label>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="w-100 my-2">
-                                                        <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled></textarea>
-                                                    </div>
-                                                </div>
+                                            <div class="container col-md-11 address-part">
+                                                {% with agent_transport.shipper|check_shipper_address:agent_transport.principal as addresses %}
+                                                    {% if addresses %}
+                                                        {% for address in addresses %}
+                                                            {% if address.address_type %}
+                                                                <div class="row">
+                                                                        <div class="col custom-control custom-radio">
+                                                                            <input type="radio" id="address-shipper-{{ address.address_type }}{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="{{ address.pk }}">
+                                                                            <label class="custom-control-label" for="address-shipper-{{ address.address_type }}{{ agent_transport.pk }}">Shipper ( {{ address.address_type }} ) </label>
+                                                                        </div> 
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="row">
+                                                                        <div class="col custom-control custom-radio">
+                                                                            <input type="radio" id="address-shipper{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="{{ address.pk }}">
+                                                                            <label class="custom-control-label" for="address-shipper{{ agent_transport.pk }}">Shipper</label>
+                                                                        </div> 
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            <div class="row">
+                                                                <div class="col custom-control custom-radio">
+                                                                    <input type="radio" id="address-other{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="other">
+                                                                    <label class="custom-control-label" for="address-other{{ agent_transport.pk }}">Other</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="w-100 my-2">
+                                                                    <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;" maxlength="400" disabled></textarea>
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="row">
+                                                                <div class="col custom-control custom-radio">
+                                                                    <input type="radio" id="address-other{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="other">
+                                                                    <label class="custom-control-label" for="address-other{{ agent_transport.pk }}">Other</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="w-100 my-2">
+                                                                    <textarea class="form-control" rows="3" id="id_address_other{{ agent_transport.pk }}" name="address_other" style="font-size: 12px;" maxlength="400"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endwith %}
                                                 <div class="row">
                                                     <div class="col custom-control custom-radio">
                                                         <input type="radio" id="address-none{{ agent_transport.pk }}" class="custom-control-input" name="address{{ agent_transport.pk }}" onchange="updateradio('{{ agent_transport.pk }}');" value="none">
