@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 import xhtml2pdf.pisa as pisa
 
 from ..models import Booking
-from customer.models import Shipper
+from customer.models import ShipperAddress
 from ndd.settings import STATICFILES_DIRS
 
 
@@ -57,14 +57,14 @@ class BookingPrintView(TemplateView):
             
             if address == 'other':
                 context['address'] = request.POST["address_other"]
-            elif address == 'shipper':
+            elif address == 'none':
+                context['address'] = ''
+            else:
                 try:
-                    shipper = Shipper.objects.get(Q(principal=context['booking'].principal) & Q(name=context['booking'].shipper))
-                    context['address'] = shipper.address
+                    shipper_address = ShipperAddress.objects.get(pk=address)
+                    context['address'] = shipper_address.address
                 except Shipper.DoesNotExist:
                     context['address'] = ''
-            else:
-                context['address'] = ''
 
         request.session['template_name'+pk] = template_name
         request.session['address'+pk] = context['address'] 

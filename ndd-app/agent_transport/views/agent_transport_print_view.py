@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 import xhtml2pdf.pisa as pisa
 
 from ..models import AgentTransport
-from customer.models import Shipper
+from customer.models import ShipperAddress
 from ndd.settings import STATICFILES_DIRS
 
 
@@ -50,14 +50,14 @@ class AgentTransportPrintView(TemplateView):
 
             if address == 'other':
                 context['address'] = request.POST["address_other"]
-            elif address == 'shipper':
+            elif address == 'none':
+                context['address'] = ''
+            else:
                 try:
-                    shipper = Shipper.objects.get(Q(principal=context['agent_transport'].principal) & Q(name=context['agent_transport'].shipper))
-                    context['address'] = shipper.address
+                    shipper_address = ShipperAddress.objects.get(pk=address)
+                    context['address'] = shipper_address.address
                 except Shipper.DoesNotExist:
                     context['address'] = ''
-            else:
-                context['address'] = ''
 
         request.session['template_name'+pk] = template_name
         request.session['address'+pk] = context['address']
