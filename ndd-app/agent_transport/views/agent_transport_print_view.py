@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 import xhtml2pdf.pisa as pisa
 
 from ..models import AgentTransport
-from customer.models import Shipper, ShipperAddress
+from customer.models import ShipperAddress
 from ndd.settings import STATICFILES_DIRS
 
 
