@@ -36,4 +36,9 @@ $(function () {
         return false;
     });
 
+    $('.address-part').each(function(){
+        $('input[type=radio]', this).get(0).checked = true;
+    });
+
+
 });

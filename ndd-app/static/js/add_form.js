@@ -1,6 +1,6 @@
 function updateradio(pk) {
-    var address = document.getElementsByName("address"+pk);
-    if (address[1].checked) {
+    var address = document.getElementById("address-other"+pk);
+    if (address.checked) {
         document.getElementById("id_address_other"+pk).disabled = false;
     } else {
         document.getElementById("id_address_other"+pk).disabled = true;

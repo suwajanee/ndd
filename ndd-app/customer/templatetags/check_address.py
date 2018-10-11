@@ -1,5 +1,7 @@
 from django.template import Library
-from ..models import Shipper, ShipperAddress
+
+from ..models import ShipperAddress
+
 
 register = Library()
 
