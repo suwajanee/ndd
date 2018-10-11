@@ -42,15 +42,15 @@ class ExportDataView(TemplateView):
             # Sheet header
             style = style_xls.header_style()
 
-            columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', \
+            columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', 'Tare', \
             'Vessel', 'Port', 'Closing date', 'Closing time', 'Ref.', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
 
-            ws_booking.write_merge(0, 0, 26, 27, 'Pick up', style)
-            ws_booking.write_merge(0, 0, 28, 31, 'Factory', style)
-            ws_booking.write_merge(0, 0, 32, 33, 'Return', style)
+            ws_booking.write_merge(0, 0, 27, 28, 'Pick up', style)
+            ws_booking.write_merge(0, 0, 29, 32, 'Factory', style)
+            ws_booking.write_merge(0, 0, 33, 34, 'Return', style)
 
             for col_num in range(len(columns)):
-                if col_num <= 25 :
+                if col_num <= 26 :
                     ws_booking.write_merge(0, 1, col_num, col_num, columns[col_num], style)
                 else:
                     ws_booking.write(1, col_num, columns[col_num], style)
@@ -58,14 +58,14 @@ class ExportDataView(TemplateView):
             # Sheet body, remaining rows
 
             rows = Booking.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('time', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-            'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'vessel', 'port', 'closing_date', 'closing_time', 'ref', 'remark', 'work_id', \
+            'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'tare', 'vessel', 'port', 'closing_date', 'closing_time', 'ref', 'remark', 'work_id', \
             'pickup_date', 'factory_date', 'return_date', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', \
-            'factory_out_time', 'return_in_time', 'return_out_time', 'nextday', 'cancel').order_by('date', 'work_id')
+            'factory_out_time', 'return_in_time', 'return_out_time', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal', 'shipper', 'work_id')
 
             row_num = 1
             row_prev = None
             booking_prev = None
-            booking_status = True
+            booking_index = -1
             for row in rows:
                 row = list(row)
                 bg_black = False 
@@ -76,10 +76,18 @@ class ExportDataView(TemplateView):
                     row_num += 1
                 row_prev = row[1]
 
-                for col_num in range(len(row)-2):
+                for col_num in range(len(row)-4):
                     style = xlwt.XFStyle()
                     style.borders = style_xls.border_cell()
                     style.alignment = style_xls.align_left()
+
+                    if col_num == 0:
+                        try:
+                            time = row[col_num].split('.')
+                            if int(time[0])>0 and int(time[0])<11:
+                                style.pattern = style_xls.bg_yellow()
+                        except:
+                            pass
 
                     if col_num == 2:
                         try:
@@ -93,28 +101,39 @@ class ExportDataView(TemplateView):
                         except Shipper.DoesNotExist:
                             row[col_num] = ''
 
+                    if col_num == 14 or col_num == 15:
+                        style.font = style_xls.font_bold()
+
                     if str(type(row[col_num])) == "<class 'datetime.date'>" :
                         style.num_format_str = 'dd/mm/yy'
 
-                    if row[len(row)-2] == '1' and col_num > 22 and col_num < 26:
+                    if row[len(row)-2] == '1' and col_num > 23 and col_num < 27:
                         style.pattern = style_xls.bg_aqua()
                     
                     if booking_prev != row[6]:
-                        booking_status = not(booking_status)
+                        if booking_index > 8:
+                            booking_index = -1
+                        booking_index += 1
                     booking_prev = row[6]
 
-                    if col_num == 6: 
-                        if booking_status == True:
-                            style.pattern = style_xls.bg_light_orange()
-                        else:
-                            style.pattern = style_xls.bright_green()
+                    if col_num == 6:
+                        style.pattern = style_xls.bg_booking(booking_index)
 
-                    if row[len(row)-1] == '1':
+                    if col_num == 7 or col_num == 9 or col_num == 11 or col_num == 12:
+                        if row[len(row)-1] == '2':
+                            style.pattern = style_xls.bg_bright_green()
+                        elif row[col_num] != '':
+                            style.pattern = style_xls.bg_sky_blue()
+                            if (col_num == 7 and row[len(row)-3] == '1') or (col_num == 11 and row[len(row)-4] == '1'):
+                                style.pattern = style_xls.bg_yellow()                        
+
+                    if row[len(row)-1] == '0':
                         style.pattern = style_xls.cancel_row()
-
-                    if col_num >= 26 :
+                        
+                    if col_num >= 27 :
                         if row[col_num] != '':
                             date_time = row[col_num].split('//')
+                            
                             if date_time[0] == '':
                                 date = None
                             else:
@@ -138,12 +157,12 @@ class ExportDataView(TemplateView):
 
             # Sheet body, remaining rows
             rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-            'container_1', 'container_2', 'ref', 'remark', 'work_id', 'pickup_date', 'return_date', 'cancel').order_by('date', 'work_id')
+            'container_1', 'container_2', 'ref', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_id')
 
             row_num = 0
             row_prev = None
             booking_prev = None
-            booking_status = True
+            booking_index = -1
             for row in rows:
                 row = list(row)
                 bg_black = False 
@@ -171,20 +190,28 @@ class ExportDataView(TemplateView):
                         except Shipper.DoesNotExist:
                             row[col_num] = ''
 
+                    if col_num == 10 or col_num == 11:
+                        style.font = style_xls.font_bold()
+
                     if str(type(row[col_num])) == "<class 'datetime.date'>" :
                         style.num_format_str = 'dd/mm/yy'
 
                     if booking_prev != row[5]:
-                        booking_status = not(booking_status)
+                        if booking_index > 8:
+                            booking_index = -1
+                        booking_index += 1
                     booking_prev = row[5]
 
-                    if col_num == 5: 
-                        if booking_status == True:
-                            style.pattern = style_xls.bg_light_orange()
-                        else:
-                            style.pattern = style_xls.bright_green()
+                    if col_num == 5:
+                        style.pattern = style_xls.bg_booking(booking_index)
 
-                    if row[len(row)-1] == '1':
+                    if col_num == 6 or col_num == 8:
+                        if row[len(row)-1] == '2':
+                            style.pattern = style_xls.bg_bright_green()
+                        elif row[col_num] != '':
+                            style.pattern = style_xls.bg_sky_blue()
+
+                    if row[len(row)-1] == '0':
                         style.pattern = style_xls.cancel_row()
 
                     ws_agent_transport.write(row_num, col_num, row[col_num], style)
