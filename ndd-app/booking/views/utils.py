@@ -59,19 +59,37 @@ class StyleXls():
         pattern.pattern_fore_colour = xlwt.Style.colour_map['aqua']
         return pattern
 
-    def bg_light_orange(self):
+    def bg_booking(self, index):
         pattern = xlwt.Pattern()
         pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern.pattern_fore_colour = xlwt.Style.colour_map['light_orange']
+        color = ['pink', 'rose', 'coral', 'light_orange', 'gold', 'light_yellow', 'light_green', 'light_turquoise', 'pale_blue', 'periwinkle']
+        pattern.pattern_fore_colour = xlwt.Style.colour_map[color[index]]
         return pattern
 
-    def bright_green(self):
+    def bg_bright_green(self):
         pattern = xlwt.Pattern()
         pattern.pattern = xlwt.Pattern.SOLID_PATTERN
         pattern.pattern_fore_colour = xlwt.Style.colour_map['bright_green']
+        return pattern
+
+    def bg_sky_blue(self):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern.pattern_fore_colour = xlwt.Style.colour_map['sky_blue']
+        return pattern
+
+    def bg_yellow(self):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern.pattern_fore_colour = xlwt.Style.colour_map['yellow']
         return pattern
 
     def align_left(self):
         alignment = xlwt.Alignment()
         alignment.horz = 1
         return alignment
+
+    def font_bold(self):
+        font = xlwt.Font()
+        font.bold = True
+        return font
