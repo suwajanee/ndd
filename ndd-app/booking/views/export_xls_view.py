@@ -36,7 +36,7 @@ class ExportDataView(TemplateView):
             response = HttpResponse(content_type='application/ms-excel')
             response['Content-Disposition'] = 'attachment; filename="Booking-' + file_month_name + '.xls"'
 
-            wb = xlwt.Workbook(encoding='utf-8')
+            wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
             ws_booking = wb.add_sheet('Booking')
 
             # Sheet header
