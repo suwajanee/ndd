@@ -41,7 +41,7 @@
 
 <body>
   <div id="head_table">
-    <table class="time-table" >
+    <table class="time-table">
 
       <thead class="time-head">
 
@@ -87,13 +87,13 @@
     <div id="content_table">
       <table class="time-table" >
 
-        <tbody>
+        <tbody >
             {% for booking in bookings %}
 
             <tr>
               <td width=4.5%>{{ booking.date | date:'d-m-y' }}</td>
               <td width=5%>{{ booking.principal | truncatechars:8 }}</td>
-              <td width=5%>{{ booking.shipper }}</td>
+              <td width=5% >{{ booking.shipper }}</td>
               <td width=5%>{{ booking.agent | truncatechars:8 }}</td>
               <td width=3.5%>{{ booking.size }}</td>
               <td width=7% >{{ booking.booking_no }}</td>
