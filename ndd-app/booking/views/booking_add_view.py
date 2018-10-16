@@ -75,7 +75,6 @@ class BookingAddView(TemplateView):
                 port = request.POST['port']
                 closing_date = request.POST['closing_date']
                 closing_time = request.POST['closing_time']
-                ref = request.POST['ref']
                 remark = request.POST['remark']
 
                 nextday = request.POST['nextday']
@@ -109,7 +108,6 @@ class BookingAddView(TemplateView):
                             'port': re.sub(' +', ' ', port.strip()),
                             'closing_date': closing_date,
                             'closing_time': closing_time,
-                            'ref': re.sub(' +', ' ', ref.strip()),
                             'remark': re.sub(' +', ' ', remark.strip()),
                             'work_id': work_id,
                             'work_number': work_number,

@@ -43,14 +43,14 @@ class ExportDataView(TemplateView):
             style = style_xls.header_style()
 
             columns = ['Time', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no', 'Tare', \
-            'Vessel', 'Port', 'Closing date', 'Closing time', 'Ref.', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
+            'Vessel', 'Port', 'Closing date', 'Closing time', 'Remark', 'Work ID', 'Pick up', 'Factory', 'Return', 'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
 
-            ws_booking.write_merge(0, 0, 27, 28, 'Pick up', style)
-            ws_booking.write_merge(0, 0, 29, 32, 'Factory', style)
-            ws_booking.write_merge(0, 0, 33, 34, 'Return', style)
+            ws_booking.write_merge(0, 0, 26, 27, 'Pick up', style)
+            ws_booking.write_merge(0, 0, 28, 31, 'Factory', style)
+            ws_booking.write_merge(0, 0, 32, 33, 'Return', style)
 
             for col_num in range(len(columns)):
-                if col_num <= 26 :
+                if col_num <= 25 :
                     ws_booking.write_merge(0, 1, col_num, col_num, columns[col_num], style)
                 else:
                     ws_booking.write(1, col_num, columns[col_num], style)
@@ -58,7 +58,7 @@ class ExportDataView(TemplateView):
             # Sheet body, remaining rows
 
             rows = Booking.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('time', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-            'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'tare', 'vessel', 'port', 'closing_date', 'closing_time', 'ref', 'remark', 'work_id', \
+            'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'tare', 'vessel', 'port', 'closing_date', 'closing_time', 'remark', 'work_id', \
             'pickup_date', 'factory_date', 'return_date', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', \
             'factory_out_time', 'return_in_time', 'return_out_time', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal', 'shipper', 'work_id')
 
@@ -130,7 +130,7 @@ class ExportDataView(TemplateView):
                     if row[len(row)-1] == '0':
                         style.pattern = style_xls.cancel_row()
                         
-                    if col_num >= 27 :
+                    if col_num >= 26 :
                         if row[col_num] != '':
                             date_time = row[col_num].split('//')
                             
@@ -150,14 +150,14 @@ class ExportDataView(TemplateView):
             style = style_xls.header_style()
 
             columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'TO', 'Container 1', 'Container 2', \
-            'Ref.', 'Remark', 'Work ID', 'Pick up', 'Return']
+             'Remark', 'Work ID', 'Pick up', 'Return']
 
             for col_num in range(len(columns)):
                 ws_agent_transport.write(0, col_num, columns[col_num], style)
 
             # Sheet body, remaining rows
             rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-            'container_1', 'container_2', 'ref', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_id')
+            'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_id')
 
             row_num = 0
             row_prev = None

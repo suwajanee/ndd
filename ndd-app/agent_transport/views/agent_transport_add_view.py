@@ -69,7 +69,6 @@ class AgentTransportAddView(TemplateView):
                 date_list = request.POST.getlist('date')
                 pickup_from = request.POST['pickup_from']
                 return_to = request.POST['return_to']
-                ref = request.POST['ref']
                 remark = request.POST['remark']
 
                 container = zip(size_list, quantity_list, date_list)
@@ -87,7 +86,6 @@ class AgentTransportAddView(TemplateView):
                             'date': date,
                             'pickup_from': re.sub(' +', ' ', pickup_from.strip().upper()),
                             'return_to': re.sub(' +', ' ', return_to.strip().upper()),
-                            'ref': re.sub(' +', ' ', ref.strip()),
                             'remark': re.sub(' +', ' ', remark.strip()),
                             'work_id': work_id,
                             'work_number': work_number,

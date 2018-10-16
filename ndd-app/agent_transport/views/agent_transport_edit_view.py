@@ -58,7 +58,6 @@ class AgentTransportEditTableView(TemplateView):
             return_to = request.POST.getlist('return_to')
             container_1 = request.POST.getlist('container_1')
             container_2 = request.POST.getlist('container_2')
-            ref = request.POST.getlist('ref')
             remark = request.POST.getlist('remark')
 
             filter_by = request.POST['filter_by']
@@ -84,7 +83,6 @@ class AgentTransportEditTableView(TemplateView):
                 agent_transport.return_to = re.sub(' +', ' ', return_to[i].strip().upper())
                 agent_transport.container_1 = re.sub(' +', ' ', container_1[i].strip())
                 agent_transport.container_2 = re.sub(' +', ' ', container_2[i].strip())
-                agent_transport.ref = re.sub(' +', ' ', ref[i].strip())
                 agent_transport.remark = re.sub(' +', ' ', remark[i].strip())
                 agent_transport.pickup_date = date[i]
                 agent_transport.return_date = date[i]
