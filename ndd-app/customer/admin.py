@@ -13,7 +13,7 @@ class PrincipalAdmin(admin.ModelAdmin):
 
 class ShipperAdmin(admin.ModelAdmin):
     form = ShipperForm
-    list_display = ('principal', 'name', 'address', 'cancel')
+    list_display = ('principal', 'name', 'cancel')
 
 class ShipperAddressAdmin(admin.ModelAdmin):
     form = ShipperForm
