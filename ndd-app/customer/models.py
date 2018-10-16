@@ -22,7 +22,6 @@ class Principal(models.Model):
 class Shipper(models.Model):
     principal = models.ForeignKey(Principal, on_delete=models.CASCADE, related_name="shippers")
     name = models.CharField(max_length=200, blank=True, default='')
-    address = models.CharField(max_length=500, blank=True, default='')
     CANCEL_CHOICES = (
         ('1', 'Cancel'),
         ('0', '-'),

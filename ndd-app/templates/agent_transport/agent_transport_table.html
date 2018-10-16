@@ -81,7 +81,6 @@
                     <th>CONTAINER 1</th>
                     <th>CONTAINER 2</th>
 
-                    <th>REF.</th>
                     <th>REMARK</th>
                     <th>เลขที่ใบงาน</th>
 
@@ -108,9 +107,9 @@
                             </td>
                             
                             <td class="text-nowrap px-2">{{ agent_transport.date | date:'d M y' }}</td>
-                            <td class="text-center px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
-                            <td style="min-width:250px;">{{ agent_transport.shipper }}</td>
-                            <td class="text-center px-2"><div class="long-text">{{ agent_transport.agent }}</div></td>
+                            <td class="px-2 text-left"><div class="long-text">{{ agent_transport.principal }}</div></td>
+                            <td class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper }}</td>
+                            <td class="text-center"><div class="long-text" style="margin:auto;">{{ agent_transport.agent }}</div></td>
                             <td class="text-nowrap">{{ agent_transport.size }}</td>
                             {% if agent_transport.status == '0' %}
                                 <td class="bg-secondary text-center" style="min-width:150px;">
@@ -134,8 +133,7 @@
                             <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_1 }}</td>
                             <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_2 }}</td>
 
-                            <td class="text-center px-1"><div class="long-text">{{ agent_transport.ref }}</div></td>
-                            <td class="text-center px-1"><div  class="long-text-80">{{ agent_transport.remark }}</div></td>
+                            <td class="text-center px-1"><div  class="long-text-80" style="margin:auto;">{{ agent_transport.remark }}</div></td>
 
                             <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                             

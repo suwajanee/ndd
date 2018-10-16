@@ -1,7 +1,7 @@
-@import url(../fonts/thsarabunnew.css);
+/* @import url(../fonts/thsarabunnew.css); */
 
 body { 
-    font-family: THSarabunNew, sans-serif;
+    /* font-family: THSarabunNew, sans-serif; */
     height: 100%;
     /* width: 100%; */
 }
@@ -78,6 +78,7 @@ tbody {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;  
+    /* margin: auto; */
 }
 .long-text:active {
     overflow: visible;
@@ -151,18 +152,20 @@ input#id_date {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
+    border-radius: 5px; 
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #888; 
+    border-radius: 5px;
 }
 
 /* Handle on hover */

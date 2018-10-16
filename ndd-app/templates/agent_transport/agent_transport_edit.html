@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %} Edit Booking {% endblock %}
+{% block title %} Edit Agent Transport {% endblock %}
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
@@ -75,7 +75,6 @@
                 <th class="px-3">CONTAINER 1</th>
                 <th class="px-3">CONTAINER 2</th>
 
-                <th class="px-5">REF.</th>
                 <th class="px-5">REMARK</th>
                 <th class="px-4">เลขที่ใบงาน</th>
 
@@ -105,8 +104,8 @@
                             </select>
                         </td>
                         <td><input type="date" name="date" class="form-control" value="{{ agent_transport.date | date:'Y-m-d' }}"  autocomplete=off></td>
-                        <td class="text-center px-2"><div class="long-text">{{ agent_transport.principal }}</div></td>
-                        <td style="min-width:250px;">{{ agent_transport.shipper }}</td>
+                        <td class="px-2 text-left"><div class="long-text">{{ agent_transport.principal }}</div></td>
+                        <td class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper }}</td>
                         <td><input name="agent" class="form-control" value="{{ agent_transport.agent }}" maxlength="50" autocomplete=off></td>
                         <td>
                             <select name="size" class="custom-select size">
@@ -149,8 +148,7 @@
                         <td><input name="container_1" class="form-control" style="font-weight: 800;" value="{{ agent_transport.container_1 }}" maxlength="20" autocomplete=off></td>
                         <td><input name="container_2" class="form-control" style="font-weight: 800;" value="{{ agent_transport.container_2 }}" maxlength="20" autocomplete=off></td>
 
-                        <td><input name="ref" class="form-control" value="{{ agent_transport.ref }}" maxlength="150" autocomplete=off></td>
-                        <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" maxlength="200">{{ agent_transport.remark }}</textarea></td>
+                        <td><textarea class="form-control text-center" rows="1" name="remark" style="padding: 2px 4px; font-size: 12px;" maxlength="200">{{ agent_transport.remark }}</textarea></td>
 
                         <td class="text-nowrap">{{ agent_transport.work_id }}</td>
 

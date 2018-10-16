@@ -70,7 +70,6 @@ class BookingEditTableView(TemplateView):
             tare = request.POST.getlist('tare')
             closing_date = request.POST.getlist('closing_date')
             closing_time = request.POST.getlist('closing_time')
-            ref = request.POST.getlist('ref')
             remark = request.POST.getlist('remark')
             nextday = request.POST.getlist('nextday')
             return_date = request.POST.getlist('return_date')
@@ -124,7 +123,6 @@ class BookingEditTableView(TemplateView):
                 booking.tare = re.sub(' +', ' ', tare[i].strip())
                 booking.closing_date = closing_date[i]
                 booking.closing_time = closing_time[i]
-                booking.ref = re.sub(' +', ' ', ref[i].strip())
                 booking.remark = re.sub(' +', ' ', remark[i].strip())
                 booking.nextday = nextday[i]
                 if nextday[i] == '1':
