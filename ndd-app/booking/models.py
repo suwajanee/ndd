@@ -40,7 +40,6 @@ class Booking(models.Model):
     port = models.CharField(max_length=50, blank=True)
     closing_date = models.DateField(max_length=20, null=True, blank=True, default=None)
     closing_time = models.CharField(max_length=20, blank=True)
-    ref = models.CharField(max_length=200, blank=True, default='')
     remark = models.CharField(max_length=200, blank=True)
     
     work_id = models.CharField(max_length=50, blank=True)
