@@ -1,7 +1,8 @@
-input:not([type]), input[type="text"], td input[type="time"] {
+input:not([type]), input[type="text"] {
     min-width: 50px;
     padding: 2px 4px;
     font-size: 11px;
+    text-align: center;
 }
 
 td input[type="date"] {
@@ -26,7 +27,7 @@ select.status {
 
 select.size {
     min-width: 75px;
-    padding: 5px;
+    padding: 0px 12px;
     height: 25px;
     font-size: 11px;
 }

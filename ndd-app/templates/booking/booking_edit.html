@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %} Edit {% endblock %}
+{% block title %} Edit Booking {% endblock %}
         
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
@@ -124,8 +124,8 @@
                     <td class="{% if booking.status != '0' %}{{ booking.time | time_color }}{% endif %}"><input name="time" class="form-control" value="{{ booking.time }}" maxlength="10" autocomplete=off></td>
                     
                     <td><input type="date" id="date{{ booking.pk }}" name="date" class="form-control" value="{{ booking.date | date:'Y-m-d' }}" autocomplete=off onchange="changeDate({{ booking.pk }});" required></td>
-                    <td class="no-collapsable text-center"><div  class="long-text">{{ booking.principal }}</div></td>
-                    <td style="min-width:250px;">{{ booking.shipper }}</td>
+                    <td class="px-1 text-left"><div  class="long-text">{{ booking.principal }}</div></td>
+                    <td class="px-2 text-left" style="min-width:250px;">{{ booking.shipper }}</td>
                     <td><input name="agent" class="form-control" value="{{ booking.agent }}" maxlength="50" autocomplete=off></td>
 
                     <td>
@@ -193,7 +193,7 @@
                     <td><input type="date" name="closing_date" class="form-control" value="{{ booking.closing_date | date:'Y-m-d' }}" autocomplete=off></td>
                     <td><input name="closing_time" class="form-control" value="{{ booking.closing_time }}" maxlength="5" autocomplete=off></td>
 
-                    <td><textarea class="form-control" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" maxlength="200">{{ booking.remark }}</textarea></td>
+                    <td><textarea class="form-control text-center" rows="1" name="remark" style="padding: 2px 4px; font-size: 11px;" maxlength="200">{{ booking.remark }}</textarea></td>
 
                     <td class="text-nowrap">{{ booking.work_id }}</td>
 

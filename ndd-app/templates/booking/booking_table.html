@@ -140,9 +140,9 @@
                             <td class="text-nowrap {% if booking.status != '0' %}{{ booking.time | time_color }}{% endif %}">{{ booking.time }}</td>
                             
                             <td class="text-nowrap px-3">{{ booking.date | date:'d M y' }}</td>
-                            <td class="text-center px-1"><div class="long-text">{{ booking.principal }}</div></td>
-                            <td style="min-width:250px;">{{ booking.shipper }}</td>
-                            <td class="text-center px-1"><div class="long-text">{{ booking.agent }}</div></td>
+                            <td class="px-1 text-left"><div class="long-text">{{ booking.principal }}</div></td>
+                            <td class="px-2 text-left" style="min-width:250px;">{{ booking.shipper }}</td>
+                            <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ booking.agent }}</div></td>
                             <td class="text-nowrap">{{ booking.size }}</td>
                             {% if booking.status == '0' %}
                                 <td class="bg-secondary text-center" style="min-width:150px;">
@@ -176,7 +176,7 @@
                                 <td class="text-nowrap">-</td>
                             {% endif %}
                             <td class="text-nowrap">{{ booking.closing_time }}</td>
-                            <td class="no-collapsable text-center px-2"><div  class="long-text-80">{{ booking.remark }}</div></td>
+                            <td class="no-collapsable text-center px-2"><div  class="long-text-80" style="margin:auto;">{{ booking.remark }}</div></td>
 
                             <td class="text-nowrap">{{ booking.work_id }}</td>
                             

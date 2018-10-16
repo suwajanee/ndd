@@ -28,18 +28,20 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
     background: #f1f1f1; 
+    border-radius: 5px;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #888; 
+    border-radius: 5px;
 }
 
 /* Handle on hover */
