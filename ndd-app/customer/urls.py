@@ -5,6 +5,8 @@ from .views.customer_cancel_view import CustomerCancelView
 from .views.customer_edit_view import CustomerEditView
 from .views.customer_table_view import CustomerListView
 
+from .views import customer_data_view
+
 
 urlpatterns = [
     url(r'^$', CustomerListView.render_customer_list, name='customer-list'),
@@ -18,6 +20,9 @@ urlpatterns = [
 
     url(r'^cancel-customer/$', CustomerCancelView.cancel_customer, name='customer-cancel'),
     url(r'^cancel-shipper/$', CustomerCancelView.cancel_shipper, name='shipper-cancel'),
+
+
+    url(r'^api/shipper-address/$', customer_data_view.api_get_shipper_address, name='api-shipper-address'),
 ]
 
 

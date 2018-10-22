@@ -10,5 +10,10 @@ window.onload = function(){
     }
     
     tableCont.addEventListener('scroll',scrollHandle)
+
+    var filterDate = document.querySelector('#filter-date');
+
+    tableCont.style.top = filterDate.offsetTop+60+'px';
   }
+
 

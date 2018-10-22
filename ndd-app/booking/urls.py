@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.urls import path
+from django.views.generic import TemplateView
 
 from .views.booking_add_view import BookingAddView
 from .views.booking_delete_view import BookingDeleteView
@@ -7,6 +8,9 @@ from .views.booking_edit_view import BookingEditTableView
 from .views.booking_print_view import BookingPrintView
 from .views.booking_table_view import BookingTableView
 from .views.booking_time_view import BookingTimeView
+
+from .views import booking_table_view
+from .views import booking_time_view
 
 
 urlpatterns = [
@@ -28,6 +32,11 @@ urlpatterns = [
     url(r'^time/save/$', BookingTimeView.save_time_booking, name='booking-time-save'),
 
     url(r'^time/print/$', BookingPrintView.print_time, name='booking-print-time'),
+
+
+    url(r'^55$', booking_table_view.index, name='booking-page'),
+    url(r'^api/filter-bookings/$', booking_table_view.api_filter_bookings, name='api-filter-bookings'),
+    url(r'^api/get-time-bookings/$', booking_time_view.api_get_time_bookings, name='api-get-time-bookings'),
 ]
 
 

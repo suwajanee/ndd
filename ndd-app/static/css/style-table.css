@@ -10,7 +10,7 @@ table, td {
     /* font-family: THSarabunNew, sans-serif; */
     font-size: 12px;
     border: 1px solid gray;
-    text-align: center;    
+    text-align: center;
     /* width:100% */
   }
 
@@ -102,12 +102,12 @@ tbody {
 
 /* Fix header table when scroll */
 .table-cont{
-    /* height: 85%; */
     overflow-y: auto;
     position: absolute;
-    bottom:0;
+    bottom: 0;
+    
     box-shadow: 0 0 1px 1px gray;
-    width:100%;
+    
 }
 
 /* [data-toggle="collapse"] .toggle-icon .fa:before {  

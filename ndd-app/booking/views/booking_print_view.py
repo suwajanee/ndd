@@ -38,7 +38,7 @@ class BookingPrintView(TemplateView):
 
         if request.method == "POST":
             template = request.POST["template"]
-            address = request.POST["address"+pk]
+            address = request.POST["address"]
             
             if template == 'forward':
                 template_name = 'pdf_template/booking_fw_template.html'
@@ -63,7 +63,7 @@ class BookingPrintView(TemplateView):
                 try:
                     shipper_address = ShipperAddress.objects.get(pk=address)
                     context['address'] = shipper_address.address
-                except Shipper.DoesNotExist:
+                except ShipperAddress.DoesNotExist:
                     context['address'] = ''
 
         request.session['template_name'+pk] = template_name

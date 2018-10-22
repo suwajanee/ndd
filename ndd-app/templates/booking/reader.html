@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
+{% endblock %}
+
+{% block content %}
+<br>
+<div id="booking-table">
+   
+<div id="filter-date" class="container col-12" style="height: auto;">
+        <div class="row">
+
+            <div class="col">
+                <form name="booking-filter-sort" method="GET" class="form-inline">
+                    <div class="input-group">
+                            <div class="input-group-prepend">
+                                <select name="filter_by" class="btn " v-model="filter_by" style="background-color: #CED4DA;">
+                                    <option value="date" class="bg-white">Date</option>
+                                    <option value="month" class="bg-white">Month</option>
+                                </select>
+                            </div>
+
+                            <input name="date_filter" :type="filter_by" class="form-control mr-2" v-model="date_filter" style="max-width: 200px;" v-on:change="filterBookings()">
+                    </div>
+
+                    <!-- <button type="submit" class="btn btn-primary" v-on:click="filterBookings()">OK</button> -->
+                </form>
+            </div>
+
+            <div v-if="nbar=='table'" class="col text-center">
+                <select name="action" v-model="action" class="custom-select col-3 mr-1">
+                    <option value=""> -------- </option>
+                    <option value="time"> ลงเวลา </option>
+                    <option value="delete"> ลบ </option>
+                </select>
+                <button v-on:click="selectAction()" class="btn btn-primary mr-1" >GO</button>
+            </div>
+            
+            <div v-if="nbar=='table'" class="col text-right">
+                <button v-on:click="getBookingsEditTable()" class="btn btn-primary mr-1" ><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                <a class="btn btn-primary" href="/booking/add" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+            </div>
+
+            <div v-if="nbar=='edit' | nbar == 'time'" class="col text-right">
+                <!-- <div v-if="saving == true">Saving</div> -->
+                <button v-on:click="getBookingsDataTable" class="btn btn-danger mr-1" ><i class="fa fa-edit"></i>&nbsp;Exit</button>
+                <button @click="editBooking()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</a>
+            </div>
+            
+        </div>
+        
+    </div>
+   <br>
+
+<div v-if="nbar=='table'">
+    {% include 'booking/booking_table_data.html' %}
+</div>
+
+<div v-if="nbar=='edit'">
+    {% include 'booking/booking_table_edit.html' %}
+</div>
+
+<div v-if="nbar=='time'">
+    {% include 'booking/booking_table_time.html' %}
+</div>
+
+</div>
+
+<script src="{% static 'js/fixed_header.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/app_booking_table.js' %}"></script>
+
+
+
+<script type="application/javascript">
+
+window.addEventListener("load", function() {
+    
+    booking_table.reload();
+     
+});
+
+</script>
+{% endblock %}
