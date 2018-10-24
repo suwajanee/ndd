@@ -3,11 +3,11 @@ Vue.filter('formatDate', function(value) {
         return 
     }
     return dateFormat(value)
-});
+})
 
 Vue.filter('split', function(value) {
     return value.split('//')
-});
+})
 
 var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 function dateFormat(date) {
@@ -26,7 +26,6 @@ var booking_table = new Vue( {
     
     data: {
         bookings: [],
-        bookings_id: [],
         today: '',
         tmr: '',
 
@@ -65,39 +64,39 @@ var booking_table = new Vue( {
                 headers: {
                     'content-type': 'application/json'
                 }
-            };
+            }
 
             return fetch(endpoint, config)
                 .then((response) => response.json())
-                .catch((error) => console.log(error));
+                .catch((error) => console.log(error))
         },
         reload() {
             if(localStorage.getItem('filter_by')){
-                this.filter_by = localStorage.getItem('filter_by');
+                this.filter_by = localStorage.getItem('filter_by')
             }
             if(localStorage.getItem('date_filter')){
-                this.date_filter = localStorage.getItem('date_filter');
+                this.date_filter = localStorage.getItem('date_filter')
             }
-            this.getBookingsDataTable();
+            this.getBookingsDataTable()
         },
 
         getBookingsDataTable() {
-            this.filterBookings();
-            this.nbar = 'table';
+            this.filterBookings()
+            this.nbar = 'table'
         },
         getBookingsEditTable() {
-            this.filterBookings();
-            this.nbar = 'edit';
+            this.filterBookings()
+            this.nbar = 'edit'
         },
         getBookingsTimeTable() {
-            this.filterTimeBookings();
-            this.nbar = 'time';
+            this.filterTimeBookings()
+            this.nbar = 'time'
         },
 
         filterBookings() {
-            this.loading = true;
-            this.checked_bookings = [];
-            this.all_checked = false;
+            this.loading = true
+            this.checked_bookings = []
+            this.all_checked = false
             this.action = ''
             this.edit_data = []
             if(this.date_filter) {
@@ -105,21 +104,21 @@ var booking_table = new Vue( {
                     this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr
-                    this.getColor();
-                    this.loading = false;
-                });
+                    this.getColor()
+                    this.loading = false
+                })
             }
             else {
                 this.api("/booking/api/filter-bookings/").then((data) => {
-                    this.bookings = data.bookings;
+                    this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr
-                    this.getColor();
+                    this.getColor()
                     this.loading = false
-                });
+                })
             }
-            localStorage.setItem('filter_by', this.filter_by);
-            localStorage.setItem('date_filter', this.date_filter);
+            localStorage.setItem('filter_by', this.filter_by)
+            localStorage.setItem('date_filter', this.date_filter)
         },
 
         getColor() {
@@ -162,7 +161,7 @@ var booking_table = new Vue( {
                 this.api("/customer/api/shipper-address/", "POST", {shipper_id: shipper_id}).then((data) => {
                     this.shipper_address = data
                     this.print.address = this.shipper_address[0].id
-                });
+                })
             }
         },
         printSubmit(id) {
@@ -185,25 +184,25 @@ var booking_table = new Vue( {
             }
             
             if(this.edit_data.indexOf(booking) === -1) {
-                this.edit_data.push(booking);
+                this.edit_data.push(booking)
             }
         },
         saveEditBooking: function() {
-            this.loading = true;
+            this.loading = true
             this.saving = true
-            this.checked_bookings = [];
-            this.all_checked = false;            
+            this.checked_bookings = []
+            this.all_checked = false         
             if(this.edit_data.length > 0) {
                 this.api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
                     this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr
 
-                    this.getColor();
+                    this.getColor()
                     this.edit_data = []
                     this.loading = false
                     this.saving = false
-                });
+                })
             }
             else {
                 this.loading = false
@@ -216,24 +215,24 @@ var booking_table = new Vue( {
 
             if (!this.all_checked) {
                 for (booking in this.bookings) {
-                    this.checked_bookings.push(this.bookings[booking].id);   
+                    this.checked_bookings.push(this.bookings[booking].id) 
                 }
             }
         },
         selectAction() {
             if (this.checked_bookings.length == 0){
-                alert('เลือกงานที่ต้องการ');
+                alert('เลือกงานที่ต้องการ')
             }
             else if (this.action == 'delete'){
                 if (confirm('Are you sure?')){
-                    this.deleteBookings();
+                    this.deleteBookings()
                 }
             }
             else if (this.action == 'time') {
-                this.getBookingsTimeTable();
+                this.getBookingsTimeTable()
             }
             else {
-                alert('Select action');
+                alert('Select action')
             }
         },
 
@@ -241,24 +240,24 @@ var booking_table = new Vue( {
             this.loading = true
             this.action = ''
             this.api("/booking/api/delete-bookings/", "POST", { checked_bookings: this.checked_bookings, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
-                this.bookings = data.bookings;
-                this.getColor();
+                this.bookings = data.bookings
+                this.getColor()
 
                 this.loading = false
                 this.checked_bookings = []
-                this.all_checked = false;
-            });
+                this.all_checked = false
+            })
         },
 
         filterTimeBookings() {
-            this.loading = true;
+            this.loading = true
             this.edit_data = []
             this.api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
-                this.bookings = data.bookings;
+                this.bookings = data.bookings
                 this.today = data.today
                 this.tmr = data.tmr
 
-                this.getColor();
+                this.getColor()
                 this.splitTime('pickup_in_time')
                 this.splitTime('pickup_out_time')
                 this.splitTime('factory_in_time')
@@ -267,8 +266,8 @@ var booking_table = new Vue( {
                 this.splitTime('factory_out_time')
                 this.splitTime('return_in_time')
                 this.splitTime('return_out_time')
-                this.loading = false;
-            });           
+                this.loading = false
+            })          
         },
         splitTime(field) {
             for(booking in this.bookings) {
@@ -293,7 +292,7 @@ var booking_table = new Vue( {
                     this.filterTimeBookings()
                     this.loading = false
                     this.saving = false
-                });
+                })
             }
             else {
                 this.loading = false
@@ -303,10 +302,10 @@ var booking_table = new Vue( {
         printTime() {
             this.$refs.printTime.action = "/booking/time/print/"
             for(booking in this.bookings){
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "pk_list";
-                input.value = this.bookings[booking].id;
+                var input = document.createElement("input")
+                input.type = "hidden"
+                input.name = "pk_list"
+                input.value = this.bookings[booking].id
                 this.$refs.printTime.appendChild(input)
             }
             this.$refs.printTime.submit()
@@ -318,7 +317,7 @@ var booking_table = new Vue( {
             var right = field + 1
             var left = field - 1
             if(event.key == 'ArrowUp') {
-                event.preventDefault();
+                event.preventDefault()
                 try {
                     document.getElementById(field + '-' + up).focus()
                 }
@@ -327,7 +326,7 @@ var booking_table = new Vue( {
             }
             else if(event.key == 'ArrowDown')
             {
-                event.preventDefault();
+                event.preventDefault()
                 try {
                     document.getElementById(field + '-' + down).focus()
                 }
@@ -336,7 +335,7 @@ var booking_table = new Vue( {
             }
             else if(event.key == 'ArrowRight')
             {
-                event.preventDefault();
+                event.preventDefault()
                 try {
                     document.getElementById(right + '-' + index).focus()
                 }
@@ -345,7 +344,7 @@ var booking_table = new Vue( {
             }
             else if(event.key == 'ArrowLeft')
             {
-                event.preventDefault();
+                event.preventDefault()
                 try {
                     document.getElementById(left + '-' + index).focus()
                 }
@@ -355,4 +354,4 @@ var booking_table = new Vue( {
         }
         
     }
-});
+})
