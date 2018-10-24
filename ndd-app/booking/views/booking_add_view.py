@@ -121,7 +121,7 @@ class BookingAddView(TemplateView):
                         booking.save()
                  
                 messages.success(request, "Added Booking.")
-                return redirect('booking-table')
+                return redirect('booking-page')
             messages.error(request, "Form not validate.")
         return redirect('booking-add')
 
