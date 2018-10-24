@@ -15,7 +15,7 @@ function dateFormat(date) {
     var date_num = date.getDate()
     var month = monthNames[date.getMonth()]
     var year = date.getFullYear().toString().substr(-2)
-    return date_num+' '+month+' '+year
+    return date_num + ' ' + month + ' ' + year
 
 }
 
@@ -26,6 +26,7 @@ var booking_table = new Vue( {
     
     data: {
         bookings: [],
+        bookings_id: [],
         today: '',
         tmr: '',
 
@@ -44,7 +45,8 @@ var booking_table = new Vue( {
         color_index: 0,
         action: '',
         
-        edit: [],
+        edit_data: [],
+        saving: false,
         loading: false,
 
         print: {
@@ -54,12 +56,6 @@ var booking_table = new Vue( {
         }
         
     },
-
-    // computed: {
-    //     orderedBookings: function () {
-    //         return _.orderBy(this.bookings, ['date', 'principal.name', 'shipper.name' ])
-    //     }
-    // },
 
     methods: {
         api(endpoint, method, data) {
@@ -82,48 +78,28 @@ var booking_table = new Vue( {
             if(localStorage.getItem('date_filter')){
                 this.date_filter = localStorage.getItem('date_filter');
             }
-
-            if(localStorage.getItem('nbar')){
-                this.nbar = localStorage.getItem('nbar');
-                if(this.nbar == 'table'){
-                    this.getBookingsDataTable();
-                }
-                else if(this.nbar == 'edit'){
-                    this.getBookingsEditTable();
-                }
-                else if(this.nbar == 'time'){
-                    this.timeBookings();
-                }
-            }
-            else{
-                this.getBookingsDataTable();
-            }
-            
+            this.getBookingsDataTable();
         },
 
         getBookingsDataTable() {
-            this.loading = true;
             this.filterBookings();
             this.nbar = 'table';
-            localStorage.setItem('nbar', this.nbar);
         },
         getBookingsEditTable() {
-            this.loading = true;
             this.filterBookings();
             this.nbar = 'edit';
-            localStorage.setItem('nbar', this.nbar);
         },
-        timeBookings() {
+        getBookingsTimeTable() {
             this.filterTimeBookings();
             this.nbar = 'time';
-            localStorage.setItem('nbar', this.nbar);
         },
 
         filterBookings() {
             this.loading = true;
             this.checked_bookings = [];
-            console.log(this.checked_bookings)
             this.all_checked = false;
+            this.action = ''
+            this.edit_data = []
             if(this.date_filter) {
                 this.api("/booking/api/filter-bookings/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
                     this.bookings = data.bookings
@@ -142,14 +118,13 @@ var booking_table = new Vue( {
                     this.loading = false
                 });
             }
-
             localStorage.setItem('filter_by', this.filter_by);
             localStorage.setItem('date_filter', this.date_filter);
-
         },
 
         getColor() {
             for(booking in this.bookings) {
+
                 if(booking == 0){
                     this.bookings[booking].color = this.booking_color[this.color_index=0]
                 }
@@ -175,17 +150,6 @@ var booking_table = new Vue( {
             }
         },
 
-        selectAll() {
-            this.checked_bookings = []
-
-            if (!this.all_checked) {
-                for (booking in this.bookings) {
-                    console.log('55555555')
-                    this.checked_bookings.push(this.bookings[booking].id);   
-                }
-            }
-        },
-
         printFormModal(id, shipper_id) {
             this.modal = id
             this.print.address_other = ''
@@ -201,83 +165,154 @@ var booking_table = new Vue( {
                 });
             }
         },
-
         printSubmit(id) {
-            this.$refs.form.action = "/booking/print/" + id +"/"
-            this.$refs.form.submit()
-
+            this.$refs.printForm.action = "/booking/print/" + id +"/"
+            this.$refs.printForm.submit()
         },
 
-        filterTimeBookings() {
-            this.api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
-                this.bookings = data.bookings;
-                this.getColor();
-                this.splitTime()
-            });           
+        editData: function(booking, index, field) {
+            if(booking.yard_ndd == '1' & field == 9){
+                this.bookings[index].forward_tr = ''
+                this.bookings[index].backward_tr = ''
+                this.bookings[index].return_tr = ''
+            }
+            if(booking.nextday == '1' & field == 22){
+                this.bookings[index].backward_tr = ''
+                this.bookings[index].return_tr = ''
+            }
+            if(booking.fac_ndd == '1' & field == 13){
+                this.bookings[index].return_tr = ''
+            }
+            
+            if(this.edit_data.indexOf(booking) === -1) {
+                this.edit_data.push(booking);
+            }
         },
+        saveEditBooking: function() {
+            this.loading = true;
+            this.saving = true
+            this.checked_bookings = [];
+            this.all_checked = false;            
+            if(this.edit_data.length > 0) {
+                this.api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
+                    this.bookings = data.bookings
+                    this.today = data.today
+                    this.tmr = data.tmr
 
-        splitTime() {
-            for(booking in this.bookings) {
-                try {
-                var pickup_in_time = this.bookings[booking].pickup_in_time.split('//')
-                console.log(pickup_in_time)
-                this.bookings[booking].pickup_in__date = pickup_in_time[0]
-                console.log(this.bookings[booking].pickup_in_date)
-                this.bookings[booking].pickup_in__time = pickup_in_time[1]
-                }
-                catch{
-                    this.bookings[booking].pickup_in__date = ''
-                    this.bookings[booking].pickup_in__time = ''
-                }
+                    this.getColor();
+                    this.edit_data = []
+                    this.loading = false
+                    this.saving = false
+                });
+            }
+            else {
+                this.loading = false
+                this.saving = false
             }
         },
 
+        selectAll() {
+            this.checked_bookings = []
+
+            if (!this.all_checked) {
+                for (booking in this.bookings) {
+                    this.checked_bookings.push(this.bookings[booking].id);   
+                }
+            }
+        },
         selectAction() {
             if (this.checked_bookings.length == 0){
-                alert('select?');
+                alert('เลือกงานที่ต้องการ');
             }
             else if (this.action == 'delete'){
                 if (confirm('Are you sure?')){
-                    this.deleteBooking();
+                    this.deleteBookings();
                 }
             }
             else if (this.action == 'time') {
-                this.timeBookings();
+                this.getBookingsTimeTable();
             }
             else {
                 alert('Select action');
             }
-
         },
 
-        ifChangeValue: function(booking) {
-            if(this.edit.indexOf(booking) === -1) {
-                this.edit.push(booking);
-              }
+        deleteBookings: function() {
+            this.loading = true
+            this.action = ''
+            this.api("/booking/api/delete-bookings/", "POST", { checked_bookings: this.checked_bookings, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
+                this.bookings = data.bookings;
+                this.getColor();
+
+                this.loading = false
+                this.checked_bookings = []
+                this.all_checked = false;
+            });
         },
 
-        editBooking: function() {
+        filterTimeBookings() {
             this.loading = true;
-            this.api("/booking/edit/", "POST", { booking: this.edit, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
+            this.edit_data = []
+            this.api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
                 this.bookings = data.bookings;
+                this.today = data.today
+                this.tmr = data.tmr
+
                 this.getColor();
+                this.splitTime('pickup_in_time')
+                this.splitTime('pickup_out_time')
+                this.splitTime('factory_in_time')
+                this.splitTime('factory_load_start_time')
+                this.splitTime('factory_load_finish_time')
+                this.splitTime('factory_out_time')
+                this.splitTime('return_in_time')
+                this.splitTime('return_out_time')
                 this.loading = false;
-            });
-            
+            });           
         },
+        splitTime(field) {
+            for(booking in this.bookings) {
+                if ( this.bookings[booking][field].indexOf('//') > -1 ) {
+                    var pickup_in_time = this.bookings[booking][field].split('//')
+                    this.bookings[booking][field + '__date'] = pickup_in_time[0]
+                    this.bookings[booking][field + '__time'] = pickup_in_time[1]
+                }
+                else{
+                    this.bookings[booking][field + '__date'] = ''
+                    this.bookings[booking][field + '__time'] = ''
+                }
 
-        deleteBooking: function() {
-            this.api("/booking/delete/", "POST", { pk: this.checked_bookings, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
-                this.bookings = data.bookings;
-                this.getColor();
-            });
+
+            }
         },
-
-        
-
+        saveTimeBooking: function() {
+            this.loading = true
+            this.saving = true
+            if(this.edit_data.length > 0) {
+                this.api("/booking/api/save-time-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then(() => {
+                    this.filterTimeBookings()
+                    this.loading = false
+                    this.saving = false
+                });
+            }
+            else {
+                this.loading = false
+                this.saving = false
+            }   
+        },
+        printTime() {
+            this.$refs.printTime.action = "/booking/time/print/"
+            for(booking in this.bookings){
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "pk_list";
+                input.value = this.bookings[booking].id;
+                this.$refs.printTime.appendChild(input)
+            }
+            this.$refs.printTime.submit()
+        },
 
         keyDownArrow(field, index) {
-            
             var up = index - 1
             var down = index + 1
             var right = field + 1

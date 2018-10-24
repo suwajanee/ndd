@@ -77,7 +77,7 @@ class BookingPrintView(TemplateView):
         context = {}
         context['static_dir'] = STATICFILES_DIRS[0]
         if request.method == "POST":
-            pk_list = request.POST.getlist("pk")
+            pk_list = request.POST.getlist("pk_list")
             context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
             request.session['pk_list'] = pk_list
         else:
