@@ -1,141 +1,75 @@
 # -*- coding: utf-8 -*-
 
 import re
-from datetime import datetime, timedelta
+import json
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
+from .booking_page_view import api_filter_bookings
 
 
-class BookingEditTableView(TemplateView):
-    
-    @login_required(login_url=reverse_lazy('login'))
-    def render_edit_booking_page(request):
-        template_name = 'booking/booking_edit.html'
-        context = {}
-        context['tmr'] = datetime.now() + timedelta(days=1)
-        context['today'] = datetime.now()
+@csrf_exempt
+def api_save_edit_bookings(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        bookings = req['bookings']
 
-        if request.method == "GET":
+        for booking in bookings:
+            if not booking['date']:
+                booking['date'] = None
+            if not booking['closing_date']:
+                booking['closing_date'] = None
+            if not booking['return_date']:
+                booking['return_date'] = None
             
-            context['filter_by'] = request.GET.get("filter_by")
-            context['date_filter'] = request.GET.get("date_filter")
-            context['nbar'] = 'booking-table'
+            pickup_tr = booking['pickup_tr']
+            forward_tr = pickup_tr
+            backward_tr = pickup_tr
+            return_tr = pickup_tr
+            if booking['yard_ndd'] == '1':
+                forward_tr = booking['forward_tr']
+                backward_tr = forward_tr
+                return_tr = forward_tr
+            if booking['nextday'] == '1':
+                backward_tr = booking['backward_tr']
+                return_tr = backward_tr
+            if booking['fac_ndd'] == '1':
+                return_tr = booking['return_tr']
 
-            if context['date_filter'] == None:
-                context['date_filter'] = ''
-
-            if not context['date_filter']:
-                context['bookings'] = Booking.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+            booking_save = Booking.objects.get(pk=booking['id'])
+            booking_save.status = booking['status']
+            booking_save.time = booking['time']
+            booking_save.date = booking['date']
+            booking_save.agent = re.sub(' +', ' ', booking['agent'].strip().upper())
+            booking_save.size = re.sub(' +', ' ', booking['size'].strip())
+            booking_save.booking_no = re.sub(' +', ' ', booking['booking_no'].strip())
+            booking_save.start = re.sub(' +', ' ', booking['start'].strip().upper())
+            booking_save.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
+            booking_save.pickup_from = re.sub(' +', ' ', booking['pickup_from'].strip().upper())
+            booking_save.yard_ndd = booking['yard_ndd']
+            booking_save.forward_tr = re.sub(' +', ' ', forward_tr.strip())
+            booking_save.factory = re.sub(' +', ' ', booking['factory'].strip().upper())
+            booking_save.backward_tr = re.sub(' +', ' ', backward_tr.strip())
+            booking_save.fac_ndd = booking['fac_ndd']
+            booking_save.return_tr = re.sub(' +', ' ', return_tr.strip())
+            booking_save.return_to = re.sub(' +', ' ', booking['return_to'].strip().upper())
+            booking_save.container_no = re.sub(' +', ' ', booking['container_no'].strip())
+            booking_save.seal_no = re.sub(' +', ' ', booking['seal_no'].strip())
+            booking_save.tare = re.sub(' +', ' ', booking['tare'].strip())
+            booking_save.closing_date = booking['closing_date']
+            booking_save.closing_time = booking['closing_time']
+            booking_save.remark = re.sub(' +', ' ', booking['remark'].strip())
+            booking_save.nextday = booking['nextday']
+            if booking['nextday'] == '1':
+                booking_save.return_date = booking['return_date']
             else:
-                if context['filter_by'] == "month":
-                    month_of_year = datetime.strptime(context['date_filter'], '%Y-%m')
-                    context['bookings'] = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'principal__name', 'shipper__name', 'work_id')
-                else:
-                    context['bookings'] = Booking.objects.filter(Q(date=context['date_filter']) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'principal__name', 'shipper__name', 'work_id')
+                booking_save.pickup_date = booking['date']
+                booking_save.factory_date = booking['date']
+                booking_save.return_date = booking['date']
+            booking_save.vessel = re.sub(' +', ' ', booking['vessel'].strip())
+            booking_save.port = re.sub(' +', ' ', booking['port'].strip())
+            booking_save.save()
 
-        else:
-            context['bookings'] = Booking.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_id')
-
-        return render(request, template_name, context)        
-
-    @login_required(login_url=reverse_lazy('login'))
-    def save_edit_data_booking(request):
-        if request.method == 'POST':
-            pk = request.POST.getlist('pk')
-            status = request.POST.getlist('status')
-            time = request.POST.getlist('time')
-            date = request.POST.getlist('date')
-            agent = request.POST.getlist('agent')
-            size = request.POST.getlist('size')
-            booking_no = request.POST.getlist('booking_no')
-            start = request.POST.getlist('start')
-            pickup_tr_list = request.POST.getlist('pickup_tr')
-            pickup_from = request.POST.getlist('pickup_from')
-            yard_ndd = request.POST.getlist('yard_ndd')
-            forward_tr_list = request.POST.getlist('forward_tr')
-            factory = request.POST.getlist('factory')
-            backward_tr_list = request.POST.getlist('backward_tr')
-            fac_ndd = request.POST.getlist('fac_ndd')
-            return_tr_list = request.POST.getlist('return_tr')
-            return_to = request.POST.getlist('return_to')
-            container_no = request.POST.getlist('container_no')
-            seal_no = request.POST.getlist('seal_no')
-            tare = request.POST.getlist('tare')
-            closing_date = request.POST.getlist('closing_date')
-            closing_time = request.POST.getlist('closing_time')
-            remark = request.POST.getlist('remark')
-            nextday = request.POST.getlist('nextday')
-            return_date = request.POST.getlist('return_date')
-            vessel = request.POST.getlist('vessel')
-            port = request.POST.getlist('port')
-
-            filter_by = request.POST['filter_by']
-            date_filter = request.POST['date_filter']
-
-            for i in range(len(pk)):
-                if not date[i]:
-                    date[i] = None
-                if not closing_date[i]:
-                    closing_date[i] = None
-                if not return_date[i]:
-                    return_date[i] = None
-                
-                pickup_tr = pickup_tr_list[i]
-                forward_tr = pickup_tr_list[i]
-                backward_tr = pickup_tr_list[i]
-                return_tr = pickup_tr_list[i]
-                if yard_ndd[i] == '1':
-                    forward_tr = forward_tr_list[i]
-                    backward_tr = forward_tr_list[i]
-                    return_tr = forward_tr_list[i]
-                if nextday[i] == '1':
-                    backward_tr = backward_tr_list[i]
-                    return_tr = backward_tr_list[i]
-                if fac_ndd[i] == '1':
-                    return_tr = return_tr_list[i]
-
-                booking = Booking.objects.get(pk=pk[i])
-                booking.status = status[i]
-                booking.time = time[i]
-                booking.date = date[i]
-                booking.agent = re.sub(' +', ' ', agent[i].strip().upper())
-                booking.size = re.sub(' +', ' ', size[i].strip())
-                booking.booking_no = re.sub(' +', ' ', booking_no[i].strip())
-                booking.start = re.sub(' +', ' ', start[i].strip().upper())
-                booking.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
-                booking.pickup_from = re.sub(' +', ' ', pickup_from[i].strip().upper())
-                booking.yard_ndd = yard_ndd[i]
-                booking.forward_tr = re.sub(' +', ' ', forward_tr.strip())
-                booking.factory = re.sub(' +', ' ', factory[i].strip().upper())
-                booking.backward_tr = re.sub(' +', ' ', backward_tr.strip())
-                booking.fac_ndd = fac_ndd[i]
-                booking.return_tr = re.sub(' +', ' ', return_tr.strip())
-                booking.return_to = re.sub(' +', ' ', return_to[i].strip().upper())
-                booking.container_no = re.sub(' +', ' ', container_no[i].strip())
-                booking.seal_no = re.sub(' +', ' ', seal_no[i].strip())
-                booking.tare = re.sub(' +', ' ', tare[i].strip())
-                booking.closing_date = closing_date[i]
-                booking.closing_time = closing_time[i]
-                booking.remark = re.sub(' +', ' ', remark[i].strip())
-                booking.nextday = nextday[i]
-                if nextday[i] == '1':
-                    booking.return_date = return_date[i]
-                else:
-                    booking.pickup_date = date[i]
-                    booking.factory_date = date[i]
-                    booking.return_date = date[i]
-                booking.vessel = re.sub(' +', ' ', vessel[i].strip())
-                booking.port = re.sub(' +', ' ', port[i].strip())
-                booking.save()
-
-            messages.success(request, "Saving Booking.")
-            return redirect(reverse('booking-edit') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
-        else:
-            return redirect('booking-edit')
+    return api_filter_bookings(request)

@@ -11,7 +11,8 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
         
-
+        <script src="{% static 'js/vue.min.js' %}"></script>
+        
         <style>
             fieldset {
                 border: 1px solid #ddd !important;
@@ -31,13 +32,13 @@
         </style>
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light" style="min-width:1000px;">
 
         <nav id="nbar" class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-            <a class="navbar-brand" href="{% url 'booking-table' %}">NDD</a>
+            <a class="navbar-brand" href="{% url 'booking-page' %}">NDD</a>
             <ul class="navbar-nav">
-                <li class="nav-item {% if nbar == 'booking-table' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'booking-table' %}">Booking</a>
+                <li class="nav-item {% if nbar == 'booking-page' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'booking-page' %}">Booking</a>
                 </li>
                 <li class="nav-item {% if nbar == 'agent-transport-table' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'agent-transport-table' %}">สายเรือ</a>
@@ -68,8 +69,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        
     </body>
 
 </html>

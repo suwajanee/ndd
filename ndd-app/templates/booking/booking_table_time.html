@@ -1,0 +1,160 @@
+<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
+    {% verbatim %}
+        <table v-if="bookings.length" class="table-hover time">
+            <thead class="text-nowrap bg-lightgray">
+                <th rowspan=2>DATE</th>
+                <th rowspan=2>PRINCIPAL</th>
+                <th rowspan=2>SHIPPER</th>
+                <th rowspan=2>AGENT</th>
+                <th rowspan=2>SIZE</th>
+                <th rowspan=2 class="px-2">BOOKING</th>
+
+                <th rowspan=2>TR</th>
+                <th rowspan=2>FM</th>
+                <th rowspan=2>TR</th>
+                <th rowspan=2>FACTORY</th>
+                <th rowspan=2>TR</th>
+                <th rowspan=2>TR</th>
+                <th rowspan=2>TO</th>
+
+                <th rowspan=2 class="px-2">CONTAINER NO</th>
+                <th rowspan=2 class="px-4">SEAL NO</th>
+                <th rowspan=2 class="px-4">TARE</th>
+
+                <th rowspan="2">เลขที่ใบงาน</th>
+
+                <th colspan="4">ลานรับตู้</th>
+                <th colspan="8">Factory</th>
+                <th colspan="4">ลานส่งตู้</th>
+                <tr>
+                    <th colspan=2>In</th>
+                    <th colspan=2>Out</th>
+
+                    <th colspan=2>In</th>
+                    <th colspan=2>Start</th>
+                    <th colspan=2>Finish</th>
+                    <th colspan=2>Out</th>
+
+                    <th colspan=2>In</th>
+                    <th colspan=2>Out</th>
+                </tr>
+            </thead> 
+            <tbody> 
+                <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
+                    <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
+
+                    <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
+                    <td v-else></td>
+
+                    <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
+                    <td v-else></td>
+
+                    <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ booking.agent }}</div></td>
+                    <td class="text-nowrap">{{ booking.size }}</td>
+
+                    <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
+                    <td v-else style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
+
+                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.pickup_tr }}</td>
+                    <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': booking.pickup_tr }">{{ booking.pickup_tr }}</td>
+
+                    <td>{{ booking.pickup_from }}</td>
+                    
+                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.forward_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': booking.forward_tr }">{{ booking.forward_tr }}</td>
+
+                    <td class="text-nowrap">{{ booking.factory }}</td>
+
+                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.backward_tr }}</td>
+                    <td v-else-if="booking.fac_ndd == '1'" class="bg-gold">{{ booking.backward_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
+
+                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.return_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
+                    
+                    <td>{{ booking.return_to }}</td>
+
+                    <td class="text-nowrap" style="font-weight: 800;">{{ booking.container_no }}</td>
+                    <td class="text-nowrap" style="font-weight: 800;">{{ booking.seal_no }}</td>
+                    <td class="px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
+
+                    <td class="text-nowrap">{{ booking.work_id }}</td>
+
+                    <td>
+                        <input v-if="booking.pickup_in_time__date" type="date" class="form-control" v-model="booking.pickup_in_time__date" autocomplete=off :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.pickup_date" autocomplete=off :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)">
+                    </td>
+                    <td class="borderless">
+                        <input class="form-control" v-model="booking.pickup_in_time__time" maxlength="10" autocomplete=off :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.pickup_out_time__date" type="date" class="form-control" v-model="booking.pickup_out_time__date" autocomplete=off :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.pickup_date" autocomplete=off :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.pickup_out_time__time" maxlength="10" autocomplete=off :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.factory_in_time__date" type="date" class="form-control" v-model="booking.factory_in_time__date" autocomplete=off :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.factory_date" autocomplete=off :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.factory_in_time__time" maxlength="10" autocomplete=off :id="'5-'+index" @keydown="keyDownArrow(5, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.factory_load_start_time__date" type="date" class="form-control" v-model="booking.factory_load_start_time__date" autocomplete=off :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.factory_date" autocomplete=off :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.factory_load_start_time__time" maxlength="10" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.factory_load_finish_time__date" type="date" class="form-control" v-model="booking.factory_load_finish_time__date" autocomplete=off :id="'8-'+index" @keydown="keyDownArrow(8, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.factory_date" autocomplete=off :id="'8-'+index" @keydown="keyDownArrow(8, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.factory_load_finish_time__time" maxlength="10" autocomplete=off :id="'9-'+index" @keydown="keyDownArrow(9, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.factory_out_time__date" type="date" class="form-control" v-model="booking.factory_out_time__date" autocomplete=off :id="'10-'+index" @keydown="keyDownArrow(10, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.factory_date" autocomplete=off :id="'10-'+index" @keydown="keyDownArrow(10, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.factory_out_time__time" maxlength="10" autocomplete=off :id="'11-'+index" @keydown="keyDownArrow(11, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.return_in_time__date" type="date" class="form-control" v-model="booking.return_in_time__date" autocomplete=off :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.return_date" autocomplete=off :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
+                    </td>
+                    <td> 
+                        <input class="form-control" v-model="booking.return_in_time__time" maxlength="10" autocomplete=off :id="'13-'+index" @keydown="keyDownArrow(13, index)" @change="editData(booking)">
+                    </td>
+
+                    <td>
+                        <input v-if="booking.return_out_time__date" type="date" class="form-control" v-model="booking.return_out_time__date" autocomplete=off :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
+                        <input v-else type="date" class="form-control" v-model="booking.return_date" autocomplete=off :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
+                    </td>
+                    <td>
+                        <input class="form-control" v-model="booking.return_out_time__time" maxlength="10" autocomplete=off :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(booking)">
+                    </td>
+                </tr>
+            </tbody> 
+        </table>
+    {% endverbatim %}
+    <form ref="printTime" method="POST" target="_blank">
+        {% csrf_token %}
+    </form>
+</div>
+
+<div v-else class="container position-relative">
+    <div class="position-absolute" style="top: -10%; left:50%; transform: translate(-50%, 10%); color: lightgray;">
+        <h1 class="text-center" style="font-size: 350%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+    </div>
+</div>

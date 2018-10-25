@@ -13,7 +13,7 @@ class AuthenticationView(TemplateView):
         template_name = 'login.html'
 
         if request.user.is_authenticated:
-            return redirect('booking-table')
+            return redirect('booking-page')
 
         if request.method == 'POST':
             username = request.POST['username']
@@ -24,7 +24,7 @@ class AuthenticationView(TemplateView):
                 auth.login(request, user)
                 if request.POST['remember_me'] == '1':
                     request.session.set_expiry(604800)
-                return redirect('booking-table')
+                return redirect('booking-page')
 
             else:
                 messages.error(request, 'Incorrect Username or Password')
