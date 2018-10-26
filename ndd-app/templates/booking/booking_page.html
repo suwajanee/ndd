@@ -44,11 +44,10 @@
             
             <div v-if="nbar=='edit' | nbar == 'time'" class="col text-right">
                 <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving booking.</div>
-                <button v-on:click="getBookingsDataTable" class="btn btn-danger mr-1" ><i class="fa fa-edit"></i>&nbsp;Exit</button>
+                <a href="{% url 'booking-page' %}" class="btn btn-danger mr-1" ><i class="fa fa-edit"></i>&nbsp;Exit</a>
                 <button v-if="nbar=='edit'" @click="saveEditBooking()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</a>
                 <button v-else-if="nbar=='time'" @click="saveTimeBooking()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</a>
-            </div>
-            
+            </div>     
         </div>
         
     </div>
@@ -70,6 +69,8 @@
 
 <script src="{% static 'js/fixed_header.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/app_booking_table.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/functions.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/filters.js' %}"></script>
 
 
 

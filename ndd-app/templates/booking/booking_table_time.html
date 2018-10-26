@@ -147,6 +147,10 @@
                 </tr>
             </tbody> 
         </table>
+
+        <div v-else>
+            <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
+        </div>
     {% endverbatim %}
     <form ref="printTime" method="POST" target="_blank">
         {% csrf_token %}
