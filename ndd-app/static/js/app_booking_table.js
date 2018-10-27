@@ -259,14 +259,18 @@ var booking_table = new Vue( {
             }      
         },
         splitTime(field) {
+            var field_date = field.split('_')[0]
             for(booking in this.bookings) {
                 if ( this.bookings[booking][field].indexOf('//') > -1 ) {
                     var pickup_in_time = this.bookings[booking][field].split('//')
                     this.bookings[booking][field + '__date'] = pickup_in_time[0]
                     this.bookings[booking][field + '__time'] = pickup_in_time[1]
+                    if( ! this.bookings[booking][field + '__date'] ) {
+                        this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
+                    }
                 }
                 else{
-                    this.bookings[booking][field + '__date'] = ''
+                    this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
                     this.bookings[booking][field + '__time'] = ''
                 }
 
