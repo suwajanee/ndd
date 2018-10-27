@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style-table.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style-edit-table.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+{% endfor %}
+<br>
+<div id="agent-transport-table">
+   
+<div id="upper-part" class="container col-12" >
+        <div class="row">
+
+            <div class="col">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <select name="filter_by" class="btn " v-model="filter_by" style="background-color: #CED4DA;">
+                            <option value="date" class="bg-white">Date</option>
+                            <option value="month" class="bg-white">Month</option>
+                        </select>
+                    </div>
+
+                    <input name="date_filter" :type="filter_by" class="form-control mr-2" v-model="date_filter" style="max-width: 200px;" v-on:change="filterAgentTransports()">
+                </div>
+
+            </div>
+
+            <div v-if="nbar=='table'" class="col text-center">
+                <select name="action" v-model="action" class="custom-select col-3 mr-1">
+                    <option value=""> -------- </option>
+                    <option value="delete"> ลบ </option>
+                </select>
+                <button v-on:click="selectAction()" class="btn btn-primary mr-1" >GO</button>
+            </div>
+            
+            <div v-if="nbar=='table'" class="col text-right">
+                <button v-on:click="getAgentTransportsEditTable()" class="btn btn-primary mr-1" ><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                <a class="btn btn-primary" href="/agent-transport/add" role="button"><i class="fa fa-plus"></i>&nbsp;Add</a>
+            </div>
+            
+            <div v-if="nbar=='edit'" class="col text-right">
+                <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving agent transport.</div>
+                <a href="{% url 'agent-transport-page' %}" class="btn btn-danger mr-1" ><i class="fa fa-edit"></i>&nbsp;Exit</a>
+                <button @click="saveEditAgentTransport()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</a>
+            </div>     
+        </div>
+        
+    </div>
+   <br>
+
+<div v-if="nbar=='table'">
+    {% include 'agent_transport/agent_transport_table_data.html' %}
+</div>
+
+<div v-if="nbar=='edit'">
+    {% include 'agent_transport/agent_transport_table_edit.html' %}
+</div>
+
+</div>
+
+<script src="{% static 'js/fixed_header.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/app_agent_transport_table.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/functions.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/filters.js' %}"></script>
+
+
+
+<script type="application/javascript">
+
+window.addEventListener("load", function() {
+    
+    agent_transport_table.reload();
+     
+});
+
+</script>
+{% endblock %}
