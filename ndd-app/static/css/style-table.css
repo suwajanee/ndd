@@ -110,18 +110,6 @@ tbody {
     
 }
 
-/* [data-toggle="collapse"] .toggle-icon .fa:before {  
-    content: "\f068";
-    font-size: 14px;
-    font-weight: bold;
-}
-  
-[data-toggle="collapse"].collapsed .toggle-icon .fa:before {
-    content: "\f067";
-    font-size: 14px;
-    font-weight: bold;
-} */
-
 [data-toggle="collapse"] td.toggle-color {  
     background-color:rgba(0, 0, 0, 0.2);;
     /* opacity: 0.2; */

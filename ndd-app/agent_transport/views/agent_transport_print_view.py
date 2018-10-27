@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
-from django.urls import reverse, reverse_lazy
 from django.utils.six import BytesIO
 from django.views.generic import TemplateView
 
@@ -39,7 +38,7 @@ class AgentTransportPrintView(TemplateView):
 
         if request.method == "POST":
             template = request.POST["template"]
-            address = request.POST["address"+pk]
+            address = request.POST["address"]
 
             if template == 'forward':
                 template_name = 'pdf_template/agent_transport_fw_template.html'

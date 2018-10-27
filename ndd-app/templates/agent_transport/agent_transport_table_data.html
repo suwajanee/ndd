@@ -1,0 +1,172 @@
+<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': agent_transports.length }">
+    {% verbatim %}
+        <table v-if="agent_transports.length" class="table-hover w-100">
+            <thead class="text-nowrap bg-lightgray"> 
+                <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
+                <th>PRINT</th>
+                <th>DATE</th>
+                <th>PRINCIPAL</th>
+                <th>SHIPPER</th>
+                <th>AGENT</th>
+                <th>SIZE</th>
+                <th>BOOKING</th>
+
+                <th>TR</th>
+                <th>FM</th>
+                <th>TR</th>
+                <th>TO</th>
+
+                <th>CONTAINER 1</th>
+                <th>CONTAINER 2</th>
+
+                <th>REMARK</th>
+                <th>เลขที่ใบงาน</th>
+
+                <th>PICK UP</th>
+                <th>RETURN</th>
+            </thead> 
+
+            <tbody>
+                <tr v-for="(agent_transport, index) in agent_transports" :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': agent_transport.status == '1' }" :key="agent_transport.id">
+                    <td class="p-0 align-middle">
+                        <input type="checkbox" :value="agent_transport.id" v-model="checked_agent_transports">
+                    </td>
+                    
+                    <td class="p-0 align-middle">
+                        <a v-if="agent_transport.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalAgentTransportPrint" @click="printFormModal(agent_transport.id, agent_transport.shipper.id)">
+                            <i class="fa fa-print font-weight-bold"></i>
+                        </a>
+                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalAgentTransportPrint" @click="printFormModal(agent_transport.id, null)">
+                            <i class="fa fa-print font-weight-bold"></i>
+                        </a>
+                    </td>
+                    
+                    <td class="text-nowrap px-3">{{ agent_transport.date|formatDate }}</td>
+
+                    <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text">{{ agent_transport.principal.name }}</div></td>
+                    <td v-else></td>
+
+                    <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper.name }}</td>
+                    <td v-else></td>
+
+                    <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ agent_transport.agent }}</div></td>
+                    <td class="text-nowrap">{{ agent_transport.size }}</td>
+
+                    <td v-if="agent_transport.status == '0'" style="min-width:150px;" class="bg-secondary">{{ agent_transport.booking_no }}</td>
+                    <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': agent_transport.color }">{{ agent_transport.booking_no }}</td>
+
+                    <td v-if="agent_transport.status != '1'" :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': agent_transport.status == '2' }">{{ agent_transport.pickup_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': agent_transport.pickup_tr }">{{ agent_transport.pickup_tr }}</td>
+
+                    <td>{{ agent_transport.pickup_from }}</td>
+                    
+                    <td v-if="agent_transport.status != '1'" :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': agent_transport.status == '2' }">{{ agent_transport.return_tr }}</td>
+                    <td v-else :class="{ 'bg-cyan': agent_transport.return_tr }">{{ agent_transport.return_tr }}</td>
+
+                    <td>{{ agent_transport.return_to }}</td>
+
+                    <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_1 }}</td>
+                    <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_2 }}</td>
+
+                    <td class="text-center px-2"><div  class="long-text-80" style="margin:auto;">{{ agent_transport.remark }}</div></td>
+
+                    <td class="text-nowrap">{{ agent_transport.work_id }}</td>
+                    
+                    <td class="text-nowrap px-3">{{ agent_transport.pickup_date|formatDate }}</td>
+                    <td class="text-nowrap px-3">{{ agent_transport.return_date|formatDate }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div v-else>
+            <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
+        </div>
+    {% endverbatim %}
+    
+    <div v-if="modal">
+        <div class="modal fade" id="modalAgentTransportPrint" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form ref="printAgentTransportForm" method="POST" target="_blank">
+                        {% csrf_token %}
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Print</h4>
+                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body mx-3 ">
+                            <div class="container col-md-11">
+                                <div class="row mb-4 mt-3">
+                                    <div class="col custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" :id="'template-full-'+modal" name="template" v-model="print.template" value="full">
+                                        <label class="custom-control-label" :for="'template-full-'+modal">Full</label>
+                                    </div>
+                                    <div class="col custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" :id="'template-forward-'+modal" name="template" v-model="print.template" value="forward">
+                                        <label class="custom-control-label" :for="'template-forward-'+modal">Forward</label>
+                                    </div>
+                                    <div class="col custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" :id="'template-backward-'+modal" name="template" v-model="print.template" value="backward">
+                                        <label class="custom-control-label" :for="'template-backward-'+modal">Backward</label>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <hr style="border-width: 3px;">
+
+                            <div class="row mb-2">
+                                <div class="col">
+                                    ADDRESS
+                                </div>
+                            </div>
+
+                            <div class="container col-md-11 address-part">
+                                {% verbatim %}
+                                    <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
+                                        <div class="col custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" :id="'address-'+index+'-'+modal" name="address" v-model="print.address" :value="address.id">
+                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} )</label>
+                                            <label v-else class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper</label>
+                                        </div> 
+                                    </div>
+                                                                
+                                    <div class="row">
+                                        <div class="col custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" :id="'address-other-'+modal" name="address" v-model="print.address" value="other">
+                                            <label class="custom-control-label" :for="'address-other-'+modal">Other</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="w-100 my-2">
+                                            <textarea class="form-control" rows="3" style="font-size: 12px;" maxlength="400" name="address_other" v-model="print.address_other" :disabled="print.address != 'other'"></textarea>
+                                        </div>
+                                    </div>
+                                                                        
+                                    <div class="row">
+                                        <div class="col custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" :id="'address-none-'+modal" name="address" v-model="print.address" value="none">
+                                            <label class="custom-control-label" :for="'address-none-'+modal">None</label>
+                                        </div>
+                                    </div>
+                                {% endverbatim %}
+                            </div>
+                        </div>            
+                            
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button class="btn btn-primary" @click="printSubmit(modal)">Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>  
+    </div>
+</div>
+
+<div v-else class="container position-relative">
+    <div class="position-absolute" style="top: -10%; left:50%; transform: translate(-50%, 10%); color: lightgray;">
+        <h1 class="text-center" style="font-size: 350%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+    </div>
+</div>

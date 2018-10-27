@@ -120,7 +120,6 @@ class BookingAddView(TemplateView):
                         booking = Booking(**data)
                         booking.save()
                  
-                messages.success(request, "Added Booking.")
                 return redirect('booking-page')
             messages.error(request, "Form not validate.")
         return redirect('booking-add')

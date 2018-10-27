@@ -1,40 +1,22 @@
-from django.views.generic import TemplateView
+# -*- coding: utf-8 -*-
+
+import json
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from ..models import AgentTransport
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from .agent_transport_page_view import api_filter_agent_transports
 
 
-class AgentTransportDeleteView(TemplateView):
+@csrf_exempt
+def api_delete_agent_transports(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        pk_list = req["checked_agent_transports"]
 
-    @login_required(login_url=reverse_lazy('login'))
-    def delete_data_agent_transport(request, pk):
-        agent_transport = AgentTransport.objects.get(pk=pk)
-        agent_transport.delete()
+        for pk in pk_list:
+            agent_transport = AgentTransport.objects.get(pk=pk)
+            agent_transport.delete()
 
-        if request.method == "GET":
-            filter_by = request.GET.get("filter_by")
-            date_filter = request.GET.get("date_filter")
-            if not date_filter:
-                return redirect(reverse('agent-transport-table'))
-            else:
-                return redirect(reverse('agent-transport-table') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
-
-
-    @login_required(login_url=reverse_lazy('login'))
-    def delete_multiple_data_agent_transport(request):
-        
-        if request.method == "POST":
-            pk_list = request.POST.getlist('pk')
-            filter_by = request.POST['filter_by']
-            date_filter = request.POST['date_filter']
-
-            for pk in pk_list:
-                agent_transport = AgentTransport.objects.get(pk=pk)
-                agent_transport.delete()
-
-            if not date_filter:
-                return redirect(reverse('agent-transport-table'))
-            else:
-                return redirect(reverse('agent-transport-table') + '?filter_by=' + filter_by + '&date_filter=' + date_filter)
+    return api_filter_agent_transports(request)

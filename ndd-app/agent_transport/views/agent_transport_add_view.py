@@ -35,7 +35,6 @@ class AgentTransportAddView(TemplateView):
         context['principals'] = Principal.objects.filter(Q(work_type='agent-transport') & Q(cancel=0)).order_by('name')
         context['nbar'] = 'agent-transport-table'
         if 'principal' in req:
-            # print(request.POST)
             context['principal'] = req.get('principal')
             if context['principal']:
                 context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
@@ -58,7 +57,6 @@ class AgentTransportAddView(TemplateView):
         if request.method == 'POST':
             form = AgentTransportAddForm(request.POST)
             if form.is_valid():
-                # print(request.POST)
                 principal = request.POST['principal']
                 shipper = request.POST['shipper']
                 agent = request.POST['agent']
@@ -96,8 +94,7 @@ class AgentTransportAddView(TemplateView):
                         agent_transport = AgentTransport(**data)
                         agent_transport.save()
                  
-                messages.success(request, "Added Agent Transport.")
-                return redirect('agent-transport-table')
+                return redirect('agent-transport-page')
             messages.error(request, "Form not validate.")
         return redirect('agent-transport-add')
 
