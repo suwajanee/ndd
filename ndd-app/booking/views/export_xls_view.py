@@ -135,7 +135,7 @@ class ExportDataView(TemplateView):
                             date_time = row[col_num].split('//')
                             
                             if date_time[0] == '':
-                                date = None
+                                date = ''
                             else:
                                 date = datetime.strptime(date_time[0], "%Y-%m-%d").strftime("%d/%m/%y")
                             time = date_time[1]
