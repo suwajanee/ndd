@@ -60,7 +60,7 @@ class ExportDataView(TemplateView):
             rows = Booking.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('time', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
             'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'tare', 'vessel', 'port', 'closing_date', 'closing_time', 'remark', 'work_id', \
             'pickup_date', 'factory_date', 'return_date', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', \
-            'factory_out_time', 'return_in_time', 'return_out_time', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal', 'shipper', 'work_id')
+            'factory_out_time', 'return_in_time', 'return_out_time', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal', 'shipper', 'booking_no', 'work_id')
 
             row_num = 1
             row_prev = None
@@ -107,7 +107,7 @@ class ExportDataView(TemplateView):
                     if str(type(row[col_num])) == "<class 'datetime.date'>" :
                         style.num_format_str = 'dd/mm/yy'
 
-                    if row[len(row)-2] == '1' and col_num > 23 and col_num < 27:
+                    if row[len(row)-2] == '1' and col_num > 22 and col_num < 26:
                         style.pattern = style_xls.bg_aqua()
                     
                     if booking_prev != row[6]:
@@ -157,7 +157,7 @@ class ExportDataView(TemplateView):
 
             # Sheet body, remaining rows
             rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-            'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_id')
+            'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_type', 'booking_no', 'work_id')
 
             row_num = 0
             row_prev = None
