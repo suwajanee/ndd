@@ -14,7 +14,6 @@ def api_delete_bookings(request):
     if request.method == "POST":
         req = json.loads( request.body.decode('utf-8') )
         pk_list = req["checked_bookings"]
-        print(pk_list)
 
         for pk in pk_list:
             booking = Booking.objects.get(pk=pk)

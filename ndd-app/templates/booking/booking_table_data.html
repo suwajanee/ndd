@@ -1,7 +1,6 @@
 <div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
     {% verbatim %}
-    
-        <table v-if="bookings.length" class="table-hover">
+        <table v-if="bookings.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
                 <th>PRINT</th>
@@ -37,17 +36,16 @@
             </thead> 
 
             <tbody>
-
                 <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
                     <td class="p-0 align-middle">
                         <input type="checkbox" :value="booking.id" v-model="checked_bookings">
                     </td>
                     
                     <td class="p-0 align-middle">
-                        <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalPrint" @click="printFormModal(booking.id, booking.shipper.id)">
+                        <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, booking.shipper.id)">
                             <i class="fa fa-print font-weight-bold"></i>
                         </a>
-                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalPrint" @click="printFormModal(booking.id, null)">
+                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, null)">
                             <i class="fa fa-print font-weight-bold"></i>
                         </a>
                     </td>
@@ -66,7 +64,7 @@
                     <td class="text-nowrap">{{ booking.size }}</td>
 
                     <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
-                    <td v-else style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
+                    <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
 
                     <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.pickup_tr }}</td>
                     <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
@@ -118,15 +116,14 @@
         <div v-else>
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         </div>
-
     {% endverbatim %}
 
     <div v-if="modal">
-        <div class="modal fade" id="modalPrint" aria-hidden="true">
+        <div class="modal fade" id="modalBookingPrint" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form ref="printForm" method="POST" target="_blank">
-                            {% csrf_token %}
+                    <form ref="printBookingForm" method="POST" target="_blank">
+                        {% csrf_token %}
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Print</h4>
                             <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
@@ -201,7 +198,8 @@
                                     <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
                                         <div class="col custom-control custom-radio">
                                             <input type="radio" class="custom-control-input" :id="'address-'+index+'-'+modal" name="address" v-model="print.address" :value="address.id">
-                                            <label class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} ) </label>
+                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} )</label>
+                                            <label v-else class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper</label>
                                         </div> 
                                     </div>
                                                                 
