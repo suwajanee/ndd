@@ -1,6 +1,5 @@
 <div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': agent_transports.length }">
     {% verbatim %}
-    
         <table v-if="agent_transports.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
@@ -28,7 +27,6 @@
             </thead> 
 
             <tbody>
-
                 <tr v-for="(agent_transport, index) in agent_transports" :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': agent_transport.status == '1' }" :key="agent_transport.id">
                     <td class="p-0 align-middle">
                         <input type="checkbox" :value="agent_transport.id" v-model="checked_agent_transports">
@@ -83,15 +81,14 @@
         <div v-else>
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         </div>
-
     {% endverbatim %}
-
+    
     <div v-if="modal">
         <div class="modal fade" id="modalAgentTransportPrint" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form ref="printAgentTransportForm" method="POST" target="_blank">
-                            {% csrf_token %}
+                        {% csrf_token %}
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Print</h4>
                             <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">

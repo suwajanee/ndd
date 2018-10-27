@@ -94,7 +94,6 @@ class AgentTransportAddView(TemplateView):
                         agent_transport = AgentTransport(**data)
                         agent_transport.save()
                  
-                messages.success(request, "Added Agent Transport.")
                 return redirect('agent-transport-page')
             messages.error(request, "Form not validate.")
         return redirect('agent-transport-add')

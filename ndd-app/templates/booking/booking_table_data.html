@@ -1,6 +1,5 @@
 <div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
     {% verbatim %}
-    
         <table v-if="bookings.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
@@ -37,7 +36,6 @@
             </thead> 
 
             <tbody>
-
                 <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
                     <td class="p-0 align-middle">
                         <input type="checkbox" :value="booking.id" v-model="checked_bookings">
@@ -118,7 +116,6 @@
         <div v-else>
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         </div>
-
     {% endverbatim %}
 
     <div v-if="modal">
@@ -126,7 +123,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form ref="printBookingForm" method="POST" target="_blank">
-                            {% csrf_token %}
+                        {% csrf_token %}
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Print</h4>
                             <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">

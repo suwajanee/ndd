@@ -1,6 +1,5 @@
 <div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': agent_transports.length }">
     {% verbatim %}
-    
         <table v-if="agent_transports.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
                 <th>STATUS</th>
@@ -24,7 +23,6 @@
             </thead> 
 
             <tbody>
-
                 <tr v-for="(agent_transport, index) in agent_transports" :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': agent_transport.status == '1' }" :key="agent_transport.id">
                     <td>
                         <select class="custom-select status py-1 px-2" v-model="agent_transport.status" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(agent_transport)">
@@ -99,9 +97,7 @@
         <div v-else>
             <h1 class="text-center text-secondary mt-3"> ไม่พบข้อมูล </h1>
         </div>
-
     {% endverbatim %}
-
 </div>
 
 <div v-else class="container position-relative">
