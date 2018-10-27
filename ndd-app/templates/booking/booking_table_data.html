@@ -1,7 +1,7 @@
 <div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
     {% verbatim %}
     
-        <table v-if="bookings.length" class="table-hover">
+        <table v-if="bookings.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
                 <th>PRINT</th>
@@ -44,10 +44,10 @@
                     </td>
                     
                     <td class="p-0 align-middle">
-                        <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalPrint" @click="printFormModal(booking.id, booking.shipper.id)">
+                        <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, booking.shipper.id)">
                             <i class="fa fa-print font-weight-bold"></i>
                         </a>
-                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalPrint" @click="printFormModal(booking.id, null)">
+                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, null)">
                             <i class="fa fa-print font-weight-bold"></i>
                         </a>
                     </td>
@@ -122,10 +122,10 @@
     {% endverbatim %}
 
     <div v-if="modal">
-        <div class="modal fade" id="modalPrint" aria-hidden="true">
+        <div class="modal fade" id="modalBookingPrint" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form ref="printForm" method="POST" target="_blank">
+                    <form ref="printBookingForm" method="POST" target="_blank">
                             {% csrf_token %}
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Print</h4>
@@ -201,7 +201,8 @@
                                     <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
                                         <div class="col custom-control custom-radio">
                                             <input type="radio" class="custom-control-input" :id="'address-'+index+'-'+modal" name="address" v-model="print.address" :value="address.id">
-                                            <label class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} ) </label>
+                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} )</label>
+                                            <label v-else class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper</label>
                                         </div> 
                                     </div>
                                                                 

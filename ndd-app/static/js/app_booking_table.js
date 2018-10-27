@@ -7,7 +7,7 @@ var booking_table = new Vue( {
         tmr: '',
 
         modal:'',
-        shipper_address: '',
+        shipper_address: [],
 
         checked_bookings: [],
         all_checked: false,
@@ -35,11 +35,11 @@ var booking_table = new Vue( {
 
     methods: {
         reload() {
-            if(localStorage.getItem('filter_by')){
-                this.filter_by = localStorage.getItem('filter_by')
+            if(localStorage.getItem('filter_by_booking')){
+                this.filter_by = localStorage.getItem('filter_by_booking')
             }
-            if(localStorage.getItem('date_filter')){
-                this.date_filter = localStorage.getItem('date_filter')
+            if(localStorage.getItem('date_filter_booking')){
+                this.date_filter = localStorage.getItem('date_filter_booking')
             }
 
             var hash = window.location.hash.slice(1)
@@ -95,8 +95,8 @@ var booking_table = new Vue( {
                     this.loading = false
                 })
             }
-            localStorage.setItem('filter_by', this.filter_by)
-            localStorage.setItem('date_filter', this.date_filter)
+            localStorage.setItem('filter_by_booking', this.filter_by)
+            localStorage.setItem('date_filter_booking', this.date_filter)
         },
 
         getColor() {
@@ -129,6 +129,7 @@ var booking_table = new Vue( {
 
         printFormModal(id, shipper_id) {
             this.modal = id
+            this.shipper_address = []
             this.print.address_other = ''
             this.print.template = 'full'
 
@@ -138,13 +139,18 @@ var booking_table = new Vue( {
             else{
                 api("/customer/api/shipper-address/", "POST", {shipper_id: shipper_id}).then((data) => {
                     this.shipper_address = data
-                    this.print.address = this.shipper_address[0].id
+                    if(this.shipper_address.length) {
+                        this.print.address = this.shipper_address[0].id
+                    }
+                    else {
+                        this.print.address = 'other'
+                    }
                 })
             }
         },
         printSubmit(id) {
-            this.$refs.printForm.action = "/booking/print/" + id +"/"
-            this.$refs.printForm.submit()
+            this.$refs.printBookingForm.action = "/booking/print/" + id +"/"
+            this.$refs.printBookingForm.submit()
         },
 
         editData: function(booking, index, field) {
@@ -170,12 +176,11 @@ var booking_table = new Vue( {
             this.saving = true
             this.checked_bookings = []
             this.all_checked = false         
-            if(this.edit_data.length > 0) {
+            if(this.edit_data.length) {
                 api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
                     this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr
-
                     this.getColor()
                     this.edit_data = []
                     this.loading = false
@@ -198,7 +203,7 @@ var booking_table = new Vue( {
             }
         },
         selectAction() {
-            if (this.checked_bookings.length == 0){
+            if (! this.checked_bookings.length){
                 alert('เลือกงานที่ต้องการ')
             }
             else if (this.action == 'delete'){
@@ -230,7 +235,7 @@ var booking_table = new Vue( {
         filterTimeBookings() {
             this.loading = true
             this.edit_data = []
-            if(this.checked_bookings.length > 0) {
+            if(this.checked_bookings.length) {
                 api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
                     this.bookings = data.bookings
                     this.today = data.today
@@ -271,7 +276,7 @@ var booking_table = new Vue( {
         saveTimeBooking: function() {
             this.loading = true
             this.saving = true
-            if(this.edit_data.length > 0) {
+            if(this.edit_data.length) {
                 api("/booking/api/save-time-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then(() => {
                     this.filterTimeBookings()
                     this.loading = false

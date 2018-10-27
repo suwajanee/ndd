@@ -24,11 +24,7 @@ def api_filter_bookings(request):
     context['tmr'] = datetime.now() + timedelta(days=1)
     context['today'] = datetime.now()
 
-    if request.method == "GET":
-        bookings = Booking.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
-        serializer = BookingSerializer(bookings, many=True)
-
-    elif request.method == "POST":
+    if request.method == "POST":
         req = json.loads( request.body.decode('utf-8') )
         filter_by = req['filter_by']
         date_filter = req['date_filter']
@@ -43,7 +39,9 @@ def api_filter_bookings(request):
         else:
             bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status=1))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
-        serializer = BookingSerializer(bookings, many=True)
+    else:
+        bookings = Booking.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
+    serializer = BookingSerializer(bookings, many=True)
     context['bookings'] = serializer.data
     return JsonResponse(context, safe=False)
