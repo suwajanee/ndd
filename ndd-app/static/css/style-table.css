@@ -83,7 +83,8 @@ tbody {
 .long-text:active {
     overflow: visible;
     width: auto;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    display: inline-block;
 }
 
 .long-text-80 {
@@ -95,9 +96,9 @@ tbody {
     -webkit-box-orient: vertical;  
 }
 .long-text-80:active {
+    width: 120px;
     overflow: visible;
-    width: auto;
-    white-space: nowrap;
+    display: inline-block;
 }
 
 /* Fix header table when scroll */

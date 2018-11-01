@@ -55,4 +55,4 @@ def api_save_time_bookings(request):
             
             booking_save.save()
 
-        return JsonResponse({'data': 'Save success'}, safe=False)
+        return JsonResponse('Success', safe=False)
