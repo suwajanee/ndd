@@ -8,6 +8,7 @@ table.border-out {border:1px solid #000;}
 td {border:none;}
 tr {border:none;}
 
+
 /* Border */
 .mt-5 {
     margin-top: 5px;
@@ -48,6 +49,7 @@ td.border-b {
 .h-30 {
     height: 30px;
 }
+
 
 /* Text format */
 .big {
@@ -97,33 +99,30 @@ td.border-b {
     padding-top: 5px
 }
 
-
-
 .nowrap {
     white-space: nowrap;
 }
 
 
+/* Time template */
 .time-table {
     font-size: 8px;
     text-align: center;
-  }
+}
 
-  .time-table th {
+.time-table th {
     background-color: lightgray;
     border:1px solid black;
     padding:1px;
     vertical-align: middle;
     height: 0.25in;
-  }
+}
 
-
-  .time-table td {
+.time-table td {
     vertical-align: center;
     padding:1px;
     border:1px solid black;
     height: 35px;
-
-  }
+}
 
 
