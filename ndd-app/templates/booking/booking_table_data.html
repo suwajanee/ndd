@@ -50,7 +50,7 @@
                         </a>
                     </td>
 
-                    <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status == '1'}">{{ booking.time }}</td>
+                    <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true}">{{ booking.time }}</td>
                     
                     <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
@@ -108,7 +108,7 @@
                     </td>
                     
                     <td class="text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
-                    <td class="text-center px-2"><div class="long-text-80">{{ booking.port }}</div></td>
+                    <td class="text-center px-2"><div class="long-text">{{ booking.port }}</div></td>
                 </tr>
             </tbody>
         </table>
@@ -131,7 +131,7 @@
                             </button>
                         </div>
 
-                        <div class="modal-body mx-3 ">
+                        <div class="modal-body mx-3">
                             <div class="row">
                                 <div class="col-md-3">เต็มเที่ยว</div>
                                 <div class="col custom-control custom-radio">

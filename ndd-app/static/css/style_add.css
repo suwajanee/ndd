@@ -1,0 +1,41 @@
+::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+fieldset.add_form {
+    border: 1px solid lightgray !important;
+    padding: 0.5em 1em 1em 1em !important;
+    margin: 0 0 1.5em 0 !important;
+    border-radius: 8px;
+}
+
+legend.add_form {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+
+#booking-add .custom-checkbox input[type="checkbox"] + label::before {
+    background-color: gray;
+}

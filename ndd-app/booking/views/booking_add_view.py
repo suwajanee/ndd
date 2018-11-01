@@ -1,151 +1,106 @@
 # -*- coding: utf-8 -*-
 
-import re
 from datetime import datetime
+import json
+import re
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max, Q
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.db.models import Max
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 
-from ..forms import BookingAddForm
 from ..models import Booking
+from ..serializers import BookingSerializer
 from customer.models import Principal, Shipper
 
 
-class BookingAddView(TemplateView):
+@login_required(login_url=reverse_lazy('login'))
+def booking_add_page(request):
+    return render(request, 'booking/booking_add_page.html', {'nbar': 'booking-page'})
 
-    @login_required(login_url=reverse_lazy('login'))
-    def render_add_booking_page(request):
-        add_booking = BookingAddView()
-        template_name = 'booking/booking_add.html'
-        context = {}
-        context['form'] = BookingAddForm()
-        context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
-        context['nbar'] = 'booking-table'
+@csrf_exempt
+def api_save_add_bookings(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
 
-        if request.method == 'POST':
-            context = add_booking.create_context(request.POST)
-            
-        return render(request, template_name, context)
+        bookings = req['bookings']
+        details = req['details']
+        import_work = req['import']
 
-    def create_context(self, req):
-        context = {}
-        context['principals'] = Principal.objects.filter(Q(work_type='normal') & Q(cancel=0)).order_by('name')
-        context['nbar'] = 'booking-table'
-        if 'principal' in req:
-            context['principal'] = req.get('principal')
-            if context['principal']:
-                context['shippers'] = Shipper.objects.filter(Q(principal=context['principal']) & Q(cancel=0)).order_by('name')
-                context['principal_name'] = Principal.objects.get(pk=context['principal']).name
-            else:
-                context['shippers'] = []
+        return_date = bookings['return_date']
 
-            req._mutable = True
-            context['time_list'] = req.getlist('time')
-            context['size_list'] = req.getlist('size')
-            context['quantity_list'] = req.getlist('quantity')
-            context['date_list'] = req.getlist('date')
-            context['zip'] = zip(context['time_list'], context['size_list'], context['quantity_list'], context['date_list'])
+        bookings['principal'] = Principal.objects.get(pk=bookings['principal'])
+        bookings['shipper'] = Shipper.objects.get(pk=bookings['shipper'])
+        bookings['agent'] = re.sub(' +', ' ', bookings['agent'].strip().upper())
+        bookings['booking_no'] = re.sub(' +', ' ', bookings['booking_no'].strip())
 
-            req.update({'time':'', 'size':'', 'quantity':'', 'date':''})
-            context['form'] = BookingAddForm(req)
-        return context
+        bookings['pickup_from'] = re.sub(' +', ' ', bookings['pickup_from'].strip().upper())
+        bookings['factory'] = re.sub(' +', ' ', bookings['factory'].strip().upper())
+        bookings['return_to'] = re.sub(' +', ' ', bookings['return_to'].strip().upper())
 
-    @login_required(login_url=reverse_lazy('login'))
-    def save_data_booking(request):
-        add_booking = BookingAddView()
-        if request.method == 'POST':
-            form = BookingAddForm(request.POST)
-            if form.is_valid():
-                principal = request.POST['principal']
-                shipper = request.POST['shipper']
-                agent = request.POST['agent']
-                booking_no = request.POST['booking_no']
-                time_list = request.POST.getlist('time')
-                size_list = request.POST.getlist('size')
-                quantity_list = request.POST.getlist('quantity')
-                date_list = request.POST.getlist('date')
-                pickup_from = request.POST['pickup_from']
-                factory = request.POST['factory']
-                return_to = request.POST['return_to']
-                vessel = request.POST['vessel']
-                port = request.POST['port']
-                closing_date = request.POST['closing_date']
-                closing_time = request.POST['closing_time']
-                remark = request.POST['remark']
+        bookings['vessel'] = re.sub(' +', ' ', bookings['vessel'].strip())
+        bookings['port'] = re.sub(' +', ' ', bookings['port'].strip())
 
-                nextday = request.POST['nextday']
+        if not bookings['closing_date']:
+            bookings['closing_date'] = None
+        bookings['closing_time'] = bookings['closing_time']
 
-                if not closing_date:
-                    closing_date = None
-                
-                container = zip(time_list, size_list, quantity_list, date_list)
-                for time, size, quantity, date in container:
-                    if nextday == '1':
-                        return_date = request.POST['return_date']
-                        if not return_date:
-                            return_date = date
-                    else:
-                        return_date = date
-                    
-                    for i in range(int(quantity)):
-                        work_id, work_number = add_booking.run_work_id(date)
-                        data = {
-                            'principal': Principal.objects.get(pk=principal),
-                            'shipper': Shipper.objects.get(pk=shipper),
-                            'agent': re.sub(' +', ' ', agent.strip().upper()),
-                            'booking_no': re.sub(' +', ' ', booking_no.strip()),
-                            'time': re.sub(' +', ' ', time.strip()),
-                            'size': re.sub(' +', ' ', size.strip()),
-                            'date': date,
-                            'pickup_from': re.sub(' +', ' ', pickup_from.strip().upper()),
-                            'factory': re.sub(' +', ' ', factory.strip().upper()),
-                            'return_to': re.sub(' +', ' ', return_to.strip().upper()),
-                            'vessel': re.sub(' +', ' ', vessel.strip()),
-                            'port': re.sub(' +', ' ', port.strip()),
-                            'closing_date': closing_date,
-                            'closing_time': closing_time,
-                            'remark': re.sub(' +', ' ', remark.strip()),
-                            'work_id': work_id,
-                            'work_number': work_number,
-                            'nextday': nextday,
-                            'pickup_date': date,
-                            'factory_date': date,
-                            'return_date': return_date,
-                        }
+        bookings['remark'] = re.sub(' +', ' ', bookings['remark'].strip())
 
-                        booking = Booking(**data)
-                        booking.save()
-                 
-                return redirect('booking-page')
-            messages.error(request, "Form not validate.")
-        return redirect('booking-add')
-
-    def run_work_id(self, date):
-        work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
-        if work['work_number__max'] == None:
-            work_number = 1
+        if bookings['nextday'] == True:
+            bookings['nextday'] = '1'
         else:
-            work_number = work['work_number__max'] + 1
+            bookings['nextday'] = '0'
+        
+        for detail in details:
+            bookings['date'] = detail['date']
+            bookings['pickup_date'] = detail['date']
+            bookings['factory_date'] = detail['date']
 
-        work = str("{:03d}".format(work_number))
-        date = datetime.strptime(date, "%Y-%m-%d")
-        work_id = date.strftime('%d%m%y') + work
+            bookings['time'] = detail['time']
+            bookings['size'] = detail['size']
+            if import_work == True:
+                bookings['container_no'] = detail['container_no']
+                bookings['seal_no'] = detail['seal_no']
 
-        while True:
-            exist_id = Booking.objects.filter(work_id=work_id)
-            if exist_id:
-                work_number = work_number + 1
-                work = str("{:03d}".format(work_number))
-                work_id = date.strftime('%d%m%y') + work
+            if bookings['nextday'] == '1':
+                if not return_date:
+                    bookings['return_date'] = detail['date']
             else:
-                break
+                bookings['return_date'] = detail['date']
 
-        return work_id, work_number
+            for i in range(int(detail['quantity'])):
+                work_id, work_number = run_work_id(detail['date'])
 
+                bookings['work_id'] = work_id
+                bookings['work_number'] = work_number
 
-            
+                booking = Booking(**bookings)
+                booking.save()
 
+    return JsonResponse('Success', safe=False)
+
+def run_work_id(date):
+    work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
+    if work['work_number__max'] == None:
+        work_number = 1
+    else:
+        work_number = work['work_number__max'] + 1
+
+    work = str("{:03d}".format(work_number))
+    date = datetime.strptime(date, "%Y-%m-%d")
+    work_id = date.strftime('%d%m%y') + work
+
+    while True:
+        exist_id = Booking.objects.filter(work_id=work_id)
+        if exist_id:
+            work_number = work_number + 1
+            work = str("{:03d}".format(work_number))
+            work_id = date.strftime('%d%m%y') + work
+        else:
+            break
+
+    return work_id, work_number
+    
