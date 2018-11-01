@@ -1,6 +1,6 @@
-var booking_add = new Vue( {
+var agent_transport_add = new Vue( {
     
-    el: '#booking-add',
+    el: '#agent-transport-add',
     data: {
         search_principal: '',
         principals: [],
@@ -8,32 +8,21 @@ var booking_add = new Vue( {
         principal_name: '',
         input_required: false,
         
-        import_work: false,
         details: [{
             date: '',
-            time: '',
             size: '',
             quantity: 1,
-            container_no: '',
-            seal_no: ''
         }],
-        booking_add_form: {
+        agent_transport_add_form: {
             principal: '',
             shipper: '',
             agent: '',
             booking_no: '',
+            work_type: 'ep',
             
             pickup_from: '',
-            factory: '',
             return_to: '',
-            vessel: '',
-            port: '',
 
-            nextday: false,
-            return_date: '',
-
-            closing_date: '',
-            closing_time: '',
             remark: ''
         },
     },
@@ -48,21 +37,21 @@ var booking_add = new Vue( {
     },
     methods: {
         reload() {
-            this.getBookingPrincipals()
+            this.getAgentTransportPrincipals()
         },
 
-        getBookingPrincipals() {
-            api("/customer/api/get-principals/", "POST", {work_type: 'normal'}).then((data) => {
+        getAgentTransportPrincipals() {
+            api("/customer/api/get-principals/", "POST", {work_type: 'agent-transport'}).then((data) => {
                 this.principals = data
             })
         },
 
         getShipper(principal) {
-            if(this.booking_add_form.principal != principal.id) {
-                this.booking_add_form.shipper = ''
+            if(this.agent_transport_add_form.principal != principal.id) {
+                this.agent_transport_add_form.shipper = ''
             }
             this.principal_name = principal.name
-            this.booking_add_form.principal = principal.id
+            this.agent_transport_add_form.principal = principal.id
             api("/customer/api/get-shippers/", "POST", {principal: principal.id}).then((data) => {
                 this.shippers = data
             })
@@ -70,38 +59,26 @@ var booking_add = new Vue( {
         addDetail() {
             this.details.push({
                 date: '',
-                time: '',
                 size: '',
                 quantity: 1,
-                container_no: '',
-                seal_no: ''
             })
         },
         deleteDetail(index) {
             this.details.splice(index,1)
         },
 
-        importCheck() {
-            if(! this.import_work){
-                this.booking_add_form.port = 'IMPORT'
-            }
-            else {
-                this.booking_add_form.port = ''
-            }
-        },
-
-        saveAddBookings() {
+        saveAddAgentTransports() {
             this.input_required = false
-            var form = this.$refs.addBookingForm
+            var form = this.$refs.addAgentTransportForm
             for(var i=0; i < form.elements.length; i++){
                 if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
                     this.input_required = true
                     return false;
                 }
             }
-            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, import: this.import_work}).then((data) => {
+            api("/agent-transport/api/save-add-agent-transports/", "POST", {agent_transports: this.agent_transport_add_form, details: this.details}).then((data) => {
                 if(data == "Success") {
-                    window.location.replace("/booking");
+                    window.location.replace("/agent-transport");
                 }
             })
         },
