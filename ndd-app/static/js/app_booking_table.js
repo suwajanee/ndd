@@ -254,8 +254,28 @@ var booking_table = new Vue( {
                 })    
             }
             else {
-                this.bookings = []
-                this.loading = false
+                api("/booking/api/get-time-bookings/").then((data) => {
+                    if(data == 'Not found') {
+                        this.bookings = []
+                        this.loading = false
+                    }
+                    else {
+                        this.bookings = data.bookings
+                        this.today = data.today
+                        this.tmr = data.tmr
+
+                        this.getColor()
+                        this.splitTime('pickup_in_time')
+                        this.splitTime('pickup_out_time')
+                        this.splitTime('factory_in_time')
+                        this.splitTime('factory_load_start_time')
+                        this.splitTime('factory_load_finish_time')
+                        this.splitTime('factory_out_time')
+                        this.splitTime('return_in_time')
+                        this.splitTime('return_out_time')
+                        this.loading = false
+                    }
+                })    
             }      
         },
         splitTime(field) {

@@ -19,15 +19,14 @@ def api_get_time_bookings(request):
     if request.method == "POST":
         req = json.loads( request.body.decode('utf-8') )
         pk_list = req["checked_bookings"]
-        if pk_list == []:
-            pk_list = request.session['checked_bookings']
-        if isinstance(pk_list, str):
-            pk_list = req["checked_bookings"].split(',')
+
         request.session['checked_bookings'] = pk_list
     else:
-        if request.session['pk_list']:
-            pk_list = request.session['pk_list']
+        if 'checked_bookings' in request.session:
+            pk_list = request.session['checked_bookings']
             request.session['checked_bookings'] = pk_list
+        else:
+            return JsonResponse('Not found', safe=False)
 
     bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'principal__name', 'shipper__name', 'work_id')
     
