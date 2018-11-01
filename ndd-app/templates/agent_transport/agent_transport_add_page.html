@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Add Agent Transport {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_add.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+    <div id="agent-transport-add"> 
+        
+        <div class="modal-dialog" role="document" style="min-width: 55%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100 text-center">Add Agent Transport</h2>
+                    <hr>
+                </div>
+                <div class="modal-body px-5">
+                    <form ref="addAgentTransportForm" class="container col-md-11">
+                        {% verbatim %}
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">CUSTOMER</span>
+                                </div>
+                                <button v-if="agent_transport_add_form.principal" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ principal_name }}
+                                </button>
+                                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{'alert-danger': input_required == true}">
+                                    --------
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-right w-100">                    
+                                    <div class="dropdown-item">
+                                        <input class="form-control" v-model="search_principal" placeholder="search">
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="options-list">
+                                        <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getShipper(principal)">{{ principal.name }}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">SHIPPER</span>
+                                </div>
+                                <select class="custom-select" v-model="agent_transport_add_form.shipper" :class="{'alert-danger': input_required == true & agent_transport_add_form.shipper == ''}" required>
+                                    <option value=""> -------- </option>
+                                    <option v-for="shipper in shippers" :value="shipper.id"> {{ shipper.name }} </option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">AGENT</span>
+                                </div>
+                                <input class="form-control" v-model="agent_transport_add_form.agent" maxlength="50">
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">BOOKING NO.</span>
+                                </div>
+                                <input class="form-control" v-model="agent_transport_add_form.booking_no" maxlength="50">
+                                <select class="custom-select col-md-2" v-model="agent_transport_add_form.work_type">
+                                    <option value="ep"> Empty </option>
+                                    <option value="fc"> Full </option>
+                                </select>
+                            </div>
+
+                            <fieldset class="add_form">
+                                <legend class="add_form">DETAILS</legend>
+                                <div v-for="(detail, index) in details">
+                                    <div class="input-group mb-2 col-md-12">
+                                        <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required == true & detail.date == ''}" required>
+                                        <select class="custom-select col-md-4" style="height: 40px;" v-model="detail.size" :class="{'alert-danger': input_required == true & detail.size == ''}" required>
+                                            <option value=""> -- SIZE -- </option>
+                                            <option value="20'">20'</option>
+                                            <option value="20'RF">20'RF</option>
+                                            <option value="40'">40'</option>
+                                            <option value="40'HC">40'HC</option>
+                                            <option value="40'OT">40'OT</option>
+                                            <option value="40'GOH">40'GOH</option>
+                                            <option value="40'RF">40'RF</option>
+                                            <option value="45'">45'</option>
+                                            <option value="" disabled> -------- </option>
+                                            <option value="2X20'">2X20'</option>
+                                            <option value="2X20'RF">2X20'RF</option>
+                                        </select>
+                                        <input type="number" class="form-control col-md-3" v-model="detail.quantity" min=1 placeholder="QTY" :class="{'alert-danger': input_required == true & detail.quantity == ''}" required>
+                                        <div class="input-group-append">
+                                            <button v-if="index==0" class="btn btn-success" @click.prevent="addDetail"><span><i class="fa fa-plus"></i></span></button>
+                                            <button v-else class="btn btn-danger" @click.prevent="deleteDetail(index)"><span><i class="fa fa-minus"></i></span></button>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </fieldset>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">FROM</span>
+                                </div>
+                                <input class="form-control" v-model="agent_transport_add_form.pickup_from" maxlength="20">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">TO</span>
+                                </div>
+                                <input class="form-control" v-model="agent_transport_add_form.return_to" maxlength="20">
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">REMARK</span>
+                                </div>
+                                <textarea class="form-control" style="min-height: 40px;" v-model="agent_transport_add_form.remark" maxlength="200"></textarea>
+                            </div>
+                        {% endverbatim %}
+                    </form>
+                </div>
+                <div class="modal-footer px-5">
+                    <div class="container col-md-11 text-right">
+                        <a href="{% url 'agent-transport-page' %}" class="btn btn-light btn-lg mr-1">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-lg" @click.prevent="saveAddAgentTransports">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <script type="application/javascript" src="{% static 'js/app_agent_transport_add.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            agent_transport_add.reload();
+        });
+
+    </script>
+
+{% endblock %}

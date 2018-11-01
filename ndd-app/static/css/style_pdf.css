@@ -1,11 +1,13 @@
 body {
     font-size: 20px;
     font-weight: bold;
+    line-height: 0;
 }
 
 table.border-out {border:1px solid #000;}
 td {border:none;}
 tr {border:none;}
+
 
 /* Border */
 .mt-5 {
@@ -48,6 +50,7 @@ td.border-b {
     height: 30px;
 }
 
+
 /* Text format */
 .big {
     height: 20px;
@@ -77,7 +80,7 @@ td.border-b {
 }
 
 .center {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
 }
@@ -101,26 +104,25 @@ td.border-b {
 }
 
 
+/* Time template */
 .time-table {
     font-size: 8px;
     text-align: center;
-  }
+}
 
-  .time-table th {
+.time-table th {
     background-color: lightgray;
     border:1px solid black;
     padding:1px;
     vertical-align: middle;
     height: 0.25in;
-  }
+}
 
-
-  .time-table td {
+.time-table td {
     vertical-align: center;
     padding:1px;
     border:1px solid black;
     height: 35px;
-
-  }
+}
 
 
