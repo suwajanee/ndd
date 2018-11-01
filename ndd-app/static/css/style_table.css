@@ -1,0 +1,147 @@
+/* Fix header table when scroll */
+.table-cont{
+    overflow-y: auto;
+    position: absolute;
+    bottom: 0; 
+    box-shadow: 0 0 1px 1px gray;
+}
+
+.table-cont table, .table-cont td {
+    font-size: 12px;
+    border: 1px solid gray;
+    text-align: center;
+}
+
+.table-cont thead {
+    box-shadow: 0 0 4px 2px gray;
+}
+
+.table-cont th {
+    padding: 10 5px;
+    box-shadow: 0 0 0 1px gray; 
+}
+
+.table-cont td {
+    padding: 5px;
+    min-width: 50px;
+}
+
+.table-cont tbody {
+    background: white;
+}
+
+table.time th {
+    padding: 3 5px;
+}
+
+
+/* color */
+.bg-lightgray {
+    background:LightGray;
+}
+
+.bg-gold {
+    background: gold;
+}
+
+.bg-lime {
+    background: Lime;
+}
+
+.bg-cyan {
+    background: Cyan;
+} 
+
+.modal-body {
+    font-size: 14px;
+}
+
+
+/* Hide too long text in field */
+.long-text {
+    width: 60px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text:active {
+    overflow: visible;
+    width: auto;
+    display: inline-block;
+}
+
+.long-text-80 {
+    width: 80px;
+    font-size: 11px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text-80:active {
+    width: 120px;
+    overflow: visible;
+    display: inline-block;
+}
+
+
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+
+/* Custom input */
+input:not([type]), input[type="text"] {
+    min-width: 50px;
+    padding: 2px 4px;
+    font-size: 11px;
+    text-align: center;
+}
+
+td input[type="date"] {
+    max-width: 115px;
+    padding: 2px 4px;
+    font-size: 11px;
+}
+
+select.short {
+    min-width: 60px;
+    /* padding: 2px 4px; */
+    height: 25px;
+    font-size: 11px;
+}
+
+select.status {
+    min-width: 80px;
+    /* padding: 2px 4px; */
+    height: 25px;
+    font-size: 11px;
+}
+
+select.size {
+    min-width: 75px;
+    padding: 0px 12px;
+    height: 25px;
+    font-size: 11px;
+}
