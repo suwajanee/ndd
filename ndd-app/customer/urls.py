@@ -23,6 +23,9 @@ urlpatterns = [
 
 
     url(r'^api/shipper-address/$', customer_data_view.api_get_shipper_address, name='api-shipper-address'),
+    url(r'^api/get-principals/$', customer_data_view.api_get_principals, name='api-get-principals'),
+    url(r'^api/get-shippers/$', customer_data_view.api_get_shippers, name='api-get-shippers'),
+
 ]
 
 

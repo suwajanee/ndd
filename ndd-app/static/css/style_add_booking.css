@@ -1,32 +1,3 @@
-/* @import url(../fonts/thsarabunnew.css); */
-
-body{ 
-    /* font-family: THSarabunNew, sans-serif; */
-
-    /* font-size: 14px; */
-    /* font-weight: bold; */
-    /* width: 100%; */
-} 
-
-#id_booking_color {
-    max-width: 15%;
-    height: 38px;
-}
-input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-    border: none;
-}
-
-.add-address-other {
-    resize:vertical;
-}
-
-.w-15 {
-    max-width: 15%;
-}
-
 ::-webkit-scrollbar {
     width: 20px;
     height: 20px;
@@ -49,3 +20,22 @@ input[type="color"]::-webkit-color-swatch {
     background: #555; 
 }
 
+fieldset.add_form {
+    border: 1px solid lightgray !important;
+    padding: 0.5em 1em 1em 1em !important;
+    margin: 0 0 1.5em 0 !important;
+    border-radius: 8px;
+}
+
+legend.add_form {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+
+#booking-add .custom-checkbox input[type="checkbox"] + label::before {
+    background-color: gray;
+}

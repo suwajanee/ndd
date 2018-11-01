@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Add Booking {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_add_booking.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+    <div id="booking-add"> 
+    
+        
+    <div class="container col-md-7 shadow bg-white">
+        <div class="container col-md-10">
+            <div class="container text-center pt-4 pb-2">
+                <h2>Add Booking</h2>
+                <hr>
+            </div>
+            <form ref="addBookingForm">
+            {% verbatim %}
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">CUSTOMER</span>
+                </div>
+                <button v-if="booking_add_form.principal" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ principal_name }}
+                </button>
+                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{'alert-danger': input_required == true}">
+                    --------
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right w-100">                    
+                    <div class="dropdown-item">
+                        <input class="form-control" v-model="search_principal" placeholder="search">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="options-list">
+                        <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getShipper(principal)">{{ principal.name }}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">SHIPPER</span>
+                </div>
+                <select class="custom-select" v-model="booking_add_form.shipper" :class="{'alert-danger': input_required == true & booking_add_form.shipper == ''}" required>
+                    <option value=""> -------- </option>
+                    <option v-for="shipper in shippers" :value="shipper.id"> {{ shipper.name }} </option>
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">AGENT</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.agent" maxlength="50">
+            </div>
+                
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">BOOKING NO.</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.booking_no" maxlength="50">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="import" v-model="import_work" @click="importCheck">
+                            <label class="custom-control-label" for="import">IMPORT</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <fieldset class="add_form">
+                <legend class="add_form">DETAILS</legend>
+                <div v-for="(detail, index) in details">
+                    <hr v-if="import_work == true & index != 0" class="my-4">
+
+                    <div class="input-group mb-2 col-md-12">
+                        <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required == true & detail.date == ''}" required>
+                        <input class="form-control col-md-2" v-model="detail.time" maxlength="10" placeholder="TIME">
+                        <select class="custom-select col-md-3" style="height: 40px;" v-model="detail.size" :class="{'alert-danger': input_required == true & detail.size == ''}" required>
+                            <option value=""> -- SIZE -- </option>
+                            <option value="20'">20'</option>
+                            <option value="20'RF">20'RF</option>
+                            <option value="40'">40'</option>
+                            <option value="40'HC">40'HC</option>
+                            <option value="40'OT">40'OT</option>
+                            <option value="40'GOH">40'GOH</option>
+                            <option value="40'RF">40'RF</option>
+                            <option value="45'">45'</option>
+                            <option value="" disabled> -------- </option>
+                            <option value="2X20'">2X20'</option>
+                            <option value="2X20'RF">2X20'RF</option>
+                        </select>
+                        <input type="number" class="form-control col-md-2" v-model="detail.quantity" min=1 placeholder="QTY" :class="{'alert-danger': input_required == true & detail.quantity == ''}" required>
+                        <div class="input-group-append">
+                            <button v-if="index==0" class="btn btn-success" @click.prevent="addDetail"><span><i class="fa fa-plus"></i></span></button>
+                            <button v-else class="btn btn-danger" @click.prevent="deleteDetail(index)"><span><i class="fa fa-minus"></i></span></button>
+                        </div>
+                    </div>
+                    <div v-if="import_work == true" class="input-group mb-2 col-md-10 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CONTAINER NO</span>
+                        </div>
+                        <input class="form-control" v-model="detail.container_no" maxlength="20">
+                        <div class="input-group-append">
+                            <span class="input-group-text">SEAL NO</span>
+                        </div>
+                        <input class="form-control" v-model="detail.seal_no" maxlength="20">
+                    </div>
+                </div>
+                
+            </fieldset>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">FROM</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.pickup_from" maxlength="20">
+                <div class="input-group-append">
+                    <span class="input-group-text">FACTORY</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.factory" maxlength="20">
+                <div class="input-group-append">
+                    <span class="input-group-text">TO</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.return_to" maxlength="20">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">VESSEL</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.vessel" maxlength="50">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">PORT</span>
+                </div>
+                <input class="form-control" v-model="booking_add_form.port" maxlength="50">
+            </div>
+
+            <fieldset class="add_form">
+                <legend class="add_form">ตัดหาง</legend>
+                <div class="container input-group mb-2 col-sm-8">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="nextday" v-model="booking_add_form.nextday">
+                                <label class="custom-control-label" for="nextday"></label>
+                            </div>
+                        </div>
+                        <span class="input-group-text">RETURN DATE</span>
+                    </div>
+                    <input type="date" class="form-control" v-model="booking_add_form.return_date" :disabled="booking_add_form.nextday == false">
+                </div>
+                
+            </fieldset>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">CLOSING</span>
+                </div>
+                <input type="date" class="form-control" v-model="booking_add_form.closing_date">
+                <input class="form-control" v-model="booking_add_form.closing_time" maxlength="5">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">REMARK</span>
+                </div>
+                <textarea class="form-control" style="min-height: 40px;" v-model="booking_add_form.remark" maxlength="200"></textarea>
+            </div>
+    {% endverbatim %}
+</form>
+            <div class="text-right pb-4">
+                <a href="{% url 'booking-page' %}" class="btn btn-light btn-lg mr-1">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg" @click.prevent="saveAddBookings">SUBMIT</button>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+
+
+
+    <script type="application/javascript" src="{% static 'js/app_booking_add.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            booking_add.reload();
+        });
+
+    </script>
+
+{% endblock %}
