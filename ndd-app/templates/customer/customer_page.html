@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Customer {% endblock %}
+
+{% block extra_head %}
+    <!-- <link rel="stylesheet" href="{% static 'css/style_table.css' %}" /> -->
+
+    <style>
+    button.text-lightgray, .text-lightgray {
+        color: lightgray;
+    }
+
+
+    #customerList {
+        overflow-y:auto;
+        /* width:100%; */
+        position: fixed;
+        bottom:0px;
+    }
+
+    /* scrollbar */
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 5px; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 5px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+    
+    
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="col-10 border-left position-fixed" style="right:0; height:100%; background: white;"></div>
+<div id="customer-page">
+    <div class="container-fluid" >
+    <div class="row">
+        <div class="col-2 p-0 position-absolute" >
+                <div id="searchCustomer" class="m-3">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Search Customer" v-model="search_principal">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modalAddCustomer"><i class="fa fa-plus"></i></button> 
+                        </div>    
+                    </div>
+                </div>
+
+                <div id="customerList" class="col-2 border-top p-0">
+                    <div class="list-group">
+                        <button 
+                            v-for="principal in filteredPrincipal" 
+                            class="list-group-item list-group-item-action" 
+                            :class="{'bg-light text-lightgray': principal.cancel == '1'}"
+                            @click="getCustomerDetails(principal.id)"
+                        >
+                            <div class="row p-0">
+                                <div class="col-8 text-truncate">
+                                        {% verbatim %}
+                                    {{ principal.name }}
+                                {% endverbatim %}
+
+                                </div>
+                                <div v-if="principal.work_type == 'agent-transport'" class="col-4">
+                                    <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
+                                </div>
+                            </div>
+                        </button>                      
+                    </div>
+                </div>
+        </div>
+
+        <div v-if="customer" class="col-10 position-absolute" style="right:0;">
+                {% include 'customer/customer_detail.html' %}
+        </div>
+
+        <div v-else class="col-10 position-absolute" style="right:0;">
+            {{ customer }}
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script type="application/javascript" src="{% static 'js/app_customer_page.js' %}"></script>
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            customer_page.reload();
+        });
+
+        window.onload = function () {
+            var tableCont = document.querySelector('#customerList')
+        
+            var filterDate = document.querySelector('#searchCustomer')
+        
+            tableCont.style.top = filterDate.offsetTop + 110 + 'px'
+        }
+
+    </script>
+{% endblock %}

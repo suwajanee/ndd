@@ -1,0 +1,79 @@
+{% verbatim %}
+<div class="m-4 text-secondary">
+    <div class="row">
+        <div class="col-md-8"> 
+            <h1 class="mb-0 text-truncate">{{ customer.name }}</h1>
+            
+    
+            <p class="my-0 d-inline"><em>{{ customer.work_type }}</em></p>
+            <span v-if="customer.cancel == '1'" class="badge badge-pill badge-danger ml-2">CANCEL</span>
+            
+        </div>
+        <div class="col-md-4 text-right">
+            <button class="btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditCustomer"><i class="fa fa-edit"></i> Edit</button>
+
+                <button v-if="customer.cancel == '0'" class="btn btn-danger btn-cancel-customer"><i class="fa fa-ban"></i> Cancel</button>
+                <button v-else class="btn btn-primary btn-cancel-customer"><i class="fa fa-undo"></i> Back</button>
+
+            <!-- <form id="formDeleteCustomer" method="POST" action="{% url 'customer-cancel' %}">
+                {% csrf_token %}
+                <input type="hidden" name="customer_pk" value="{{ customer.pk }}">
+            </form> -->
+        </div>
+    </div>
+
+    <hr class="m-0">
+</div>
+
+
+<div class="my-5 col-md-9 container">
+        <table class="table bg-white border-bottom">
+                <thead class="bg-light">
+                <tr class="row m-0">
+                    <th class="col-md-3"> SHIPPER </th>
+                    <th class="col-md-2"> TYPE </th>
+                    <th class="col-md-5"> ADDRESS </th>
+                    <th class="col-md-2 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddNewShipper"><i class="fa fa-plus"></i></button></th>
+                </tr>
+        </thead>
+        <tbody v-if="shippers.length">
+
+            <tr v-for="(shipper, index) in shippers" class="row m-0" :class="{'bg-light text-lightgray': shipper.shipper.cancel == '1'}">
+                <td v-if="index == 0" class="col-md-3">{{ shipper.shipper.name }}</td>
+                <td v-else-if="shipper.shipper.name != shippers[index-1].shipper.name" class="col-md-3">{{ shipper.shipper.name }}</td>
+                <td v-else class="col-md-3 border-top-0"></td>
+
+                <td v-if="index == 0" class="col-md-2">{{ shipper.address_type }}</td>
+                <td v-else class="col-md-2" :class="{'border-top-0': shipper.shipper.name == shippers[index-1].shipper.name}">{{ shipper.address_type }}</td>
+            
+
+                <td v-if="index == 0" class="col-md-5 text-truncate" style="white-space: pre;">{{ shipper.address }}</td>
+                <td v-else class="col-md-5 text-truncate" :class="{'border-top-0': shipper.shipper.name == shippers[index-1].shipper.name}" style="white-space: pre;">{{ shipper.address }}</td>
+                
+                <td v-if="index == 0" class="col-md-2 text-right">
+                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
+
+                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>
+                    <button v-else class="btn btn-outline-primary btn-cancel-shipper"><i class="fa fa-undo"></i></button>
+                </td>
+                <td v-else-if="shipper.shipper.name != shippers[index-1].shipper.name" class="col-md-2 text-right">
+                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
+
+                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>
+                    <button v-else class="btn btn-outline-primary btn-cancel-shipper"><i class="fa fa-undo"></i></button>
+                </td>
+                <td v-else class="col-md-2 text-right border-top-0"></td>
+            </tr>
+        </tbody>
+
+
+            <tbody v-else>
+            <tr>
+                <td colspan=3 class="text-center text-secondary">
+                    <h5>ไม่พบข้อมูล</h5>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+{% endverbatim %}

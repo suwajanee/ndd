@@ -6,6 +6,7 @@ from .views.customer_edit_view import CustomerEditView
 from .views.customer_table_view import CustomerListView
 
 from .views import customer_data_view
+from .views import customer_page_view
 
 
 urlpatterns = [
@@ -26,6 +27,11 @@ urlpatterns = [
     url(r'^api/get-principals/$', customer_data_view.api_get_principals, name='api-get-principals'),
     url(r'^api/get-shippers/$', customer_data_view.api_get_shippers, name='api-get-shippers'),
 
+    url(r'^page/$', customer_page_view.customer_page, name='customer-page'),
+    url(r'^api/get-customer-details/$', customer_data_view.api_get_customer_details, name='api-get-customer-details'),
+
+
+    
 ]
 
 

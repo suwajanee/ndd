@@ -14,6 +14,7 @@ class ShipperSerializer(serializers.ModelSerializer):
                 fields = '__all__'
 
 class ShipperAddressSerializer(serializers.ModelSerializer):
+        shipper = ShipperSerializer()
         class Meta:
                 model = ShipperAddress
                 fields = '__all__'

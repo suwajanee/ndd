@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import Principal, Shipper, ShipperAddress
 from ..serializers import PrincipalSerializer, ShipperSerializer, ShipperAddressSerializer
 
+from collections import OrderedDict
+
 
 @csrf_exempt
 def api_get_shipper_address(request):
@@ -36,7 +38,10 @@ def api_get_principals(request):
         
         principals = Principal.objects.filter(Q(work_type=work_type) & Q(cancel=0)).order_by('name')
 
-        serializer = PrincipalSerializer(principals, many=True)
+    else:
+        principals = Principal.objects.all().order_by('cancel', 'name')
+
+    serializer = PrincipalSerializer(principals, many=True)
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -51,3 +56,30 @@ def api_get_shippers(request):
         serializer = ShipperSerializer(shippers, many=True)
 
     return JsonResponse(serializer.data, safe=False)
+
+
+@csrf_exempt
+def api_get_customer_details(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        principal_id = req['principal']
+
+        shippers_pk = Shipper.objects.filter(principal=principal_id).values_list('pk')
+
+        shipper = Shipper.objects.filter(pk__in=shippers_pk).order_by('name')
+        shipper_serializer = ShipperSerializer(shipper, many=True)
+
+        shipper_address = ShipperAddress.objects.filter(shipper__in=shippers_pk).order_by('shipper__name', 'address_type')
+        shipper_address_serializer = ShipperAddressSerializer(shipper_address, many=True)
+        
+        shipper_address_data_list = shipper_address_serializer.data
+
+        for shipper_data in shipper_serializer.data:
+            re = any(shipper_address_data['shipper'] == shipper_data for shipper_address_data in shipper_address_serializer.data)
+
+            if not re:      
+                shipper_address_data_list.append(OrderedDict({'shipper': shipper_data}))
+
+
+
+    return JsonResponse(shipper_address_data_list, safe=False)
