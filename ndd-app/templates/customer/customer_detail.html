@@ -12,8 +12,8 @@
         <div class="col-md-4 text-right">
             <button class="btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditCustomer"><i class="fa fa-edit"></i> Edit</button>
 
-                <button v-if="customer.cancel == '0'" class="btn btn-danger btn-cancel-customer"><i class="fa fa-ban"></i> Cancel</button>
-                <button v-else class="btn btn-primary btn-cancel-customer"><i class="fa fa-undo"></i> Back</button>
+                <button v-if="customer.cancel == '0'" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+                <button v-else class="btn btn-primary"><i class="fa fa-undo"></i> Back</button>
 
             <!-- <form id="formDeleteCustomer" method="POST" action="{% url 'customer-cancel' %}">
                 {% csrf_token %}
@@ -77,3 +77,49 @@
         </table>
         </div>
 {% endverbatim %}
+
+
+<!-- POPUP: Edit customer -->
+<div class="modal fade" id="modalEditCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Edit Customer</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body mx-3">
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input class="form-control" :class="{'alert-danger': input_required == true & edit_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="edit_customer_form.name">
+                    
+                </div>
+
+                <div class="md-form mb-3 float-right text-secondary">
+                        <em>&mdash;&nbsp;WORK TYPE :</em>
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd1" v-model="edit_customer_form.work_type" value="normal">
+                        <label class="custom-control-label" for="workTypeAdd1">Normal</label>
+                    </div> 
+
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd2" v-model="edit_customer_form.work_type" value="agent-transport">
+                        <label class="custom-control-label" for="workTypeAdd2">สายเรือ</label>
+                    </div> 
+                </div>
+
+            </div>
+        
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-primary" @click="editCustomer">Add</button>
+            </div>
+
+        </div>
+        
+    </div>
+    </div>
