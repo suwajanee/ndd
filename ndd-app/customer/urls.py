@@ -7,6 +7,7 @@ from .views.customer_table_view import CustomerListView
 
 from .views import customer_data_view
 from .views import customer_page_view
+from .views import customer_add_view
 
 
 urlpatterns = [
@@ -29,6 +30,8 @@ urlpatterns = [
 
     url(r'^page/$', customer_page_view.customer_page, name='customer-page'),
     url(r'^api/get-customer-details/$', customer_data_view.api_get_customer_details, name='api-get-customer-details'),
+
+    url(r'^api/save-add-customer-details/$', customer_add_view.api_save_add_customer, name='api-save-add-customer'),
 
 
     

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import re
 
 from django.contrib import messages
@@ -9,6 +10,28 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 
 from ..models import Principal, Shipper, ShipperAddress
+from ..serializers import PrincipalSerializer, ShipperSerializer, ShipperAddressSerializer
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def api_save_add_customer(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        data = req['customer']
+
+        data['name'] = re.sub(' +', ' ', data['name'].strip())
+
+        customer = Principal(**data)
+        customer.save()
+        
+    return JsonResponse(customer.pk, safe=False)
+
+
+
 
 
 class CustomerAddView(TemplateView):

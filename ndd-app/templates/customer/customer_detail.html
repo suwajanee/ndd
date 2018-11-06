@@ -53,14 +53,14 @@
                 <td v-if="index == 0" class="col-md-2 text-right">
                     <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
 
-                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>
-                    <button v-else class="btn btn-outline-primary btn-cancel-shipper"><i class="fa fa-undo"></i></button>
+                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger"><i class="fa fa-ban"></i></button>
+                    <button v-else class="btn btn-outline-primary"><i class="fa fa-undo"></i></button>
                 </td>
                 <td v-else-if="shipper.shipper.name != shippers[index-1].shipper.name" class="col-md-2 text-right">
                     <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper{{ shipper.pk }}"><i class="fa fa-edit"></i></button>
 
-                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger btn-cancel-shipper"><i class="fa fa-ban"></i></button>
-                    <button v-else class="btn btn-outline-primary btn-cancel-shipper"><i class="fa fa-undo"></i></button>
+                    <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger"><i class="fa fa-ban"></i></button>
+                    <button v-else class="btn btn-outline-primary"><i class="fa fa-undo"></i></button>
                 </td>
                 <td v-else class="col-md-2 text-right border-top-0"></td>
             </tr>

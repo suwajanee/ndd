@@ -88,6 +88,7 @@
         </div>
 
         <div v-if="customer" class="col-10 position-absolute" style="right:0;">
+            
                 {% include 'customer/customer_detail.html' %}
         </div>
 
@@ -96,10 +97,61 @@
         </div>
     </div>
     </div>
+
+
+<!-- POPUP: Add customer -->
+<div class="modal fade" id="modalAddCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Add New Customer</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body mx-3">
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input class="form-control" :class="{'alert-danger': input_required == true & add_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="add_customer_form.name">
+                    
+                </div>
+
+                <div class="md-form mb-3 float-right text-secondary">
+                        <em>&mdash;&nbsp;WORK TYPE :</em>
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd1" v-model="add_customer_form.work_type" value="normal">
+                        <label class="custom-control-label" for="workTypeAdd1">Normal</label>
+                    </div> 
+
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd2" v-model="add_customer_form.work_type" value="agent-transport">
+                        <label class="custom-control-label" for="workTypeAdd2">สายเรือ</label>
+                    </div> 
+                </div>
+
+            </div>
+        
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-primary" @click="addCustomer">Add</button>
+            </div>
+
+        </div>
+        
+    </div>
+    </div>
+
+
+
+
 </div>
 
 
 
+    
 
 
 
