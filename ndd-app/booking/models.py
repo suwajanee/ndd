@@ -13,7 +13,7 @@ class Booking(models.Model):
     size = models.CharField(max_length=50, blank=True)
     booking_no = models.CharField(max_length=50, blank=True)
 
-    NDD_CHOICES = (
+    NDD_CHOICES_1 = (
         ('1', 'NDD'),
         ('0', '-'),
     )
@@ -21,13 +21,18 @@ class Booking(models.Model):
     pickup_tr = models.CharField(max_length=20, blank=True, default='')
     pickup_from = models.CharField(max_length=20, blank=True, default='')
 
-    yard_ndd = models.CharField(max_length=1, choices=NDD_CHOICES, default=0)
+    yard_ndd = models.CharField(max_length=1, choices=NDD_CHOICES_1, default=0)
 
     forward_tr = models.CharField(max_length=20, blank=True, default='')
     factory = models.CharField(max_length=20, blank=True, default='')
     backward_tr = models.CharField(max_length=20, blank=True, default='')
 
-    fac_ndd = models.CharField(max_length=1, choices=NDD_CHOICES, default=0)
+    NDD_CHOICES_2 = (
+        ('2', 'Fac'),
+        ('1', 'NDD'),
+        ('0', '-'),
+    )
+    fac_ndd = models.CharField(max_length=1, choices=NDD_CHOICES_2, default=0)
 
     return_tr = models.CharField(max_length=20, blank=True, default='')
     return_to = models.CharField(max_length=20, blank=True, default='')
