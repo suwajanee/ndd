@@ -37,6 +37,9 @@ def api_save_edit_bookings(request):
                 return_tr = backward_tr
             if booking['fac_ndd'] == '1':
                 return_tr = booking['return_tr']
+            elif booking['fac_ndd'] == '2':
+                backward_tr = booking['backward_tr']
+                return_tr = booking['return_tr']
 
             booking_save = Booking.objects.get(pk=booking['id'])
             booking_save.status = booking['status']

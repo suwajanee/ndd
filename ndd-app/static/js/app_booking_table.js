@@ -159,7 +159,7 @@ var booking_table = new Vue( {
                 this.bookings[index].backward_tr = ''
                 this.bookings[index].return_tr = ''
             }
-            if(booking.nextday == '1' & field == 22){
+            if((booking.nextday == '1' & field == 22) | (booking.fac_ndd == '2' & field == 13)){
                 this.bookings[index].backward_tr = ''
                 this.bookings[index].return_tr = ''
             }
