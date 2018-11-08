@@ -50,7 +50,7 @@
                         </a>
                     </td>
 
-                    <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true}">{{ booking.time }}</td>
+                    <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}">{{ booking.time }}</td>
                     
                     <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
@@ -118,7 +118,7 @@
         </div>
     {% endverbatim %}
 
-    <div v-if="modal">
+    <!-- <div v-if="modal"> -->
         <div class="modal fade" id="modalBookingPrint" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -135,8 +135,8 @@
                             <div class="row">
                                 <div class="col-md-3">เต็มเที่ยว</div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-full-'+modal" name="template" v-model="print.template" value="full">
-                                    <label class="custom-control-label" :for="'template-full-'+modal">Full</label>
+                                    <input type="radio" class="custom-control-input" id="template-full" name="template" v-model="print.template" value="full">
+                                    <label class="custom-control-label" for="template-full">Full</label>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -148,12 +148,12 @@
                                     ตัดหาง
                                 </div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-forward-'+modal" name="template" v-model="print.template" value="forward">
-                                    <label class="custom-control-label" :for="'template-forward-'+modal">Forward</label>
+                                    <input type="radio" class="custom-control-input" id="template-forward" name="template" v-model="print.template" value="forward">
+                                    <label class="custom-control-label" for="template-forward">Forward</label>
                                 </div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-backward-'+modal" name="template" v-model="print.template" value="backward">
-                                    <label class="custom-control-label" :for="'template-backward-'+modal">Backward</label>
+                                    <input type="radio" class="custom-control-input" id="template-backward" name="template" v-model="print.template" value="backward">
+                                    <label class="custom-control-label" for="template-backward">Backward</label>
                                 </div>
                             </div>
     
@@ -164,24 +164,24 @@
                                     ซอยตู้
                                 </div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-yard_ndd-'+modal" name="template" v-model="print.template" value="yard_ndd">
-                                    <label class="custom-control-label" :for="'template-yard_ndd-'+modal">Yard - NDD</label>
+                                    <input type="radio" class="custom-control-input" id="template-yard_ndd" name="template" v-model="print.template" value="yard_ndd">
+                                    <label class="custom-control-label" for="template-yard_ndd">Yard - NDD</label>
                                 </div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-ndd_fac_return-'+modal" name="template" v-model="print.template" value="ndd_fac_return">
-                                    <label class="custom-control-label" :for="'template-ndd_fac_return-'+modal">NDD - Fac - Return</label>
+                                    <input type="radio" class="custom-control-input" id="template-ndd_fac_return" name="template" v-model="print.template" value="ndd_fac_return">
+                                    <label class="custom-control-label" for="template-ndd_fac_return">NDD - Fac - Return</label>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-3"></div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-ndd_fac_ndd-'+modal" name="template" v-model="print.template" value="ndd_fac_ndd">
-                                    <label class="custom-control-label" :for="'template-ndd_fac_ndd-'+modal">NDD - Fac - NDD</label>
+                                    <input type="radio" class="custom-control-input" id="template-ndd_fac_ndd" name="template" v-model="print.template" value="ndd_fac_ndd">
+                                    <label class="custom-control-label" for="'template-ndd_fac_ndd">NDD - Fac - NDD</label>
                                 </div>
                                 <div class="col custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" :id="'template-ndd_return-'+modal" name="template" v-model="print.template" value="ndd_return">
-                                    <label class="custom-control-label" :for="'template-ndd_return-'+modal">NDD - Return</label>
+                                    <input type="radio" class="custom-control-input" id="template-ndd_return" name="template" v-model="print.template" value="ndd_return">
+                                    <label class="custom-control-label" for="template-ndd_return">NDD - Return</label>
                                 </div>
                             </div>
     
@@ -197,16 +197,16 @@
                                 {% verbatim %}
                                     <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-'+index+'-'+modal" name="address" v-model="print.address" :value="address.id">
-                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} )</label>
-                                            <label v-else class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper</label>
+                                            <input type="radio" class="custom-control-input" :id="'address-'+index" name="address" v-model="print.address" :value="address.id">
+                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index">Shipper ( {{ address.address_type }} )</label>
+                                            <label v-else class="custom-control-label" :for="'address-'+index">Shipper</label>
                                         </div> 
                                     </div>
                                                                 
                                     <div class="row">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-other-'+modal" name="address" v-model="print.address" value="other">
-                                            <label class="custom-control-label" :for="'address-other-'+modal">Other</label>
+                                            <input type="radio" class="custom-control-input" id="address-other" name="address" v-model="print.address" value="other">
+                                            <label class="custom-control-label" for="address-other">Other</label>
                                         </div>
                                     </div>
 
@@ -218,8 +218,8 @@
                                                                         
                                     <div class="row">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-none-'+modal" name="address" v-model="print.address" value="none">
-                                            <label class="custom-control-label" :for="'address-none-'+modal">None</label>
+                                            <input type="radio" class="custom-control-input" id="address-none" name="address" v-model="print.address" value="none">
+                                            <label class="custom-control-label" for="address-none">None</label>
                                         </div>
                                     </div>
                                 {% endverbatim %}
@@ -233,7 +233,7 @@
                 </div>
             </div>
         </div>  
-    </div>
+    <!-- </div> -->
 </div>
 
 <div v-else class="container position-relative">

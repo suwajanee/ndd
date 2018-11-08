@@ -83,7 +83,7 @@
         </div>
     {% endverbatim %}
     
-    <div v-if="modal">
+    <!-- <div v-if="modal"> -->
         <div class="modal fade" id="modalAgentTransportPrint" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -100,16 +100,16 @@
                             <div class="container col-md-11">
                                 <div class="row mb-4 mt-3">
                                     <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" :id="'template-full-'+modal" name="template" v-model="print.template" value="full">
-                                        <label class="custom-control-label" :for="'template-full-'+modal">Full</label>
+                                        <input type="radio" class="custom-control-input" id="template-full" name="template" v-model="print.template" value="full">
+                                        <label class="custom-control-label" for="template-full">Full</label>
                                     </div>
                                     <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" :id="'template-forward-'+modal" name="template" v-model="print.template" value="forward">
-                                        <label class="custom-control-label" :for="'template-forward-'+modal">Forward</label>
+                                        <input type="radio" class="custom-control-input" id="template-forward" name="template" v-model="print.template" value="forward">
+                                        <label class="custom-control-label" for="template-forward">Forward</label>
                                     </div>
                                     <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" :id="'template-backward-'+modal" name="template" v-model="print.template" value="backward">
-                                        <label class="custom-control-label" :for="'template-backward-'+modal">Backward</label>
+                                        <input type="radio" class="custom-control-input" id="template-backward" name="template" v-model="print.template" value="backward">
+                                        <label class="custom-control-label" for="template-backward">Backward</label>
                                     </div>
                                 </div>
                             </div>
@@ -126,16 +126,16 @@
                                 {% verbatim %}
                                     <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-'+index+'-'+modal" name="address" v-model="print.address" :value="address.id">
-                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper ( {{ address.address_type }} )</label>
-                                            <label v-else class="custom-control-label" :for="'address-'+index+'-'+modal">Shipper</label>
+                                            <input type="radio" class="custom-control-input" :id="'address-'+index" name="address" v-model="print.address" :value="address.id">
+                                            <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index">Shipper ( {{ address.address_type }} )</label>
+                                            <label v-else class="custom-control-label" :for="'address-'+index">Shipper</label>
                                         </div> 
                                     </div>
                                                                 
                                     <div class="row">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-other-'+modal" name="address" v-model="print.address" value="other">
-                                            <label class="custom-control-label" :for="'address-other-'+modal">Other</label>
+                                            <input type="radio" class="custom-control-input" id="address-other" name="address" v-model="print.address" value="other">
+                                            <label class="custom-control-label" for="address-other">Other</label>
                                         </div>
                                     </div>
 
@@ -147,8 +147,8 @@
                                                                         
                                     <div class="row">
                                         <div class="col custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" :id="'address-none-'+modal" name="address" v-model="print.address" value="none">
-                                            <label class="custom-control-label" :for="'address-none-'+modal">None</label>
+                                            <input type="radio" class="custom-control-input" id="address-none" name="address" v-model="print.address" value="none">
+                                            <label class="custom-control-label" for="address-none">None</label>
                                         </div>
                                     </div>
                                 {% endverbatim %}
@@ -162,7 +162,7 @@
                 </div>
             </div>
         </div>  
-    </div>
+    <!-- </div> -->
 </div>
 
 <div v-else class="container position-relative">
