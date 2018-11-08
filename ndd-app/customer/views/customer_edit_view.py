@@ -35,7 +35,6 @@ def api_save_edit_customer(request):
 def api_save_edit_shipper(request):
     if request.method == "POST":
         req = json.loads( request.body.decode('utf-8') )
-        customer_id = req['customer_id']
         shipper_detail = req['shipper_detail']
         shipper_address_detail = req['shipper_address_detail']
         shipper_address_id = req['address_id']
@@ -66,7 +65,7 @@ def api_save_edit_shipper(request):
                 shipper_address = ShipperAddress(**data)
                 shipper_address.save()
 
-    return JsonResponse(customer_id, safe=False)
+    return JsonResponse('Success', safe=False)
 
 
 

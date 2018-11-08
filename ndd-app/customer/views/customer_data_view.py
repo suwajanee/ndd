@@ -69,7 +69,7 @@ def api_get_customer_details(request):
         shipper = Shipper.objects.filter(pk__in=shippers_pk).order_by('name')
         shipper_serializer = ShipperSerializer(shipper, many=True)
 
-        shipper_address = ShipperAddress.objects.filter(shipper__in=shippers_pk).order_by('shipper__name', 'address_type')
+        shipper_address = ShipperAddress.objects.filter(shipper__in=shippers_pk).order_by('shipper__cancel', 'shipper__name', 'address_type')
         shipper_address_serializer = ShipperAddressSerializer(shipper_address, many=True)
         
         shipper_address_data_list = shipper_address_serializer.data

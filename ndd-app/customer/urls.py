@@ -13,24 +13,24 @@ from .views import customer_cancel_view
 
 
 urlpatterns = [
-    url(r'^$', CustomerListView.render_customer_list, name='customer-list'),
-    url(r'^(?P<pk>\d+)/detail/$', CustomerListView.render_customer_detail, name='customer-detail'),
+    url(r'^55$', CustomerListView.render_customer_list, name='customer-list'),
+    # url(r'^(?P<pk>\d+)/detail/$', CustomerListView.render_customer_detail, name='customer-detail'),
 
-    url(r'^add-customer/$', CustomerAddView.add_customer, name='customer-add-new'),
-    url(r'^add-shipper/$', CustomerAddView.add_shipper, name='shipper-add-new'),
+    # url(r'^add-customer/$', CustomerAddView.add_customer, name='customer-add-new'),
+    # url(r'^add-shipper/$', CustomerAddView.add_shipper, name='shipper-add-new'),
 
-    url(r'^edit-customer/$', CustomerEditView.edit_customer, name='customer-edit'),
-    url(r'^edit-shipper/$', CustomerEditView.edit_shipper, name='shipper-edit'),
+    # url(r'^edit-customer/$', CustomerEditView.edit_customer, name='customer-edit'),
+    # url(r'^edit-shipper/$', CustomerEditView.edit_shipper, name='shipper-edit'),
 
-    url(r'^cancel-customer/$', CustomerCancelView.cancel_customer, name='customer-cancel'),
-    url(r'^cancel-shipper/$', CustomerCancelView.cancel_shipper, name='shipper-cancel'),
+    # url(r'^cancel-customer/$', CustomerCancelView.cancel_customer, name='customer-cancel'),
+    # url(r'^cancel-shipper/$', CustomerCancelView.cancel_shipper, name='shipper-cancel'),
 
 
     url(r'^api/shipper-address/$', customer_data_view.api_get_shipper_address, name='api-shipper-address'),
     url(r'^api/get-principals/$', customer_data_view.api_get_principals, name='api-get-principals'),
     url(r'^api/get-shippers/$', customer_data_view.api_get_shippers, name='api-get-shippers'),
 
-    url(r'^page/$', customer_page_view.customer_page, name='customer-page'),
+    url(r'^$', customer_page_view.customer_page, name='customer-page'),
     url(r'^api/get-customer-details/$', customer_data_view.api_get_customer_details, name='api-get-customer-details'),
 
     url(r'^api/save-add-customer/$', customer_add_view.api_save_add_customer, name='api-save-add-customer'),
@@ -39,6 +39,8 @@ urlpatterns = [
 
     url(r'^api/save-add-shipper/$', customer_add_view.api_save_add_shipper, name='api-save-add-shipper'),
     url(r'^api/save-edit-shipper/$', customer_edit_view.api_save_edit_shipper, name='api-save-edit-shipper'),
+    url(r'^api/cancel-shipper/$', customer_cancel_view.api_cancel_shipper, name='api-cancel-shipper'),
+
 
     
 

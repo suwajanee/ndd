@@ -27,6 +27,20 @@ def api_cancel_customer(request):
 
     return JsonResponse(customer.pk, safe=False)
 
+@csrf_exempt
+def api_cancel_shipper(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        shipper_id = req['shipper_id']
+        cancel_status = req['cancel_status']
+        
+        shipper = Shipper.objects.get(pk=shipper_id)
+        shipper.cancel = cancel_status
+        
+        shipper.save()
+
+    return JsonResponse('Success', safe=False)
+
 
 class CustomerCancelView(TemplateView):
 

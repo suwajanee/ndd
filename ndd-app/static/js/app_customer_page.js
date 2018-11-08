@@ -185,7 +185,6 @@ var customer_page = new Vue( {
             var address = this.shippers.filter(shipper => shipper.shipper.id == shipper_obj.id )
             if(address) {
                 for(index in address) {
-                    console.log(address)
                     if(address[index].address || address[index].address_type) {
                         this.edit_shipper_address.push({
                             id: address[index].id,
@@ -217,12 +216,18 @@ var customer_page = new Vue( {
             }
             else{
                 var address_id = this.edit_shipper_address.map(address => address.id);
-                api("/customer/api/save-edit-shipper/", "POST", { customer_id: this.customer.id, shipper_detail: this.edit_shipper_form, shipper_address_detail: this.edit_shipper_address, address_id: address_id}).then((data) => {
-                    this.getPrincipals(data)
+                api("/customer/api/save-edit-shipper/", "POST", { shipper_detail: this.edit_shipper_form, shipper_address_detail: this.edit_shipper_address, address_id: address_id}).then(() => {
+                    this.getPrincipals(this.customer.id)
                     $('#modalEditShipper').modal('hide');
                 })
 
             }
+        },
+
+        cancelShipper(shipper_id, cancel_status) {
+            api("/customer/api/cancel-shipper/", "POST", { shipper_id: shipper_id, cancel_status: cancel_status }).then(() => {
+                this.getPrincipals(this.customer.id)
+            })
         },
 
     }
