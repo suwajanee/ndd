@@ -4,159 +4,97 @@
 {% block title %} Customer {% endblock %}
 
 {% block extra_head %}
-    <!-- <link rel="stylesheet" href="{% static 'css/style_table.css' %}" /> -->
-
-    <style>
-    button.text-lightgray, .text-lightgray {
-        color: lightgray;
-    }
-
-
-    #customerList {
-        overflow-y:auto;
-        /* width:100%; */
-        position: fixed;
-        bottom:0px;
-    }
-
-    /* scrollbar */
-    /* width */
-    ::-webkit-scrollbar {
-        width: 5px;
-        height: 10px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 5px; 
-    }
-    
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #888; 
-        border-radius: 5px;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555; 
-    }
-    
-    
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style_customer.css' %}" />
 {% endblock %}
 
 {% block content %}
 
-<div class="col-10 border-left position-fixed" style="right:0; height:100%; background: white;"></div>
-<div id="customer-page">
-    <div class="container-fluid" >
-    <div class="row">
-        <div class="col-2 p-0 position-fixed" >
-                <div id="searchCustomer" class="m-3">
-                    <div class="input-group">
-                        <input class="form-control" placeholder="Search Customer" v-model="search_principal">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modalAddCustomer"><i class="fa fa-plus"></i></button> 
-                        </div>    
+    <div class="col-10 border-left position-fixed" style="right:0; height:100%; background: white;"></div>
+    <div id="customer-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2 p-0 position-fixed" >
+                    <div id="searchCustomer" class="m-3">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search Customer" v-model="search_principal">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#modalAddCustomer"><i class="fa fa-plus"></i></button> 
+                            </div>    
+                        </div>
                     </div>
-                </div>
 
-                <div id="customerList" class="col-2 border-top p-0">
-                    <div class="list-group">
-                        <button 
-                            v-for="principal in filteredPrincipal" 
-                            class="list-group-item list-group-item-action" 
-                            :class="{'bg-light text-lightgray': principal.cancel == '1'}"
-                            @click="getCustomerDetails(principal.id)"
-                        >
-                            <div class="row p-0">
-                                <div class="col-8 text-truncate">
+                    <div id="customerList" class="col-2 border-top p-0">
+                        <div class="list-group">
+                            <button 
+                                v-for="principal in filteredPrincipal" 
+                                class="list-group-item list-group-item-action" 
+                                :class="{'bg-light text-lightgray': principal.cancel == '1'}"
+                                @click="getCustomerDetails(principal.id)"
+                            >
+                                <div class="row p-0">
+                                    <div class="col-8 text-truncate">
                                         {% verbatim %}
-                                    {{ principal.name }}
-                                {% endverbatim %}
-
+                                            {{ principal.name }}
+                                        {% endverbatim %}
+                                    </div>
+                                    <div v-if="principal.work_type == 'agent-transport'" class="col-4">
+                                        <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
+                                    </div>
                                 </div>
-                                <div v-if="principal.work_type == 'agent-transport'" class="col-4">
-                                    <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
-                                </div>
-                            </div>
-                        </button>                      
+                            </button>                      
+                        </div>
                     </div>
                 </div>
-        </div>
 
-        <div v-if="customer" class="col-10 position-absolute" style="right:0;">
-            
-                {% include 'customer/customer_detail.html' %}
-        </div>
-
-        <div v-else class="col-10 position-absolute" style="right:0;">
-            {{ customer }}
-        </div>
-    </div>
-    </div>
-
-
-<!-- POPUP: Add customer -->
-<div class="modal fade" id="modalAddCustomer" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Add New Customer</h4>
-                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div v-if="customer" class="col-10 position-absolute" style="right:0;">
+                    {% include 'customer/customer_detail.html' %}
+                </div>
             </div>
-            
-            <div class="modal-body mx-3">
-                <div class="input-group my-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">NAME</span>
+        </div>
+
+
+        <!-- POPUP: Add customer -->
+        <div class="modal fade" id="modalAddCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold">Add New Customer</h4>
+                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <input class="form-control" :class="{'alert-danger': input_required == true & add_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="add_customer_form.name">
                     
+                    <div class="modal-body mx-3">
+                        <div class="input-group my-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">NAME</span>
+                            </div>
+                            <input class="form-control" :class="{'alert-danger': input_required == true & add_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="add_customer_form.name">
+                        </div>
+
+                        <div class="md-form mb-3 float-right text-secondary">
+                            <em>&mdash;&nbsp;WORK TYPE :</em>
+                            <div class="custom-control custom-radio ml-4 d-inline">
+                                <input type="radio" class="custom-control-input" id="workTypeAdd1" v-model="add_customer_form.work_type" value="normal">
+                                <label class="custom-control-label" for="workTypeAdd1">Normal</label>
+                            </div> 
+                            <div class="custom-control custom-radio ml-4 d-inline">
+                                <input type="radio" class="custom-control-input" id="workTypeAdd2" v-model="add_customer_form.work_type" value="agent-transport">
+                                <label class="custom-control-label" for="workTypeAdd2">สายเรือ</label>
+                            </div> 
+                        </div>
+                    </div>
+                
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button class="btn btn-primary" @click="addCustomer">Add</button>
+                    </div>
                 </div>
-
-                <div class="md-form mb-3 float-right text-secondary">
-                        <em>&mdash;&nbsp;WORK TYPE :</em>
-                    <div class="custom-control custom-radio ml-4 d-inline">
-                        <input type="radio" class="custom-control-input" id="workTypeAdd1" v-model="add_customer_form.work_type" value="normal">
-                        <label class="custom-control-label" for="workTypeAdd1">Normal</label>
-                    </div> 
-
-                    <div class="custom-control custom-radio ml-4 d-inline">
-                        <input type="radio" class="custom-control-input" id="workTypeAdd2" v-model="add_customer_form.work_type" value="agent-transport">
-                        <label class="custom-control-label" for="workTypeAdd2">สายเรือ</label>
-                    </div> 
-                </div>
-
             </div>
-        
-            <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-primary" @click="addCustomer">Add</button>
-            </div>
-
         </div>
-        
-    </div>
     </div>
 
 
-
-
-</div>
-
-
-
-    
-
-
-
-<script type="application/javascript" src="{% static 'js/app_customer_page.js' %}"></script>
-
+    <script type="application/javascript" src="{% static 'js/app_customer_page.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 
     <script type="application/javascript">
@@ -167,11 +105,10 @@
 
         window.onload = function () {
             var tableCont = document.querySelector('#customerList')
-        
             var filterDate = document.querySelector('#searchCustomer')
-        
             tableCont.style.top = filterDate.offsetTop + 110 + 'px'
         }
 
     </script>
+    
 {% endblock %}

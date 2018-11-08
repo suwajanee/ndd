@@ -25,8 +25,6 @@ var customer_page = new Vue( {
         shipper_name: '',
         edit_shipper_form: '',
         edit_shipper_address: []
-        
-
     },
 
     computed: {
@@ -46,6 +44,7 @@ var customer_page = new Vue( {
                 this.getPrincipals(parseInt(hash))
             }
         },
+
         getPrincipals(principal_id) {
             api("/customer/api/get-principals/").then((data) => {
                 this.principals = data
@@ -69,6 +68,7 @@ var customer_page = new Vue( {
                 address: ''
             }]
         },
+
 
         addCustomer() {
             this.input_required = false
@@ -115,7 +115,6 @@ var customer_page = new Vue( {
                     this.getPrincipals(data)
                     $('#modalEditCustomer').modal('hide');
                 })
-                
             }
         },
         cancelCustomer(customer_id, cancel_status) {
@@ -162,7 +161,6 @@ var customer_page = new Vue( {
                 alert("This customer name is existing.")
             }
             else{
-                // alert('eiei')
                 api("/customer/api/save-add-shipper/", "POST", { customer_id: this.customer.id, shipper_name: this.add_shipper_name, address: this.add_shipper_address}).then((data) => {
                     this.getPrincipals(data)
                     $('#modalAddShipper').modal('hide');
@@ -194,11 +192,10 @@ var customer_page = new Vue( {
                     }
                 }
             }
-                this.edit_shipper_address.push({
-                    type: '',
-                    address: ''
-                })
-            
+            this.edit_shipper_address.push({
+                type: '',
+                address: ''
+            })
         },
         editShipper() {
             this.input_required = false
@@ -220,7 +217,6 @@ var customer_page = new Vue( {
                     this.getPrincipals(this.customer.id)
                     $('#modalEditShipper').modal('hide');
                 })
-
             }
         },
 

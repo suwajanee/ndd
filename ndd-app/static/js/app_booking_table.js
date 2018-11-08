@@ -30,7 +30,6 @@ var booking_table = new Vue( {
             address: '',
             address_other: ''
         }
-        
     },
 
     methods: {
