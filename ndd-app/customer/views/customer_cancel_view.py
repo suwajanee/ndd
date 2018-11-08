@@ -1,10 +1,31 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 
-from ..models import Principal, Shipper
+from ..models import Principal, Shipper, ShipperAddress
+from ..serializers import PrincipalSerializer, ShipperSerializer, ShipperAddressSerializer
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def api_cancel_customer(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        customer_id = req['customer_id']
+        cancel_status = req['cancel_status']
+        
+        customer = Principal.objects.get(pk=customer_id)
+        customer.cancel = cancel_status
+        
+        customer.save()
+
+    return JsonResponse(customer.pk, safe=False)
 
 
 class CustomerCancelView(TemplateView):

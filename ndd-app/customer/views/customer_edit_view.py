@@ -31,6 +31,45 @@ def api_save_edit_customer(request):
         
     return JsonResponse(customer.pk, safe=False)
 
+@csrf_exempt
+def api_save_edit_shipper(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        customer_id = req['customer_id']
+        shipper_detail = req['shipper_detail']
+        shipper_address_detail = req['shipper_address_detail']
+        shipper_address_id = req['address_id']
+
+        shipper = Shipper.objects.get(pk=shipper_detail['id'])
+        shipper.name = re.sub(' +', ' ', shipper_detail['name'].strip())
+        shipper.save()
+
+        old_address_id = ShipperAddress.objects.filter(shipper=shipper_detail['id']).values_list('pk', flat=True)
+        for address_id in old_address_id:
+            if address_id not in shipper_address_id:
+                shipper_address = ShipperAddress.objects.get(pk=address_id).delete()
+            
+        for address in shipper_address_detail:
+            if 'id' in address:
+                shipper_address = ShipperAddress.objects.get(pk=address['id'])
+                shipper_address.address_type = re.sub(' +', ' ', address['type'].strip())
+                shipper_address.address = address['address']
+                shipper_address.save()
+            else:
+                if address['type'].strip() == '' and address['address'].strip() == '':
+                    continue
+                data = {
+                    'shipper': Shipper.objects.get(pk=shipper_detail['id']),
+                    'address_type': re.sub(' +', ' ', address['type'].strip()),
+                    'address': address['address']
+                }
+                shipper_address = ShipperAddress(**data)
+                shipper_address.save()
+
+    return JsonResponse(customer_id, safe=False)
+
+
+
 class CustomerEditView(TemplateView):
 
     @login_required(login_url=reverse_lazy('login'))

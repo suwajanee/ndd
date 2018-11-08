@@ -31,6 +31,36 @@ def api_save_add_customer(request):
     return JsonResponse(customer.pk, safe=False)
 
 
+@csrf_exempt
+def api_save_add_shipper(request):
+    if request.method == "POST":
+        req = json.loads( request.body.decode('utf-8') )
+        customer_id = req['customer_id']
+        shipper_name = req['shipper_name']
+        address_detail = req['address']
+
+        data = {
+            'principal': Principal.objects.get(pk=customer_id),
+            'name': re.sub(' +', ' ', shipper_name.strip()),
+        }
+
+        shipper = Shipper(**data)
+        shipper.save()
+
+        for address in address_detail:
+            if address['type'].strip() == '' and address['address'].strip() == '':
+                continue
+            data = {
+                'shipper': Shipper.objects.get(pk=shipper.pk),
+                'address_type': re.sub(' +', ' ', address['type'].strip()),
+                'address': address['address']
+            }
+            shipper_address = ShipperAddress(**data)
+            shipper_address.save()
+        
+    return JsonResponse(customer_id, safe=False)
+
+
 
 
 

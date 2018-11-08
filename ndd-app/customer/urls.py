@@ -9,6 +9,7 @@ from .views import customer_data_view
 from .views import customer_page_view
 from .views import customer_add_view
 from .views import customer_edit_view
+from .views import customer_cancel_view
 
 
 urlpatterns = [
@@ -34,7 +35,12 @@ urlpatterns = [
 
     url(r'^api/save-add-customer/$', customer_add_view.api_save_add_customer, name='api-save-add-customer'),
     url(r'^api/save-edit-customer/$', customer_edit_view.api_save_edit_customer, name='api-save-edit-customer'),
+    url(r'^api/cancel-customer/$', customer_cancel_view.api_cancel_customer, name='api-cancel-customer'),
 
+    url(r'^api/save-add-shipper/$', customer_add_view.api_save_add_shipper, name='api-save-add-shipper'),
+    url(r'^api/save-edit-shipper/$', customer_edit_view.api_save_edit_shipper, name='api-save-edit-shipper'),
+
+    
 
     
 ]
