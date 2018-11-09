@@ -1,34 +1,46 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
-
+{% load static %}
 
 {% block title %} Export {% endblock %}
- 
-
-{% block extra_head %}
-
-{% endblock %}
-
 
 {% block content %}
 
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Export Work</h5>
+    <div id="export-page">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Work</h5>
+                </div>
 
+                <div class="modal-body">
+                    <form ref="exportExcel" method="POST" action="{% url 'export-excel' %}">
+                        {% csrf_token %}
+                        <input type="month" name="month_export" class="form-control container col-6 my-3">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @click="exportExcel">Export</button>
+                </div>
+            </div>
         </div>
-        <form method="POST" action="{% url 'export-work' %}">
-        {% csrf_token %}
-          <div class="modal-body">
-              <input type="month" name="month-work-export" class="form-control container col-6 my-3">
-          </div>
-          <div class="modal-footer pb-1">
-            <button class="btn btn-primary">Export</button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
+
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+    <script type="application/javascript">
+
+        var export_page = new Vue( {
+
+            el: '#export-page',
+            methods: {
+                exportExcel() {
+                    this.$refs.exportExcel.submit()
+                },
+            }
+
+        })
+
+    </script>
 
 {% endblock %}

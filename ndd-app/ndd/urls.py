@@ -20,8 +20,8 @@ from django.conf.urls import url
 from django.views.generic import RedirectView
 
 from booking.views import authentication_view
+from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
-from booking.views.export_xls_view import ExportDataView
 
 
 urlpatterns = [
@@ -36,8 +36,8 @@ urlpatterns = [
 
     url(r'^$', RedirectView.as_view(url='/staff/')),
 
-    url(r'^export/$', ExportDataView.render_export_page, name='export-page'),
-    url(r'^export/work/$', ExportDataView.export_xls, name='export-work'),
+    url(r'^export/$', export_xls_view.export_page, name='export-page'),
+    url(r'^export/excel/$', export_xls_view.export_xls, name='export-excel'),
 
 ]
 
