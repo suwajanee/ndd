@@ -32,7 +32,7 @@
                     <a class="nav-link" href="{% url 'export-page' %}">Export</a>
                 </li>
                 <li class="nav-item {% if nbar == 'customer' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'customer-list' %}">Customer</a>
+                    <a class="nav-link" href="{% url 'customer-page' %}">Customer</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ request.user.username }}</a>

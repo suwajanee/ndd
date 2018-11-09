@@ -1,0 +1,202 @@
+{% verbatim %}
+
+    <div class="m-4 text-secondary">
+        <div class="row">
+            <div class="col-md-8"> 
+                <h1 class="mb-0 text-truncate">{{ customer.name }}</h1>
+                <p class="my-0 d-inline"><em>{{ customer.work_type }}</em></p>
+                <span v-if="customer.cancel == '1'" class="badge badge-pill badge-danger ml-2">CANCEL</span>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditCustomer"><i class="fa fa-edit"></i> Edit</button>
+
+                <button v-if="customer.cancel == '0'" class="btn btn-danger" @click="cancelCustomer(customer.id, 1)"><i class="fa fa-ban"></i> Cancel</button>
+                <button v-else class="btn btn-primary" @click="cancelCustomer(customer.id, 0)"><i class="fa fa-undo"></i> Back</button>
+            </div>
+        </div>
+        <hr class="m-0">
+    </div>
+
+
+    <div class="my-5 col-md-9 container">
+        <table class="table bg-white border-bottom">
+            <thead class="bg-light">
+                <tr class="row m-0">
+                    <th class="col-md-3"> SHIPPER </th>
+                    <th class="col-md-1"> TYPE </th>
+                    <th class="col-md-6"> ADDRESS </th>
+                    <th class="col-md-2 text-right"><button class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddShipper"><i class="fa fa-plus"></i></button></th>
+                </tr>
+            </thead>
+            <tbody v-if="shippers.length">
+                <tr v-for="(shipper, index) in shippers" class="row m-0" :class="{'bg-light text-lightgray': shipper.shipper.cancel == '1'}">
+
+                    <td v-if="index == 0" class="col-md-3">{{ shipper.shipper.name }}</td>
+                    <td v-else-if="shipper.shipper.name != shippers[index-1].shipper.name" class="col-md-3">{{ shipper.shipper.name }}</td>
+                    <td v-else class="col-md-3 border-top-0"></td>
+
+                    <td v-if="index == 0" class="col-md-1">{{ shipper.address_type }}</td>
+                    <td v-else class="col-md-1" :class="{'border-top-0': shipper.shipper.name == shippers[index-1].shipper.name}">{{ shipper.address_type }}</td>
+                
+                    <td v-if="index == 0" class="col-md-6 text-truncate" style="white-space: pre;">{{ shipper.address }}</td>
+                    <td v-else class="col-md-6 text-truncate" :class="{'border-top-0': shipper.shipper.name == shippers[index-1].shipper.name}" style="white-space: pre;">{{ shipper.address }}</td>
+                    
+                    <td v-if="index == 0" class="col-md-2 text-right">
+                        <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper" @click="modalEditShipper(shipper.shipper)"><i class="fa fa-edit"></i></button>
+
+                        <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger" @click="cancelShipper(shipper.shipper.id, 1)"><i class="fa fa-ban"></i></button>
+                        <button v-else class="btn btn-outline-primary" @click="cancelShipper(shipper.shipper.id, 0)"><i class="fa fa-undo"></i></button>
+                    </td>
+                    <td v-else-if="shipper.shipper.name != shippers[index-1].shipper.name" class="col-md-2 text-right">
+                        <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEditShipper" @click="modalEditShipper(shipper.shipper)"><i class="fa fa-edit"></i></button>
+
+                        <button v-if="shipper.shipper.cancel == '0'" class="btn btn-outline-danger" @click="cancelShipper(shipper.shipper.id, 1)"><i class="fa fa-ban"></i></button>
+                        <button v-else class="btn btn-outline-primary" @click="cancelShipper(shipper.shipper.id, 0)"><i class="fa fa-undo"></i></button>
+                    </td>
+                    <td v-else class="col-md-2 text-right border-top-0"></td>
+
+                </tr>
+            </tbody>
+
+            <tbody v-else>
+                <tr>
+                    <td colspan=3 class="text-center text-secondary">
+                        <h5>ไม่พบข้อมูล</h5>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endverbatim %}
+
+<!-- POPUP: Edit customer -->
+<div class="modal fade" id="modalEditCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Edit Customer</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body mx-3">
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input class="form-control" :class="{'alert-danger': input_required == true & edit_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="edit_customer_form.name"> 
+                </div>
+
+                <div class="md-form mb-3 float-right text-secondary">
+                    <em>&mdash;&nbsp;WORK TYPE :</em>
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd1" v-model="edit_customer_form.work_type" value="normal">
+                        <label class="custom-control-label" for="workTypeAdd1">Normal</label>
+                    </div> 
+
+                    <div class="custom-control custom-radio ml-4 d-inline">
+                        <input type="radio" class="custom-control-input" id="workTypeAdd2" v-model="edit_customer_form.work_type" value="agent-transport">
+                        <label class="custom-control-label" for="workTypeAdd2">สายเรือ</label>
+                    </div> 
+                </div>
+            </div>
+        
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-primary" @click="editCustomer">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP : Add new shipper -->
+<div class="modal fade" id="modalAddShipper" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Add New Shipper</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-5">
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" autocomplete=off maxlength="150" v-model="add_shipper_name">
+                </div>
+
+                <div class="row mt-3">
+                    <div class="container">
+                        <div class="table">
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-2">TYPE</div>
+                                <div class="col-md-10">ADDRESS</div>
+                            </div>
+                            <hr>
+                            <div class="row entry mt-2" v-for="(address, index) in add_shipper_address">
+                                <div class="col-md-2"><input class="form-control" autocomplete=off maxlength="50" v-model="address.type"></div>
+                                <div class="col-md-9"><textarea rows=3 class="form-control" maxlength="500" autocomplete=off v-model="address.address"></textarea></div>
+                                <div class="col-md-1">
+                                    <button v-if="index==0" class="btn btn-outline-success" @click="addShipperAddress('add')"><i class="fa fa-plus"></i></button>
+                                    <button v-else class="btn btn-outline-danger" @click="deleteShipperAddress(index, 'add')"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-primary" @click="addShipper">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP : Edit shipper -->
+<div class="modal fade" id="modalEditShipper" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Edit Shipper Detail</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-5">
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" maxlength="150" autocomplete=off v-model="edit_shipper_form.name">                                            
+                </div>
+
+                <div class="row mt-3">
+                    <div class="table">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-2">TYPE</div>
+                            <div class="col-md-10">ADDRESS</div>
+                        </div>
+                        <hr>
+                        <div class="row entry mt-2" v-for="(address, index) in edit_shipper_address">
+                            <div class="col-md-2"><input class="form-control" autocomplete=off maxlength="50" v-model="address.type"></div>
+                            <div class="col-md-9"><textarea rows=3 class="form-control" maxlength="500" autocomplete=off v-model="address.address"></textarea></div>
+
+                            <div class="col-md-1">
+                                <button v-if="index==edit_shipper_address.length-1" class="btn btn-outline-success" @click="addShipperAddress('edit')"><i class="fa fa-plus"></i></button>
+                                <button v-else class="btn btn-outline-danger" @click="deleteShipperAddress(index, 'edit')"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-primary" @click="editShipper()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
