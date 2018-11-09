@@ -1,83 +1,97 @@
-{% load staticfiles %}
+{% load static %}
+
 <html>
+    <head>
+        <title>Login</title>
 
-<head>
-    <title>Login</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="{% static 'js/vue.min.js' %}"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <style>
+            .bg-img {
+                background-image: url("{% static 'images/bg-ndd.jpg' %}");
+                background-position: center;
+                background-size: cover; 
+            }
+        </style>
+    </head>
 
-    <style>
-        .bg-img {
-            /* background-image: url('https://images.unsplash.com/photo-1473445730015-841f29a9490b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bec1372c6bc20f2bc9692bd09b13dfb9&auto=format&fit=crop&w=1350&q=80'); */
-            /* background-image: url('https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?cs=srgb&dl=adorable-animal-blur-406014.jpg&fm=jpg'); */
-            background-image: url("{% static 'images/bg-ndd.jpg' %}");
-            background-position: center;
-            background-size: cover; 
-        }
-    </style>
-
-</head>
-
-<body class="bg-light bg-img">
-    <div class="container h-100 position-relative">
-
-        <div class="col-md-5 position-absolute" style="top: 30%; left:50%; transform: translate(-50%,-30%);">
-
-  
-            <div class="card shadow rounded-3" style="opacity:0.8;">
-                <div class="card-header">
-                    <h2 class="m-2 text-center">Login</h2>
-                </div>
-         
-                <div class="card-body">
-  
-                    {% for message in messages %}
-                    <div class="text-danger"><i class="fa fa-times"></i>&nbsp;{{ message }}</div>
-                    {% endfor %}
-                    <form method="POST" action="{% url 'login' %}">
-                        {% csrf_token %}
+    <body class="bg-light bg-img">
+        <div id="login-page" class="container h-100 position-relative">
+            <div class="col-md-5 position-absolute" style="top: 30%; left:50%; transform: translate(-50%,-30%);">
+                <div class="card shadow rounded-3" style="opacity:0.8;">
+                    <div class="card-header">
+                        <h2 class="m-2 text-center">Login</h2>
+                    </div>
+            
+                    <div class="card-body">
+                        <div v-if="error" class="text-danger"><i class="fa fa-times"></i>&nbsp;Incorrect Username or Password</div>
+                    
                         <div class="input-group input-group-lg mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" name="username" placeholder="Username" required>
+                            <input type="text" name="username" class="form-control" placeholder="Username" v-model="login_form.username" @keyup.enter="login">
                         </div>
 
                         <div class="input-group input-group-lg mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-lock"></i></span>
                             </div>
-                            <input type="password" class="form-control" name="password" autocomplete="off" placeholder="Password" required>
+                            <input type="password" class="form-control" placeholder="Password" v-model="login_form.password" @keyup.enter="login">
                         </div>
 
                         <div class="custom-control custom-checkbox mb-1">
-                            <input type="hidden" name="remember_me" value=0 />
-                            <input type="checkbox" class="custom-control-input" id="remember_me" name="remember_me" value=1>
+                            <input type="checkbox" class="custom-control-input" id="remember_me" v-model="login_form.remember_me" @keyup.enter="login">
                             <label class="custom-control-label" for="remember_me">&nbsp;Remember me</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg float-right" id="btnLogin"><i class="fa fa-sign-in"></i>&nbsp;Login</button>
-                    </form>
+                        <button ref="submit" class="btn btn-primary btn-lg float-right" @click="login"><i class="fa fa-sign-in"></i>&nbsp;Login</button>
+                    </div>
                 </div>
-
             </div>
-
-
         </div>
 
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-    </div>
+        <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 
+        <script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-</body>
+            var login_page = new Vue( {
+            
+                el: '#login-page',
+                data: {
+                    error: false,
+                    login_form: {
+                        username: '',
+                        password: '',
+                        remember_me: false
+                    }
+                },
+                methods: {
+                    login() {
+                        this.error = false
+                        api("/api-login/", "POST", this.login_form).then((data) => {
+                            if(data == 'Success') {
+                                window.location.replace("/booking");
+                            }
+                            else {
+                                this.error = true
+                                this.login_form.password = ''
+                                return false
+                            }             
+                        })
+                    },
+                }
+            })
 
+        </script>
+        
+    </body>
 </html>

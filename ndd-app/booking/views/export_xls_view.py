@@ -18,7 +18,7 @@ from customer.models import Principal, Shipper
 
 class ExportDataView(TemplateView):
 
-    @login_required(login_url=reverse_lazy('login'))
+    @login_required(login_url=reverse_lazy('login-page'))
     def render_export_page(request):
         template_name = 'export.html'
         context = {}

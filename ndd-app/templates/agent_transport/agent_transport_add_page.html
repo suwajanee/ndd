@@ -56,7 +56,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
                                 </div>
-                                <input class="form-control" v-model="agent_transport_add_form.agent" maxlength="50">
+                                <input name="agent" class="form-control" v-model="agent_transport_add_form.agent" maxlength="50">
                             </div>
                             
                             <div class="input-group mb-3">
@@ -102,18 +102,18 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">FROM</span>
                                 </div>
-                                <input class="form-control" v-model="agent_transport_add_form.pickup_from" maxlength="20">
+                                <input name="pickup_from" class="form-control" v-model="agent_transport_add_form.pickup_from" maxlength="20">
                                 <div class="input-group-append">
                                     <span class="input-group-text">TO</span>
                                 </div>
-                                <input class="form-control" v-model="agent_transport_add_form.return_to" maxlength="20">
+                                <input name="return_to" class="form-control" v-model="agent_transport_add_form.return_to" maxlength="20">
                             </div>
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">REMARK</span>
                                 </div>
-                                <textarea class="form-control" style="min-height: 40px;" v-model="agent_transport_add_form.remark" maxlength="200"></textarea>
+                                <textarea name="remark" class="form-control" style="min-height: 40px;" v-model="agent_transport_add_form.remark" maxlength="200"></textarea>
                             </div>
                         {% endverbatim %}
                     </form>
