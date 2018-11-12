@@ -19,9 +19,9 @@ from django.urls import include, path
 from django.conf.urls import url
 from django.views.generic import RedirectView
 
-from booking.views.authentication_view import AuthenticationView
+from booking.views import authentication_view
+from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
-from booking.views.export_xls_view import ExportDataView
 
 
 urlpatterns = [
@@ -30,13 +30,14 @@ urlpatterns = [
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
 
-    url(r'^staff/$', AuthenticationView.login, name='login'),
-    url(r'^logout/$', AuthenticationView.logout, name='logout'),
+    url(r'^staff/$', authentication_view.login_page, name='login-page'),
+    url(r'^api-login/$', authentication_view.login, name='api-login'),
+    url(r'^logout/$', authentication_view.logout, name='logout'),
 
     url(r'^$', RedirectView.as_view(url='/staff/')),
 
-    url(r'^export/$', ExportDataView.render_export_page, name='export-page'),
-    url(r'^export/work/$', ExportDataView.export_xls, name='export-work'),
+    url(r'^export/$', export_xls_view.export_page, name='export-page'),
+    url(r'^export/excel/$', export_xls_view.export_xls, name='export-excel'),
 
 ]
 

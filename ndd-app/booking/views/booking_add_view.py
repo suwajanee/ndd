@@ -16,7 +16,7 @@ from ..serializers import BookingSerializer
 from customer.models import Principal, Shipper
 
 
-@login_required(login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('login-page'))
 def booking_add_page(request):
     return render(request, 'booking/booking_add_page.html', {'nbar': 'booking-page'})
 

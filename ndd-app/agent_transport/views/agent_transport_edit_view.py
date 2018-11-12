@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
 from .agent_transport_page_view import api_filter_agent_transports
+from customer.models import Shipper
 
 
 @csrf_exempt
@@ -26,6 +27,7 @@ def api_save_edit_agent_transport(request):
             agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
             agent_transport_save.status = agent_transport['status']
             agent_transport_save.date = agent_transport['date']
+            agent_transport_save.shipper = Shipper.objects.get(pk=agent_transport['shipper']['id'])
             agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip().upper())
             agent_transport_save.size = re.sub(' +', ' ', agent_transport['size'].strip())
             agent_transport_save.booking_no = re.sub(' +', ' ', agent_transport['booking_no'].strip())

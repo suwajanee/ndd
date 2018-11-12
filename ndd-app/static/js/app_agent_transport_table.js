@@ -4,6 +4,8 @@ var agent_transport_table = new Vue( {
     data: {
         agent_transports: [],
 
+        shippers: [],
+
         modal:'',
         shipper_address: [],
 
@@ -55,6 +57,7 @@ var agent_transport_table = new Vue( {
         },
         getAgentTransportsEditTable() {
             window.location.hash = ''
+            this.getShipper()
             this.filterAgentTransports()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
@@ -98,6 +101,15 @@ var agent_transport_table = new Vue( {
                 }
 
             }
+        },
+
+        getShipper() {
+            api("/customer/api/get-shippers/").then((data) => {
+                this.shippers = data
+            })
+        },
+        filterEditShipper(customer_id) {
+            return this.shippers.filter(shipper => shipper.principal == customer_id )           
         },
 
         printFormModal(id, shipper_id) {

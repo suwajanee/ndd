@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <html>
     <head>
@@ -6,13 +6,10 @@
 
         {% block extra_head %}{% endblock %}
 
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
         
         <script src="{% static 'js/vue.min.js' %}"></script>
-        
     </head>
 
     <body class="bg-light" style="min-width:1000px;">
@@ -32,7 +29,7 @@
                     <a class="nav-link" href="{% url 'export-page' %}">Export</a>
                 </li>
                 <li class="nav-item {% if nbar == 'customer' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'customer-list' %}">Customer</a>
+                    <a class="nav-link" href="{% url 'customer-page' %}">Customer</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ request.user.username }}</a>
@@ -54,5 +51,4 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
         
     </body>
-
 </html>

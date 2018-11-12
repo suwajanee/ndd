@@ -6,6 +6,8 @@ var booking_table = new Vue( {
         today: '',
         tmr: '',
 
+        shippers: [],
+
         modal:'',
         shipper_address: [],
 
@@ -30,9 +32,7 @@ var booking_table = new Vue( {
             address: '',
             address_other: ''
         }
-        
     },
-
     methods: {
         reload() {
             if(localStorage.getItem('filter_by_booking')){
@@ -60,6 +60,7 @@ var booking_table = new Vue( {
         },
         getBookingsEditTable() {
             window.location.hash = ''
+            this.getShipper()
             this.filterBookings()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
@@ -125,6 +126,15 @@ var booking_table = new Vue( {
                     this.bookings[booking].timeColor = false
                 }
             }
+        },
+
+        getShipper() {
+            api("/customer/api/get-shippers/").then((data) => {
+                this.shippers = data
+            })
+        },
+        filterEditShipper(customer_id) {
+            return this.shippers.filter(shipper => shipper.principal == customer_id )           
         },
 
         printFormModal(id, shipper_id) {
@@ -254,8 +264,28 @@ var booking_table = new Vue( {
                 })    
             }
             else {
-                this.bookings = []
-                this.loading = false
+                api("/booking/api/get-time-bookings/").then((data) => {
+                    if(data == 'Not found') {
+                        this.bookings = []
+                        this.loading = false
+                    }
+                    else {
+                        this.bookings = data.bookings
+                        this.today = data.today
+                        this.tmr = data.tmr
+
+                        this.getColor()
+                        this.splitTime('pickup_in_time')
+                        this.splitTime('pickup_out_time')
+                        this.splitTime('factory_in_time')
+                        this.splitTime('factory_load_start_time')
+                        this.splitTime('factory_load_finish_time')
+                        this.splitTime('factory_out_time')
+                        this.splitTime('return_in_time')
+                        this.splitTime('return_out_time')
+                        this.loading = false
+                    }
+                })    
             }      
         },
         splitTime(field) {
@@ -273,8 +303,6 @@ var booking_table = new Vue( {
                     this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
                     this.bookings[booking][field + '__time'] = ''
                 }
-
-
             }
         },
         saveTimeBooking: function() {

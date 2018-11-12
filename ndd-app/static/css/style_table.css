@@ -127,14 +127,12 @@ td input[type="date"] {
 
 select.short {
     min-width: 60px;
-    /* padding: 2px 4px; */
     height: 25px;
     font-size: 11px;
 }
 
 select.status {
     min-width: 80px;
-    /* padding: 2px 4px; */
     height: 25px;
     font-size: 11px;
 }
@@ -142,6 +140,13 @@ select.status {
 select.size {
     min-width: 75px;
     padding: 0px 12px;
+    height: 25px;
+    font-size: 11px;
+}
+
+select.shipper {
+    min-width: 250px;
+    padding: 0px 5px;
     height: 25px;
     font-size: 11px;
 }
