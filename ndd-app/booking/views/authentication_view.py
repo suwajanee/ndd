@@ -1,36 +1,34 @@
 # -*- coding: utf-8 -*-
 
+import json
+
 from django.contrib import auth
-from django.contrib import messages
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 
 
-class AuthenticationView(TemplateView):
+def login_page(request):
+    if request.user.is_authenticated:
+        return redirect('booking-page')
+    return render(request, 'login.html')
 
-    def login(request):
-        template_name = 'login.html'
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        req = json.loads( request.body.decode('utf-8') )
+        username = req['username']
+        password = req['password']
+        user = auth.authenticate(username=username, password=password)
 
-        if request.user.is_authenticated:
-            return redirect('booking-page')
+        if user is not None:
+            auth.login(request, user)
+            if req['remember_me'] == True:
+                request.session.set_expiry(604800)
+            return JsonResponse('Success', safe=False)
+        else:
+            return JsonResponse('Incorrect', safe=False)
 
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-
-            if user is not None:
-                auth.login(request, user)
-                if request.POST['remember_me'] == '1':
-                    request.session.set_expiry(604800)
-                return redirect('booking-page')
-
-            else:
-                messages.error(request, 'Incorrect Username or Password')
-
-        return render(request, template_name)
-    
-    def logout(request):
-        auth.logout(request)
-        return redirect('login')
+def logout(request):
+    auth.logout(request)
+    return redirect('login-page')

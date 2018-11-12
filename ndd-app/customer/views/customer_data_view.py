@@ -33,7 +33,11 @@ def api_get_shippers(request):
         principal_id = req['principal']
 
         shippers = Shipper.objects.filter(Q(principal=principal_id) & Q(cancel=0)).order_by('name')
-        serializer = ShipperSerializer(shippers, many=True)
+
+    else:
+        shippers = Shipper.objects.all().order_by('cancel', 'name')
+
+    serializer = ShipperSerializer(shippers, many=True)
 
     return JsonResponse(serializer.data, safe=False)
 

@@ -16,7 +16,7 @@ from ..serializers import AgentTransportSerializer
 from customer.models import Principal, Shipper
 
 
-@login_required(login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('login-page'))
 def agent_trnasport_add_page(request):
     return render(request, 'agent_transport/agent_transport_add_page.html', {'nbar': 'agent-transport-page'})
 
