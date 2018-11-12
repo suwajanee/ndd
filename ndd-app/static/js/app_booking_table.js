@@ -6,6 +6,8 @@ var booking_table = new Vue( {
         today: '',
         tmr: '',
 
+        shippers: [],
+
         modal:'',
         shipper_address: [],
 
@@ -31,7 +33,6 @@ var booking_table = new Vue( {
             address_other: ''
         }
     },
-
     methods: {
         reload() {
             if(localStorage.getItem('filter_by_booking')){
@@ -59,6 +60,7 @@ var booking_table = new Vue( {
         },
         getBookingsEditTable() {
             window.location.hash = ''
+            this.getShipper()
             this.filterBookings()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
@@ -124,6 +126,15 @@ var booking_table = new Vue( {
                     this.bookings[booking].timeColor = false
                 }
             }
+        },
+
+        getShipper() {
+            api("/customer/api/get-shippers/").then((data) => {
+                this.shippers = data
+            })
+        },
+        filterEditShipper(customer_id) {
+            return this.shippers.filter(shipper => shipper.principal == customer_id )           
         },
 
         printFormModal(id, shipper_id) {
@@ -292,8 +303,6 @@ var booking_table = new Vue( {
                     this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
                     this.bookings[booking][field + '__time'] = ''
                 }
-
-
             }
         },
         saveTimeBooking: function() {

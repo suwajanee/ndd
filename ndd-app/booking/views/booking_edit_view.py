@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
 from .booking_page_view import api_filter_bookings
+from customer.models import Shipper
 
 
 @csrf_exempt
@@ -45,6 +46,7 @@ def api_save_edit_bookings(request):
             booking_save.status = booking['status']
             booking_save.time = booking['time']
             booking_save.date = booking['date']
+            booking_save.shipper = Shipper.objects.get(pk=booking['shipper']['id'])
             booking_save.agent = re.sub(' +', ' ', booking['agent'].strip().upper())
             booking_save.size = re.sub(' +', ' ', booking['size'].strip())
             booking_save.booking_no = re.sub(' +', ' ', booking['booking_no'].strip())
