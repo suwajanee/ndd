@@ -67,6 +67,9 @@ def api_save_add_bookings(request):
             else:
                 bookings['return_date'] = detail['date']
 
+            bookings['container_no'] = ''
+            bookings['seal_no'] = ''
+
             if detail['container_input'] == False:
                 for i in range(int(detail['quantity'])):
                     work_id, work_number = run_work_id(detail['date'])
