@@ -99,12 +99,7 @@ var booking_add = new Vue( {
         },
 
         containerCheck(index) {
-            if(! this.details[index].container_input){
-                this.details[index].quantity = this.details[index].container.length
-            }
-            else {
-                this.details[index].quantity = this.details[index].container.length
-            }
+            this.details[index].quantity = this.details[index].container.length
         },
 
         saveAddBookings() {
