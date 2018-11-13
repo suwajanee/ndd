@@ -27,7 +27,6 @@ def api_save_add_bookings(request):
 
         bookings = req['bookings']
         details = req['details']
-        import_work = req['import']
 
         return_date = bookings['return_date']
 
@@ -61,9 +60,6 @@ def api_save_add_bookings(request):
 
             bookings['time'] = detail['time']
             bookings['size'] = detail['size']
-            if import_work == True:
-                bookings['container_no'] = detail['container_no']
-                bookings['seal_no'] = detail['seal_no']
 
             if bookings['nextday'] == '1':
                 if not return_date:
@@ -71,14 +67,27 @@ def api_save_add_bookings(request):
             else:
                 bookings['return_date'] = detail['date']
 
-            for i in range(int(detail['quantity'])):
-                work_id, work_number = run_work_id(detail['date'])
+            if detail['container_input'] == False:
+                for i in range(int(detail['quantity'])):
+                    work_id, work_number = run_work_id(detail['date'])
 
-                bookings['work_id'] = work_id
-                bookings['work_number'] = work_number
+                    bookings['work_id'] = work_id
+                    bookings['work_number'] = work_number
 
-                booking = Booking(**bookings)
-                booking.save()
+                    booking = Booking(**bookings)
+                    booking.save()
+            else:
+                for cont_detail in detail['container']:
+                    bookings['container_no'] = cont_detail['container_no']
+                    bookings['seal_no'] = cont_detail['seal_no']
+
+                    work_id, work_number = run_work_id(detail['date'])
+
+                    bookings['work_id'] = work_id
+                    bookings['work_number'] = work_number
+
+                    booking = Booking(**bookings)
+                    booking.save()
 
     return JsonResponse('Success', safe=False)
 

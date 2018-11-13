@@ -8,14 +8,16 @@ var booking_add = new Vue( {
         principal_name: '',
         input_required: false,
         
-        import_work: false,
         details: [{
             date: '',
             time: '',
             size: '',
             quantity: 1,
-            container_no: '',
-            seal_no: ''
+            container_input: false,
+            container: [{
+                container_no: '',
+                seal_no: ''
+            }]
         }],
         booking_add_form: {
             principal: '',
@@ -73,20 +75,35 @@ var booking_add = new Vue( {
                 time: '',
                 size: '',
                 quantity: 1,
-                container_no: '',
-                seal_no: ''
+                container_input: false,
+                container: [{
+                    container_no: '',
+                    seal_no: ''
+                }]
             })
         },
         deleteDetail(index) {
             this.details.splice(index,1)
         },
 
-        importCheck() {
-            if(! this.import_work){
-                this.booking_add_form.port = 'IMPORT'
+        addContainerDetail(index) {
+            this.details[index].container.push({
+                container_no: '',
+                seal_no: ''
+            })
+            this.details[index].quantity += 1
+        },
+        deleteContainerDetail(index, index_cont) {
+            this.details[index].container.splice(index_cont,1)
+            this.details[index].quantity -= 1
+        },
+
+        containerCheck(index) {
+            if(! this.details[index].container_input){
+                this.details[index].quantity = this.details[index].container.length
             }
             else {
-                this.booking_add_form.port = ''
+                this.details[index].quantity = this.details[index].container.length
             }
         },
 
@@ -99,7 +116,7 @@ var booking_add = new Vue( {
                     return false;
                 }
             }
-            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, import: this.import_work}).then((data) => {
+            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details}).then((data) => {
                 if(data == "Success") {
                     window.location.replace("/booking");
                 }

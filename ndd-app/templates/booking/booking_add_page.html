@@ -64,20 +64,12 @@
                                     <span class="input-group-text">BOOKING NO.</span>
                                 </div>
                                 <input class="form-control" v-model="booking_add_form.booking_no" maxlength="50">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="import" v-model="import_work" @click="importCheck">
-                                            <label class="custom-control-label" for="import">IMPORT</label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <fieldset class="add_form">
                                 <legend class="add_form">DETAILS</legend>
                                 <div v-for="(detail, index) in details">
-                                    <hr v-if="import_work == true & index != 0" class="my-4">
+                                    <hr v-if="index != 0" class="my-4">
 
                                     <div class="input-group mb-2 col-md-12">
                                         <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required == true & detail.date == ''}" required>
@@ -96,21 +88,37 @@
                                             <option value="2X20'">2X20'</option>
                                             <option value="2X20'RF">2X20'RF</option>
                                         </select>
-                                        <input type="number" class="form-control col-md-2" v-model="detail.quantity" min=1 placeholder="QTY" :class="{'alert-danger': input_required == true & detail.quantity == ''}" required>
+
+                                        <input 
+                                            type="number" class="form-control col-md-2" 
+                                            v-model="detail.quantity" min=1 placeholder="QTY" 
+                                            :class="{'alert-danger': input_required == true & detail.quantity == ''}" 
+                                            :disabled="detail.container_input" required
+                                        >
+
                                         <div class="input-group-append">
                                             <button v-if="index==0" class="btn btn-success" @click.prevent="addDetail"><span><i class="fa fa-plus"></i></span></button>
                                             <button v-else class="btn btn-danger" @click.prevent="deleteDetail(index)"><span><i class="fa fa-minus"></i></span></button>
                                         </div>
                                     </div>
-                                    <div v-if="import_work == true" class="input-group mb-2 col-md-10 container">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CONTAINER NO</span>
+                                    <div v-for="(container, index_cont) in detail.container" class="row container">
+                                        <div class="col-md-2">
+                                            <div v-if="index_cont==0" class="custom-control custom-checkbox mt-2">
+                                                <input type="checkbox" class="custom-control-input" :id="'container_input'+index" v-model="detail.container_input" @click="containerCheck(index)">
+                                                <label class="custom-control-label" :for="'container_input'+index"> Container </label>
+                                            </div>
                                         </div>
-                                        <input class="form-control" v-model="detail.container_no" maxlength="20">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">SEAL NO</span>
+                                        <div v-if="detail.container_input" class="row col-md-10">
+                                            <div class="input-group mb-2 col-md-10">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">{{ index_cont + 1 }}</span>
+                                                </div>
+                                                <input class="form-control" v-model="container.container_no" maxlength="20" placeholder="CONTAINER NO">
+                                                <input class="form-control" v-model="container.seal_no" maxlength="20" placeholder="SEAL NO">
+                                            </div>
+                                            <button v-if="index_cont==0" class="btn btn-dark btn-sm btn-circle" @click.prevent="addContainerDetail(index)"><i class="fa fa-plus"></i></button>
+                                            <button v-else class="btn btn-secondary btn-sm btn-circle" @click.prevent="deleteContainerDetail(index, index_cont)"><i class="fa fa-minus"></i></button>
                                         </div>
-                                        <input class="form-control" v-model="detail.seal_no" maxlength="20">
                                     </div>
                                 </div> 
                             </fieldset>

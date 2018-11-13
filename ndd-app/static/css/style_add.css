@@ -39,3 +39,17 @@ legend.add_form {
 #booking-add .custom-checkbox input[type="checkbox"] + label::before {
     background-color: gray;
 }
+
+.btn-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50% !important;
+}
+
+.btn-circle i {
+    font-size: 11px;
+}
+
+input::placeholder {
+    font-size: 11px;
+}
