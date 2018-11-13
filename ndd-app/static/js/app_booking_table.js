@@ -164,16 +164,16 @@ var booking_table = new Vue( {
         },
 
         editData: function(booking, index, field) {
-            if(booking.yard_ndd == '1' & field == 9){
+            if(booking.yard_ndd == '1' & field == 10){
                 this.bookings[index].forward_tr = ''
                 this.bookings[index].backward_tr = ''
                 this.bookings[index].return_tr = ''
             }
-            if((booking.nextday == '1' & field == 22) | (booking.fac_ndd == '2' & field == 13)){
+            if((booking.nextday == '1' & field == 23) | (booking.fac_ndd == '2' & field == 14)){
                 this.bookings[index].backward_tr = ''
                 this.bookings[index].return_tr = ''
             }
-            if(booking.fac_ndd == '1' & field == 13){
+            if(booking.fac_ndd == '1' & field == 14){
                 this.bookings[index].return_tr = ''
             }
             
