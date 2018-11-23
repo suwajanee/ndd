@@ -50,7 +50,8 @@ def api_get_shipper_address(request):
         shipper_address = ShipperAddress.objects.filter(shipper=shipper_id).order_by('address_type')
         serializer = ShipperAddressSerializer(shipper_address, many=True)
 
-    return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
 
 @csrf_exempt
 def api_get_customer_details(request):
@@ -71,4 +72,5 @@ def api_get_customer_details(request):
             if not address:      
                 shipper_address_data_list.append(OrderedDict({'shipper': shipper_data}))
 
-    return JsonResponse(shipper_address_data_list, safe=False)
+        return JsonResponse(shipper_address_data_list, safe=False)
+    return JsonResponse('Error', safe=False)

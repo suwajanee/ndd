@@ -92,7 +92,8 @@ def api_save_add_bookings(request):
                     booking = Booking(**bookings)
                     booking.save()
 
-    return JsonResponse('Success', safe=False)
+        return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
 
 def run_work_id(date):
     work = Booking.objects.filter(date=date).aggregate(Max('work_number'))

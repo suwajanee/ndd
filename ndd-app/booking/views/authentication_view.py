@@ -28,6 +28,7 @@ def login(request):
             return JsonResponse('Success', safe=False)
         else:
             return JsonResponse('Incorrect', safe=False)
+    return JsonResponse('Error', safe=False)
 
 def logout(request):
     auth.logout(request)

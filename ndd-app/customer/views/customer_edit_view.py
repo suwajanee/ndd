@@ -21,7 +21,8 @@ def api_save_edit_customer(request):
         customer.work_type = data['work_type']
         customer.save()
         
-    return JsonResponse(customer.pk, safe=False)
+        return JsonResponse(customer.pk, safe=False)
+    return JsonResponse('Error', safe=False)
 
 @csrf_exempt
 def api_save_edit_shipper(request):
@@ -57,4 +58,5 @@ def api_save_edit_shipper(request):
                 shipper_address = ShipperAddress(**data)
                 shipper_address.save()
 
-    return JsonResponse('Success', safe=False)
+        return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)

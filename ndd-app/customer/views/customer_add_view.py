@@ -21,7 +21,8 @@ def api_save_add_customer(request):
         customer = Principal(**data)
         customer.save()
         
-    return JsonResponse(customer.pk, safe=False)
+        return JsonResponse(customer.pk, safe=False)
+    return JsonResponse('Error', safe=False)
 
 @csrf_exempt
 def api_save_add_shipper(request):
@@ -49,4 +50,5 @@ def api_save_add_shipper(request):
             shipper_address = ShipperAddress(**data)
             shipper_address.save()
         
-    return JsonResponse(customer_id, safe=False)
+        return JsonResponse(customer_id, safe=False)
+    return JsonResponse('Error', safe=False)

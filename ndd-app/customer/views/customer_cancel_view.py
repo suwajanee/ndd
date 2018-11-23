@@ -20,7 +20,8 @@ def api_cancel_customer(request):
         customer.cancel = cancel_status
         customer.save()
 
-    return JsonResponse(customer.pk, safe=False)
+        return JsonResponse(customer.pk, safe=False)
+    return JsonResponse('Error', safe=False)
 
 @csrf_exempt
 def api_cancel_shipper(request):
@@ -33,4 +34,5 @@ def api_cancel_shipper(request):
         shipper.cancel = cancel_status
         shipper.save()
 
-    return JsonResponse('Success', safe=False)
+        return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)

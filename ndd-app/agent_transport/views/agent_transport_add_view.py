@@ -55,9 +55,7 @@ def api_save_add_agent_transports(request):
                 agent_transport.save()
 
         return JsonResponse('Success', safe=False)
-
-    else:
-        return JsonResponse('Error', safe=False)
+    return JsonResponse('Error', safe=False)
 
 def run_work_id(date, work_type):
     work = AgentTransport.objects.filter(date=date, work_type=work_type).aggregate(Max('work_number'))
