@@ -25,6 +25,8 @@ from booking.views.response_server import error_404, error_500
 
 
 urlpatterns = [
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+
     path('ndd-admin/', admin.site.urls),
     path('booking/', include('booking.urls')),
     path('agent-transport/', include('agent_transport.urls')),
