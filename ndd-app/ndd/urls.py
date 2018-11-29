@@ -29,6 +29,7 @@ urlpatterns = [
     path('booking/', include('booking.urls')),
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
+    path('summary/', include('summary.urls')),
 
     url(r'^staff/$', authentication_view.login_page, name='login-page'),
     url(r'^api-login/$', authentication_view.login, name='api-login'),
