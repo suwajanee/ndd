@@ -32,8 +32,7 @@ urlpatterns = [
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
 
-    url(r'^staff/$', authentication_view.login_page, name='login-page'),
-    url(r'^api-login/$', authentication_view.login, name='api-login'),
+    url(r'^staff/$', authentication_view.login, name='login'),
     url(r'^logout/$', authentication_view.logout, name='logout'),
 
     url(r'^$', RedirectView.as_view(url='/staff/')),

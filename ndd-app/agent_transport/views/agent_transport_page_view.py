@@ -14,7 +14,7 @@ from ..models import AgentTransport
 from ..serializers import AgentTransportSerializer
 
 
-@login_required(login_url=reverse_lazy('login-page'))
+@login_required(login_url=reverse_lazy('login'))
 def agent_transport_page(request):
     return render(request, 'agent_transport/agent_transport_page.html', {'nbar': 'agent-transport-page'})
 
