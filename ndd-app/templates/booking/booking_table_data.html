@@ -35,8 +35,11 @@
                 <th>PORT</th>
             </thead> 
 
-            <tbody>
-                <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
+            <tbody v-for="(booking, index) in bookings">
+                <tr 
+                    :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" 
+                    :key="booking.id"
+                >
                     <td class="p-0 align-middle">
                         <input type="checkbox" :value="booking.id" v-model="checked_bookings">
                     </td>
@@ -110,6 +113,14 @@
                     <td class="text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
                     <td class="text-center px-2"><div class="long-text">{{ booking.port }}</div></td>
                 </tr>
+
+                <tr v-if="index == bookings.length-1">
+                    <td colspan=28 class="bg-dark"></td>
+                </tr>
+                <tr v-else-if="booking.date != bookings[index+1].date">
+                    <td colspan=28 class="bg-dark"></td>
+                </tr>
+
             </tbody>
         </table>
 

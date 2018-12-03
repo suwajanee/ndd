@@ -39,8 +39,11 @@
                     <th colspan=2>Out</th>
                 </tr>
             </thead> 
-            <tbody> 
-                <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
+            <tbody v-for="(booking, index) in bookings"> 
+                <tr 
+                    :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" 
+                    :key="booking.id"
+                >
                     <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
                     <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
@@ -137,6 +140,14 @@
                         <input class="form-control" v-model="booking.return_out_time__time" maxlength="10" autocomplete=off :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(booking)">
                     </td>
                 </tr>
+
+                <tr v-if="index == bookings.length-1">
+                    <td colspan=33 class="bg-dark"></td>
+                </tr>
+                <tr v-else-if="booking.date != bookings[index+1].date">
+                    <td colspan=33 class="bg-dark"></td>
+                </tr>
+
             </tbody> 
         </table>
 
