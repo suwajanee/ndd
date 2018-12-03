@@ -78,7 +78,10 @@
                                     <option value="export_empty"> ตู้เปล่าไป </option>
                                     <option value="import_loaded"> ตู้เปล่ากลับ </option>
                                 </select>
-                                <input type="number" class="form-control" min=0 placeholder="Price" v-model="agent_transport_add_form.price" @focusout="currencyFormat">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">PRICE</span>
+                                </div>
+                                <input type="number" class="form-control" min=0 v-model="agent_transport_add_form.price" @focusout="currencyFormat">
                                 <div class="input-group-append">
                                     <span class="input-group-text">฿</span>
                                 </div>

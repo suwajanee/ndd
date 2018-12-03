@@ -21,7 +21,7 @@ var agent_transport_add = new Vue( {
             work_type: 'ep',
 
             operation_type: '',
-            price: '',
+            price: 0,
             
             pickup_from: '',
             return_to: '',
