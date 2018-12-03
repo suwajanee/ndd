@@ -4,6 +4,7 @@
             <thead class="text-nowrap bg-lightgray"> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
                 <th>PRINT</th>
+                <th></th>
                 <th>DATE</th>
                 <th>PRINCIPAL</th>
                 <th>SHIPPER</th>
@@ -26,8 +27,11 @@
                 <th>RETURN</th>
             </thead> 
 
-            <tbody>
-                <tr v-for="(agent_transport, index) in agent_transports" :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': agent_transport.status == '1' }" :key="agent_transport.id">
+            <tbody v-for="(agent_transport, index) in agent_transports">
+                <tr
+                    :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': agent_transport.status == '1' }"
+                    :key="agent_transport.id"
+                >
                     <td class="p-0 align-middle">
                         <input type="checkbox" :value="agent_transport.id" v-model="checked_agent_transports">
                     </td>
@@ -39,6 +43,31 @@
                         <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalAgentTransportPrint" @click="printFormModal(agent_transport.id, null)">
                             <i class="fa fa-print font-weight-bold"></i>
                         </a>
+                    </td>
+                    
+                    <td class="text-blue">
+                        <span v-if="agent_transport.operation_type != '' | agent_transport.price">
+                            **
+                        </span>
+                        
+                        <span v-if="agent_transport.operation_type == 'export_loaded'">
+                            ตู้หนักไป
+                        </span>
+                        <span v-else-if="agent_transport.operation_type == 'import_loaded'">
+                            ตู้หนักกลับ
+                        </span>
+                        <span v-else-if="agent_transport.operation_type == 'export_empty'">
+                            ตู้เปล่าไป
+                        </span>
+                        <span v-else-if="agent_transport.operation_type == 'import_empty'">
+                            ตู้เปล่ากลับ
+                        </span>
+
+                        <span v-if="agent_transport.price != '0.00'">{{ currencyCommas(agent_transport.price) }} </span>
+
+                        <span v-if="agent_transport.operation_type != '' | agent_transport.price">
+                            **
+                        </span>
                     </td>
                     
                     <td class="text-nowrap px-3">{{ agent_transport.date|formatDate }}</td>
@@ -75,6 +104,16 @@
                     <td class="text-nowrap px-3">{{ agent_transport.pickup_date|formatDate }}</td>
                     <td class="text-nowrap px-3">{{ agent_transport.return_date|formatDate }}</td>
                 </tr>
+
+                <tr v-if="index == agent_transports.length-1">
+                    <td colspan=19 class="bg-dark"></td>
+                </tr>
+                <tr
+                    v-else-if="agent_transport.date != agent_transports[index+1].date | agent_transport.work_type != agent_transports[index+1].work_type | agent_transport.shipper.id != agent_transports[index+1].shipper.id"
+                >
+                    <td colspan=19 class="bg-dark"></td>
+                </tr>
+
             </tbody>
         </table>
 

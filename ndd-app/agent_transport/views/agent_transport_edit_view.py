@@ -26,6 +26,8 @@ def api_save_edit_agent_transport(request):
 
             agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
             agent_transport_save.status = agent_transport['status']
+            agent_transport_save.operation_type = agent_transport['operation_type']
+            agent_transport_save.price = agent_transport['price']
             agent_transport_save.date = agent_transport['date']
             agent_transport_save.shipper = Shipper.objects.get(pk=agent_transport['shipper']['id'])
             agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip().upper())

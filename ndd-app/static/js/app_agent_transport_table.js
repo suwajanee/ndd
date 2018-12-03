@@ -112,6 +112,20 @@ var agent_transport_table = new Vue( {
             return this.shippers.filter(shipper => shipper.principal == customer_id )           
         },
 
+        currencyCommas(price){
+            price += '';
+            var x = price.split('.');
+            var x1 = x[0];
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+             x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1;
+        },
+        currencyFormat(index) {
+            this.agent_transports[index].price = parseFloat(this.agent_transports[index].price).toFixed(2);
+        },
+
         printFormModal(id, shipper_id) {
             this.modal = id
             this.shipper_address = []
