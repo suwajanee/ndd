@@ -83,6 +83,7 @@ var agent_transport_add = new Vue( {
                     return false;
                 }
             }
+
             api("/agent-transport/api/save-add-agent-transports/", "POST", {agent_transports: this.agent_transport_add_form, details: this.details}).then((data) => {
                 if(data == "Success") {
                     window.location.replace("/agent-transport");

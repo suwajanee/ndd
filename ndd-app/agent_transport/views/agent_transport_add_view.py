@@ -37,6 +37,9 @@ def api_save_add_agent_transports(request):
         agent_transports['return_to'] = re.sub(' +', ' ', agent_transports['return_to'].strip().upper())
 
         agent_transports['remark'] = re.sub(' +', ' ', agent_transports['remark'].strip())
+
+        if agent_transports['price'] == 'NaN':
+            agent_transports['price'] = 0
         
         for detail in details:
             agent_transports['date'] = detail['date']

@@ -24,6 +24,9 @@ def api_save_edit_agent_transport(request):
             if not agent_transport['return_tr']:
                 agent_transport['return_tr'] = agent_transport['pickup_tr']
 
+            if agent_transport['price'] == 'NaN':
+                agent_transport['price'] = 0
+
             agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
             agent_transport_save.status = agent_transport['status']
             agent_transport_save.operation_type = agent_transport['operation_type']
