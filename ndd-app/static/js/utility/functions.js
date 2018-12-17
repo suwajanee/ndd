@@ -54,3 +54,17 @@ const keyDownArrow = (field, index) => {
       }
   }
 }
+
+const currencyCommas = (price) => {
+    price += '';
+    var x = price.split('.');
+    var x1 = x[0];
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+     x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    if(x[1] == '00'){
+        return x1
+    }
+    return x1 + '.' + x[1];
+}

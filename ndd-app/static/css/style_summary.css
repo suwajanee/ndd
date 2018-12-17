@@ -20,3 +20,24 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
+
+fieldset.summary_form_detail {
+    border: 1px solid lightgray !important;
+    padding: 0.5em 1em 1em 1em !important;
+    margin: 0 !important;
+    border-radius: 8px;
+}
+
+legend.summary_form_detail {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+
+#summary-form-setting-page .custom-checkbox input[type="checkbox"] + label::before,
+#summary-form-setting-page .custom-radio input[type="radio"] + label::before {
+    border: 0.5px solid gray;
+}
