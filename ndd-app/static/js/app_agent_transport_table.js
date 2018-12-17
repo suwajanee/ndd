@@ -100,6 +100,10 @@ var agent_transport_table = new Vue( {
                     this.agent_transports[agent_transport].color = this.booking_color[this.color_index % 10]
                 }
 
+                if(! this.agent_transports[agent_transport].shipper){
+                    this.agent_transports[agent_transport].shipper = 0
+                }
+
             }
         },
 

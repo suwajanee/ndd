@@ -125,6 +125,10 @@ var booking_table = new Vue( {
                 catch(err) {
                     this.bookings[booking].timeColor = false
                 }
+
+                if(! this.bookings[booking].shipper){
+                    this.bookings[booking].shipper = 0
+                }
             }
         },
 
