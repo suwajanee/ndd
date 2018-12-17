@@ -23,7 +23,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
 
-@login_required(login_url=reverse_lazy('login-page'))
+@login_required(login_url=reverse_lazy('login'))
 def export_page(request):
     return render(request, 'export.html', {'nbar': 'export-page'})
 

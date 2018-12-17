@@ -19,7 +19,7 @@
     </head>
 
     <body class="bg-light bg-img">
-        <div id="login-page" class="container h-100 position-relative">
+        <div class="container h-100 position-relative">
             <div class="col-md-5 position-absolute" style="top: 30%; left:50%; transform: translate(-50%,-30%);">
                 <div class="card shadow rounded-3" style="opacity:0.8;">
                     <div class="card-header">
@@ -27,28 +27,34 @@
                     </div>
             
                     <div class="card-body">
-                        <div v-if="error" class="text-danger"><i class="fa fa-times"></i>&nbsp;Incorrect Username or Password</div>
-                    
-                        <div class="input-group input-group-lg mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        {% for message in messages %}	        
+                            <div class="text-danger"><i class="fa fa-times"></i>&nbsp;{{ message }}</div>	    
+                        {% endfor %}
+                        <form ref="login_form" method="POST" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            <div class="input-group input-group-lg mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" name="username" class="form-control" placeholder="Username" @keyup.enter="login">
                             </div>
-                            <input type="text" name="username" class="form-control" placeholder="Username" v-model="login_form.username" @keyup.enter="login">
-                        </div>
 
-                        <div class="input-group input-group-lg mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            <div class="input-group input-group-lg mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" class="form-control" placeholder="Password" @keyup.enter="login">
                             </div>
-                            <input type="password" class="form-control" placeholder="Password" v-model="login_form.password" @keyup.enter="login">
-                        </div>
 
-                        <div class="custom-control custom-checkbox mb-1">
-                            <input type="checkbox" class="custom-control-input" id="remember_me" v-model="login_form.remember_me" @keyup.enter="login">
-                            <label class="custom-control-label" for="remember_me">&nbsp;Remember me</label>
-                        </div>
+                            <div class="custom-control custom-checkbox mb-1">
+                                <input type="hidden" name="remember_me" value=0 />
+                                <input type="checkbox" id="remember_me" name="remember_me" class="custom-control-input" value=1 @keyup.enter="login">
+                                <label class="custom-control-label" for="remember_me">&nbsp;Remember me</label>
+                            </div>
 
-                        <button ref="submit" class="btn btn-primary btn-lg float-right" @click="login"><i class="fa fa-sign-in"></i>&nbsp;Login</button>
+                            <button class="btn btn-primary btn-lg float-right" @click="login"><i class="fa fa-sign-in"></i>&nbsp;Login</button>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -66,27 +72,9 @@
             var login_page = new Vue( {
             
                 el: '#login-page',
-                data: {
-                    error: false,
-                    login_form: {
-                        username: '',
-                        password: '',
-                        remember_me: false
-                    }
-                },
                 methods: {
                     login() {
-                        this.error = false
-                        api("/api-login/", "POST", this.login_form).then((data) => {
-                            if(data == 'Success') {
-                                window.location.replace("/booking");
-                            }
-                            else {
-                                this.error = true
-                                this.login_form.password = ''
-                                return false
-                            }             
-                        })
+                        this.$refs.login_form.submit()
                     },
                 }
             })

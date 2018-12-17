@@ -3,33 +3,32 @@
 import json
 
 from django.contrib import auth
-from django.http import JsonResponse
+from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.views.decorators.csrf import csrf_exempt
 
 
-def login_page(request):
+def login(request):
+    template_name = 'login.html'
+
     if request.user.is_authenticated:
         return redirect('booking-page')
-    return render(request, 'login.html')
 
-@csrf_exempt
-def login(request):
     if request.method == 'POST':
-        req = json.loads( request.body.decode('utf-8') )
-        username = req['username']
-        password = req['password']
+        username = request.POST['username']
+        password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
 
         if user is not None:
             auth.login(request, user)
-            if req['remember_me'] == True:
+
+            if request.POST['remember_me'] == '1':
                 request.session.set_expiry(604800)
-            return JsonResponse('Success', safe=False)
+            return redirect('booking-page')
         else:
-            return JsonResponse('Incorrect', safe=False)
-    return JsonResponse('Error', safe=False)
+            messages.error(request, 'Incorrect Username or Password')
+
+    return render(request, template_name)
 
 def logout(request):
     auth.logout(request)
-    return redirect('login-page')
+    return redirect('login')
