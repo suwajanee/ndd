@@ -32,7 +32,7 @@ class AgentTransport(models.Model):
         ('export_loaded', 'Export Loaded'),
         ('import_loaded', 'Import Loaded'),
         ('export_empty', 'Export Empty'),
-        ('import_loaded', 'Import Empty'),
+        ('import_empty', 'Import Empty'),
     )
     operation_type = models.CharField(max_length=15, choices=OPERATION_CHOICES, default='')
 
