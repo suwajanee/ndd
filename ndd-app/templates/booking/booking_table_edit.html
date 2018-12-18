@@ -56,11 +56,12 @@
                         <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
                         <td v-else></td>
 
-                        <td>
+                        <td v-if="booking.principal">
                             <select class="custom-select shipper" v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required>
                                 <option v-for="shipper in filterEditShipper(booking.principal.id)" :value="shipper">{{ shipper.name }}</option>
                             </select>
                         </td>
+                        <td v-else></td>
                         
                         <td><input name="agent" class="form-control" v-model="booking.agent" maxlength="50" :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)"></td>
                         
