@@ -43,8 +43,6 @@ STATUS_CHOICES = (
     ('0', '-'),
     ('1', 'Processing'),
     ('2', 'Finished'),
-
-    
 )
 class SummaryWeek(models.Model):
     week = models.CharField(max_length=2, null=True, blank=True)

@@ -36,18 +36,15 @@ def api_get_summary_year(request):
             else:
                 data['status'] = 'alert-dark'
             summary_year.append(data)
-            
-    # serializer = YearSerializer(years, many=True)
 
     return JsonResponse(summary_year, safe=False)
-
 
 @csrf_exempt
 def api_add_year(request):
     if request.method == "POST":
         req = json.loads( request.body.decode('utf-8') )
         data = req['year']
-
+        print(data)
         year = Year(**data)
         year.save()
         

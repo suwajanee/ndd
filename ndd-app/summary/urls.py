@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^$', summary_page_view.summary_page, name='summary-page'),
     url(r'^form-setting/$', summary_page_view.summary_form_setting_page, name='summary-form-setting-page'),
 
+    # Summary Year
+    url(r'^api/add-year/$', summary_year_view.api_add_year, name='api-add-year'),
     url(r'^api/get-summary-year/$', summary_year_view.api_get_summary_year, name='api-get-summary-year')
 
 ]
