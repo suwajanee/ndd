@@ -161,7 +161,7 @@
                         <td><input name="return_to" class="form-control" v-model="booking.return_to" maxlength="20" :id="'16-'+index" @keydown="keyDownArrow(16, index)" @change="editData(booking)"></td>
 
                         <td><input class="form-control" style="font-weight: 800;" v-model="booking.container_no" maxlength="20" autocomplete=off :id="'17-'+index" @keydown="keyDownArrow(17, index)" @change="editData(booking)"></td>
-                        <td><input class="form-control" style="font-weight: 800;" v-model="booking.seal_no" maxlength="20" autocomplete=off :id="'18-'+index" @keydown="keyDownArrow(18, index)" @change="editData(booking)"></td>
+                        <td><input class="form-control" style="font-weight: 800;" v-model="booking.seal_no" maxlength="30" autocomplete=off :id="'18-'+index" @keydown="keyDownArrow(18, index)" @change="editData(booking)"></td>
                         <td><input class="form-control" v-model="booking.tare" maxlength="80" autocomplete=off :id="'19-'+index" @keydown="keyDownArrow(19, index)" @change="editData(booking)"></td>
 
                         <td><input type="date" class="form-control" v-model="booking.closing_date" autocomplete=off :id="'20-'+index" @keydown="keyDownArrow(20, index)" @change="editData(booking)"></td>
