@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_summary.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb m-0 bg-white">
+        <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ year }}</li>
+    </ol>
+</nav>
+
+<div id="summary-year-details" >
+    {% verbatim %}
+        <table class="table table-bordered table-light">
+            <thead class="text-center">
+                <th>Customer Name</th>
+                <th class="th-click">Jan</th>
+                <th class="th-click">Feb</th>
+                <th class="th-click">Mar</th>
+                <th class="th-click">Apr</th>
+                <th class="th-click">May</th>
+                <th class="th-click">Jun</th>
+                <th class="th-click">Jul</th>
+                <th class="th-click">Aug</th>
+                <th class="th-click">Sep</th>
+                <th class="th-click">Oct</th>
+                <th class="th-click">Nov</th>
+                <th class="th-click">Dec</th>
+                <th><u>Total</u></th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr v-for="(year_detail, index) in summary_year_details" class="text-right">
+                    <td v-if="year_detail.sub_customer" class="text-left" :style="'background:'+ year_detail.color">{{ year_detail.sub_customer }}</td>
+                    <td v-else class="text-left" :style="'background:'+ year_detail.color">{{ year_detail.customer }}</td>
+                    <td v-for="i in 12" :class="{'bg-secondary': ! year_detail.total[i-1]}" style="width:120px;" :style="'background:'+ year_detail.color">{{ year_detail.total[i-1] }}</td>
+                    <td style="width:120px;" :style="'background:'+ year_detail.color">{{ currencyCommas(total_customer[index]) }}</td>
+                    <td v-if="year_detail.cusotomer_total" class="text-center" :style="'background:'+ year_detail.color">{{ currencyCommas(year_detail.cusotomer_total) }}</td>
+                </tr>
+
+                <tr class="text-right" >
+                    <td class="text-center"><u><b>Total</b></u></td>
+                    <td v-for="month in total_month" style="background: LightBlue;">{{ currencyCommas(month) }}</td>
+                    <td style="background: Lime;"><b>{{ total_year }}</b></td>
+                </tr>
+
+            </tbody>
+
+
+        </table>
+    {% endverbatim %}
+
+</div>
+
+
+
+<script type="application/javascript" src="{% static 'js/app_summary_year_details_page.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            summary_year_details.reload({{ year }});
+        });
+
+    </script>
+
+{% endblock %}

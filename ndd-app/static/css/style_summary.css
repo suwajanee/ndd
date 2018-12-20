@@ -41,3 +41,13 @@ legend.summary_form_detail {
 #summary-form-setting-page .custom-radio input[type="radio"] + label::before {
     border: 0.5px solid gray;
 }
+
+th.th-click:hover {
+    background: Gainsboro ;
+    cursor: pointer;
+}
+
+th.th-click:active {
+    background: LightGray;
+    cursor: pointer;
+}

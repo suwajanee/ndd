@@ -18,14 +18,6 @@ var summary_page = new Vue( {
         getSummaryYear() {
             api("/summary/api/get-summary-year/").then((data) => {
                 this.year_summary = data
-                for(year in this.year_summary){
-                    if(this.year_summary[year].total == null){
-                        this.year_summary[year].total = '0.00'
-                    }
-                    else{
-                        this.year_summary[year].total = currencyCommas(this.year_summary[year].total)
-                    }    
-                }
             })
         },
         addYear() {

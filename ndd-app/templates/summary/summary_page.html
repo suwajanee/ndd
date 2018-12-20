@@ -17,7 +17,6 @@
 </nav>
 
 <div id="summary-page" class="row col-md-12 px-5 pb-4 alert-secondary m-0 shadow" style="overflow-y: auto; height: 50%; resize:vertical;">
-    {% verbatim %}
 
     <div class="col-md-4 pt-4">
         <button class="btn alert-dark w-100" style="min-height: 214px;" data-toggle="modal" data-target="#modalAddYear">
@@ -55,15 +54,18 @@
 
     <div v-for="year in year_summary" class="col-md-4 pt-4">
         <div class="card border-dark" :class="year.status">
+    {% verbatim %}
+
             <h4 class="card-header">{{ year.year }}</h4>
             <div class="card-body">
-                <h1 class="text-center">{{ year.total }}</h1>   
+                <h1 class="text-center">{{ currencyCommas(year.total) }}</h1>   
             </div>
-            <div class="card-footer"><a href="#" class="btn btn-outline-dark float-right">Detail</a></div>
+    {% endverbatim %}
+
+            <div class="card-footer"><a :href="'/summary/'+ year.year" class="btn btn-outline-dark float-right">Detail</a></div>
         </div>
     </div>
 
-    {% endverbatim %}
 
 </div>
 

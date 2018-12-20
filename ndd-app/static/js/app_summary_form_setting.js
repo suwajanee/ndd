@@ -2,12 +2,7 @@ var summary_form_setting = new Vue( {
     
     el: '#summary-form-setting',
     data: {
-        // booking_field: {
-        //     '0': 'BOOKING',
-        //     '1': 'B/L',
-        //     '2': 'ROUTING',
-        //     '3': 'JOB NO/BOOKING',
-        // },
+
         booking_field: {},
         create_new_form: {
             form_name: '',
@@ -43,9 +38,6 @@ var summary_form_setting = new Vue( {
         ]
     },
 
-    computed: {
-        
-    },
     methods: {
         reload() {
             this.booking_field = booking_field_text
