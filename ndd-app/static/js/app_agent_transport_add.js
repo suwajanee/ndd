@@ -19,6 +19,9 @@ var agent_transport_add = new Vue( {
             agent: '',
             booking_no: '',
             work_type: 'ep',
+
+            operation_type: '',
+            price: 0,
             
             pickup_from: '',
             return_to: '',
@@ -67,6 +70,10 @@ var agent_transport_add = new Vue( {
             this.details.splice(index,1)
         },
 
+        currencyFormat() {
+            this.agent_transport_add_form.price = parseFloat(this.agent_transport_add_form.price).toFixed(2);
+        },
+
         saveAddAgentTransports() {
             this.input_required = false
             var form = this.$refs.addAgentTransportForm
@@ -76,6 +83,7 @@ var agent_transport_add = new Vue( {
                     return false;
                 }
             }
+
             api("/agent-transport/api/save-add-agent-transports/", "POST", {agent_transports: this.agent_transport_add_form, details: this.details}).then((data) => {
                 if(data == "Success") {
                     window.location.replace("/agent-transport");

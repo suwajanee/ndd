@@ -50,7 +50,7 @@ table.time th {
 
 .bg-cyan {
     background: Cyan;
-} 
+}
 
 .modal-body {
     font-size: 14px;
@@ -112,7 +112,7 @@ table.time th {
 
 
 /* Custom input */
-input:not([type]), input[type="text"] {
+input:not([type]), input[type="text"], input[type="number"] {
     min-width: 50px;
     padding: 2px 4px;
     font-size: 11px;

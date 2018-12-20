@@ -22,39 +22,44 @@ def agent_trnasport_add_page(request):
 
 @csrf_exempt
 def api_save_add_agent_transports(request):
-    if request.method == "POST":
-        req = json.loads( request.body.decode('utf-8') )
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
 
-        agent_transports = req['agent_transports']
-        details = req['details']
+            agent_transports = req['agent_transports']
+            details = req['details']
 
-        agent_transports['principal'] = Principal.objects.get(pk=agent_transports['principal'])
-        agent_transports['shipper'] = Shipper.objects.get(pk=agent_transports['shipper'])
-        agent_transports['agent'] = re.sub(' +', ' ', agent_transports['agent'].strip().upper())
-        agent_transports['booking_no'] = re.sub(' +', ' ', agent_transports['booking_no'].strip())
+            agent_transports['principal'] = Principal.objects.get(pk=agent_transports['principal'])
+            agent_transports['shipper'] = Shipper.objects.get(pk=agent_transports['shipper'])
+            agent_transports['agent'] = re.sub(' +', ' ', agent_transports['agent'].strip().upper())
+            agent_transports['booking_no'] = re.sub(' +', ' ', agent_transports['booking_no'].strip())
 
-        agent_transports['pickup_from'] = re.sub(' +', ' ', agent_transports['pickup_from'].strip().upper())
-        agent_transports['return_to'] = re.sub(' +', ' ', agent_transports['return_to'].strip().upper())
+            agent_transports['pickup_from'] = re.sub(' +', ' ', agent_transports['pickup_from'].strip().upper())
+            agent_transports['return_to'] = re.sub(' +', ' ', agent_transports['return_to'].strip().upper())
 
-        agent_transports['remark'] = re.sub(' +', ' ', agent_transports['remark'].strip())
-        
-        for detail in details:
-            agent_transports['date'] = detail['date']
-            agent_transports['pickup_date'] = detail['date']
-            agent_transports['return_date'] = detail['date']
+            agent_transports['remark'] = re.sub(' +', ' ', agent_transports['remark'].strip())
 
-            agent_transports['size'] = detail['size']
+            if agent_transports['price'] == 'NaN':
+                agent_transports['price'] = 0
+            
+            for detail in details:
+                agent_transports['date'] = detail['date']
+                agent_transports['pickup_date'] = detail['date']
+                agent_transports['return_date'] = detail['date']
 
-            for i in range(int(detail['quantity'])):
-                work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+                agent_transports['size'] = detail['size']
 
-                agent_transports['work_id'] = work_id
-                agent_transports['work_number'] = work_number
+                for i in range(int(detail['quantity'])):
+                    work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
 
-                agent_transport = AgentTransport(**agent_transports)
-                agent_transport.save()
+                    agent_transports['work_id'] = work_id
+                    agent_transports['work_number'] = work_number
 
-        return JsonResponse('Success', safe=False)
+                    agent_transport = AgentTransport(**agent_transports)
+                    agent_transport.save()
+
+            return JsonResponse('Success', safe=False)
+
     return JsonResponse('Error', safe=False)
 
 def run_work_id(date, work_type):

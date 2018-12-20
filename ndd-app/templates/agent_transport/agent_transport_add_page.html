@@ -70,6 +70,23 @@
                                 </select>
                             </div>
 
+                            <div class="input-group mb-3 col-md-6 container">
+                                <select class="custom-select" v-model="agent_transport_add_form.operation_type">
+                                    <option value=""> -------- </option>
+                                    <option value="export_loaded"> ตู้หนักไป </option>
+                                    <option value="import_loaded"> ตู้หนักกลับ </option>
+                                    <option value="export_empty"> ตู้เปล่าไป </option>
+                                    <option value="import_empty"> ตู้เปล่ากลับ </option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">PRICE</span>
+                                </div>
+                                <input type="number" class="form-control" min=0 v-model="agent_transport_add_form.price" @focusout="currencyFormat">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">฿</span>
+                                </div>
+                            </div>
+
                             <fieldset class="add_form">
                                 <legend class="add_form">DETAILS</legend>
                                 <div v-for="(detail, index) in details">

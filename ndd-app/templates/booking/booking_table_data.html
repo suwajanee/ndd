@@ -36,80 +36,92 @@
             </thead> 
 
             <tbody>
-                <tr v-for="(booking, index) in bookings" :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" :key="booking.id">
-                    <td class="p-0 align-middle">
-                        <input type="checkbox" :value="booking.id" v-model="checked_bookings">
-                    </td>
-                    
-                    <td class="p-0 align-middle">
-                        <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, booking.shipper.id)">
-                            <i class="fa fa-print font-weight-bold"></i>
-                        </a>
-                        <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, null)">
-                            <i class="fa fa-print font-weight-bold"></i>
-                        </a>
-                    </td>
+                <template v-for="(booking, index) in bookings">
+                    <tr 
+                        :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & booking.status == '1', 'alert-danger': booking.closing_date <= tmr & booking.status == '1' }" 
+                        :key="booking.id"
+                    >
+                        <td class="p-0 align-middle">
+                            <input type="checkbox" :value="booking.id" v-model="checked_bookings">
+                        </td>
+                        
+                        <td class="p-0 align-middle">
+                            <a v-if="booking.shipper" class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, booking.shipper.id)">
+                                <i class="fa fa-print font-weight-bold"></i>
+                            </a>
+                            <a v-else class="btn btn-link" data-toggle="modal" data-target="#modalBookingPrint" @click="printFormModal(booking.id, null)">
+                                <i class="fa fa-print font-weight-bold"></i>
+                            </a>
+                        </td>
 
-                    <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}">{{ booking.time }}</td>
-                    
-                    <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
+                        <td class="text-nowrap" :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}">{{ booking.time }}</td>
+                        
+                        <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
-                    <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
-                    <td v-else></td>
+                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
+                        <td v-else></td>
 
-                    <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
-                    <td v-else></td>
+                        <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
+                        <td v-else></td>
 
-                    <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ booking.agent }}</div></td>
-                    <td class="text-nowrap">{{ booking.size }}</td>
+                        <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ booking.agent }}</div></td>
+                        <td class="text-nowrap">{{ booking.size }}</td>
 
-                    <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
-                    <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
+                        <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
+                        <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
 
-                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.pickup_tr }}</td>
-                    <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
-                    <td v-else :class="{ 'bg-cyan': booking.pickup_tr }">{{ booking.pickup_tr }}</td>
+                        <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.pickup_tr }}</td>
+                        <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
+                        <td v-else :class="{ 'bg-cyan': booking.pickup_tr }">{{ booking.pickup_tr }}</td>
 
-                    <td>{{ booking.pickup_from }}</td>
-                    
-                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.forward_tr }}</td>
-                    <td v-else :class="{ 'bg-cyan': booking.forward_tr }">{{ booking.forward_tr }}</td>
+                        <td>{{ booking.pickup_from }}</td>
+                        
+                        <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.forward_tr }}</td>
+                        <td v-else :class="{ 'bg-cyan': booking.forward_tr }">{{ booking.forward_tr }}</td>
 
-                    <td class="text-nowrap">{{ booking.factory }}</td>
+                        <td class="text-nowrap">{{ booking.factory }}</td>
 
-                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.backward_tr }}</td>
-                    <td v-else-if="booking.fac_ndd == '1'" class="bg-gold">{{ booking.backward_tr }}</td>
-                    <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
+                        <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.backward_tr }}</td>
+                        <td v-else-if="booking.fac_ndd == '1'" class="bg-gold">{{ booking.backward_tr }}</td>
+                        <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
-                    <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.return_tr }}</td>
-                    <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
-                    
-                    <td>{{ booking.return_to }}</td>
+                        <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.return_tr }}</td>
+                        <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
+                        
+                        <td>{{ booking.return_to }}</td>
 
-                    <td class="text-nowrap" style="font-weight: 800;">{{ booking.container_no }}</td>
-                    <td class="text-nowrap" style="font-weight: 800;">{{ booking.seal_no }}</td>
-                    <td class="px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
+                        <td class="text-nowrap" style="font-weight: 800;">{{ booking.container_no }}</td>
+                        <td class="text-nowrap" style="font-weight: 800;">{{ booking.seal_no }}</td>
+                        <td class="px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
 
-                    <td class="text-nowrap px-2">{{ booking.closing_date|formatDate }}</td>
-                    <td class="text-nowrap">{{ booking.closing_time }}</td>
+                        <td class="text-nowrap px-2">{{ booking.closing_date|formatDate }}</td>
+                        <td class="text-nowrap">{{ booking.closing_time }}</td>
 
-                    <td class="text-center px-2"><div  class="long-text-80" style="margin:auto;">{{ booking.remark }}</div></td>
+                        <td class="text-center px-2"><div  class="long-text-80" style="margin:auto;">{{ booking.remark }}</div></td>
 
-                    <td class="text-nowrap">{{ booking.work_id }}</td>
-                    
-                    <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
-                        {{ booking.pickup_date|formatDate }}
-                    </td>
-                    <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
-                        {{ booking.factory_date|formatDate }}
-                    </td>
-                    <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
-                        {{ booking.return_date|formatDate }}
-                    </td>
-                    
-                    <td class="text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
-                    <td class="text-center px-2"><div class="long-text">{{ booking.port }}</div></td>
-                </tr>
+                        <td class="text-nowrap">{{ booking.work_id }}</td>
+                        
+                        <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
+                            {{ booking.pickup_date|formatDate }}
+                        </td>
+                        <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
+                            {{ booking.factory_date|formatDate }}
+                        </td>
+                        <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
+                            {{ booking.return_date|formatDate }}
+                        </td>
+                        
+                        <td class="text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
+                        <td class="text-center px-2"><div class="long-text">{{ booking.port }}</div></td>
+                    </tr>
+
+                    <tr v-if="index == bookings.length-1">
+                        <td colspan=28 class="bg-dark"></td>
+                    </tr>
+                    <tr v-else-if="booking.date != bookings[index+1].date">
+                        <td colspan=28 class="bg-dark"></td>
+                    </tr>
+                </template>
             </tbody>
         </table>
 
@@ -236,6 +248,6 @@
 
 <div v-else class="container position-relative">
     <div class="position-absolute" style="top: -10%; left:50%; transform: translate(-50%, 10%); color: lightgray;">
-        <h1 class="text-center" style="font-size: 350%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+        <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
     </div>
 </div>

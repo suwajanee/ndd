@@ -20,27 +20,29 @@ def agent_transport_page(request):
 
 @csrf_exempt
 def api_filter_agent_transports(request):
-    context = {}
-    context['today'] = datetime.now()
+    if request.user.is_authenticated:
+        context = {}
+        context['today'] = datetime.now()
 
-    if request.method == "POST":
-        req = json.loads( request.body.decode('utf-8') )
-        filter_by = req['filter_by']
-        date_filter = req['date_filter']
-        if date_filter == '':
-            date_filter = None
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            filter_by = req['filter_by']
+            date_filter = req['date_filter']
+            if date_filter == '':
+                date_filter = None
 
-        if date_filter == None:
-            agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
-        elif filter_by == "month":
-            month_of_year = datetime.strptime(date_filter, '%Y-%m')
-            agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+            if date_filter == None:
+                agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+            elif filter_by == "month":
+                month_of_year = datetime.strptime(date_filter, '%Y-%m')
+                agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+            else:
+                agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+
         else:
-            agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
-
-    else:
-        agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
-        
-    serializer = AgentTransportSerializer(agent_transports, many=True)
-    context['agent_transports'] = serializer.data
-    return JsonResponse(context, safe=False)
+            agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status=1)).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+            
+        serializer = AgentTransportSerializer(agent_transports, many=True)
+        context['agent_transports'] = serializer.data
+        return JsonResponse(context, safe=False)
+    return JsonResponse('Error', safe=False)
