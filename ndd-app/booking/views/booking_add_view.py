@@ -22,77 +22,79 @@ def booking_add_page(request):
 
 @csrf_exempt
 def api_save_add_bookings(request):
-    if request.method == "POST":
-        req = json.loads( request.body.decode('utf-8') )
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
 
-        bookings = req['bookings']
-        details = req['details']
+            bookings = req['bookings']
+            details = req['details']
 
-        return_date = bookings['return_date']
+            return_date = bookings['return_date']
 
-        bookings['principal'] = Principal.objects.get(pk=bookings['principal'])
-        bookings['shipper'] = Shipper.objects.get(pk=bookings['shipper'])
-        bookings['agent'] = re.sub(' +', ' ', bookings['agent'].strip().upper())
-        bookings['booking_no'] = re.sub(' +', ' ', bookings['booking_no'].strip())
+            bookings['principal'] = Principal.objects.get(pk=bookings['principal'])
+            bookings['shipper'] = Shipper.objects.get(pk=bookings['shipper'])
+            bookings['agent'] = re.sub(' +', ' ', bookings['agent'].strip().upper())
+            bookings['booking_no'] = re.sub(' +', ' ', bookings['booking_no'].strip())
 
-        bookings['pickup_from'] = re.sub(' +', ' ', bookings['pickup_from'].strip().upper())
-        bookings['factory'] = re.sub(' +', ' ', bookings['factory'].strip().upper())
-        bookings['return_to'] = re.sub(' +', ' ', bookings['return_to'].strip().upper())
+            bookings['pickup_from'] = re.sub(' +', ' ', bookings['pickup_from'].strip().upper())
+            bookings['factory'] = re.sub(' +', ' ', bookings['factory'].strip().upper())
+            bookings['return_to'] = re.sub(' +', ' ', bookings['return_to'].strip().upper())
 
-        bookings['vessel'] = re.sub(' +', ' ', bookings['vessel'].strip())
-        bookings['port'] = re.sub(' +', ' ', bookings['port'].strip())
+            bookings['vessel'] = re.sub(' +', ' ', bookings['vessel'].strip())
+            bookings['port'] = re.sub(' +', ' ', bookings['port'].strip())
 
-        if not bookings['closing_date']:
-            bookings['closing_date'] = None
-        bookings['closing_time'] = bookings['closing_time']
+            if not bookings['closing_date']:
+                bookings['closing_date'] = None
+            bookings['closing_time'] = bookings['closing_time']
 
-        bookings['remark'] = re.sub(' +', ' ', bookings['remark'].strip())
+            bookings['remark'] = re.sub(' +', ' ', bookings['remark'].strip())
 
-        if bookings['nextday'] == True:
-            bookings['nextday'] = '1'
-        else:
-            bookings['nextday'] = '0'
-        
-        for detail in details:
-            bookings['date'] = detail['date']
-            bookings['pickup_date'] = detail['date']
-            bookings['factory_date'] = detail['date']
+            if bookings['nextday'] == True:
+                bookings['nextday'] = '1'
+            else:
+                bookings['nextday'] = '0'
+            
+            for detail in details:
+                bookings['date'] = detail['date']
+                bookings['pickup_date'] = detail['date']
+                bookings['factory_date'] = detail['date']
 
-            bookings['time'] = detail['time']
-            bookings['size'] = detail['size']
+                bookings['time'] = detail['time']
+                bookings['size'] = detail['size']
 
-            if bookings['nextday'] == '1':
-                if not return_date:
+                if bookings['nextday'] == '1':
+                    if not return_date:
+                        bookings['return_date'] = detail['date']
+                else:
                     bookings['return_date'] = detail['date']
-            else:
-                bookings['return_date'] = detail['date']
 
-            bookings['container_no'] = ''
-            bookings['seal_no'] = ''
+                bookings['container_no'] = ''
+                bookings['seal_no'] = ''
 
-            if detail['container_input'] == False:
-                for i in range(int(detail['quantity'])):
-                    work_id, work_number = run_work_id(detail['date'])
+                if detail['container_input'] == False:
+                    for i in range(int(detail['quantity'])):
+                        work_id, work_number = run_work_id(detail['date'])
 
-                    bookings['work_id'] = work_id
-                    bookings['work_number'] = work_number
+                        bookings['work_id'] = work_id
+                        bookings['work_number'] = work_number
 
-                    booking = Booking(**bookings)
-                    booking.save()
-            else:
-                for cont_detail in detail['container']:
-                    bookings['container_no'] = cont_detail['container_no']
-                    bookings['seal_no'] = cont_detail['seal_no']
+                        booking = Booking(**bookings)
+                        booking.save()
+                else:
+                    for cont_detail in detail['container']:
+                        bookings['container_no'] = cont_detail['container_no']
+                        bookings['seal_no'] = cont_detail['seal_no']
 
-                    work_id, work_number = run_work_id(detail['date'])
+                        work_id, work_number = run_work_id(detail['date'])
 
-                    bookings['work_id'] = work_id
-                    bookings['work_number'] = work_number
+                        bookings['work_id'] = work_id
+                        bookings['work_number'] = work_number
 
-                    booking = Booking(**bookings)
-                    booking.save()
+                        booking = Booking(**bookings)
+                        booking.save()
 
-    return JsonResponse('Success', safe=False)
+        return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)    
 
 def run_work_id(date):
     work = Booking.objects.filter(date=date).aggregate(Max('work_number'))
