@@ -151,15 +151,15 @@ def export_xls(request):
         # Sheet header
         style = style_xls.header_style()
 
-        columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'TO', 'Container 1', 'Container 2', \
+        columns = [' ', 'Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'TO', 'Container 1', 'Container 2', \
             'Remark', 'Work ID', 'Pick up', 'Return']
 
         for col_num in range(len(columns)):
             ws_agent_transport.write(0, col_num, columns[col_num], style)
 
         # Sheet body, remaining rows
-        rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'status').order_by('date', 'principal', 'shipper', 'work_type', 'booking_no', 'work_id')
+        rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('operation_type', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
+        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'work_type', 'price', 'status').order_by('date', 'principal', 'shipper', 'work_type', 'booking_no', 'work_id')
 
         row_num = 0
         row_prev = None
@@ -169,45 +169,46 @@ def export_xls(request):
             row = list(row)
             bg_black = False 
             row_num += 1
-            if row_prev != None and row_prev != row[0]:
-                style = style_xls.bg_black()
-                ws_agent_transport.write_merge(row_num, row_num, 0, len(row)-2, '', style)
-                row_num += 1
-            row_prev = row[0]
+            if row_prev != None:
+                try:
+                    row[3] = Shipper.objects.get(pk=row[3]).name
+                except Shipper.DoesNotExist:
+                    row[3] = ''
 
-            for col_num in range(len(row)-1):
+                if row_prev[1] != row[1] or row_prev[3] != row[3] or row_prev[len(row)-3] != row[len(row)-3]:
+                    style = style_xls.bg_black()
+                    ws_agent_transport.write_merge(row_num, row_num, 0, len(row)-3, '', style)
+                    row_num += 1
+
+            row_prev = row
+
+            for col_num in range(len(row)-3):
                 style = xlwt.XFStyle()
                 style.borders = style_xls.border_cell()
                 style.alignment = style_xls.align_left()
 
-                if col_num == 1:
+                if col_num == 2:
                     try:
                         row[col_num] = Principal.objects.get(pk=row[col_num]).name
                     except Principal.DoesNotExist:
                         row[col_num] = ''
 
-                if col_num == 2:
-                    try:
-                        row[col_num] = Shipper.objects.get(pk=row[col_num]).name
-                    except Shipper.DoesNotExist:
-                        row[col_num] = ''
-
-                if col_num == 10 or col_num == 11:
+                if col_num == 11 or col_num == 12:
                     style.font = style_xls.font_bold()
 
                 if str(type(row[col_num])) == "<class 'datetime.date'>" :
                     style.num_format_str = 'dd/mm/yy'
 
-                if booking_prev != row[5]:
+                if booking_prev != row[6]:
                     if booking_index > 8:
                         booking_index = -1
                     booking_index += 1
-                booking_prev = row[5]
+                booking_prev = row[6]
 
-                if col_num == 5:
+                if col_num == 6:
                     style.pattern = style_xls.bg_booking(booking_index)
 
-                if col_num == 6 or col_num == 8:
+                if col_num == 7 or col_num == 9:
                     if row[len(row)-1] == '2':
                         style.pattern = style_xls.bg_bright_green()
                     elif row[col_num] != '':
@@ -216,7 +217,19 @@ def export_xls(request):
                 if row[len(row)-1] == '0':
                     style.pattern = style_xls.cancel_row()
 
-                ws_agent_transport.write(row_num, col_num, row[col_num], style)
+                if col_num == 0:
+                    if row[col_num] == 'export_loaded':
+                        row[col_num] = 'ตู้หนักไป'
+                    elif  row[col_num] == 'import_loaded':
+                        row[col_num] = 'ตู้หนักกลับ'
+                    elif  row[col_num] == 'export_empty':
+                        row[col_num] = 'ตู้เปล่าไป'
+                    elif  row[col_num] == 'import_empty':
+                        row[col_num] = 'ตู้เปล่ากลับ'
+
+                    ws_agent_transport.write(row_num, col_num, '**' + row[col_num] + ' ' + str(row[len(row)-2]) + '**', style)
+                else:
+                    ws_agent_transport.write(row_num, col_num, row[col_num], style)
 
         wb.save(response)
         return response
