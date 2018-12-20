@@ -9,5 +9,7 @@ class BookingAdmin(admin.ModelAdmin):
     'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time')
 
     ordering = ('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+
+    search_fields = ['work_id', 'container_no']
  
 admin.site.register(Booking, BookingAdmin)

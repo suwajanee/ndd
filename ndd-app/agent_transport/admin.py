@@ -8,5 +8,6 @@ class AgentTransportAdmin(admin.ModelAdmin):
 
     ordering = ('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
 
+    search_fields = ['work_id', 'container_1', 'container_2']
  
 admin.site.register(AgentTransport, AgentTransportAdmin)
