@@ -22,7 +22,7 @@ class SummaryWeekAdmin(admin.ModelAdmin):
 
 class SummaryCustomerAdmin(admin.ModelAdmin):
     list_display = ('customer', 'week', 'date_billing', 'date_end', 'status')
-    ordering = ('week', 'customer')
+    ordering = ('week',)
 
 
 class InvoiceAdmin(admin.ModelAdmin):

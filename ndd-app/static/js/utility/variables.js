@@ -1,6 +1,8 @@
 const booking_field_text = {
-    '0': 'BOOKING',
-    '1': 'B/L',
-    '2': 'ROUTING',
-    '3': 'JOB NO/BOOKING',
+    '00': 'BOOKING',
+    '01': 'B/L',
+    '02': 'ROUTING',
+    '03': 'JOB NO/BOOKING',
 }
+
+const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

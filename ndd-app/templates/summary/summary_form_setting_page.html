@@ -19,28 +19,28 @@
 
 <div id="summary-form-setting" class="container text-center" style="min-width: 75%;"> 
         {% verbatim %}
-    <button class="btn btn-success btn-lg my-5" data-toggle="modal" data-target="#modalCreateForm" @click="setting_form">Create New Form</button>
+    <button class="btn btn-success btn-lg my-5" data-toggle="modal" data-target="#modalFormSetting" @click="settingForm">Create New Form</button>
 
-    <div v-for="(form, index) in summary_form" class="modal-dialog" role="document" style="min-width: 100%;">
+    <div v-for="(form, index) in summary_forms" class="modal-dialog" role="document" style="min-width: 100%;">
         <div class="modal-content">
             <div class="modal-header px-5">
-                <h2 class="modal-title">{{ form.form_name }}</h2>
+                <h3 class="modal-title">{{ form.form_name }}</h3>
                 <div class="float-right p-0">
-                    <button class="btn btn-outline-info my-2" data-toggle="modal" data-target="#modalCreateForm" @click="setting_form(index)">แก้ไข</button>
-                    <button v-if="form.form_name.toLowerCase() != 'default'" class="btn btn-outline-danger my-2">ลบ</button> 
+                    <button class="btn btn-outline-warning my-2" data-toggle="modal" data-target="#modalFormSetting" @click="settingForm(index)"><i class="fa fa-edit"></i></button>
+                    <button v-if="index!=0" class="btn btn-outline-danger my-2" @click="deleteForm(form.id)"><i class="fa fa-trash"></i></button> 
                 </div>
             </div>
             <div class="modal-body px-5">
-                        <div v-if="form.form_detail[1]=='diesel_rate'" class="float-right mb-3">
+                        <div v-if="form.form_detail[1]=='1_diesel_rate'" class="float-right mb-3">
                             Diesel Rate : __________
                         </div>
-                        <div v-else-if="form.form_detail[1]=='job_no_out'" class="float-right mb-3">
+                        <div v-else-if="form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
                             JOB NO : __________
                         </div>
-                        <div v-else-if="form.form_detail[1]=='ap_billing_no'" class="float-right mb-3">
+                        <div v-else-if="form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
                             AP Billing No. __________
                         </div>
-                        <div v-else-if="form.form_detail[1]=='input_field'" class="float-right mb-3">
+                        <div v-else-if="form.form_detail[1]=='1_input_field'" class="float-right mb-3">
                             <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
                         </div>
                         <div v-else class="float-right mb-3">
@@ -79,13 +79,13 @@
                                 <td rowspan=2 v-if="form.form_detail.indexOf('date_from') > 0" class="align-middle">
                                     Date From
                                 </td>
-                                <td rowspan=2 v-if="form.form_detail[2]=='remark'" class="align-middle">
+                                <td rowspan=2 v-if="form.form_detail[2]=='2_remark'" class="align-middle">
                                     Remark
                                 </td>
-                                <td rowspan=2 v-if="form.form_detail[2]=='job_no'" class="align-middle">
+                                <td rowspan=2 v-if="form.form_detail[2]=='2_job_no'" class="align-middle">
                                     <span class="text-nowrap">Job No.</span>
                                 </td>
-                                <td rowspan=2 v-if="form.form_detail[2]=='truck'" class="align-middle">
+                                <td rowspan=2 v-if="form.form_detail[2]=='2_truck'" class="align-middle">
                                     TRUCK
                                 </td>
                             </tr>

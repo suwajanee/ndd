@@ -1,6 +1,6 @@
-<div class="modal fade" id="modalCreateForm" tabindex="-1" role="dialog" aria-hidden="true">    
+<div class="modal fade" id="modalFormSetting" tabindex="-1" role="dialog" aria-hidden="true">    
     {% verbatim %}
-        <div class="modal-dialog" role="document" style="min-width: 75%;">
+        <div class="modal-dialog" role="document" style="min-width: 80%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title w-100 text-center">{{ form_title }}</h2>
@@ -13,42 +13,46 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">FORM NAME</span>
                         </div>
-                        <input class="form-control" v-model="create_new_form.form_name" maxlength="50" :disabled="create_new_form.form_name.toLowerCase() == 'default'">
+                        <input class="form-control" 
+                            v-model="form_setting_modal.form_name" maxlength="50" 
+                            :disabled="form_index==0"
+                            :class="{'alert-danger': input_required == true & form_setting_modal.form_name == ''}"
+                        >
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="ndd_form" v-model="create_new_form.form_type" value="ndd">
+                            <input type="radio" class="custom-control-input" id="ndd_form" v-model="form_setting_modal.form_type" value="ndd">
                             <label class="custom-control-label" for="ndd_form">NDD Form</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="other_form" v-model="create_new_form.form_type" value="other" disabled>
+                            <input type="radio" class="custom-control-input" id="other_form" v-model="form_setting_modal.form_type" value="other" disabled>
                             <label class="custom-control-label" for="other_form">Other Form</label>
                         </div> 
-                    </div>
+                    </div> -->
 
                     <fieldset class="summary_form_detail">
                         <legend class="summary_form_detail">FORM DETAILS</legend>
 
                         <div class="float-right mb-3">
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="none" value="none" v-model="create_new_form.form_detail[1]">
+                                <input type="radio" class="custom-control-input" id="none" value="1_none" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label text-secondary" for="none"><-- ว่าง --></label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="diesel_rate" value="diesel_rate" v-model="create_new_form.form_detail[1]">
+                                <input type="radio" class="custom-control-input" id="diesel_rate" value="1_diesel_rate" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label" for="diesel_rate">Diesel Rate</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="job_no_out" value="job_no_out" v-model="create_new_form.form_detail[1]">
+                                <input type="radio" class="custom-control-input" id="job_no_out" value="1_job_no_out" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label" for="job_no_out">JOB NO.</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="ap_billing_no" value="ap_billing_no" v-model="create_new_form.form_detail[1]">
+                                <input type="radio" class="custom-control-input" id="ap_billing_no" value="1_ap_billing_no" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label" for="ap_billing_no">AP Billing No.</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="input_field" value="input_field" v-model="create_new_form.form_detail[1]">
+                                <input type="radio" class="custom-control-input" id="input_field" value="1_input_field" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label" for="input_field"><input class="form-control p-0 text-center" placeholder="เพิ่มเติม" readonly></label>
                             </div>
                         </div>
@@ -60,19 +64,19 @@
                                 </td>
                                 <td rowspan=2 class="text-left">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="booking" value="0" v-model="create_new_form.form_detail[0]">
+                                        <input type="radio" class="custom-control-input" id="booking" value="00" v-model="form_setting_modal.form_detail[0]">
                                         <label class="custom-control-label" for="booking">BOOKING</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="b/l" value="1" v-model="create_new_form.form_detail[0]">
+                                        <input type="radio" class="custom-control-input" id="b/l" value="01" v-model="form_setting_modal.form_detail[0]">
                                         <label class="custom-control-label" for="b/l">B/L</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="routing" value="2" v-model="create_new_form.form_detail[0]">
+                                        <input type="radio" class="custom-control-input" id="routing" value="02" v-model="form_setting_modal.form_detail[0]">
                                         <label class="custom-control-label" for="routing">ROUTING</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="job_no_booking" value="3" v-model="create_new_form.form_detail[0]">
+                                        <input type="radio" class="custom-control-input" id="job_no_booking" value="03" v-model="form_setting_modal.form_detail[0]">
                                         <label class="custom-control-label" for="job_no_booking">JOB NO/<br>BOOKING</label>
                                     </div>
                                 </td>
@@ -85,9 +89,9 @@
                                 <td rowspan=2 class="align-middle">
                                     Container No.1
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail.indexOf('container_2') <= 0 }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('container_2') <= 0 }">
                                     <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
-                                        <input type="checkbox" class="custom-control-input" id="container_2" value="container_2" v-model="create_new_form.form_detail">
+                                        <input type="checkbox" class="custom-control-input" id="container_2" value="container_2" v-model="form_setting_modal.form_detail">
                                         <label class="custom-control-label" for="container_2"></label>
                                     </div>
                                     Container No.2
@@ -98,37 +102,37 @@
                                 <td rowspan=2 class="align-middle">
                                     Drayage Charge
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail.indexOf('gate_charge') <= 0 }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('gate_charge') <= 0 }">
                                     <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
-                                        <input type="checkbox" class="custom-control-input" id="gate_charge"  value="gate_charge" v-model="create_new_form.form_detail">
+                                        <input type="checkbox" class="custom-control-input" id="gate_charge"  value="gate_charge" v-model="form_setting_modal.form_detail">
                                         <label class="custom-control-label" for="gate_charge"></label>
                                     </div>
                                     Gate Charge
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail.indexOf('date_from') <= 0 }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('date_from') <= 0 }">
                                     <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
-                                        <input type="checkbox" class="custom-control-input" id="date_from"  value="date_from" v-model="create_new_form.form_detail">
+                                        <input type="checkbox" class="custom-control-input" id="date_from"  value="date_from" v-model="form_setting_modal.form_detail">
                                         <label class="custom-control-label" for="date_from"></label>
                                     </div>
                                     Date From
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail[2]!='remark' }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[2]!='2_remark' }">
                                     <div class="custom-control custom-radio" style="margin: auto; width:0%;">
-                                        <input type="radio" class="custom-control-input" id="remark"  value="remark" v-model="create_new_form.form_detail[2]">
+                                        <input type="radio" class="custom-control-input" id="remark"  value="2_remark" v-model="form_setting_modal.form_detail[2]">
                                         <label class="custom-control-label" for="remark"></label>
                                     </div>
                                     Remark
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail[2]!='job_no' }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[2]!='2_job_no' }">
                                     <div class="custom-control custom-radio" style="margin: auto; width:0%;">
-                                        <input type="radio" class="custom-control-input" id="job_no" value="job_no" v-model="create_new_form.form_detail[2]">
+                                        <input type="radio" class="custom-control-input" id="job_no" value="2_job_no" v-model="form_setting_modal.form_detail[2]">
                                         <label class="custom-control-label" for="job_no"></label>
                                     </div>
                                     <span class="text-nowrap" >Job No.</span>
                                 </td>
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': create_new_form.form_detail[2]!='truck' }">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[2]!='2_truck' }">
                                     <div class="custom-control custom-radio" style="margin: auto; width:0%;">
-                                        <input type="radio" class="custom-control-input" id="truck" value="truck" v-model="create_new_form.form_detail[2]">
+                                        <input type="radio" class="custom-control-input" id="truck" value="2_truck" v-model="form_setting_modal.form_detail[2]">
                                         <label class="custom-control-label" for="truck"></label>
                                     </div>
                                     TRUCK
@@ -147,7 +151,8 @@
                 </div>
                 <div class="modal-footer px-5 py-4">
                     <div class="text-right">
-                        <button class="btn btn-lg btn-primary">{{ button_label }}</button>
+                        <button v-if="form_action == 'add'" class="btn btn-lg btn-primary" @click="addForm">Create</button>
+                        <button v-else-if="form_action == 'edit'" class="btn btn-lg btn-primary" @click="editForm">Save</button>
                     </div>
                 </div>
             </div>

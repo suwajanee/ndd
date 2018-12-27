@@ -2,59 +2,124 @@ var summary_form_setting = new Vue( {
     
     el: '#summary-form-setting',
     data: {
+        input_required: false,
+
+        summary_forms: [],
 
         booking_field: {},
-        create_new_form: {
-            form_name: '',
-            form_type: 'ndd',
-            form_detail: ['0', 'none', 'remark', 'container_2', 'gate_charge'],
-        },
-
-        default_form: {
-            form_name: '',
-            form_type: 'ndd',
-            form_detail: ['0', 'none', 'remark', 'gate_charge'],
-        },
-
+        form_action: 'create',
         form_title: 'Create New Form',
-        button_label: 'Create',
+        form_id: '',
+        form_setting_modal: {
+            form_name: '',
+            form_detail: ['00', '1_none', '2_remark', '4_gate_charge'],
+        },
+        form_index: -1,
         
-        summary_form: [
-            {
-                form_name: 'Default',
-                form_type: 'ndd',
-                form_detail: ['0', 'ap_billing_no', 'remark', 'container_2', 'gate_charge']
-            },
-            {
-                form_name: 'default2',
-                form_type: 'ndd',
-                form_detail: ['3', 'input_field', 'truck', 'date_from']
-            },
-            {
-                form_name: 'default3',
-                form_type: 'ndd',
-                form_detail: ['2', 'diesel_rate', 'job_no', 'gate_charge']
-            },
-        ]
+        edit_form_name: '',
+        edit_form_detail: []
+        
+
     },
 
     methods: {
         reload() {
+            this.getForm()
             this.booking_field = booking_field_text
         },
 
-        setting_form(index) {
+        settingForm(index) {
             if(index >= 0){
-                this.create_new_form = this.summary_form[index]
-                this.button_label = 'Edit'
+                this.form_id = this.summary_forms[index].id
+                this.form_setting_modal.form_name = this.summary_forms[index].form_name
+                this.form_setting_modal.form_detail = Array.from(this.summary_forms[index].form_detail)
+
+                this.edit_form_name = this.form_setting_modal.form_name
+                this.edit_form_detail = Array.from(this.form_setting_modal.form_detail)
+
+                this.form_action = 'edit'
                 this.form_title = 'Edit Form'
+                this.form_index = index
             }
             else{
-                this.create_new_form = this.default_form
-                this.button_label = 'Create'
+                this.form_setting_modal = {
+                    form_name: '',
+                    form_detail: ['00', '1_none', '2_remark', 'gate_charge'],
+                }
+                this.form_action = 'add'
                 this.form_title = 'Create New Form'
+                this.form_index = -1
             }
-        }
+        },
+
+        getForm(){
+            api("/summary/api/get-form/").then((data) => {
+                this.summary_forms = data
+            })
+        },
+
+        addForm() {
+            this.input_required = false
+
+            if(this.form_setting_modal.form_name == ''){
+                this.input_required = true
+                return false;
+            }
+
+            var form_exist = this.summary_forms.find(form => 
+                form.form_name.replace(/\s/g, "").toLowerCase() == this.form_setting_modal.form_name.replace(/\s/g, "").toLowerCase() |
+                arrayEqual(form.form_detail, this.form_setting_modal.form_detail)
+            )
+
+            if(form_exist) {
+                alert("This form name is existing.")
+            }
+            else(
+                api("/summary/api/add-form/", "POST", {form: this.form_setting_modal}).then((data) => {
+                    $('#modalFormSetting').modal('hide')
+                    this.summary_forms = data
+                })
+            )
+        },
+
+        editForm() {
+            this.input_required = false
+
+            if( this.edit_form_name == this.form_setting_modal.form_name & arrayEqual(this.edit_form_detail, this.form_setting_modal.form_detail)){
+                $('#modalFormSetting').modal('hide');
+                return false
+            }
+
+            if(this.form_setting_modal.form_name == ''){
+                this.input_required = true
+                return false
+            }
+            var form_name_exist = this.summary_forms.find(form => 
+                form.form_name.replace(/\s/g, "").toLowerCase() == this.form_setting_modal.form_name.replace(/\s/g, "").toLowerCase()
+            )
+            var form_detail_exist = this.summary_forms.find(form => 
+                arrayEqual(form.form_detail, this.form_setting_modal.form_detail)
+            )
+
+            if((form_name_exist != null & this.edit_form_name != this.form_setting_modal.form_name) |
+                form_detail_exist != null & ! arrayEqual(this.edit_form_detail, this.form_setting_modal.form_detail)) {
+                alert("This form name is existing.")
+            }
+            else {
+                api("/summary/api/edit-form/", "POST", {form_id: this.form_id, form: this.form_setting_modal}).then((data) => {
+                    $('#modalFormSetting').modal('hide')
+                    this.summary_forms = data
+                })
+            }
+        },
+
+        deleteForm(id) {
+            if (confirm('Are you sure?')){
+                api("/summary/api/delete-form/", "POST", { form_id: id }).then((data) => {
+                    this.summary_forms = data
+                })
+            }
+        },
 
     }
 })

@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 from agent_transport.models import AgentTransport
@@ -18,7 +19,7 @@ class FormDetail(models.Model):
     form_name = models.CharField(max_length=50, null=True, blank=True)
     form_detail = ArrayField(
         models.CharField(max_length=15, null=True, blank=True),
-        size=4,
+        size=6,
     )
 
     def __str__(self):
@@ -31,7 +32,7 @@ class CustomerForm(models.Model):
     customer_title = models.CharField(max_length=50, null=True, blank=True)
 
     form = models.ForeignKey(FormDetail, on_delete=models.SET_NULL, null=True, blank=True)
-    optional = models.CharField(max_length=5, null=True, blank=True)
+    optional = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
         if self.sub_customer:
@@ -57,11 +58,15 @@ class SummaryWeek(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
     def __str__(self):
-        return self.year.name + " - WK. " + self.week
+        if self.year:
+            return self.year.name + " - WK. " + self.week
+        return "WK. " + self.week
 
 
 class SummaryCustomer(models.Model):
-    customer = models.ForeignKey(CustomerForm, on_delete=models.SET_NULL, null=True, blank=True)
+    customer_main = models.ForeignKey(Principal, on_delete=models.SET_NULL, null=True, blank=True)
+    customer_custom = models.ForeignKey(CustomerForm, on_delete=models.SET_NULL, null=True, blank=True)
+
     week = models.ForeignKey(SummaryWeek, on_delete=models.SET_NULL, null=True, blank=True)
 
     date_billing = models.DateField(blank=True, null=True)
@@ -69,9 +74,24 @@ class SummaryCustomer(models.Model):
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
-    def __str__(self):
-        return self.week.year.name + " - WK. " + self.week.week + " - " + self.customer.customer.name
+    @property
+    def customer(self):
+        if not self.customer_custom and not self.customer_main:
+            return
+        elif self.customer_custom:
+            return self.customer_custom
+        elif self.customer_main:
+            return self.customer_main
 
+
+    def __str__(self):
+        if self.week and self.customer_custom:
+            return self.week.year.name + " - WK. " + self.week.week + " - " + self.customer_custom.customer.name
+        elif self.week and self.customer_main:
+            return self.week.year.name + " - WK. " + self.week.week + " - " + self.customer_main.name
+        else:
+            return str(self.pk)
+            
 
 class Invoice(models.Model):
     invoice_no = models.CharField(max_length=15, null=True, blank=True)
