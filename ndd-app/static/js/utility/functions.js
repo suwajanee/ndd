@@ -82,3 +82,10 @@ const currencyCommas = (price) => {
 const arrayEqual = (arr1, arr2) => {
     return arr1.sort().toString() == arr2.sort().toString()
 } 
+
+const checkNull = (value) => {
+    if(value){
+        return value
+    }
+    return ''
+}

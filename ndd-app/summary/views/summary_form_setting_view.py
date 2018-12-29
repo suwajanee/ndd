@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import copy
 import json
 import re
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
 from django.http import JsonResponse
-from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerForm, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
+from ..models import FormDetail
 from ..serializers import FormDetailSerializer
 
 

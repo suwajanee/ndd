@@ -3,6 +3,7 @@ from django.conf.urls import url
 from .views import summary_page_view
 from .views import summary_year_view
 from .views import summary_form_setting_view
+from .views import summary_customer_setting_view
 
 
 urlpatterns = [
@@ -23,6 +24,12 @@ urlpatterns = [
     url(r'^api/add-form/$', summary_form_setting_view.api_add_summary_form, name='api-add-form'),
     url(r'^api/edit-form/$', summary_form_setting_view.api_edit_summary_form, name='api-edit-form'),
     url(r'^api/delete-form/$', summary_form_setting_view.api_delete_summary_form, name='api-delete-form'),
+
+    # Customer Setting
+    url(r'^api/get-customer-setting/$', summary_customer_setting_view.api_get_summary_customer_setting, name='api-get-customer-setting'),
+    url(r'^api/add-customer-setting/$', summary_customer_setting_view.api_add_summary_customer_setting, name='api-add-customer-setting'),
+    url(r'^api/edit-customer-setting/$', summary_customer_setting_view.api_edit_summary_customer_setting, name='api-edit-customer-setting'),
+    url(r'^api/delete-customer-setting/$', summary_customer_setting_view.api_delete_summary_customer_setting, name='api-delete-customer-setting'),
 
 
 
