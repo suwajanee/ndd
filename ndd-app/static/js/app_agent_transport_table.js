@@ -156,12 +156,12 @@ var agent_transport_table = new Vue( {
             this.$refs.printAgentTransportForm.submit()
         },
 
-        editData: function(agent_transport) {
+        editData(agent_transport) {
             if(this.edit_data.indexOf(agent_transport) === -1) {
                 this.edit_data.push(agent_transport)
             }
         },
-        saveEditAgentTransport: function() {
+        saveEditAgentTransport() {
             this.loading = true
             this.saving = true
             this.checked_agent_transports = []
@@ -204,7 +204,7 @@ var agent_transport_table = new Vue( {
             }
         },
 
-        deleteAgentTransports: function() {
+        deleteAgentTransports() {
             this.loading = true
             this.action = ''
             api("/agent-transport/api/delete-agent-transports/", "POST", { checked_agent_transports: this.checked_agent_transports, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {

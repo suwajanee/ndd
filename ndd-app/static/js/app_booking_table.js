@@ -167,7 +167,7 @@ var booking_table = new Vue( {
             this.$refs.printBookingForm.submit()
         },
 
-        editData: function(booking, index, field) {
+        editData(booking, index, field) {
             if(booking.yard_ndd == '1' & field == 10){
                 this.bookings[index].forward_tr = ''
                 this.bookings[index].backward_tr = ''
@@ -185,7 +185,7 @@ var booking_table = new Vue( {
                 this.edit_data.push(booking)
             }
         },
-        saveEditBooking: function() {
+        saveEditBooking() {
             this.loading = true
             this.saving = true
             this.checked_bookings = []
@@ -233,7 +233,7 @@ var booking_table = new Vue( {
             }
         },
 
-        deleteBookings: function() {
+        deleteBookings() {
             this.loading = true
             this.action = ''
             api("/booking/api/delete-bookings/", "POST", { checked_bookings: this.checked_bookings, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
@@ -309,7 +309,7 @@ var booking_table = new Vue( {
                 }
             }
         },
-        saveTimeBooking: function() {
+        saveTimeBooking() {
             this.loading = true
             this.saving = true
             if(this.edit_data.length) {
