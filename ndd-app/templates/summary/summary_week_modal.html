@@ -1,0 +1,92 @@
+<div class="modal fade" id="modalSummaryWeek" tabindex="-1" role="dialog" aria-hidden="true">    
+    {% verbatim %}
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" :class="{'alert-warning': summary_week_modal.status==0, 'alert-success': summary_week_modal.status==1}">
+                    <h2 v-if="modal_action == 'add'"  class="modal-title w-100 text-center">Add Week</h2>
+                    <h2 v-if="modal_action == 'edit'"  class="modal-title w-100 text-center">Edit Week Details</h2>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-5">
+                        <div class="input-group mb-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">WEEK</span>
+                            </div>
+                            <input class="form-control" 
+                                v-model="summary_week_modal.week" maxlength="2"
+                                :class="{'alert-danger': input_required == true & summary_week_modal.week == ''}"
+                            >
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">MONTH</span>
+                            </div>
+
+                            <select v-if="modal_action == 'edit'" class="custom-select" v-model="summary_week_modal.month">
+                                <option v-for="i in 12" :value="i">{{ month_list[i-1] }}</option>
+                            </select>
+                            <input v-else-if="modal_action == 'add'" class="form-control" 
+                                v-model="month_list[summary_week_modal.month-1]" maxlength="5" readonly
+                            >
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">YEAR</span>
+                            </div>
+
+                            <select v-if="modal_action == 'edit'" class="custom-select" v-model="summary_week_modal.year">
+                                <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                            </select>
+                            <input v-else-if="modal_action == 'add'" class="form-control" 
+                                v-model="summary_week_modal.year" readonly
+                            >
+
+                        </div>
+
+                    <div class="input-group mb-5 container col-md-10">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">DATE FROM</span>
+                        </div>
+                        <input type="date" class="form-control" 
+                            v-model="summary_week_modal.date_start"
+                            :class="{'alert-danger': input_required == true & summary_week_modal.date_start == ''}"
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text"> TO </span>
+                        </div>
+                        <input type="date" class="form-control" 
+                            v-model="summary_week_modal.date_end"
+                            :class="{'alert-danger': input_required == true & summary_week_modal.date_end == ''}"
+                        >      
+                    </div>
+
+                    <div class="input-group container col-md-6" :class="{'mb-5': modal_action == 'edit'}">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">DIESEL RATE</span>
+                        </div>
+                        <input class="form-control" 
+                            v-model="summary_week_modal.diesel_rate" maxlength="5"
+                        >
+                    </div>
+
+                    <div v-if="summary_week_modal.status" class="input-group container col-md-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">STATUS</span>
+                        </div>
+                        <select class="custom-select" v-model="summary_week_modal.status">
+                            <option value="0">Processing</option>
+                            <option value="1">Finished</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer px-5 py-3">
+                    <div class="text-right">
+                        <button v-if="modal_action == 'add'" class="btn btn-lg btn-primary" @click="addSummaryWeek">Add</button>
+                        <button v-else-if="modal_action == 'edit'" class="btn btn-lg btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endverbatim %}
+</div>

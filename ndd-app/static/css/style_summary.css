@@ -42,12 +42,25 @@ legend.summary_form_detail {
     border: 0.5px solid gray;
 }
 
-th.th-click:hover {
+.cell-click:hover {
     background: Gainsboro ;
     cursor: pointer;
 }
 
-th.th-click:active {
+.cell-click:active {
     background: LightGray;
     cursor: pointer;
+}
+
+td input[type="date"], td input:not([type]), input[type="text"] {
+    /* max-width: 120px; */
+    padding: 2px 4px;
+    font-size: 14px;
+}
+
+/* table.table-bordered > thead > tr > th{
+    border:1px solid blue;
+} */
+table.table-bordered > tbody > tr > td{
+    border:1px solid black;
 }

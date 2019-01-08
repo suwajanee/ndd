@@ -20,3 +20,11 @@ def summary_customer_setting_page(request):
 @login_required(login_url=reverse_lazy('login-page'))
 def summary_year_details_page(request, year):
     return render(request, 'summary/summary_year_details_page.html', {'nbar': 'summary-page', 'year': year})
+
+@login_required(login_url=reverse_lazy('login-page'))
+def summary_month_details_page(request, year, month):
+    return render(request, 'summary/summary_month_details_page.html', {'nbar': 'summary-page', 'year': year, 'month': month})
+
+@login_required(login_url=reverse_lazy('login-page'))
+def summary_week_details_page(request, year, month, week):
+    return render(request, 'summary/summary_week_details_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week})

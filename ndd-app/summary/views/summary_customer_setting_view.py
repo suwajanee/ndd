@@ -6,7 +6,7 @@ import re
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import CustomerForm,FormDetail
+from ..models import CustomerCustom,FormDetail
 from ..serializers import CustomerSettingSerializer
 from customer.models import Principal
 
@@ -18,7 +18,7 @@ def api_get_summary_customer_setting(request):
             req = json.loads( request.body.decode('utf-8') )
             customer_id = req['customer']
 
-            customer_setting = CustomerForm.objects.filter(customer__pk=customer_id)
+            customer_setting = CustomerCustom.objects.filter(customer__pk=customer_id)
             serializer = CustomerSettingSerializer(customer_setting, many=True)
             return JsonResponse(serializer.data, safe=False)
 
@@ -41,7 +41,7 @@ def api_add_summary_customer_setting(request):
             if form:
                 data['form'] = FormDetail.objects.get(pk=customer['form']['id'])
 
-            customer_setting = CustomerForm(**data)
+            customer_setting = CustomerCustom(**data)
             customer_setting.save()
 
             return api_get_summary_customer_setting(request)
@@ -57,7 +57,7 @@ def api_edit_summary_customer_setting(request):
             customer_title = customer['customer_title']
             form = customer['form']
 
-            customer_setting = CustomerForm.objects.get(pk=customer['id'])
+            customer_setting = CustomerCustom.objects.get(pk=customer['id'])
 
             if sub_customer:
                 customer_setting.sub_customer = re.sub(' +', ' ', customer['sub_customer'].strip())
@@ -87,7 +87,7 @@ def api_delete_summary_customer_setting(request):
             req = json.loads( request.body.decode('utf-8') )
             setting_id = req["setting_id"]
 
-            customer_setting = CustomerForm.objects.get(pk=setting_id)
+            customer_setting = CustomerCustom.objects.get(pk=setting_id)
             customer_setting.delete()
 
             return api_get_summary_customer_setting(request)

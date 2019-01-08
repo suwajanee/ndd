@@ -16,7 +16,7 @@ var summary_page = new Vue( {
             this.getSummaryYear()
         },
         getSummaryYear() {
-            api("/summary/api/get-summary-year/").then((data) => {
+            api("/summary/api/get-summary-year/", "POST", {}).then((data) => {
                 this.year_summary = data
             })
         },
@@ -33,7 +33,7 @@ var summary_page = new Vue( {
                 alert("This year is existing.")
             }
             else{
-                api("/summary/api/add-year/", "POST", { year: { name: this.add_year_input } }).then((data) => {
+                api("/summary/api/add-year/", "POST", { year: { year_label: this.add_year_input } }).then((data) => {
                     this.reload()
                     this.add_year_input = ''
                     $('#modalAddYear').modal('hide');  

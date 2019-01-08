@@ -9,10 +9,10 @@ from customer.models import Principal
 # Create your models here.
 
 class Year(models.Model):
-    name = models.CharField(max_length=4, null=True, blank=True)
+    year_label = models.CharField(max_length=4, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.year_label
 
 
 class FormDetail(models.Model):
@@ -26,13 +26,13 @@ class FormDetail(models.Model):
         return self.form_name
 
 
-class CustomerForm(models.Model):
+class CustomerCustom(models.Model):
     customer = models.ForeignKey(Principal, on_delete=models.CASCADE, related_name="customerforms")
     sub_customer = models.CharField(max_length=50, null=True, blank=True)
     customer_title = models.CharField(max_length=50, null=True, blank=True)
 
     form = models.ForeignKey(FormDetail, on_delete=models.SET_NULL, null=True, blank=True)
-    optional = models.CharField(max_length=10, null=True, blank=True)
+    option = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
         if self.sub_customer:
@@ -41,9 +41,8 @@ class CustomerForm(models.Model):
 
 
 STATUS_CHOICES = (
-    ('0', '-'),
-    ('1', 'Processing'),
-    ('2', 'Finished'),
+    ('0', 'Processing'),
+    ('1', 'Finished'),
 )
 class SummaryWeek(models.Model):
     week = models.CharField(max_length=2, null=True, blank=True)
@@ -53,19 +52,19 @@ class SummaryWeek(models.Model):
     date_start = models.DateField(blank=True, null=True)
     date_end = models.DateField(blank=True, null=True)
 
-    diesel_rate_of_week = models.CharField(max_length=5, null=True, blank=True)
+    diesel_rate = models.CharField(max_length=5, null=True, blank=True)
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
     def __str__(self):
         if self.year:
-            return self.year.name + " - WK. " + self.week
+            return self.year.year_label + " - WK. " + self.week
         return "WK. " + self.week
 
 
 class SummaryCustomer(models.Model):
     customer_main = models.ForeignKey(Principal, on_delete=models.SET_NULL, null=True, blank=True)
-    customer_custom = models.ForeignKey(CustomerForm, on_delete=models.SET_NULL, null=True, blank=True)
+    customer_custom = models.ForeignKey(CustomerCustom, on_delete=models.SET_NULL, null=True, blank=True)
 
     week = models.ForeignKey(SummaryWeek, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -73,6 +72,8 @@ class SummaryCustomer(models.Model):
     date_end = models.DateField(blank=True, null=True)
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
+
+    detail = models.CharField(max_length=100, null=True, blank=True, default='')
 
     @property
     def customer(self):
@@ -86,9 +87,9 @@ class SummaryCustomer(models.Model):
 
     def __str__(self):
         if self.week and self.customer_custom:
-            return self.week.year.name + " - WK. " + self.week.week + " - " + self.customer_custom.customer.name
+            return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_custom.sub_customer
         elif self.week and self.customer_main:
-            return self.week.year.name + " - WK. " + self.week.week + " - " + self.customer_main.name
+            return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_main.name
         else:
             return str(self.pk)
             
@@ -97,7 +98,10 @@ class Invoice(models.Model):
     invoice_no = models.CharField(max_length=15, null=True, blank=True)
     customer_week = models.ForeignKey(SummaryCustomer, on_delete=models.SET_NULL, null=True, blank=True)
 
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    drayage_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    gate_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    detail = JSONField(null=True, blank=True)
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
@@ -111,13 +115,18 @@ class InvoiceDetail(models.Model):
     work_normal = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, blank=True)
     work_agent_transport = models.ForeignKey(AgentTransport, on_delete=models.SET_NULL, null=True, blank=True)
 
+    drayage_charge = JSONField(null=True, blank=True)
+    gate_charge = JSONField(null=True, blank=True)
+
+    detail = JSONField(null=True, blank=True)
+
     @property
     def work(self):
         if not self.invoice:
             return
-        elif self.invoice.customer_week.customer.customer.work_type == 'normal' :
+        elif self.invoice.customer_week.customer_main.work_type == 'normal' :
             return self.work_normal
-        elif self.invoice.customer_week.customer.customer.work_type == 'agent-transport' :
+        elif self.invoice.customer_week.customer_main.work_type == 'agent-transport' :
             return self.work_agent_transport
 
     def __str__(self):

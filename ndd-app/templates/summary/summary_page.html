@@ -58,7 +58,7 @@
 
             <h4 class="card-header">{{ year.year }}</h4>
             <div class="card-body">
-                <h1 class="text-center">{{ currencyCommas(year.total) }}</h1>   
+                <h1 class="text-center">{{ year.total|currencyCommas }}</h1>   
             </div>
     {% endverbatim %}
 
@@ -82,6 +82,7 @@
 
 
 <script type="application/javascript" src="{% static 'js/app_summary_page.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 
     <script type="application/javascript">

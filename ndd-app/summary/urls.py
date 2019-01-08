@@ -4,6 +4,8 @@ from .views import summary_page_view
 from .views import summary_year_view
 from .views import summary_form_setting_view
 from .views import summary_customer_setting_view
+from .views import summary_week_view
+from .views import summary_month_view
 
 
 urlpatterns = [
@@ -11,6 +13,8 @@ urlpatterns = [
     url(r'^form-setting/$', summary_page_view.summary_form_setting_page, name='summary-form-setting-page'),
     url(r'^customer-setting/$', summary_page_view.summary_customer_setting_page, name='summary-customer-setting-page'),
     url(r'^(?P<year>\w+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
+    url(r'^(?P<year>\w+)/(?P<month>\w+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
+    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
 
 
     # Summary Year
@@ -30,6 +34,13 @@ urlpatterns = [
     url(r'^api/add-customer-setting/$', summary_customer_setting_view.api_add_summary_customer_setting, name='api-add-customer-setting'),
     url(r'^api/edit-customer-setting/$', summary_customer_setting_view.api_edit_summary_customer_setting, name='api-edit-customer-setting'),
     url(r'^api/delete-customer-setting/$', summary_customer_setting_view.api_delete_summary_customer_setting, name='api-delete-customer-setting'),
+
+    # Summary Month
+    url(r'^api/get-summary-month-details/$', summary_month_view.api_get_summary_month_details, name='api-get-summary-month-details'),
+    
+    # Summary Week
+    url(r'^api/get-summary-week-details/$', summary_week_view.api_get_summary_week_details, name='api-get-summary-week-details'),
+    url(r'^api/add-summary-week/$', summary_week_view.api_add_summary_week, name='api-add-summary-week'),
 
 
 
