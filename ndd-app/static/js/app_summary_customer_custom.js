@@ -1,6 +1,6 @@
-var summary_customer_setting = new Vue( {
+var summary_customer_custom = new Vue( {
     
-    el: '#summary-customer-setting',
+    el: '#summary-customer-custom',
     data: {
         search_principal: '',
 
@@ -12,7 +12,7 @@ var summary_customer_setting = new Vue( {
         summary_forms: [],
 
         form_action: 'add',
-        form_title: 'Customer Setting',
+        form_title: 'Customer Custom',
         edit_customer: '',
         customer_setting_modal: {
             customer: {
@@ -55,7 +55,7 @@ var summary_customer_setting = new Vue( {
         getDetails(principal) {
             this.principal_id = principal.id
             this.principal_name = principal.name
-            api("/summary/api/get-customer-setting/", "POST", {customer: principal.id}).then((data) => {
+            api("/summary/api/get-customer-custom/", "POST", {customer: principal.id}).then((data) => {
                 this.customer_details = data
             })
         },
@@ -67,7 +67,7 @@ var summary_customer_setting = new Vue( {
                 this.edit_customer = this.customer_setting_modal.sub_customer
 
                 this.form_action = 'edit'
-                this.form_title = 'Edit Customer Setting'
+                this.form_title = 'Edit Customer Custom'
             }
             else{
                 this.customer_setting_modal = {
@@ -80,7 +80,7 @@ var summary_customer_setting = new Vue( {
                     form: null,
                 }
                 this.form_action = 'add'
-                this.form_title = 'Customer Setting'
+                this.form_title = 'Customer Custom'
             }
         },
 
@@ -93,8 +93,8 @@ var summary_customer_setting = new Vue( {
                 alert("This setting is existing.")
             }
             else(
-                api("/summary/api/add-customer-setting/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
-                    $('#modalCustomerSetting').modal('hide')
+                api("/summary/api/add-customer-custom/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
+                    $('#modalCustomerCustom').modal('hide')
                     this.customer_details = data
                 })
             )
@@ -109,8 +109,8 @@ var summary_customer_setting = new Vue( {
                 alert("This setting is existing.")
             }
             else {
-                api("/summary/api/edit-customer-setting/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
-                    $('#modalCustomerSetting').modal('hide')
+                api("/summary/api/edit-customer-custom/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
+                    $('#modalCustomerCustom').modal('hide')
                     this.customer_details = data
                 })
             }
@@ -118,7 +118,7 @@ var summary_customer_setting = new Vue( {
 
         deleteCustomerSetting(customer_id, id) {
             if (confirm('Are you sure?')){
-                api("/summary/api/delete-customer-setting/", "POST", { customer: customer_id, setting_id: id }).then((data) => {
+                api("/summary/api/delete-customer-custom/", "POST", { customer: customer_id, setting_id: id }).then((data) => {
                     this.customer_details = data
                 })
             }

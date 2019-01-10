@@ -12,7 +12,7 @@ from customer.models import Principal
 
 
 @csrf_exempt
-def api_get_summary_customer_setting(request):
+def api_get_customer_custom(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
@@ -25,7 +25,7 @@ def api_get_summary_customer_setting(request):
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
-def api_add_summary_customer_setting(request):
+def api_add_customer_custom(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
@@ -44,11 +44,11 @@ def api_add_summary_customer_setting(request):
             customer_setting = CustomerCustom(**data)
             customer_setting.save()
 
-            return api_get_summary_customer_setting(request)
+            return api_get_customer_custom(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
-def api_edit_summary_customer_setting(request):
+def api_edit_customer_custom(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
@@ -76,12 +76,12 @@ def api_edit_summary_customer_setting(request):
 
             customer_setting.save()
 
-            return api_get_summary_customer_setting(request)
+            return api_get_customer_custom(request)
 
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
-def api_delete_summary_customer_setting(request):
+def api_delete_customer_custom(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
@@ -90,5 +90,5 @@ def api_delete_summary_customer_setting(request):
             customer_setting = CustomerCustom.objects.get(pk=setting_id)
             customer_setting.delete()
 
-            return api_get_summary_customer_setting(request)
+            return api_get_customer_custom(request)
     return JsonResponse('Error', safe=False)  

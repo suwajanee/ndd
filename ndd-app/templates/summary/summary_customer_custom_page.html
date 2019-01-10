@@ -13,11 +13,11 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb m-0 bg-white">
         <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Customer Setting</li>
+        <li class="breadcrumb-item active" aria-current="page">Customer Customer</li>
     </ol>
 </nav>
 
-<div id="summary-customer-setting" class="container" style="width: 75%;">
+<div id="summary-customer-custom" class="container" style="width: 75%;">
     {% verbatim %}
         <div class="input-group my-5">
             <div class="input-group-prepend">
@@ -43,7 +43,7 @@
         </div>
 
         <div class="w-100 text-center my-5">
-            <button class="btn btn-success btn-lg" :disabled="!principal_name" data-toggle="modal" data-target="#modalCustomerSetting" @click="settingForm">Add</button>
+            <button class="btn btn-success btn-lg" :disabled="!principal_name" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm">Add</button>
         </div>
 
 
@@ -56,7 +56,7 @@
                     <h3 v-else class="modal-title">{{ customer.customer.name }}</h3>
 
                     <div class="float-right p-0">
-                        <button class="btn btn-outline-warning my-2" data-toggle="modal" data-target="#modalCustomerSetting" @click="settingForm(index)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-outline-warning my-2" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm(index)"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-outline-danger my-2" @click="deleteCustomerSetting(customer.customer.id, customer.id)"><i class="fa fa-trash"></i></button> 
                     </div>
                 </div>
@@ -156,18 +156,18 @@
         </div>
     {% endverbatim %}
 
-    {% include 'summary/summary_customer_setting_modal.html' %}
+    {% include 'summary/summary_customer_custom_modal.html' %}
 
 </div>
 
-<script type="application/javascript" src="{% static 'js/app_summary_customer_setting.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/app_summary_customer_custom.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
 
     <script type="application/javascript">
 
         window.addEventListener("load", function() {   
-            summary_customer_setting.reload();
+            summary_customer_custom.reload();
         });
 
     </script>
