@@ -75,8 +75,18 @@
                     <td v-else class="text-center align-middle"></td>
 
 
-                    <td v-if="week.sub_customer" class="text-left align-middle cell-click">{{ week.sub_customer }}</td>
-                    <td v-else class="text-left align-middle cell-click">{{ week.customer }}</td>
+                    <td v-if="week.sub_customer" 
+                        class="text-left align-middle cell-click"
+                        :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                    >
+                        {{ week.sub_customer }}
+                    </td>
+                    <td v-else 
+                        class="text-left align-middle cell-click"
+                        :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                    >
+                        {{ week.customer }}
+                    </td>
 
  
                     <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>

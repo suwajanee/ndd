@@ -105,6 +105,7 @@ def api_get_summary_week_details(request):
                             data['date_billing'] = customer.date_billing
                             data['date_end'] = customer.date_end
                             data['detail'] = customer.detail
+                            data['status'] = customer.status
 
                             week_total = Invoice.objects.filter(Q(customer_week = customer)).annotate(sum_drayage_total=Sum('drayage_total'), sum_gate_total=Sum('gate_total')).values_list('sum_drayage_total', 'sum_gate_total')
                             if week_total:
