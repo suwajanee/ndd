@@ -17,15 +17,18 @@ var summary_form_setting = new Vue( {
         form_index: -1,
         
         edit_form_name: '',
-        edit_form_detail: []
-        
-
+        edit_form_detail: []    
     },
 
     methods: {
         reload() {
             this.getForm()
             this.booking_field = booking_field_text
+        },
+        getForm(){
+            api("/summary/api/get-form/").then((data) => {
+                this.summary_forms = data
+            })
         },
 
         settingForm(index) {
@@ -50,12 +53,6 @@ var summary_form_setting = new Vue( {
                 this.form_title = 'Create New Form'
                 this.form_index = -1
             }
-        },
-
-        getForm(){
-            api("/summary/api/get-form/").then((data) => {
-                this.summary_forms = data
-            })
         },
 
         addForm() {
@@ -120,6 +117,5 @@ var summary_form_setting = new Vue( {
                 })
             }
         },
-
     }
 })

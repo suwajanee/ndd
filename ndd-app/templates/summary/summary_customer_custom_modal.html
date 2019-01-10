@@ -28,11 +28,6 @@
                             <span class="input-group-text">TITLE</span>
                         </div>
                         <input class="form-control" v-model="customer_setting_modal.customer_title" maxlength="50">
-                        <!-- <input class="form-control" 
-                            v-model="form_setting_modal.form_name" maxlength="50" 
-                            :disabled="form_index==0"
-                            :class="{'alert-danger': input_required == true & form_setting_modal.form_name == ''}"
-                        > -->
                     </div>
 
                     <div class="input-group w-75 container">
@@ -45,84 +40,80 @@
                         </select>
                     </div>
 
-
                     <div v-if="customer_setting_modal.form">
-
                         <hr class="my-4">
-                        <!-- <fieldset class="summary_form_detail" v-if="customer.form"> -->
-                            <!-- <legend class="summary_form_detail">FORM - {{ customer.form.form_name }}</legend> -->
+
                         <div v-if="customer_setting_modal.form.form_detail[1]=='1_diesel_rate'" class="float-right mb-3">
-                                Diesel Rate : __________
-                            </div>
-                            <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
-                                JOB NO : __________
-                            </div>
-                            <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
-                                AP Billing No. __________
-                            </div>
-                            <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
-                                <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
-                            </div>
-                            <div v-else class="float-right mb-3">
-                            </div>
+                            Diesel Rate : __________
+                        </div>
+                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
+                            JOB NO : __________
+                        </div>
+                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
+                            AP Billing No. __________
+                        </div>
+                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
+                            <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
+                        </div>
+                        <div v-else class="float-right mb-3"></div>
     
-                            <table class="table table-bordered m-0" style="border-width:2px; font-size:14px;">
-                                <tr class="text-center bg-white">
-                                    <td rowspan=2 class="align-middle">
-                                        Customer Name
-                                    </td>
-                                    <td rowspan=2 class="align-middle">
-                                        {{ booking_field[customer_setting_modal.form.form_detail[0]] }}
-                                    </td>
-                                    <td colspan=2 class="align-middle">
-                                        Vessel/Truck Routing
-                                    </td>
-                                    
-                                    <td rowspan=2 class="align-middle">
-                                        Date
-                                    </td>
-                                    <td rowspan=2 class="align-middle">
-                                        Container No.1
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('container_2') > 0" class="align-middle">
-                                        Container No.2
-                                    </td>
-                                    <td rowspan=2 class="align-middle">
-                                        Size
-                                    </td>
-                                    <td rowspan=2 class="align-middle">
-                                        Drayage Charge
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
-                                        Gate Charge
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('date_from') > 0" class="align-middle">
-                                        Date From
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_remark'" class="align-middle">
-                                        Remark
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_job_no'" class="align-middle">
-                                        <span class="text-nowrap">Job No.</span>
-                                    </td>
-                                    <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_truck'" class="align-middle">
-                                        TRUCK
-                                    </td>
-                                </tr>
-                                <tr class="text-center">
-                                    <td class="align-middle">
-                                        From
-                                    </td>
-                                    <td class="align-middle">
-                                        To
-                                    </td>
-                                </tr>
-    
-                            </table>
-                            </div>
+                        <table class="table table-bordered m-0" style="border-width:2px; font-size:14px;">
+                            <tr class="text-center bg-white">
+                                <td rowspan=2 class="align-middle">
+                                    Customer Name
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    {{ booking_field[customer_setting_modal.form.form_detail[0]] }}
+                                </td>
 
+                                <td colspan=2 class="align-middle">
+                                    Vessel/Truck Routing
+                                </td>
+                                
+                                <td rowspan=2 class="align-middle">
+                                    Date
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Container No.1
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('container_2') > 0" class="align-middle">
+                                    Container No.2
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Size
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Drayage Charge
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+                                    Gate Charge
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('date_from') > 0" class="align-middle">
+                                    Date From
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_remark'" class="align-middle">
+                                    Remark
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_job_no'" class="align-middle">
+                                    <span class="text-nowrap">Job No.</span>
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_truck'" class="align-middle">
+                                    TRUCK
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="align-middle">
+                                    From
+                                </td>
+                                <td class="align-middle">
+                                    To
+                                </td>
+                            </tr>
+                        </table>
 
+                    </div>
                 </div>
+                
                 <div class="modal-footer px-5 py-3">
                     <div class="text-right">
                         <button v-if="form_action == 'add'" class="btn btn-lg btn-primary" @click="addCustomerSetting">Add</button>

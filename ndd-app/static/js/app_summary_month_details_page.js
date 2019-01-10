@@ -26,10 +26,6 @@ var summary_month_details = new Vue( {
         week_exist: false,
     },
 
-    computed: {
-
-    },
-
     methods: {
         reload(year, month) {
             this.year = this.summary_week_modal.year = year
@@ -100,10 +96,7 @@ var summary_month_details = new Vue( {
                     })
                 }
             })
-            
         },
-        
-
 
     }
 })

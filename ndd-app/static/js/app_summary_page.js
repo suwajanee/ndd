@@ -8,9 +8,6 @@ var summary_page = new Vue( {
         
     },
 
-    computed: {
-        
-    },
     methods: {
         reload() {
             this.getSummaryYear()
@@ -20,6 +17,7 @@ var summary_page = new Vue( {
                 this.year_summary = data
             })
         },
+
         addYear() {
             this.input_required = false
             if(this.add_year_input == ''){
@@ -40,7 +38,5 @@ var summary_page = new Vue( {
                 })
             }
         },
-
-
     }
 })

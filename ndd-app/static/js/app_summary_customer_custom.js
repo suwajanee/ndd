@@ -23,8 +23,8 @@ var summary_customer_custom = new Vue( {
             customer_title: '',
             form: null,
         },
-
     },
+
     computed: {
         filteredPrincipal() {
             if(this.search_principal === '') return this.principals
@@ -45,7 +45,6 @@ var summary_customer_custom = new Vue( {
                 this.principals = data
             })
         },
-
         getForms(){
             api("/summary/api/get-form/").then((data) => {
                 this.summary_forms = data
@@ -123,7 +122,6 @@ var summary_customer_custom = new Vue( {
                 })
             }
         },
-
 
     }
 })

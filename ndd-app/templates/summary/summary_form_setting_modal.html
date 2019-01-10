@@ -20,17 +20,6 @@
                         >
                     </div>
 
-                    <!-- <div class="mb-3">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="ndd_form" v-model="form_setting_modal.form_type" value="ndd">
-                            <label class="custom-control-label" for="ndd_form">NDD Form</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="other_form" v-model="form_setting_modal.form_type" value="other" disabled>
-                            <label class="custom-control-label" for="other_form">Other Form</label>
-                        </div> 
-                    </div> -->
-
                     <fieldset class="summary_form_detail">
                         <legend class="summary_form_detail">FORM DETAILS</legend>
 
@@ -80,9 +69,11 @@
                                         <label class="custom-control-label" for="job_no_booking">JOB NO/<br>BOOKING</label>
                                     </div>
                                 </td>
+
                                 <td colspan=2 class="align-middle">
                                     Vessel/Truck Routing
                                 </td>
+
                                 <td rowspan=2 class="align-middle">
                                     Date
                                 </td>
@@ -149,6 +140,7 @@
                         </table>
                     </fieldset>  
                 </div>
+                
                 <div class="modal-footer px-5 py-4">
                     <div class="text-right">
                         <button v-if="form_action == 'add'" class="btn btn-lg btn-primary" @click="addForm">Create</button>

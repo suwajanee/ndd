@@ -10,10 +10,6 @@ var summary_year_details = new Vue( {
         total_year: 0
     },
 
-    computed: {
-
-    },
-
     methods: {
         reload(year) {
             this.year = year
@@ -62,8 +58,6 @@ var summary_year_details = new Vue( {
         selectMonth(month){
             window.location.replace("/summary/" + this.year + "/" + month)
         }
-        
-
 
     }
 })

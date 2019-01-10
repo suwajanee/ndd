@@ -9,135 +9,122 @@
 
 {% block content %}
 
-<div id="summary-week-details" >
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb m-0 bg-white">
-        <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'summary-year-details-page' year=year %}">{{ year }}</a></li>
+    <div id="summary-week-details" >
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'summary-year-details-page' year=year %}">{{ year }}</a></li>
+                
+                <li class="breadcrumb-item">
+                    <a href="{% url 'summary-month-details-page' year=year month=month %}">
+                        {% verbatim %}
+                            {{ month_list[month-1] }}
+                        {% endverbatim %}
+                    </a>
+                </li>
+                
+                <li class="breadcrumb-item active" aria-current="page">
+                    WK. {{ week }}
+                    <span v-if="week_details.date_start">
+                        ( 
+                            {% verbatim %}
+                                {{ week_details.date_start|formatDate }} - {{ week_details.date_end|formatDate }}
+                            {% endverbatim %} 
+                        )
+                    </span>
+                </li>
+            </ol>
+        </nav>
+
+        {% verbatim %}
+            <div class="position-absolute" style="right:0px;">
+                <div class="row m-3">
+                    <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;</div>
+                    <button v-if="mode=='note'" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+                    <button v-else class="btn btn-outline-info" @click="mode='note'"><i class="fa fa-pencil"></i>&nbsp;Note</button>
+                </div>
+                <div class="row mx-3 float-right">
+                    <button v-if="mode=='note'" class="btn btn-outline-danger" @click="mode='show'"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
+                    <button v-else class="btn btn-outline-warning" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-info-circle"></i>&nbsp;Week</button>
+                </div>
+            </div>
+            <div class="row col-md-11">
+                <table class="table table-bordered">
+                    <thead class="text-center alert-dark">
+                        <th class="align-middle border-dark">No.</th>
+                        <th class="align-middle border-dark">Customer Name</th>
+                        <th class="align-middle border-dark">Drayage Charge</th>
+                        <th class="align-middle border-dark">Gate</th>
+                        <th class="align-middle border-dark">Other</th>
+                        <th class="align-middle border-dark">Total</th>
+                        <th class="align-middle border-dark">หัก ณที่จ่าย 1%</th>
+                        <th class="align-middle border-dark">รับเช็ค</th>
+                        <th class="align-middle border-dark alert-primary">วันที่วางบิล</th>
+                        <th class="align-middle border-dark alert-primary">วันครบกำหนด</th>
+                        <th class="align-middle border-dark">Note</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.detail}">
+                            <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
+                            <td v-else class="text-center align-middle"></td>
+
+                            <td v-if="week.sub_customer" 
+                                class="text-left align-middle cell-click"
+                                :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                            >
+                                {{ week.sub_customer }}
+                            </td>
+                            <td v-else 
+                                class="text-left align-middle cell-click"
+                                :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                            >
+                                {{ week.customer }}
+                            </td>
+
+                            <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ week.gate_total|currencyCommas }}</td>
+                            <td class="text-right align-middle"></td>
+                            <td class="text-right align-middle">{{ total_list[index]|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ withholding_list[index]|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ check_list[index]|currencyCommas }}</td>
+
+                            <td class="text-center align-middle" :class="{'alert-success': week.date_billing}">
+                                <input v-if="week.id && mode=='note'" type="date" class="form-control" v-model="customer_note[week.item-1].date_billing" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.date_billing|formatDate }}</template>
+                            </td>
+
+                            <td class="text-center align-middle">
+                                <input v-if="week.id && mode=='note'" type="date" class="form-control" v-model="customer_note[week.item-1].date_end" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.date_end|formatDate }}</template>
+                            </td>
+
+                            <td class="text-center align-middle" :class="{'bg-warning': week.detail}">
+                                <input v-if="week.id && mode=='note'" class="form-control" v-model="customer_note[week.item-1].detail" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.detail }}</template>
+                            </td>
+                        </tr>
+
+                        <tr class="text-right" >
+                            <td></td>
+                            <td class="text-center"><u><b>Total</b></u></td>
+                            <td v-for="total in sum_total" class="alert-primary"><b>{{ total|currencyCommas }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         
-        <li class="breadcrumb-item">
-            <a href="{% url 'summary-month-details-page' year=year month=month %}">
-                {% verbatim %}
-                    {{ month_list[month-1] }}
-                {% endverbatim %}
-            </a>
-        </li>
-        
-        <li class="breadcrumb-item active" aria-current="page">
-            WK. {{ week }}
-            <span v-if="week_details.date_start">
-                ( 
-                    {% verbatim %}
-                        {{ week_details.date_start|formatDate }} - {{ week_details.date_end|formatDate }}
-                    {% endverbatim %} 
-                )
-            </span>
-        </li>
+        {% endverbatim %}
 
+        {% include 'summary/summary_week_modal.html' %}
 
-    </ol>
-</nav>
-
-    {% verbatim %}
-    <div class="position-absolute" style="right:0px;">
-        <div class="row m-3">
-            <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;</div>
-            <button v-if="mode=='note'" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
-            <button v-else class="btn btn-outline-info" @click="mode='note'"><i class="fa fa-pencil"></i>&nbsp;Note</button>
-
-        </div>
-        <div class="row mx-3 float-right">
-            <button v-if="mode=='note'" class="btn btn-outline-danger" @click="mode='show'"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
-            <button v-else class="btn btn-outline-warning" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-info-circle"></i>&nbsp;Week</button>
-
-        </div>
     </div>
-    <div class="row col-md-11">
-        <table class="table table-bordered">
-            <thead class="text-center alert-dark">
-                <th class="align-middle border-dark">No.</th>
-                <th class="align-middle border-dark">Customer Name</th>
-                <th class="align-middle border-dark">Drayage Charge</th>
-                <th class="align-middle border-dark">Gate</th>
-                <th class="align-middle border-dark">Other</th>
-                <th class="align-middle border-dark">Total</th>
-                <th class="align-middle border-dark">หัก ณที่จ่าย 1%</th>
-                <th class="align-middle border-dark">รับเช็ค</th>
-                <th class="align-middle border-dark alert-primary">วันที่วางบิล</th>
-                <th class="align-middle border-dark alert-primary">วันครบกำหนด</th>
-                <th class="align-middle border-dark">Note</th>
-
-            </thead>
-            <tbody>
-                <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.detail}">
-
-                    <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
-                    <td v-else class="text-center align-middle"></td>
 
 
-                    <td v-if="week.sub_customer" 
-                        class="text-left align-middle cell-click"
-                        :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
-                    >
-                        {{ week.sub_customer }}
-                    </td>
-                    <td v-else 
-                        class="text-left align-middle cell-click"
-                        :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
-                    >
-                        {{ week.customer }}
-                    </td>
-
- 
-                    <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>
-                    <td class="text-right align-middle">{{ week.gate_total|currencyCommas }}</td>
-                    <td class="text-right align-middle"></td>
-                    <td class="text-right align-middle">{{ total_list[index]|currencyCommas }}</td>
-                    <td class="text-right align-middle">{{ withholding_list[index]|currencyCommas }}</td>
-                    <td class="text-right align-middle">{{ check_list[index]|currencyCommas }}</td>
-
-                    <td class="text-center align-middle" :class="{'alert-success': week.date_billing}">
-                        <input v-if="week.id && mode=='note'" type="date" class="form-control" v-model="customer_note[week.item-1].date_billing" @change="editData(customer_note[week.item-1])">
-                        <template v-else>{{ week.date_billing|formatDate }}</template>
-                    </td>
-
-                    <td class="text-center align-middle">
-                        <input v-if="week.id && mode=='note'" type="date" class="form-control" v-model="customer_note[week.item-1].date_end" @change="editData(customer_note[week.item-1])">
-                        <template v-else>{{ week.date_end|formatDate }}</template>
-                    </td>
-
-                    <td class="text-center align-middle" :class="{'bg-warning': week.detail}">
-                        <input v-if="week.id && mode=='note'" class="form-control" v-model="customer_note[week.item-1].detail" @change="editData(customer_note[week.item-1])">
-                        <template v-else>{{ week.detail }}</template>
-                    </td>
-
-                </tr>
-
-                <tr class="text-right" >
-                    <td></td>
-                    <td class="text-center"><u><b>Total</b></u></td>
-
-                    <td v-for="total in sum_total" class="alert-primary"><b>{{ total|currencyCommas }}</b></td>
-
-                </tr>
-
-            </tbody>
-        </table>
-        </div>
-
-        
-    {% endverbatim %}
-
-    {% include 'summary/summary_week_modal.html' %}
-
-</div>
-
-
-
-<script type="application/javascript" src="{% static 'js/app_summary_week_details_page.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_summary_week_details_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
 
     <script type="application/javascript">
 

@@ -10,18 +10,13 @@ var summary_week_details = new Vue( {
 
         week_details: {},
 
-        customer_note: [],
+        item: 0,
 
         summary_week_details: [],
         total_list: [],
         withholding_list: [],
         check_list: [],
         sum_total: [],
-
-        item: 0,
-
-        mode: 'show',
-
 
         input_required: false,
         modal_action: 'edit',
@@ -36,12 +31,10 @@ var summary_week_details = new Vue( {
             status: '',
         },
 
+        mode: 'show',
         saving: false,
+        customer_note: [],
         edit_data: [],
-    },
-
-    computed: {
-
     },
 
     methods: {
@@ -52,7 +45,6 @@ var summary_week_details = new Vue( {
             this.month_list = _month
             this.getSummaryWeekDetails(year, month, week)
             this.getYears()
-            
         },
         resetValue(){
             this.item = 0
@@ -129,14 +121,7 @@ var summary_week_details = new Vue( {
 
         },
 
-        
-
-        // selectWeek(week){
-        //     window.location.replace("/summary/" + this.year + "/" + this.month + "/" + week)
-        // },
-
         editWeekDetails() {
-            var res = false
             this.input_required = false
 
             if(this.summary_week_modal.week == '' || this.summary_week_modal.date_start == '' || this.summary_week_modal.date_end == ''){
@@ -156,10 +141,8 @@ var summary_week_details = new Vue( {
             }
             else {
                 this.saveEditWeek()
-
             }
         },
-
         saveEditWeek() {
             api("/summary/api/edit-summary-week/", "POST", { summary_week: this.summary_week_modal }).then((data) => {
                 $('#modalSummaryWeek').modal('hide')
@@ -174,7 +157,6 @@ var summary_week_details = new Vue( {
                 this.edit_data.push(customer_data)
             }
         },
-
         saveEditCustomerDetail() {
             if(this.edit_data.length){
                 this.saving = true
@@ -185,7 +167,5 @@ var summary_week_details = new Vue( {
             }
         },
         
-
-
     }
 })

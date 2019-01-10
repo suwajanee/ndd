@@ -9,160 +9,155 @@
 
 {% block content %}
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb m-0 bg-white">
+            <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Customer Customer</li>
+        </ol>
+    </nav>
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb m-0 bg-white">
-        <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Customer Customer</li>
-    </ol>
-</nav>
-
-<div id="summary-customer-custom" class="container" style="width: 75%;">
-    {% verbatim %}
-        <div class="input-group my-5">
-            <div class="input-group-prepend">
-                <span class="input-group-text">CUSTOMER</span>
-            </div>
-            <button v-if="principal_name" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ principal_name }}
-            </button>
-            <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                --------
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-right w-100">                    
-                <div class="dropdown-item">
-                    <input class="form-control" v-model="search_principal" placeholder="search">
+    <div id="summary-customer-custom" class="container" style="width: 75%;">
+        {% verbatim %}
+            <div class="input-group my-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">CUSTOMER</span>
                 </div>
-                <div class="dropdown-divider"></div>
-                <div class="options-list">
-                    <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getDetails(principal)">{{ principal.name }}</button>
-                </div>
-            </div>
-            
-        </div>
+                <button v-if="principal_name" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ principal_name }}
+                </button>
+                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    --------
+                </button>
 
-        <div class="w-100 text-center my-5">
-            <button class="btn btn-success btn-lg" :disabled="!principal_name" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm">Add</button>
-        </div>
-
-
-        <div v-for="(customer, index) in customer_details" class="modal-dialog" role="document" style="min-width: 100%;">
-            <div class="modal-content">
-                <div class="modal-header px-5">
-
-                    <h3 v-if="customer.customer_title" class="modal-title">{{ customer.customer_title }}</h3>
-                    <h3 v-else-if="customer.sub_customer" class="modal-title">{{ customer.sub_customer }}</h3>
-                    <h3 v-else class="modal-title">{{ customer.customer.name }}</h3>
-
-                    <div class="float-right p-0">
-                        <button class="btn btn-outline-warning my-2" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm(index)"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-outline-danger my-2" @click="deleteCustomerSetting(customer.customer.id, customer.id)"><i class="fa fa-trash"></i></button> 
+                <div class="dropdown-menu dropdown-menu-right w-100">                    
+                    <div class="dropdown-item">
+                        <input class="form-control" v-model="search_principal" placeholder="search">
                     </div>
-                </div>
-                <div class="modal-body px-5">
-                    <table class="table table-borderless w-75">
-                        <tr v-if="customer.sub_customer">
-                            <td class="text-right"><b>Sub Customer :</b></td>
-                            <td class="w-75">{{ customer.sub_customer }}</td>
-                        </tr>
-                        <tr v-if="customer.customer_title">
-                            <td class="text-right"><b>Customer Title :</b></td>
-                            <td class="w-75">{{ customer.customer_title }}</td>
-                        </tr>
-                        <tr v-if="customer.form">
-                            <td class="text-right"><b>Form :</b></td>
-                            <td class="w-75">{{ customer.form.form_name }}</td>
-                        </tr>
+                    <div class="dropdown-divider"></div>
+                    <div class="options-list">
+                        <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getDetails(principal)">{{ principal.name }}</button>
+                    </div>
+                </div> 
+            </div>
 
-                    </table>
-                    <div v-if="customer.form">
+            <div class="w-100 text-center my-5">
+                <button class="btn btn-success btn-lg" :disabled="!principal_name" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm">Add</button>
+            </div>
 
-                    <hr>
-                    <!-- <fieldset class="summary_form_detail" v-if="customer.form"> -->
-                        <!-- <legend class="summary_form_detail">FORM - {{ customer.form.form_name }}</legend> -->
-                    <div v-if="customer.form.form_detail[1]=='1_diesel_rate'" class="float-right mb-3">
-                            Diesel Rate : __________
-                        </div>
-                        <div v-else-if="customer.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
-                            JOB NO : __________
-                        </div>
-                        <div v-else-if="customer.form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
-                            AP Billing No. __________
-                        </div>
-                        <div v-else-if="customer.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
-                            <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
-                        </div>
-                        <div v-else class="float-right mb-3">
-                        </div>
+            <div v-for="(customer, index) in customer_details" class="modal-dialog" role="document" style="min-width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header px-5">
 
-                        <table class="table table-bordered" style="border-width:2px; font-size:14px;">
-                            <tr class="text-center bg-white">
-                                <td rowspan=2 class="align-middle">
-                                    Customer Name
-                                </td>
-                                <td rowspan=2 class="align-middle">
-                                    {{ booking_field[customer.form.form_detail[0]] }}
-                                </td>
-                                <td colspan=2 class="align-middle">
-                                    Vessel/Truck Routing
-                                </td>
-                                
-                                <td rowspan=2 class="align-middle">
-                                    Date
-                                </td>
-                                <td rowspan=2 class="align-middle">
-                                    Container No.1
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail.indexOf('container_2') > 0" class="align-middle">
-                                    Container No.2
-                                </td>
-                                <td rowspan=2 class="align-middle">
-                                    Size
-                                </td>
-                                <td rowspan=2 class="align-middle">
-                                    Drayage Charge
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
-                                    Gate Charge
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail.indexOf('date_from') > 0" class="align-middle">
-                                    Date From
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail[2]=='2_remark'" class="align-middle">
-                                    Remark
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail[2]=='2_job_no'" class="align-middle">
-                                    <span class="text-nowrap">Job No.</span>
-                                </td>
-                                <td rowspan=2 v-if="customer.form.form_detail[2]=='2_truck'" class="align-middle">
-                                    TRUCK
-                                </td>
+                        <h3 v-if="customer.customer_title" class="modal-title">{{ customer.customer_title }}</h3>
+                        <h3 v-else-if="customer.sub_customer" class="modal-title">{{ customer.sub_customer }}</h3>
+                        <h3 v-else class="modal-title">{{ customer.customer.name }}</h3>
+
+                        <div class="float-right p-0">
+                            <button class="btn btn-outline-warning my-2" data-toggle="modal" data-target="#modalCustomerCustom" @click="settingForm(index)"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-outline-danger my-2" @click="deleteCustomerSetting(customer.customer.id, customer.id)"><i class="fa fa-trash"></i></button> 
+                        </div>
+                    </div>
+                    <div class="modal-body px-5">
+                        <table class="table table-borderless w-75">
+                            <tr v-if="customer.sub_customer">
+                                <td class="text-right"><b>Sub Customer :</b></td>
+                                <td class="w-75">{{ customer.sub_customer }}</td>
                             </tr>
-                            <tr class="text-center">
-                                <td class="align-middle">
-                                    From
-                                </td>
-                                <td class="align-middle">
-                                    To
-                                </td>
+                            <tr v-if="customer.customer_title">
+                                <td class="text-right"><b>Customer Title :</b></td>
+                                <td class="w-75">{{ customer.customer_title }}</td>
+                            </tr>
+                            <tr v-if="customer.form">
+                                <td class="text-right"><b>Form :</b></td>
+                                <td class="w-75">{{ customer.form.form_name }}</td>
                             </tr>
 
                         </table>
+                        <div v-if="customer.form">
+
+                            <hr>
+
+                            <div v-if="customer.form.form_detail[1]=='1_diesel_rate'" class="float-right mb-3">
+                                Diesel Rate : __________
+                            </div>
+                            <div v-else-if="customer.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
+                                JOB NO : __________
+                            </div>
+                            <div v-else-if="customer.form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
+                                AP Billing No. __________
+                            </div>
+                            <div v-else-if="customer.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
+                                <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
+                            </div>
+                            <div v-else class="float-right mb-3"></div>
+
+                            <table class="table table-bordered" style="border-width:2px; font-size:14px;">
+                                <tr class="text-center bg-white">
+                                    <td rowspan=2 class="align-middle">
+                                        Customer Name
+                                    </td>
+                                    <td rowspan=2 class="align-middle">
+                                        {{ booking_field[customer.form.form_detail[0]] }}
+                                    </td>
+
+                                    <td colspan=2 class="align-middle">
+                                        Vessel/Truck Routing
+                                    </td>
+                                    
+                                    <td rowspan=2 class="align-middle">
+                                        Date
+                                    </td>
+                                    <td rowspan=2 class="align-middle">
+                                        Container No.1
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail.indexOf('container_2') > 0" class="align-middle">
+                                        Container No.2
+                                    </td>
+                                    <td rowspan=2 class="align-middle">
+                                        Size
+                                    </td>
+                                    <td rowspan=2 class="align-middle">
+                                        Drayage Charge
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+                                        Gate Charge
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail.indexOf('date_from') > 0" class="align-middle">
+                                        Date From
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail[2]=='2_remark'" class="align-middle">
+                                        Remark
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail[2]=='2_job_no'" class="align-middle">
+                                        <span class="text-nowrap">Job No.</span>
+                                    </td>
+                                    <td rowspan=2 v-if="customer.form.form_detail[2]=='2_truck'" class="align-middle">
+                                        TRUCK
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td class="align-middle">
+                                        From
+                                    </td>
+                                    <td class="align-middle">
+                                        To
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                    <!-- </fieldset> -->
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endverbatim %}
+        {% endverbatim %}
 
-    {% include 'summary/summary_customer_custom_modal.html' %}
+        {% include 'summary/summary_customer_custom_modal.html' %}
 
-</div>
+    </div>
 
-<script type="application/javascript" src="{% static 'js/app_summary_customer_custom.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    
+    <script type="application/javascript" src="{% static 'js/app_summary_customer_custom.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
 
     <script type="application/javascript">
 
@@ -171,6 +166,5 @@
         });
 
     </script>
-
 
 {% endblock %}
