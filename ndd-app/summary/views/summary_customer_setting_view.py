@@ -70,7 +70,7 @@ def api_edit_summary_customer_setting(request):
                 customer_setting.customer_title = ''
 
             if form:
-                customer_setting.form = FormDetail.objects.get(pk=customer['form']['id'])
+                customer_setting.form = FormDetail.objects.get(pk=form['id'])
             else:
                 customer_setting.form = None
 

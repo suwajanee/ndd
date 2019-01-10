@@ -23,21 +23,22 @@
 
 
     {% verbatim %}
-    <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek">Add Week</button>
-        <table class="table table-bordered table-light table-hover w-75 container">
+    <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-plus-circle"></i>&nbsp;Week</button>
+    <div class="row col-md-11">
+    <table class="table table-bordered table-hover">
             <thead class="text-center">
                 <th class="align-middle border-dark">Customer Name</th>
                 
                 <th v-if="! weeks.length" class="border-dark"></th>
                 <th v-else v-for="(week, index) in weeks" class="cell-click align-middle border-dark"
-                    :class="{'alert-warning': status[index]==0, 'alert-success': status[index]==1}" @click="selectWeek(week.week)"
+                    :class="{'alert-warning': week.status==0, 'alert-success': week.status==1}" @click="selectWeek(week.week)"
                 >
                     WK. {{ week.week }} <br> ( {{ week.date_start|formatDate }} - {{ week.date_end|formatDate }} )
                 </th>
                 
 
                 <th class="align-middle border-dark"><u>Total</u></th>
-                <th class="border-dark"></th>
+                <!-- <th class="border-dark"></th> -->
             </thead>
             <tbody>
                 <tr v-for="(month_detail, index) in summary_month_details" class="text-right" :style="'background:'+ month_detail.color">
@@ -63,6 +64,7 @@
 
             </tbody>
         </table>
+        </div>
 
         
     {% endverbatim %}

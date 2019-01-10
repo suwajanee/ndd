@@ -38,16 +38,15 @@ def api_edit_summary_form(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
-            form_id = req['form_id']
             data = req['form']
+            data['id'] = req['form_id']
 
-            form = FormDetail.objects.get(pk=form_id)
-            form.form_name = re.sub(' +', ' ', data['form_name'].strip())
-            form.form_detail = data['form_detail']
-            form.save()
+            data['form_name'] = re.sub(' +', ' ', data['form_name'].strip())
+
+            form_setting = FormDetail(**data)
+            form_setting.save()
 
             return api_get_summary_form(request)
-
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

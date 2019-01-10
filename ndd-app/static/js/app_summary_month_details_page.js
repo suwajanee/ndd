@@ -5,7 +5,6 @@ var summary_month_details = new Vue( {
         year: '',
         month: '',
         month_list: [],
-        year_list: [],
 
         weeks: [],
 
@@ -23,7 +22,8 @@ var summary_month_details = new Vue( {
             date_start: '',
             date_end: '',
             diesel_rate: ''
-        }
+        },
+        week_exist: false,
     },
 
     computed: {
@@ -36,7 +36,6 @@ var summary_month_details = new Vue( {
             this.month = this.summary_week_modal.month = month
             this.month_list = _month
             this.getSummaryMonthDetails(year, month)
-            this.getYears()   
         },
         getSummaryMonthDetails(year, month) {
             api("/summary/api/get-summary-month-details/", "POST", { year: year, month: month }).then((data) => {
@@ -51,11 +50,6 @@ var summary_month_details = new Vue( {
                 this.totalCustomer()
                 this.totalMonth()
                 
-            })
-        },
-        getYears() {
-            api("/summary/api/get-summary-year/").then((data) => {
-                this.year_list = data
             })
         },
 
@@ -88,7 +82,6 @@ var summary_month_details = new Vue( {
         },
 
         addSummaryWeek() {
-
             this.input_required = false
 
             if(this.summary_week_modal.week == '' || this.summary_week_modal.date_start == '' || this.summary_week_modal.date_end == ''){
@@ -96,19 +89,18 @@ var summary_month_details = new Vue( {
                 return false;
             }
 
-            if(this.weeks){
-                var week_exist = this.weeks.includes(this.summary_week_modal.week)
-            }
+            api("/summary/api/check-week-exist/", "POST", { year: this.summary_week_modal.year, week: this.summary_week_modal.week }).then((data) => {
+                if(data) {
+                    alert("This week is existing.")
+                }
+                else {
+                    api("/summary/api/add-summary-week/", "POST", { summary_week: this.summary_week_modal }).then((data) => {
+                        $('#modalSummaryWeek').modal('hide')
+                        this.getSummaryMonthDetails(this.year, this.month)                    
+                    })
+                }
+            })
             
-            if(week_exist) {
-                alert("This week is existing.")
-            }
-            else {
-                api("/summary/api/add-summary-week/", "POST", { summary_week: this.summary_week_modal }).then((data) => {
-                    $('#modalSummaryWeek').modal('hide')
-                    this.getSummaryMonthDetails(this.year, this.month)                    
-                })
-            }
         },
         
 

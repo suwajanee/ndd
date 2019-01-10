@@ -19,12 +19,12 @@
 
 <div id="summary-year-details" >
     {% verbatim %}
-        <table class="table table-bordered table-light table-hover">
+        <table class="table table-bordered table-hover">
             <thead class="text-center">
                 <th class="border-dark">Customer Name</th>
                 <th v-for="i in 12" class="cell-click border-dark" @click="selectMonth(i)">{{ month[i-1] }}</th>
                 <th class="border-dark"><u>Total</u></th>
-                <th class="border-dark"></th>
+                <!-- <th class="border-dark"></th> -->
             </thead>
             <tbody>
                 <tr v-for="(year_detail, index) in summary_year_details" class="text-right" :style="'background:'+ year_detail.color">
