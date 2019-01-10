@@ -1,5 +1,5 @@
 Vue.filter('formatDate', function(value) {
-    if(value == null){
+    if(value == null || value == ''){
         return 
     }
     return dateFormat(value)
