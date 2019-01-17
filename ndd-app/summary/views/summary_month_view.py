@@ -5,11 +5,11 @@ import json
 import re
 
 from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
+from ..models import Year, CustomerCustom, SummaryWeek, Invoice
 from customer.models import Principal
 from ..serializers import SummaryWeekSerializer
 
@@ -23,7 +23,6 @@ def api_get_summary_month_details(request):
             month = req['month']
 
             details = {}
-            # weeks = []
 
             year_existing = Year.objects.filter(year_label=year)
             if not year_existing or int(month) not in range(1,13) :
@@ -34,11 +33,8 @@ def api_get_summary_month_details(request):
             color_index = 0
 
             customers = Principal.objects.all().order_by('name')
-            # week_details = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(month=month)).order_by('week').values_list('week', 'date_start', 'date_end', 'status')
-            # if week_details:
-            #     weeks, details['date_start'], details['date_end'], details['status'] = zip(*week_details)
-            #     details['weeks'] = weeks
 
+            # get weeks data
             week_details = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(month=month)).order_by('week')
             week_serializer = SummaryWeekSerializer(week_details, many=True)
             weeks = details['weeks'] = week_serializer.data

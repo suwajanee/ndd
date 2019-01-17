@@ -28,3 +28,8 @@ def summary_month_details_page(request, year, month):
 @login_required(login_url=reverse_lazy('login-page'))
 def summary_week_details_page(request, year, month, week):
     return render(request, 'summary/summary_week_details_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week})
+
+@login_required(login_url=reverse_lazy('login-page'))
+def summary_invoice_page(request, year, month, week, customer):
+    customer = customer.split('__')
+    return render(request, 'summary/summary_invoice_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week, 'customer': customer})

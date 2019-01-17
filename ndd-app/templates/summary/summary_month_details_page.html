@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    <div id="summary-month-details" >
+    <div id="summary-breadcrumb" >
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
                 <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
@@ -20,7 +20,8 @@
 
             </ol>
         </nav>
-
+    </div>
+    <div id="summary-month-details" >
         {% verbatim %}
             <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-plus-circle"></i>&nbsp;Week</button>
             <div class="row col-md-11">
@@ -77,6 +78,7 @@
 
         window.addEventListener("load", function() {   
             summary_month_details.reload({{ year }}, {{ month }});
+            summary_breadcrumb.reload({{ month }});
         });
 
     </script>

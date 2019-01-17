@@ -2,14 +2,13 @@
 
 import copy
 import json
-import re
 
 from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
+from ..models import Year, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice
 from customer.models import Principal
 from ..serializers import SummaryWeekSerializer
 
@@ -77,10 +76,12 @@ def api_get_summary_week_details(request):
                 return JsonResponse('Error', safe=False)
 
             summary_week_details = []
-            color_list = ['#e0ffff', '#cefdce', '#ffffff']
-            color_index = 0
+            # color_list = ['#e0ffff', '#cefdce', '#ffffff']
+            # color_index = 0
 
             customers = Principal.objects.all().order_by('name')
+
+            # get week data
             week_detail = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(week=week))
             week_serializer = SummaryWeekSerializer(week_detail, many=True)
             details['week'] = week_serializer.data
@@ -89,8 +90,8 @@ def api_get_summary_week_details(request):
                 data = {}
                 total = []
                 data['customer'] = customer.name
-                data['color'] = color_list[color_index % 3]
-                color_index += 1
+                # data['color'] = color_list[color_index % 3]
+                # color_index += 1
                 sub_customers = CustomerCustom.objects.filter(Q(customer__name=customer.name)).order_by('customer__name','sub_customer')
                 if sub_customers:
                     customer_total = 0

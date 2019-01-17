@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import CustomerCustom,FormDetail
-from ..serializers import CustomerSettingSerializer
+from ..serializers import CustomerCustomSerializer
 from customer.models import Principal
 
 
@@ -19,7 +19,7 @@ def api_get_customer_custom(request):
             customer_id = req['customer']
 
             customer_setting = CustomerCustom.objects.filter(customer__pk=customer_id)
-            serializer = CustomerSettingSerializer(customer_setting, many=True)
+            serializer = CustomerCustomSerializer(customer_setting, many=True)
             return JsonResponse(serializer.data, safe=False)
 
     return JsonResponse('Error', safe=False)

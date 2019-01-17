@@ -166,6 +166,10 @@ var summary_week_details = new Vue( {
                 })
             }
         },
+
+        selectCustomer(customer){
+            window.location.replace("/summary/" + this.year + "/" + this.month + "/" + this.week + "/" + customer)
+        },
         
     }
 })

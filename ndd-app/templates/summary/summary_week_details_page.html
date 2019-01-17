@@ -53,14 +53,14 @@
                     <thead class="text-center alert-dark">
                         <th class="align-middle border-dark">No.</th>
                         <th class="align-middle border-dark">Customer Name</th>
-                        <th class="align-middle border-dark">Drayage Charge</th>
-                        <th class="align-middle border-dark">Gate</th>
-                        <th class="align-middle border-dark">Other</th>
-                        <th class="align-middle border-dark">Total</th>
-                        <th class="align-middle border-dark">หัก ณที่จ่าย 1%</th>
-                        <th class="align-middle border-dark">รับเช็ค</th>
-                        <th class="align-middle border-dark alert-primary">วันที่วางบิล</th>
-                        <th class="align-middle border-dark alert-primary">วันครบกำหนด</th>
+                        <th class="align-middle border-dark width-9">Drayage Charge</th>
+                        <th class="align-middle border-dark width-9">Gate</th>
+                        <th class="align-middle border-dark width-9">Other</th>
+                        <th class="align-middle border-dark width-9">Total</th>
+                        <th class="align-middle border-dark width-9">หัก ณที่จ่าย 1%</th>
+                        <th class="align-middle border-dark width-9">รับเช็ค</th>
+                        <th class="align-middle border-dark alert-primary width-9">วันที่วางบิล</th>
+                        <th class="align-middle border-dark alert-primary width-9">วันครบกำหนด</th>
                         <th class="align-middle border-dark">Note</th>
                     </thead>
                     <tbody>
@@ -71,12 +71,14 @@
                             <td v-if="week.sub_customer" 
                                 class="text-left align-middle cell-click"
                                 :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                                @click="selectCustomer(week.customer + '__' + week.sub_customer)"
                             >
                                 {{ week.sub_customer }}
                             </td>
                             <td v-else 
                                 class="text-left align-middle cell-click"
                                 :class="{'alert-success': week.status == '1', 'alert-warning': week.status == '0' }"
+                                @click="selectCustomer(week.customer + '__')"
                             >
                                 {{ week.customer }}
                             </td>

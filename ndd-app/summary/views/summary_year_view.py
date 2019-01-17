@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 
-# from datetime import datetime
 import copy
 import json
-import re
 
 from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
+from ..models import Year, CustomerCustom, SummaryWeek, Invoice
 from customer.models import Principal
 from ..serializers import YearSerializer
-
-# from customer.models import Principal, Shipper
 
 
 @csrf_exempt
