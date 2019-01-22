@@ -31,7 +31,7 @@ var summary_week_details = new Vue( {
             status: '',
         },
 
-        mode: 'show',
+        mode: 'table',
         saving: false,
         customer_note: [],
         edit_data: [],
@@ -61,7 +61,7 @@ var summary_week_details = new Vue( {
                     return false
                 }
                 this.summary_week_details = data.summary_week_details
-                this.week_details = data.week[0]
+                this.week_details = data.week
                 this.summary_week_modal.id = this.week_details.id
                 this.summary_week_modal.date_start = this.week_details.date_start
                 this.summary_week_modal.date_end = this.week_details.date_end
@@ -117,7 +117,7 @@ var summary_week_details = new Vue( {
                 this.withholding_list.push(parseFloat(withholding))
                 this.check_list.push(parseFloat(check))
             }
-            this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list), sumArray(this.check_list)]
+            this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list).toFixed(2), sumArray(this.check_list).toFixed(2)]
 
         },
 

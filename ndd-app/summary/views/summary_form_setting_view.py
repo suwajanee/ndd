@@ -11,6 +11,15 @@ from ..serializers import FormDetailSerializer
 
 
 @csrf_exempt
+def api_get_form_default(request):
+    if request.user.is_authenticated:
+        forms = FormDetail.objects.all().order_by('pk').first()
+        serializer = FormDetailSerializer(forms, many=False)
+        return JsonResponse(serializer.data, safe=False)
+
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
 def api_get_summary_form(request):
     if request.user.is_authenticated:
         forms = FormDetail.objects.all().order_by('pk')
