@@ -108,6 +108,14 @@
                                     </div>
                                     Date From
                                 </td>
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('agent') <= 0 }">
+                                    <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
+                                        <input type="checkbox" class="custom-control-input" id="agent"  value="agent" v-model="form_setting_modal.form_detail">
+                                        <label class="custom-control-label" for="agent"></label>
+                                    </div>
+                                    Agent
+                                </td>
+
                                 <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[2]!='2_remark' }">
                                     <div class="custom-control custom-radio" style="margin: auto; width:0%;">
                                         <input type="radio" class="custom-control-input" id="remark"  value="2_remark" v-model="form_setting_modal.form_detail[2]">

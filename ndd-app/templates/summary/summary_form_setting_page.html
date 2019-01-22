@@ -79,13 +79,17 @@
                                 <td rowspan=2 v-if="form.form_detail.indexOf('date_from') > 0" class="align-middle">
                                     Date From
                                 </td>
+                                <td rowspan=2 v-if="form.form_detail.indexOf('agent') > 0" class="align-middle">
+                                    Agent
+                                </td>
+
                                 <td rowspan=2 v-if="form.form_detail[2]=='2_remark'" class="align-middle">
                                     Remark
                                 </td>
-                                <td rowspan=2 v-if="form.form_detail[2]=='2_job_no'" class="align-middle">
+                                <td rowspan=2 v-else-if="form.form_detail[2]=='2_job_no'" class="align-middle">
                                     <span class="text-nowrap">Job No.</span>
                                 </td>
-                                <td rowspan=2 v-if="form.form_detail[2]=='2_truck'" class="align-middle">
+                                <td rowspan=2 v-else-if="form.form_detail[2]=='2_truck'" class="align-middle">
                                     TRUCK
                                 </td>
                             </tr>

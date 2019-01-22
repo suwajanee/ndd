@@ -19,7 +19,7 @@ class FormDetail(models.Model):
     form_name = models.CharField(max_length=50, null=True, blank=True)
     form_detail = ArrayField(
         models.CharField(max_length=15, null=True, blank=True),
-        size=6,
+        size=10,
     )
 
     def __str__(self):
