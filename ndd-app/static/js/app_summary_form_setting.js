@@ -12,7 +12,7 @@ var summary_form_setting = new Vue( {
         form_id: '',
         form_setting_modal: {
             form_name: '',
-            form_detail: ['00', '1_none', '2_remark', '4_gate_charge'],
+            form_detail: ['00', '1_input_field', '2_remark', '4_gate_charge'],
         },
         form_index: -1,
         
@@ -47,7 +47,7 @@ var summary_form_setting = new Vue( {
             else{
                 this.form_setting_modal = {
                     form_name: '',
-                    form_detail: ['00', '1_none', '2_remark', 'gate_charge'],
+                    form_detail: ['00', '1_input_field', '2_remark', 'gate_charge'],
                 }
                 this.form_action = 'add'
                 this.form_title = 'Create New Form'

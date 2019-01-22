@@ -27,7 +27,7 @@ class FormDetail(models.Model):
 
 
 class CustomerCustom(models.Model):
-    customer = models.ForeignKey(Principal, on_delete=models.CASCADE, related_name="customerforms")
+    customer = models.ForeignKey(Principal, on_delete=models.CASCADE, related_name="customercustoms")
     sub_customer = models.CharField(max_length=50, null=True, blank=True)
     customer_title = models.CharField(max_length=50, null=True, blank=True)
 
@@ -95,7 +95,7 @@ class SummaryCustomer(models.Model):
             
 
 class Invoice(models.Model):
-    invoice_no = models.CharField(max_length=15, null=True, blank=True)
+    invoice_no = models.CharField(max_length=25, null=True, blank=True)
     customer_week = models.ForeignKey(SummaryCustomer, on_delete=models.SET_NULL, null=True, blank=True)
 
     drayage_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)

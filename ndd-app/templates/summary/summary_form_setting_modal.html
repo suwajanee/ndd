@@ -24,9 +24,13 @@
                         <legend class="summary_form_detail">FORM DETAILS</legend>
 
                         <div class="float-right mb-3">
-                            <div class="custom-control custom-radio custom-control-inline">
+                            <!-- <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="none" value="1_none" v-model="form_setting_modal.form_detail[1]">
-                                <label class="custom-control-label text-secondary" for="none"><-- ว่าง --></label>
+                                <label class="custom-control-label text-secondary" for="none"></label>
+                            </div> -->
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="input_field" value="1_input_field" v-model="form_setting_modal.form_detail[1]">
+                                <label class="custom-control-label" for="input_field"><input class="form-control p-0 text-center" placeholder="เพิ่มเติม" readonly></label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="diesel_rate" value="1_diesel_rate" v-model="form_setting_modal.form_detail[1]">
@@ -40,10 +44,7 @@
                                 <input type="radio" class="custom-control-input" id="ap_billing_no" value="1_ap_billing_no" v-model="form_setting_modal.form_detail[1]">
                                 <label class="custom-control-label" for="ap_billing_no">AP Billing No.</label>
                             </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="input_field" value="1_input_field" v-model="form_setting_modal.form_detail[1]">
-                                <label class="custom-control-label" for="input_field"><input class="form-control p-0 text-center" placeholder="เพิ่มเติม" readonly></label>
-                            </div>
+                            
                         </div>
                         
                         <table class="table table-bordered" style="border-width:2px; font-size:14px;">
