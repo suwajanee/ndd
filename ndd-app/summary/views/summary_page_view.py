@@ -3,6 +3,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.db.models import Q
+
+from ..models import CustomerCustom, SummaryCustomer
+from customer.models import Principal
 
 
 @login_required(login_url=reverse_lazy('login-page'))
@@ -31,5 +35,27 @@ def summary_week_details_page(request, year, month, week):
 
 @login_required(login_url=reverse_lazy('login-page'))
 def summary_invoice_page(request, year, month, week, customer):
+    customer_text = []
     customer = customer.split('__')
-    return render(request, 'summary/summary_invoice_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week, 'customer': customer})
+    customer_main_name = Principal.objects.get(pk=customer[0]).name
+    customer_text.append(customer_main_name)
+
+    if customer[1] != '':
+        sub_customer_name = CustomerCustom.objects.get(pk=customer[1]).sub_customer
+        customer_text.append(sub_customer_name)
+
+        try:
+            summary_customer = SummaryCustomer.objects.get(Q(customer_custom__pk=customer[1]) & Q(week__week=week) & Q(week__year__year_label=year)).pk
+            customer.append(summary_customer)
+        except:
+            pass
+    else:
+        customer.append('')
+        try:
+            summary_customer = SummaryCustomer.objects.get(Q(customer_main__pk=customer[0]) & Q(week__week=week) & Q(week__year__year_label=year)).pk
+            customer.append(summary_customer)
+        except:
+            pass
+
+
+    return render(request, 'summary/summary_invoice_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week, 'customer': customer, 'customer_text': customer_text})
