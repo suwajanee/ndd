@@ -67,10 +67,30 @@ def api_edit_summary_week(request):
             req = json.loads( request.body.decode('utf-8') )
             data = req['summary_week']
 
-            data['year'] = Year.objects.get(year_label=data['year'])
+            summary_week = SummaryWeek.objects.get(pk=data['id'])
+            summary_week.year = Year.objects.get(year_label=data['year'])
+            summary_week.month = data['month']
+            summary_week.week = data['week']
+            summary_week.date_start = data['date_start']
+            summary_week.date_end = data['date_end']
+            summary_week.diesel_rate = data['diesel_rate']
 
-            summary_week = SummaryWeek(**data)
+            summary_week.save()
 
+            return JsonResponse(True, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_summary_week_status(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            week_id = req['id']
+            week_status = req['status']
+
+            summary_week = SummaryWeek.objects.get(pk=week_id)
+
+            summary_week.status = week_status
             summary_week.save()
 
             return JsonResponse(True, safe=False)
@@ -151,6 +171,18 @@ def api_get_summary_week_details(request):
                     summary_week_details.append(data)
             details['summary_week_details'] = summary_week_details            
             return JsonResponse(details, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_summary_weeks_by_year(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            year = req['year']
+
+            week = SummaryWeek.objects.filter(Q(year__year_label=year))
+            week_serializer = SummaryWeekSerializer(week, many=True)
+            return JsonResponse(week_serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
 def get_week_details(week, year):

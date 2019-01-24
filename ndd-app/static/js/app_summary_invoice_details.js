@@ -12,6 +12,9 @@ var summary_invoice_details = new Vue( {
         invoice_id: '',
         summary_week_id: '',
 
+        year_list: [],
+        week_list: [],
+
         customer_custom: {},
         customer_main: {},
         customer_type: '',
@@ -49,12 +52,13 @@ var summary_invoice_details = new Vue( {
     },
 
     methods: {
-        reload(id, invoice) {
+        reload(invoice) {
             this.booking_field = booking_field_text
 
-            this.invoice = invoice
-            this.invoice_id = id
+            this.invoice = invoice.invoice_no
+            this.invoice_id = invoice.id
             this.getFormDefault()
+            this.getYears()
             
         },
 
@@ -70,6 +74,17 @@ var summary_invoice_details = new Vue( {
                 else {
                     this.customer_form = this.customer_custom.form.form_detail
                 }
+            })
+        },
+        getYears() {
+            api("/summary/api/get-summary-year/").then((data) => {
+                this.year_list = data
+                this.getWeeks()
+            })
+        },
+        getWeeks() {
+            api("/summary/api/get-summary-weeks-by-year/", "POST", {year: this.query.year }).then((data) => {
+                this.week_list = data
             })
         },
 
@@ -103,7 +118,7 @@ var summary_invoice_details = new Vue( {
                 if(data) {
                     this.query.summary_customer = data.customer_week.id
                     summary_invoice.getInvoice()
-                    this.reload(data.id, data.invoice_no)
+                    this.reload(data)
                 }
             })
 

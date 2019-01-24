@@ -108,10 +108,11 @@ var summary_invoice = new Vue( {
             this.mode = 'table'
         },
 
-        selectInvoice(id, invoice) {
+        selectInvoice(invoice) {
             summary_invoice_details.invoice_details = true
             // if(id && invoice) {
-            summary_invoice_details.reload(id, invoice)
+                
+            summary_invoice_details.reload(invoice)
             // }
         },
         

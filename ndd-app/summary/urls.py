@@ -48,6 +48,9 @@ urlpatterns = [
     url(r'^api/get-summary-week-details/$', summary_week_view.api_get_summary_week_details, name='api-get-summary-week-details'),
     url(r'^api/add-summary-week/$', summary_week_view.api_add_summary_week, name='api-add-summary-week'),
     url(r'^api/edit-summary-week/$', summary_week_view.api_edit_summary_week, name='api-edit-summary-week'),
+    url(r'^api/get-summary-weeks-by-year/$', summary_week_view.api_get_summary_weeks_by_year, name='api-get-summary-weeks-by-year'),
+    url(r'^api/summary-weeks-status/$', summary_week_view.api_summary_week_status, name='api-summary-weeks-status'),
+
 
     # Summary Customer
     url(r'^api/edit-summary-customer-detail/$', summary_customer_view.api_edit_summary_customer_detail, name='api-edit-summary-customer-detail'),

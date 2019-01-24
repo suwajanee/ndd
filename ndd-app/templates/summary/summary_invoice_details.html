@@ -1,7 +1,10 @@
 <div v-if="invoice_details">
-<div class="my-3 text-right">
-    <button class="btn btn-outline-info" @click="mode='edit'">Edit</button>
-    <button class="btn btn-outline-danger" @click="mode='table'">Exit</button>
+
+<div class="my-3">
+    <button class="btn btn-outline-info"data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+
+    <button class="btn btn-outline-danger float-right" @click="mode='table'">Exit</button>
+    <button class="btn btn-outline-info float-right mx-2" @click="mode='edit'">Edit</button>
 </div>
 
 
@@ -16,7 +19,7 @@
         <tr>
             <td class="px-1" style="width: 80px;">INV. NO.</td>
             <td v-if="mode=='edit'" class="px-1" style="width: 200px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice"></td>
-            <td v-else class="px-1 text-center" style="width: 200px; background: Cyan;">{{ invoice }}</td>
+            <td v-else class="p-1 text-center" style="width: 200px; background: Cyan;">{{ invoice }}</td>
             <td class="text-secondary">
                 (Drayage INV.)
             </td>
@@ -46,7 +49,7 @@
                     {{ booking_field[customer_form[0]] }}
                 </th>
 
-                <th colspan=2 class="border-dark align-middle">
+                <th colspan=2 class="border-dark align-middle py-1">
                     Vessel/Truck Routing
                 </th>
                 
@@ -91,10 +94,10 @@
                 </th>
             </tr>
             <tr>
-                <th class="border-dark align-middle">
+                <th class="border-dark align-middle py-1" style="width: 120px;">
                     From
                 </th>
-                <th class="border-dark align-middle">
+                <th class="border-dark align-middle py-1" style="width: 120px;">
                     To
                 </th>
             </tr>
@@ -133,5 +136,42 @@
 
     {% endverbatim %}
 
+</div>
+
+
+<div class="modal fade" id="modalInvoiceDetails" tabindex="-1" role="dialog" aria-hidden="true">    
+    {% verbatim %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100 text-center">Invoice</h2>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="input-group mb-3 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">YEAR</span>
+                        </div>
+                        <select class="custom-select" v-model="query.year" @change="getWeeks">
+                            <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">WEEK</span>
+                        </div>
+                        <select class="custom-select" v-model="summary_week_id">
+                            <option v-for="week in week_list" :value="week.id">{{ week.week }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer px-5 py-3">
+                    <button >Save</button>
+                </div>
+            </div>
+        </div>
+    {% endverbatim %}
 </div>
 </div>

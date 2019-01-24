@@ -57,23 +57,13 @@
                         >      
                     </div>
 
-                    <div class="input-group container col-md-6" :class="{'mb-5': modal_action == 'edit'}">
+                    <div class="input-group container col-md-6">
                         <div class="input-group-prepend">
                             <span class="input-group-text">DIESEL RATE</span>
                         </div>
                         <input class="form-control" 
                             v-model="summary_week_modal.diesel_rate" maxlength="5"
                         >
-                    </div>
-
-                    <div v-if="summary_week_modal.status" class="input-group container col-md-5">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">STATUS</span>
-                        </div>
-                        <select class="custom-select" v-model="summary_week_modal.status">
-                            <option value="0">Processing</option>
-                            <option value="1">Finished</option>
-                        </select>
                     </div>
                 </div>
                 

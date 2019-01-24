@@ -170,6 +170,12 @@ var summary_week_details = new Vue( {
         selectCustomer(customer){
             window.location.replace("/summary/" + this.year + "/" + this.month + "/" + this.week + "/" + customer)
         },
+
+        changeWeekStatus() {
+            api("/summary/api/summary-weeks-status/", "POST", {id: this.week_details.id, status: this.week_details.status}).then((data) => {
+                this.getSummaryWeekDetails(this.year, this.month, this.week)
+            })
+        },
         
     }
 })

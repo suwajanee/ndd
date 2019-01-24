@@ -39,11 +39,19 @@
         {% verbatim %}
             <div class="position-absolute" style="right:0px;">
                 <div class="row m-3">
+                    <div class="switch-field p-0">
+                        <input type="radio" id="status_0" value="0" class="processing" v-model="week_details.status" @change="changeWeekStatus" />
+                        <label for="status_0" style="width:40px;" class="p-2"><i class="fa fa-cog"></i></label>
+                        <input type="radio" id="status_1" value="1" class="finished" v-model="week_details.status" @change="changeWeekStatus" />
+                        <label for="status_1" style="width:40px;" class="p-2"><i class="fa fa-check"></i></label>
+                    </div>
+                </div>
+                <div class="row m-3">
                     <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;</div>
                     <button v-if="mode=='edit'" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
                     <button v-else class="btn btn-outline-info" @click="mode='edit'"><i class="fa fa-pencil"></i>&nbsp;Note</button>
                 </div>
-                <div class="row mx-3 float-right">
+                <div class="row mr-3 float-right">
                     <button v-if="mode=='edit'" class="btn btn-outline-danger" @click="mode='table'"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
                     <button v-else class="btn btn-outline-warning" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-info-circle"></i>&nbsp;Week</button>
                 </div>

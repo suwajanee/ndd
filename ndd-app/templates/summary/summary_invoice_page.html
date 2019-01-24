@@ -40,8 +40,8 @@
     </div>
 
     <!-- <div class="row m-0"> -->
-        <div class="col-md-6 summary-invoice">
-            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalInvoiceDetails" @click="selectInvoice">New Invoice</button>
+        <div class="col-md-7 summary-invoice">
+            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalWorkList" @click="selectInvoice">New Invoice</button>
             {% verbatim %}
             <div class="switch-field float-right" v-if="customer_details.status">
                 <input type="radio" id="customer_status_0" v-model="customer_details.status" value="0" class="processing" @change="changeStatus" />
@@ -81,7 +81,7 @@
                             <td class="text-center">
                                 {{ index + 1 }}
                             </td>
-                            <td class="cell-click" @click="selectInvoice(inv.id, inv.invoice_no)">
+                            <td class="cell-click" @click="selectInvoice(inv)">
                                 {{ inv.invoice_no }}
                             </td>
                             <td class="text-right">
@@ -144,7 +144,7 @@
         window.addEventListener("load", function() {   
             summary_invoice.reload({{ year }}, {{ month }}, {{ week }}, '{{ customer.0 }}', '{{ customer.1 }}', '{{ customer.2 }}');
             summary_breadcrumb.reload({{ month }});
-            summary_invoice_details.reload();
+            // summary_invoice_details.reload();
         });
 
     </script>
