@@ -60,6 +60,83 @@ td input[type="date"], td input:not([type]), input[type="text"] {
 /* table.table-bordered > thead > tr > th{
     border:1px solid blue;
 } */
-table.table-bordered > tbody > tr > td{
+table.table-bordered-dark > tbody > tr > td{
     border:1px solid black;
+}
+
+.width-9 {
+    width: 9%;
+}
+/* 
+table.invoice-page {
+    font-size: 14px;
+} */
+
+
+
+
+
+.switch-field {
+    /* font-family: "Lucida Grande", Tahoma, Verdana, sans-serif; */
+    padding: 20px 0px;
+    overflow: hidden;
+  }
+  
+  /* .switch-title {
+    margin-bottom: 6px;
+  } */
+  
+  .switch-field input {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      border: 0;
+      overflow: hidden;
+  }
+  
+  .switch-field label {
+    float: left;
+  }
+  
+  .switch-field label {
+    display: inline-block;
+    width: 120px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    text-align: center;
+    padding: 6px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  }
+  
+  .switch-field label:hover {
+      cursor: pointer;
+  }
+  
+  .switch-field input.finished:checked + label {
+    background-color: #A5DC86;
+    font-weight: bold;
+    box-shadow: none;
+  }
+
+  .switch-field input.processing:checked + label {
+    background-color: #ffec80;
+    font-weight: bold;
+    box-shadow: none;
+  }
+  
+  .switch-field label:first-of-type {
+    border-radius: 5px 0 0 5px;
+  }
+  
+.switch-field label:last-of-type {
+    border-radius: 0 5px 5px 0;
+}
+
+.bg-processing {
+    background-color: #ffec80;
+}
+
+.bg-finished {
+    background-color: #A5DC86;
 }

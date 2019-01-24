@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Year, FormDetail, CustomerCustom, SummaryWeek
+from .models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice
 from customer.serializers import PrincipalSerializer, ShipperSerializer
 
 
@@ -16,7 +16,7 @@ class FormDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CustomerSettingSerializer(serializers.ModelSerializer):
+class CustomerCustomSerializer(serializers.ModelSerializer):
     customer = PrincipalSerializer()
     form = FormDetailSerializer()
     class Meta:
@@ -28,4 +28,20 @@ class SummaryWeekSerializer(serializers.ModelSerializer):
     year = YearSerializer()
     class Meta:
         model = SummaryWeek
+        fields = '__all__'
+
+
+class SummaryCustomerSerializer(serializers.ModelSerializer):
+    customer_main = PrincipalSerializer()
+    customer_custom = CustomerCustomSerializer()
+    week = SummaryWeekSerializer()
+    class Meta:
+        model = SummaryCustomer
+        fields = '__all__'
+
+
+class InvoiceSerializer(serializers.ModelSerializer):
+    customer_week = SummaryCustomerSerializer()
+    class Meta:
+        model = Invoice
         fields = '__all__'

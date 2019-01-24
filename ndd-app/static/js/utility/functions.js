@@ -72,3 +72,17 @@ const sumArray = (arr) => {
     }
     return
 }
+
+var summary_breadcrumb = new Vue( {
+    el: '#summary-breadcrumb',
+    data: {
+        month: '',
+        month_list: [],
+    },
+    methods: {
+        reload(month) {
+            this.month = month
+            this.month_list = _month
+        },
+    }
+})

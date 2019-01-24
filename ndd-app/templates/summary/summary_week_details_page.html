@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="row col-md-11">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-bordered-dark">
                     <thead class="text-center table-secondary">
                         <th class="align-middle border-dark">No.</th>
                         <th class="align-middle border-dark">Customer Name</th>
@@ -68,19 +68,24 @@
                             <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
                             <td v-else class="text-center align-middle"></td>
 
-                            <td v-if="week.sub_customer" 
+                            <td v-if="week.customer_custom" 
                                 class="text-left align-middle cell-click"
                                 :class="{'table-success': week.status == '1', 'table-warning': week.status == '0' }"
-                                @click="selectCustomer(week.customer + '__' + week.sub_customer)"
+                                @click="selectCustomer(week.customer.id + '__' + week.customer_custom.id)"
                             >
-                                {{ week.sub_customer }}
+                                <template v-if="week.customer_custom.sub_customer">
+                                    {{ week.customer_custom.sub_customer }}
+                                </template>
+                                <template v-else>
+                                    {{ week.customer.name }}
+                                </template>
                             </td>
                             <td v-else 
                                 class="text-left align-middle cell-click"
                                 :class="{'table-success': week.status == '1', 'table-warning': week.status == '0' }"
-                                @click="selectCustomer(week.customer + '__')"
+                                @click="selectCustomer(week.customer.id + '__')"
                             >
-                                {{ week.customer }}
+                                {{ week.customer.name }}
                             </td>
 
                             <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>
