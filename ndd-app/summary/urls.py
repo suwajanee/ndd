@@ -7,6 +7,7 @@ from .views import summary_customer_custom_view
 from .views import summary_week_view
 from .views import summary_month_view
 from .views import summary_customer_view
+from .views import summary_invoice_view
 
 
 urlpatterns = [
@@ -16,6 +17,8 @@ urlpatterns = [
     url(r'^(?P<year>\w+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
     url(r'^(?P<year>\w+)/(?P<month>\w+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
     url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
+    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
+    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/(?P<customer>\w+)/$', summary_page_view.summary_invoice_page, name='summary-invoice-page'),
 
 
     # Summary Year
@@ -25,6 +28,7 @@ urlpatterns = [
     url(r'^api/get-summary-year-details/$', summary_year_view.api_get_summary_year_details, name='api-get-summary-year-details'),
 
     # Form Setting
+    url(r'^api/get-form-default/$', summary_form_setting_view.api_get_form_default, name='api-get-form-default'),
     url(r'^api/get-form/$', summary_form_setting_view.api_get_summary_form, name='api-get-form'),
     url(r'^api/add-form/$', summary_form_setting_view.api_add_summary_form, name='api-add-form'),
     url(r'^api/edit-form/$', summary_form_setting_view.api_edit_summary_form, name='api-edit-form'),
@@ -47,6 +51,15 @@ urlpatterns = [
 
     # Summary Customer
     url(r'^api/edit-summary-customer-detail/$', summary_customer_view.api_edit_summary_customer_detail, name='api-edit-summary-customer-detail'),
+    url(r'^api/summary-customer-status/$', summary_customer_view.api_summary_customer_status, name='api-summary-customer-status'),
+
+    # Invoice
+    url(r'^api/get-invoice/$', summary_invoice_view.api_get_invoice, name='api-get-invoice'),
+    url(r'^api/edit-invoice-remark/$', summary_invoice_view.api_edit_invoice_remark, name='api-edit-invoice-remark'),
+    url(r'^api/invoice-status/$', summary_invoice_view.api_invoice_status, name='api-invoice-status'),
+    url(r'^api/add-invoice/$', summary_invoice_view.api_add_invoice, name='api-add-invoice'),
+
+
 
 
 
