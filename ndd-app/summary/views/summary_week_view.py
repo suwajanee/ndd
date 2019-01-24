@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import Year, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice
 from customer.models import Principal
 from ..serializers import SummaryWeekSerializer
+from ..serializers import CustomerCustomSerializer
+from customer.serializers import PrincipalSerializer
 
 
 @csrf_exempt
@@ -94,11 +96,13 @@ def api_get_summary_week_details(request):
             summary_week_details = []
 
             customers = Principal.objects.all().order_by('name')
+            
 
             for customer in customers:
                 data = {}
                 total = []
-                data['customer'] = customer.name
+                principal_serializer = PrincipalSerializer(customer, many=False)
+                data['customer'] = principal_serializer.data
 
                 sub_customers = CustomerCustom.objects.filter(Q(customer__name=customer.name)).order_by('customer__name','sub_customer')
                 if sub_customers:
@@ -106,7 +110,9 @@ def api_get_summary_week_details(request):
                     last_index = 0
                     for sub_customer in sub_customers:
                         data = copy.deepcopy(data)
-                        data['sub_customer'] = sub_customer.sub_customer
+                        customer_custom_serializer = CustomerCustomSerializer(sub_customer, many=False)
+                        data['customer_custom'] = customer_custom_serializer.data
+
                         summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_custom=sub_customer))
                         if summary_customer:
                             customer = summary_customer[0]

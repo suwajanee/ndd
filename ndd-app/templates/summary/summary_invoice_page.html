@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_summary.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+    <div id="summary-breadcrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'summary-year-details-page' year=year %}">{{ year }}</a></li>
+                
+                <li class="breadcrumb-item">
+                    <a href="{% url 'summary-month-details-page' year=year month=month %}">
+                        {% verbatim %}
+                            {{ month_list[month-1] }}
+                        {% endverbatim %}
+                    </a>
+                </li>
+                
+                <li class="breadcrumb-item">
+                    <a href="{% url 'summary-week-details-page' year=year month=month week=week %}">
+                        WK. {{ week }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if customer_text.1 %}
+                        {{ customer_text.1 }}
+                    {% else %}
+                        {{ customer_text.0 }}
+                    {% endif %}
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- <div class="row m-0"> -->
+        <div class="col-md-6 summary-invoice">
+            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalInvoiceDetails" @click="selectInvoice">New Invoice</button>
+            {% verbatim %}
+            <div class="switch-field float-right" v-if="customer_details.status">
+                <input type="radio" id="customer_status_0" v-model="customer_details.status" value="0" class="processing" @change="changeStatus" />
+                <label for="customer_status_0">Processing</label>
+                <input type="radio" id="customer_status_1" v-model="customer_details.status" value="1" class="finished" @change="changeStatus" />
+                <label for="customer_status_1">Finished</label>
+            </div>
+            <div class="switch-field float-right" v-else>
+                <input type="radio" id="customer_status_0" disabled />
+                <label for="customer_status_0">Processing</label>
+                <input type="radio" id="customer_status_1" disabled />
+                <label for="customer_status_1">Finished</label>
+            </div>
+                <table class="table table-bordered table-bordered-dark">
+                    <thead class="text-center table-secondary">
+                        <th class="border-dark align-middle" style="width: 40px;">
+                            Item
+                        </th>
+                        <th class="border-dark align-middle" class="bg-success">
+                            INV. No
+                        </th>
+                        <th class="border-dark align-middle" style="width: 20%;">
+                            Drayage Charge
+                        </th>
+                        <th class="border-dark align-middle" style="width: 20%;">
+                            Gate Charge
+                        </th>
+                        <th class="border-dark align-middle">
+                            Remark
+                            <button v-if="mode=='edit'" class="btn btn-sm btn-outline-success float-right" @click="editInvoiceRemark"><i class="fa fa-floppy-o"></i></button>
+                            <button v-else class="btn btn-sm btn-outline-info float-right" @click="mode='edit'"><i class="fa fa-edit"></i></button>
+                        </th>
+                        <!-- <th style="width: 50px;"></th> -->
+                    </thead>
+                    <tbody>
+                        <tr v-for="(inv, index) in invoices" :class="{'table-success': inv.status==1, 'table-warning': inv.status==0}">
+                            <td class="text-center">
+                                {{ index + 1 }}
+                            </td>
+                            <td class="cell-click" @click="selectInvoice(inv.id, inv.invoice_no)">
+                                {{ inv.invoice_no }}
+                            </td>
+                            <td class="text-right">
+                                {{ inv.drayage_total|currencyCommas }}
+                            </td>
+                            <td class="text-right">
+                                {{ inv.gate_total|currencyCommas }}
+                            </td>
+                            <td class="text-center">
+                                <input v-if="mode=='edit'" class="form-control" v-model="inv.detail.remark">
+                                <template v-else>{{ inv.detail.remark }}</template>
+                            </td>
+                            <td class="text-center align-middle p-0 border-light bg-light" style="width: 80px;">
+                                <div class="switch-field p-0 float-right">
+                                    <input type="radio" :id="'inv_status_'+index+'_0'" v-model="inv.status" value="0" class="processing" @change="changeInvoiceStatus(inv)" />
+                                    <label :for="'inv_status_'+index+'_0'" style="width:35px;" class="p-2"><i class="fa fa-cog"></i></label>
+                                    <input type="radio" :id="'inv_status_'+index+'_1'" v-model="inv.status" value="1" class="finished" @change="changeInvoiceStatus(inv)" />
+                                    <label :for="'inv_status_'+index+'_1'" style="width:35px;" class="p-2"><i class="fa fa-check"></i></label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="alert-secondary">
+                            <td colspan=2 class="text-center"><u><b>Total</b></u></td>
+                            <td class="text-right"><b>{{ drayage_total|currencyCommas }}</b></td>
+                            <td class="text-right"><b>{{ gate_total|currencyCommas }}</b></td>
+                        </tr>
+                        <tr class="alert-secondary" v-if="customer_details" >
+                            <td colspan=2 class="text-center" :class="{'bg-finished': customer_details.status==1, 'bg-processing': customer_details.status==0}"><u><b>G.TOTAL</b></u></td>
+                            <td colspan=2 class="text-right"><b>{{ drayage_total + gate_total|currencyCommas }}</b></td>
+                        </tr>
+                        <tr class="alert-secondary" v-else >
+                            <td colspan=2 class="text-center"><u><b>G.TOTAL</b></u></td>
+                            <td colspan=2 class="text-right"><b>-</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+            {% endverbatim %}
+            
+
+            <!-- {% include 'summary/summary_week_modal.html' %} -->
+
+        </div>
+        <div id="summary-invoice-details" class="col-md-12 mt-5">
+            {% include 'summary/summary_invoice_details.html' %}
+            {% include 'summary/summary_invoice_details_modal.html' %}
+        </div>
+    <!-- </div> -->
+
+
+    <script type="application/javascript" src="{% static 'js/app_summary_invoice_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_summary_invoice_details.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            summary_invoice.reload({{ year }}, {{ month }}, {{ week }}, '{{ customer.0 }}', '{{ customer.1 }}', '{{ customer.2 }}');
+            summary_breadcrumb.reload({{ month }});
+            summary_invoice_details.reload();
+        });
+
+    </script>
+
+{% endblock %}
