@@ -68,21 +68,7 @@ var summary_invoice_details = new Vue( {
                         work_list.container_2.toLowerCase().includes(lower_filter)
                     }
                 }
-                // if(work_list.shipper && work_list.container_no) {
-                //     return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.shipper.name.toLowerCase().includes(lower_filter) 
-                //     || work_list.container_no.toLowerCase().includes(lower_filter)
-                // }
-                // else if(work_list.shipper && work_list.container_1 && work_list.container_2) {
-                //     return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.shipper.name.toLowerCase().includes(lower_filter) ||
-                //     work_list.container_1.toLowerCase().includes(lower_filter) || work_list.container_2.toLowerCase().includes(lower_filter)
-                // }
-                // else if(work_list.container_no) {
-                //     return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.container_no.toLowerCase().includes(lower_filter)
-                // }
-                // else {
-                //     return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.container_1.toLowerCase().includes(lower_filter) || 
-                //     work_list.container_2.toLowerCase().includes(lower_filter)
-                // }
+
             })  
         },
 
@@ -183,8 +169,6 @@ var summary_invoice_details = new Vue( {
             }
         },
 
-
-
         dataAddSummaryCustomer() {
             var data = {
                 week: this.summary_week_id,
@@ -206,12 +190,25 @@ var summary_invoice_details = new Vue( {
                 if(data) {
                     this.query.summary_customer = data.customer_week.id
                     summary_invoice.getInvoice()
-                    this.addInvoiceDetails(data)
+                    if(this.customer_custom.option == 'evergreen') {
+                        this.addInvoiceDetailsEvergreen(data)
+                    }
+                    else {
+                        this.addInvoiceDetails(data)    
+                    }
                 }
             })
         },
         addInvoiceDetails(invoice) {
             api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
+                this.reload(invoice)
+                this.invoice_details = true
+            })
+            $('#modalWorkList').modal('hide');
+
+        },
+        addInvoiceDetailsEvergreen(invoice) {
+            api("/summary/api/add-invoice-details-evergreen/", "POST", {invoice_id: invoice.id, work_list: this.work_selected}).then((data) => {
                 this.reload(invoice)
                 this.invoice_details = true
             })
@@ -228,7 +225,6 @@ var summary_invoice_details = new Vue( {
                         summary_invoice.getInvoice()
                         $('#modalInvoiceDetails').modal('hide');
                         this.invoice_details = false
-                        // this.reload(this.query)
                     }
                 })
             }
@@ -265,15 +261,16 @@ var summary_invoice_details = new Vue( {
         },
 
         evergreenSelectWork(work_click, work_action) {
+
             var action = this.work_selected.indexOf(work_action)
             if(this.work_selected.indexOf(work_click) >= 0){
-                this.work_selected.splice(action, 1)
-                
+                this.work_selected.splice(action, 1)                
             }
             else {
+                this.work_selected.push(work_click)
                 this.work_selected.push(work_action)
             }
-            
+                
         }
 
         

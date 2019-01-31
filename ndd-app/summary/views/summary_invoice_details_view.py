@@ -32,7 +32,6 @@ def api_add_invoice_details(request):
 
             invoice = Invoice.objects.get(pk=invoice_id)
             
-
             if customer_type == 'normal':
                 bookings = Booking.objects.filter(pk__in=work_list)
                 for booking in bookings:
@@ -72,14 +71,72 @@ def api_add_invoice_details(request):
                     invoice_detail.save()
                 status = agent_transport_summary_status(work_list, '1')               
 
-
             # for work in work_list:
             #     if customer_type == 'agent-transport':
             #         data['work_agent_transport'] = AgentTransport.objects.get(pk=work)
             #     elif customer_type == 'normal':
             #         data['work_normal'] = Booking.objects.get(pk=work)
 
+            return api_get_invoice_details(request)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_add_invoice_details_evergreen(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            invoice_id = req['invoice_id']
+            work_list = req['work_list']
+
+            evergreen_work = []
+
+            invoice = Invoice.objects.get(pk=invoice_id)
+
+            for work in work_list:
+                work_order = work.split('_')
+                work_id = work_order[0]
+                work_container = work_order[1]
+
+                work_selected = AgentTransport.objects.get(pk=work_id)
+
+                evergreen_work.append(work_id)
+                
+                if work_container == '1':
+                    data = {
+                        'invoice': invoice,
+                        'work_agent_transport': work_selected,
+                        'drayage_charge': {
+                            'drayage': '',
+                        },
+                        'gate_charge': {
+                            'gate': '',
+                        },
+                        'detail': {
+                            'remark': '',
+                            'container': work_selected.container_1
+                        },
+                    }
+                elif work_container == '2':
+                    data = {
+                        'invoice': invoice,
+                        'work_agent_transport': work_selected,
+                        'drayage_charge': {
+                            'drayage': '',
+                        },
+                        'gate_charge': {
+                            'gate': '',
+                        },
+                        'detail': {
+                            'remark': '',
+                            'container': work_selected.container_2
+                        },
+                    }
+                invoice_detail = InvoiceDetail(**data)
+                invoice_detail.save()
             
+            evergreen_work = set(evergreen_work)
+                
+            status = agent_transport_summary_status(evergreen_work, '1')               
 
             return api_get_invoice_details(request)
     return JsonResponse('Error', safe=False)

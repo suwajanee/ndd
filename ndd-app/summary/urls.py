@@ -71,7 +71,8 @@ urlpatterns = [
     url(r'^api/delete-invoice-detail/$', summary_invoice_details_view.api_delete_invoice_detail, name='api-delete-invoice-detail'),
 
 
-
+    # Evergreen
+    url(r'^api/add-invoice-details-evergreen/$', summary_invoice_details_view.api_add_invoice_details_evergreen, name='api-add-invoice-details-evergreen'),
 
 
 
