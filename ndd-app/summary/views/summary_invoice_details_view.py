@@ -97,40 +97,32 @@ def api_add_invoice_details_evergreen(request):
                 work_id = work_order[0]
                 work_container = work_order[1]
 
-                work_selected = AgentTransport.objects.get(pk=work_id)
+                work_object = AgentTransport.objects.get(pk=work_id)
 
                 evergreen_work.append(work_id)
                 
+                data = {
+                    'invoice': invoice,
+                    'work_agent_transport': work_object,
+                    'drayage_charge': {
+                        'drayage': '',
+                    },
+                    'detail': {
+                        'job_no': '',
+                        'from': '',
+                        'to': '',
+                        'date': '',
+                        'size': '',
+                        'truck': '',
+                    },
+                }
+                
                 if work_container == '1':
-                    data = {
-                        'invoice': invoice,
-                        'work_agent_transport': work_selected,
-                        'drayage_charge': {
-                            'drayage': '',
-                        },
-                        'gate_charge': {
-                            'gate': '',
-                        },
-                        'detail': {
-                            'remark': '',
-                            'container': work_selected.container_1
-                        },
-                    }
+                    data['detail']['container'] = work_object.container_1
+
                 elif work_container == '2':
-                    data = {
-                        'invoice': invoice,
-                        'work_agent_transport': work_selected,
-                        'drayage_charge': {
-                            'drayage': '',
-                        },
-                        'gate_charge': {
-                            'gate': '',
-                        },
-                        'detail': {
-                            'remark': '',
-                            'container': work_selected.container_2
-                        },
-                    }
+                    data['detail']['container'] = work_object.container_2
+
                 invoice_detail = InvoiceDetail(**data)
                 invoice_detail.save()
             

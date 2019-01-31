@@ -79,7 +79,7 @@ var summary_invoice_details = new Vue( {
         reload(invoice) {
             this.work_selected = []
             this.booking_field = booking_field_text
-
+            
             this.invoice = invoice
             this.invoice_id = invoice.id
             this.invoiceEditFields()
