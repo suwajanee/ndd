@@ -9,8 +9,13 @@
                     </button>
                 </div>
                 <div class="modal-body px-5 py-4">
-                    <input class="form-control col-md-4 container mb-4" v-model="filter_work" placeholder="Filter by Shipper / Booking No.">
-                    <table v-if="work_choices.length" class="table table-bordered table-hover" style="font-size: 14px;">
+                    <div class="input-group col-md-4 container mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-filter"></i></span>
+                        </div>
+                        <input class="form-control" v-model="filter_work" placeholder="Filter by Shipper / Booking No.">
+                    </div>
+                    <table v-if="work_list.length" class="table table-bordered table-hover" style="font-size: 14px;">
                         <thead class="text-center">
                             <th>(&nbsp;{{ work_selected.length }}&nbsp;)</th>
                             <th>Date</th>
@@ -28,10 +33,10 @@
                             <th>เลขที่ใบงาน</th>
                         </thead>
                         <tbody>
-                            <tr v-for="(work, index) in filteredWork" :class="{'bg-light text-secondary': work.status=='2'}">
+                            <tr v-for="(work, index) in filteredWork" :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id)}">
                                 <td class="text-center align-middle">
                                     <div class="m-0 custom-control custom-checkbox">
-                                        <input type="checkbox" class="form-check-input" :id="'work'+ index" v-model="work_selected" :value="work.id" :disabled="work.status=='2'">
+                                        <input type="checkbox" class="form-check-input" :id="'work'+ index" v-model="work_selected" :value="work.id" :disabled="work.summary_status=='1'">
                                         <!-- <label class="custom-control-label" :for="'work'+ index"></label> -->
                                     </div>
                                     <!-- <input type="checkbox" v-model="work_selected" :value="work.id"> -->
@@ -74,7 +79,8 @@
                 </div>
                 
                 <div class="modal-footer px-5 py-3">
-                    <button @click="addNewInvoice">Save</button>
+                    <button class="btn btn-primary" @click="addNewInvoice">Save</button>
+                    <!-- <button @click="addInvoiceDetails">Save</button> -->
                 </div>
             </div>
         </div>

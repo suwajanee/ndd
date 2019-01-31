@@ -8,6 +8,7 @@ from .views import summary_week_view
 from .views import summary_month_view
 from .views import summary_customer_view
 from .views import summary_invoice_view
+from .views import summary_invoice_details_view
 
 
 urlpatterns = [
@@ -61,6 +62,15 @@ urlpatterns = [
     url(r'^api/edit-invoice-remark/$', summary_invoice_view.api_edit_invoice_remark, name='api-edit-invoice-remark'),
     url(r'^api/invoice-status/$', summary_invoice_view.api_invoice_status, name='api-invoice-status'),
     url(r'^api/add-invoice/$', summary_invoice_view.api_add_invoice, name='api-add-invoice'),
+    url(r'^api/edit-invoice-week/$', summary_invoice_view.api_edit_invoice_week, name='api-edit-invoice-week'),
+    url(r'^api/delete-invoice-week/$', summary_invoice_view.api_delete_invoice_week, name='api-delete-invoice-week'),
+
+    # Invoice Details
+    url(r'^api/get-invoice-details/$', summary_invoice_details_view.api_get_invoice_details, name='api-get-invoice-details'),
+    url(r'^api/add-invoice-details/$', summary_invoice_details_view.api_add_invoice_details, name='api-add-invoice-details'),
+    url(r'^api/delete-invoice-detail/$', summary_invoice_details_view.api_delete_invoice_detail, name='api-delete-invoice-detail'),
+
+
 
 
 

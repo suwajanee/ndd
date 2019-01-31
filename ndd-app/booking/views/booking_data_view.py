@@ -23,9 +23,14 @@ def api_get_work_list(request):
 
             week, week_serializer = get_week_details(week, year)
 
-            bookings = Booking.objects.filter(Q(principal__pk=customer) & Q(date__lte=week.date_end) & ~Q(status=0)).order_by('date', 'shipper__name', 'booking_no', 'work_id')
+            bookings = Booking.objects.filter(Q(principal__pk=customer) & ~Q(status=0) & ((Q(date__lte=week.date_end) & Q(date__gte=week.date_start)) \
+                                                | (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'booking_no', 'work_id')
 
             serializer = BookingSerializer(bookings, many=True)
             # context['bookings'] = serializer.data
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)  
+
+def booking_summary_status(work_id, status):
+    bookings = Booking.objects.filter(pk__in=work_id).update(summary_status=status)
+    return JsonResponse(True, safe=False)

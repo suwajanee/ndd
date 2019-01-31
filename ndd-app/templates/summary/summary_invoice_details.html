@@ -1,7 +1,9 @@
 <div v-if="invoice_details">
 
 <div class="my-3">
-    <button class="btn btn-outline-info"data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+    <button class="btn btn-outline-warning"data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+
+    
 
     <button class="btn btn-outline-danger float-right" @click="mode='table'">Exit</button>
     <button class="btn btn-outline-info float-right mx-2" @click="mode='edit'">Edit</button>
@@ -18,12 +20,31 @@
     <table class="mt-3 w-100">
         <tr>
             <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td v-if="mode=='edit'" class="px-1" style="width: 200px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice"></td>
-            <td v-else class="p-1 text-center" style="width: 200px; background: Cyan;">{{ invoice }}</td>
-            <td class="text-secondary">
+            <td v-if="mode=='edit'" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice.invoice_no"></td>
+            <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice.invoice_no }}</td>
+            <td class="text-secondary" style="width: 150px;">
                 (Drayage INV.)
             </td>
-            <td rowspan=2 class="text-primary" style="width: 300px;">
+            <td rowspan=2 class="text-center">
+                <div v-if="mode=='edit'" class="input-group col-md-5 container mb-1" :class="{'col-md-10': customer_form.indexOf('date_from') > 0}">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Customer Name</span>
+                    </div>
+                    <input class="form-control" v-model="invoice_customer_name">
+                </div>
+
+                
+                <!-- Customer Name <input class="form-control col-md-4 container" v-model="customer_name"> -->
+            </td>
+            <td rowspan=2 class="text-center" v-if="customer_form.indexOf('date_from') > 0">
+                <div v-if="mode=='edit'" class="input-group col-md-10 container mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Date From</span>
+                    </div>
+                    <input class="form-control" v-model="invoice_date_from">
+                </div>
+            </td>
+            <td rowspan=2 class="text-primary text-right" style="width: 400px;">
                 <template v-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
                 <template v-else-if="customer_form[1]=='1_job_no_out'"><div class="form-inline float-right"><label for="job_no" class="mr-sm-2">JOB NO :</label><input id="job_no" class="form-control text-center p-1 mx-1"></div></template>
                 <template v-else-if="customer_form[1]=='1_ap_billing_no'"><div class="form-inline float-right"><label for="ap_billing_no" class="mr-sm-2">AP BILLING NO :</label><input id="ap_billing_no"  class="form-control text-center p-1 mx-1"></div></template>
@@ -32,13 +53,13 @@
         </tr>
         <!-- <tr>
             <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td class="px-1" style="width: 200px; background: Cyan;"><input class="form-control text-center p-1"></td>
-            <td class="text-secondary">(Gate INV.)</td>
+            <td class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1"></td>
+            <td class="text-secondary" style="width: 150px;">(Gate INV.)</td>
         </tr> -->
     </table>
     
-    <table class="table table-bordered table-bordered-dark">
-        <thead class="text-center">
+    <table class="table table-bordered table-bordered-dark table-light">
+        <thead class="text-center table-secondary">
             <tr>
                 <th rowspan=2 class="border-dark align-middle"></th>
                 <th rowspan=2 class="border-dark align-middle" style="width: 40px;">Item</th>
@@ -86,10 +107,10 @@
                 <th rowspan=2 v-if="customer_form[2]=='2_truck'" class="border-dark align-middle">
                     TRUCK
                 </th>
-                <th rowspan=2 class="align-middle" v-if="customer_main.work_type=='agent_transport'">
+                <th rowspan=2 class="align-middle table-light" v-if="customer_main.work_type=='agent-transport'">
                     NOTE
                 </th>
-                <th rowspan=2 class="align-middle">
+                <th rowspan=2 class="align-middle table-light">
                     NOTE
                 </th>
             </tr>
@@ -103,43 +124,139 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="text-center">
-                    <i class="fa fa-trash"></i>
-                </td>
-            </tr>
+            <template v-for="(inv_detail, index) in invoice_detail_list">
+                <tr class="text-center">
+                    <td class="text-danger cell-click" @click="deleteInvoiceDetail(inv_detail.id)">
+                        <b><i class="fa fa-trash"></i></b>
+                    </td>
+                    <td>
+                        {{ index + 1 }}
+                    </td>
+
+                    <td v-if="invoice_customer_name" class="text-left">
+                        {{ invoice_customer_name }}
+                    </td>
+                    <td v-else class="text-left">
+                        {{ inv_detail.work.shipper.name }}
+                    </td>
+
+                    <td>
+                        <template v-if="mode=='table'">
+                            {{ inv_detail.work.booking_no }}
+                        </template>
+                        <input v-else class="form-control" v-model="inv_detail.work.booking_no"> 
+                    </td>
+                    <td>
+                        {{ inv_detail.work.pickup_from }}
+                    </td>
+                    <td>
+                        {{ inv_detail.work.return_to }}
+                    </td>
+                    <td>
+                        {{ inv_detail.work.date|formatDate }}
+                    </td>
+
+                    <template v-if="customer_type == 'agent-transport'">
+                        <td class="text-center" style="font-weight: 800;">{{ inv_detail.work.container_1 }}</td>
+                        <td v-if="customer_form.indexOf('container_2') > 0" class="text-center" style="font-weight: 800;">{{ inv_detail.work.container_2 }}</td>
+                    </template>
+                    <td v-else class="text-center" style="font-weight: 800;">{{ inv_detail.work.container_no }}</td>
+
+                    <td>
+                        <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                    </td>
+
+                    <td class="text-right">
+                        {{ inv_detail.drayage_charge.drayage }}
+                    </td>
+
+                    <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right">
+                        {{ inv_detail.gate_charge.gate }}
+                    </td>
+                    <td v-if="customer_form.indexOf('date_from') > 0" class="align-middle">
+                        {{ invoice_date_from }}
+                    </td>
+
+                    <td class="text-primary">
+                        {{ inv_detail.detail.remark }}
+                    </td>
+                    <td class="align-middle text-danger border-light" v-if="customer_main.work_type=='agent-transport'">
+                        {{ inv_detail.work.pickup_tr }}<template v-if="inv_detail.work.pickup_tr!=inv_detail.work.return_tr">/{{ inv_detail.work.return_tr }}</template>
+                    </td>
+                    <td class="border-light">
+                        {{ inv_detail.detail.note }}
+                    </td>
+                </tr>
+
+                <tr class="text-center" v-if="customer_form.indexOf('date_from') > 0 && inv_detail.work.container_2">
+                    <td class="text-danger cell-click" @click="deleteInvoiceDetail(inv_detail.id)">
+                        <b><i class="fa fa-trash"></i></b>
+                    </td>
+                    <td>
+                        {{ index + 1 }}
+                    </td>
+
+                    <td v-if="invoice_customer_name" class="text-left">
+                        {{ invoice_customer_name }}
+                    </td>
+                    <td v-else class="text-left">
+                        {{ inv_detail.work.shipper.name }}
+                    </td>
+
+                    <td>
+                        <template v-if="mode=='table'">
+                            {{ inv_detail.work.booking_no }}
+                        </template>
+                        <input v-else class="form-control" v-model="inv_detail.work.booking_no"> 
+                    </td>
+                    <td>
+                        {{ inv_detail.work.pickup_from }}
+                    </td>
+                    <td>
+                        {{ inv_detail.work.return_to }}
+                    </td>
+                    <td>
+                        {{ inv_detail.work.date|formatDate }}
+                    </td>
+
+                    <td class="text-center" style="font-weight: 800;">{{ inv_detail.work.container_2 }}</td>
+
+                    <td>
+                        <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                    </td>
+
+                    <td class="text-right">
+                        {{ inv_detail.drayage_charge.drayage }}
+                    </td>
+
+                    <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right">
+                        {{ inv_detail.gate_charge.gate }}
+                    </td>
+                    <td v-if="customer_form.indexOf('date_from') > 0" class="align-middle">
+                        {{ invoice_date_from }}
+                    </td>
+
+                    <td class="text-primary">
+                        {{ inv_detail.detail.remark }}
+                    </td>
+                    <td class="align-middle text-danger border-light" v-if="customer_main.work_type=='agent-transport'">
+                        {{ inv_detail.work.pickup_tr }}<template v-if="inv_detail.work.pickup_tr!=inv_detail.work.return_tr">/{{ inv_detail.work.return_tr }}</template>
+                    </td>
+                    <td class="border-light">
+                        {{ inv_detail.detail.note }}
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
-    <!-- <table class="table table-bordered invoice-page">
-        <thead class="text-center">
-            <tr>
-                <th rowspan=2 class="border-dark align-middle" style="width: 40px;">Item</th>
-                <th rowspan=2 class="border-dark align-middle">Customer Name</th>
-                <th rowspan=2 class="border-dark align-middle">Booking</th>
-                <th colspan=2 class="border-dark align-middle">Vessel/Truck Routing</th>
-                <th rowspan=2 class="border-dark align-middle">Date</th>
-                <th rowspan=2 class="border-dark align-middle">Container No.1</th>
-                <th rowspan=2 class="border-dark align-middle">Size</th>
-                <th rowspan=2 class="border-dark align-middle">drayage charge</th>
-                <th rowspan=2 class="border-dark align-middle">Gate charge</th>
-                <th rowspan=2 class="border-dark align-middle">Remark</th>
-            </tr>
-            <tr>
-                <th class="border-dark align-middle">From</th>
-                <th class="border-dark align-middle">To</th>
-            </tr>
-
-        </thead>
-
-    </table> -->
 
 
-    {% endverbatim %}
+
 
 </div>
 
 
-<div class="modal fade" id="modalInvoiceDetails" tabindex="-1" role="dialog" aria-hidden="true">    
+<div v-if="invoice" class="modal fade" id="modalInvoiceDetails" tabindex="-1" role="dialog" aria-hidden="true">    
     {% verbatim %}
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -154,21 +271,22 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">YEAR</span>
                         </div>
-                        <select class="custom-select" v-model="query.year" @change="getWeeks">
+                        <select class="custom-select" v-model="invoice.customer_week.week.year.year_label" @change="getWeeks">
                             <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
                         </select>
                     </div>
-                    <div class="input-group mb-3 container">
+                    <div class="input-group container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">WEEK</span>
                         </div>
-                        <select class="custom-select" v-model="summary_week_id">
+                        <select class="custom-select" v-model="invoice.customer_week.week.id">
                             <option v-for="week in week_list" :value="week.id">{{ week.week }}</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer px-5 py-3">
-                    <button >Save</button>
+                    <button class="btn btn-outline-danger mr-auto" @click="deleteInvoice">Delete</button>
+                    <button class="btn btn-primary" @click="editInvoiceWeek">Save</button>
                 </div>
             </div>
         </div>
