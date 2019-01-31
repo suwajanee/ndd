@@ -41,7 +41,7 @@
 
     <!-- <div class="row m-0"> -->
         <div class="col-md-7 summary-invoice">
-            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalWorkList" @click="selectInvoice">New Invoice</button>
+            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalWorkList">New Invoice</button>
             {% verbatim %}
             <div class="switch-field float-right" v-if="customer_details.status">
                 <input type="radio" id="customer_status_0" v-model="customer_details.status" value="0" class="processing" @change="changeStatus" />
@@ -127,8 +127,17 @@
 
         </div>
         <div id="summary-invoice-details" class="col-md-12 mt-5">
-            {% include 'summary/summary_invoice_details.html' %}
-            {% include 'summary/summary_invoice_details_modal.html' %}
+            <template v-if="customer_custom.option=='evergreen'">
+                {% include 'summary/summary_invoice_details_evergreen.html' %}
+                {% include 'summary/summary_invoice_work_list_modal_evergreen.html' %}
+
+            </template>
+            <template v-else>
+                {% include 'summary/summary_invoice_details.html' %}
+                {% include 'summary/summary_invoice_work_list_modal.html' %}
+
+            </template>
+            
         </div>
     <!-- </div> -->
 

@@ -34,7 +34,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">FORM</span>
                         </div>
-                        <select class="custom-select" v-model="customer_setting_modal.form">
+                        <select class="custom-select" v-model="customer_setting_modal.form" :disabled="customer_setting_modal.option=='evergreen'">
                             <option :value="null">------</option>
                             <option v-for="form in summary_forms" :value="form">{{ form.form_name }}</option>
                         </select>

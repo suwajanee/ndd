@@ -43,19 +43,16 @@ def summary_invoice_page(request, year, month, week, customer):
     if customer[1] != '':
         sub_customer_name = CustomerCustom.objects.get(pk=customer[1]).sub_customer
         customer_text.append(sub_customer_name)
-
-        try:
+        try:  
             summary_customer = SummaryCustomer.objects.get(Q(customer_custom__pk=customer[1]) & Q(week__week=week) & Q(week__year__year_label=year)).pk
             customer.append(summary_customer)
         except:
             pass
     else:
-        customer.append('')
         try:
             summary_customer = SummaryCustomer.objects.get(Q(customer_main__pk=customer[0]) & Q(week__week=week) & Q(week__year__year_label=year)).pk
             customer.append(summary_customer)
         except:
             pass
-
 
     return render(request, 'summary/summary_invoice_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week, 'customer': customer, 'customer_text': customer_text})

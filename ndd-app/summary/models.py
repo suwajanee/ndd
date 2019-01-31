@@ -87,7 +87,7 @@ class SummaryCustomer(models.Model):
 
     def __str__(self):
         if self.week and self.customer_custom:
-            return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_custom.sub_customer
+            return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_main.name + " - " + self.customer_custom.sub_customer
         elif self.week and self.customer_main:
             return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_main.name
         else:
@@ -106,7 +106,7 @@ class Invoice(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
     def __str__(self):
-        return self.invoice_no
+        return str(self.customer_week) + " - " + self.invoice_no
 
 
 class InvoiceDetail(models.Model):

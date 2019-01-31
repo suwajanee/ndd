@@ -145,6 +145,12 @@
                                 </tr>
                             </table>
                         </div>
+                        <table class="table table-borderless w-75">
+                            <tr v-if="customer.option">
+                                <td class="text-right"><b>Option :</b></td>
+                                <td class="w-75">{{ customer.option }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -56,7 +56,7 @@ var summary_invoice = new Vue( {
                 summary_invoice_details.summary_week_id = this.summary_week.id
 
                 summary_invoice_details.customer_main = this.customer_details.customer_main
-                if('customer_custom' in this.customer_details){
+                if(this.customer_details.customer_custom != null){
                     summary_invoice_details.customer_custom = this.customer_details.customer_custom
                     summary_invoice_details.customer_main = this.customer_details.customer_custom.customer
                 }                 
@@ -113,6 +113,7 @@ var summary_invoice = new Vue( {
             // if(id && invoice) {
                 
             summary_invoice_details.reload(invoice)
+
             // }
         },
         

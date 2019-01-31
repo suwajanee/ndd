@@ -62,10 +62,20 @@ def add_summary_customer(detail):
         'week': SummaryWeek.objects.get(pk=detail['week']),
         'customer_main': Principal.objects.get(pk=detail['customer_main'])
     }
-    if detail['customer_custom']:
+    # if detail['customer_custom']:
+    if 'customer_custom' in detail:
         data['customer_custom'] = CustomerCustom.objects.get(pk=detail['customer_custom'])
 
     summary_customer = SummaryCustomer(**data)
     summary_customer.save()
 
     return summary_customer
+
+def delete_summary_customer(summary_customer):
+    invoice_count = Invoice.objects.filter(customer_week__pk=summary_customer).count()
+
+    if invoice_count == 0:
+        summary_customer = SummaryCustomer.objects.get(pk=summary_customer)
+        summary_customer.delete()
+
+    return True
