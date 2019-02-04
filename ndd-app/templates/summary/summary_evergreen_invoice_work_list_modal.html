@@ -99,8 +99,8 @@
                 </div>
                 
                 <div class="modal-footer px-5 py-3">
-                    <button class="btn btn-primary" @click="addNewInvoice">Save</button>
-                    <!-- <button @click="addInvoiceDetails">Save</button> -->
+                    <button v-if="work_list_modal_mode=='create'" class="btn btn-primary" @click="addNewInvoice">Create</button>
+                    <button v-else class="btn btn-primary" @click="addInvoiceDetailsEvergreen(invoice)">Add</button>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ var summary_invoice = new Vue( {
         drayage_total: 0,
         gate_total: 0,
 
-        mode: 'table',
+        table_edit: false,
         invoice_details: false,
 
         
@@ -105,7 +105,7 @@ var summary_invoice = new Vue( {
             api("/summary/api/edit-invoice-remark/", "POST", {invoice_remark: this.invoices}).then((data) => {
                 this.getInvoice()
             })
-            this.mode = 'table'
+            this.table_edit = false
         },
 
         selectInvoice(invoice) {

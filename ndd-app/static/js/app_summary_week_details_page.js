@@ -31,7 +31,7 @@ var summary_week_details = new Vue( {
             status: '',
         },
 
-        mode: 'table',
+        table_edit: false,
         saving: false,
         customer_note: [],
         edit_data: [],

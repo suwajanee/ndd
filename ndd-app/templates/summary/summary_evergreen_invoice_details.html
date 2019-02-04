@@ -4,9 +4,13 @@
     <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
 
     
-    <button class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#modelAddFieldEvergreen">test</button>
-    <button class="btn btn-outline-danger float-right" @click="mode='table'">Exit</button>
-    <button class="btn btn-outline-info float-right mx-2" @click="mode='edit'">Edit</button>
+    <!-- <button class="btn btn-outline-danger float-right" @click="table_edit=false">Exit</button> -->
+
+    <button v-if="table_edit" class="btn btn-outline-success float-right mx-2" @click="table_edit=false">Save</button>
+    <button v-else class="btn btn-outline-info float-right mx-2" @click="table_edit=true">Edit</button>
+
+    <button v-if="table_edit" class="btn btn-outline-secondary float-right" data-toggle="modal" data-target="#modelAddFieldEvergreen">Add Data</button>
+
 </div>
 
 
@@ -19,13 +23,13 @@
     <table class="mt-3 w-100">
         <tr>
             <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td v-if="mode=='edit'" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice.invoice_no"></td>
+            <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice.invoice_no"></td>
             <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice.invoice_no }}</td>
             <td class="text-secondary" style="width: 150px;">
                 <!-- (Drayage INV.) -->
             </td>
             <td rowspan=2 class="text-center">
-                <div v-if="mode=='edit'" class="input-group col-md-10 container mb-1" :class="{'col-md-10': customer_form.indexOf('date_from') > 0}">
+                <div v-if="table_edit" class="input-group col-md-10 container mb-1" :class="{'col-md-10': customer_form.indexOf('date_from') > 0}">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Customer Name</span>
                     </div>
@@ -34,7 +38,7 @@
 
             </td>
             <td rowspan=2 class="text-center">
-                <div v-if="mode=='edit'" class="input-group col-md-10 container mb-1">
+                <div v-if="table_edit" class="input-group col-md-10 container mb-1">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Date From</span>
                     </div>
@@ -59,7 +63,7 @@
                 <th rowspan=2 class="border-dark align-middle">
                     Customer Name
                 </th>
-                <th v-if="mode=='edit'" rowspan=2 colspan=2 class="border-dark align-middle">
+                <th v-if="table_edit" rowspan=2 colspan=2 class="border-dark align-middle">
                     JOB NO/BOOKING
                 </th>
                 <th v-else rowspan=2 class="border-dark align-middle">
@@ -107,7 +111,7 @@
         <tbody>
             <template v-for="(inv_detail, index) in invoice_detail_list">
                 <tr class="text-center">
-                    <td class="text-danger cell-click" @click="deleteInvoiceDetail(inv_detail.id)">
+                    <td class="text-danger cell-click" @click="deleteInvoiceDetail(inv_detail.id, inv_detail.work.id)">
                         <b><i class="fa fa-trash"></i></b>
                     </td>
                     <td>
@@ -121,12 +125,12 @@
                         {{ inv_detail.work.shipper.name }}
                     </td>
 
-                    <template v-if="mode=='edit'">
+                    <template v-if="table_edit">
                         <td>
-                            <input class="form-control" placeholder="Job No" v-model="inv_detail.detail.job_no">
+                            <input class="form-control text-center" placeholder="Job No" v-model="inv_detail.detail.job_no">
                         </td>
                         <td>
-                            <input class="form-control" v-model="inv_detail.work.booking_no" placeholder="Booking No"> 
+                            <input class="form-control text-center" v-model="inv_detail.work.booking_no" placeholder="Booking No"> 
                         </td>
                     </template>
                     <td v-else>
@@ -134,23 +138,53 @@
                     </td>
                     
                     <td>
-                        {{ inv_detail.detail.from }}
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.from" style="width: 120px;">
+                        <template v-else>
+                            {{ inv_detail.detail.from }}
+                        </template>
                     </td>
                     <td>
-                        {{ inv_detail.detail.to }}
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.to" style="width: 120px;">
+                        <template v-else>
+                            {{ inv_detail.detail.to }}
+                        </template>
                     </td>
                     <td>
-                        {{ inv_detail.detail.date }}
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.date">
+                        <template v-else>
+                            {{ inv_detail.detail.date }}
+                        </template>
                     </td>
 
-                    <td class="text-center" style="font-weight: 800;">{{ inv_detail.detail.container }}</td>
+                    <td v-if="inv_detail.detail.container==1" class="text-center">
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_1">
+                        <template v-else>
+                            {{ inv_detail.work.container_1 }}
+                        </template>
+                    </td>
+                    <td v-else class="text-center">
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_2">
+                        <template v-else>
+                            {{ inv_detail.work.container_2 }}
+                        </template>
+                    </td>
 
                     <td>
-                        <template v-if="inv_detail.detail.size">1X{{ inv_detail.detail.size }}'</template>
+                        <select v-if="table_edit" class="custom-select size" v-model="inv_detail.detail.size">
+                            <option value=""> -------- </option>
+                            <option value="20">20'</option>
+                            <option value="40">40'</option>
+                        </select>   
+                        <template v-else>
+                            <template v-if="inv_detail.detail.size">1X{{ inv_detail.detail.size }}'</template>
+                        </template>        
                     </td>
 
                     <td class="text-right">
-                        {{ inv_detail.drayage_charge.drayage }}
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                        <template v-else>
+                            {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
+                        </template>
                     </td>
 
                     <td class="align-middle">
@@ -158,18 +192,43 @@
                     </td>
 
                     <td class="text-primary">
-                        {{ inv_detail.detail.truck }}
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.truck" style="width: 120px;">
+                        <template v-else>
+                            {{ inv_detail.detail.truck }}
+                        </template>
                     </td>
 
                     <td class="align-middle text-danger border-light">
                         {{ inv_detail.work.pickup_tr }}<template v-if="inv_detail.work.pickup_tr!=inv_detail.work.return_tr">/{{ inv_detail.work.return_tr }}</template>
                     </td>
-                    <td class="border-light">
-                        {{ inv_detail.detail.note }}
+                    <td class="border-light" :class="{'bg-processing': inv_detail.detail.note}">
+                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.note" > 
+                        <template v-else>
+                            {{ inv_detail.detail.note }}
+                        </template>
                     </td>
                 </tr>
 
             </template>
+            <tr class="text-center font-weight-bold">
+                <td class="text-success cell-click align-middle" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'">
+                    <i class="fa fa-plus"></i>
+                </td>
+
+                <td v-if="table_edit" colspan=9 class="table-secondary">Total</td>
+                <td v-else colspan=8 class="table-secondary">Total</td>
+
+                <td class="text-right table-secondary">{{ drayageTotal|currencyCommas }}</td>
+                <td class="text-right table-secondary">-</td>
+            </tr>
+            <tr class="text-center table-secondary font-weight-bold">
+                <td></td>
+
+                <td v-if="table_edit" colspan=9>G.Total</td>
+                <td v-else colspan=8>G.Total</td>
+
+                <td colspan=2 class="text-right">{{ drayageTotal|currencyCommas }}</td>
+            </tr>
         </tbody>
     </table>
 

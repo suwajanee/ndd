@@ -42,7 +42,7 @@
     <!-- <div class="row m-0"> -->
         <div class="col-md-7 summary-invoice">
             
-            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalWorkList">New Invoice</button>
+            <button class="btn btn-outline-success" style="margin-top:20px;" data-toggle="modal" data-target="#modalWorkList" @click="summary_invoice_details.work_list_modal_mode='create'">New Invoice</button>
             {% verbatim %}
             <div class="switch-field float-right" v-if="customer_details.status">
                 <input type="radio" id="customer_status_0" v-model="customer_details.status" value="0" class="processing" @change="changeStatus" />
@@ -72,8 +72,8 @@
                         </th>
                         <th class="border-dark align-middle">
                             Remark
-                            <button v-if="mode=='edit'" class="btn btn-sm btn-outline-success float-right" @click="editInvoiceRemark"><i class="fa fa-floppy-o"></i></button>
-                            <button v-else class="btn btn-sm btn-outline-info float-right" @click="mode='edit'"><i class="fa fa-edit"></i></button>
+                            <button v-if="table_edit" class="btn btn-sm btn-outline-success float-right" @click="editInvoiceRemark"><i class="fa fa-floppy-o"></i></button>
+                            <button v-else class="btn btn-sm btn-outline-info float-right" @click="table_edit=true"><i class="fa fa-edit"></i></button>
                         </th>
                         <!-- <th style="width: 50px;"></th> -->
                     </thead>
@@ -92,7 +92,7 @@
                                 {{ inv.gate_total|currencyCommas }}
                             </td>
                             <td class="text-center">
-                                <input v-if="mode=='edit'" class="form-control" v-model="inv.detail.remark">
+                                <input v-if="table_edit" class="form-control" v-model="inv.detail.remark">
                                 <template v-else>{{ inv.detail.remark }}</template>
                             </td>
                             <td class="text-center align-middle p-0 border-light bg-light" style="width: 80px;">
@@ -149,7 +149,7 @@
             
         </div>
         <div id="summary-evergreen" >
-                {% include 'summary/summary_evergreen_invoice.html' %}
+                {% include 'summary/summary_evergreen_add_fields.html' %}
 
         </div>
 

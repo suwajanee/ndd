@@ -46,6 +46,7 @@ def api_add_invoice_details(request):
                         },
                         'detail': {
                             'remark': '',
+                            'note': ''
                         },
                     }
                     invoice_detail = InvoiceDetail(**data)
@@ -65,6 +66,7 @@ def api_add_invoice_details(request):
                         },
                         'detail': {
                             'remark': '',
+                            'note': ''
                         },
                     }
                     invoice_detail = InvoiceDetail(**data)
@@ -114,14 +116,15 @@ def api_add_invoice_details_evergreen(request):
                         'date': '',
                         'size': '',
                         'truck': '',
+                        'note': ''
                     },
                 }
                 
                 if work_container == '1':
-                    data['detail']['container'] = work_object.container_1
+                    data['detail']['container'] = 1
 
                 elif work_container == '2':
-                    data['detail']['container'] = work_object.container_2
+                    data['detail']['container'] = 2
 
                 invoice_detail = InvoiceDetail(**data)
                 invoice_detail.save()
@@ -153,6 +156,9 @@ def api_delete_invoice_detail(request):
             req = json.loads( request.body.decode('utf-8') )
             invoice_detail_id = req['invoice_detail_id']
             customer_type = req['customer_type']
+            if 'work_id' in req:
+                work_id = req['work_id']    
+                invoice_detail_id = InvoiceDetail.objects.filter(work_agent_transport__pk=work_id)
 
             status = delete_invoice_details(invoice_detail_id, customer_type)
 

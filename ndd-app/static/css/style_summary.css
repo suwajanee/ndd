@@ -140,3 +140,9 @@ table.invoice-page {
 .bg-finished {
     background-color: #A5DC86;
 }
+
+select.size {
+    min-width: 75px;
+    padding: 0px 12px;
+    height: 25px;
+}
