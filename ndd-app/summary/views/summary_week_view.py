@@ -131,43 +131,20 @@ def api_get_summary_week_details(request):
                         data = copy.deepcopy(data)
                         customer_custom_serializer = CustomerCustomSerializer(sub_customer, many=False)
                         data['customer_custom'] = customer_custom_serializer.data
+                        
 
                         summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_custom=sub_customer))
+
                         if summary_customer:
                             data = summary_customer_json(data, summary_customer)
-                            # customer = summary_customer[0]
-                            # data['id'] = customer.pk
-                            # data['date_billing'] = customer.date_billing
-                            # data['date_end'] = customer.date_end
-                            # data['detail'] = customer.detail
-                            # data['status'] = customer.status
-
-                            # invoice = Invoice.objects.filter(Q(customer_week = customer))
-                            # drayage_total = invoice.aggregate(sum_drayage_total=Sum('drayage_total'))['sum_drayage_total']
-                            # gate_total = invoice.aggregate(sum_gate_total=Sum('gate_total'))['sum_gate_total']
-                            # if drayage_total or gate_total:
-                            #     data['drayage_total'] = float(drayage_total)
-                            #     data['gate_total'] = float(gate_total)
-
+                        else:
+                            data = summary_customer_json(data, '')
 
                         summary_week_details.append(data)
                 else:
                     summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_main=customer))
                     if summary_customer:
                         data = summary_customer_json(data, summary_customer)
-                        # customer = summary_customer[0]
-                        # data['id'] = customer.pk
-                        # data['date_billing'] = customer.date_billing
-                        # data['date_end'] = customer.date_end
-                        # data['detail'] = customer.detail
-                        # data['status'] = customer.status
-
-                        # invoice = Invoice.objects.filter(Q(customer_week = customer))
-                        # drayage_total = invoice.aggregate(sum_drayage_total=Sum('drayage_total'))['sum_drayage_total']
-                        # gate_total = invoice.aggregate(sum_gate_total=Sum('gate_total'))['sum_gate_total']
-                        # if drayage_total or gate_total:
-                        #     data['drayage_total'] = float(drayage_total)
-                        #     data['gate_total'] = float(gate_total)
  
                     summary_week_details.append(data)
             details['summary_week_details'] = summary_week_details            
@@ -175,19 +152,29 @@ def api_get_summary_week_details(request):
     return JsonResponse('Error', safe=False)
 
 def summary_customer_json(data, summary_customer):
-    customer = summary_customer[0]
-    data['id'] = customer.pk
-    data['date_billing'] = customer.date_billing
-    data['date_end'] = customer.date_end
-    data['detail'] = customer.detail
-    data['status'] = customer.status
+    if summary_customer:
+        customer = summary_customer[0]
+        data['id'] = customer.pk
+        data['date_billing'] = customer.date_billing
+        data['date_end'] = customer.date_end
+        data['detail'] = customer.detail
+        data['status'] = customer.status
 
-    invoice = Invoice.objects.filter(Q(customer_week = customer))
-    drayage_total = invoice.aggregate(sum_drayage_total=Sum('drayage_total'))['sum_drayage_total']
-    gate_total = invoice.aggregate(sum_gate_total=Sum('gate_total'))['sum_gate_total']
-    if drayage_total or gate_total:
-        data['drayage_total'] = float(drayage_total)
-        data['gate_total'] = float(gate_total)
+        invoice = Invoice.objects.filter(Q(customer_week = customer))
+        drayage_total = invoice.aggregate(sum_drayage_total=Sum('drayage_total'))['sum_drayage_total']
+        gate_total = invoice.aggregate(sum_gate_total=Sum('gate_total'))['sum_gate_total']
+        if drayage_total or gate_total:
+            data['drayage_total'] = float(drayage_total)
+            data['gate_total'] = float(gate_total)
+    else:
+        data['id'] = ''
+        data['date_billing'] = ''
+        data['date_end'] = ''
+        data['detail'] = ''
+        data['status'] = ''
+        data['drayage_total'] = 0
+        data['gate_total'] = 0
+
     return data
 
 

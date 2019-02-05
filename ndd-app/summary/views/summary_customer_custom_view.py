@@ -6,7 +6,7 @@ import re
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import CustomerCustom,FormDetail
+from ..models import CustomerCustom, FormDetail, SummaryCustomer
 from ..serializers import CustomerCustomSerializer
 from customer.models import Principal
 
@@ -32,8 +32,10 @@ def api_add_customer_custom(request):
             customer = req['customer_setting']
             form = customer['form']
 
+            customer_main = Principal.objects.get(pk=customer['customer']['id'])
+
             data = {
-                'customer': Principal.objects.get(pk=customer['customer']['id']),
+                'customer': customer_main,
                 'sub_customer': re.sub(' +', ' ', customer['sub_customer'].strip()),
                 'customer_title': re.sub(' +', ' ', customer['customer_title'].strip()),
             }
@@ -43,6 +45,10 @@ def api_add_customer_custom(request):
 
             customer_setting = CustomerCustom(**data)
             customer_setting.save()
+
+            invoice_count = CustomerCustom.objects.filter(customer=customer_main).count()
+            if invoice_count == 1:
+                summary_customer = SummaryCustomer.objects.filter(customer_main=customer_main).update(customer_custom=customer_setting)
 
             return api_get_customer_custom(request)
     return JsonResponse('Error', safe=False)

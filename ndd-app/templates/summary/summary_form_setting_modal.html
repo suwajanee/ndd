@@ -89,7 +89,15 @@
                                     Drayage Charge
                                 </td>
 
-                                <td rowspan=2 class="align-middle">
+                                <!-- <td rowspan=2 class="align-middle">
+                                    Gate Charge
+                                </td> -->
+
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('gate_charge') <= 0 }">
+                                    <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
+                                        <input type="checkbox" class="custom-control-input" id="gate_charge"  value="gate_charge" v-model="form_setting_modal.form_detail">
+                                        <label class="custom-control-label" for="gate_charge"></label>
+                                    </div>
                                     Gate Charge
                                 </td>
 
