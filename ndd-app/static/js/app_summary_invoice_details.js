@@ -37,11 +37,19 @@ var summary_invoice_details = new Vue( {
         table_edit: false,
         invoice_details: false,
 
-        invoice_customer_name: '',
-        invoice_date_from: '',
-        invoice_other_data: '',
+        invoice_data: {
+            invoice_no: '',
+            customer_name: '',
+            date_from: '',
+            other: '',
+        },
+        
 
+        saving: false,
+        not_save: false,
 
+        drayage_total: '',
+        gate_total: '',
         
     },
     computed: {
@@ -73,25 +81,46 @@ var summary_invoice_details = new Vue( {
         },
 
         drayageTotal() {
+            this.not_save = false
             var total = 0
             for(inv_detail in this.invoice_detail_list) {
-                var result = eval(this.invoice_detail_list[inv_detail].drayage_charge.drayage)
+                var drayage = this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].drayage_charge.drayage.replace(',', '')
+                try {
+                    var result = eval(drayage)
+                }
+                catch(err) {
+                    var result = 0
+                    this.not_save = true
+                }
                 if(isNaN(result)){
                     result = 0
                 }
+
                 total += result
+
             }
+            this.drayage_total = total
+
             return total
         },
         gateTotal() {
+            this.not_save = false
             var total = 0
             for(inv_detail in this.invoice_detail_list) {
-                var result = eval(this.invoice_detail_list[inv_detail].gate_charge.gate)
+                var gate = this.invoice_detail_list[inv_detail].gate_charge.gate = this.invoice_detail_list[inv_detail].gate_charge.gate.replace(',', '')
+                try {
+                    var result = eval(gate)
+                }
+                catch(err) {
+                    var result = 0
+                    this.not_save = true
+                }
                 if(isNaN(result)){
                     result = 0
                 }
                 total += result
             }
+            this.gate_total = total
             return total
         }
 
@@ -113,9 +142,10 @@ var summary_invoice_details = new Vue( {
         },
         invoiceEditFields() {
             if(this.invoice.detail) {
-                this.invoice_customer_name = this.invoice.detail.customer_name
-                this.invoice_date_from = this.invoice.detail.invoice_date_from
-                this.invoice_other_data = this.invoice.detail.other_data
+                this.invoice_data.invoice_no = this.invoice.invoice_no
+                this.invoice_data.customer_name = this.invoice.detail.customer_name
+                this.invoice_data.date_from = this.invoice.detail.date_from
+                this.invoice_data.other = this.invoice.detail.other
             }
         },
 
@@ -161,22 +191,24 @@ var summary_invoice_details = new Vue( {
 
         getInvoiceDetails(invoice_id) {
             api("/summary/api/get-invoice-details/", "POST", {invoice_id: invoice_id}).then((data) => {
-                this.invoice_detail_list = data
-                this.addWorkKey()
+                this.afterGetInvoiceDetails(data) 
             })
         },
         addWorkKey() {
             if(this.customer_type == 'agent-transport') {
                 for(inv_detail in this.invoice_detail_list){
                     this.invoice_detail_list[inv_detail].work = this.invoice_detail_list[inv_detail].work_agent_transport
-                    this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].work.price
+                    // this.invoice_detail_list[inv_detail].work = Object.assign({}, this.invoice_detail_list[inv_detail].work_agent_transport)
+                    if(! this.invoice_detail_list[inv_detail].drayage_charge.drayage) {
+                        this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].work.price
+                    }
 
-                    if(! this.invoice_detail_list[inv_detail].detail.remark) {
-                        this.invoice_detail_list[inv_detail].detail.remark = ''
-                    }
-                    if(! this.invoice_detail_list[inv_detail].detail.remark) {
-                        this.invoice_detail_list[inv_detail].detail.remark = ''
-                    }
+                    // if(! this.invoice_detail_list[inv_detail].detail.remark) {
+                    //     this.invoice_detail_list[inv_detail].detail.remark = ''
+                    // }
+                    // if(! this.invoice_detail_list[inv_detail].detail.note) {
+                    //     this.invoice_detail_list[inv_detail].detail.note = ''
+                    // }
 
                 }
             }
@@ -184,9 +216,12 @@ var summary_invoice_details = new Vue( {
                 for(inv_detail in this.invoice_detail_list){
                     this.invoice_detail_list[inv_detail].work = this.invoice_detail_list[inv_detail].work_normal
 
-                    if(! this.invoice_detail_list[inv_detail].detail.remark) {
-                        this.invoice_detail_list[inv_detail].detail.remark = ''
-                    }
+                    // if(! this.invoice_detail_list[inv_detail].detail.remark) {
+                    //     this.invoice_detail_list[inv_detail].detail.remark = ''
+                    // }
+                    // if(! this.invoice_detail_list[inv_detail].detail.note) {
+                    //     this.invoice_detail_list[inv_detail].detail.note = ''
+                    // }
                 }
                 
             }
@@ -206,9 +241,9 @@ var summary_invoice_details = new Vue( {
             return data
         },
 
-        addNewInvoice() { 
+        addNewInvoice() {
             var data = this.dataAddSummaryCustomer()
-            
+
             api("/summary/api/add-invoice/", "POST", {summary_details: data}).then((data) => {
                 if(data) {
                     this.query.summary_customer = data.customer_week.id
@@ -218,14 +253,23 @@ var summary_invoice_details = new Vue( {
                     else {
                         this.addInvoiceDetails(data)    
                     }
+                    this.reload(data)
                 }
             })
+        },
+
+
+        afterGetInvoiceDetails(data) {
+            this.invoice_detail_list = data
+            this.addWorkKey()
+            this.work_selected = []
         },
         addInvoiceDetails(invoice) {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
-                this.reload(invoice)
+                // this.reload(invoice)
                 this.invoice_details = true
+                this.afterGetInvoiceDetails(data) 
             })
             $('#modalWorkList').modal('hide');
 
@@ -233,8 +277,9 @@ var summary_invoice_details = new Vue( {
         addInvoiceDetailsEvergreen(invoice) {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details-evergreen/", "POST", {invoice_id: invoice.id, work_list: this.work_selected}).then((data) => {
-                this.reload(invoice)
+                // this.reload(invoice)
                 this.invoice_details = true
+                this.afterGetInvoiceDetails(data) 
             })
             $('#modalWorkList').modal('hide');
 
@@ -247,7 +292,7 @@ var summary_invoice_details = new Vue( {
                 api("/summary/api/edit-invoice-week/", "POST", {invoice_id: this.invoice_id, summary_details: data}).then((data) => {
                     if(data) {
                         summary_invoice.getInvoice()
-                        $('#modalInvoiceDetails').modal('hide');
+                        $('#modalInvoiceDetails').modal('hide')
                         this.invoice_details = false
                     }
                 })
@@ -260,8 +305,12 @@ var summary_invoice_details = new Vue( {
                 api("/summary/api/delete-invoice-week/", "POST", {invoice_id: this.invoice_id, summary_customer_id: this.query.summary_customer, customer_type: this.customer_type}).then((data) => {
                     if(data) {
                         summary_invoice.getInvoice()
-                        $('#modalInvoiceDetails').modal('hide');
+                        $('#modalInvoiceDetails').modal('hide')
                         this.invoice_details = false
+
+                        if(summary_invoice.invoices.length-1 == 0) {
+                            delete this.query.summary_customer
+                        }
                     }
                 })
             }
@@ -270,17 +319,16 @@ var summary_invoice_details = new Vue( {
         deleteInvoiceDetail(id, work_id) {
             if (confirm('Are you sure?')){
                 var invoice_detail_id = [id]
-                api("/summary/api/delete-invoice-detail/", "POST", {invoice_detail_id: invoice_detail_id, customer_type: this.customer_type, work_id: work_id}).then((data) => {
+                api("/summary/api/delete-invoice-detail/", "POST", {invoice_id: this.invoice_id, invoice_detail_id: invoice_detail_id, customer_type: this.customer_type, work_id: work_id}).then((data) => {
                     if(data) {
-                        this.getInvoiceDetails(this.invoice_id)
-                        this.getWorkList()
+                        summary_invoice.getInvoice()
+                        this.afterGetInvoiceDetails(data)
                     }
                 })
             }
         },
 
         evergreenSelectWork(work_click, work_action) {
-
             var action = this.work_selected.indexOf(work_action)
             if(this.work_selected.indexOf(work_click) >= 0){
                 this.work_selected.splice(action, 1)                
@@ -290,8 +338,29 @@ var summary_invoice_details = new Vue( {
                 this.work_selected.push(work_action)
             }
                 
-        }
+        },
 
-        
+        editInvoiceDetails() {
+            this.saving = true
+            var post_data = {
+                invoice_id: this.invoice_id, 
+                invoice_data: this.invoice_data, 
+                invoice_detail_list: this.invoice_detail_list, 
+                customer_type: this.customer_type,
+                drayage_total: this.drayage_total,
+                gate_total: this.gate_total,
+
+            }
+            summary_invoice.getInvoice()
+            api("/summary/api/edit-invoice-details/", "POST", post_data).then((data) => {
+                this.invoice_details = true
+                summary_invoice.getInvoice()
+                this.afterGetInvoiceDetails(data) 
+                this.saving = false
+
+            })
+
+        },
+
     }
 })

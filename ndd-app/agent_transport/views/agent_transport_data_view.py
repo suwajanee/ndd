@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import re
 
 from django.db.models import Q
 from django.http import JsonResponse
@@ -32,3 +33,20 @@ def api_get_work_list(request):
 def agent_transport_summary_status(work_id, status):
     agent_transports = AgentTransport.objects.filter(pk__in=work_id).update(summary_status=status)
     return JsonResponse(True, safe=False)
+
+def agent_transport_edit_summary(agent_transports):
+    for agent_transport in agent_transports:
+        agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
+
+        agent_transport_save.booking_no = re.sub(' +', ' ', agent_transport['booking_no'].strip())
+        agent_transport_save.pickup_from = re.sub(' +', ' ', agent_transport['pickup_from'].strip())
+        agent_transport_save.return_to = re.sub(' +', ' ', agent_transport['return_to'].strip())
+
+        if 'container_1' in agent_transport:
+            agent_transport_save.container_1 = re.sub(' +', ' ', agent_transport['container_1'].strip())
+        if 'container_2' in agent_transport:
+            agent_transport_save.container_2 = re.sub(' +', ' ', agent_transport['container_2'].strip())
+        agent_transport_save.size = re.sub(' +', ' ', agent_transport['size'].strip())
+        agent_transport_save.save()
+
+    return True

@@ -17,8 +17,8 @@ from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer, Invo
 from customer.serializers import PrincipalSerializer
 from .summary_week_view import get_week_details
 from .summary_customer_view import add_summary_customer, delete_summary_customer
-from booking.views.booking_data_view import booking_summary_status
-from agent_transport.views.agent_transport_data_view import agent_transport_summary_status
+from booking.views.booking_data_view import booking_summary_status, booking_edit_summary
+from agent_transport.views.agent_transport_data_view import agent_transport_summary_status, agent_transport_edit_summary
 
 
 @csrf_exempt
@@ -115,7 +115,7 @@ def api_add_invoice_details_evergreen(request):
                         'to': '',
                         'date': '',
                         'size': '',
-                        'truck': '',
+                        'remark': '',
                         'note': ''
                     },
                 }
@@ -154,6 +154,7 @@ def api_delete_invoice_detail(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
+            invoice_id = req['invoice_id']
             invoice_detail_id = req['invoice_detail_id']
             customer_type = req['customer_type']
             if 'work_id' in req:
@@ -162,7 +163,7 @@ def api_delete_invoice_detail(request):
 
             status = delete_invoice_details(invoice_detail_id, customer_type)
 
-            return JsonResponse(True, safe=False)
+            return api_get_invoice_details(request)
     return JsonResponse('Error', safe=False)
 
 def delete_invoice_details(invoice_detail, customer_type):
@@ -180,4 +181,87 @@ def delete_invoice_details(invoice_detail, customer_type):
 
     invoice_details.delete()
     return True
+
+
+@csrf_exempt
+def api_edit_invoice_details(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            invoice_id = req['invoice_id']
+            invoice_data = req['invoice_data']
+            invoice_detail_list = req['invoice_detail_list']
+            customer_type = req['customer_type']
+
+            drayage_total = req['drayage_total']
+            gate_total = req['gate_total']
+
+            works = []
+
+            invoice = Invoice.objects.get(pk=invoice_id)
+            invoice.invoice_no = invoice_data['invoice_no']
+            invoice.drayage_total = drayage_total
+            if gate_total:
+                invoice.gate_total = gate_total
+
+            invoice = check_key_detail(invoice, invoice_data, 'customer_name', True)
+            invoice = check_key_detail(invoice, invoice_data, 'date_from', True)
+            invoice = check_key_detail(invoice, invoice_data, 'other', True)
+
+            invoice.save()
+
+            for detail in invoice_detail_list:
+
+                invoice_detail = InvoiceDetail.objects.get(pk=detail['id'])
+                invoice_detail.drayage_charge['drayage'] = detail['drayage_charge']['drayage']
+
+                if invoice_detail.gate_charge:
+                    invoice_detail.gate_charge['gate'] = detail['gate_charge']['gate']
+
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'remark', False)
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'note', False)
+
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'job_no', False)
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'from', False)
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'to', False)
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'date', False)
+                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'size', False)
+
+                invoice_detail.save()
+
+                if 'container' in detail['detail']:
+                    container = detail['detail']['container']
+                    if container == 1:
+                        detail['work'].pop('container_2')
+                    else:
+                        detail['work'].pop('container_1')
+                
+                works.append(detail['work'])
+            
+            if customer_type == 'normal':
+                booking_edit_summary(works)
+            else:
+                agent_transport_edit_summary(works)
+
+            return api_get_invoice_details(request)
+    return JsonResponse('Error', safe=False)
+
+
+def check_key_detail(invoice, data, key, pop):
+    
+    try:
+        if data[key]:
+            invoice.detail[key] = data[key]
+        else: 
+            try:
+                if pop:
+                    invoice.detail.pop(key)
+                else:
+                    invoice.detail[key] = ''
+            except:
+                pass
+    except:
+        pass
+    return invoice
+
 

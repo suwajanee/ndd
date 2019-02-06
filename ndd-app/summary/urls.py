@@ -69,6 +69,7 @@ urlpatterns = [
     url(r'^api/get-invoice-details/$', summary_invoice_details_view.api_get_invoice_details, name='api-get-invoice-details'),
     url(r'^api/add-invoice-details/$', summary_invoice_details_view.api_add_invoice_details, name='api-add-invoice-details'),
     url(r'^api/delete-invoice-detail/$', summary_invoice_details_view.api_delete_invoice_detail, name='api-delete-invoice-detail'),
+    url(r'^api/edit-invoice-details/$', summary_invoice_details_view.api_edit_invoice_details, name='api-edit-invoice-details'),
 
 
     # Evergreen

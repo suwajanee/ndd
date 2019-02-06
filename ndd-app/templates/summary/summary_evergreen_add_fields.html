@@ -27,7 +27,7 @@
                                 <td><textarea class="form-control" rows=10 v-model="date"></textarea></td>
                                 <td><textarea class="form-control" rows=10 v-model="container"></textarea></td>
                                 <td><textarea class="form-control" rows=10 v-model="size"></textarea></td>
-                                <td><textarea class="form-control" rows=10 v-model="truck"></textarea></td>
+                                <td><textarea class="form-control" rows=10 v-model="remark"></textarea></td>
                                 <td><textarea class="form-control" rows=10 v-model="drayage"></textarea></td>
                             </tbody>
                         </table>
@@ -46,7 +46,7 @@
 
 var summary_invoice_details = new Vue( {
     
-    el: '#summary-evergreen',
+    el: '#modelAddFieldEvergreen',
     data: {
         job_no: '',
         from: '',
@@ -55,7 +55,7 @@ var summary_invoice_details = new Vue( {
         container: '',
         size: '',
         drayage: '',
-        truck: '',
+        remark: '',
     },
 
 
@@ -68,7 +68,7 @@ var summary_invoice_details = new Vue( {
             var container = this.container.split('\n')
             var size = this.size.split('\n')
             var drayage = this.drayage.split('\n')
-            var truck = this.truck.split('\n')
+            var remark = this.remark.split('\n')
 
             for(invoice_detail in summary_invoice_details.invoice_detail_list) {
                 var status = false
@@ -92,11 +92,12 @@ var summary_invoice_details = new Vue( {
                     details.to = to[invoice_detail]
                     details.date = date[invoice_detail]
                     details.size = size[invoice_detail]
-                    details.truck = truck[invoice_detail]
+                    details.remark = remark[invoice_detail]
 
                     summary_invoice_details.invoice_detail_list[invoice_detail].drayage_charge.drayage = drayage[invoice_detail]
                 }
             }
+            $('#modelAddFieldEvergreen').modal('hide')
 
         }
     }
