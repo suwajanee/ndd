@@ -143,7 +143,7 @@ def api_get_invoice_details(request):
             req = json.loads( request.body.decode('utf-8') )
             invoice_id = req['invoice_id']
 
-            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date')
+            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date', 'pk')
             invoice_details_serializer = InvoiceDetailSerializer(invoice_details, many=True)
 
             return JsonResponse(invoice_details_serializer.data, safe=False)
@@ -160,8 +160,12 @@ def api_delete_invoice_detail(request):
             if 'work_id' in req:
                 work_id = req['work_id']    
                 invoice_detail_id = InvoiceDetail.objects.filter(work_agent_transport__pk=work_id)
-
+            
             status = delete_invoice_details(invoice_detail_id, customer_type)
+            
+            invoice = Invoice.objects.get(pk=invoice_id)
+            invoice = save_invoice_total_charge(invoice, req['drayage_total'], req['gate_total'])
+            invoice.save()
 
             return api_get_invoice_details(request)
     return JsonResponse('Error', safe=False)
@@ -182,6 +186,12 @@ def delete_invoice_details(invoice_detail, customer_type):
     invoice_details.delete()
     return True
 
+def save_invoice_total_charge(invoice, drayage_total, gate_total):
+    invoice.drayage_total = drayage_total
+    if gate_total:
+        invoice.gate_total = gate_total
+    return invoice
+
 
 @csrf_exempt
 def api_edit_invoice_details(request):
@@ -200,9 +210,11 @@ def api_edit_invoice_details(request):
 
             invoice = Invoice.objects.get(pk=invoice_id)
             invoice.invoice_no = invoice_data['invoice_no']
-            invoice.drayage_total = drayage_total
-            if gate_total:
-                invoice.gate_total = gate_total
+
+            invoice = save_invoice_total_charge(invoice, drayage_total, gate_total)
+            # invoice.drayage_total = drayage_total
+            # if gate_total:
+            #     invoice.gate_total = gate_total
 
             invoice = check_key_detail(invoice, invoice_data, 'customer_name', True)
             invoice = check_key_detail(invoice, invoice_data, 'date_from', True)
@@ -248,7 +260,6 @@ def api_edit_invoice_details(request):
 
 
 def check_key_detail(invoice, data, key, pop):
-    
     try:
         if data[key]:
             invoice.detail[key] = data[key]

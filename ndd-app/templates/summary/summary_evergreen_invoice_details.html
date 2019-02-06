@@ -6,12 +6,12 @@
     
     <!-- <button class="btn btn-outline-danger float-right" @click="table_edit=false">Exit</button> -->
 
-    <button v-if="table_edit" class="btn btn-outline-success float-right mx-2" @click="editInvoiceDetails">Save</button>
-    <button v-if="table_edit" class="btn btn-outline-danger float-right" @click="table_edit=false">Exit</button>
+    <button v-if="table_edit" class="btn btn-outline-success float-right mx-2" @click="editInvoiceDetails" :disabled="not_save">Save</button>
+    <button v-if="table_edit" class="btn btn-outline-danger float-right" @click="table_edit=false" :disabled="not_save">Exit</button>
 
     <button v-else class="btn btn-outline-info float-right mx-2" @click="table_edit=true">Edit</button>
 
-    <button v-if="table_edit" class="btn btn-outline-secondary float-right mx-2" data-toggle="modal" data-target="#modelAddFieldEvergreen">Add Data</button>
+    <button v-if="table_edit" class="btn btn-outline-secondary float-right mx-2" data-toggle="modal" data-target="#modelAddFieldEvergreen" :disabled="not_save">Add Data</button>
     <div v-if="saving == true" class="mr-2 pt-2 text-secondary float-right"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
 
 

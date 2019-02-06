@@ -140,13 +140,12 @@ var summary_invoice_details = new Vue( {
             this.getYears()
             
         },
-        invoiceEditFields() {
-            if(this.invoice.detail) {
-                this.invoice_data.invoice_no = this.invoice.invoice_no
-                this.invoice_data.customer_name = this.invoice.detail.customer_name
-                this.invoice_data.date_from = this.invoice.detail.date_from
-                this.invoice_data.other = this.invoice.detail.other
-            }
+
+        // Get initial data
+        getInvoiceDetails(invoice_id) {
+            api("/summary/api/get-invoice-details/", "POST", {invoice_id: invoice_id}).then((data) => {
+                this.afterGetInvoiceDetails(data) 
+            })
         },
 
         getFormDefault() {
@@ -189,11 +188,16 @@ var summary_invoice_details = new Vue( {
             }
         },
 
-        getInvoiceDetails(invoice_id) {
-            api("/summary/api/get-invoice-details/", "POST", {invoice_id: invoice_id}).then((data) => {
-                this.afterGetInvoiceDetails(data) 
-            })
+        // Setup Data
+        invoiceEditFields() {
+            if(this.invoice.detail) {
+                this.invoice_data.invoice_no = this.invoice.invoice_no
+                this.invoice_data.customer_name = this.invoice.detail.customer_name
+                this.invoice_data.date_from = this.invoice.detail.date_from
+                this.invoice_data.other = this.invoice.detail.other
+            }
         },
+
         addWorkKey() {
             if(this.customer_type == 'agent-transport') {
                 for(inv_detail in this.invoice_detail_list){
@@ -202,26 +206,11 @@ var summary_invoice_details = new Vue( {
                     if(! this.invoice_detail_list[inv_detail].drayage_charge.drayage) {
                         this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].work.price
                     }
-
-                    // if(! this.invoice_detail_list[inv_detail].detail.remark) {
-                    //     this.invoice_detail_list[inv_detail].detail.remark = ''
-                    // }
-                    // if(! this.invoice_detail_list[inv_detail].detail.note) {
-                    //     this.invoice_detail_list[inv_detail].detail.note = ''
-                    // }
-
                 }
             }
             else {
                 for(inv_detail in this.invoice_detail_list){
                     this.invoice_detail_list[inv_detail].work = this.invoice_detail_list[inv_detail].work_normal
-
-                    // if(! this.invoice_detail_list[inv_detail].detail.remark) {
-                    //     this.invoice_detail_list[inv_detail].detail.remark = ''
-                    // }
-                    // if(! this.invoice_detail_list[inv_detail].detail.note) {
-                    //     this.invoice_detail_list[inv_detail].detail.note = ''
-                    // }
                 }
                 
             }
@@ -241,6 +230,15 @@ var summary_invoice_details = new Vue( {
             return data
         },
 
+        afterGetInvoiceDetails(data) {
+            this.invoice_detail_list = data
+            this.addWorkKey()
+            this.work_selected = []
+        },
+
+
+        // Invoice 
+
         addNewInvoice() {
             var data = this.dataAddSummaryCustomer()
 
@@ -256,33 +254,6 @@ var summary_invoice_details = new Vue( {
                     this.reload(data)
                 }
             })
-        },
-
-
-        afterGetInvoiceDetails(data) {
-            this.invoice_detail_list = data
-            this.addWorkKey()
-            this.work_selected = []
-        },
-        addInvoiceDetails(invoice) {
-            summary_invoice.getInvoice()
-            api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
-                // this.reload(invoice)
-                this.invoice_details = true
-                this.afterGetInvoiceDetails(data) 
-            })
-            $('#modalWorkList').modal('hide');
-
-        },
-        addInvoiceDetailsEvergreen(invoice) {
-            summary_invoice.getInvoice()
-            api("/summary/api/add-invoice-details-evergreen/", "POST", {invoice_id: invoice.id, work_list: this.work_selected}).then((data) => {
-                // this.reload(invoice)
-                this.invoice_details = true
-                this.afterGetInvoiceDetails(data) 
-            })
-            $('#modalWorkList').modal('hide');
-
         },
 
         editInvoiceWeek() {
@@ -316,28 +287,17 @@ var summary_invoice_details = new Vue( {
             }
         },
 
-        deleteInvoiceDetail(id, work_id) {
-            if (confirm('Are you sure?')){
-                var invoice_detail_id = [id]
-                api("/summary/api/delete-invoice-detail/", "POST", {invoice_id: this.invoice_id, invoice_detail_id: invoice_detail_id, customer_type: this.customer_type, work_id: work_id}).then((data) => {
-                    if(data) {
-                        summary_invoice.getInvoice()
-                        this.afterGetInvoiceDetails(data)
-                    }
-                })
-            }
-        },
+        // Invoice Detail
+        
+        addInvoiceDetails(invoice) {
+            summary_invoice.getInvoice()
+            api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
+                // this.reload(invoice)
+                this.invoice_details = true
+                this.afterGetInvoiceDetails(data) 
+            })
+            $('#modalWorkList').modal('hide');
 
-        evergreenSelectWork(work_click, work_action) {
-            var action = this.work_selected.indexOf(work_action)
-            if(this.work_selected.indexOf(work_click) >= 0){
-                this.work_selected.splice(action, 1)                
-            }
-            else {
-                this.work_selected.push(work_click)
-                this.work_selected.push(work_action)
-            }
-                
         },
 
         editInvoiceDetails() {
@@ -361,6 +321,77 @@ var summary_invoice_details = new Vue( {
             })
 
         },
+
+        deleteInvoiceDetail(id, work_id) {
+            if (confirm('Are you sure?')){
+                var invoice_detail_id = [id]
+                var drayage_total = this.drayage_total
+                var gate_total = this.gate_total
+
+                var invoice_details = this.invoice_detail_list.filter(invoice_detail => {
+                        if(work_id) {
+                            return invoice_detail.work.id == work_id
+                        }
+                        else {
+                            return invoice_detail.id == id
+                        }
+                    }
+                )
+                for(detail in invoice_details) {
+                    drayage_total = eval(drayage_total - eval(invoice_details[detail].drayage_charge.drayage))
+                    if(invoice_details[detail].gate_charge) {
+                        gate_total = eval(gate_total - eval(invoice_details[detail].gate_charge.gate))
+                    }
+
+                }
+       
+                var post_data = {
+                    invoice_id: this.invoice_id,
+                    invoice_detail_id: invoice_detail_id,
+                    customer_type: this.customer_type,
+                    work_id: work_id,
+
+                    drayage_total: drayage_total,
+                    gate_total: gate_total,
+                }
+                api("/summary/api/delete-invoice-detail/", "POST", post_data).then((data) => {
+                    if(data) {
+                        summary_invoice.getInvoice()
+                        this.afterGetInvoiceDetails(data)
+                    }
+                })
+            }
+        },
+
+
+
+        // Evergreen
+
+        addInvoiceDetailsEvergreen(invoice) {
+            summary_invoice.getInvoice()
+            api("/summary/api/add-invoice-details-evergreen/", "POST", {invoice_id: invoice.id, work_list: this.work_selected}).then((data) => {
+                // this.reload(invoice)
+                this.invoice_details = true
+                this.afterGetInvoiceDetails(data) 
+            })
+            $('#modalWorkList').modal('hide');
+
+        },
+
+
+        evergreenSelectWork(work_click, work_action) {
+            var action = this.work_selected.indexOf(work_action)
+            if(this.work_selected.indexOf(work_click) >= 0){
+                this.work_selected.splice(action, 1)                
+            }
+            else {
+                this.work_selected.push(work_click)
+                this.work_selected.push(work_action)
+            }
+                
+        },
+
+        
 
     }
 })
