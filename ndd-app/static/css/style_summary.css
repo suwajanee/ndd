@@ -146,3 +146,17 @@ select.size {
     padding: 0px 12px;
     height: 25px;
 }
+
+
+/* check color */
+.bg-yellow {
+    background-color: Yellow;
+}
+
+.bg-lime {
+    background-color: Lime ;
+}
+
+.bg-red {
+    background-color: Red ;
+}

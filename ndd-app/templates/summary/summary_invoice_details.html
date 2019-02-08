@@ -116,6 +116,7 @@
                 <th rowspan=2 class="align-middle table-light">
                     NOTE
                 </th>
+                <th v-if="table_edit" rowspan=2 class="table-light"></th>
             </tr>
             <tr>
                 <th class="border-dark align-middle py-1" style="width: 120px;">
@@ -129,8 +130,8 @@
         <tbody>
             <template v-for="(inv_detail, index) in invoice_detail_list">
                 <tr class="text-center">
-                    <td v-if="! table_edit" class="text-danger cell-click font-weight-bold align-middle" @click="deleteInvoiceDetail(inv_detail.id)">
-                        <i class="fa fa-trash"></i>
+                    <td v-if="! table_edit" class="align-middle p-1" >
+                        <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id)"><i class="fa fa-trash"></i></button>
                     </td>
                     <td class="align-middle">
                         {{ index + 1 }}
@@ -166,25 +167,58 @@
                     </td>
 
                     <template v-if="customer_type == 'agent-transport'">
-                        <td class="text-center align-middle">
-                            <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_1"> 
+                        <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
+                            <div v-if="table_edit" class="input-group">
+                                <input type="text" class="form-control" style="padding: 2px 4px;" v-model="inv_detail.work.container_1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="checkContainer(inv_detail.id, inv_detail.detail.color1, 1)"
+                                    >
+                                    <i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
                             <template v-else>
                                 {{ inv_detail.work.container_1 }}
                             </template>
                         </td>
-                        <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle">
-                            <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_2"> 
+                        <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
+                            <div v-if="table_edit" class="input-group">
+                                <input type="text" class="form-control" style="padding: 2px 4px;" v-model="inv_detail.work.container_2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="checkContainer(inv_detail.id, inv_detail.detail.color2, 2)"
+                                    >
+                                    <i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
                             <template v-else>
                                 {{ inv_detail.work.container_2 }}
                             </template>
                         </td>
                     </template>
-                    <td v-else class="text-center align-middle">
-                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_no"> 
-                        <template v-else>
-                            {{ inv_detail.work.container_no }}
-                        </template>
-                    </td>
+                    <template v-else>
+                        <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
+                            <div v-if="table_edit" class="input-group">
+                                <input type="text" class="form-control" style="padding: 2px 4px;" v-model="inv_detail.work.container_no">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="checkContainer(inv_detail.id, inv_detail.detail.color1, 1)"
+                                    >
+                                    <i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                            <!-- <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.container_no">  -->
+                            <template v-else>
+                                {{ inv_detail.work.container_no }}
+                            </template>
+                        </td>
+                        <td v-if="customer_form.indexOf('container_2') > 0">
+                        
+                        </td>
+                    </template>
 
                     <td class="align-middle">
                         <select v-if="table_edit" class="custom-select size" v-model="inv_detail.work.size">
@@ -242,12 +276,97 @@
                             {{ inv_detail.detail.note }}
                         </template>
                     </td>
+                    <td v-if="table_edit" class="align-middle border-light p-1">
+                        <button class="btn btn-sm btn-outline-primary" @click="addOtherCharge(inv_detail.id)">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr v-if="inv_detail.drayage_charge.other.length" v-for="(other, other_index) in inv_detail.drayage_charge.other" class="text-center bg-light" :class="{'text-primary': other_index%2==1, 'text-danger': other_index%2==0}">
+                    <!-- <td>{{ inv_detail.drayage_charge }}</td>
+                    <td></td> -->
+                    <td v-if="! table_edit"></td>
+                    <td class="align-middle">
+                        {{ index + 1 }}.{{ other_index+1 }}
+                    </td>
+                    
+                    <td v-if="invoice_data.customer_name" class="text-left align-middle">
+                        {{ invoice_data.customer_name }}
+                    </td>
+                    <td v-else class="text-left align-middle">
+                        {{ inv_detail.work.shipper.name }}
+                    </td>
+
+                    <td class="align-middle">
+                        {{ inv_detail.work.booking_no }}
+                    </td>
+                    <td class="align-middle">
+                        {{ inv_detail.work.pickup_from }}
+                    </td>
+                    <td class="align-middle">
+                        {{ inv_detail.work.return_to }}
+                    </td>
+                    <td class="align-middle">
+                        {{ inv_detail.work.date|formatDate }}
+                    </td>
+
+                    <template v-if="customer_type == 'agent-transport'">
+                        <td class="text-center align-middle">
+                            {{ inv_detail.work.container_1 }}
+                        </td>
+                        <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle">
+                            {{ inv_detail.work.container_2 }}
+                        </td>
+                    </template>
+                    <template v-else>
+                        <td class="text-center align-middle">
+                            {{ inv_detail.work.container_no }}
+                        </td>
+                        <td v-if="customer_form.indexOf('container_2') > 0">
+                        
+                        </td>
+                    </template>
+
+                    <td class="align-middle">
+                        <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                    </td>
+
+                    <td class="text-right align-middle">
+                        <input v-if="table_edit" class="form-control text-center" v-model="other.other_charge" > 
+                        <template v-else>
+                            {{ eval(other.other_charge)|currencyCommas }}
+                        </template>
+                    </td>
+
+                    <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right align-middle">
+                        -
+                    </td>
+
+                    <td v-if="customer_form.indexOf('agent') > 0" class="text-center align-middle">
+                        {{ inv_detail.work.agent }}
+                    </td>
+
+                    <td class="align-middle">
+                        <input v-if="table_edit" class="form-control text-center" v-model="other.other_remark" > 
+                        <template v-else>
+                            {{ other.other_remark }}
+                        </template>
+                    </td>
+                    <td v-if="customer_main.work_type=='agent-transport'" class="border-light"></td>
+                    <td class="border-light"></td>
+                    <td v-if="table_edit" class="align-middle border-light p-1">
+                        <button class="btn btn-sm btn-outline-danger" @click="removeOtherCharge(inv_detail.id, other_index)">
+                            <i class="fa fa-angle-up"></i>
+                        </button>
+                    </td>
                 </tr>
             </template>
             <tr class="text-center font-weight-bold">
-                <td v-if="! table_edit" class="text-success cell-click align-middle" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'">
-                    <i class="fa fa-plus"></i>
+                <td v-if="! table_edit" class="align-middle p-1">
+                    <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'"><i class="fa fa-plus"></i></button>
                 </td>
+                
 
                 <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="table-secondary align-middle">Total</td>
                 <td v-else colspan=8 class="table-secondary align-middle">Total</td>

@@ -216,9 +216,9 @@ def api_edit_invoice_details(request):
             # if gate_total:
             #     invoice.gate_total = gate_total
 
-            invoice = check_key_detail(invoice, invoice_data, 'customer_name', True)
-            invoice = check_key_detail(invoice, invoice_data, 'date_from', True)
-            invoice = check_key_detail(invoice, invoice_data, 'other', True)
+            invoice.detail = check_key_detail(invoice.detail, invoice_data, 'customer_name', True)
+            invoice.detail = check_key_detail(invoice.detail, invoice_data, 'date_from', True)
+            invoice.detail = check_key_detail(invoice.detail, invoice_data, 'other', True)
 
             invoice.save()
 
@@ -230,14 +230,17 @@ def api_edit_invoice_details(request):
                 if invoice_detail.gate_charge:
                     invoice_detail.gate_charge['gate'] = detail['gate_charge']['gate']
 
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'remark', False)
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'note', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'note', False)
 
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'job_no', False)
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'from', False)
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'to', False)
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'date', False)
-                invoice_detail = check_key_detail(invoice_detail, detail['detail'], 'size', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'date', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'size', False)
+
+                if 'other' in detail['drayage_charge']:
+                    invoice_detail.drayage_charge = check_key_detail(invoice_detail.drayage_charge, detail['drayage_charge'], 'other', True)
 
                 invoice_detail.save()
 
@@ -260,19 +263,46 @@ def api_edit_invoice_details(request):
 
 
 def check_key_detail(invoice, data, key, pop):
-    try:
+    if key in data:
         if data[key]:
-            invoice.detail[key] = data[key]
+            invoice[key] = data[key]
         else: 
             try:
                 if pop:
-                    invoice.detail.pop(key)
+                    invoice.pop(key)
                 else:
-                    invoice.detail[key] = ''
+                    invoice[key] = ''
             except:
                 pass
-    except:
-        pass
+    else:
+        try:
+            if pop:
+                invoice.pop(key)
+            else:
+                invoice[key] = ''
+        except:
+            pass
     return invoice
+
+
+@csrf_exempt
+def api_check_container(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            invoice_detail_id = req['invoice_detail_id']
+            index = str(req['index'])
+            color = {'color'+index: req['color']}
+
+            invoice_detail = InvoiceDetail.objects.get(pk=invoice_detail_id)
+            invoice_detail.detail = check_key_detail(invoice_detail.detail, color, 'color'+index, True)
+            invoice_detail.save()
+
+            return api_get_invoice_details(request)
+    return JsonResponse('Error', safe=False)
+
+
+
 
 

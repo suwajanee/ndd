@@ -66,7 +66,7 @@ def api_get_summary_month_details(request):
 
                             data['total'] = total
 
-                        if last_index == len(sub_customers)-1:
+                        if last_index == len(sub_customers)-1 and len(sub_customers) > 1:
                             data['cusotomer_total'] = customer_total
                             customer_total = 0
                             last_index = 0

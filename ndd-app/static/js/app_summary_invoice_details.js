@@ -24,6 +24,7 @@ var summary_invoice_details = new Vue( {
         form_default: [],
         booking_field: {},
         diesel_rate: '',
+        container_color: {},
         // customer_details: {},
         // invoices: [],
         // drayage_total: 0,
@@ -83,8 +84,30 @@ var summary_invoice_details = new Vue( {
         drayageTotal() {
             this.not_save = false
             var total = 0
-            for(inv_detail in this.invoice_detail_list) {
-                var drayage = this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].drayage_charge.drayage.replace(',', '')
+            for(detail_index in this.invoice_detail_list) {
+                var drayage_charge = this.invoice_detail_list[detail_index].drayage_charge
+                var drayage = drayage_charge.drayage = drayage_charge.drayage.replace(',', '')   
+
+                if(drayage_charge.other) {
+                    for(other_index in drayage_charge.other) {
+                        var other = drayage_charge.other[other_index].other_charge = drayage_charge.other[other_index].other_charge.replace(',', '')
+
+
+                        try {
+
+                            var other_result = eval(other)
+                        }
+                        catch(err) {
+                            var other_result = 0
+                            this.not_save = true
+                        }
+                        if(isNaN(other_result)){
+                            other_result = 0
+                        }
+                        total += other_result
+                    }
+                }
+
                 try {
                     var result = eval(drayage)
                 }
@@ -98,16 +121,17 @@ var summary_invoice_details = new Vue( {
 
                 total += result
 
-            }
-            this.drayage_total = total
 
+            }
+
+            this.drayage_total = total
             return total
         },
         gateTotal() {
             this.not_save = false
             var total = 0
-            for(inv_detail in this.invoice_detail_list) {
-                var gate = this.invoice_detail_list[inv_detail].gate_charge.gate = this.invoice_detail_list[inv_detail].gate_charge.gate.replace(',', '')
+            for(detail_index in this.invoice_detail_list) {
+                var gate = this.invoice_detail_list[detail_index].gate_charge.gate = this.invoice_detail_list[detail_index].gate_charge.gate.replace(',', '')
                 try {
                     var result = eval(gate)
                 }
@@ -131,6 +155,7 @@ var summary_invoice_details = new Vue( {
         reload(invoice) {
             this.work_selected = []
             this.booking_field = booking_field_text
+            this.container_color = container_color
             
             this.invoice = invoice
             this.invoice_id = invoice.id
@@ -201,18 +226,37 @@ var summary_invoice_details = new Vue( {
         addWorkKey() {
             if(this.customer_type == 'agent-transport') {
                 for(inv_detail in this.invoice_detail_list){
-                    this.invoice_detail_list[inv_detail].work = this.invoice_detail_list[inv_detail].work_agent_transport
+                    var detail = this.invoice_detail_list[inv_detail]
+                    detail.work = detail.work_agent_transport
                     // this.invoice_detail_list[inv_detail].work = Object.assign({}, this.invoice_detail_list[inv_detail].work_agent_transport)
-                    if(! this.invoice_detail_list[inv_detail].drayage_charge.drayage) {
-                        this.invoice_detail_list[inv_detail].drayage_charge.drayage = this.invoice_detail_list[inv_detail].work.price
+                    if(! detail.drayage_charge.drayage) {
+                        detail.drayage_charge.drayage = detail.work.price
                     }
+
+                    // if('other' in detail.drayage_charge){
+                    //     this.$set(detail, 'other_status', true)
+                    // }
+                    // else {
+                    //     this.$set(detail, 'other_status', false)
+                    // }
+
                 }
             }
             else {
                 for(inv_detail in this.invoice_detail_list){
-                    this.invoice_detail_list[inv_detail].work = this.invoice_detail_list[inv_detail].work_normal
+                    var detail = this.invoice_detail_list[inv_detail]
+
+                    detail.work = detail.work_normal
+
+                    // if('other' in detail.drayage_charge){
+                    //     this.$set(detail, 'other_status', true)
+                    // }
+                    // else {
+                    //     this.$set(detail, 'other_status', false)
+                    // }
+
+
                 }
-                
             }
         },
 
@@ -287,6 +331,7 @@ var summary_invoice_details = new Vue( {
             }
         },
 
+
         // Invoice Detail
         
         addInvoiceDetails(invoice) {
@@ -311,7 +356,6 @@ var summary_invoice_details = new Vue( {
                 gate_total: this.gate_total,
 
             }
-            summary_invoice.getInvoice()
             api("/summary/api/edit-invoice-details/", "POST", post_data).then((data) => {
                 this.invoice_details = true
                 summary_invoice.getInvoice()
@@ -328,21 +372,28 @@ var summary_invoice_details = new Vue( {
                 var drayage_total = this.drayage_total
                 var gate_total = this.gate_total
 
-                var invoice_details = this.invoice_detail_list.filter(invoice_detail => {
+                var invoice_details = this.invoice_detail_list.filter(x => {
                         if(work_id) {
-                            return invoice_detail.work.id == work_id
+                            return x.work.id == work_id
                         }
                         else {
-                            return invoice_detail.id == id
+                            return x.id == id
                         }
                     }
                 )
-                for(detail in invoice_details) {
-                    drayage_total = eval(drayage_total - eval(invoice_details[detail].drayage_charge.drayage))
-                    if(invoice_details[detail].gate_charge) {
-                        gate_total = eval(gate_total - eval(invoice_details[detail].gate_charge.gate))
-                    }
+                for(detail_index in invoice_details) {
+                    var detail = invoice_details[detail_index]
+                    var drayage_charge = detail.drayage_charge
 
+                    drayage_total = eval(drayage_total - eval(drayage_charge.drayage))
+                    if(drayage_charge.other) {
+                        for(other_index in drayage_charge.other) {
+                            drayage_total = eval(drayage_total - eval(drayage_charge.other[other_index].other_charge))
+                        }
+                    }
+                    if(detail.gate_charge) {
+                        gate_total = eval(gate_total - eval(detail.gate_charge.gate))
+                    }
                 }
        
                 var post_data = {
@@ -362,6 +413,41 @@ var summary_invoice_details = new Vue( {
                 })
             }
         },
+
+        addOtherCharge(id) {
+            var detail_index = this.invoice_detail_list.findIndex(x => x.id == id)
+
+            var drayage_charge = this.invoice_detail_list[detail_index].drayage_charge
+
+
+            if(! drayage_charge.other) {
+                this.$set(drayage_charge, 'other', [])
+            }
+            drayage_charge.other.push({'other_charge': '', 'other_remark': ''})
+        },
+
+        removeOtherCharge(id, index) {
+            var detail_index = this.invoice_detail_list.findIndex(x => x.id == id)
+            var other_charge = this.invoice_detail_list[detail_index].drayage_charge.other
+
+            other_charge.splice(index,1)
+
+        },
+
+        checkContainer(id, color, index) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = (color + 1) % 4
+                if(color==0) { color = '' }
+            }
+
+            api("/summary/api/check-container/", "POST", {invoice_id: this.invoice_id, invoice_detail_id: id, color: color, index: index}).then((data) => {
+                this.afterGetInvoiceDetails(data) 
+            })
+        },
+
 
 
 
