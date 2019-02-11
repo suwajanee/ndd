@@ -225,38 +225,17 @@ var summary_invoice_details = new Vue( {
 
         addWorkKey() {
             if(this.customer_type == 'agent-transport') {
-                for(inv_detail in this.invoice_detail_list){
-                    var detail = this.invoice_detail_list[inv_detail]
-                    detail.work = detail.work_agent_transport
-                    // this.invoice_detail_list[inv_detail].work = Object.assign({}, this.invoice_detail_list[inv_detail].work_agent_transport)
-                    if(! detail.drayage_charge.drayage) {
-                        detail.drayage_charge.drayage = detail.work.price
+                this.invoice_detail_list.forEach(function(inv_detail) {
+                    inv_detail.work = inv_detail.work_agent_transport
+                    if(! inv_detail.drayage_charge.drayage) {
+                        inv_detail.drayage_charge.drayage = inv_detail.work.price
                     }
-
-                    // if('other' in detail.drayage_charge){
-                    //     this.$set(detail, 'other_status', true)
-                    // }
-                    // else {
-                    //     this.$set(detail, 'other_status', false)
-                    // }
-
-                }
+                })
             }
             else {
-                for(inv_detail in this.invoice_detail_list){
-                    var detail = this.invoice_detail_list[inv_detail]
-
-                    detail.work = detail.work_normal
-
-                    // if('other' in detail.drayage_charge){
-                    //     this.$set(detail, 'other_status', true)
-                    // }
-                    // else {
-                    //     this.$set(detail, 'other_status', false)
-                    // }
-
-
-                }
+                this.invoice_detail_list.forEach(function(inv_detail) {
+                    inv_detail.work = inv_detail.work_normal
+                })
             }
         },
 
@@ -447,13 +426,19 @@ var summary_invoice_details = new Vue( {
 
                 var invoice_detail = this.invoice_detail_list.find(x => x.id == id)
 
-                this.$set(invoice_detail.detail, 'color'+index, data)
+                this.$set(invoice_detail.detail, 'color' + index, data)
 
 
             })
         },
 
+        copyToAll(value, key1, key2) {
+            this.invoice_detail_list.forEach(function(inv_detail) {
+                inv_detail[key1][key2] = value
+            })
+        },
 
+        
 
 
         // Evergreen

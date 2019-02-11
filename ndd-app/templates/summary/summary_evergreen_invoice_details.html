@@ -67,9 +67,15 @@
                     Customer Name
                 </th>
                 
-                <th v-if="table_edit" rowspan=2 colspan=2 class="border-dark align-middle">
-                    JOB NO/BOOKING
-                </th>
+                <template v-if="table_edit">
+                    <th rowspan=2 class="border-dark align-middle">
+                        JOB NO
+                    </th>
+                    <th rowspan=2 class="border-dark align-middle">
+                        BOOKING
+                    </th>
+                </template>
+                
                 <th v-else rowspan=2 class="border-dark align-middle">
                     JOB NO/BOOKING
                 </th>
@@ -132,10 +138,10 @@
 
                     <template v-if="table_edit">
                         <td>
-                            <input class="form-control text-center" placeholder="Job No" v-model="inv_detail.detail.job_no">
+                            <input class="form-control text-center" v-model="inv_detail.detail.job_no">
                         </td>
                         <td>
-                            <input class="form-control text-center" v-model="inv_detail.work.booking_no" placeholder="Booking No"> 
+                            <input class="form-control text-center" v-model="inv_detail.work.booking_no"> 
                         </td>
                     </template>
                     <td v-else>
@@ -206,7 +212,19 @@
                     </td>
 
                     <td class="text-right">
-                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                        <template v-if="table_edit">
+                            <div v-if="index==0" class="input-group">
+                                <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.drayage_charge.drayage">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="copyToAll(inv_detail.drayage_charge.drayage, 'drayage_charge', 'drayage')"
+                                    >
+                                    <i class="fa fa-clone"></i></button>
+                                </div>
+                            </div>
+                            <input v-else class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                        </template>
                         <template v-else>
                             {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
                         </template>
@@ -217,7 +235,19 @@
                     </td>
 
                     <td class="text-primary">
-                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.remark">
+                        <template v-if="table_edit">
+                            <div v-if="index==0" class="input-group">
+                                <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.detail.remark">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="copyToAll(inv_detail.detail.remark, 'detail', 'remark')"
+                                    >
+                                    <i class="fa fa-clone"></i></button>
+                                </div>
+                            </div>
+                            <input v-else class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                        </template>
                         <template v-else>
                             {{ inv_detail.detail.remark }}
                         </template>

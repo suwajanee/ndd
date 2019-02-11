@@ -236,12 +236,26 @@
                             <option value="2X20'RF">2X20'RF</option>
                         </select>   
                         <template v-else>
-                            <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                            <template v-if="inv_detail.work.size">
+                                <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                            </template>
                         </template>               
                     </td>
 
                     <td class="text-right align-middle">
-                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                        <template v-if="table_edit">
+                            <div v-if="index==0" class="input-group">
+                                <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.drayage_charge.drayage">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="copyToAll(inv_detail.drayage_charge.drayage, 'drayage_charge', 'drayage')"
+                                    >
+                                    <i class="fa fa-clone"></i></button>
+                                </div>
+                            </div>
+                            <input v-else class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                        </template>
                         <template v-else>
                             {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
                         </template>
@@ -262,7 +276,19 @@
                     </td>
 
                     <td class="text-primary align-middle">
-                        <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                        <template v-if="table_edit">
+                            <div v-if="index==0" class="input-group">
+                                <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.detail.remark">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="copyToAll(inv_detail.detail.remark, 'detail', 'remark')"
+                                    >
+                                    <i class="fa fa-clone"></i></button>
+                                </div>
+                            </div>
+                            <input v-else class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                        </template>
                         <template v-else>
                             {{ inv_detail.detail.remark }}
                         </template>
@@ -329,7 +355,9 @@
                     </template>
 
                     <td class="align-middle">
-                        <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                        <template v-if="inv_detail.work.size">
+                            <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                        </template>
                     </td>
 
                     <td class="text-right align-middle">

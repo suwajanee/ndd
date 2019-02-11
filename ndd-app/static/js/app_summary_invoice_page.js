@@ -69,12 +69,14 @@ var summary_invoice = new Vue( {
         },
 
         totalCalc(){
-            for(inv in this.invoices){
-                var drayage = parseFloat(this.invoices[inv].drayage_total)
-                var gate = parseFloat(this.invoices[inv].gate_total)
+            var drayage_total = 0
+            var gate_total = 0
+            this.invoices.forEach(function(invoice) {
+                var drayage = parseFloat(invoice.drayage_total)
+                var gate = parseFloat(invoice.gate_total)
 
-                if(! this.invoices[inv].detail.remark) {
-                    this.invoices[inv].detail.remark = ''
+                if(! invoice.detail.remark) {
+                    invoice.detail.remark = ''
                 }
 
                 if(isNaN(drayage)){
@@ -84,9 +86,12 @@ var summary_invoice = new Vue( {
                     gate = 0
                 }
 
-                this.drayage_total += drayage
-                this.gate_total += gate
-            }
+                drayage_total += drayage
+                gate_total += gate
+            })
+            this.drayage_total = drayage_total
+            this.gate_total = gate_total
+
         },
 
         changeStatus() {
