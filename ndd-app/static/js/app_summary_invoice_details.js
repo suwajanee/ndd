@@ -444,7 +444,12 @@ var summary_invoice_details = new Vue( {
             }
 
             api("/summary/api/check-container/", "POST", {invoice_id: this.invoice_id, invoice_detail_id: id, color: color, index: index}).then((data) => {
-                this.afterGetInvoiceDetails(data) 
+
+                var invoice_detail = this.invoice_detail_list.find(x => x.id == id)
+
+                this.$set(invoice_detail.detail, 'color'+index, data)
+
+
             })
         },
 

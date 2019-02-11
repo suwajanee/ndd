@@ -299,7 +299,12 @@ def api_check_container(request):
             invoice_detail.detail = check_key_detail(invoice_detail.detail, color, 'color'+index, True)
             invoice_detail.save()
 
-            return api_get_invoice_details(request)
+            if 'color' + index in invoice_detail.detail:
+                color_key = invoice_detail.detail['color'+index]
+            else:
+                color_key = 0
+
+            return JsonResponse(color_key, safe=False)
     return JsonResponse('Error', safe=False)
 
 
