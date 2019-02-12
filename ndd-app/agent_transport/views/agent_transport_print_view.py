@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 import xhtml2pdf.pisa as pisa
 
 from ..models import AgentTransport
+from booking.views.print_view import render_pdf
 from customer.models import ShipperAddress
 from ndd.settings import STATICFILES_DIRS
 
@@ -29,7 +30,7 @@ class AgentTransportPrintView(TemplateView):
             request.session['template_name'+pk] = template_name
             request.session['address'+pk] = context['address']
 
-        return self.render(template_name, context)
+        return render_pdf(template_name, context)
     
     def post(self, request, pk):
         context = {}
@@ -61,15 +62,5 @@ class AgentTransportPrintView(TemplateView):
         request.session['template_name'+pk] = template_name
         request.session['address'+pk] = context['address']
 
-        return self.render(template_name, context)
-        
-    def render(self, path, params):
-        template = get_template(path)
-        html = template.render(params)
-        response = BytesIO()
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), response, encoding="UTF-8")
-        if not pdf.err:
-            return HttpResponse(response.getvalue(), content_type='application/pdf')
-        else:
-            return HttpResponse("Error Rendering PDF", status=400)
+        return render_pdf(template_name, context)
             
