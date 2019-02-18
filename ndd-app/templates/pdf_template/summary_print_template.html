@@ -1,0 +1,352 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Summary Print</title>
+        
+        <link rel="stylesheet" href="{{ static_dir }}/css/style_summary_pdf.css" />
+
+        <style type='text/css'>
+            /* Size and frame */
+            @page {
+                size: a4 landscape;
+                /* margin: 10pt; */
+
+                @frame { 
+                    left: 0.25in; width: 11.2in; top: 0.5in; height: 7.3in;
+                }
+
+            }
+
+            @font-face {
+                font-family: THSarabunNew; 
+                src: url("{{ static_dir }}/fonts/thsarabunnew-webfont.ttf"); 
+            } 
+
+            html {
+                font-family: THSarabunNew;
+            }
+            /* @font-face {
+                font-family: CSChatThai; 
+                src: url("{{ static_dir }}/fonts/CSChatThai.ttf"); 
+                } 
+
+                html {
+                font-family: CSChatThai;
+                } */
+
+        </style>
+
+    </head>
+
+    {% load result %}
+    {% load parse_date %}
+    {% load booking_field_text %}
+    <body style="font-size: 95%;">
+        <div style="text-align: center;">
+            <h2 style="font-size: 200%;">
+                {% if invoice.customer_week.customer_custom.customer_title %}
+                    {{ invoice.customer_week.customer_custom.customer_title }}
+                {% elif invoice.customer_week.customer_custom.sub_customer %}
+                    {{ invoice.customer_week.customer_custom.sub_customer }}
+                {% else %}
+                    {{ invoice.customer_week.customer_main.name }}
+                {% endif %}
+            </h2>
+
+            <table>
+                <tr>
+                    <td style="width: 90px;">
+                        INV. NO.
+                    </td>
+                    <td class="font-125" style="width: 260px; background-color: Cyan;">
+                        <b>{{ invoice.invoice_no }}</b>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td class="text-right text-blue px-3" style="width: 350px;">
+                        {% if form.1 == '1_diesel_rate' %}
+                            DIESEL RATE : {{ diesel_rate }}
+                        {% elif form.1 == '1_job_no_out' %}
+                            JOB NO : 
+                        {% elif form.1 == '1_ap_billing_no' %}
+                            AP BILLING NO : 
+                            
+                        {% endif %}
+                        {{ invoice.detail.other }}
+                    </td>
+                </tr>
+            </table>
+            <table class="table-bordered">
+                <tr>
+                    <td rowspan=2 class="vert-middle">
+                        Item
+                    </td>
+                    <td rowspan=2 class="vert-middle">
+                        Customer Name 
+                    </td>
+                    <td rowspan=2 class="vert-middle">
+                        {{ form.0 | booking_field_text }}
+                    </td>
+                    <td colspan=2>
+                        Vessel/Truck Routing 
+                    </td>
+                    <td rowspan=2 class="vert-middle">
+                        Date
+                    </td>
+                    <td rowspan=2 class="vert-middle">
+                        Container No. 1
+                    </td>
+                    {% if 'container_2' in form %}
+                        <td rowspan=2 class="vert-middle">
+                            Container No. 2
+                        </td>
+                    {% endif %}
+                    <td rowspan=2 class="vert-middle">
+                        Size
+                    </td>
+                    <td rowspan=2 class="vert-middle">
+                        Drayage Charge
+                    </td>
+                    {% if 'gate_charge' in form %}
+                        <td rowspan=2 class="vert-middle">
+                            Gate Charge
+                        </td>
+                    {% endif %}
+                    {% if 'agent' in form %}
+                        <td rowspan=2 class="vert-middle">
+                            Agent
+                        </td>
+                    {% endif %}
+
+                    <td rowspan=2 class="vert-middle">
+                        {% if form.2 == '2_remark' %}
+                            Remark
+                        {% elif form.2 == '2_job_no' %}
+                            Job No.
+                        {% elif form.2 == '2_truck' %}
+                            TRUCK
+                        {% endif %}
+
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        From
+                    </td>
+                    <td>
+                        To
+                    </td>
+                </tr>
+                {% for inv_detail in invoice_details %}
+                    
+                    <tr>
+                        <td style="width: 0.9in;">
+                            {{ forloop.counter }} 
+                        </td>
+
+                        {% if invoice.detail.customer_name|length > 34 %}
+                            <td class="text-left px-3" style="width: 7in">
+                        {% elif invoice.detail.customer_name|length > 22 %}
+                            <td class="text-left px-3" style="width: 5.5in">
+                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 34 %}
+                            <td class="text-left px-3" style="width: 7in">
+                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
+                            <td class="text-left px-3" style="width: 5.5in">
+                        {% else %}
+                            <td class="text-left px-3" >
+                        {% endif %}
+                            {% if invoice.detail.customer_name %}
+                                {{ invoice.detail.customer_name }}
+                            {% else %}
+                                {{ inv_detail.work.shipper.name}}
+                            {% endif %}
+                        </td>
+
+                        {% if inv_detail.work.shipper.name|length > 22 or invoice.detail.customer_name|length > 22 %}
+                            <td>
+                        {% elif inv_detail.work.booking_no|length > 25 %}
+                            <td style="width: 6in">
+                        {% else %}
+                            <td>
+                        {% endif %}
+                            {{ inv_detail.work.booking_no }}
+                        </td>
+
+                        <td style="width: 2.2in">
+                            {{ inv_detail.work.pickup_from }}
+                        </td>
+                        <td style="width: 2.2in">
+                            {{ inv_detail.work.return_to }}
+                        </td>
+                        <td style="width: 1.6in;"> 
+                            {{ inv_detail.work.date|parse_date | date:'j Ny' }}
+                        </td>
+                        <td style="width: 3in;">
+                            {% if inv_detail.work.container_no %}
+                                {{ inv_detail.work.container_no }}
+                            {% elif inv_detail.work.container_1 %}
+                                {{ inv_detail.work.container_1 }}
+                            {% endif %}
+                        </td>
+                        {% if 'container_2' in form %}
+                            <td style="width: 3in;">
+                                {{ inv_detail.work.container_2 }}
+                            </td>
+                        {% endif %}
+                        <td style="width: 1.6in;">
+                            {% if not 'X' in inv_detail.work.size %}1X{% endif %}{{ inv_detail.work.size }}
+                        </td>
+                        <td class="text-right px-3" style="width: 2.4in">
+                            {{ inv_detail.drayage_charge.drayage|result }}
+                        </td>
+                        {% if 'gate_charge' in form %}
+                            <td class="text-right px-3" style="width: 2.4in">
+                                {{ inv_detail.gate_charge.gate|result }}
+                            </td>
+                        {% endif %}
+                        {% if 'agent' in form %}
+                            <td style="width: 2.2in">
+                                {{ inv_detail.work.agent }}
+                            </td>
+                        {% endif %}
+                        <td class="text-blue">
+                            {{ inv_detail.detail.remark }}
+                        </td>
+    
+                    </tr>
+                    {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                        </table>
+                            <pdf:nextpage>
+                        <table class="table-bordered">
+                    {% endif %}
+                    {% if inv_detail.drayage_charge.other %}
+                        {% for other in inv_detail.drayage_charge.other %}
+                            {% if other.color == 0 %}
+                                <tr class="text-red">
+                            {% elif other.color == 1 %}
+                                <tr class="text-blue">
+                            {% endif %}
+                                <td style="width: 0.9in;">
+                                    {{forloop.parentloop.counter}}.{{ forloop.counter }} 
+                                </td>
+                               
+                                {% if invoice.detail.customer_name|length > 34 %}
+                                    <td class="text-left px-3" style="width: 7in">
+                                {% elif invoice.detail.customer_name|length > 22 %}
+                                    <td class="text-left px-3" style="width: 5.5in">
+                                {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 34 %}
+                                    <td class="text-left px-3" style="width: 7in">
+                                {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
+                                    <td class="text-left px-3" style="width: 5.5in">
+                                {% else %}
+                                    <td class="text-left px-3" >
+                                {% endif %}
+                                    {% if invoice.detail.customer_name %}
+                                        {{ invoice.detail.customer_name }}
+                                    {% else %}
+                                        {{ inv_detail.work.shipper.name}}
+                                    {% endif %}
+                                </td>
+
+                                {% if inv_detail.work.shipper.name|length > 22 or invoice.detail.customer_name|length > 22 %}
+                                    <td>
+                                {% elif inv_detail.work.booking_no|length > 25 %}
+                                    <td style="width: 6in">
+                                {% else %}
+                                    <td>
+                                {% endif %}
+                                    {{ inv_detail.work.booking_no }}
+                                </td>
+                                
+                                <td style="width: 2.2in">
+                                    {{ inv_detail.work.pickup_from }}
+                                </td>
+                                <td style="width: 2.2in">
+                                    {{ inv_detail.work.return_to }}
+                                </td>
+                                <td style="width: 1.6in;">
+                                    {{ inv_detail.work.date|parse_date | date:'j Ny' }}
+                                </td>
+                                <td style="width: 3in;">
+                                    {% if inv_detail.work.container_no %}
+                                        {{ inv_detail.work.container_no }}
+                                    {% elif inv_detail.work.container_1 %}
+                                        {{ inv_detail.work.container_1 }}
+                                    {% endif %}
+                                </td>
+                                {% if 'container_2' in form %}
+                                    <td style="width: 3in;">
+                                        {{ inv_detail.work.container_2 }}
+                                    </td>
+                                {% endif %}
+                                <td style="width: 1.6in;">
+                                    {% if not 'X' in inv_detail.work.size %}1X{% endif %}{{ inv_detail.work.size }}
+                                </td>
+                                <td class="text-right px-3" style="width: 2.4in">
+                                    {{ other.other_charge|result }}
+                                </td>
+                                {% if 'gate_charge' in form %}
+                                    <td class="text-right px-3" style="width: 2.4in">
+                                        -
+                                    </td>
+                                {% endif %}
+                                {% if 'agent' in form %}
+                                    <td style="width: 2.2in">
+                                        {{ inv_detail.work.agent }}
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    {{ other.other_remark }}
+                                </td>
+                            </tr>
+                            {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:other.num == 6 %}
+                                </table>
+                                    <pdf:nextpage>
+                                <table class="table-bordered">
+                            {% endif %}
+
+                        {% endfor %}
+                    {% endif %}
+                    
+                {% endfor %}
+                
+                <tr class="h-30">
+                    {% if 'container_2' in form %}
+                        <td colspan=9 class="bg-whitesmoke font-125">
+                    {% else %}
+                        <td colspan=8 class="bg-whitesmoke font-125">
+                    {% endif %}
+                        Total
+                    </td>
+                    <td class="text-right px-3 bg-whitesmoke font-110">{{ invoice.drayage_total|result }}</td>
+                    <td class="text-right px-3 bg-whitesmoke font-110">
+                        {% if 'gate_charge' in form %}
+                            {{ invoice.gate_total|result }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="bg-whitesmoke"></td>
+                
+                </tr>
+                <tr class="h-30">
+                    {% if 'container_2' in form %}
+                        <td colspan=9 class="bg-whitesmoke font-125">
+                    {% else %}
+                        <td colspan=8 class="bg-whitesmoke font-125">
+                    {% endif %}
+                        G.Total
+                    </td>
+                    <td colspan=2 class="text-right px-3 bg-whitesmoke font-125">{{ invoice.drayage_total|add:invoice.gate_total | result }}</td>
+                    <td class="bg-whitesmoke"></td>
+                </tr>
+            </table>
+
+
+        </div>
+
+    </body>
+</html>

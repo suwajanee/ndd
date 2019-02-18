@@ -10,16 +10,18 @@ from .views import summary_customer_view
 from .views import summary_invoice_view
 from .views import summary_invoice_details_view
 
+from .views.summary_print_view import SummaryPrintView
+
 
 urlpatterns = [
     url(r'^$', summary_page_view.summary_page, name='summary-page'),
     url(r'^form-setting/$', summary_page_view.summary_form_setting_page, name='summary-form-setting-page'),
     url(r'^customer-custom/$', summary_page_view.summary_customer_custom_page, name='summary-customer-custom-page'),
-    url(r'^(?P<year>\w+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
-    url(r'^(?P<year>\w+)/(?P<month>\w+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
-    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
-    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
-    url(r'^(?P<year>\w+)/(?P<month>\w+)/(?P<week>\w+)/(?P<customer>\w+)/$', summary_page_view.summary_invoice_page, name='summary-invoice-page'),
+    url(r'^(?P<year>\d+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
+    url(r'^(?P<year>\d+)/(?P<month>\d+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
+    url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
+    url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
+    url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/(?P<customer>\w+)/$', summary_page_view.summary_invoice_page, name='summary-invoice-page'),
 
 
     # Summary Year
@@ -75,6 +77,9 @@ urlpatterns = [
 
     # Evergreen
     url(r'^api/add-invoice-details-evergreen/$', summary_invoice_details_view.api_add_invoice_details_evergreen, name='api-add-invoice-details-evergreen'),
+
+    # Print
+    url(r'^print/(?P<pk>\d+)/$', SummaryPrintView.as_view(), name='summary-print'),
 
 
 
