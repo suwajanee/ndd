@@ -194,7 +194,7 @@ var summary_invoice_details = new Vue( {
             })
         },
         getWeeks() {
-            api("/summary/api/get-summary-weeks-by-year/", "POST", {year: this.invoice.customer_week.week.year.year_label }).then((data) => {
+            api("/summary/api/get-summary-weeks-by-year/", "POST", { year: this.invoice.customer_week.week.year.year_label }).then((data) => {
                 this.week_list = data
             })
         },
@@ -402,7 +402,14 @@ var summary_invoice_details = new Vue( {
             if(! drayage_charge.other) {
                 this.$set(drayage_charge, 'other', [])
             }
-            drayage_charge.other.push({'other_charge': '', 'other_remark': ''})
+            drayage_charge.other.push({'other_charge': '', 'other_remark': '', 'color': 0})
+        },
+
+        textColorOtherCharge(id, index, color) {
+            var detail_index = this.invoice_detail_list.findIndex(x => x.id == id)
+            var other_charge = this.invoice_detail_list[detail_index].drayage_charge.other
+            other_charge[index].color = color
+
         },
 
         removeOtherCharge(id, index) {

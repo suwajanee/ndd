@@ -1,14 +1,22 @@
 <div v-if="invoice_details">
 
-<div class="my-3">
-    <button class="btn btn-outline-warning"data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+<div class="row my-3">
+    {% verbatim %}
+        <div class="col">
+            <a v-if="! table_edit" class="btn btn-outline-primary" :href="'/summary/print/'+invoice_id" target="_blank" >Print</a>
+            <button v-if="! table_edit" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+        </div>
 
-    <button v-if="table_edit" class="btn btn-outline-success float-right mx-2" @click="editInvoiceDetails" :disabled="not_save">Save</button>
-    <button v-if="table_edit" class="btn btn-outline-danger float-right" @click="table_edit=false" :disabled="not_save">Exit</button>
+        <div class="col text-right">
+            <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
+            <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
+            <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
 
-    <button v-else class="btn btn-outline-info float-right mx-2" @click="table_edit=true">Edit</button>
-    <div v-if="saving == true" class="mr-2 pt-2 text-secondary float-right"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
+            <div v-if="saving == true" class="mr-2 pt-2 text-secondary "><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
+        </div>
 
+        
+    {% endverbatim %}
 </div>
 
 
@@ -309,7 +317,10 @@
                     </td>
                 </tr>
 
-                <tr v-if="inv_detail.drayage_charge.other.length" v-for="(other, other_index) in inv_detail.drayage_charge.other" class="text-center bg-light" :class="{'text-primary': other_index%2==1, 'text-danger': other_index%2==0}">
+                <tr v-if="inv_detail.drayage_charge.other.length" 
+                    v-for="(other, other_index) in inv_detail.drayage_charge.other" 
+                    class="text-center bg-light" :class="{'text-primary': other.color==1, 'text-danger': other.color==0}"
+                >
                     <!-- <td>{{ inv_detail.drayage_charge }}</td>
                     <td></td> -->
                     <td v-if="! table_edit"></td>
@@ -382,7 +393,12 @@
                         </template>
                     </td>
                     <td v-if="customer_main.work_type=='agent-transport'" class="border-light"></td>
-                    <td class="border-light"></td>
+                    <td class="border-light align-middle">
+                        <div v-if="table_edit" class="btn-group">
+                            <button class="btn btn-lg btn-outline-danger" @click="textColorOtherCharge(inv_detail.id, other_index, 0)"></button>
+                            <button class="btn btn-lg btn-outline-primary" @click="textColorOtherCharge(inv_detail.id, other_index, 1)"></button>
+                        </div>
+                    </td>
                     <td v-if="table_edit" class="align-middle border-light p-1">
                         <button class="btn btn-sm btn-outline-danger" @click="removeOtherCharge(inv_detail.id, other_index)">
                             <i class="fa fa-angle-up"></i>
