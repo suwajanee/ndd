@@ -21,6 +21,7 @@ var summary_customer_custom = new Vue( {
             },
             sub_customer: '',
             customer_title: '',
+            option: '',
             form: null,
         },
     },
@@ -76,6 +77,7 @@ var summary_customer_custom = new Vue( {
                     },
                     sub_customer: '',
                     customer_title: '',
+                    option: '',
                     form: null,
                 }
                 this.form_action = 'add'

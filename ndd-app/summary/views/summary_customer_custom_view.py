@@ -43,6 +43,9 @@ def api_add_customer_custom(request):
             if form:
                 data['form'] = FormDetail.objects.get(pk=customer['form']['id'])
 
+            if not customer['option']:
+                data['option'] = ''
+
             customer_setting = CustomerCustom(**data)
             customer_setting.save()
 
@@ -61,19 +64,25 @@ def api_edit_customer_custom(request):
             customer = req['customer_setting']
             sub_customer = customer['sub_customer']
             customer_title = customer['customer_title']
+            option = customer['option']            
             form = customer['form']
 
             customer_setting = CustomerCustom.objects.get(pk=customer['id'])
 
             if sub_customer:
-                customer_setting.sub_customer = re.sub(' +', ' ', customer['sub_customer'].strip())
+                customer_setting.sub_customer = re.sub(' +', ' ', sub_customer.strip())
             else:
                 customer_setting.sub_customer = ''
             
             if customer_title:
-                customer_setting.customer_title = re.sub(' +', ' ', customer['customer_title'].strip())
+                customer_setting.customer_title = re.sub(' +', ' ', customer_title.strip())
             else:
                 customer_setting.customer_title = ''
+
+            if option:
+                customer_setting.option = option
+            else:
+                customer_setting.option = ''
 
             if form:
                 customer_setting.form = FormDetail.objects.get(pk=form['id'])

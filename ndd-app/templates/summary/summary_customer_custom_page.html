@@ -67,6 +67,11 @@
                                 <td class="text-right"><b>Customer Title :</b></td>
                                 <td class="w-75">{{ customer.customer_title }}</td>
                             </tr>
+                            <tr v-if="customer.option">
+                                <td class="text-right"><b>Option :</b></td>
+                                <td v-if="customer.option=='2_inv'">2 INV. (แยก Drayage - Gate)</td>
+                                <td v-else class="w-75">{{ customer.option.toUpperCase() }}</td>
+                            </tr>
                             <tr v-if="customer.form">
                                 <td class="text-right"><b>Form :</b></td>
                                 <td class="w-75">{{ customer.form.form_name }}</td>
@@ -145,12 +150,6 @@
                                 </tr>
                             </table>
                         </div>
-                        <table class="table table-borderless w-75">
-                            <tr v-if="customer.option">
-                                <td class="text-right"><b>Option :</b></td>
-                                <td class="w-75">{{ customer.option }}</td>
-                            </tr>
-                        </table>
                     </div>
                 </div>
             </div>

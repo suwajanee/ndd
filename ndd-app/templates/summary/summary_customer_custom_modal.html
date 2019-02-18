@@ -9,7 +9,7 @@
                     </button>
                 </div>
                 <div class="modal-body p-5">
-                    <div class="input-group mb-3 w-75 container">
+                    <div class="input-group mb-3 col-md-9 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">CUSTOMER</span>
                         </div>
@@ -17,20 +17,60 @@
                             v-model="customer_setting_modal.customer.name" maxlength="50" readonly
                         >
                     </div>
-                    <div class="input-group mb-3 w-75 container">
+                    <div class="input-group mb-3 col-md-9 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">SUB CUSTOMER</span>
                         </div>
                         <input class="form-control" v-model="customer_setting_modal.sub_customer" maxlength="50">
                     </div>
-                    <div class="input-group mb-3 w-75 container">
+                    <div class="input-group mb-3 col-md-9 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">TITLE</span>
                         </div>
                         <input class="form-control" v-model="customer_setting_modal.customer_title" maxlength="50">
                     </div>
 
-                    <div class="input-group w-75 container">
+                    <div class="input-group mb-1 col-md-9 container">
+                        <!-- <div class="input-group-prepend"> -->
+                            <span class="input-group-text">OPTION</span>
+                        <!-- </div> -->
+                    </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="none" v-model="customer_setting_modal.option" value=""> 
+                            </div>
+                        </div>
+                        <label class="form-control" for="none">None</label>
+                    </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="2_inv" v-model="customer_setting_modal.option" value="2_inv"> 
+                            </div>
+                        </div>
+                        <label class="form-control" for="2_inv">2 INV. (แยก Drayage - Gate)</label>
+                    </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="oocl" v-model="customer_setting_modal.option" value="oocl"> 
+                            </div>
+                        </div>
+                        <label class="form-control bg-light" for="oocl">OOCL</label>
+                    </div>
+                    <div class="input-group mb-3 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="evergreen" v-model="customer_setting_modal.option" value="evergreen" @click="customer_setting_modal.form=null"> 
+                            </div>
+                        </div>
+                        <label class="form-control bg-light" for="evergreen" @click="customer_setting_modal.form=null">Evergreen</label>
+                    </div>
+
+                    
+
+                    <div class="input-group col-md-9 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">FORM</span>
                         </div>
