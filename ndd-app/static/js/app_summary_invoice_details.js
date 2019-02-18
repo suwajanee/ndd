@@ -13,6 +13,7 @@ var summary_invoice_details = new Vue( {
         summary_week_id: '',
         invoice_detail_list: [],
 
+
         year_list: [],
         week_list: [],
 
@@ -158,6 +159,7 @@ var summary_invoice_details = new Vue( {
             this.container_color = container_color
             
             this.invoice = invoice
+
             this.invoice_id = invoice.id
             this.invoiceEditFields()
             this.getInvoiceDetails(this.invoice_id)
@@ -216,7 +218,6 @@ var summary_invoice_details = new Vue( {
         // Setup Data
         invoiceEditFields() {
             if(this.invoice.detail) {
-                this.invoice_data.invoice_no = this.invoice.invoice_no
                 this.invoice_data.customer_name = this.invoice.detail.customer_name
                 this.invoice_data.date_from = this.invoice.detail.date_from
                 this.invoice_data.other = this.invoice.detail.other
@@ -254,6 +255,7 @@ var summary_invoice_details = new Vue( {
         },
 
         afterGetInvoiceDetails(data) {
+            this.invoice_data.invoice_no = this.invoice.invoice_no.split(',')
             this.invoice_detail_list = data
             this.addWorkKey()
             this.work_selected = []
@@ -326,6 +328,8 @@ var summary_invoice_details = new Vue( {
 
         editInvoiceDetails() {
             this.saving = true
+
+            this.invoice.invoice_no = this.invoice_data.invoice_no = this.invoice_data.invoice_no.toString()
             var post_data = {
                 invoice_id: this.invoice_id, 
                 invoice_data: this.invoice_data, 

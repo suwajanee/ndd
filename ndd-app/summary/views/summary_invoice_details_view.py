@@ -66,7 +66,7 @@ def api_add_invoice_details(request):
                         },
                         'detail': {
                             'remark': '',
-                            'note': ''
+                            # 'note': ''
                         },
                     }
                     invoice_detail = InvoiceDetail(**data)
@@ -230,14 +230,15 @@ def api_edit_invoice_details(request):
                 if invoice_detail.gate_charge:
                     invoice_detail.gate_charge['gate'] = detail['gate_charge']['gate']
 
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', False)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'note', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark_gate', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'note', True)
 
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', False)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', False)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', False)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'date', False)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'size', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'date', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'size', True)
 
                 if 'other' in detail['drayage_charge']:
                     invoice_detail.drayage_charge = check_key_detail(invoice_detail.drayage_charge, detail['drayage_charge'], 'other', True)

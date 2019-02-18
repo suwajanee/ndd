@@ -30,10 +30,10 @@
     <table class="mt-3 w-100">
         <tr>
             <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no"></td>
-            <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no }}</td>
+            <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]"></td>
+            <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[0] }}</td>
             <td class="text-secondary" style="width: 150px;">
-                (Drayage INV.)
+                <template v-if="customer_custom.option=='2_inv'">(Drayage INV.)</template>
             </td>
             <td rowspan=2 class="text-center">
                 <div v-if="table_edit" class="input-group col-md-5 container mb-1">
@@ -65,11 +65,12 @@
                 
             </td>
         </tr>
-        <!-- <tr>
+        <tr v-if="customer_custom.option=='2_inv'">
             <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1"></td>
+            <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[1]"></td>
+            <td v-else class="px-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[1] }}</td>
             <td class="text-secondary" style="width: 150px;">(Gate INV.)</td>
-        </tr> -->
+        </tr>
     </table>
     
     <table class="table table-bordered table-bordered-dark table-light">
@@ -110,13 +111,17 @@
                     Agent
                 </th>
                 <th rowspan=2 v-if="customer_form[2]=='2_remark'" class="border-dark align-middle">
-                    Remark
+                    Remark<template v-if="customer_custom.option=='2_inv'"><br>(Drayage)</template>
                 </th>
                 <th rowspan=2 v-if="customer_form[2]=='2_job_no'" class="border-dark align-middle">
                     <span class="text-nowrap">Job No.</span>
                 </th>
                 <th rowspan=2 v-if="customer_form[2]=='2_truck'" class="border-dark align-middle">
                     TRUCK
+                </th>
+
+                <th rowspan=2 v-if="customer_custom.option=='2_inv'" class="border-dark align-middle">
+                    Remark<br>(Gate)
                 </th>
                 <th rowspan=2 class="align-middle table-light" v-if="customer_main.work_type=='agent-transport'">
                     NOTE
@@ -301,6 +306,26 @@
                             {{ inv_detail.detail.remark }}
                         </template>
                     </td>
+
+                    <td v-if="customer_custom.option=='2_inv'" class="text-primary align-middle">
+                        <template v-if="table_edit">
+                            <div v-if="index==0" class="input-group">
+                                <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.detail.remark_gate">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                        style="padding: 4px;"
+                                        @click="copyToAll(inv_detail.detail.remark_gate, 'detail', 'remark_gate')"
+                                    >
+                                    <i class="fa fa-clone"></i></button>
+                                </div>
+                            </div>
+                            <input v-else class="form-control text-center" v-model="inv_detail.detail.remark_gate" > 
+                        </template>
+                        <template v-else>
+                            {{ inv_detail.detail.remark_gate }}
+                        </template>
+                    </td>
+
                     <td class="align-middle text-danger border-light" v-if="customer_main.work_type=='agent-transport'">
                         {{ inv_detail.work.pickup_tr }}<template v-if="inv_detail.work.pickup_tr!=inv_detail.work.return_tr">/{{ inv_detail.work.return_tr }}</template>
                     </td>
