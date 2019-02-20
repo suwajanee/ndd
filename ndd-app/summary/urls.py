@@ -10,7 +10,7 @@ from .views import summary_customer_view
 from .views import summary_invoice_view
 from .views import summary_invoice_details_view
 
-from .views.summary_print_view import SummaryPrintView
+from .views.summary_print_view import SummaryPrintView, SummaryEvergreenPrintView
 
 
 urlpatterns = [
@@ -80,6 +80,7 @@ urlpatterns = [
 
     # Print
     url(r'^print/(?P<pk>\d+)/$', SummaryPrintView.as_view(), name='summary-print'),
+    url(r'^print-evergreen/(?P<pk>\d+)/$', SummaryEvergreenPrintView.as_view(), name='summary-evergreen-print'),
 
 
 

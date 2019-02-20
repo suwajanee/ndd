@@ -18,6 +18,7 @@ from .summary_customer_view import add_summary_customer, delete_summary_customer
 from .summary_invoice_details_view import delete_invoice_details
 from booking.views.booking_data_view import booking_summary_status
 from agent_transport.views.agent_transport_data_view import agent_transport_summary_status
+from .summary_invoice_details_view import check_key_detail
 
 
 @csrf_exempt
@@ -28,12 +29,11 @@ def api_edit_invoice_remark(request):
             remarks = req['invoice_remark']
 
             for remark in remarks:
-                detail_remark = remark['detail']['remark']
-                if detail_remark:
-                    invoice = Invoice.objects.get(pk=remark['id'])
-                    
-                    invoice.detail['remark'] = detail_remark
-                    invoice.save()
+                invoice = Invoice.objects.get(pk=remark['id'])
+
+                invoice.detail = check_key_detail(invoice.detail, remark['detail'], 'remark', True)
+                
+                invoice.save()
 
             return JsonResponse(True, safe=False)
     return JsonResponse('Error', safe=False)
@@ -119,7 +119,7 @@ def api_add_invoice(request):
             data = {
                 'invoice_no': invoice_count + 1,
                 'customer_week': summary_customer,
-                'detail': {'remark': ''}
+                'detail': {}
             }
 
             invoice = Invoice(**data)

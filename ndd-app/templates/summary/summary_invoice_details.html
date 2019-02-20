@@ -435,7 +435,6 @@
                 <td v-if="! table_edit" class="align-middle p-1">
                     <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'"><i class="fa fa-plus"></i></button>
                 </td>
-                
 
                 <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="table-secondary align-middle">Total</td>
                 <td v-else colspan=8 class="table-secondary align-middle">Total</td>
@@ -446,6 +445,7 @@
                 <td v-else class="text-right table-secondary">-</td>
 
                 <td class="table-secondary"></td>
+                <td v-if="customer_custom.option == '2_inv'" class="table-secondary"></td>
             </tr>
             <tr class="text-center table-secondary font-weight-bold">
                 <td v-if="! table_edit"></td>
@@ -455,6 +455,7 @@
                 <td v-if="customer_form.indexOf('gate_charge') > 0" colspan=2 class="text-right align-middle">{{ drayageTotal+gateTotal|currencyCommas }}</td>
                 <td v-else colspan=2 class="text-right align-middle">{{ drayageTotal|currencyCommas }}</td>
                 <td></td>
+                <td v-if="customer_custom.option == '2_inv'"></td>
             </tr>
         </tbody>
     </table>
