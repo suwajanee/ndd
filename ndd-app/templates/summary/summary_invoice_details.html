@@ -8,11 +8,11 @@
         </div>
 
         <div class="col text-right">
-            <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
-            <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
-            <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
+                <div v-if="saving" class="mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
 
-            <div v-if="saving == true" class="mr-2 pt-2 text-secondary "><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
+                <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
+                <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
+                <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
         </div>
 
         
