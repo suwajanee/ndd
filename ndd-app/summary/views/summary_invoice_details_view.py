@@ -190,6 +190,8 @@ def save_invoice_total_charge(invoice, drayage_total, gate_total):
     invoice.drayage_total = drayage_total
     if gate_total:
         invoice.gate_total = gate_total
+    else:
+        invoice.gate_total = 0
     return invoice
 
 

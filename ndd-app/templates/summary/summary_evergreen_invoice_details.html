@@ -16,6 +16,9 @@
     {% verbatim %}
         <div class="col">
             <a v-if="! table_edit" class="btn btn-outline-primary" :href="'/summary/print-evergreen/'+invoice_id" target="_blank" >Print</a>
+        </div>
+
+        <div class="col text-center">
             <button v-if="! table_edit" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
         </div>
 
@@ -345,12 +348,8 @@
                         </template>
                     </td>
 
-                    <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right align-middle">
-                        -
-                    </td>
-
-                    <td v-if="customer_form.indexOf('agent') > 0" class="text-center align-middle">
-                        {{ inv_detail.work.agent }}
+                    <td class="align-middle">
+                        {{ invoice_data.date_from }}
                     </td>
 
                     <td class="align-middle">
@@ -381,7 +380,7 @@
                 <td v-if="table_edit" colspan=9 class="table-secondary">Total</td>
                 <td v-else colspan=8 class="table-secondary">Total</td>
 
-                <td class="text-right table-secondary">{{ drayageTotal|currencyCommas }}</td>
+                <td class="text-right table-secondary" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
                 <td class="text-right table-secondary">-</td>
                 <td class="table-secondary"></td>
             </tr>

@@ -4,48 +4,46 @@
     {% verbatim %}
         <div class="col">
             <a v-if="! table_edit" class="btn btn-outline-primary" :href="'/summary/print/'+invoice_id" target="_blank" >Print</a>
+            <button v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-secondary" >Report</button>
+        </div>
+
+        <div class="col text-center">
             <button v-if="! table_edit" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
         </div>
 
         <div class="col text-right">
-                <div v-if="saving" class="mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
+            <div v-if="saving" class="mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
 
-                <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
-                <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
-                <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
+            <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
+            <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
+            <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
         </div>
-
-        
     {% endverbatim %}
 </div>
 
-
 <div>
     {% verbatim %}
-    <h2 v-if="customer_custom.customer_title" class="text-center">{{ customer_custom.customer_title }}</h2>
-    <h2 v-else-if="customer_custom.sub_customer" class="text-center">{{ customer_custom.sub_customer }}</h2>
-    <h2 v-else class="text-center">{{ customer_main.name }}</h2>
+        <h2 v-if="customer_custom.customer_title" class="text-center">{{ customer_custom.customer_title }}</h2>
+        <h2 v-else-if="customer_custom.sub_customer" class="text-center">{{ customer_custom.sub_customer }}</h2>
+        <h2 v-else class="text-center">{{ customer_main.name }}</h2>
     
 
-    <table class="mt-3 w-100">
-        <tr>
-            <td class="px-1" style="width: 80px;">INV. NO.</td>
-            <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]"></td>
-            <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[0] }}</td>
-            <td class="text-secondary" style="width: 150px;">
-                <template v-if="customer_custom.option=='2_inv'">(Drayage INV.)</template>
-            </td>
-            <td rowspan=2 class="text-center">
-                <div v-if="table_edit" class="input-group col-md-5 container mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Customer Name</span>
+        <table class="mt-3 w-100">
+            <tr>
+                <td class="px-1" style="width: 80px;">INV. NO.</td>
+                <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]"></td>
+                <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[0] }}</td>
+                <td class="text-secondary" style="width: 150px;">
+                    <template v-if="customer_custom.option=='2_inv'">(Drayage INV.)</template>
+                </td>
+                <td rowspan=2 class="text-center">
+                    <div v-if="table_edit" class="input-group col-md-5 container mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Customer Name</span>
+                        </div>
+                        <input class="form-control" v-model="invoice_data.customer_name">
                     </div>
-                    <input class="form-control" v-model="invoice_data.customer_name">
-                </div>
-
-                
-                <!-- Customer Name <input class="form-control col-md-4 container" v-model="customer_name"> -->
-            </td>
+                </td>
 
             <td rowspan=2 class="text-primary text-right" style="width: 400px;">
                 <template v-if="table_edit">
@@ -439,9 +437,14 @@
                 <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="table-secondary align-middle">Total</td>
                 <td v-else colspan=8 class="table-secondary align-middle">Total</td>
 
-                <td class="text-right table-secondary align-middle">{{ drayageTotal|currencyCommas }}</td>
+                <td class="text-right table-secondary align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
 
-                <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right table-secondary align-middle">{{ gateTotal|currencyCommas }}</td>
+                <td v-if="customer_form.indexOf('gate_charge') > 0"
+                    class="text-right table-secondary align-middle"
+                    :class="{'alert-warning': gateTotal != invoice.gate_total}"
+                >   
+                    {{ gateTotal|currencyCommas }}
+                </td>
                 <td v-else class="text-right table-secondary">-</td>
 
                 <td class="table-secondary"></td>

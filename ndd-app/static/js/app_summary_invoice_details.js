@@ -342,7 +342,11 @@ var summary_invoice_details = new Vue( {
             api("/summary/api/edit-invoice-details/", "POST", post_data).then((data) => {
                 this.invoice_details = true
                 summary_invoice.getInvoice()
-                this.afterGetInvoiceDetails(data) 
+                this.afterGetInvoiceDetails(data)
+
+                this.invoice.drayage_total = this.drayage_total
+                this.invoice.gate_total = this.gate_total
+                
                 this.saving = false
 
             })
