@@ -19,12 +19,21 @@
             }
 
             @font-face {
-                font-family: THSarabunNew; 
-                src: url("{{ static_dir }}/fonts/thsarabunnew-webfont.ttf"); 
+                font-family: 'Sarabun-light', sans-serif;
+                src: url("{{ static_dir }}/fonts/Sarabun-Light.ttf"); 
+            } 
+
+            @font-face {
+                font-family: 'Sarabun-bold', sans-serif;
+                src: url("{{ static_dir }}/fonts/Sarabun-Bold.ttf"); 
             } 
 
             html {
-                font-family: THSarabunNew;
+                font-family: Sarabun-light;
+            }
+
+            .bold {
+                font-family: Sarabun-bold;
             }
 
         </style>
@@ -35,9 +44,9 @@
     {% load split %}
     {% load parse_date %}
     {% load booking_field_text %}
-    <body style="font-size: 95%;">
+    <body>
         <div style="text-align: center;">
-            <h2 style="font-size: 200%;">
+            <h2 class="bold" style="font-size: 200%;">
                 {% if invoice.customer_week.customer_custom.customer_title %}
                     {{ invoice.customer_week.customer_custom.customer_title }}
                 {% elif invoice.customer_week.customer_custom.sub_customer %}
@@ -52,7 +61,7 @@
                     <td style="width: 90px;">
                         INV. NO.
                     </td>
-                    <td class="font-125" style="width: 260px; background-color: Cyan;">
+                    <td class="font-125 bold" style="width: 260px; background-color: Cyan;">
                         <b>{{ invoice.invoice_no }}</b>
                     </td>
                     <td>
@@ -73,35 +82,35 @@
             </table>
             <table class="table-bordered">
                 <tr>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Item
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Customer Name 
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         JOB NO/BOOKING
                     </td>
                     <td colspan=2>
                         Vessel/Truck Routing 
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Date
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Container No. 1
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Size
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Drayage Charge
                     </td>
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         Date From
                     </td>
 
-                    <td rowspan=2 class="vert-middle">
+                    <td rowspan=2>
                         TRUCK
                     </td>
                     
@@ -235,11 +244,11 @@
                 {% endfor %}
                 
                 <tr class="h-30">
-                    <td colspan=8 class="bg-whitesmoke font-125">
+                    <td colspan=8 class="bg-whitesmoke font-125 bold">
                         Total
                     </td>
-                    <td class="text-right px-3 bg-whitesmoke font-110">{{ invoice.drayage_total|result }}</td>
-                        <td class="text-right px-3 bg-whitesmoke font-110">
+                    <td class="text-right px-3 bg-whitesmoke font-110 bold">{{ invoice.drayage_total|result }}</td>
+                        <td class="text-right px-3 bg-whitesmoke font-110 bold">
                                 -
                         </td>
                     <td class="bg-whitesmoke"></td>
@@ -247,10 +256,10 @@
                 </tr>
                     <tr class="h-30">
                        
-                        <td colspan=8 class="bg-whitesmoke font-125">
+                        <td colspan=8 class="bg-whitesmoke font-125 bold">
                             G.Total
                         </td>
-                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125">{{ invoice.drayage_total | result }}</td>
+                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total | result }}</td>
                         <td class="bg-whitesmoke"></td>
                     </tr>
             </table>
