@@ -6,6 +6,7 @@ var summary_customer_custom = new Vue( {
 
         principal_id: '',
         principal_name: '',
+        principal_type: '',
         principals: [],
         customer_details: [],
         booking_field: {},
@@ -55,6 +56,7 @@ var summary_customer_custom = new Vue( {
         getDetails(principal) {
             this.principal_id = principal.id
             this.principal_name = principal.name
+            this.principal_type = principal.work_type
             api("/summary/api/get-customer-custom/", "POST", {customer: principal.id}).then((data) => {
                 this.customer_details = data
             })

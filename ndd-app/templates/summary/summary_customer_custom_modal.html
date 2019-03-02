@@ -43,7 +43,7 @@
                         </div>
                         <label class="form-control" for="none">None</label>
                     </div>
-                    <div class="input-group mb-1 col-md-8 container">
+                    <div class="input-group mb-1 col-md-8 container" :class="{'mb-3': principal_type=='normal'}">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                             <input type="radio" id="2_inv" v-model="customer_setting_modal.option" value="2_inv"> 
@@ -51,24 +51,25 @@
                         </div>
                         <label class="form-control" for="2_inv">2 INV. (แยก Drayage - Gate)</label>
                     </div>
-                    <div class="input-group mb-1 col-md-8 container">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                            <input type="radio" id="oocl" v-model="customer_setting_modal.option" value="oocl"> 
+                    <template v-if="principal_type=='agent-transport'">
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="oocl" v-model="customer_setting_modal.option" value="oocl"> 
+                                </div>
                             </div>
+                            <label class="form-control bg-light" for="oocl">OOCL</label>
                         </div>
-                        <label class="form-control bg-light" for="oocl">OOCL</label>
-                    </div>
-                    <div class="input-group mb-3 col-md-8 container">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                            <input type="radio" id="evergreen" v-model="customer_setting_modal.option" value="evergreen" @click="customer_setting_modal.form=null"> 
+                        <div class="input-group mb-3 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="evergreen" v-model="customer_setting_modal.option" value="evergreen" @click="customer_setting_modal.form=null"> 
+                                </div>
                             </div>
+                            <label class="form-control bg-light" for="evergreen" @click="customer_setting_modal.form=null">Evergreen</label>
                         </div>
-                        <label class="form-control bg-light" for="evergreen" @click="customer_setting_modal.form=null">Evergreen</label>
-                    </div>
-
-                    
+                    </template>
+                                        
 
                     <div class="input-group col-md-9 container">
                         <div class="input-group-prepend">
@@ -88,9 +89,6 @@
                         </div>
                         <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
                             JOB NO : __________
-                        </div>
-                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_ap_billing_no'" class="float-right mb-3">
-                            AP Billing No. __________
                         </div>
                         <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
                             <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
