@@ -1,10 +1,16 @@
 <div v-if="invoice_details">
 
 <div class="row my-3">
-    {% verbatim %}
         <div class="col">
-            <a v-if="! table_edit" class="btn btn-outline-primary" :href="'/summary/print/'+invoice_id" target="_blank" >Print</a>
-            <button v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-secondary" >Report</button>
+            <a v-if="! table_edit" class="btn btn-primary" :href="'/summary/print/'+invoice_id" target="_blank" >Print</a>
+            <button v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-primary"  data-toggle="modal" data-target="#modalReportOocl">Report</button>
+      
+            <form class="d-inline" v-if="customer_custom.option == 'oocl' & ! table_edit" action="{% url 'summary-oocl-invoice' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="invoice_id" :value="invoice_id">
+                <button class="btn btn-outline-primary">ใบแจ้งหนี้</button>
+            </form>
+            <!-- <a v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-secondary" href="/summary/export/oocl-invoice/">Invoice</a> -->
         </div>
 
         <div class="col text-center">
@@ -14,11 +20,10 @@
         <div class="col text-right">
             <div v-if="saving" class="mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
 
-            <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
-            <button v-if="table_edit" class="btn btn-outline-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
-            <button v-else class="btn btn-outline-info" @click="table_edit=true">Edit</button>
+            <button v-if="table_edit" class="btn btn-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
+            <button v-if="table_edit" class="btn btn-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
+            <button v-else class="btn btn-info" @click="table_edit=true">Edit</button>
         </div>
-    {% endverbatim %}
 </div>
 
 <div>
@@ -47,17 +52,17 @@
 
             <td rowspan=2 class="text-primary text-right" style="width: 400px;">
                 <template v-if="table_edit">
-                    <template v-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
+                    <template v-if="customer_custom.option == 'oocl'"><div class="form-inline float-right"><label for="ap_billing_no" class="mr-2">AP BILLING NO :</label><input id="ap_billing_no"  class="form-control text-center p-1 mx-1" v-model="invoice_data.other"></div></template>
+                    <template v-else-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
                     <template v-else-if="customer_form[1]=='1_job_no_out'"><div class="form-inline float-right"><label for="job_no" class="mr-2">JOB NO :</label><input id="job_no" class="form-control text-center p-1 mx-1" v-model="invoice_data.other"></div></template>
-                    <template v-else-if="customer_form[1]=='1_ap_billing_no'"><div class="form-inline float-right"><label for="ap_billing_no" class="mr-2">AP BILLING NO :</label><input id="ap_billing_no"  class="form-control text-center p-1 mx-1" v-model="invoice_data.other"></div></template>
                     <div v-else class="col-md-10 float-right">
                         <input class="form-control text-center p-1" v-model="invoice_data.other">
                     </div>
                 </template>
                 <template v-else>
-                    <template v-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
+                    <template v-if="customer_custom.option == 'oocl'"><div class="form-inline float-right"><label class="mr-2">AP BILLING NO :</label>{{ invoice_data.other }}</div></template>
+                    <template v-else-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
                     <template v-else-if="customer_form[1]=='1_job_no_out'"><div class="form-inline float-right"><label class="mr-2">JOB NO :</label>{{ invoice_data.other }}</div></template>
-                    <template v-else-if="customer_form[1]=='1_ap_billing_no'"><div class="form-inline float-right"><label class="mr-2">AP BILLING NO :</label>{{ invoice_data.other }}</div></template>
                     <template v-else>{{ invoice_data.other }}</template>
                 </template>
                 
@@ -505,4 +510,40 @@
         </div>
     {% endverbatim %}
 </div>
+
+    <div v-if="customer_custom.option == 'oocl'" class="modal fade" id="modalReportOocl" tabindex="-1" role="dialog" aria-hidden="true">    
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form ref="reportOocl" method="POST" action="{% url 'summary-oocl-report' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">Report</h2>
+                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-5">
+                        <div class="input-group mb-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">REPORT OOCL</span>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">(</span>
+                            </div>
+                            {% verbatim %}
+                                <input type="hidden" name="invoice_id" :value="invoice.id">
+                            {% endverbatim %}
+                            <input class="form-control text-center" name="report_name" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text">)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-5 py-3">
+                        <button class="btn btn-primary">Export</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

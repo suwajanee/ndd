@@ -46,7 +46,7 @@ def api_add_invoice_details(request):
                         },
                         'detail': {
                             'remark': '',
-                            'note': ''
+                            # 'note': ''
                         },
                     }
                     invoice_detail = InvoiceDetail(**data)
@@ -116,7 +116,7 @@ def api_add_invoice_details_evergreen(request):
                         'date': '',
                         'size': '',
                         'remark': '',
-                        'note': ''
+                        # 'note': ''
                     },
                 }
                 
@@ -232,8 +232,8 @@ def api_edit_invoice_details(request):
                 if invoice_detail.gate_charge:
                     invoice_detail.gate_charge['gate'] = detail['gate_charge']['gate']
 
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', True)
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark_gate', True)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', False)
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark_gate', False)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'note', True)
 
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', True)

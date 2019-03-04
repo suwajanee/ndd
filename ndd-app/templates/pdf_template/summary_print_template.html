@@ -71,13 +71,12 @@
 
                     </td>
                     <td class="text-right text-blue px-3" style="width: 350px;">
-                        {% if form.1 == '1_diesel_rate' %}
+                        {% if invoice.customer_week.customer_custom.option == 'oocl' %}
+                            AP BILLING NO :
+                        {% elif form.1 == '1_diesel_rate' %}
                             DIESEL RATE : {{ diesel_rate }}
                         {% elif form.1 == '1_job_no_out' %}
                             JOB NO : 
-                        {% elif form.1 == '1_ap_billing_no' %}
-                            AP BILLING NO : 
-                            
                         {% endif %}
                         {{ invoice.detail.other }}
                     </td>
