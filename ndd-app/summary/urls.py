@@ -11,6 +11,8 @@ from .views import summary_invoice_view
 from .views import summary_invoice_details_view
 
 from .views.summary_print_view import SummaryPrintView, SummaryEvergreenPrintView
+from .views import summary_oocl_report
+from .views import summary_oocl_invoice
 
 
 urlpatterns = [
@@ -81,6 +83,8 @@ urlpatterns = [
     # Print
     url(r'^print/(?P<pk>\d+)/$', SummaryPrintView.as_view(), name='summary-print'),
     url(r'^print-evergreen/(?P<pk>\d+)/$', SummaryEvergreenPrintView.as_view(), name='summary-evergreen-print'),
+    url(r'^export/oocl-report/$', summary_oocl_report.oocl_report, name='summary-oocl-report'),
+    url(r'^export/oocl-invoice/$', summary_oocl_invoice.oocl_invoice, name='summary-oocl-invoice'),
 
 
 

@@ -16,13 +16,6 @@ from agent_transport.models import AgentTransport
 from customer.models import Principal, Shipper
 
 
-import json
-
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.views.decorators.csrf import csrf_exempt
-
-
 @login_required(login_url=reverse_lazy('login'))
 def export_page(request):
     return render(request, 'export.html', {'nbar': 'export-page'})
