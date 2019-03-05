@@ -173,7 +173,7 @@ def oocl_invoice(request):
         style_l.alignment = style_xls.align_left()
         style_r.alignment = style_xls.align_right()
 
-        style_r.num_format_str = '_(#,##0.00 ;#,##0.00 ;"- "_)'
+        style_r.num_format_str = '_(#,##0.00 ;-#,##0.00 ;"- "_)'
 
         sheet.write(14, 1, '1', style_c)
 
@@ -235,7 +235,7 @@ def oocl_invoice(request):
         style.borders = style_xls.border_right()
         style.font = style_xls.font_size_16()
         style.alignment = style_xls.align_right()
-        style.num_format_str = '_(#,##0.00 ;#,##0.00 ;"- "_)'
+        style.num_format_str = '_(#,##0.00 ;-#,##0.00 ;"- "_)'
         sheet.write(25, 6, xlwt.Formula("SUM(G15:G25)"), style)
         sheet.write(26, 6, xlwt.Formula("SUM(G26)"), style)
         sheet.write(27, 6, xlwt.Formula("G27*1%"), style)

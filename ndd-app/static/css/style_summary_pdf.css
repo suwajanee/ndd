@@ -50,6 +50,10 @@ table.table-bordered {
     background-color: #e6e6e6 ;
 }
 
+.font-105 {
+    font-size: 105%;
+}
+
 .font-110 {
     font-size: 110%;
 }

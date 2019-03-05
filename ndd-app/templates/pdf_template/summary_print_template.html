@@ -70,7 +70,7 @@
                     <td>
 
                     </td>
-                    <td class="text-right text-blue px-3" style="width: 350px;">
+                    <td class="text-right text-blue font-105 px-3" style="width: 350px;">
                         {% if invoice.customer_week.customer_custom.option == 'oocl' %}
                             AP BILLING NO :
                         {% elif form.1 == '1_diesel_rate' %}
@@ -171,8 +171,12 @@
                             {% endif %}
                         </td>
 
-                        {% if inv_detail.work.shipper.name|length > 22 or invoice.detail.customer_name|length > 22 %}
+                        {% if invoice.detail.customer_name|length > 22 %}
                             <td>
+                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
+                            <td>
+                        {% elif inv_detail.work.booking_no|length > 40 %}
+                            <td style="width: 7.5in">
                         {% elif inv_detail.work.booking_no|length > 25 %}
                             <td style="width: 6in">
                         {% else %}
@@ -181,10 +185,10 @@
                             {{ inv_detail.work.booking_no }}
                         </td>
 
-                        <td style="width: 2.2in">
+                        <td style="width: 2.4in">
                             {{ inv_detail.work.pickup_from }}
                         </td>
-                        <td style="width: 2.2in">
+                        <td style="width: 2.4in">
                             {{ inv_detail.work.return_to }}
                         </td>
                         <td style="width: 1.6in;"> 
@@ -269,10 +273,10 @@
                                     {{ inv_detail.work.booking_no }}
                                 </td>
                                 
-                                <td style="width: 2.2in">
+                                <td style="width: 2.4in">
                                     {{ inv_detail.work.pickup_from }}
                                 </td>
-                                <td style="width: 2.2in">
+                                <td style="width: 2.4in">
                                     {{ inv_detail.work.return_to }}
                                 </td>
                                 <td style="width: 1.6in;">

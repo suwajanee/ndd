@@ -133,7 +133,7 @@ def oocl_report(request):
 
             style.alignment = style_xls.align_right()
             style.font = style_xls.font_size_14()
-            style.num_format_str = '_(#,##0.00 ;#,##0.00 ;"- "_)'
+            style.num_format_str = '_(#,##0.00 ;-#,##0.00 ;"- "_)'
 
             if row[0]['drayage']:
                 drayage = float(eval(row[0]['drayage']))
@@ -175,7 +175,7 @@ def oocl_report(request):
 
         style.font = style_xls.font_size_16_bold()
         style.alignment = style_xls.align_right()
-        style.num_format_str = '_(#,##0.00 ;#,##0.00 ;"- "_)'
+        style.num_format_str = '_(#,##0.00 ;-#,##0.00 ;"- "_)'
         sheet.write_merge(row_num + 1, row_num + 1, 8, 9, xlwt.Formula("I" + str(row_num+1) + "+J" + str(row_num+1)), style)
 
 

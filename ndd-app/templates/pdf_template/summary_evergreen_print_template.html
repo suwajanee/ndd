@@ -67,7 +67,7 @@
                     <td>
 
                     </td>
-                    <td class="text-right text-blue px-3" style="width: 350px;">
+                    <td class="text-right text-blue font-105 px-3" style="width: 350px;">
                         {% if form.1 == '1_diesel_rate' %}
                             DIESEL RATE : {{ diesel_rate }}
                         {% elif form.1 == '1_job_no_out' %}
@@ -154,11 +154,7 @@
                             {% endif %}
                         </td>
                         <td style="width: 1.6in;">
-                            {% if 'X' in inv_detail.work.size %}
-                                1X{{ inv_detail.work.size|split_size:'X' }}
-                            {% else %}
-                                1X{{ inv_detail.work.size }}
-                            {% endif %}
+                            1X{{ inv_detail.detail.size }}'
                         </td>
                         <td class="text-right px-3" style="width: 3in">
                             {{ inv_detail.drayage_charge.drayage|result }}
