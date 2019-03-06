@@ -256,14 +256,9 @@ var booking_table = new Vue( {
                     this.tmr = data.tmr
 
                     this.getColor()
-                    this.splitTime('pickup_in_time')
-                    this.splitTime('pickup_out_time')
-                    this.splitTime('factory_in_time')
-                    this.splitTime('factory_load_start_time')
-                    this.splitTime('factory_load_finish_time')
-                    this.splitTime('factory_out_time')
-                    this.splitTime('return_in_time')
-                    this.splitTime('return_out_time')
+
+                    this.addTimeFields()
+
                     this.loading = false
                 })    
             }
@@ -279,35 +274,29 @@ var booking_table = new Vue( {
                         this.tmr = data.tmr
 
                         this.getColor()
-                        this.splitTime('pickup_in_time')
-                        this.splitTime('pickup_out_time')
-                        this.splitTime('factory_in_time')
-                        this.splitTime('factory_load_start_time')
-                        this.splitTime('factory_load_finish_time')
-                        this.splitTime('factory_out_time')
-                        this.splitTime('return_in_time')
-                        this.splitTime('return_out_time')
+
+                        this.addTimeFields()
+
                         this.loading = false
                     }
                 })    
             }      
         },
-        splitTime(field) {
-            var field_date = field.split('_')[0]
-            for(booking in this.bookings) {
-                if ( this.bookings[booking][field].indexOf('//') > -1 ) {
-                    var pickup_in_time = this.bookings[booking][field].split('//')
-                    this.bookings[booking][field + '__date'] = pickup_in_time[0]
-                    this.bookings[booking][field + '__time'] = pickup_in_time[1]
-                    if( ! this.bookings[booking][field + '__date'] ) {
-                        this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
+        addTimeFields() {
+            this.bookings.forEach(function(booking) {
+                if(! booking.hasOwnProperty("booking_time")) {
+                    booking['booking_time'] = {
+                        pickup_in_time: {date: '', time: ''},
+                        pickup_out_time: {date: '', time: ''},
+                        factory_in_time: {date: '', time: ''},
+                        factory_load_start_time: {date: '', time: ''},
+                        factory_load_finish_time: {date: '', time: ''},
+                        factory_out_time: {date: '', time: ''},
+                        return_in_time: {date: '', time: ''},
+                        return_out_time: {date: '', time: ''},
                     }
                 }
-                else{
-                    this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
-                    this.bookings[booking][field + '__time'] = ''
-                }
-            }
+            })
         },
         saveTimeBooking: function() {
             this.loading = true
