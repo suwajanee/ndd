@@ -39,10 +39,10 @@ def api_add_invoice_details(request):
                         'invoice': invoice,
                         'work_normal': booking,
                         'drayage_charge': {
-                            'drayage': '',
+                            'drayage': '0',
                         },
                         'gate_charge': {
-                            'gate': '',
+                            'gate': '0',
                         },
                         'detail': {
                             'remark': '',
@@ -59,10 +59,10 @@ def api_add_invoice_details(request):
                         'invoice': invoice,
                         'work_agent_transport': agent_transport,
                         'drayage_charge': {
-                            'drayage': '',
+                            'drayage': '0',
                         },
                         'gate_charge': {
-                            'gate': '',
+                            'gate': '0',
                         },
                         'detail': {
                             'remark': '',
@@ -160,7 +160,7 @@ def api_delete_invoice_detail(request):
             if 'work_id' in req:
                 work_id = req['work_id']    
                 invoice_detail_id = InvoiceDetail.objects.filter(work_agent_transport__pk=work_id)
-            
+
             status = delete_invoice_details(invoice_detail_id, customer_type)
             
             invoice = Invoice.objects.get(pk=invoice_id)

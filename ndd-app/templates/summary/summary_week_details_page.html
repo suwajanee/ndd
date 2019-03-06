@@ -72,7 +72,7 @@
                         <th class="align-middle border-dark">Remark</th>
                     </thead>
                     <tbody>
-                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'table-success': week.id && week_details.status==1 && ! week.detail}">
+                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.detail}">
                             <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
                             <td v-else class="text-center align-middle"></td>
 

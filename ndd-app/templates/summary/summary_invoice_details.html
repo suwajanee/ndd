@@ -10,6 +10,11 @@
                 <input type="hidden" name="invoice_id" :value="invoice_id">
                 <button class="btn btn-outline-primary">ใบแจ้งหนี้</button>
             </form>
+            <form class="d-inline" v-if="customer_custom.option == 'damco' & ! table_edit" action="{% url 'summary-oocl-invoice' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="invoice_id" :value="invoice_id">
+                <button class="btn btn-outline-primary">ค่าใช้จ่าย</button>
+            </form>
             <!-- <a v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-secondary" href="/summary/export/oocl-invoice/">Invoice</a> -->
         </div>
 

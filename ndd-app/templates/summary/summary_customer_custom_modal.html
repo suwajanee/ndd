@@ -43,7 +43,7 @@
                         </div>
                         <label class="form-control" for="none">None</label>
                     </div>
-                    <div class="input-group mb-1 col-md-8 container" :class="{'mb-3': principal_type=='normal'}">
+                    <div class="input-group mb-1 col-md-8 container">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                             <input type="radio" id="2_inv" v-model="customer_setting_modal.option" value="2_inv"> 
@@ -51,7 +51,17 @@
                         </div>
                         <label class="form-control" for="2_inv">2 INV. (แยก Drayage - Gate)</label>
                     </div>
-                    <template v-if="principal_type=='agent-transport'">
+                    <template v-if="principal_type=='normal'">
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="damco" v-model="customer_setting_modal.option" value="damco"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="damco">DAMCO</label>
+                        </div>
+                    </template>
+                    <template v-else>
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
@@ -69,6 +79,7 @@
                             <label class="form-control bg-light" for="evergreen" @click="customer_setting_modal.form=null">Evergreen</label>
                         </div>
                     </template>
+                    
                                         
 
                     <div class="input-group col-md-9 container">

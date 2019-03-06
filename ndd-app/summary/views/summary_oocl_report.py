@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 
 from booking.models import Booking
-from .utils import StyleXls
+from .utils_oocl import StyleXls
 from agent_transport.models import AgentTransport
 from customer.models import Principal, Shipper
 from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
