@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from datetime import datetime
 from customer.models import Principal, Shipper
@@ -54,15 +55,6 @@ class Booking(models.Model):
     factory_date = models.DateField(blank=True, null=True)
     return_date = models.DateField(blank=True, null=True)
 
-    pickup_in_time = models.CharField(max_length=50, blank=True, default='')
-    pickup_out_time = models.CharField(max_length=50, blank=True, default='')
-    factory_in_time = models.CharField(max_length=50, blank=True, default='')
-    factory_load_start_time = models.CharField(max_length=50, blank=True, default='')
-    factory_load_finish_time = models.CharField(max_length=50, blank=True, default='')
-    factory_out_time = models.CharField(max_length=50, blank=True, default='')
-    return_in_time = models.CharField(max_length=50, blank=True, default='')
-    return_out_time = models.CharField(max_length=50, blank=True, default='')
-
     NEXTDAY_CHOICES = (
         ('1', 'Yes'),
         ('0', '-'),
@@ -78,3 +70,16 @@ class Booking(models.Model):
 
     def __str__(self) :
         return self.work_id
+
+
+class BookingTime(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="bookingtimes")
+
+    pickup_in_time = JSONField(null=True, blank=True)
+    pickup_out_time = JSONField(null=True, blank=True)
+    factory_in_time = JSONField(null=True, blank=True)
+    factory_load_start_time = JSONField(null=True, blank=True)
+    factory_load_finish_time = JSONField(null=True, blank=True)
+    factory_out_time = JSONField(null=True, blank=True)
+    return_in_time = JSONField(null=True, blank=True)
+    return_out_time = JSONField(null=True, blank=True)
