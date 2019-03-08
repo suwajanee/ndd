@@ -168,22 +168,25 @@ var booking_table = new Vue( {
         },
 
         editData: function(booking, index, field) {
-            if(booking.yard_ndd == '1' & field == 10){
-                this.bookings[index].forward_tr = ''
-                this.bookings[index].backward_tr = ''
-                this.bookings[index].return_tr = ''
-            }
-            if((booking.nextday == '1' & field == 23) | (booking.fac_ndd == '2' & field == 14)){
-                this.bookings[index].backward_tr = ''
-                this.bookings[index].return_tr = ''
-            }
-            if(booking.fac_ndd == '1' & field == 14){
-                this.bookings[index].return_tr = ''
+            if(index && field) {
+                if(booking.yard_ndd == '1' & field == 10){
+                    this.bookings[index].forward_tr = ''
+                    this.bookings[index].backward_tr = ''
+                    this.bookings[index].return_tr = ''
+                }
+                if((booking.nextday == '1' & field == 23) | (booking.fac_ndd == '2' & field == 14)){
+                    this.bookings[index].backward_tr = ''
+                    this.bookings[index].return_tr = ''
+                }
+                if(booking.fac_ndd == '1' & field == 14){
+                    this.bookings[index].return_tr = ''
+                }
             }
             
             if(this.edit_data.indexOf(booking) === -1) {
                 this.edit_data.push(booking)
             }
+            
         },
         saveEditBooking: function() {
             this.loading = true
@@ -286,14 +289,14 @@ var booking_table = new Vue( {
             this.bookings.forEach(function(booking) {
                 if(! booking.hasOwnProperty("booking_time")) {
                     booking['booking_time'] = {
-                        pickup_in_time: {date: '', time: ''},
-                        pickup_out_time: {date: '', time: ''},
-                        factory_in_time: {date: '', time: ''},
-                        factory_load_start_time: {date: '', time: ''},
-                        factory_load_finish_time: {date: '', time: ''},
-                        factory_out_time: {date: '', time: ''},
-                        return_in_time: {date: '', time: ''},
-                        return_out_time: {date: '', time: ''},
+                        pickup_in_time: {time: ''},
+                        pickup_out_time: {time: ''},
+                        factory_in_time: {time: ''},
+                        factory_load_start_time: {time: ''},
+                        factory_load_finish_time: {time: ''},
+                        factory_out_time: {time: ''},
+                        return_in_time: {time: ''},
+                        return_out_time: {time: ''},
                     }
                 }
             })
@@ -313,16 +316,16 @@ var booking_table = new Vue( {
                 this.saving = false
             }   
         },
-        printTime() {
-            this.$refs.printTime.action = "/booking/time/print/"
+        exportTime() {
+            this.$refs.exportTime.action = "/booking/time/export/"
             for(booking in this.bookings){
                 var input = document.createElement("input")
                 input.type = "hidden"
                 input.name = "pk_list"
                 input.value = this.bookings[booking].id
-                this.$refs.printTime.appendChild(input)
+                this.$refs.exportTime.appendChild(input)
             }
-            this.$refs.printTime.submit()
+            this.$refs.exportTime.submit()
         },
 
     }

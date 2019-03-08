@@ -80,14 +80,13 @@ def api_save_time_bookings(request):
                 except:
                     booking_time = None
 
-                date_update = pickup_in['date'] or pickup_out['date'] or factory_in['date'] or factory_load_start['date'] or factory_load_finish['date'] or \
-                        factory_out['date'] or return_in['date'] or return_out['date']
+                # date_update = pickup_in['date'] or pickup_out['date'] or factory_in['date'] or factory_load_start['date'] or factory_load_finish['date'] or \
+                #         factory_out['date'] or return_in['date'] or return_out['date']
 
                 time_update = pickup_in['time'] or pickup_out['time'] or factory_in['time'] or factory_load_start['time'] or factory_load_finish['time'] or \
                         factory_out['time'] or return_in['time'] or return_out['time']
 
-
-                if date_update or time_update:
+                if time_update:
                     data = {
                         'booking': Booking.objects.get(pk=booking['id']),
                         'pickup_in_time': pickup_in,
