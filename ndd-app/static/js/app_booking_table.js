@@ -167,23 +167,26 @@ var booking_table = new Vue( {
             this.$refs.printBookingForm.submit()
         },
 
-        editData(booking, index, field) {
-            if(booking.yard_ndd == '1' & field == 10){
-                this.bookings[index].forward_tr = ''
-                this.bookings[index].backward_tr = ''
-                this.bookings[index].return_tr = ''
-            }
-            if((booking.nextday == '1' & field == 23) | (booking.fac_ndd == '2' & field == 14)){
-                this.bookings[index].backward_tr = ''
-                this.bookings[index].return_tr = ''
-            }
-            if(booking.fac_ndd == '1' & field == 14){
-                this.bookings[index].return_tr = ''
+        editData: function(booking, index, field) {
+            if(index && field) {
+                if(booking.yard_ndd == '1' & field == 10){
+                    this.bookings[index].forward_tr = ''
+                    this.bookings[index].backward_tr = ''
+                    this.bookings[index].return_tr = ''
+                }
+                if((booking.nextday == '1' & field == 23) | (booking.fac_ndd == '2' & field == 14)){
+                    this.bookings[index].backward_tr = ''
+                    this.bookings[index].return_tr = ''
+                }
+                if(booking.fac_ndd == '1' & field == 14){
+                    this.bookings[index].return_tr = ''
+                }
             }
             
             if(this.edit_data.indexOf(booking) === -1) {
                 this.edit_data.push(booking)
             }
+            
         },
         saveEditBooking() {
             this.loading = true
@@ -256,14 +259,9 @@ var booking_table = new Vue( {
                     this.tmr = data.tmr
 
                     this.getColor()
-                    this.splitTime('pickup_in_time')
-                    this.splitTime('pickup_out_time')
-                    this.splitTime('factory_in_time')
-                    this.splitTime('factory_load_start_time')
-                    this.splitTime('factory_load_finish_time')
-                    this.splitTime('factory_out_time')
-                    this.splitTime('return_in_time')
-                    this.splitTime('return_out_time')
+
+                    this.addTimeFields()
+
                     this.loading = false
                 })    
             }
@@ -279,35 +277,29 @@ var booking_table = new Vue( {
                         this.tmr = data.tmr
 
                         this.getColor()
-                        this.splitTime('pickup_in_time')
-                        this.splitTime('pickup_out_time')
-                        this.splitTime('factory_in_time')
-                        this.splitTime('factory_load_start_time')
-                        this.splitTime('factory_load_finish_time')
-                        this.splitTime('factory_out_time')
-                        this.splitTime('return_in_time')
-                        this.splitTime('return_out_time')
+
+                        this.addTimeFields()
+
                         this.loading = false
                     }
                 })    
             }      
         },
-        splitTime(field) {
-            var field_date = field.split('_')[0]
-            for(booking in this.bookings) {
-                if ( this.bookings[booking][field].indexOf('//') > -1 ) {
-                    var pickup_in_time = this.bookings[booking][field].split('//')
-                    this.bookings[booking][field + '__date'] = pickup_in_time[0]
-                    this.bookings[booking][field + '__time'] = pickup_in_time[1]
-                    if( ! this.bookings[booking][field + '__date'] ) {
-                        this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
+        addTimeFields() {
+            this.bookings.forEach(function(booking) {
+                if(! booking.hasOwnProperty("booking_time")) {
+                    booking['booking_time'] = {
+                        pickup_in_time: {time: ''},
+                        pickup_out_time: {time: ''},
+                        factory_in_time: {time: ''},
+                        factory_load_start_time: {time: ''},
+                        factory_load_finish_time: {time: ''},
+                        factory_out_time: {time: ''},
+                        return_in_time: {time: ''},
+                        return_out_time: {time: ''},
                     }
                 }
-                else{
-                    this.bookings[booking][field + '__date'] = this.bookings[booking][field_date + '_date']
-                    this.bookings[booking][field + '__time'] = ''
-                }
-            }
+            })
         },
         saveTimeBooking() {
             this.loading = true
@@ -324,16 +316,16 @@ var booking_table = new Vue( {
                 this.saving = false
             }   
         },
-        printTime() {
-            this.$refs.printTime.action = "/booking/time/print/"
+        exportTime() {
+            this.$refs.exportTime.action = "/booking/time/export/"
             for(booking in this.bookings){
                 var input = document.createElement("input")
                 input.type = "hidden"
                 input.name = "pk_list"
                 input.value = this.bookings[booking].id
-                this.$refs.printTime.appendChild(input)
+                this.$refs.exportTime.appendChild(input)
             }
-            this.$refs.printTime.submit()
+            this.$refs.exportTime.submit()
         },
 
     }

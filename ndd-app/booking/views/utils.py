@@ -11,10 +11,10 @@ class StyleXls():
 
         # borders
         borders = xlwt.Borders()
-        borders.top = xlwt.Borders.THICK
-        borders.right = xlwt.Borders.THICK
-        borders.left = xlwt.Borders.THICK
-        borders.bottom = xlwt.Borders.THICK
+        borders.top = xlwt.Borders.THIN
+        borders.right = xlwt.Borders.THIN
+        borders.left = xlwt.Borders.THIN
+        borders.bottom = xlwt.Borders.THIN
         style.borders = borders
 
         # pattern
@@ -66,6 +66,12 @@ class StyleXls():
         pattern.pattern_fore_colour = xlwt.Style.colour_map[color[index]]
         return pattern
 
+    def bg_none(self):
+        pattern = xlwt.Pattern()
+        # pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        # pattern.pattern_fore_colour = xlwt.Style.colour_map['']
+        return pattern
+
     def bg_bright_green(self):
         pattern = xlwt.Pattern()
         pattern.pattern = xlwt.Pattern.SOLID_PATTERN
@@ -87,6 +93,13 @@ class StyleXls():
     def align_left(self):
         alignment = xlwt.Alignment()
         alignment.horz = 1
+        alignment.vert = 1
+        return alignment
+
+    def align_center(self):
+        alignment = xlwt.Alignment()
+        alignment.horz = 2
+        alignment.vert = 1
         return alignment
 
     def font_bold(self):

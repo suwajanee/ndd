@@ -6,6 +6,7 @@ from .views import booking_edit_view
 from .views import booking_page_view
 from .views import booking_time_view
 from .views import booking_data_view
+from .views import booking_time_export
 from .views.booking_print_view import BookingPrintView
 
 
@@ -28,5 +29,6 @@ urlpatterns = [
     # Summary
     url(r'^api/get-work-list/$', booking_data_view.api_get_work_list, name='api-get-booking-work-list'),
 
+    url(r'^time/export/$', booking_time_export.export_time, name='booking-export-time'),
     
 ]
