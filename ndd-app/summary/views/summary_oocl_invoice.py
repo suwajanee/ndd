@@ -36,6 +36,7 @@ def oocl_invoice(request):
 
         wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
         sheet = wb.add_sheet(invoice.invoice_no)
+        sheet.page_preview = True
 
         sheet.header_str = bytes('', 'utf-8')
         sheet.footer_str = bytes('', 'utf-8')

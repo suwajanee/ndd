@@ -7,7 +7,7 @@ class StyleXls():
         # font
         font = xlwt.Font()
         font.bold = True
-        style.font.name = 'BrowalliaUPC'
+        font.name = 'BrowalliaUPC'
         font.height = 20*13
         style.font = font
 

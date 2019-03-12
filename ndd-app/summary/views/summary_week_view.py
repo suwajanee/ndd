@@ -115,7 +115,7 @@ def api_get_summary_week_details(request):
 
             summary_week_details = []
 
-            customers = Principal.objects.all().order_by('name')
+            customers = Principal.objects.all().order_by('cancel', 'name')
 
             for customer in customers:
                 data = {}

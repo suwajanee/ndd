@@ -71,7 +71,7 @@ def api_get_summary_year_details(request):
             color_list = ['#e0ffff', '#cefdce', '#ffffff']
             color_index = 0
 
-            customers = Principal.objects.all().order_by('name')
+            customers = Principal.objects.all().order_by('cancel', 'name')
             for customer in customers:
                 data = {}
                 total = []

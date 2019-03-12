@@ -32,7 +32,7 @@ def api_get_summary_month_details(request):
             color_list = ['#e0ffff', '#cefdce', '#ffffff']
             color_index = 0
 
-            customers = Principal.objects.all().order_by('name')
+            customers = Principal.objects.all().order_by('cancel', 'name')
 
             # get weeks data
             week_details = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(month=month)).order_by('week')
