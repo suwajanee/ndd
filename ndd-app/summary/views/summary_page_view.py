@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.db.models import Q
 
 from ..models import CustomerCustom, SummaryCustomer
 from customer.models import Principal
