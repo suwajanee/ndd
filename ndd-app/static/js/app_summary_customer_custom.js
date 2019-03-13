@@ -57,7 +57,7 @@ var summary_customer_custom = new Vue( {
             this.principal_id = principal.id
             this.principal_name = principal.name
             this.principal_type = principal.work_type
-            api("/summary/api/get-customer-custom/", "POST", {customer: principal.id}).then((data) => {
+            api("/summary/api/get-customer-custom/", "POST", { customer: principal.id }).then((data) => {
                 this.customer_details = data
             })
         },
@@ -96,7 +96,7 @@ var summary_customer_custom = new Vue( {
                 alert("This setting is existing.")
             }
             else(
-                api("/summary/api/add-customer-custom/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
+                api("/summary/api/add-customer-custom/", "POST", { customer: this.principal_id, customer_setting: this.customer_setting_modal }).then((data) => {
                     $('#modalCustomerCustom').modal('hide')
                     this.customer_details = data
                 })
@@ -112,7 +112,7 @@ var summary_customer_custom = new Vue( {
                 alert("This setting is existing.")
             }
             else {
-                api("/summary/api/edit-customer-custom/", "POST", {customer: this.principal_id, customer_setting: this.customer_setting_modal}).then((data) => {
+                api("/summary/api/edit-customer-custom/", "POST", { customer: this.principal_id, customer_setting: this.customer_setting_modal }).then((data) => {
                     $('#modalCustomerCustom').modal('hide')
                     this.customer_details = data
                 })
