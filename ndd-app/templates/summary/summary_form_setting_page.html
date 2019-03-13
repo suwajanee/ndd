@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block content %}
-
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb m-0 bg-white">
             <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
@@ -40,7 +39,6 @@
                         <div v-else class="float-right mb-3">
                             <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
                         </div>
-                        <!-- <div v-else class="float-right mb-3"></div> -->
                         
                         <table class="table table-bordered" style="border-width:2px; font-size:14px;">
                             <tr class="text-center">
@@ -70,9 +68,6 @@
                                 <td rowspan=2 class="align-middle">
                                     Drayage Charge
                                 </td>
-                                <!-- <td rowspan=2 class="align-middle">
-                                    Gate Charge
-                                </td> -->
 
                                 <td rowspan=2 v-if="form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
                                     Gate Charge
