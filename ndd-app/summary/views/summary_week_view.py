@@ -8,10 +8,10 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice
-from customer.models import Principal
-from ..serializers import SummaryWeekSerializer
+from ..models import CustomerCustom, Invoice, SummaryCustomer, SummaryWeek, Year
 from ..serializers import CustomerCustomSerializer
+from ..serializers import SummaryWeekSerializer
+from customer.models import Principal
 from customer.serializers import PrincipalSerializer
 
 
@@ -132,7 +132,6 @@ def api_get_summary_week_details(request):
                         customer_custom_serializer = CustomerCustomSerializer(sub_customer, many=False)
                         data['customer_custom'] = customer_custom_serializer.data
                         
-
                         summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_custom=sub_customer))
 
                         if summary_customer:
@@ -151,6 +150,20 @@ def api_get_summary_week_details(request):
             return JsonResponse(details, safe=False)
     return JsonResponse('Error', safe=False)
 
+@csrf_exempt
+def api_get_summary_weeks_by_year(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            year = req['year']
+
+            week = SummaryWeek.objects.filter(Q(year__year_label=year))
+            week_serializer = SummaryWeekSerializer(week, many=True)
+            return JsonResponse(week_serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+
+# Method
 def summary_customer_json(data, summary_customer):
     if summary_customer:
         customer = summary_customer[0]
@@ -176,20 +189,6 @@ def summary_customer_json(data, summary_customer):
         data['gate_total'] = 0
 
     return data
-
-
-@csrf_exempt
-def api_get_summary_weeks_by_year(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            req = json.loads( request.body.decode('utf-8') )
-            year = req['year']
-
-            week = SummaryWeek.objects.filter(Q(year__year_label=year))
-            week_serializer = SummaryWeekSerializer(week, many=True)
-            return JsonResponse(week_serializer.data, safe=False)
-    return JsonResponse('Error', safe=False)
-
 
 def get_week_details(week, year):
     try:

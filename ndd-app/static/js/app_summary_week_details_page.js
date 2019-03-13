@@ -46,6 +46,11 @@ var summary_week_details = new Vue( {
             this.getSummaryWeekDetails(year, month, week)
             this.getYears()
         },
+        getYears() {
+            api("/summary/api/get-summary-year/").then((data) => {
+                this.year_list = data
+            })
+        },
         resetValue(){
             this.item = 0
             this.total_list = []
@@ -72,12 +77,6 @@ var summary_week_details = new Vue( {
 
             })
         },
-        getYears() {
-            api("/summary/api/get-summary-year/").then((data) => {
-                this.year_list = data
-            })
-        },
-
         totalCalc() {
             var drayage_total = gate_total = 0
             for(week in this.summary_week_details) {
@@ -118,7 +117,6 @@ var summary_week_details = new Vue( {
                 this.check_list.push(parseFloat(check))
             }
             this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list).toFixed(2), sumArray(this.check_list).toFixed(2)]
-
         },
 
         editWeekDetails() {
@@ -176,6 +174,5 @@ var summary_week_details = new Vue( {
                 this.getSummaryWeekDetails(this.year, this.month, this.week)
             })
         },
-        
     }
 })

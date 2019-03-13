@@ -15,7 +15,6 @@ var summary_year_details = new Vue( {
             this.year = year
             this.month = _month
             this.getSummaryYearDetails(year)
-            
         },
         getSummaryYearDetails(year) {
             api("/summary/api/get-summary-year-details/", "POST", { year: year }).then((data) => {
@@ -27,10 +26,8 @@ var summary_year_details = new Vue( {
                 this.totalMonth()
                 this.totalCustomer()
                 this.totalYear()
-                
             })
         },
-
         totalMonth(){
             for(year_detail in this.summary_year_details){
                 var detail = this.summary_year_details[year_detail].total

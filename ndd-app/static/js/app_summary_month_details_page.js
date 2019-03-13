@@ -48,7 +48,6 @@ var summary_month_details = new Vue( {
                 
             })
         },
-
         totalWeek(){
             for(month_detail in this.summary_month_details){
                 var detail = this.summary_month_details[month_detail].total

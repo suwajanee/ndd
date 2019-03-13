@@ -2,14 +2,13 @@
 
 import copy
 import json
-import re
 
 from django.db.models import Q
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, CustomerCustom, SummaryWeek, Invoice
+from ..models import CustomerCustom, Invoice, SummaryWeek, Year
 from customer.models import Principal
 from ..serializers import SummaryWeekSerializer
 

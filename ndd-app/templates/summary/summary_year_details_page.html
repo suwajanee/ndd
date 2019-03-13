@@ -26,7 +26,6 @@
                 </thead>
                 <tbody>
                     <tr v-for="(year_detail, index) in summary_year_details" class="text-right" :style="'background:'+ year_detail.color">
-
                         <td v-if="year_detail.sub_customer" class="text-left">{{ year_detail.sub_customer }}</td>
                         <td v-else class="text-left">{{ year_detail.customer }}</td>
 

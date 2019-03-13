@@ -21,9 +21,12 @@
             </ol>
         </nav>
     </div>
+
     <div id="summary-month-details" >
         {% verbatim %}
-            <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-plus-circle"></i>&nbsp;Week</button>
+            <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek">
+                <i class="fa fa-plus-circle"></i>&nbsp;Week
+            </button>
             <div class="row col-md-11">
                 <table class="table table-bordered table-bordered-dark table-hover">
                     <thead class="text-center">
@@ -57,7 +60,7 @@
                             <td v-if="! weeks.length"></td>
                             <td v-else v-for="week in total_week" class="alert-primary"><b>{{ week|currencyCommas }}</b></td>
 
-                            <td style="background: Lime;"><b>{{ total_month|currencyCommas }}</b></td>
+                            <td class="bg-lime"><b>{{ total_month|currencyCommas }}</b></td>
                         </tr>
                     </tbody>
                 </table>
