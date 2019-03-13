@@ -5,7 +5,6 @@ import json
 
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
@@ -25,10 +24,9 @@ def api_get_work_list(request):
             week, week_serializer = get_week_details(week, year)
 
             bookings = Booking.objects.filter(Q(principal__pk=customer) & ~Q(status=0) & ((Q(date__lte=week.date_end) & Q(date__gte=week.date_start)) | \
-                                            (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'booking_no', 'work_id')
+                        (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'booking_no', 'work_id')
 
             serializer = BookingSerializer(bookings, many=True)
-            # context['bookings'] = serializer.data
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
