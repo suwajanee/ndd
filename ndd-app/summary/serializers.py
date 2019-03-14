@@ -48,6 +48,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = '__all__'
 
+
 class InvoiceDetailSerializer(serializers.ModelSerializer):
     work_normal = BookingSerializer()
     work_agent_transport = AgentTransportSerializer()

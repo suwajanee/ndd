@@ -1,24 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import copy
 import json
-import re
 
 from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
-from customer.models import Principal
-from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer, InvoiceSerializer, CustomerCustomSerializer
-from customer.serializers import PrincipalSerializer
-from .summary_week_view import get_week_details
+from ..models import CustomerCustom, Invoice, InvoiceDetail, SummaryCustomer
+from ..serializers import CustomerCustomSerializer, InvoiceSerializer, SummaryCustomerSerializer
 from .summary_customer_view import add_summary_customer, delete_summary_customer
-from .summary_invoice_details_view import delete_invoice_details
-from booking.views.booking_data_view import booking_summary_status
-from agent_transport.views.agent_transport_data_view import agent_transport_summary_status
 from .summary_invoice_details_view import check_key_detail
+from .summary_invoice_details_view import delete_invoice_details
+from .summary_week_view import get_week_details
+from customer.models import Principal
+from customer.serializers import PrincipalSerializer
 
 
 @csrf_exempt
@@ -107,7 +102,6 @@ def api_add_invoice(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             summary_details = req['summary_details']
-            # work_list = req['work_list']
 
             if 'summary_customer_id' in summary_details:
                 summary_customer = SummaryCustomer.objects.get(pk=summary_details['summary_customer_id'])
@@ -180,5 +174,3 @@ def api_delete_invoice_week(request):
 
             return JsonResponse(check_summary_customer, safe=False)
     return JsonResponse('Error', safe=False)
-
-

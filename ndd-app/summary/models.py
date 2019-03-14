@@ -84,7 +84,6 @@ class SummaryCustomer(models.Model):
         elif self.customer_main:
             return self.customer_main
 
-
     def __str__(self):
         if self.week and self.customer_custom:
             return self.week.year.year_label + " - WK. " + self.week.week + " - " + self.customer_main.name + " - " + self.customer_custom.sub_customer

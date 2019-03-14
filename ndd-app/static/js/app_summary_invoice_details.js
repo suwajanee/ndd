@@ -2,17 +2,11 @@ var summary_invoice_details = new Vue( {
     
     el: '#summary-invoice-details',
     data: {
-        // year: '',
-        // month: '',
-        // week: '',
-        // customer: '',
-        // sub_customer: '',
         query: {},
         invoice: {},
         invoice_id: '',
         summary_week_id: '',
         invoice_detail_list: [],
-
 
         year_list: [],
         week_list: [],
@@ -26,10 +20,6 @@ var summary_invoice_details = new Vue( {
         booking_field: {},
         diesel_rate: '',
         container_color: {},
-        // customer_details: {},
-        // invoices: [],
-        // drayage_total: 0,
-        // gate_total: 0,
 
         work_list_modal_mode: 'create',
         filter_work: '',
@@ -46,13 +36,11 @@ var summary_invoice_details = new Vue( {
             other: '',
         },
         
-
         saving: false,
         not_save: false,
 
         drayage_total: '',
         gate_total: '',
-        
     },
     computed: {
         filteredWork() {
@@ -92,10 +80,7 @@ var summary_invoice_details = new Vue( {
                 if(drayage_charge.other) {
                     for(other_index in drayage_charge.other) {
                         var other = drayage_charge.other[other_index].other_charge = drayage_charge.other[other_index].other_charge.replace(',', '')
-
-
                         try {
-
                             var other_result = eval(other)
                         }
                         catch(err) {
@@ -122,12 +107,12 @@ var summary_invoice_details = new Vue( {
 
                 total += result
 
-
             }
 
             this.drayage_total = total
             return total
         },
+
         gateTotal() {
             this.not_save = false
             var total = 0
@@ -148,8 +133,6 @@ var summary_invoice_details = new Vue( {
             this.gate_total = total
             return total
         }
-
-        
     },
 
     methods: {
@@ -165,7 +148,6 @@ var summary_invoice_details = new Vue( {
             this.getInvoiceDetails(this.invoice_id)
             this.getFormDefault()
             this.getYears()
-            
         },
 
         // Get initial data
@@ -174,7 +156,6 @@ var summary_invoice_details = new Vue( {
                 this.afterGetInvoiceDetails(data) 
             })
         },
-
         getFormDefault() {
             api("/summary/api/get-form-default/").then((data) => {
                 this.form_default = data.form_detail
@@ -200,7 +181,6 @@ var summary_invoice_details = new Vue( {
                 this.week_list = data
             })
         },
-
         getWorkList() {
             this.customer_type = this.customer_main.work_type
             if(this.customer_type == 'agent-transport') {
@@ -261,9 +241,7 @@ var summary_invoice_details = new Vue( {
             this.work_selected = []
         },
 
-
         // Invoice 
-
         addNewInvoice() {
             var data = this.dataAddSummaryCustomer()
 
@@ -312,18 +290,14 @@ var summary_invoice_details = new Vue( {
             }
         },
 
-
         // Invoice Detail
-        
         addInvoiceDetails(invoice) {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
-                // this.reload(invoice)
                 this.invoice_details = true
                 this.afterGetInvoiceDetails(data) 
             })
             $('#modalWorkList').modal('hide');
-
         },
 
         editInvoiceDetails() {
@@ -337,7 +311,6 @@ var summary_invoice_details = new Vue( {
                 customer_type: this.customer_type,
                 drayage_total: this.drayage_total,
                 gate_total: this.gate_total,
-
             }
             api("/summary/api/edit-invoice-details/", "POST", post_data).then((data) => {
                 this.invoice_details = true
@@ -348,9 +321,7 @@ var summary_invoice_details = new Vue( {
                 this.invoice.gate_total = this.gate_total
                 
                 this.saving = false
-
             })
-
         },
 
         deleteInvoiceDetail(id, work_id) {
@@ -406,7 +377,6 @@ var summary_invoice_details = new Vue( {
 
             var drayage_charge = this.invoice_detail_list[detail_index].drayage_charge
 
-
             if(! drayage_charge.other) {
                 this.$set(drayage_charge, 'other', [])
             }
@@ -417,7 +387,6 @@ var summary_invoice_details = new Vue( {
             var detail_index = this.invoice_detail_list.findIndex(x => x.id == id)
             var other_charge = this.invoice_detail_list[detail_index].drayage_charge.other
             other_charge[index].color = color
-
         },
 
         removeOtherCharge(id, index) {
@@ -425,7 +394,6 @@ var summary_invoice_details = new Vue( {
             var other_charge = this.invoice_detail_list[detail_index].drayage_charge.other
 
             other_charge.splice(index,1)
-
         },
 
         checkContainer(id, color, index) {
@@ -438,12 +406,8 @@ var summary_invoice_details = new Vue( {
             }
 
             api("/summary/api/check-container/", "POST", {invoice_id: this.invoice_id, invoice_detail_id: id, color: color, index: index}).then((data) => {
-
                 var invoice_detail = this.invoice_detail_list.find(x => x.id == id)
-
                 this.$set(invoice_detail.detail, 'color' + index, data)
-
-
             })
         },
 
@@ -453,22 +417,15 @@ var summary_invoice_details = new Vue( {
             })
         },
 
-        
-
-
         // Evergreen
-
         addInvoiceDetailsEvergreen(invoice) {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details-evergreen/", "POST", {invoice_id: invoice.id, work_list: this.work_selected}).then((data) => {
-                // this.reload(invoice)
                 this.invoice_details = true
                 this.afterGetInvoiceDetails(data) 
             })
             $('#modalWorkList').modal('hide');
-
         },
-
 
         evergreenSelectWork(work_click, work_action) {
             var action = this.work_selected.indexOf(work_action)
@@ -479,10 +436,7 @@ var summary_invoice_details = new Vue( {
                 this.work_selected.push(work_click)
                 this.work_selected.push(work_action)
             }
-                
         },
-
-        
 
     }
 })

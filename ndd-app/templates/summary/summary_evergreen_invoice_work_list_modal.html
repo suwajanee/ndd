@@ -37,11 +37,10 @@
                                         <div class="m-0 custom-control custom-checkbox">
                                             <input v-if="work.size.indexOf('X') > 0" type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" @click="evergreenSelectWork(work.id+'_1', work.id+'_2')" :disabled="work.summary_status=='1'">
                                             <input v-else type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" :disabled="work.summary_status=='1'">
-                                            <!-- <label class="custom-control-label" :for="'work'+ index"></label> -->
                                         </div>
-                                        <!-- <input type="checkbox" v-model="work_selected" :value="work.id"> -->
                                     </td>
                                     <td class="text-center">{{ work.date|formatDate }}</td>
+
                                     <td v-if="customer_type == 'agent-transport'" class="text-center text-primary">
                                         <span v-if="work.operation_type == 'export_loaded'">
                                             ตู้หนักไป
@@ -57,42 +56,38 @@
                                         </span>
                                     </td>
                                     <td>{{ work.principal.name }}</td>
+
                                     <td v-if="work.shipper" style="max-width: 250px;">{{ work.shipper.name }}</td>
                                     <td v-else></td>
+
                                     <td class="text-center">{{ work.agent }}</td>
                                     <td class="text-center">{{ work.booking_no }}</td>
                                     <td class="text-center">{{ work.pickup_from }}</td>
                                     <td class="text-center">{{ work.return_to }}</td>
-                                    
                                     <td class="text-center" style="font-weight: 800;">{{ work.container_1 }}</td>
-
                                     <td class="text-center">{{ work.size }}</td>
                                     <td class="text-center">{{ work.work_id }}</td>
                                 </tr>
                                 <tr v-if="work.size.indexOf('X') > 0" :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id+'_2')}">
-                                        <td class="text-center align-middle">
-                                            <div class="m-0 custom-control custom-checkbox">
-                                                <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_2'" @click="evergreenSelectWork(work.id+'_2', work.id+'_1')" :disabled="work.summary_status=='1'">
-                                                <!-- <label class="custom-control-label" :for="'work'+ index"></label> -->
-                                            </div>
-                                            <!-- <input type="checkbox" v-model="work_selected" :value="work.id"> -->
-                                        </td>
-                                        <td class="text-center"></td>
-                                        <td v-if="customer_type == 'agent-transport'" class="text-center text-primary">
-                                            
-                                        </td>
-                                        <td></td>
-                                        <td ></td>
-                                        <td class="text-center"></td>
-                                        <td class="text-center"></td>
-                                        <td class="text-center"></td>
-                                        <td class="text-center"></td>
-                                        
-                                        <td class="text-center" style="font-weight: 800;">{{ work.container_2 }}</td>
-    
-                                        <td class="text-center"></td>
-                                        <td class="text-center"></td>
-                                    </tr>
+                                    <td class="text-center align-middle">
+                                        <div class="m-0 custom-control custom-checkbox">
+                                            <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_2'" @click="evergreenSelectWork(work.id+'_2', work.id+'_1')" :disabled="work.summary_status=='1'">
+                                        </div>
+                                    </td>
+                                    <td class="text-center"></td>
+                                    <td v-if="customer_type == 'agent-transport'" class="text-center text-primary"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+                                    <td class="text-center" style="font-weight: 800;">{{ work.container_2 }}</td>
+
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                             </template>
                         </tbody>
                     </table>
@@ -104,6 +99,5 @@
                 </div>
             </div>
         </div>
-
     {% endverbatim %}
 </div>

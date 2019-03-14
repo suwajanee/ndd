@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import copy
 import json
-import re
 
-from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
+from ..models import CustomerCustom, Invoice, SummaryCustomer, SummaryWeek
 from customer.models import Principal
-from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer
 
 
 @csrf_exempt
@@ -56,13 +51,13 @@ def api_summary_customer_status(request):
             return JsonResponse(True, safe=False)
     return JsonResponse('Error', safe=False)
 
-# @csrf_exempt
+
+# Method
 def add_summary_customer(detail):
     data = {
         'week': SummaryWeek.objects.get(pk=detail['week']),
         'customer_main': Principal.objects.get(pk=detail['customer_main'])
     }
-    # if detail['customer_custom']:
     if 'customer_custom' in detail:
         data['customer_custom'] = CustomerCustom.objects.get(pk=detail['customer_custom'])
 
@@ -73,9 +68,7 @@ def add_summary_customer(detail):
 
 def delete_summary_customer(summary_customer):
     invoice_count = Invoice.objects.filter(customer_week__pk=summary_customer).count()
-
     if invoice_count == 0:
         summary_customer = SummaryCustomer.objects.get(pk=summary_customer)
         summary_customer.delete()
-
     return True

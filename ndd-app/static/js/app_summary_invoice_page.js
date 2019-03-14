@@ -1,6 +1,6 @@
 var summary_invoice = new Vue( {
     
-    el: '.summary-invoice',
+    el: '#summary-invoice',
     data: {
         year: '',
         month: '',
@@ -11,8 +11,6 @@ var summary_invoice = new Vue( {
         summary_week: {},
         query: {},
 
-        // test: '2222',
-
         customer_details: {},
         invoices: [],
         drayage_total: 0,
@@ -20,8 +18,6 @@ var summary_invoice = new Vue( {
 
         table_edit: false,
         invoice_details: false,
-
-        
     },
 
     methods: {
@@ -61,13 +57,11 @@ var summary_invoice = new Vue( {
                     summary_invoice_details.customer_main = this.customer_details.customer_custom.customer
                 }                 
 
-                    
                 this.invoices = data.invoice
                 summary_invoice_details.getWorkList()
                 this.totalCalc()
             })
         },
-
         totalCalc(){
             var drayage_total = 0
             var gate_total = 0
@@ -116,14 +110,9 @@ var summary_invoice = new Vue( {
         },
 
         selectInvoice(invoice) {
-            summary_invoice_details.invoice_details = true
-            // if(id && invoice) {
-                
+            summary_invoice_details.invoice_details = true                
             summary_invoice_details.reload(invoice)
-
-            // }
         },
         
-
     }
 })

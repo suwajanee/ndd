@@ -1,19 +1,19 @@
 from django.conf.urls import url
 
-from .views import summary_page_view
-from .views import summary_year_view
-from .views import summary_form_setting_view
 from .views import summary_customer_custom_view
-from .views import summary_week_view
-from .views import summary_month_view
 from .views import summary_customer_view
-from .views import summary_invoice_view
+from .views import summary_form_setting_view
 from .views import summary_invoice_details_view
+from .views import summary_invoice_view
+from .views import summary_month_view
+from .views import summary_page_view
+from .views import summary_week_view
+from .views import summary_year_view
 
-from .views.summary_print_view import SummaryPrintView, SummaryEvergreenPrintView
-from .views import summary_oocl_report
-from .views import summary_oocl_invoice
 from .views import summary_damco_invoice
+from .views import summary_oocl_invoice
+from .views import summary_oocl_report
+from .views.summary_print_view import SummaryPrintView, SummaryEvergreenPrintView
 
 
 urlpatterns = [
@@ -57,7 +57,6 @@ urlpatterns = [
     url(r'^api/get-summary-weeks-by-year/$', summary_week_view.api_get_summary_weeks_by_year, name='api-get-summary-weeks-by-year'),
     url(r'^api/summary-weeks-status/$', summary_week_view.api_summary_week_status, name='api-summary-weeks-status'),
 
-
     # Summary Customer
     url(r'^api/edit-summary-customer-detail/$', summary_customer_view.api_edit_summary_customer_detail, name='api-edit-summary-customer-detail'),
     url(r'^api/summary-customer-status/$', summary_customer_view.api_summary_customer_status, name='api-summary-customer-status'),
@@ -77,13 +76,15 @@ urlpatterns = [
     url(r'^api/edit-invoice-details/$', summary_invoice_details_view.api_edit_invoice_details, name='api-edit-invoice-details'),
     url(r'^api/check-container/$', summary_invoice_details_view.api_check_container, name='api-check-container'),
 
-
     # Evergreen
     url(r'^api/add-invoice-details-evergreen/$', summary_invoice_details_view.api_add_invoice_details_evergreen, name='api-add-invoice-details-evergreen'),
+
 
     # Print
     url(r'^print/(?P<pk>\d+)/$', SummaryPrintView.as_view(), name='summary-print'),
     url(r'^print-evergreen/(?P<pk>\d+)/$', SummaryEvergreenPrintView.as_view(), name='summary-evergreen-print'),
+
+    # Export
     url(r'^export/oocl-report/$', summary_oocl_report.oocl_report, name='summary-oocl-report'),
     url(r'^export/oocl-invoice/$', summary_oocl_invoice.oocl_invoice, name='summary-oocl-invoice'),
     url(r'^export/damco-invoice/$', summary_damco_invoice.damco_invoice, name='summary-damco-invoice'),
