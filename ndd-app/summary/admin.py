@@ -14,25 +14,35 @@ class CustomerCustomAdmin(admin.ModelAdmin):
     list_display = ('customer', 'sub_customer', 'customer_title', 'form', 'option')
     ordering = ('customer', 'sub_customer')
 
+    search_fields = ['customer__name',]
+
 
 class SummaryWeekAdmin(admin.ModelAdmin):
     list_display = ('week', 'month', 'year', 'date_start', 'date_end', 'diesel_rate', 'status')
     ordering = ('week', )
+
+    search_fields = ['week', 'year__year_label']
 
 
 class SummaryCustomerAdmin(admin.ModelAdmin):
     list_display = ('customer', 'week', 'date_billing', 'date_end', 'detail', 'status')
     ordering = ('week',)
 
+    search_fields = ['customer_main__name', 'customer_custom__customer__name', 'week__week']
+
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('invoice_no', 'customer_week', 'drayage_total', 'gate_total', 'status', 'detail')
     ordering = ('customer_week__week__year', 'customer_week__week', 'invoice_no')
 
+    search_fields = ['invoice_no']
+
 
 class InvoiceDetailAdmin(admin.ModelAdmin):
     list_display = ('invoice', 'work', 'drayage_charge', 'gate_charge', 'detail')
     ordering = ('invoice', )
+
+    search_fields = ['invoice__invoice_no', 'work_normal__work_id', 'work_agent_transport__work_id']
 
 
 admin.site.register(Year, YearAdmin)
