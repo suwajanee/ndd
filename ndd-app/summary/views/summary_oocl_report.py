@@ -1,21 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import xlwt
-from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
 
-from booking.models import Booking
+from ..models import Invoice, InvoiceDetail
 from .utils_oocl import StyleXls
 from agent_transport.models import AgentTransport
-from customer.models import Principal, Shipper
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
-from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer, InvoiceSerializer, CustomerCustomSerializer, InvoiceDetailSerializer
 
 
 def oocl_report(request):
@@ -30,10 +21,6 @@ def oocl_report(request):
 
         wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
         sheet = wb.add_sheet(report_name)
-
-        # sheet.paper_size_code = 9
-        # sheet.show_auto_page_breaks = 1
-        # sheet.fit_num_pages=1
 
         # Col width
         sheet.col(0).width = 250*7
@@ -83,6 +70,7 @@ def oocl_report(request):
             else:
                 sheet.write(3, col_num, columns[col_num], header_style)
 
+        # Detail
         invoice = Invoice.objects.get(pk=invoice_id)
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice).values_list('drayage_charge', 'gate_charge', 'detail').order_by('work_agent_transport__date', 'pk')
         
@@ -178,14 +166,9 @@ def oocl_report(request):
         style.num_format_str = '_(#,##0.00 ;-#,##0.00 ;"- "_)'
         sheet.write_merge(row_num + 1, row_num + 1, 8, 9, xlwt.Formula("I" + str(row_num+1) + "+J" + str(row_num+1)), style)
 
-
         style.font = style_xls.font_size_14_bold()
-        # sheet.write(row_num, 8, invoice.drayage_total, style)
         sheet.write(row_num, 8, xlwt.Formula("SUM(I5:I" + str(row_num) + ")"), style)
-        # if invoice.gate_total:
         sheet.write(row_num, 9, xlwt.Formula("SUM(J5:J" + str(row_num) + ")"), style)
-        # else:
-        #     sheet.write(row_num, 9, 0, style)
 
         wb.save(response)
         return response

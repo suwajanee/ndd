@@ -2,31 +2,18 @@
 
 import xlwt
 import copy
-from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
 
-from ndd.settings import STATICFILES_DIRS
-from booking.models import Booking
+from ..models import Invoice, InvoiceDetail
 from .utils_damco import StyleXls
-from agent_transport.models import AgentTransport
-from customer.models import Principal, Shipper
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
-from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer, InvoiceSerializer, CustomerCustomSerializer, InvoiceDetailSerializer
 
 
 def damco_invoice(request):
     if request.method == 'POST':
-        # report_name = request.POST['report_name']
         invoice_id = request.POST['invoice_id']
 
         invoice = Invoice.objects.get(pk=invoice_id)
-
         week = "{:0>2s}".format(invoice.customer_week.week.week)
         year = invoice.customer_week.week.year.year_label
 
@@ -105,6 +92,8 @@ def damco_invoice(request):
             sheet.row(row).height_mismatch = True
             sheet.row(row).height = 645
         
+
+        # Header invoice
         style = xlwt.XFStyle()
         style.font = style_xls.font_size_30_bold()
         sheet.write_merge(4, 4, 1, 7, 'Damco Logistics (Thailand) Co., Ltd. (Head Office)', style)
@@ -142,6 +131,8 @@ def damco_invoice(request):
         sheet.write_merge(6, 6, 18, 19, '', style)
         sheet.write_merge(7, 7, 18, 19, invoice_details[0].work_normal.booking_no, style)
 
+
+        # Header table
         style.font = style_xls.font_size_16_bold()
         style.alignment = style_xls.align_center_mid()
         style.pattern = style_xls.bg_light_green()
@@ -172,6 +163,8 @@ def damco_invoice(request):
                 sheet.write(10, col_num, header_thai[col_num], style_head_top)
                 sheet.write(11, col_num, header_eng[col_num], style_head_bot)
 
+
+        # Details
         style = xlwt.XFStyle()
         style.font = style_xls.font_size_16()
         style.borders = style_xls.border_all()
@@ -219,6 +212,8 @@ def damco_invoice(request):
             for col in range(10, 20):
                 sheet.write(row_num, col, '', style_currency)
 
+
+        # Total
         style = xlwt.XFStyle()
         style.borders = style_xls.border_all()
         style.font = style_xls.font_size_20_bold()
@@ -355,6 +350,8 @@ def damco_invoice(request):
         sheet.write(30, 18, xlwt.Formula("S28-S29"), style_currency)
         sheet.write(30, 19, xlwt.Formula("SUM(K31:S31)"), style_currency)
 
+
+        # Footer
         style = xlwt.XFStyle()
         style.borders = style_xls.border_bottom()
 

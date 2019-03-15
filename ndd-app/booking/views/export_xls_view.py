@@ -6,9 +6,8 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.urls import reverse_lazy
 
 from ..models import Booking
 from .utils import StyleXls

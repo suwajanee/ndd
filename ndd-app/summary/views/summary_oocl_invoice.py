@@ -2,31 +2,19 @@
 
 import xlwt
 import copy
-from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
 
-from ndd.settings import STATICFILES_DIRS
-from booking.models import Booking
+from ..models import Invoice, InvoiceDetail
 from .utils_oocl import StyleXls
-from agent_transport.models import AgentTransport
-from customer.models import Principal, Shipper
-from ..models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
-from ..serializers import SummaryWeekSerializer, SummaryCustomerSerializer, InvoiceSerializer, CustomerCustomSerializer, InvoiceDetailSerializer
+from ndd.settings import STATICFILES_DIRS
 
 
 def oocl_invoice(request):
     if request.method == 'POST':
-        # report_name = request.POST['report_name']
         invoice_id = request.POST['invoice_id']
 
         invoice = Invoice.objects.get(pk=invoice_id)
-
         week = "{:0>2s}".format(invoice.customer_week.week.week)
 
         style_xls = StyleXls()
@@ -50,7 +38,7 @@ def oocl_invoice(request):
         sheet.col(5).width = 256*20
         sheet.col(6).width = 256*18
 
-        # Sheet header
+        # Row height
         sheet.row(0).height_mismatch = True
         sheet.row(0).height = 20*27
 
@@ -76,7 +64,8 @@ def oocl_invoice(request):
         sheet.row(32).height_mismatch = True
         sheet.row(32).height = 555
         
-        
+
+        # Sheet header
         image = STATICFILES_DIRS[0] + '/images/logo.bmp'
         sheet.insert_bitmap(image, 0, 1, 25, 5)
 
@@ -132,6 +121,8 @@ def oocl_invoice(request):
         style.num_format_str = 'D MMM YYYY'
         sheet.write(8, 6, invoice.customer_week.date_billing, style)
 
+
+        # Details
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice)
         size_20_1 = invoice_details.filter(work_agent_transport__size__startswith='20')
         size_20_2 = invoice_details.filter(work_agent_transport__size__contains='2X20')
@@ -152,7 +143,6 @@ def oocl_invoice(request):
             price_40 = eval(size_40[0].drayage_charge['drayage'])
         else:
             price_40 = 0
-
 
         style = style_xls.header_style()
         style.font = style_xls.font_size_16_bold()
@@ -210,6 +200,8 @@ def oocl_invoice(request):
             sheet.write(row, 5, '', style)
             sheet.write(row, 6, '', style)
 
+
+        # Footer
         style.borders = style_xls.border_left()
         style.font = style_xls.font_size_16_bold()
         style.alignment = style_xls.align_left()

@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.template.loader import get_template
-from django.utils.six import BytesIO
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-
-import xhtml2pdf.pisa as pisa
 
 from ..models import Booking
 from .print_view import render_pdf

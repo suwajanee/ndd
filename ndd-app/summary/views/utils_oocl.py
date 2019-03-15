@@ -1,13 +1,18 @@
 import xlwt
 
 class StyleXls():
+    def font_name(self):
+        font = xlwt.Font()
+        font.name = 'BrowalliaUPC'
+        return font
+
+    # Title
     def title_style(self):
         style = xlwt.XFStyle()
 
         # font
-        font = xlwt.Font()
+        font = self.font_name()
         font.bold = True
-        font.name = 'BrowalliaUPC'
         font.height = 20*13
         style.font = font
 
@@ -19,12 +24,12 @@ class StyleXls():
 
         return style
 
+    # Header table
     def header_style(self):
         style = xlwt.XFStyle()
 
         # font
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.height = 20*13
         style.font = font
 
@@ -44,14 +49,7 @@ class StyleXls():
 
         return style
 
-    def bg_black(self):
-        style = xlwt.XFStyle()
-        pattern = xlwt.Pattern()
-        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern.pattern_fore_colour = xlwt.Style.colour_map['black']
-        style.pattern = pattern
-        return style
-
+    # Border
     def border_cell(self):
         borders = xlwt.Borders()
         borders.top = xlwt.Borders.THIN
@@ -95,6 +93,7 @@ class StyleXls():
         borders.bottom = xlwt.Borders.THIN
         return borders
 
+    # Background color
     def bg_turquoise(self):
         pattern = xlwt.Pattern()
         pattern.pattern = xlwt.Pattern.SOLID_PATTERN
@@ -107,6 +106,7 @@ class StyleXls():
         pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
         return pattern
 
+    # Alignment
     def align_left(self):
         alignment = xlwt.Alignment()
         alignment.horz = 1
@@ -125,66 +125,57 @@ class StyleXls():
         alignment.vert = 1
         return alignment
 
+    # Font
     def font_size_12(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()        
         font.height = 20*12
         return font
 
     def font_size_12_bold(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()        
         font.bold = True
         font.height = 20*12
         return font
 
     def font_size_13(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.height = 20*13
         return font
 
     def font_size_14(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.height = 20*14
         return font
 
     def font_size_14_bold(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.bold = True
         font.height = 20*14
         return font
 
     def font_size_16(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.height = 20*16
         return font
 
     def font_size_16_bold(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.bold = True
         font.height = 20*16
         return font
 
     def font_size_18(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.height = 20*18
         return font
 
     def font_size_18_bold(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.bold = True
         font.height = 20*18
         return font
 
     def font_bold(self):
-        font = xlwt.Font()
-        font.name = 'BrowalliaUPC'
+        font = self.font_name()
         font.bold = True
         return font

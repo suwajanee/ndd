@@ -10,19 +10,16 @@
             /* Size and frame */
             @page {
                 size: a4 landscape;
-                /* margin: 10pt; */
 
                 @frame { 
                     left: 0.25in; width: 11.2in; top: 0.5in; height: 7.3in;
                 }
-
             }
 
             @font-face {
                 font-family: 'Sarabun-light', sans-serif;
                 src: url("{{ static_dir }}/fonts/Sarabun-Light.ttf"); 
             } 
-
             @font-face {
                 font-family: 'Sarabun-bold', sans-serif;
                 src: url("{{ static_dir }}/fonts/Sarabun-Bold.ttf"); 
@@ -31,13 +28,10 @@
             html {
                 font-family: Sarabun-light;
             }
-
             .bold {
                 font-family: Sarabun-bold;
             }
-
         </style>
-
     </head>
 
     {% load result %}
@@ -64,18 +58,8 @@
                     <td class="font-125 bold" style="width: 260px; background-color: Cyan;">
                         <b>{{ invoice.invoice_no }}</b>
                     </td>
-                    <td>
-
-                    </td>
+                    <td></td>
                     <td class="text-right text-blue font-105 px-3" style="width: 350px;">
-                        {% if form.1 == '1_diesel_rate' %}
-                            DIESEL RATE : {{ diesel_rate }}
-                        {% elif form.1 == '1_job_no_out' %}
-                            JOB NO : 
-                        {% elif form.1 == '1_ap_billing_no' %}
-                            AP BILLING NO : 
-                            
-                        {% endif %}
                         {{ invoice.detail.other }}
                     </td>
                 </tr>
@@ -109,11 +93,9 @@
                     <td rowspan=2>
                         Date From
                     </td>
-
                     <td rowspan=2>
                         TRUCK
-                    </td>
-                    
+                    </td> 
                 </tr>
                 <tr>
                     <td>
@@ -123,20 +105,18 @@
                         To
                     </td>
                 </tr>
+
                 {% for inv_detail in invoice_details %}
-                    
                     <tr>
                         <td style="width: 0.9in;">
                             {{ forloop.counter }} 
                         </td>
-
                         <td class="text-left px-3">
                             {{ inv_detail.work.shipper.name}}
                         </td>
                         <td class="text-left px-3" style="width: 6in">
                             {{ inv_detail.detail.job_no }}/{{ inv_detail.work.booking_no }}
                         </td>
-
                         <td style="width: 2.5in">
                             {{ inv_detail.detail.from }}
                         </td>
@@ -146,6 +126,7 @@
                         <td style="width: 3in"> 
                             {{ inv_detail.detail.date }}
                         </td>
+
                         <td style="width: 3in;">
                             {% if inv_detail.detail.container == 1 %}
                                 {{ inv_detail.work.container_1 }}
@@ -153,28 +134,27 @@
                                 {{ inv_detail.work.container_2 }}
                             {% endif %}
                         </td>
+
                         <td style="width: 1.6in;">
                             1X{{ inv_detail.detail.size }}'
                         </td>
                         <td class="text-right px-3" style="width: 3in">
                             {{ inv_detail.drayage_charge.drayage|result }}
                         </td>
-                        
-                        
                         <td>
                             {{ invoice.detail.date_from }}
                         </td>
-                        
                         <td class="text-blue">
                             {{ inv_detail.detail.remark }}
                         </td>
-    
                     </tr>
+
                     {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                         </table>
                             <pdf:nextpage>
                         <table class="table-bordered">
                     {% endif %}
+
                     {% if inv_detail.drayage_charge.other %}
                         {% for other in inv_detail.drayage_charge.other %}
                             {% if other.color == 0 %}
@@ -185,15 +165,12 @@
                                 <td style="width: 0.9in;">
                                     {{forloop.parentloop.counter}}.{{ forloop.counter }} 
                                 </td>
-                               
                                 <td class="text-left px-3">
                                     {{ inv_detail.work.shipper.name}}
                                 </td>
-
                                 <td class="text-left px-3" style="width: 6in">
                                     {{ inv_detail.detail.job_no }}/{{ inv_detail.work.booking_no }}
                                 </td>
-                                
                                 <td style="width: 2.5in">
                                     {{ inv_detail.detail.from }}
                                 </td>
@@ -203,6 +180,7 @@
                                 <td style="width: 3in;">
                                     {{ inv_detail.detail.date }}
                                 </td>
+
                                 <td style="width: 3in;">
                                     {% if inv_detail.detail.container == 1 %}
                                         {{ inv_detail.work.container_1 }}
@@ -210,6 +188,7 @@
                                         {{ inv_detail.work.container_2 }}
                                     {% endif %}
                                 </td>
+
                                 <td style="width: 1.6in;">
                                     {% if 'X' in inv_detail.work.size %}
                                         1X{{ inv_detail.work.size|split_size:'X' }}
@@ -228,6 +207,7 @@
                                     {{ other.other_remark }}
                                 </td>
                             </tr>
+
                             {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:other.num == 6 %}
                                 </table>
                                     <pdf:nextpage>
@@ -235,8 +215,7 @@
                             {% endif %}
 
                         {% endfor %}
-                    {% endif %}
-                    
+                    {% endif %}  
                 {% endfor %}
                 
                 <tr class="h-30">
@@ -248,19 +227,16 @@
                                 -
                         </td>
                     <td class="bg-whitesmoke"></td>
-                
                 </tr>
-                    <tr class="h-30">
-                       
-                        <td colspan=8 class="bg-whitesmoke font-125 bold">
-                            G.Total
-                        </td>
-                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total | result }}</td>
-                        <td class="bg-whitesmoke"></td>
-                    </tr>
+
+                <tr class="h-30">
+                    <td colspan=8 class="bg-whitesmoke font-125 bold">
+                        G.Total
+                    </td>
+                    <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total | result }}</td>
+                    <td class="bg-whitesmoke"></td>
+                </tr>
             </table>
-
         </div>
-
     </body>
 </html>
