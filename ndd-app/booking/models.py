@@ -10,22 +10,22 @@ class Booking(models.Model):
     date = models.DateField(default=datetime.now, null=True)
     principal = models.ForeignKey(Principal, on_delete=models.SET_NULL, null=True, blank=True)
     shipper = models.ForeignKey(Shipper, on_delete=models.SET_NULL, null=True, blank=True)
-    agent = models.CharField(max_length=50, blank=True)
-    size = models.CharField(max_length=50, blank=True)
-    booking_no = models.CharField(max_length=50, blank=True)
+    agent = models.CharField(max_length=100, blank=True)
+    size = models.CharField(max_length=20, blank=True)
+    booking_no = models.CharField(max_length=150, blank=True)
 
     NDD_CHOICES_1 = (
         ('1', 'NDD'),
         ('0', '-'),
     )
-    start = models.CharField(max_length=20, blank=True, default='')
+    start = models.CharField(max_length=25, blank=True, default='')
     pickup_tr = models.CharField(max_length=20, blank=True, default='')
-    pickup_from = models.CharField(max_length=20, blank=True, default='')
+    pickup_from = models.CharField(max_length=25, blank=True, default='')
 
     yard_ndd = models.CharField(max_length=1, choices=NDD_CHOICES_1, default=0)
 
     forward_tr = models.CharField(max_length=20, blank=True, default='')
-    factory = models.CharField(max_length=20, blank=True, default='')
+    factory = models.CharField(max_length=25, blank=True, default='')
     backward_tr = models.CharField(max_length=20, blank=True, default='')
 
     NDD_CHOICES_2 = (
@@ -36,17 +36,17 @@ class Booking(models.Model):
     fac_ndd = models.CharField(max_length=1, choices=NDD_CHOICES_2, default=0)
 
     return_tr = models.CharField(max_length=20, blank=True, default='')
-    return_to = models.CharField(max_length=20, blank=True, default='')
+    return_to = models.CharField(max_length=25, blank=True, default='')
 
     container_no = models.CharField(max_length=50, blank=True)
     seal_no = models.CharField(max_length=50, blank=True)
     tare = models.CharField(max_length=100, blank=True, default='')
 
-    vessel = models.CharField(max_length=50, blank=True)
+    vessel = models.CharField(max_length=100, blank=True)
     port = models.CharField(max_length=50, blank=True)
     closing_date = models.DateField(max_length=20, null=True, blank=True, default=None)
     closing_time = models.CharField(max_length=20, blank=True)
-    remark = models.CharField(max_length=200, blank=True)
+    remark = models.CharField(max_length=250, blank=True)
     
     work_id = models.CharField(max_length=50, blank=True)
     work_number = models.IntegerField(default=1)
