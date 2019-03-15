@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import xlwt
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
@@ -8,6 +7,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+
+import xlwt
 
 from ..models import Booking
 from .utils import StyleXls

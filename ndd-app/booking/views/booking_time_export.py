@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import xlwt
-
 from django.http import HttpResponse
+
+import xlwt
 
 from ..models import Booking
 from ..models import BookingTime

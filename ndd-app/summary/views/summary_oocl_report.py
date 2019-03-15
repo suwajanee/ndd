@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import xlwt
-
 from django.http import HttpResponse
+
+import xlwt
 
 from ..models import Invoice, InvoiceDetail
 from .utils_oocl import StyleXls
