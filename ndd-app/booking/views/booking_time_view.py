@@ -16,7 +16,6 @@ from ..serializers import BookingSerializer, BookingTimeSerializer
 def api_get_time_bookings(request):
     if request.user.is_authenticated:
         context = {}
-        context['bookings'] = []
         context['tmr'] = datetime.now() + timedelta(days=1)
         context['today'] = datetime.now()
         if request.method == "POST":
@@ -32,23 +31,12 @@ def api_get_time_bookings(request):
                 return JsonResponse('Not found', safe=False)
 
         bookings = Booking.objects.filter(pk__in=pk_list).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
-        for booking in bookings:
-            data = {}
-            serializer_booking = BookingSerializer(booking, many=False)
-            # data.append(serializer_booking.data)
-            data = serializer_booking.data
-            try:
-                booking_time = BookingTime.objects.get(booking=booking)
-                serializer_time = BookingTimeSerializer(booking_time, many=False)
+        serializer_booking = BookingSerializer(bookings, many=True)
+        context['bookings'] = serializer_booking.data
 
-                data['booking_time'] = serializer_time.data
-            except:
-                pass
-            
-            context['bookings'].append(data)
-
-        # serializer = BookingSerializer(bookings, many=True)
-        # context['bookings'] = serializer.data
+        booking_time = BookingTime.objects.filter(booking__pk__in=pk_list).order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id')
+        serializer_time = BookingTimeSerializer(booking_time, many=True)
+        context['booking_time'] = serializer_time.data
 
         return JsonResponse(context, safe=False)
     return JsonResponse('Error', safe=False)                  

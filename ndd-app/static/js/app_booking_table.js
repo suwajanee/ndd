@@ -260,7 +260,7 @@ var booking_table = new Vue( {
 
                     this.getColor()
 
-                    this.addTimeFields()
+                    this.addTimeFields(data.booking_time)
 
                     this.loading = false
                 })    
@@ -278,16 +278,21 @@ var booking_table = new Vue( {
 
                         this.getColor()
 
-                        this.addTimeFields()
+                        this.addTimeFields(data.booking_time)
 
                         this.loading = false
                     }
                 })    
             }      
         },
-        addTimeFields() {
+        addTimeFields(booking_time) {
             this.bookings.forEach(function(booking) {
-                if(! booking.hasOwnProperty("booking_time")) {
+                var time = booking_time.find(time => time.booking.id == booking.id)
+                if(time) {
+                    booking['booking_time'] = time
+                }
+                else {
+                // if(! booking.hasOwnProperty("booking_time")) {
                     booking['booking_time'] = {
                         pickup_in_time: {time: ''},
                         pickup_out_time: {time: ''},

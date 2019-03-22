@@ -108,7 +108,7 @@ def export_time(request):
                         style.alignment = style_xls.align_left()
                         try:
                             row[col_num] = Shipper.objects.get(pk=row[col_num]).name
-                        except Principal.DoesNotExist:
+                        except Shipper.DoesNotExist:
                             row[col_num] = ''
 
                     if col_num == 4:
