@@ -1,5 +1,6 @@
 from django.conf.urls import url
 
+from .views import summary_apll_invoice
 from .views import summary_customer_custom_view
 from .views import summary_customer_view
 from .views import summary_form_setting_view
@@ -89,6 +90,8 @@ urlpatterns = [
     url(r'^export/oocl-invoice/$', summary_oocl_invoice.oocl_invoice, name='summary-oocl-invoice'),
     url(r'^export/damco-invoice/$', summary_damco_invoice.damco_invoice, name='summary-damco-invoice'),
 
+    # Beautiful Soup
+    url(r'^export/apll-invoice/$', summary_apll_invoice.apll_invoice, name='summary-apll-invoice'),
 
 
 
