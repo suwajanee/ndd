@@ -131,18 +131,19 @@ def oocl_invoice(request):
         count_20_1 = size_20_1.count()
         count_20_2 = size_20_2.count()*2
         count_20 = count_20_1 + count_20_2
-        if count_20_2 > 0:
-            price_20 = eval(size_20_2[0].drayage_charge['drayage'])/2
-        elif count_20_1 > 1:
-            price_20 = eval(size_20_1[0].drayage_charge['drayage'])
-        else:
+        try:
+            if count_20_2 > 0:
+                price_20 = eval(size_20_2[0].drayage_charge['drayage'])/2
+            elif count_20_1 > 0:
+                price_20 = eval(size_20_1[0].drayage_charge['drayage'])
+        except:
             price_20 = 0
 
         size_40 = invoice_details.filter(work_agent_transport__size__contains='40')
         count_40 = size_40.count()
-        if count_40 > 0:
+        try:
             price_40 = eval(size_40[0].drayage_charge['drayage'])
-        else:
+        except:
             price_40 = 0
 
         style = style_xls.header_style()

@@ -182,7 +182,10 @@ def damco_invoice(request):
         row_num = 11
         for index, row in enumerate(invoice_details):
             work = row.work_normal
-            drayage = eval(row.drayage_charge['drayage'])
+            try:
+                drayage = eval(row.drayage_charge['drayage'])
+            except:
+                drayage = 0
             row_num += 1
             num = str(row_num + 1)
             sheet.write(row_num, 0, index+1, style)
