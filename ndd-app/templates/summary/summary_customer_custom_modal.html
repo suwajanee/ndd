@@ -53,6 +53,16 @@
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
+                                <input type="radio" id="apll" v-model="customer_setting_modal.option" value="apll" @click="customer_setting_modal.form=null"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="apll">APLL</label>
+                        </div>
+                    </template>
+                    <template v-if="principal_type=='normal'">
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
                                 <input type="radio" id="damco" v-model="customer_setting_modal.option" value="damco"> 
                                 </div>
                             </div>
@@ -82,7 +92,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">FORM</span>
                         </div>
-                        <select class="custom-select" v-model="customer_setting_modal.form" :disabled="customer_setting_modal.option=='evergreen'">
+                        <select class="custom-select" v-model="customer_setting_modal.form" :disabled="customer_setting_modal.option=='evergreen' || customer_setting_modal.option=='apll'">
                             <option :value="null">------</option>
                             <option v-for="form in summary_forms" :value="form">{{ form.form_name }}</option>
                         </select>

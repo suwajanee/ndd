@@ -44,10 +44,10 @@ def api_add_invoice_details(request):
                         'invoice': invoice,
                         'work_normal': booking,
                         'drayage_charge': {
-                            'drayage': '0',
+                            'drayage': '',
                         },
                         'gate_charge': {
-                            'gate': '0',
+                            'gate': '',
                         },
                         'detail': {
                             'remark': '',
@@ -63,10 +63,10 @@ def api_add_invoice_details(request):
                         'invoice': invoice,
                         'work_agent_transport': agent_transport,
                         'drayage_charge': {
-                            'drayage': '0',
+                            'drayage': '',
                         },
                         'gate_charge': {
-                            'gate': '0',
+                            'gate': '',
                         },
                         'detail': {
                             'remark': '',
@@ -168,6 +168,8 @@ def api_edit_invoice_details(request):
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', False)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark_gate', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'note', True)
+
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'routing', True)
 
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', True)
