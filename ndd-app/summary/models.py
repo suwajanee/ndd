@@ -132,3 +132,8 @@ class InvoiceDetail(models.Model):
         if not self.invoice:
             return str(self.pk)
         return self.invoice.invoice_no
+
+
+class InvoiceSetting(models.Model):
+    primary = models.CharField(max_length=10, null=True, blank=True)
+    data = JSONField(null=True, blank=True)
