@@ -206,19 +206,21 @@
                                 </td>
 
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
-                                    <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sm btn-outline-secondary"
-                                                style="padding: 4px;"
-                                                @click="checkContainer(inv_detail.id, inv_detail.detail.color2, 2)"
-                                            >
-                                            <i class="fa fa-check"></i></button>
+                                    <div v-if="inv_detail.work.size.indexOf('X') > -1">
+                                        <div v-if="table_edit" class="input-group">
+                                            <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-outline-secondary"
+                                                    style="padding: 4px;"
+                                                    @click="checkContainer(inv_detail.id, inv_detail.detail.color2, 2)"
+                                                >
+                                                <i class="fa fa-check"></i></button>
+                                            </div>
                                         </div>
+                                        <template v-else>
+                                            {{ inv_detail.work.container_2 }}
+                                        </template>
                                     </div>
-                                    <template v-else>
-                                        {{ inv_detail.work.container_2 }}
-                                    </template>
                                 </td>
                             </template>
                             <template v-else>
