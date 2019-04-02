@@ -147,7 +147,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(inv_detail, index) in invoice_detail_list">
+                    <template v-if="inv_detail.work" v-for="(inv_detail, index) in invoice_detail_list">
                         <tr class="text-center">
                             <td v-if="! table_edit" class="align-middle p-1" >
                                 <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id)"><i class="fa fa-trash"></i></button>
@@ -159,9 +159,10 @@
                             <td v-if="invoice_data.customer_name" class="text-left align-middle">
                                 {{ invoice_data.customer_name }}
                             </td>
-                            <td v-else class="text-left align-middle">
+                            <td v-else-if="inv_detail.work.shipper.name" class="text-left align-middle">
                                 {{ inv_detail.work.shipper.name }}
                             </td>
+                            <td v-else></td>
 
                             <td class="align-middle">
                                 <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no"> 

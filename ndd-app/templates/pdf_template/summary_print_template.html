@@ -187,7 +187,7 @@
                             {{ inv_detail.work.return_to }}
                         </td>
                         <td style="width: 1.6in;"> 
-                            {{ inv_detail.work.date|parse_date | date:'j Ny' }}
+                            {{ inv_detail.work.date|parse_date }}
                         </td>
                         <td style="width: 3in;">
                             {% if inv_detail.work.container_no %}
@@ -273,7 +273,7 @@
                                     {{ inv_detail.work.return_to }}
                                 </td>
                                 <td style="width: 1.6in;">
-                                    {{ inv_detail.work.date|parse_date | date:'j Ny' }}
+                                    {{ inv_detail.work.date|parse_date }}
                                 </td>
                                 <td style="width: 3in;">
                                     {% if inv_detail.work.container_no %}
@@ -498,7 +498,7 @@
                                 {{ inv_detail.work.return_to }}
                             </td>
                             <td style="width: 1.6in;"> 
-                                {{ inv_detail.work.date|parse_date | date:'j Ny' }}
+                                {{ inv_detail.work.date|parse_date }}
                             </td>
                             <td style="width: 3in;">
                                 {% if inv_detail.work.container_no %}

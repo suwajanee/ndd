@@ -5,4 +5,4 @@ register = Library()
 
 @register.filter(name='parse_date')
 def parse_date(value):
-    return datetime.strptime(str(value), "%Y-%m-%d").date()
+    return datetime.strptime(str(value), "%Y-%m-%d").strftime('%-d %b %y')
