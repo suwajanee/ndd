@@ -40,6 +40,10 @@ legend.add_form {
     background-color: gray;
 }
 
+#agent-transport-add .custom-checkbox input[type="checkbox"] + label::before {
+    background-color: gray;
+}
+
 .btn-circle {
     width: 28px;
     height: 28px;
