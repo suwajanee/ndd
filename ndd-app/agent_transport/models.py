@@ -55,7 +55,7 @@ class AgentTransport(models.Model):
         ('1', 'Done'),
         ('0', '-'),
     )
-    summary_status = models.CharField(max_length=1, choices=SUMMARY_STATUS_CHOICES)
+    summary_status = models.CharField(max_length=1, choices=SUMMARY_STATUS_CHOICES, blank=True, null=True)
 
     def __str__(self) :
         return self.work_id
