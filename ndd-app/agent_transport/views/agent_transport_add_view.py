@@ -49,14 +49,42 @@ def api_save_add_agent_transports(request):
 
                 agent_transports['size'] = detail['size']
 
-                for i in range(int(detail['quantity'])):
-                    work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+                agent_transports['container_1'] = ''
+                agent_transports['container_2'] = ''
 
-                    agent_transports['work_id'] = work_id
-                    agent_transports['work_number'] = work_number
 
-                    agent_transport = AgentTransport(**agent_transports)
-                    agent_transport.save()
+
+
+                # for i in range(int(detail['quantity'])):
+                #     work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+
+                #     agent_transports['work_id'] = work_id
+                #     agent_transports['work_number'] = work_number
+
+                #     agent_transport = AgentTransport(**agent_transports)
+                #     agent_transport.save()
+
+                if detail['container_input'] == False:
+                    for i in range(int(detail['quantity'])):
+                        work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+
+                        agent_transports['work_id'] = work_id
+                        agent_transports['work_number'] = work_number
+
+                        agent_transport = AgentTransport(**agent_transports)
+                        agent_transport.save()
+                else:
+                    for cont_detail in detail['container']:
+                        agent_transports['container_1'] = cont_detail['container_1']
+                        agent_transports['container_2'] = cont_detail['container_2']
+
+                        work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+
+                        agent_transports['work_id'] = work_id
+                        agent_transports['work_number'] = work_number
+
+                        agent_transport = AgentTransport(**agent_transports)
+                        agent_transport.save()
 
             return JsonResponse('Success', safe=False)
 
