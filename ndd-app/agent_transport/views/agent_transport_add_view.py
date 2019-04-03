@@ -52,9 +52,6 @@ def api_save_add_agent_transports(request):
                 agent_transports['container_1'] = ''
                 agent_transports['container_2'] = ''
 
-
-
-
                 # for i in range(int(detail['quantity'])):
                 #     work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
 
