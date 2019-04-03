@@ -12,6 +12,11 @@ var agent_transport_add = new Vue( {
             date: '',
             size: '',
             quantity: 1,
+            container_input: false,
+            container: [{
+                container_1: '',
+                container_2: ''
+            }]
         }],
         agent_transport_add_form: {
             principal: '',
@@ -64,10 +69,31 @@ var agent_transport_add = new Vue( {
                 date: '',
                 size: '',
                 quantity: 1,
+                container_input: false,
+                container: [{
+                    container_1: '',
+                    container_2: ''
+                }]
             })
         },
         deleteDetail(index) {
             this.details.splice(index,1)
+        },
+
+        addContainerDetail(index) {
+            this.details[index].container.push({
+                container_1: '',
+                container_2: ''
+            })
+            this.details[index].quantity += 1
+        },
+        deleteContainerDetail(index, index_cont) {
+            this.details[index].container.splice(index_cont,1)
+            this.details[index].quantity -= 1
+        },
+
+        containerCheck(index) {
+            this.details[index].quantity = this.details[index].container.length
         },
 
         currencyFormat() {
