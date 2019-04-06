@@ -118,22 +118,21 @@ def api_get_summary_week_details(request):
             customers = Principal.objects.all().order_by('cancel', 'name')
 
             for customer in customers:
-                data = {}
-                total = []
                 principal_serializer = PrincipalSerializer(customer, many=False)
-                data['customer'] = principal_serializer.data
+                principal_data = principal_serializer.data
 
-                sub_customers = CustomerCustom.objects.filter(Q(customer__name=customer.name)).order_by('customer__name','sub_customer')
+                sub_customers = CustomerCustom.objects.filter(Q(customer=customer)).order_by('customer__name','sub_customer')
                 if sub_customers:
                     customer_total = 0
                     last_index = 0
                     for sub_customer in sub_customers:
-                        data = copy.deepcopy(data)
+                        data = {}
+                        data['customer'] = principal_data
+
                         customer_custom_serializer = CustomerCustomSerializer(sub_customer, many=False)
                         data['customer_custom'] = customer_custom_serializer.data
                         
-                        summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_custom=sub_customer))
-
+                        summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_main=customer) & Q(customer_custom=sub_customer))
                         if summary_customer:
                             data = summary_customer_json(data, summary_customer)
                         else:
@@ -141,10 +140,14 @@ def api_get_summary_week_details(request):
 
                         summary_week_details.append(data)
                 else:
+                    data = {}
+                    data['customer'] = principal_data
                     summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_main=customer))
                     if summary_customer:
                         data = summary_customer_json(data, summary_customer)
- 
+                    else:
+                        data = summary_customer_json(data, '')
+
                     summary_week_details.append(data)
             details['summary_week_details'] = summary_week_details            
             return JsonResponse(details, safe=False)
