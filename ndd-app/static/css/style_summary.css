@@ -1,0 +1,137 @@
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px; 
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+
+/* Fieldset */
+fieldset.summary_form_detail {
+    border: 1px solid lightgray !important;
+    padding: 0.5em 1em 1em 1em !important;
+    margin: 0 !important;
+    border-radius: 8px;
+}
+legend.summary_form_detail {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+
+
+/* Table / Input style */
+table.table-bordered-dark > tbody > tr > td{
+    border:1px solid black;
+}
+.width-9 {
+    width: 9%;
+}
+td input[type="date"], td input:not([type]), input[type="text"] {
+    padding: 2px 4px;
+    font-size: 14px;
+}
+#summary-form-setting-page .custom-checkbox input[type="checkbox"] + label::before,
+#summary-form-setting-page .custom-radio input[type="radio"] + label::before {
+    border: 0.5px solid gray;
+}
+select.size {
+    min-width: 75px;
+    padding: 0px 8px;
+    height: 25px;
+    font-size: 12px;
+}
+
+
+/* Hover - Active cell color */
+.cell-click:hover {
+    background: Gainsboro ;
+    cursor: pointer;
+}
+.cell-click:active {
+    background: LightGray;
+    cursor: pointer;
+}
+
+
+/* Switch input */
+.switch-field {
+    padding: 20px 0px;
+    overflow: hidden;
+}
+.switch-field input {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+}
+.switch-field label {
+    float: left;
+} 
+.switch-field label {
+    display: inline-block;
+    width: 120px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    text-align: center;
+    padding: 6px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+}
+.switch-field label:hover {
+    cursor: pointer;
+}
+.switch-field input.finished:checked + label {
+    background-color: #A5DC86;
+    font-weight: bold;
+    box-shadow: none;
+}
+.switch-field input.processing:checked + label {
+    background-color: #ffec80;
+    font-weight: bold;
+    box-shadow: none;
+}
+.switch-field label:first-of-type {
+    border-radius: 5px 0 0 5px;
+}
+.switch-field label:last-of-type {
+    border-radius: 0 5px 5px 0;
+}
+
+
+/* Status color */
+.bg-processing {
+    background-color: #ffec80;
+}
+.bg-finished {
+    background-color: #A5DC86;
+}
+
+
+/* Check color */
+.bg-yellow {
+    background-color: Yellow;
+}
+.bg-lime {
+    background-color: Lime ;
+}
+.bg-red {
+    background-color: Red ;
+}

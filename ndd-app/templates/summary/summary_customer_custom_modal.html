@@ -1,0 +1,181 @@
+<div class="modal fade" id="modalCustomerCustom" tabindex="-1" role="dialog" aria-hidden="true">    
+    {% verbatim %}
+        <div class="modal-dialog" role="document" style="min-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100 text-center">{{ form_title }}</h2>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-5">
+                    <div class="input-group mb-3 col-md-9 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CUSTOMER</span>
+                        </div>
+                        <input class="form-control" 
+                            v-model="customer_setting_modal.customer.name" maxlength="50" readonly
+                        >
+                    </div>
+                    <div class="input-group mb-3 col-md-9 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">SUB CUSTOMER</span>
+                        </div>
+                        <input class="form-control" v-model="customer_setting_modal.sub_customer" maxlength="50">
+                    </div>
+                    <div class="input-group mb-3 col-md-9 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">TITLE</span>
+                        </div>
+                        <input class="form-control" v-model="customer_setting_modal.customer_title" maxlength="50">
+                    </div>
+
+                    <div class="input-group mb-1 col-md-9 container">
+                        <span class="input-group-text">OPTION</span>
+                    </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="none" v-model="customer_setting_modal.option" value=""> 
+                            </div>
+                        </div>
+                        <label class="form-control" for="none">None</label>
+                    </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="2_inv" v-model="customer_setting_modal.option" value="2_inv"> 
+                            </div>
+                        </div>
+                        <label class="form-control" for="2_inv">2 INV. (แยก Drayage - Gate)</label>
+                    </div>
+                    <template v-if="principal_type=='normal'">
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="apll" v-model="customer_setting_modal.option" value="apll" @click="customer_setting_modal.form=null"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="apll">APLL</label>
+                        </div>
+                    </template>
+                    <template v-if="principal_type=='normal'">
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="damco" v-model="customer_setting_modal.option" value="damco"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="damco">DAMCO</label>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="oocl" v-model="customer_setting_modal.option" value="oocl"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="oocl">OOCL</label>
+                        </div>
+                        <div class="input-group mb-3 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="evergreen" v-model="customer_setting_modal.option" value="evergreen" @click="customer_setting_modal.form=null"> 
+                                </div>
+                            </div>
+                            <label class="form-control bg-light" for="evergreen" @click="customer_setting_modal.form=null">Evergreen</label>
+                        </div>
+                    </template>            
+
+                    <div class="input-group col-md-9 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">FORM</span>
+                        </div>
+                        <select class="custom-select" v-model="customer_setting_modal.form" :disabled="customer_setting_modal.option=='evergreen' || customer_setting_modal.option=='apll'">
+                            <option :value="null">------</option>
+                            <option v-for="form in summary_forms" :value="form">{{ form.form_name }}</option>
+                        </select>
+                    </div>
+
+                    <div v-if="customer_setting_modal.form">
+                        <hr class="my-4">
+
+                        <div v-if="customer_setting_modal.form.form_detail[1]=='1_diesel_rate'" class="float-right mb-3">
+                            Diesel Rate : __________
+                        </div>
+                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_job_no_out'" class="float-right mb-3">
+                            JOB NO : __________
+                        </div>
+                        <div v-else-if="customer_setting_modal.form.form_detail[1]=='1_input_field'" class="float-right mb-3">
+                            <input class="form-control p-0 text-center" placeholder="เพิ่มเติม" disabled>
+                        </div>
+                        <div v-else class="float-right mb-3"></div>
+    
+                        <table class="table table-bordered m-0" style="border-width:2px; font-size:14px;">
+                            <tr class="text-center bg-white">
+                                <td rowspan=2 class="align-middle">
+                                    Customer Name
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    {{ booking_field[customer_setting_modal.form.form_detail[0]] }}
+                                </td>
+
+                                <td colspan=2 class="align-middle">
+                                    Vessel/Truck Routing
+                                </td>
+                                
+                                <td rowspan=2 class="align-middle">
+                                    Date
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Container No.1
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('container_2') > 0" class="align-middle">
+                                    Container No.2
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Size
+                                </td>
+                                <td rowspan=2 class="align-middle">
+                                    Drayage Charge
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+                                    Gate Charge
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('agent') > 0" class="align-middle">
+                                    Agent
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_remark'" class="align-middle">
+                                    Remark
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_job_no'" class="align-middle">
+                                    <span class="text-nowrap">Job No.</span>
+                                </td>
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_truck'" class="align-middle">
+                                    TRUCK
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="align-middle">
+                                    From
+                                </td>
+                                <td class="align-middle">
+                                    To
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+                
+                <div class="modal-footer px-5 py-3">
+                    <div class="text-right">
+                        <button v-if="form_action == 'add'" class="btn btn-lg btn-primary" @click="addCustomerSetting">Add</button>
+                        <button v-else-if="form_action == 'edit'" class="btn btn-lg btn-primary" @click="editCustomerSetting">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endverbatim %}
+</div>

@@ -4,6 +4,7 @@ from .views import agent_transport_add_view
 from .views import agent_transport_delete_view
 from .views import agent_transport_edit_view
 from .views import agent_transport_page_view
+from .views import agent_transport_data_view
 from .views.agent_transport_print_view import AgentTransportPrintView
 
 
@@ -18,5 +19,8 @@ urlpatterns = [
     url(r'^api/delete-agent-transports/$', agent_transport_delete_view.api_delete_agent_transports, name='api-delete-agent-transports'),
 
     url(r'^print/(?P<pk>\d+)/$', AgentTransportPrintView.as_view(), name='agent-transport-print'),
+
+    # Summary
+    url(r'^api/get-work-list/$', agent_transport_data_view.api_get_work_list, name='api-get-agent-transport-work-list'),
     
 ]

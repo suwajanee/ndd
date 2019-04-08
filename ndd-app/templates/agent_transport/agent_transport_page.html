@@ -42,7 +42,7 @@
                 
                 <div v-if="nbar=='edit'" class="col text-right">
                     <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving agent transport.</div>
-                    <a href="{% url 'agent-transport-page' %}" class="btn btn-danger mr-1" ><i class="fa fa-edit"></i>&nbsp;Exit</a>
+                    <a href="{% url 'agent-transport-page' %}" class="btn btn-danger mr-1" ><i class="fa fa-sign-out"></i>&nbsp;Exit</a>
                     <button @click="saveEditAgentTransport()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</button>
                 </div>     
             </div>

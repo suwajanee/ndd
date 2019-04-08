@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.template.loader import get_template
-from django.utils.six import BytesIO
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
-import xhtml2pdf.pisa as pisa
-
 from ..models import Booking
+from .print_view import render_pdf
 from customer.models import ShipperAddress
 from ndd.settings import STATICFILES_DIRS
 
@@ -29,7 +23,7 @@ class BookingPrintView(TemplateView):
             request.session['template_name'+pk] = template_name
             request.session['address'+pk] = context['address']
 
-        return self.render(template_name, context)
+        return render_pdf(template_name, context)
     
     def post(self, request, pk):
         context = {}
@@ -69,33 +63,5 @@ class BookingPrintView(TemplateView):
         request.session['template_name'+pk] = template_name
         request.session['address'+pk] = context['address'] 
 
-        return self.render(template_name, context)
-
-    def print_time(request):
-        booking_print_view = BookingPrintView()
-        template_name = 'pdf_template/booking_time_template.html'
-        context = {}
-        context['static_dir'] = STATICFILES_DIRS[0]
-        if request.method == "POST":
-            pk_list = request.POST.getlist("pk_list")
-            context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
-            request.session['pk_list'] = pk_list
-        else:
-            if request.session['pk_list']:
-                pk_list = request.session['pk_list']
-                context['bookings'] = Booking.objects.filter(pk__in=pk_list).order_by('date', 'work_id')
-
-                request.session['pk_list'] = pk_list
-        
-        return booking_print_view.render(template_name, context)
-
-    def render(self, path, params):
-        template = get_template(path)
-        html = template.render(params)
-        response = BytesIO()
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), response, encoding="UTF-8")
-        if not pdf.err:
-            return HttpResponse(response.getvalue(), content_type='application/pdf')
-        else:
-            return HttpResponse("Error Rendering PDF", status=400)
+        return render_pdf(template_name, context)
             

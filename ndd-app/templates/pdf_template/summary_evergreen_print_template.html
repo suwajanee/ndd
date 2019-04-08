@@ -1,0 +1,242 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Summary Print</title>
+        
+        <link rel="stylesheet" href="{{ static_dir }}/css/style_summary_pdf.css" />
+
+        <style type='text/css'>
+            /* Size and frame */
+            @page {
+                size: a4 landscape;
+
+                @frame { 
+                    left: 0.25in; width: 11.2in; top: 0.5in; height: 7.3in;
+                }
+            }
+
+            @font-face {
+                font-family: 'Sarabun-light', sans-serif;
+                src: url("{{ static_dir }}/fonts/Sarabun-Light.ttf"); 
+            } 
+            @font-face {
+                font-family: 'Sarabun-bold', sans-serif;
+                src: url("{{ static_dir }}/fonts/Sarabun-Bold.ttf"); 
+            } 
+
+            html {
+                font-family: Sarabun-light;
+            }
+            .bold {
+                font-family: Sarabun-bold;
+            }
+        </style>
+    </head>
+
+    {% load result %}
+    {% load split %}
+    {% load parse_date %}
+    {% load booking_field_text %}
+    <body>
+        <div style="text-align: center;">
+            <h2 class="bold" style="font-size: 200%;">
+                {% if invoice.customer_week.customer_custom.customer_title %}
+                    {{ invoice.customer_week.customer_custom.customer_title }}
+                {% elif invoice.customer_week.customer_custom.sub_customer %}
+                    {{ invoice.customer_week.customer_custom.sub_customer }}
+                {% else %}
+                    {{ invoice.customer_week.customer_main.name }}
+                {% endif %}
+            </h2>
+
+            <table>
+                <tr>
+                    <td style="width: 90px;">
+                        INV. NO.
+                    </td>
+                    <td class="font-125 bold" style="width: 260px; background-color: Cyan;">
+                        <b>{{ invoice.invoice_no }}</b>
+                    </td>
+                    <td></td>
+                    <td class="text-right text-blue font-105 px-3" style="width: 350px;">
+                        {{ invoice.detail.other }}
+                    </td>
+                </tr>
+            </table>
+            <table class="table-bordered">
+                <tr>
+                    <td rowspan=2>
+                        Item
+                    </td>
+                    <td rowspan=2>
+                        Customer Name 
+                    </td>
+                    <td rowspan=2>
+                        JOB NO/BOOKING
+                    </td>
+                    <td colspan=2>
+                        Vessel/Truck Routing 
+                    </td>
+                    <td rowspan=2>
+                        Date
+                    </td>
+                    <td rowspan=2>
+                        Container No. 1
+                    </td>
+                    <td rowspan=2>
+                        Size
+                    </td>
+                    <td rowspan=2>
+                        Drayage Charge
+                    </td>
+                    <td rowspan=2>
+                        Date From
+                    </td>
+                    <td rowspan=2>
+                        TRUCK
+                    </td> 
+                </tr>
+                <tr>
+                    <td>
+                        From
+                    </td>
+                    <td>
+                        To
+                    </td>
+                </tr>
+
+                {% for inv_detail in invoice_details %}
+                    <tr>
+                        <td style="width: 0.9in;">
+                            {{ forloop.counter }} 
+                        </td>
+                        <td class="text-left px-3">
+                            {{ inv_detail.work.shipper.name}}
+                        </td>
+                        <td class="text-left px-3" style="width: 6in">
+                            {{ inv_detail.detail.job_no }}/{{ inv_detail.work.booking_no }}
+                        </td>
+                        <td style="width: 2.5in">
+                            {{ inv_detail.detail.from }}
+                        </td>
+                        <td style="width: 2.5in">
+                            {{ inv_detail.detail.to }}
+                        </td>
+                        <td style="width: 3in"> 
+                            {{ inv_detail.detail.date }}
+                        </td>
+
+                        <td style="width: 3in;">
+                            {% if inv_detail.detail.container == 1 %}
+                                {{ inv_detail.work.container_1 }}
+                            {% elif inv_detail.detail.container == 2 %}
+                                {{ inv_detail.work.container_2 }}
+                            {% endif %}
+                        </td>
+
+                        <td style="width: 1.6in;">
+                            1X{{ inv_detail.detail.size }}'
+                        </td>
+                        <td class="text-right px-3" style="width: 3in">
+                            {{ inv_detail.drayage_charge.drayage|result }}
+                        </td>
+                        <td>
+                            {{ invoice.detail.date_from }}
+                        </td>
+                        <td class="text-blue">
+                            {{ inv_detail.detail.remark }}
+                        </td>
+                    </tr>
+
+                    {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                        </table>
+                            <pdf:nextpage>
+                        <table class="table-bordered">
+                    {% endif %}
+
+                    {% if inv_detail.drayage_charge.other %}
+                        {% for other in inv_detail.drayage_charge.other %}
+                            {% if other.color == 0 %}
+                                <tr class="text-red">
+                            {% elif other.color == 1 %}
+                                <tr class="text-blue">
+                            {% endif %}
+                                <td style="width: 0.9in;">
+                                    {{forloop.parentloop.counter}}.{{ forloop.counter }} 
+                                </td>
+                                <td class="text-left px-3">
+                                    {{ inv_detail.work.shipper.name}}
+                                </td>
+                                <td class="text-left px-3" style="width: 6in">
+                                    {{ inv_detail.detail.job_no }}/{{ inv_detail.work.booking_no }}
+                                </td>
+                                <td style="width: 2.5in">
+                                    {{ inv_detail.detail.from }}
+                                </td>
+                                <td style="width: 2.5in">
+                                    {{ inv_detail.detail.to }}
+                                </td>
+                                <td style="width: 3in;">
+                                    {{ inv_detail.detail.date }}
+                                </td>
+
+                                <td style="width: 3in;">
+                                    {% if inv_detail.detail.container == 1 %}
+                                        {{ inv_detail.work.container_1 }}
+                                    {% elif inv_detail.detail.container == 2 %}
+                                        {{ inv_detail.work.container_2 }}
+                                    {% endif %}
+                                </td>
+
+                                <td style="width: 1.6in;">
+                                    {% if 'X' in inv_detail.work.size %}
+                                        1X{{ inv_detail.work.size|split_size:'X' }}
+                                    {% else %}
+                                        1X{{ inv_detail.work.size }}
+                                    {% endif %}
+                                </td>
+                                
+                                <td class="text-right px-3" style="width: 3in">
+                                    {{ other.other_charge|result }}
+                                </td>
+                                <td>
+                                    {{ invoice.detail.date_from }}
+                                </td>
+                                <td>
+                                    {{ other.other_remark }}
+                                </td>
+                            </tr>
+
+                            {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:other.num == 6 %}
+                                </table>
+                                    <pdf:nextpage>
+                                <table class="table-bordered">
+                            {% endif %}
+
+                        {% endfor %}
+                    {% endif %}  
+                {% endfor %}
+                
+                <tr class="h-30">
+                    <td colspan=8 class="bg-whitesmoke font-125 bold">
+                        Total
+                    </td>
+                    <td class="text-right px-3 bg-whitesmoke font-110 bold">{{ invoice.drayage_total|result }}</td>
+                        <td class="text-right px-3 bg-whitesmoke font-110 bold">
+                                -
+                        </td>
+                    <td class="bg-whitesmoke"></td>
+                </tr>
+
+                <tr class="h-30">
+                    <td colspan=8 class="bg-whitesmoke font-125 bold">
+                        G.Total
+                    </td>
+                    <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total | result }}</td>
+                    <td class="bg-whitesmoke"></td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

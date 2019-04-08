@@ -56,7 +56,7 @@ var customer_page = new Vue( {
         getCustomerDetails(principal_id) {
             window.location.hash = ''
             this.customer = this.principals.find(principal => principal.id == principal_id)
-            this.edit_customer_form = Object.assign({}, this.customer);
+            this.edit_customer_form = Object.assign({}, this.customer)
             api("/customer/api/get-customer-details/", "POST", {principal: principal_id}).then((data) => {
                 this.shippers = data
                 window.location.hash = principal_id

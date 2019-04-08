@@ -54,3 +54,35 @@ const keyDownArrow = (field, index) => {
       }
   }
 }
+
+const arrayEqual = (arr1, arr2) => {
+    return arr1.sort().toString() == arr2.sort().toString()
+} 
+
+const checkNull = (value) => {
+    if(value){
+        return value
+    }
+    return ''
+}
+
+const sumArray = (arr) => {
+    if(arr){
+        return arr.reduce((a, b) => a + b, 0)
+    }
+    return
+}
+
+var summary_breadcrumb = new Vue( {
+    el: '#summary-breadcrumb',
+    data: {
+        month: '',
+        month_list: [],
+    },
+    methods: {
+        reload(month) {
+            this.month = month
+            this.month_list = _month
+        },
+    }
+})

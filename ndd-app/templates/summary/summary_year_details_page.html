@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_summary.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb m-0 bg-white">
+            <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ year }}</li>
+        </ol>
+    </nav>
+
+    <div id="summary-year-details" >
+        {% verbatim %}
+            <table class="table table-bordered table-bordered-dark table-hover">
+                <thead class="text-center">
+                    <th class="border-dark">Customer Name</th>
+                    <th v-for="i in 12" class="cell-click border-dark" @click="selectMonth(i)">{{ month[i-1] }}</th>
+                    <th class="border-dark"><u>Total</u></th>
+                </thead>
+                <tbody>
+                    <tr v-for="(year_detail, index) in summary_year_details" class="text-right" :style="'background:'+ year_detail.color">
+                        <td v-if="year_detail.sub_customer" class="text-left">{{ year_detail.sub_customer }}</td>
+                        <td v-else class="text-left">{{ year_detail.customer }}</td>
+
+                        <td v-for="i in 12" :class="{'bg-secondary': ! year_detail.total[i-1]}" style="width:120px;">{{ year_detail.total[i-1]|currencyCommas }}</td>
+                        <td style="width:120px;">{{ total_customer[index]|currencyCommas }}</td>
+
+                        <td v-if="year_detail.cusotomer_total" class="text-center"><b>{{ year_detail.cusotomer_total|currencyCommas }}</b></td>
+                    </tr>
+
+                    <tr class="text-right" >
+                        <td class="text-center"><u><b>Total</b></u></td>
+                        <td v-for="month in total_month" class="alert-primary"><b>{{ month|currencyCommas }}</b></td>
+                        <td style="background: Lime;"><b>{{ total_year|currencyCommas }}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endverbatim %}
+    </div>
+
+
+    <script type="application/javascript" src="{% static 'js/app_summary_year_details_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            summary_year_details.reload({{ year }});
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,26 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import xlwt
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.urls import reverse_lazy
+
+import xlwt
 
 from ..models import Booking
 from .utils import StyleXls
 from agent_transport.models import AgentTransport
 from customer.models import Principal, Shipper
-
-
-import json
-
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -83,7 +76,7 @@ def export_xls(request):
         # Sheet body, remaining rows
         rows = Booking.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('time', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
         'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'tare', 'vessel', 'port', 'closing_date', 'closing_time', 'remark', 'work_id', \
-        'pickup_date', 'factory_date', 'return_date', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal', 'shipper', 'booking_no', 'work_id')
+        'pickup_date', 'factory_date', 'return_date', 'yard_ndd', 'fac_ndd', 'nextday', 'status').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         row_num = 0
         row_prev = None
@@ -202,7 +195,7 @@ def export_xls(request):
 
         # Sheet body, remaining rows
         rows = AgentTransport.objects.filter((Q(date__month=month_export.month) & Q(date__year=month_export.year))).values_list('operation_type', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'work_type', 'price', 'status').order_by('date', 'principal', 'shipper', 'work_type', 'booking_no', 'work_id')
+        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'work_type', 'price', 'status').order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
 
         row_num = 0
         row_prev = None

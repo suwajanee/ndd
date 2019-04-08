@@ -1,7 +1,8 @@
-import xlwt
+# -*- coding: utf-8 -*-
 
-from django.db.models import Q
 from django.http import HttpResponse
+
+import xlwt
 
 from ..models import Booking
 from ..models import BookingTime
@@ -14,11 +15,10 @@ def export_time(request):
         pk_list = request.POST.getlist("pk_list")
         request.session['pk_list'] = pk_list
 
-
         style_xls = StyleXls()
 
         response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="time.xls"'
+        response['Content-Disposition'] = 'attachment; filename="Time.xls"'
 
         wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
         sheet = wb.add_sheet('Time')
@@ -53,7 +53,7 @@ def export_time(request):
         sheet.row(1).height = 20*25
 
         columns = ['Date', 'Principal', 'Shipper', 'Agent', 'Size', 'Booking', 'TR', 'FM', 'TR', 'Factory', 'TR', 'TR', 'To', 'Container', 'Seal no','Work ID', \
-            'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
+                    'In', 'Out', 'In', 'Start', 'Finish', 'Out', 'In', 'Out']
 
         sheet.write_merge(0, 0, 16, 17, 'Pick up', style)
         sheet.write_merge(0, 0, 18, 21, 'Factory', style)
@@ -66,7 +66,7 @@ def export_time(request):
                 sheet.write(1, col_num, columns[col_num], style)
 
         rows = Booking.objects.filter(pk__in=pk_list).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-            'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         row_prev = None
         booking_prev = None
@@ -91,7 +91,6 @@ def export_time(request):
                 style = xlwt.XFStyle()
                 style.borders = style_xls.border_cell()
                 style.alignment = style_xls.align_center()
-
 
                 if col_num == 0 or col_num == 1 or col_num == 2 or col_num == 4 or col_num == 5:
                     if str(type(row[col_num])) == "<class 'datetime.date'>" :
@@ -127,7 +126,7 @@ def export_time(request):
                 sheet.write(row_num, col_num, row[col_num], style)
 
             row_time = BookingTime.objects.filter(booking__pk=row[16]).values_list('pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', \
-                'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time')
+                        'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time')
 
             if len(row_time):
                 row_time = row_time[0]
@@ -142,7 +141,6 @@ def export_time(request):
             else:
                 for col_time in range(16, 24):
                     sheet.write(row_num, col_time, "", style)
-
 
         wb.save(response)
         return response

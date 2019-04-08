@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_summary.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+    <div id="summary-week-details" >
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'summary-year-details-page' year=year %}">{{ year }}</a></li>
+                
+                <li class="breadcrumb-item">
+                    <a href="{% url 'summary-month-details-page' year=year month=month %}">
+                        {% verbatim %}
+                            {{ month_list[month-1] }}
+                        {% endverbatim %}
+                    </a>
+                </li>
+                
+                <li class="breadcrumb-item active" aria-current="page">
+                    WK. {{ week }}
+                    <span v-if="week_details.date_start">
+                        ( 
+                            {% verbatim %}
+                                {{ week_details.date_start|formatDate }} - {{ week_details.date_end|formatDate }}
+                            {% endverbatim %} 
+                        )
+                    </span>
+                </li>
+            </ol>
+        </nav>
+
+        {% verbatim %}
+            <div class="position-absolute" style="right:0px;">
+                <div class="row m-3">
+                    <div class="switch-field p-0">
+                        <input type="radio" id="status_0" value="0" class="processing" v-model="week_details.status" @change="changeWeekStatus" />
+                        <label for="status_0" style="width:40px;" class="p-2"><i class="fa fa-cog"></i></label>
+                        <input type="radio" id="status_1" value="1" class="finished" v-model="week_details.status" @change="changeWeekStatus" />
+                        <label for="status_1" style="width:40px;" class="p-2"><i class="fa fa-check"></i></label>
+                    </div>
+                </div>
+                <div class="row m-3">
+                    <button v-if="table_edit" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+                    <button v-else class="btn btn-outline-info" @click="table_edit=true"><i class="fa fa-pencil"></i>&nbsp;Note</button>
+                </div>
+
+                <div class="row m-3">
+                    <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
+                    <button v-else class="btn btn-outline-warning" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-info-circle"></i>&nbsp;Week</button>
+                </div>
+
+                <div class="row mt-5 m-3">
+                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#modalApllInvoice"><i class="fa fa-download"></i>&nbsp;APLL<br>Export</button>
+                 </div>
+            </div>
+            <div class="row col-md-11">
+                <table class="table table-bordered table-bordered-dark">
+                    <thead class="text-center table-secondary">
+                        <th class="align-middle border-dark">No.</th>
+                        <th class="align-middle border-dark">Customer Name</th>
+                        <th class="align-middle border-dark width-9">Drayage Charge</th>
+                        <th class="align-middle border-dark width-9">Gate</th>
+                        <th class="align-middle border-dark width-9">Other</th>
+                        <th class="align-middle border-dark width-9">Total</th>
+                        <th class="align-middle border-dark width-9">หัก ณที่จ่าย 1%</th>
+                        <th class="align-middle border-dark width-9">รับเช็ค</th>
+                        <th class="align-middle border-dark alert-primary width-9">วันที่วางบิล</th>
+                        <th class="align-middle border-dark alert-primary width-9">วันครบกำหนด</th>
+                        <th class="align-middle border-dark">Remark</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.detail}">
+                            <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
+                            <td v-else class="text-center align-middle"></td>
+
+                            <td v-if="week.customer_custom" 
+                                class="text-left align-middle cell-click"
+                                :class="{'table-success': week.status == '1', 'table-warning': week.status == '0' }"
+                                @click="selectCustomer(week.customer.id + '__' + week.customer_custom.id)"
+                            >
+                                <template v-if="week.customer_custom.sub_customer">
+                                    {{ week.customer_custom.sub_customer }}
+                                </template>
+                                <template v-else>
+                                    {{ week.customer.name }}
+                                </template>
+                            </td>
+                            <td v-else 
+                                class="text-left align-middle cell-click"
+                                :class="{'table-success': week.status == '1', 'table-warning': week.status == '0' }"
+                                @click="selectCustomer(week.customer.id + '__')"
+                            >
+                                {{ week.customer.name }}
+                            </td>
+
+                            <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ week.gate_total|currencyCommas }}</td>
+                            <td class="text-right align-middle"></td>
+                            <td class="text-right align-middle">{{ total_list[index]|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ withholding_list[index]|currencyCommas }}</td>
+                            <td class="text-right align-middle">{{ check_list[index]|currencyCommas }}</td>
+
+                            <td class="text-center align-middle" :class="{'table-success': week.date_billing}">
+                                <input v-if="week.id && table_edit" type="date" class="form-control" v-model="customer_note[week.item-1].date_billing" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.date_billing|formatDate }}</template>
+                            </td>
+
+                            <td class="text-center align-middle">
+                                <input v-if="week.id && table_edit" type="date" class="form-control" v-model="customer_note[week.item-1].date_end" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.date_end|formatDate }}</template>
+                            </td>
+
+                            <td class="text-center align-middle" :class="{'bg-warning': week.detail}">
+                                <input v-if="week.id && table_edit" class="form-control" v-model="customer_note[week.item-1].detail" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.detail }}</template>
+                            </td>
+                        </tr>
+
+                        <tr class="text-right" >
+                            <td class="text-center"><div v-if="saving == true" class="text-secondary"><i class="fa fa-spinner fa-pulse"></i>&nbsp;</div></td>
+                            <td class="text-center"><u><b>Total</b></u></td>
+                            <td v-for="total in sum_total" class="alert-primary"><b>{{ total|currencyCommas }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+   
+        {% endverbatim %}
+
+        {% include 'summary/summary_week_modal.html' %}
+
+    </div>
+
+
+    <script type="application/javascript" src="{% static 'js/app_summary_week_details_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            summary_week_details.reload({{ year }}, {{ month }}, {{ week }});
+        });
+
+    </script>
+
+{% endblock %}

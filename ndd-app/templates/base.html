@@ -22,12 +22,15 @@
                 <li class="nav-item {% if nbar == 'agent-transport-page' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                 </li>
+                <li class="nav-item {% if nbar == 'summary-page' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'summary-page' %}">SUMMARY</a>
+                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item {% if nbar == 'export' %}active{% endif %}">
+                <li class="nav-item {% if nbar == 'export-page' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'export-page' %}">Export</a>
                 </li>
-                <li class="nav-item {% if nbar == 'customer' %}active{% endif %}">
+                <li class="nav-item {% if nbar == 'customer-page' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'customer-page' %}">Customer</a>
                 </li>
                 <li class="nav-item dropdown">

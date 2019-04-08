@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb m-0 bg-white">
+            <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Total {{ year }}</li>
+        </ol>
+    </nav>
+
+    <div id="summary-chart" >
+        {% verbatim %}
+            <div class="input-group container my-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">CUSTOMER</span>
+                </div>
+                <button v-if="principal_name" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ principal_name }}
+                </button>
+                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ---- All ----
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right w-100">                    
+                    <div class="dropdown-item">
+                        <input class="form-control" v-model="search_principal" placeholder="search">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="options-list">
+                        <button class="dropdown-item" @click.prevent="summaryTotal">
+                            ---- All ----
+                        </button>
+                        <button v-for="principal in filteredPrincipal" class="dropdown-item" :class="{'bg-light text-secondary': principal.cancel=='1'}" @click.prevent="cusomerTotal(principal)">
+                            {{ principal.name }}
+                            <div v-if="principal.work_type=='agent-transport'" class="d-inline">
+                                <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
+                            </div>
+                        </button>
+                    </div>
+                </div> 
+            </div>
+        {% endverbatim %}
+
+        <div id="chartContainer" style="width: 100%;"></div>
+    </div>
+
+
+    <script type="application/javascript" src="{% static 'js/app_summary_chart_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            summary_chart.reload({{ year }});
+        });
+
+    </script>
+
+{% endblock %}

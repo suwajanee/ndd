@@ -1,0 +1,245 @@
+<div v-if="invoice_details">
+
+    <div class="row my-3">
+        {% verbatim %}
+            <div class="col"></div>
+
+            <div class="col text-center">
+                <button v-if="! table_edit" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalInvoiceDetails">Invoice</button>
+            </div>
+
+            <div class="col text-right">
+                    <div v-if="saving" class="mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving</div>
+
+                    <button v-if="table_edit" class="btn btn-outline-secondary" data-toggle="modal" data-target="#modelAddFieldAPLL" :disabled="not_save">Add Data</button>
+                    <button v-if="table_edit" class="btn btn-danger" @click="table_edit=false" :disabled="not_save">Exit</button>
+                    <button v-if="table_edit" class="btn btn-success " @click="editInvoiceDetails" :disabled="not_save">Save</button>
+                    <button v-else class="btn btn-info" @click="table_edit=true">Edit</button>
+            </div> 
+        {% endverbatim %}
+    </div>
+
+    <div>
+        {% verbatim %}
+            <h2 v-if="customer_custom.customer_title" class="text-center">{{ customer_custom.customer_title }}</h2>
+            <h2 v-else-if="customer_custom.sub_customer" class="text-center">{{ customer_custom.sub_customer }}</h2>
+            <h2 v-else class="text-center">{{ customer_main.name }}</h2>
+
+            <table class="mt-3 w-100">
+                <tr>
+                    <td class="px-1" style="width: 80px;">INV. NO.</td>
+                    <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]"></td>
+                    <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[0] }}</td>
+                    <td class="text-secondary" style="width: 150px;"></td>
+
+                    <td rowspan=2 class="text-center">
+                        <div v-if="table_edit" class="input-group col-md-5 container mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Customer Name</span>
+                            </div>
+                            <input class="form-control" v-model="invoice_data.customer_name">
+                        </div>
+                    </td>
+
+                    <td rowspan=2 class="text-primary text-right" style="width: 400px;">
+                        <div v-if="table_edit" class="col-md-10 float-right">
+                            <input class="form-control text-center p-1" v-model="invoice_data.other">
+                        </div>
+                        <template v-else>{{ invoice_data.other }}</template>
+                    </td>
+                </tr>
+            </table>
+    
+            <table class="table table-bordered table-bordered-dark table-light">
+                <thead class="text-center table-secondary">
+                    <tr>
+                        <th v-if="! table_edit" class="border-dark align-middle"></th>
+                        <th class="border-dark align-middle" style="width: 40px;">Item</th>
+                        <th class="border-dark align-middle">
+                            Customer Name
+                        </th>
+                        <th class="border-dark align-middle">
+                            Truck Routing 
+                        </th>
+                        <th class="border-dark align-middle">
+                            BOOKING
+                        </th>
+                        <th class="border-dark align-middle">
+                            Date
+                        </th>
+                        <th class="border-dark align-middle">
+                            Container
+                        </th>
+                        <th class="border-dark align-middle">
+                            Size
+                        </th>
+                        <th class="border-dark align-middle">
+                            Drayage Charge
+                        </th>
+                        <th class="border-dark align-middle">
+                            Gate Charge
+                        </th>
+                        <th class="border-dark align-middle">
+                            Remark
+                        </th>
+                        <th class="align-middle table-light">
+                            NOTE
+                        </th>
+                    </tr>
+                
+                </thead>
+                <tbody>
+                    <template v-for="(inv_detail, index) in invoice_detail_list">
+                        <tr class="text-center">
+                            <td v-if="! table_edit" class="align-middle p-1" >
+                                <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id, inv_detail.work.id)"><i class="fa fa-trash"></i></button>
+                            </td>
+                            <td>
+                                {{ index + 1 }}
+                            </td>
+
+                            <td v-if="invoice_data.customer_name" class="text-left">
+                                {{ invoice_data.customer_name }}
+                            </td>
+                            <td v-else class="text-left">
+                                {{ inv_detail.work.shipper.name }}
+                            </td>
+
+                            <td class="align-middle">
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.routing"> 
+                                <template v-else>
+                                    {{ inv_detail.detail.routing }}
+                                </template>
+                            </td>
+
+                            <td class="align-middle">
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no"> 
+                                <template v-else>
+                                    {{ inv_detail.work.booking_no }}
+                                </template>
+                            </td>
+                            <td>
+                                {{ inv_detail.work.date|formatDate }}
+                            </td>
+
+                            <td class="text-center" :class="container_color[inv_detail.detail.color1]">
+                                <div v-if="table_edit" class="input-group">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_no">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-outline-secondary"
+                                            style="padding: 4px;"
+                                            @click="checkContainer(inv_detail.id, inv_detail.detail.color1, 1)"
+                                        >
+                                        <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                                <template v-else>
+                                    {{ inv_detail.work.container_no }}
+                                </template>
+                            </td>
+                            <td>
+                                <template v-if="inv_detail.work.size">
+                                    <template v-if="inv_detail.work.size.indexOf('X') == -1">1X</template>{{ inv_detail.work.size }}
+                                </template>
+                            </td>
+
+                            <td class="text-right">
+                                <template v-if="table_edit">
+                                    <input class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                                </template>
+                                <template v-else>
+                                    {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
+                                </template>
+                            </td>
+
+                            <td class="text-right">
+                                <template v-if="table_edit">
+                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.gate" > 
+                                </template>
+                                <template v-else>
+                                    {{ eval(inv_detail.gate_charge.gate)|currencyCommas }}
+                                </template>
+                            </td>
+
+                            <td class="text-primary">
+                                <template v-if="table_edit">
+                                    <input class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                                </template>
+                                <template v-else>
+                                    {{ inv_detail.detail.remark }}
+                                </template>
+                            </td>
+
+                            <td class="border-light" :class="{'bg-processing': inv_detail.detail.note}">
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.note" > 
+                                <template v-else>
+                                    {{ inv_detail.detail.note }}
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <tr class="text-center font-weight-bold">
+                        <td v-if="! table_edit" class="align-middle p-1">
+                            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'"><i class="fa fa-plus"></i></button>
+                        </td>
+
+                        <td v-if="table_edit" colspan=7 class="table-secondary">Total</td>
+                        <td v-else colspan=7 class="table-secondary">Total</td>
+
+                        <td class="text-right table-secondary" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
+                        <td class="text-right table-secondary" :class="{'alert-warning': gateTotal != invoice.gate_total}">{{ gateTotal|currencyCommas }}</td>
+                        <td class="table-secondary"></td>
+                    </tr>
+
+                    <tr class="text-center table-secondary font-weight-bold">
+                        <td v-if="! table_edit"></td>
+
+                        <td colspan=7>G.Total</td>
+
+                        <td colspan=2 class="text-right">{{ drayageTotal + gateTotal|currencyCommas }}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endverbatim %}
+    </div>
+
+    <div v-if="invoice" class="modal fade" id="modalInvoiceDetails" tabindex="-1" role="dialog" aria-hidden="true">    
+        {% verbatim %}
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">Invoice</h2>
+                        <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-5">
+                        <div class="input-group mb-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">YEAR</span>
+                            </div>
+                            <select class="custom-select" v-model="invoice.customer_week.week.year.year_label" @change="getWeeks">
+                                <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                            </select>
+                        </div>
+                        <div class="input-group container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">WEEK</span>
+                            </div>
+                            <select class="custom-select" v-model="invoice.customer_week.week.id">
+                                <option v-for="week in week_list" :value="week.id">{{ week.week }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-5 py-3">
+                        <button class="btn btn-outline-danger mr-auto" @click="deleteInvoice">Delete</button>
+                        <button class="btn btn-primary" @click="editInvoiceWeek">Save</button>
+                    </div>
+                </div>
+            </div>
+        {% endverbatim %}
+    </div>
+    
+</div>

@@ -188,7 +188,7 @@ var booking_table = new Vue( {
             }
             
         },
-        saveEditBooking: function() {
+        saveEditBooking() {
             this.loading = true
             this.saving = true
             this.checked_bookings = []
@@ -236,7 +236,7 @@ var booking_table = new Vue( {
             }
         },
 
-        deleteBookings: function() {
+        deleteBookings() {
             this.loading = true
             this.action = ''
             api("/booking/api/delete-bookings/", "POST", { checked_bookings: this.checked_bookings, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
@@ -306,7 +306,7 @@ var booking_table = new Vue( {
                 }
             })
         },
-        saveTimeBooking: function() {
+        saveTimeBooking() {
             this.loading = true
             this.saving = true
             if(this.edit_data.length) {
