@@ -18,7 +18,7 @@
 
     <div id="summary-year-details" >
         {% verbatim %}
-            <table class="table table-bordered table-bordered-dark table-hover">
+            <table v-if="loading==false" class="table table-bordered table-bordered-dark table-hover">
                 <thead class="text-center">
                     <th class="border-dark">Customer Name</th>
                     <th v-for="i in 12" class="cell-click border-dark" @click="selectMonth(i)">{{ month[i-1] }}</th>
@@ -29,8 +29,8 @@
                         <td v-if="year_detail.sub_customer" class="text-left">{{ year_detail.sub_customer }}</td>
                         <td v-else class="text-left">{{ year_detail.customer }}</td>
 
-                        <td v-for="i in 12" :class="{'bg-secondary': ! year_detail.total[i-1]}" style="width:120px;">{{ year_detail.total[i-1]|currencyCommas }}</td>
-                        <td style="width:120px;">{{ total_customer[index]|currencyCommas }}</td>
+                        <td v-for="i in 12" :class="{'bg-secondary': ! year_detail.total[i-1]}" style="min-width:120px;">{{ year_detail.total[i-1]|currencyCommas }}</td>
+                        <td style="min-width:120px;">{{ total_customer[index]|currencyCommas }}</td>
 
                         <td v-if="year_detail.cusotomer_total" class="text-center"><b>{{ year_detail.cusotomer_total|currencyCommas }}</b></td>
                     </tr>
@@ -42,6 +42,12 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div v-else class="container mt-5">
+                <div style="color: lightgray;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
         {% endverbatim %}
     </div>
 

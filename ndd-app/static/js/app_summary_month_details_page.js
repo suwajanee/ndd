@@ -24,6 +24,7 @@ var summary_month_details = new Vue( {
             diesel_rate: ''
         },
         week_exist: false,
+        loading: false,
     },
 
     methods: {
@@ -34,6 +35,7 @@ var summary_month_details = new Vue( {
             this.getSummaryMonthDetails(year, month)
         },
         getSummaryMonthDetails(year, month) {
+            this.loading = true
             api("/summary/api/get-summary-month-details/", "POST", { year: year, month: month }).then((data) => {
                 if(data == 'Error'){
                     window.location.replace("/summary/" + this.year)
@@ -45,7 +47,7 @@ var summary_month_details = new Vue( {
                 this.totalWeek()
                 this.totalCustomer()
                 this.totalMonth()
-                
+                this.loading = false 
             })
         },
         totalWeek(){

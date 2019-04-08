@@ -61,7 +61,7 @@
                  </div>
             </div>
             <div class="row col-md-11">
-                <table class="table table-bordered table-bordered-dark">
+                <table v-if="loading==false" class="table table-bordered table-bordered-dark">
                     <thead class="text-center table-secondary">
                         <th class="align-middle border-dark">No.</th>
                         <th class="align-middle border-dark">Customer Name</th>
@@ -130,6 +130,11 @@
                         </tr>
                     </tbody>
                 </table>
+                <div v-else class="container mt-5">
+                    <div style="color: lightgray;">
+                        <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                    </div>
+                </div>
             </div>
    
         {% endverbatim %}

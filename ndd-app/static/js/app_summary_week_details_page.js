@@ -35,6 +35,8 @@ var summary_week_details = new Vue( {
         saving: false,
         customer_note: [],
         edit_data: [],
+
+        loading: false,
     },
 
     methods: {
@@ -59,6 +61,7 @@ var summary_week_details = new Vue( {
             this.edit_data = []
         },
         getSummaryWeekDetails(year, month, week) {
+            this.loading = true
             this.resetValue()
             api("/summary/api/get-summary-week-details/", "POST", { year: year, month: month, week: week }).then((data) => {
                 if(data == 'Error'){
@@ -74,7 +77,7 @@ var summary_week_details = new Vue( {
                 this.summary_week_modal.status = this.week_details.status
 
                 this.totalCalc()
-
+                this.loading = false
             })
         },
         totalCalc() {
