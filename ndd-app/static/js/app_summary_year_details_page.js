@@ -7,7 +7,9 @@ var summary_year_details = new Vue( {
         summary_year_details: [],
         total_month: [],
         total_customer: [],
-        total_year: 0
+        total_year: 0,
+
+        loading: false,
     },
 
     methods: {
@@ -17,6 +19,7 @@ var summary_year_details = new Vue( {
             this.getSummaryYearDetails(year)
         },
         getSummaryYearDetails(year) {
+            this.loading = true
             api("/summary/api/get-summary-year-details/", "POST", { year: year }).then((data) => {
                 if(data == 'Error'){
                     window.location.replace("/summary")
@@ -26,6 +29,7 @@ var summary_year_details = new Vue( {
                 this.totalMonth()
                 this.totalCustomer()
                 this.totalYear()
+                this.loading = false
             })
         },
         totalMonth(){

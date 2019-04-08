@@ -28,7 +28,7 @@
                 <i class="fa fa-plus-circle"></i>&nbsp;Week
             </button>
             <div class="row col-md-11">
-                <table class="table table-bordered table-bordered-dark table-hover">
+                <table v-if="loading==false" class="table table-bordered table-bordered-dark table-hover">
                     <thead class="text-center">
                         <th class="align-middle border-dark">Customer Name</th>
                         
@@ -64,6 +64,11 @@
                         </tr>
                     </tbody>
                 </table>
+                <div v-else class="container mt-5">
+                    <div style="color: lightgray;">
+                        <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                    </div>
+                </div>
             </div>
         {% endverbatim %}
 

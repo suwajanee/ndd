@@ -34,13 +34,21 @@ var summary_chart = new Vue( {
         summaryTotal() {
             this.dataPoints = []
             this.chart = new CanvasJS.Chart("chartContainer", {
+                height: 900,
                 animationEnabled: true,
                 exportEnabled: true,
                 theme: "light2",
                 title: {
-                    text: "Summary " + this.year
+                    text: "Summary " + this.year,
+                    fontSize: 28,
                 },
-                axisY2:{
+                axisX: {
+                    labelFontSize: 12,
+                    interval: 1,
+                },
+                axisY2: {
+                    titleFontSize: 18,
+                    labelFontSize: 12,
                     title: "drayage total"
                 },
                 data: [{
@@ -72,15 +80,19 @@ var summary_chart = new Vue( {
                 exportEnabled: true,
                 theme: "light2",
                 title:{
-                    text: customer.name + ' ' + this.year
+                    text: customer.name + ' ' + this.year,
+                    fontSize: 28,
                 },
                 axisX: {
                     interval: 1,
                     intervalType: "month",
-                    valueFormatString: "MMM YYYY"
+                    valueFormatString: "MMM YYYY",
+                    labelFontSize: 12,
                 },
                 axisY:{
                     title: "drayage total",
+                    titleFontSize: 18,
+                    labelFontSize: 12,
                     includeZero: false,
                 },
                 data: [{        
