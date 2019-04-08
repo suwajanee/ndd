@@ -35,7 +35,7 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="options-list">
-                        <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getDetails(principal)">
+                        <button v-for="principal in filteredPrincipal" class="dropdown-item" :class="{'bg-light text-secondary': principal.cancel=='1'}"  @click.prevent="getDetails(principal)">
                             {{ principal.name }}
                             <div v-if="principal.work_type=='agent-transport'" class="d-inline">
                                 <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
