@@ -11,7 +11,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb m-0 bg-white">
             <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Total</li>
+            <li class="breadcrumb-item active" aria-current="page">Total {{ year }}</li>
         </ol>
     </nav>
 
@@ -50,7 +50,6 @@
 
         <div id="chartContainer" style="width: 100%;"></div>
     </div>
-
 
 
     <script type="application/javascript" src="{% static 'js/app_summary_chart_page.js' %}"></script>

@@ -20,7 +20,6 @@
                             <th>(&nbsp;{{ work_selected.length }}&nbsp;)</th>
                             <th>Date</th>
                             <th></th>
-                            <!-- <th>Principal</th> -->
                             <th>Shipper</th>
                             <th>Agent</th>
                             <th>Booking</th>
@@ -56,7 +55,6 @@
                                             ตู้เปล่ากลับ
                                         </span>
                                     </td>
-                                    <!-- <td>{{ work.principal.name }}</td> -->
 
                                     <td v-if="work.shipper" style="max-width: 250px;">{{ work.shipper.name }}</td>
                                     <td v-else></td>
@@ -78,7 +76,6 @@
                                     </td>
                                     <td class="text-center"></td>
                                     <td v-if="customer_type == 'agent-transport'" class="text-center text-primary"></td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

@@ -45,7 +45,6 @@ var summary_chart = new Vue( {
                 },
                 data: [{
                     type: "bar",
-                    // name: "companies",
                     axisYType: "secondary",
                     yValueFormatString: "#,###.##",
                     dataPoints: this.dataPoints

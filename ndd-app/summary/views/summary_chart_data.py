@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import copy
 import json
 
 from django.db.models import Q
@@ -8,9 +7,8 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import CustomerCustom, Invoice, SummaryWeek, Year
+from ..models import Invoice, Year
 from customer.models import Principal
-from ..serializers import YearSerializer
 
 
 @csrf_exempt
