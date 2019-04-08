@@ -128,6 +128,7 @@
         </template>
         <template v-else-if="customer_custom.option=='apll'">
             {% include 'summary/summary_apll_invoice_details.html' %}
+            {% include 'summary/summary_invoice_work_list_modal.html' %}
         </template>
         <template v-else>
             {% include 'summary/summary_invoice_details.html' %}

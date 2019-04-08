@@ -22,6 +22,11 @@ def summary_customer_custom_page(request):
     return render(request, 'summary/summary_customer_custom_page.html', {'nbar': 'summary-page'})
 
 @login_required(login_url=reverse_lazy('login'))
+def summary_chart_page(request, year):
+    return render(request, 'summary/summary_chart_page.html', {'nbar': 'summary-page', 'year': year})
+
+
+@login_required(login_url=reverse_lazy('login'))
 def summary_year_details_page(request, year):
     return render(request, 'summary/summary_year_details_page.html', {'nbar': 'summary-page', 'year': year})
 

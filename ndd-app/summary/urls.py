@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from .views import summary_apll_invoice
+from .views import summary_chart_data
 from .views import summary_customer_custom_view
 from .views import summary_customer_view
 from .views import summary_form_setting_view
@@ -21,6 +22,8 @@ urlpatterns = [
     url(r'^$', summary_page_view.summary_page, name='summary-page'),
     url(r'^form-setting/$', summary_page_view.summary_form_setting_page, name='summary-form-setting-page'),
     url(r'^customer-custom/$', summary_page_view.summary_customer_custom_page, name='summary-customer-custom-page'),
+    url(r'^chart/(?P<year>\d+)/$', summary_page_view.summary_chart_page, name='summary-chart-page'),
+
     url(r'^(?P<year>\d+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
     url(r'^(?P<year>\d+)/(?P<month>\d+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
     url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
@@ -92,6 +95,10 @@ urlpatterns = [
 
     # Beautiful Soup
     url(r'^export/apll-invoice/$', summary_apll_invoice.apll_invoice, name='summary-apll-invoice'),
+
+    # Chart
+    url(r'^api/get-summary-year-data/$', summary_chart_data.api_summary_year_total_chart, name='api-get-summary-year-data'),
+    url(r'^api/get-summary-customer-data/$', summary_chart_data.api_summary_customer_total_chart, name='api-get-summary-customer-data'),
 
 
 

@@ -57,7 +57,10 @@
                         <h1 class="text-center">{{ year.total|currencyCommas }}</h1>   
                     </div>
                 {% endverbatim %}
-                <div class="card-footer"><a :href="'/summary/'+ year.year" class="btn btn-outline-dark float-right">Detail</a></div>
+                <div class="card-footer">
+                    <a :href="'/summary/chart/'+ year.year" class="btn btn-outline-dark">Total</a>
+                    <a :href="'/summary/'+ year.year" class="btn btn-outline-dark float-right">Detail</a>
+                </div>
             </div>
         </div>
     </div>
