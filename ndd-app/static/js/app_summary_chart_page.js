@@ -33,6 +33,7 @@ var summary_chart = new Vue( {
 
         summaryTotal() {
             this.dataPoints = []
+            this.principal_name = ''
             this.chart = new CanvasJS.Chart("chartContainer", {
                 height: 900,
                 animationEnabled: true,
