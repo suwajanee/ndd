@@ -78,7 +78,7 @@ def api_get_summary_year_details(request):
                 data['customer'] = customer.name
                 data['color'] = color_list[color_index % 3]
                 color_index += 1
-                sub_customers = CustomerCustom.objects.filter(Q(customer__name=customer.name)).order_by('customer__name','sub_customer')
+                sub_customers = CustomerCustom.objects.filter(Q(customer=customer)).order_by('customer__name','sub_customer')
                 if sub_customers:
                     customer_total = 0
                     last_index = 0
@@ -88,9 +88,8 @@ def api_get_summary_year_details(request):
                         total = []
                         for month in range(0,12):
                             month = str(month+1)
-                            month_total = Invoice.objects.filter(Q(customer_week__week__year__year_label=year) & Q(customer_week__week__month=month) & \
-                                            Q(customer_week__customer_custom = sub_customer) & \
-                                            Q(customer_week__customer_custom__sub_customer = sub_customer.sub_customer)).aggregate(total=Sum('drayage_total'))['total']
+                            month_total = Invoice.objects.filter(Q(customer_week__week__year=year_existing[0]) & Q(customer_week__week__month=month) & \
+                                            Q(customer_week__customer_custom = sub_customer)).aggregate(total=Sum('drayage_total'))['total']
 
                             if month_total:
                                 total.append(float(month_total))
@@ -111,8 +110,8 @@ def api_get_summary_year_details(request):
                 else:
                     for month in range(0,12):
                         month = str(month+1)
-                        month_total = Invoice.objects.filter(Q(customer_week__week__year__year_label=year) & Q(customer_week__week__month=month) & \
-                                        Q(customer_week__customer_main__name = customer.name)).aggregate(total=Sum('drayage_total'))['total']
+                        month_total = Invoice.objects.filter(Q(customer_week__week__year=year_existing[0]) & Q(customer_week__week__month=month) & \
+                                        Q(customer_week__customer_main = customer)).aggregate(total=Sum('drayage_total'))['total']
                         if month_total:
                             total.append(float(month_total))
                         else:
