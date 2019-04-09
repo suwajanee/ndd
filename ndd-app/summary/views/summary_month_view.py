@@ -34,7 +34,7 @@ def api_get_summary_month_details(request):
             customers = Principal.objects.all().order_by('cancel', 'name')
 
             # get weeks data
-            week_details = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(month=month)).order_by('week')
+            week_details = SummaryWeek.objects.filter(Q(year=year_existing[0]) & Q(month=month)).order_by('week')
             week_serializer = SummaryWeekSerializer(week_details, many=True)
             weeks = details['weeks'] = week_serializer.data
 
@@ -44,7 +44,7 @@ def api_get_summary_month_details(request):
                 data['customer'] = customer.name
                 data['color'] = color_list[color_index % 3]
                 color_index += 1
-                sub_customers = CustomerCustom.objects.filter(Q(customer__name=customer.name)).order_by('customer__name','sub_customer')
+                sub_customers = CustomerCustom.objects.filter(Q(customer=customer)).order_by('customer__name','sub_customer')
                 if sub_customers:
                     customer_total = 0
                     last_index = 0
@@ -52,10 +52,9 @@ def api_get_summary_month_details(request):
                         data = copy.deepcopy(data)
                         data['sub_customer'] = sub_customer.sub_customer
                         total = []
-                        for week in weeks:
-                            week_total = Invoice.objects.filter(Q(customer_week__week=week['id']) & \
-                                            Q(customer_week__customer_custom = sub_customer) & \
-                                            Q(customer_week__customer_custom__sub_customer = sub_customer.sub_customer)).aggregate(total=Sum('drayage_total'))['total']
+                        for week in week_details:
+                            week_total = Invoice.objects.filter(Q(customer_week__week=week) & \
+                                            Q(customer_week__customer_custom = sub_customer)).aggregate(total=Sum('drayage_total'))['total']
 
                             if week_total:
                                 total.append(float(week_total))
@@ -74,9 +73,9 @@ def api_get_summary_month_details(request):
 
                         summary_month_details.append(data)
                 else:
-                    for week in weeks:
-                        week_total = Invoice.objects.filter(Q(customer_week__week=week['id']) & \
-                                        Q(customer_week__customer_main__name = customer.name)).aggregate(total=Sum('drayage_total'))['total']
+                    for week in week_details:
+                        week_total = Invoice.objects.filter(Q(customer_week__week=week) & \
+                                        Q(customer_week__customer_main = customer)).aggregate(total=Sum('drayage_total'))['total']
 
                         if week_total:
                             total.append(float(week_total))
