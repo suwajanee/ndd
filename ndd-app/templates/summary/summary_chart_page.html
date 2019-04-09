@@ -4,6 +4,7 @@
 {% block title %} Summary {% endblock %}
 
 {% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_summary.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -15,7 +16,7 @@
         </ol>
     </nav>
 
-    <div id="summary-chart" >
+    <div id="summary-chart">
         {% verbatim %}
             <div class="input-group container mt-5 mb-4">
                 <div class="input-group-prepend">
@@ -33,7 +34,7 @@
                         <input class="form-control" v-model="search_principal" placeholder="search">
                     </div>
                     <div class="dropdown-divider"></div>
-                    <div class="options-list">
+                    <div class="options-list" style="overflow-y: scroll; max-height: 300px;">
                         <button class="dropdown-item" @click.prevent="summaryTotal">
                             ---- All ----
                         </button>

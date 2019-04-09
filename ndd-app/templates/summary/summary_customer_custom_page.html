@@ -34,8 +34,8 @@
                         <input class="form-control" v-model="search_principal" placeholder="search">
                     </div>
                     <div class="dropdown-divider"></div>
-                    <div class="options-list">
-                        <button v-for="principal in filteredPrincipal" class="dropdown-item" :class="{'bg-light text-secondary': principal.cancel=='1'}"  @click.prevent="getDetails(principal)">
+                    <div class="options-list" style="overflow-y: scroll; max-height: 300px;">
+                        <button v-for="principal in filteredPrincipal" class="dropdown-item" :class="{'bg-light text-secondary': principal.cancel=='1'}" @click.prevent="getDetails(principal)">
                             {{ principal.name }}
                             <div v-if="principal.work_type=='agent-transport'" class="d-inline">
                                 <span class="badge badge-pill badge-secondary float-right">สายเรือ</span>
