@@ -357,7 +357,7 @@
                         {% endif %}
                             G.Total
                         </td>
-                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total|add:invoice.gate_total | result }}</td>
+                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total|add_float:invoice.gate_total | result }}</td>
                         <td class="bg-whitesmoke"></td>
                     </tr>
                 {% endif %}
