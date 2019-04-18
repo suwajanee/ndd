@@ -47,12 +47,12 @@
                     </div>
                 </div>
                 <div class="row m-3">
-                    <button v-if="table_edit" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+                    <button v-if="table_edit" class="btn btn-outline-success" @click="saveEditCustomerDetail"><i class="fa fa-save"></i>&nbsp;Save</button>
                     <button v-else class="btn btn-outline-info" @click="table_edit=true"><i class="fa fa-pencil-alt"></i>&nbsp;Note</button>
                 </div>
 
                 <div class="row m-3">
-                    <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false"><i class="fa fa-sign-out"></i>&nbsp;Exit</button>
+                    <button v-if="table_edit" class="btn btn-outline-danger" @click="table_edit=false"><i class="fas fa-sign-out-alt"></i>&nbsp;Exit</button>
                     <button v-else class="btn btn-outline-warning" data-toggle="modal" data-target="#modalSummaryWeek"><i class="fa fa-info-circle"></i>&nbsp;Week</button>
                 </div>
 

@@ -43,7 +43,7 @@
                 
                 <div v-if="nbar=='edit' | nbar == 'time'" class="col text-right">
                     <div v-if="saving == true" class="save-msg mr-2 pt-2 text-secondary d-inline"><i class="fa fa-spinner fa-pulse"></i>&nbsp;Saving booking.</div>
-                    <a href="{% url 'booking-page' %}" class="btn btn-danger mr-1" ><i class="fa fa-sign-out"></i>&nbsp;Exit</a>
+                    <a href="{% url 'booking-page' %}" class="btn btn-danger mr-1" ><i class="fas fa-sign-out-alt"></i>&nbsp;Exit</a>
                     <button v-if="nbar=='edit'" @click="saveEditBooking()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</button>
                     <button v-else-if="nbar=='time'" @click="saveTimeBooking()" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Save</button>
                 </div>     
