@@ -119,7 +119,7 @@ var summary_week_details = new Vue( {
                 this.withholding_list.push(parseFloat(withholding))
                 this.check_list.push(parseFloat(check))
             }
-            this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list).toFixed(2), sumArray(this.check_list).toFixed(2)]
+            this.sum_total = [drayage_total.toFixed(2), gate_total.toFixed(2), "", sumArray(this.total_list).toFixed(2), sumArray(this.withholding_list).toFixed(2), sumArray(this.check_list).toFixed(2)]
         },
 
         editWeekDetails() {
