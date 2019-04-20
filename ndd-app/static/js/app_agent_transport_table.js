@@ -180,6 +180,12 @@ var agent_transport_table = new Vue( {
                 this.saving = false
             }
         },
+        changeStateAgentTransport(id, state) {
+            api("/agent-transport/api/change-state-agent-transport/", "POST", {agent_transport_id: id, state: state}).then((data) => {
+                var agent_transport = this.agent_transports.find(x => x.id == id)
+                agent_transport.status = data
+            })
+        },
 
         selectAll() {
             this.checked_agent_transports = []

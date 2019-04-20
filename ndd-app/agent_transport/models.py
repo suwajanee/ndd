@@ -45,6 +45,7 @@ class AgentTransport(models.Model):
     return_date = models.DateField(blank=True, null=True, default='')
 
     STATUS_CHOICES = (
+        ('3', 'Pickup'),
         ('2', 'Finished'),
         ('1', '-'),
         ('0', 'Cancel'),

@@ -62,6 +62,8 @@ class Booking(models.Model):
     nextday = models.CharField(max_length=1, choices=NEXTDAY_CHOICES, default=0)
 
     STATUS_CHOICES = (
+        ('4', 'Factory'),
+        ('3', 'Yard'),
         ('2', 'Finished'),
         ('1', '-'),
         ('0', 'Cancel'),

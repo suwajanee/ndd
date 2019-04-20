@@ -17,7 +17,7 @@ function dateFormat(date) {
 
 
 Vue.filter('currencyCommas', function(price) {
-    // console.log(price)
+    price = parseFloat(price).toFixed(2)
     if(price == null || price == 0 || isNaN(price)){
         return '-'
     }

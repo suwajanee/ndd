@@ -51,4 +51,22 @@ def api_save_edit_agent_transport(request):
 
         return api_filter_agent_transports(request)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_change_state_agent_transport(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            agent_transport_id = req['agent_transport_id']
+            state = req['state']
+
+            agent_transport = AgentTransport.objects.get(pk=agent_transport_id)
+            if agent_transport.status == '3' and state == '3':
+                state = '1'
+            agent_transport.status = state
+            agent_transport.save()
+
+            return JsonResponse(agent_transport.status, safe=False)
+    return JsonResponse('Error', safe=False)
     
