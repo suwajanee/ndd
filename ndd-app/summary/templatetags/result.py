@@ -21,6 +21,10 @@ def result(value):
         return x[0] + '.' + x[1]
     return '-'
 
+@register.filter(name='add_float')
+def add_float(num1, num2):
+    return num1 + num2
+
 @register.filter(name='minus')
 def minus(num1, num2):
     return num1 - num2
