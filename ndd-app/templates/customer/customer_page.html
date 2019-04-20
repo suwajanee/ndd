@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-
+    
     <div class="col-10 border-left position-fixed" style="right:0; height:100%; background: white;"></div>
     <div id="customer-page">
         <div class="container-fluid">
@@ -46,8 +46,16 @@
                     </div>
                 </div>
 
-                <div v-if="customer" class="col-10 position-relative" style="left: 0;">
-                    {% include 'customer/customer_detail.html' %}
+                <div class="col-10 position-relative" style="left: 0;">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 bg-white border-bottom">
+                            <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Customer</li>
+                        </ol>
+                    </nav>
+                    <template v-if="customer">
+                        {% include 'customer/customer_detail.html' %}
+                    </template>
                 </div>
             </div>
         </div>
