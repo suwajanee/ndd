@@ -23,7 +23,7 @@ def login(request):
 
             if request.POST['remember_me'] == '1':
                 request.session.set_expiry(604800)
-            return redirect('booking-page')
+            return redirect('dashboard-page')
         else:
             messages.error(request, 'Incorrect Username or Password')
 

@@ -20,6 +20,7 @@ from django.conf.urls import url
 from django.views.generic import RedirectView
 
 from booking.views import authentication_view
+from booking.views import dashboard_view
 from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
 
@@ -33,6 +34,7 @@ urlpatterns = [
     path('customer/', include('customer.urls')),
     path('summary/', include('summary.urls')),
 
+    url(r'^dashboard/$', dashboard_view.dashboard_page, name='dashboard-page'),
     url(r'^staff/$', authentication_view.login, name='login'),
     url(r'^logout/$', authentication_view.logout, name='logout'),
 

@@ -1,0 +1,167 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>{% block title %}NDD Dashboard{% endblock %}</title>
+
+        {% block extra_head %}{% endblock %}
+        
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        
+        <script src="{% static 'js/vue.min.js' %}"></script>
+
+        <style>
+            img.logo {
+                -webkit-filter: drop-shadow(1px 1px 1.5px white)
+                                drop-shadow(-1px -1px 1.5px white)
+                                drop-shadow(1px -1px 1.5px white)
+                                drop-shadow(-1px 1px 1.5px white);
+                -moz-box-shadow: drop-shadow(1px 1px 1.5px white)
+                                 drop-shadow(-1px -1px 1.5px white)
+                                 drop-shadow(1px -1px 1.5px white)
+                                 drop-shadow(-1px 1px 1.5px white);
+                filter: drop-shadow(1px 1px 1.5px white) 
+                        drop-shadow(-1px -1px 1.5px white)
+                        drop-shadow(1px -1px 1.5px white)
+                        drop-shadow(-1px 1px 1.5px white);
+            }
+
+            .sidebar-heading{
+                padding: 1rem;
+                margin-top: 1rem;
+                background-color: #eee;
+                color: #7d7a7a;
+            }
+
+            .sidebar-sticky{
+                /* position: -webkit-sticky;
+                position: sticky;
+                top: 48px; */
+                width: 100%;
+                height: calc(100vh - 80px);
+                padding-top: .5rem;
+                overflow-x: hidden;
+                /* overflow-y: auto; */
+            }
+
+            .sidebar .nav-link {
+                font-weight: 300;
+                color: #333;
+                position: relative;
+                display: block;
+                padding: .5em 1em;
+                text-decoration: none;
+            }
+
+            .sidebar .active {
+                font-weight: 450;
+                color: #007bff;
+                border-left: 3px solid #007bff;
+            }
+
+            .sidebar .nav-link:hover {
+                font-weight: 400;
+                color: #4da3ff;
+                border-left: 3px solid #4da3ff;
+            }
+        </style>
+    </head>
+
+    <body>
+        {% load random_icon %}
+        <nav id="nbar" class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
+            <a class="navbar-brand" href="{% url 'booking-page' %}">
+                <img class="logo my-1" src="{% static 'images/logo.png' %}" height="45">
+            </a>
+            <!-- <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link my-1" href="{% url 'booking-page' %}"><i class="fa fa-home"></i></a>
+                </li>
+                <li class="nav-item {% if nbar == 'booking-page' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'booking-page' %}">Booking</a>
+                </li>
+                <li class="nav-item {% if nbar == 'agent-transport-page' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'agent-transport-page' %}">สายเรือ</a>
+                </li>
+                <li class="nav-item {% if nbar == 'summary-page' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'summary-page' %}">SUMMARY</a>
+                </li>
+            </ul> -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle lead" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-{{ ''|random_icon }}"></i>&nbsp;&nbsp;<b>{{ request.user.username }}</b>&nbsp;
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-power-off"></i>&nbsp;Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        
+        <div class="container-fluid">
+            <div class="row">
+                <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
+                    <div class="sidebar-sticky px-3">
+                        <h6 class="sidebar-heading">
+                            <span>Home</span>
+                        </h6>
+                        <a class="nav-link active" href="#">
+                            <i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Operation</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'booking-page' %}">
+                            <i class="fa fa-truck-loading"></i>&nbsp; Booking
+                        </a>
+                        <a class="nav-link" href="{% url 'agent-transport-page' %}">
+                            <i class="fa fa-shipping-fast"></i>&nbsp; สายเรือ
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Finance</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'summary-page' %}">
+                            <i class="fa fa-chart-line"></i>&nbsp; Summary
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Database</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'customer-page' %}">
+                            <i class="fa fa-briefcase"></i>&nbsp; Customer
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user-alt"></i>&nbsp; Employee
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-truck"></i>&nbsp; Truck
+                        </a>
+                    </div>
+                </aside>
+
+
+                <main class="col">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
+                        <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
+                        <div class="mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-primary">
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        
+    </body>
+</html>
