@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^api/save-edit-agent-transports/$', agent_transport_edit_view.api_save_edit_agent_transport, name='api-save-edit-agent-transports'),
     url(r'^api/delete-agent-transports/$', agent_transport_delete_view.api_delete_agent_transports, name='api-delete-agent-transports'),
 
+    url(r'^api/change-state-agent-transport/$', agent_transport_edit_view.api_change_state_agent_transport, name='api-change-state-agent-transport'),
+
     url(r'^print/(?P<pk>\d+)/$', AgentTransportPrintView.as_view(), name='agent-transport-print'),
 
     # Summary

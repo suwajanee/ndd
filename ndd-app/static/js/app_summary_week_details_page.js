@@ -108,18 +108,18 @@ var summary_week_details = new Vue( {
                     gate = 0
                 }
 
-                var total = (drayage + gate).toFixed(2)
-                var withholding = (drayage * (1 / 100)).toFixed(2)
-                var check = (total - withholding).toFixed(2)
+                var total = drayage + gate
+                var withholding = drayage * (1 / 100)
+                var check = total - withholding
                     
                 drayage_total += drayage
                 gate_total += gate
 
-                this.total_list.push(parseFloat(total))
-                this.withholding_list.push(parseFloat(withholding))
-                this.check_list.push(parseFloat(check))
+                this.total_list.push(total)
+                this.withholding_list.push(withholding)
+                this.check_list.push(check)
             }
-            this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list).toFixed(2), sumArray(this.check_list).toFixed(2)]
+            this.sum_total = [drayage_total, gate_total, "", sumArray(this.total_list), sumArray(this.withholding_list), sumArray(this.check_list)]
         },
 
         editWeekDetails() {

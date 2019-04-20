@@ -81,3 +81,21 @@ def api_save_edit_bookings(request):
 
         return api_filter_bookings(request)
     return JsonResponse('Error', safe=False)          
+
+@csrf_exempt
+def api_change_state_booking(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            booking_id = req['booking_id']
+            state = req['state']
+
+            booking = Booking.objects.get(pk=booking_id)
+            if booking.status == '3' and state == '3':
+                state = '1'
+            booking.status = state
+            booking.save()
+
+            return JsonResponse(booking.status, safe=False)
+    return JsonResponse('Error', safe=False)

@@ -209,6 +209,12 @@ var booking_table = new Vue( {
                 this.saving = false
             }
         },
+        changeStateBooking(id, state) {
+            api("/booking/api/change-state-booking/", "POST", {booking_id: id, state: state}).then((data) => {
+                var booking = this.bookings.find(x => x.id == id)
+                booking.status = data
+            })
+        },
 
         selectAll() {
             this.checked_bookings = []
