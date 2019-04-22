@@ -18,7 +18,7 @@ class SummaryPrintView(TemplateView):
         context = {}
         context['static_dir'] = STATICFILES_DIRS[0]
         invoice = get_object_or_404(Invoice, pk=pk)
-        context['invoice'] = invoice
+        # context['invoice'] = invoice
         context['invoice_no'] = invoice.invoice_no.split(',')
 
         context['diesel_rate'] = invoice.customer_week.week.diesel_rate
@@ -33,7 +33,9 @@ class SummaryPrintView(TemplateView):
 
         rows = len(invoice_details)
         num = 0
-            
+
+        booking_len = []
+        customer_len = []   
         for detail in invoice_details:
             customer_name = detail.work.shipper.name
 
@@ -44,15 +46,19 @@ class SummaryPrintView(TemplateView):
                     other['num'] = num = num + 1
 
             if 'extra' in detail.detail:
-                detail.detail['booking_len'] = len(detail.work.booking_no) + len(detail.detail['extra'])
+                booking_len.append(len(detail.work.booking_no) + len(detail.detail['extra']))
             else:
-                detail.detail['booking_len'] = len(detail.work.booking_no)
+                booking_len.append(len(detail.work.booking_no))
 
             if 'customer_name' in invoice.detail:
-                detail.detail['customer_len'] = len(invoice.detail['customer_name'])
+                customer_len.append(len(invoice.detail['customer_name']))
             else:
-                detail.detail['customer_len'] = len(customer_name)
+                customer_len.append(len(customer_name))
 
+        invoice.detail['booking_len'] = max(booking_len)
+        invoice.detail['customer_len'] = max(customer_len)
+
+        context['invoice'] = invoice
         context['invoice_details'] = invoice_details
         context['rows'] = rows + 2
 
