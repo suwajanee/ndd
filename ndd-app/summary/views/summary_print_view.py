@@ -33,13 +33,25 @@ class SummaryPrintView(TemplateView):
 
         rows = len(invoice_details)
         num = 0
-
+            
         for detail in invoice_details:
+            customer_name = detail.work.shipper.name
+
             detail.detail['num'] = num = num + 1
             if 'other' in detail.drayage_charge:
                 rows += len(detail.drayage_charge['other'])
                 for other in detail.drayage_charge['other']:
                     other['num'] = num = num + 1
+
+            if 'extra' in detail.detail:
+                detail.detail['booking_len'] = len(detail.work.booking_no) + len(detail.detail['extra'])
+            else:
+                detail.detail['booking_len'] = len(detail.work.booking_no)
+
+            if 'customer_name' in invoice.detail:
+                detail.detail['customer_len'] = len(invoice.detail['customer_name'])
+            else:
+                detail.detail['customer_len'] = len(customer_name)
 
         context['invoice_details'] = invoice_details
         context['rows'] = rows + 2
@@ -57,12 +69,6 @@ class SummaryEvergreenPrintView(TemplateView):
         context['invoice'] = invoice
 
         context['diesel_rate'] = invoice.customer_week.week.diesel_rate
-        context['form'] = FormDetail.objects.all().order_by('pk').first().form_detail
-
-        if invoice.customer_week.customer_custom:
-            context['option'] = invoice.customer_week.customer_custom.option
-            if invoice.customer_week.customer_custom.form:
-                context['form'] = invoice.customer_week.customer_custom.form.form_detail
 
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_agent_transport__date', 'pk')
 
