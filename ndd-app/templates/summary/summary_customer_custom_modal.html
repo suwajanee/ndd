@@ -49,6 +49,14 @@
                         </div>
                         <label class="form-control" for="2_inv">2 INV. (แยก Drayage - Gate)</label>
                     </div>
+                    <div class="input-group mb-1 col-md-8 container">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                            <input type="radio" id="extra" v-model="customer_setting_modal.option" value="extra"> 
+                            </div>
+                        </div>
+                        <label class="form-control" for="extra">ข้อมูลเพิ่มเติม (Booking)</label>
+                    </div>
                     <template v-if="principal_type=='normal'">
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">

@@ -109,7 +109,7 @@ var summary_invoice_details = new Vue( {
 
             }
 
-            this.drayage_total = total
+            this.drayage_total = parseFloat(total.toFixed(2))
             return this.drayage_total
         },
 
@@ -131,7 +131,7 @@ var summary_invoice_details = new Vue( {
                 total += result
             }
 
-            this.gate_total = total
+            this.gate_total = parseFloat(total.toFixed(2))
             return this.gate_total
         }
     },
