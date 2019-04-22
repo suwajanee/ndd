@@ -140,18 +140,12 @@
                             {{ forloop.counter }} 
                         </td>
 
-                        {% if invoice.detail.customer_name|length > 34 %}
+                        {% if inv_detail.detail.customer_len > 34 %}
                             <td class="text-left px-3" style="width: 7in">
-                        {% elif invoice.detail.customer_name|length > 22 %}
+                        {% elif inv_detail.detail.customer_len > 22 %}
                             <td class="text-left px-3" style="width: 5.5in">
-                        {% elif invoice.detail.customer_name and invoice.detail.customer_name|length < 20 and inv_detail.work.booking_no|length < 15 and inv_detail.detail.remark|length > 30 %}
-                            <td class="text-left px-3" style="width: 5in">
-                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 34 %}
-                            <td class="text-left px-3" style="width: 7in">
-                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
-                            <td class="text-left px-3" style="width: 5.5in">
-                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length < 20 and inv_detail.work.booking_no|length < 15 and inv_detail.detail.remark|length > 30 %}
-                            <td class="text-left px-3" style="width: 5in">
+                        {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                            <td class="text-left px-3" style="width: 4in">
                         {% else %}
                             <td class="text-left px-3" >
                         {% endif %}
@@ -162,22 +156,18 @@
                             {% endif %}
                         </td>
 
-                        {% if invoice.detail.customer_name|length > 22 %}
-                            <td>
-                        {% elif invoice.detail.customer_name and invoice.detail.customer_name|length < 20 and inv_detail.work.booking_no|length < 15 and inv_detail.detail.remark|length > 30 %}
-                            <td class="px-3" style="width: 4.5in">
-                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
-                            <td>
-                        {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length < 20 and inv_detail.work.booking_no|length < 15 and inv_detail.detail.remark|length > 30 %}
-                            <td class="px-3" style="width: 4.5in">
-                        {% elif inv_detail.work.booking_no|length > 40 %}
-                            <td style="width: 7.5in">
-                        {% elif inv_detail.work.booking_no|length > 25 %}
-                            <td style="width: 6in">
+                        {% if inv_detail.detail.customer_len > 22 %}
+                            <td class="px-3">
+                        {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                            <td class="px-3">
+                        {% elif inv_detail.detail.booking_len > 40 %}
+                            <td class="px-3" style="width: 7.5in">
+                        {% elif inv_detail.detail.booking_len > 15 %}
+                            <td class="px-3" style="width: 6in">
                         {% else %}
-                            <td>
+                            <td class="px-3">
                         {% endif %}
-                            {{ inv_detail.work.booking_no }}
+                            {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
                         </td>
 
                         <td style="width: 2.5in">
@@ -241,14 +231,15 @@
                                     {{forloop.parentloop.counter}}.{{ forloop.counter }} 
                                 </td>
                                
-                            {% if invoice.detail.customer_name and invoice.detail.customer_name|length < 20 and inv_detail.work.booking_no|length < 15 and other.other_remark|length > 30 %}
-                                <td class="text-left px-3" style="width: 5in">
-                            {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length < 20 and inv_detail.work.booking_no|length < 15 and other.other_remark|length > 30 %}
-                                <td class="text-left px-3" style="width: 5in">
+                            {% if inv_detail.detail.customer_len > 34 %}
+                                <td class="text-left px-3" style="width: 7in">
+                            {% elif inv_detail.detail.customer_len > 22 %}
+                                <td class="text-left px-3" style="width: 5.5in">
+                            {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                                <td class="text-left px-3" style="width: 4in">
                             {% else %}
-                                <td class="text-left px-3">
+                                <td class="text-left px-3" >
                             {% endif %}
-
                                     {% if invoice.detail.customer_name %}
                                         {{ invoice.detail.customer_name }}
                                     {% else %}
@@ -256,14 +247,18 @@
                                     {% endif %}
                                 </td>
                             
-                            {% if invoice.detail.customer_name and invoice.detail.customer_name|length < 20 and inv_detail.work.booking_no|length < 15 and other.other_remark|length > 30 %}
-                                <td class="px-3" style="width: 4.5in">
-                            {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length < 20 and inv_detail.work.booking_no|length < 15 and other.other_remark|length > 30 %}
-                                <td class="px-3" style="width: 4.5in">
+                            {% if inv_detail.detail.customer_len > 22 %}
+                                <td class="px-3">
+                            {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                                <td class="px-3">
+                            {% elif inv_detail.detail.booking_len > 40 %}
+                                <td class="px-3" style="width: 7.5in"> 
+                            {% elif inv_detail.detail.booking_len > 15 %}
+                                <td class="px-3" style="width: 6in">
                             {% else %}
-                                <td>
+                                <td class="px-3">
                             {% endif %}
-                                    {{ inv_detail.work.booking_no }}
+                                    {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
                                 </td>
                                 
                                 <td style="width: 2.5in">
@@ -462,18 +457,15 @@
                                 {{ forloop.counter }} 
                             </td>
 
-                            {% if invoice.detail.customer_name|length > 34 %}
+                            {% if inv_detail.detail.customer_len > 34 %}
                                 <td class="text-left px-3" style="width: 7in">
-                            {% elif invoice.detail.customer_name|length > 22 %}
+                            {% elif inv_detail.detail.customer_len > 22 %}
                                 <td class="text-left px-3" style="width: 5.5in">
-                            {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 34 %}
-                                <td class="text-left px-3" style="width: 7in">
-                            {% elif not invoice.detail.customer_name and inv_detail.work.shipper.name|length > 22 %}
-                                <td class="text-left px-3" style="width: 5.5in">
+                            {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                                <td class="text-left px-3" style="width: 4in">
                             {% else %}
                                 <td class="text-left px-3" >
                             {% endif %}
-
                                 {% if invoice.detail.customer_name %}
                                     {{ invoice.detail.customer_name }}
                                 {% else %}
@@ -481,14 +473,18 @@
                                 {% endif %}
                             </td>
 
-                            {% if inv_detail.work.shipper.name|length > 22 or invoice.detail.customer_name|length > 22 %}
-                                <td>
-                            {% elif inv_detail.work.booking_no|length > 25 %}
-                                <td style="width: 6in">
+                            {% if inv_detail.detail.customer_len > 22 %}
+                                <td class="px-3">
+                            {% elif inv_detail.detail.customer_len < 22 and inv_detail.detail.booking_len < 15 %}
+                                <td class="px-3">
+                            {% elif inv_detail.detail.booking_len > 40 %}
+                                <td class="px-3" style="width: 7.5in"> 
+                            {% elif inv_detail.detail.booking_len > 15 %}
+                                <td class="px-3" style="width: 6in">
                             {% else %}
-                                <td>
+                                <td class="px-3">
                             {% endif %}
-                                {{ inv_detail.work.booking_no }}
+                                {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
                             </td>
 
                             <td style="width: 2.5in">

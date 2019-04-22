@@ -171,6 +171,8 @@ def api_edit_invoice_details(request):
 
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'routing', True)
 
+                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'extra', True)
+
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', True)

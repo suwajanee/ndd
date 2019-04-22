@@ -90,6 +90,8 @@
                         <th rowspan=2 class="border-dark align-middle">
                             {{ booking_field[customer_form[0]] }}
                         </th>
+                        <th v-if="customer_custom.option=='extra' & table_edit" rowspan=2 class="border-dark align-middle">
+                        </th>
 
                         <th colspan=2 class="border-dark align-middle py-1">
                             Vessel/Truck Routing
@@ -163,12 +165,17 @@
                                 {{ inv_detail.work.shipper.name }}
                             </td>
                             <td v-else></td>
-
-                            <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no"> 
-                                <template v-else>
-                                    {{ inv_detail.work.booking_no }}
-                                </template>
+                            
+                            <template v-if="table_edit">
+                                <td class="align-middle">
+                                    <input class="form-control text-center" v-model="inv_detail.work.booking_no"> 
+                                </td>
+                                <td v-if="customer_custom.option=='extra'" class="align-middle">
+                                    <input class="form-control text-center" v-model="inv_detail.detail.extra"> 
+                                </td>
+                            </template>
+                            <td v-else class="align-middle">
+                                {{ inv_detail.work.booking_no }}<template v-if="inv_detail.detail.extra">/{{ inv_detail.detail.extra }}</template>
                             </td>
 
                             <td class="align-middle">
@@ -359,8 +366,16 @@
                                 {{ inv_detail.work.shipper.name }}
                             </td>
 
-                            <td class="align-middle">
-                                {{ inv_detail.work.booking_no }}
+                            <template v-if="table_edit">
+                                <td class="align-middle">
+                                    {{ inv_detail.work.booking_no }}
+                                </td>
+                                <td v-if="customer_custom.option=='extra'" class="align-middle">
+                                    {{ inv_detail.detail.extra }}
+                                </td>
+                            </template>
+                            <td v-else class="align-middle">
+                                {{ inv_detail.work.booking_no }}<template v-if="inv_detail.detail.extra">/{{ inv_detail.detail.extra }}</template>
                             </td>
                             <td class="align-middle">
                                 {{ inv_detail.work.pickup_from }}
@@ -446,6 +461,7 @@
                         </td>
 
                         <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="table-secondary align-middle">Total</td>
+                        <td v-else-if="customer_custom.option=='extra' & table_edit" colspan=9 class="table-secondary align-middle">Total</td>
                         <td v-else colspan=8 class="table-secondary align-middle">Total</td>
 
                         <td class="text-right table-secondary align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
@@ -467,6 +483,7 @@
                     <tr class="text-center table-secondary font-weight-bold">
                         <td v-if="! table_edit"></td>
                         <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="align-middle">G.Total</td>
+                        <td v-if="customer_custom.option=='extra' & table_edit" colspan=9 class="align-middle">G.Total</td>
                         <td v-else colspan=8 class="align-middle">G.Total</td>
 
                         <td v-if="customer_form.indexOf('gate_charge') > 0" colspan=2 class="text-right align-middle">{{ drayageTotal+gateTotal|currencyCommas }}</td>

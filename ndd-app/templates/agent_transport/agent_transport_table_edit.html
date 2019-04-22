@@ -33,6 +33,7 @@
                         <td>
                             <select class="custom-select status py-1 px-2" v-model="agent_transport.status" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(agent_transport)">
                                 <option value="1"> - </option>
+                                <option value="3"> Pickup </option>
                                 <option value="2"> Finished </option>
                                 <option value="0"> Cancel </option>
                             </select>
