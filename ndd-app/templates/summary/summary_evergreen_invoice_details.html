@@ -343,8 +343,8 @@
                             <td v-if="customer_main.work_type=='agent-transport'" class="border-light"></td>
                             <td class="border-light align-middle">
                                 <div v-if="table_edit" class="btn-group">
-                                    <button class="btn btn-lg btn-outline-danger" @click="textColorOtherCharge(inv_detail.id, other_index, 0)"></button>
-                                    <button class="btn btn-lg btn-outline-primary" @click="textColorOtherCharge(inv_detail.id, other_index, 1)"></button>
+                                    <button class="btn btn-lg" :class="{'btn-outline-danger': other.color=='1', 'btn-danger': other.color=='0' }" @click="textColorOtherCharge(inv_detail.id, other_index, 0)"></button>
+                                    <button class="btn btn-lg" :class="{'btn-outline-primary': other.color=='0', 'btn-primary': other.color=='1' }" @click="textColorOtherCharge(inv_detail.id, other_index, 1)"></button>
                                 </div>
                             </td>
                             <td v-if="table_edit" class="align-middle border-light p-1">
