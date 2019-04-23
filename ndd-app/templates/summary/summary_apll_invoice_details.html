@@ -95,7 +95,7 @@
                     <template v-for="(inv_detail, index) in invoice_detail_list">
                         <tr class="text-center">
                             <td v-if="! table_edit" class="align-middle p-1" >
-                                <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id, inv_detail.work.id)"><i class="fa fa-trash-alt"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id)"><i class="fa fa-trash-alt"></i></button>
                             </td>
                             <td>
                                 {{ index + 1 }}

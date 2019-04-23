@@ -342,6 +342,18 @@ var summary_invoice_details = new Vue( {
             })
         },
 
+        tryCatchTotal(val) {
+            try {
+                var result = eval(val)
+            }
+            catch(err) {
+                var result = 0
+            }
+            if(isNaN(result)){
+                result = 0
+            }
+            return result
+        },
         deleteInvoiceDetail(id, work_id) {
             if (confirm('Are you sure?')){
                 var invoice_detail_id = [id]
@@ -361,17 +373,26 @@ var summary_invoice_details = new Vue( {
                     var detail = invoice_details[detail_index]
                     var drayage_charge = detail.drayage_charge
 
-                    drayage_total = eval(drayage_total - eval(drayage_charge.drayage))
+                    var drayage = this.tryCatchTotal(drayage_charge.drayage)
+                    drayage_total = eval(drayage_total - eval(drayage))
+
                     if(drayage_charge.other) {
                         for(other_index in drayage_charge.other) {
-                            drayage_total = eval(drayage_total - eval(drayage_charge.other[other_index].other_charge))
+                            var other = this.tryCatchTotal(drayage_charge.other[other_index].other_charge)
+                            drayage_total = eval(drayage_total - eval(other))
                         }
                     }
                     if(detail.gate_charge) {
-                        gate_total = eval(gate_total - eval(detail.gate_charge.gate))
+                        var gate = this.tryCatchTotal(detail.gate_charge.gate)
+                        gate_total = eval(gate_total - eval(gate))
+                        
+                        if(detail.gate_charge.vat) {
+                            var vat = this.tryCatchTotal(detail.gate_charge.vat)
+                            gate_total = eval(gate_total - eval(vat))
+                        }
                     }
                 }
-       
+
                 var post_data = {
                     invoice_id: this.invoice_id,
                     invoice_detail_id: invoice_detail_id,
