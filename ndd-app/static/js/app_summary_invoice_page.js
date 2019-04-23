@@ -60,6 +60,16 @@ var summary_invoice = new Vue( {
                 this.invoices = data.invoice
                 summary_invoice_details.getWorkList()
                 this.totalCalc()
+
+                for(inv in this.invoices) {
+                    var inv_id = this.invoices[inv]
+                    if(inv_id.id == summary_invoice_details.invoice_id) {
+                        this.$set(inv_id.detail, 'active', true)
+                    }
+                    else {
+                        this.$set(inv_id.detail, 'active', false)
+                    }
+                }
             })
         },
         totalCalc(){
@@ -112,6 +122,16 @@ var summary_invoice = new Vue( {
         selectInvoice(invoice) {
             summary_invoice_details.invoice_details = true                
             summary_invoice_details.reload(invoice)
+
+            for(inv in this.invoices) {
+                var inv_id = this.invoices[inv]
+                if(inv_id.id == invoice.id) {
+                    this.$set(inv_id.detail, 'active', true)
+                }
+                else {
+                    this.$set(inv_id.detail, 'active', false)
+                }
+            }
         },
         
     }
