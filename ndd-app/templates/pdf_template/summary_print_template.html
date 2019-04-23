@@ -157,17 +157,17 @@
                         </td>
 
                         {% if invoice.detail.customer_len > 22 %}
-                            <td class="px-3">1
+                            <td class="px-3">
                         {% elif invoice.detail.customer_len < 22 and invoice.detail.booking_len < 15 %}
-                            <td class="px-3">2
+                            <td class="px-3">
                         {% elif invoice.detail.booking_len > 40 %}
-                            <td class="px-3" style="width: 7.5in">3
+                            <td class="px-3" style="width: 7.5in">
                         {% elif invoice.detail.booking_len > 15 %}
-                            <td class="px-3" style="width: 6in">4
+                            <td class="px-3" style="width: 6in">
                         {% else %}
-                            <td class="px-3">5
+                            <td class="px-3">
                         {% endif %}
-                            {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
+                            {{ inv_detail.work.booking_no }}
                         </td>
 
                         <td style="width: 2.5in">
@@ -248,17 +248,17 @@
                                 </td>
                             
                             {% if invoice.detail.customer_len > 22 %}
-                                <td class="px-3">1
+                                <td class="px-3">
                             {% elif invoice.detail.customer_len < 22 and invoice.detail.booking_len < 15 %}
-                                <td class="px-3">2
+                                <td class="px-3">
                             {% elif invoice.detail.booking_len > 40 %}
-                                <td class="px-3" style="width: 7.5in">3
+                                <td class="px-3" style="width: 7.5in">
                             {% elif invoice.detail.booking_len > 15 %}
-                                <td class="px-3" style="width: 6in">4
+                                <td class="px-3" style="width: 6in">
                             {% else %}
-                                <td class="px-3">5
+                                <td class="px-3">
                             {% endif %}
-                                    {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
+                                    {{ inv_detail.work.booking_no }}
                                 </td>
                                 
                                 <td style="width: 2.5in">
@@ -474,17 +474,17 @@
                             </td>
 
                             {% if invoice.detail.customer_len > 22 %}
-                                <td class="px-3">1
+                                <td class="px-3">
                             {% elif invoice.detail.customer_len < 22 and invoice.detail.booking_len < 15 %}
-                                <td class="px-3">2
+                                <td class="px-3">
                             {% elif invoice.detail.booking_len > 40 %}
-                                <td class="px-3" style="width: 7.5in">3
+                                <td class="px-3" style="width: 7.5in">
                             {% elif invoice.detail.booking_len > 15 %}
-                                <td class="px-3" style="width: 6in">4
+                                <td class="px-3" style="width: 6in">
                             {% else %}
-                                <td class="px-3">5
+                                <td class="px-3">
                             {% endif %}
-                                {{ inv_detail.work.booking_no }}{% if inv_detail.detail.extra %}/{{ inv_detail.detail.extra }}{% endif %}
+                                {{ inv_detail.work.booking_no }}
                             </td>
 
                             <td style="width: 2.5in">

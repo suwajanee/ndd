@@ -79,7 +79,7 @@
                         <td class="text-center">
                             {{ index + 1 }}
                         </td>
-                        <td class="cell-click" @click="selectInvoice(inv)">
+                        <td class="cell-click" :class="{'bg-light': inv.detail.active==true }" @click="selectInvoice(inv)">
                             {{ inv.invoice_no }}
                         </td>
                         <td class="text-right">

@@ -15,12 +15,14 @@
                             <th>CNTR No</th>
                             <th>Drayage Charge</th>
                             <th>Gate Charge</th>
+                            <th>Vat</th>
                         </thead>
                         <tbody>
                             <td><textarea class="form-control" rows=10 v-model="routing"></textarea></td>
                             <td><textarea class="form-control" rows=10 v-model="container"></textarea></td>
                             <td><textarea class="form-control" rows=10 v-model="drayage"></textarea></td>
                             <td><textarea class="form-control" rows=10 v-model="gate"></textarea></td>
+                            <td><textarea class="form-control" rows=10 v-model="vat"></textarea></td>
                         </tbody>
                     </table>
                 </div>
@@ -43,6 +45,7 @@
             container: '',
             drayage: '',
             gate: '',
+            vat: '',
         },
 
         methods: {
@@ -51,24 +54,52 @@
                 var container = this.container.split('\n')
                 var drayage = this.drayage.split('\n')
                 var gate = this.gate.split('\n')
+                var vat = this.vat.split('\n')
 
                 for(invoice_detail in summary_invoice_details.invoice_detail_list) {
                     var status = false
-                    var details = summary_invoice_details.invoice_detail_list[invoice_detail].detail
+                    var details = summary_invoice_details.invoice_detail_list[invoice_detail]
 
-                    if(summary_invoice_details.invoice_detail_list[invoice_detail].work.container_no.trim() == container[invoice_detail].trim()) {
+                    if(details.work.container_no.trim() == container[invoice_detail].trim()) {
                         status = true
                     }
                    
                     if(status) {
-                        details.routing = routing[invoice_detail]
+                        details.detail.routing = routing[invoice_detail]
+                        if(!drayage[invoice_detail] || drayage[invoice_detail] == ""){
+                            drayage[invoice_detail] = ''
+                        }
+                        else {
+                            if(drayage[invoice_detail].trim() == '-') {
+                                drayage[invoice_detail] = ''
+                            }
+                        }
 
-                        summary_invoice_details.invoice_detail_list[invoice_detail].drayage_charge.drayage = drayage[invoice_detail].replace(',', '')
-                        summary_invoice_details.invoice_detail_list[invoice_detail].gate_charge.gate = gate[invoice_detail].replace(',', '')
+                        if(!gate[invoice_detail] || gate[invoice_detail] == ""){
+                            gate[invoice_detail] = ''
+                        }
+                        else {
+                            if(gate[invoice_detail].trim() == '-') {
+                                gate[invoice_detail] = ''
+                            }
+                        }
+
+                        if(!vat[invoice_detail] || vat[invoice_detail] == ""){
+                            vat[invoice_detail] = ''
+                        }
+                        else {
+                            if(vat[invoice_detail].trim() == '-') {
+                                vat[invoice_detail] = ''
+                            }
+                        }
+
+                        details.drayage_charge.drayage = drayage[invoice_detail].replace(',', '')
+                        details.gate_charge.gate = gate[invoice_detail].replace(',', '')
+                        details.gate_charge.vat = vat[invoice_detail].replace(',', '')
                     }
                 }
                 $('#modelAddFieldAPLL').modal('hide')
-            }
+            },
         }
     })
 

@@ -80,6 +80,9 @@
                             Gate Charge
                         </th>
                         <th class="border-dark align-middle">
+                            Vat
+                        </th>
+                        <th class="border-dark align-middle">
                             Remark
                         </th>
                         <th class="align-middle table-light">
@@ -92,7 +95,7 @@
                     <template v-for="(inv_detail, index) in invoice_detail_list">
                         <tr class="text-center">
                             <td v-if="! table_edit" class="align-middle p-1" >
-                                <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id, inv_detail.work.id)"><i class="fa fa-trash-alt"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" @click="deleteInvoiceDetail(inv_detail.id)"><i class="fa fa-trash-alt"></i></button>
                             </td>
                             <td>
                                 {{ index + 1 }}
@@ -161,6 +164,15 @@
                                 </template>
                             </td>
 
+                            <td class="text-right">
+                                <template v-if="table_edit">
+                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.vat" > 
+                                </template>
+                                <template v-else>
+                                    {{ eval(inv_detail.gate_charge.vat)|currencyCommas }}
+                                </template>
+                            </td>
+
                             <td class="text-primary">
                                 <template v-if="table_edit">
                                     <input class="form-control text-center" v-model="inv_detail.detail.remark" > 
@@ -188,7 +200,7 @@
                         <td v-else colspan=7 class="table-secondary">Total</td>
 
                         <td class="text-right table-secondary" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
-                        <td class="text-right table-secondary" :class="{'alert-warning': gateTotal != invoice.gate_total}">{{ gateTotal|currencyCommas }}</td>
+                        <td colspan=2 class="text-right table-secondary" :class="{'alert-warning': gateTotal != invoice.gate_total}">{{ gateTotal|currencyCommas }}</td>
                         <td class="table-secondary"></td>
                     </tr>
 
@@ -197,7 +209,7 @@
 
                         <td colspan=7>G.Total</td>
 
-                        <td colspan=2 class="text-right">{{ drayageTotal + gateTotal|currencyCommas }}</td>
+                        <td colspan=3 class="text-right">{{ drayageTotal + gateTotal|currencyCommas }}</td>
                         <td></td>
                     </tr>
                 </tbody>
