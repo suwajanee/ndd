@@ -18,7 +18,6 @@ class SummaryPrintView(TemplateView):
         context = {}
         context['static_dir'] = STATICFILES_DIRS[0]
         invoice = get_object_or_404(Invoice, pk=pk)
-        # context['invoice'] = invoice
         context['invoice_no'] = invoice.invoice_no.split(',')
 
         context['diesel_rate'] = invoice.customer_week.week.diesel_rate
@@ -45,10 +44,7 @@ class SummaryPrintView(TemplateView):
                 for other in detail.drayage_charge['other']:
                     other['num'] = num = num + 1
 
-            if 'extra' in detail.detail:
-                booking_len.append(len(detail.work.booking_no) + len(detail.detail['extra']))
-            else:
-                booking_len.append(len(detail.work.booking_no))
+            booking_len.append(len(detail.work.booking_no))
 
             if 'customer_name' in invoice.detail:
                 customer_len.append(len(invoice.detail['customer_name']))

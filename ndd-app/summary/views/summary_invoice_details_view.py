@@ -38,11 +38,11 @@ def api_add_invoice_details(request):
             invoice = Invoice.objects.get(pk=invoice_id)
             
             if customer_type == 'normal':
-                bookings = Booking.objects.filter(pk__in=work_list)
-                for booking in bookings:
+                for work_id in work_list:
+                    work = Booking.objects.get(pk=work_id)
                     data = {
                         'invoice': invoice,
-                        'work_normal': booking,
+                        'work_normal': work,
                         'drayage_charge': {
                             'drayage': '',
                         },
@@ -57,11 +57,11 @@ def api_add_invoice_details(request):
                     invoice_detail.save()
                 status = booking_summary_status(work_list, '1')
             elif customer_type == 'agent-transport':
-                agent_transports = AgentTransport.objects.filter(pk__in=work_list)
-                for agent_transport in agent_transports:
+                for work_id in work_list:
+                    work = AgentTransport.objects.get(pk=work_id)
                     data = {
                         'invoice': invoice,
-                        'work_agent_transport': agent_transport,
+                        'work_agent_transport': work,
                         'drayage_charge': {
                             'drayage': '',
                         },
@@ -171,13 +171,13 @@ def api_edit_invoice_details(request):
 
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'routing', True)
 
-                invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'extra', True)
-
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'job_no', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'from', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'date', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'size', True)
+
+                invoice_detail.gate_charge = check_key_detail(invoice_detail.gate_charge, detail['gate_charge'], 'vat', True)
 
                 if 'other' in detail['drayage_charge']:
                     invoice_detail.drayage_charge = check_key_detail(invoice_detail.drayage_charge, detail['drayage_charge'], 'other', True)

@@ -117,7 +117,8 @@ var summary_invoice_details = new Vue( {
             this.not_save = false
             var total = 0
             for(detail_index in this.invoice_detail_list) {
-                var gate = this.invoice_detail_list[detail_index].gate_charge.gate = this.invoice_detail_list[detail_index].gate_charge.gate.replace(',', '')
+                var gate_charge = this.invoice_detail_list[detail_index].gate_charge
+                var gate = gate_charge.gate = gate_charge.gate.replace(',', '')
                 try {
                     var result = eval(gate)
                 }
@@ -128,7 +129,23 @@ var summary_invoice_details = new Vue( {
                 if(isNaN(result)){
                     result = 0
                 }
+
                 total += result
+
+                if('vat' in gate_charge) {
+                    var vat = gate_charge.vat = gate_charge.vat.replace(',', '')
+                    try {
+                        var result_vat = eval(vat)
+                    }
+                    catch(err) {
+                        var result_vat = 0
+                        this.not_save = true
+                    }
+                    if(isNaN(result_vat)){
+                        result_vat = 0
+                    }
+                    total += result_vat
+                }
             }
 
             this.gate_total = parseFloat(total.toFixed(2))
