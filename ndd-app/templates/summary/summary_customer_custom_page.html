@@ -74,7 +74,6 @@
                             <tr v-if="customer.option">
                                 <td class="text-right"><b>Option :</b></td>
                                 <td v-if="customer.option=='2_inv'">2 INV. (แยก Drayage - Gate)</td>
-                                <td v-else-if="customer.option=='extra'">ข้อมูลเพิ่มเติม (Booking)</td>
                                 <td v-else class="w-75">{{ customer.option.toUpperCase() }}</td>
                             </tr>
                             <tr v-if="customer.form">
