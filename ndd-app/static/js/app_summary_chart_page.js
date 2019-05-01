@@ -109,7 +109,6 @@ var summary_chart = new Vue( {
             })
         },
         addDataLine(data) {
-            console.log(data)
             for (var i = 0; i < data.length; i++) {
                 this.dataPoints.push({
                     x: new Date(this.year, i),
