@@ -4,7 +4,6 @@
     <head>
         <title>{% block title %}NDD Dashboard{% endblock %}</title>
 
-        {% block extra_head %}{% endblock %}
         
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -101,7 +100,7 @@
         </nav>
 
         
-        <div class="container-fluid">
+        <div id="dashboard-page" class="container-fluid">
             <div class="row">
                 <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
                     <div class="sidebar-sticky px-3">
@@ -144,7 +143,7 @@
                     </div>
                 </aside>
 
-
+                {% verbatim %}
                 <main class="col">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
                         <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
@@ -153,8 +152,151 @@
                                 Export
                             </button>
                         </div>
+                        
+                    </div>
+                    <div class="card-group">
+                        <div class="card border rounded">
+                            <div class="card-body text-muted">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex no-block">    
+                                            <div class="">
+                                                <h1 class="font-light my-0 text-dark">{{ booking_total }}</h1>
+                                                <p class="my-0">Daily Loading Works</p>
+                                            </div>
+                                            <div class="my-1 ml-auto">
+                                                <i class="fa fa-truck-loading fa-3x"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="progress" 
+                                            style="height: 8px;"
+                                            data-toggle="tooltip" data-html="true" 
+                                            :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nCancel: ' + booking_cancel "
+                                        >
+                                            <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + booking_completed_width + '%'"></div>
+                                            <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + booking_pending_width + '%'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer text-muted text-right">
+                                <a href="/booking" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- Column -->
+                        <!-- Column -->
+
+                        <div class="card mx-4 border rounded">
+                            <div class="card-body text-muted">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex no-block">
+                                            
+                                            <div class="">
+                                                <h1 class="font-light my-0 text-dark">{{ agent_total }}</h1>
+                                                <p class="my-0">Daily Agent Transport Works</p>
+                                            </div>
+                                            <div class="my-1 ml-auto">
+                                                <i class="fa fa-shipping-fast fa-3x"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="progress" 
+                                            style="height: 8px;"
+                                            data-toggle="tooltip" data-html="true" 
+                                            :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nCancel: ' + agent_cancel "
+                                        >
+                                            <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + agent_completed_width + '%'"></div>
+                                            <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + agent_pending_width + '%'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted text-right">
+                                <a href="/agent-transport" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                            </div>    
+                        </div>
+                            <div class="card border rounded">
+                                <div class="card-body text-muted"></div>
+                            </div>
+
+                        
+                            <!-- <div class="card"></div> -->
+                        <!-- Column -->
+                        <!-- Column -->
+                        <!-- <div class="card">
+                                <div class="card-body text-muted">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="d-flex no-block">
+                                                
+                                                <div class="">
+                                                    <h1 class="font-light my-0 text-dark">{{ booking_total }}</h1>
+                                                    <p class="my-0">Daily Normal Works</p>
+                                                </div>
+                                                <div class="my-1 ml-auto">
+                                                    <i class="fa fa-truck-loading fa-3x"></i> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="progress" style="height: 10px;">
+                                                <div class="progress-bar bg-success" role="progressbar" 
+                                                    :style="'width: '+booking_completed + '%'"
+                                                >
+                                                </div>
+                                                <div class="progress-bar bg-warning" role="progressbar" :style="'width: '+booking_pending+'%'"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        <!-- Column -->
+                        <!-- Column -->
+                        <!-- <div class="card">
+                            <div class="card-body text-muted">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex no-block">
+                                            
+                                            <div class="">
+                                                <h1 class="font-light my-0 text-dark">{{ booking_total }}</h1>
+                                                <p class="my-0">Daily Normal Works</p>
+                                            </div>
+                                            <div class="my-1 ml-auto">
+                                                <i class="fa fa-truck-loading fa-3x"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar bg-success" role="progressbar" 
+                                                :style="'width: '+booking_completed + '%'"
+                                            >
+                                            </div>
+                                            <div class="progress-bar bg-warning" role="progressbar" :style="'width: '+booking_pending+'%'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                    <div class="row my-3">
+                        <div class="card col p-4 mx-3 border rounded">
+                            <div id="chartWeeklyWork" style="width: 100%; height: 50%;"></div>
+                        </div>
+                        <div class="card col p-4 mx-3 border rounded">
+                            <div id="chartYearlyIncome" style="width: 100%; height: 50%;"></div>
+                        </div>
                     </div>
                 </main>
+                {% endverbatim %}
+
             </div>
         </div>
 
@@ -163,5 +305,19 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
         
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+        <script type="application/javascript" src="{% static 'js/app_dashboard_page.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+        <script type="application/javascript">
+
+            window.addEventListener("load", function() {   
+                dashboard_page.reload();
+            });
+    
+        </script>
     </body>
 </html>
