@@ -8,13 +8,12 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="col-10 border-left position-fixed" style="right:0; height:100%; background: white;"></div>
+    
     <div id="customer-page">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2 px-0 pt-3 position-relative">
-                    <div id="searchCustomer" class="col-2 position-fixed">
+                <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
+                    <div id="searchCustomer" class="m-3">
                         <div class="input-group">
                             <input class="form-control" placeholder="Search Customer" v-model="search_principal">
                             <div class="input-group-append">
@@ -23,7 +22,7 @@
                         </div>
                     </div>
 
-                    <div id="customerList" class="col-2 border-top p-0">
+                    <div id="customerList" class="border-top p-0">
                         <div class="list-group">
                             <button 
                                 v-for="principal in filteredPrincipal" 
@@ -44,11 +43,19 @@
                             </button>                      
                         </div>
                     </div>
-                </div>
+                </aside>
 
-                <div v-if="customer" class="col-10 position-relative" style="left: 0;">
-                    {% include 'customer/customer_detail.html' %}
-                </div>
+                <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 bg-white border-bottom">
+                            <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Customer</li>
+                        </ol>
+                    </nav>
+                    <template v-if="customer">
+                        {% include 'customer/customer_detail.html' %}
+                    </template>
+                </main>
             </div>
         </div>
 
@@ -102,12 +109,6 @@
         window.addEventListener("load", function() {   
             customer_page.reload();
         });
-
-        window.onload = function () {
-            var tableCont = document.querySelector('#customerList')
-            var filterDate = document.querySelector('#searchCustomer')
-            tableCont.style.top = filterDate.offsetTop + 60 + 'px'
-        }
 
     </script>
     

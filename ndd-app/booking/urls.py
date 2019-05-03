@@ -31,5 +31,8 @@ urlpatterns = [
     # Summary
     url(r'^api/get-work-list/$', booking_data_view.api_get_work_list, name='api-get-booking-work-list'),
 
+
+    url(r'^api/get-booking-daily-works/$', booking_data_view.api_get_booking_daily_works, name='api-get-booking-daily-works'),
+
     
 ]

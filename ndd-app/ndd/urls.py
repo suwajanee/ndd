@@ -20,6 +20,7 @@ from django.conf.urls import url
 from django.views.generic import RedirectView
 
 from booking.views import authentication_view
+from booking.views import dashboard_view
 from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
 
@@ -33,6 +34,7 @@ urlpatterns = [
     path('customer/', include('customer.urls')),
     path('summary/', include('summary.urls')),
 
+    url(r'^dashboard/$', dashboard_view.dashboard_page, name='dashboard-page'),
     url(r'^staff/$', authentication_view.login, name='login'),
     url(r'^logout/$', authentication_view.logout, name='logout'),
 
@@ -40,6 +42,11 @@ urlpatterns = [
 
     url(r'^export/$', export_xls_view.export_page, name='export-page'),
     url(r'^export/excel/$', export_xls_view.export_xls, name='export-excel'),
+
+
+    # Data
+    url(r'^api/get-weekly-works/$', dashboard_view.api_get_weekly_works, name='api-get-weekly-works'),
+    url(r'^api/get-yearly-income/$', dashboard_view.api_get_income, name='api-get-yearly-income'),
 
 ]
 

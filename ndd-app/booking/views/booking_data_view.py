@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 import re
 import json
 
@@ -46,3 +47,18 @@ def booking_edit_summary(bookings):
         booking_save.save()
 
     return True
+
+@csrf_exempt
+def api_get_booking_daily_works(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            data = {}
+            today = datetime.today()
+
+            data['cancel'] = Booking.objects.filter(Q(date=today) & Q(status=0)).count()
+            data['pending'] = pending = Booking.objects.filter(Q(date=today) & Q(status__in=[1,3,4])).count()
+            data['completed'] = completed = Booking.objects.filter(Q(date=today) & Q(status=2)).count()
+            data['total'] = pending + completed
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)

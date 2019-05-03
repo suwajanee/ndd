@@ -3,9 +3,8 @@ button.text-lightgray, .text-lightgray {
 }
 
 #customerList {
-    overflow-y:auto;
-    position: fixed;
-    bottom:0px;
+    overflow-y: auto;
+    height: calc(100vh - 135px);
 }
 
 /* scrollbar */

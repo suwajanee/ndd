@@ -24,5 +24,9 @@ urlpatterns = [
 
     # Summary
     url(r'^api/get-work-list/$', agent_transport_data_view.api_get_work_list, name='api-get-agent-transport-work-list'),
+
+
+    url(r'^api/get-agent-transport-daily-works/$', agent_transport_data_view.api_get_agent_transport_daily_works, name='api-get-agent-transport-daily-works'),
+
     
 ]

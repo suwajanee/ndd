@@ -1,0 +1,208 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>{% block title %}NDD Dashboard{% endblock %}</title>
+ 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+        <link rel="stylesheet" href="{% static 'css/style_dashboard.css' %}" />
+        
+        <script src="{% static 'js/vue.min.js' %}"></script>
+    </head>
+
+    <body>
+        {% load random_icon %}
+        <nav id="nbar" class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
+            <a class="navbar-brand" href="{% url 'dashboard-page' %}">
+                <img class="logo my-1" src="{% static 'images/logo.png' %}" height="45">
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle lead" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-{{ ''|random_icon }}"></i>&nbsp;&nbsp;<b>{{ request.user.username }}</b>&nbsp;
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-power-off"></i>&nbsp;Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+     
+        <div id="dashboard-page" class="container-fluid">
+            <div class="row">
+                <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
+                    <div class="sidebar-sticky px-3">
+                        <h6 class="sidebar-heading">
+                            <span>Home</span>
+                        </h6>
+                        <a class="nav-link active" href="#">
+                            <i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Operation</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'booking-page' %}">
+                            <i class="fa fa-truck-loading"></i>&nbsp; Booking
+                        </a>
+                        <a class="nav-link" href="{% url 'agent-transport-page' %}">
+                            <i class="fa fa-shipping-fast"></i>&nbsp; สายเรือ
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Finance</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'summary-page' %}">
+                            <i class="fa fa-chart-line"></i>&nbsp; Summary
+                        </a>
+
+                        <h6 class="sidebar-heading">
+                            <span>Database</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'customer-page' %}">
+                            <i class="fa fa-briefcase"></i>&nbsp; Customer
+                        </a>
+                        <!-- <a class="nav-link" href="#">
+                            <i class="fa fa-user-alt"></i>&nbsp; Employee
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-truck"></i>&nbsp; Truck
+                        </a> -->
+                    </div>
+                </aside>
+
+                {% verbatim %}
+                    <main class="col" style="overflow-y: auto; height: calc(100vh - 80px);">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
+                            <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
+                            <div class="mb-2 mb-md-0">
+                                <!-- <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportWork">
+                                    Time Export
+                                </button> -->
+                                <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportWork">
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-group">
+                            <div class="card border rounded">
+                                <div class="card-body text-muted">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="d-flex no-block">    
+                                                <div class="">
+                                                    <h1 class="font-light my-0 text-dark">{{ booking_total }}</h1>
+                                                    <p class="my-0">Daily Loading Works</p>
+                                                </div>
+                                                <div class="my-1 ml-auto">
+                                                    <i class="fa fa-truck-loading fa-3x"></i> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress" 
+                                                style="height: 8px;"
+                                                data-toggle="tooltip" data-html="true" 
+                                                :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nCancel: ' + booking_cancel "
+                                            >
+                                                <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + booking_completed_width + '%'"></div>
+                                                <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + booking_pending_width + '%'"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer text-muted text-right">
+                                    <a href="/booking" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="card mx-4 border rounded">
+                                <div class="card-body text-muted">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="d-flex no-block">
+                                                
+                                                <div class="">
+                                                    <h1 class="font-light my-0 text-dark">{{ agent_total }}</h1>
+                                                    <p class="my-0">Daily Agent Transport Works</p>
+                                                </div>
+                                                <div class="my-1 ml-auto">
+                                                    <i class="fa fa-shipping-fast fa-3x"></i> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress" 
+                                                style="height: 8px;"
+                                                data-toggle="tooltip" data-html="true" 
+                                                :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nCancel: ' + agent_cancel "
+                                            >
+                                                <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + agent_completed_width + '%'"></div>
+                                                <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + agent_pending_width + '%'"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-muted text-right">
+                                    <a href="/agent-transport" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                                </div>    
+                            </div>
+                            <div class="card border rounded">
+                                <div class="card-body text-muted"></div>
+                            </div>
+                        </div>
+
+                        <div class="row my-3" >              
+                            <div class="card col-lg mx-3 border rounded" style="height: 55vh;">
+                                <div class="card-body mt-2" >
+                                    <div>
+                                        <h3 class="card-title mb-3">Weekly Works</h3>
+                                    </div>
+                                    <div id="chartWeeklyWork"></div>
+                                </div>
+                            </div>
+                            <div class="card col-lg mx-3 border rounded" style="height: 55vh;">
+                                <div class="card-body mt-2" >
+                                    <div class="d-flex">
+                                        <div>
+                                            <h3 class="card-title mb-3">Yearly Income - {{ year }}</h3>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <select class="custom-select b-0" v-model="year" @change="yearlyIncomeChart()">
+                                                <option v-for="year_item in year_list" :value="year_item.year_label">{{ year_item.year_label }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="chartYearlyIncome" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                {% endverbatim %}     
+            </div>
+        </div>
+        {% include 'export_modal.html' %}
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+        <script type="application/javascript" src="{% static 'js/app_dashboard_page.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
+        <script type="application/javascript">
+
+            window.addEventListener("load", function() {   
+                dashboard_page.reload();
+            });
+    
+        </script>
+    </body>
+</html>
