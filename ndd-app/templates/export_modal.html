@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="modal fade" id="modalExportWork" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Export Work</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form ref="exportExcel" method="POST" action="{% url 'export-excel' %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="month" name="month_export" class="form-control container col-6 my-3" required>
+                </div>
+                <div class="modal-footer pt-3 pb-0">
+                    <button class="btn btn-primary">Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+
