@@ -164,6 +164,7 @@ def api_edit_invoice_details(request):
 
                 if invoice_detail.gate_charge:
                     invoice_detail.gate_charge['gate'] = detail['gate_charge']['gate']
+                    invoice_detail.gate_charge = check_key_detail(invoice_detail.gate_charge, detail['gate_charge'], 'vat', True)
 
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark', False)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'remark_gate', True)
@@ -176,8 +177,6 @@ def api_edit_invoice_details(request):
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'to', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'date', True)
                 invoice_detail.detail = check_key_detail(invoice_detail.detail, detail['detail'], 'size', True)
-
-                invoice_detail.gate_charge = check_key_detail(invoice_detail.gate_charge, detail['gate_charge'], 'vat', True)
 
                 if 'other' in detail['drayage_charge']:
                     invoice_detail.drayage_charge = check_key_detail(invoice_detail.drayage_charge, detail['drayage_charge'], 'other', True)
