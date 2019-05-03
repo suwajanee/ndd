@@ -3,6 +3,7 @@ var dashboard_page = new Vue( {
     el: '#dashboard-page',
     data: {
         year: '',
+        year_list: [],
 
         booking_total: 0,
         booking_pending: 0,
@@ -31,11 +32,23 @@ var dashboard_page = new Vue( {
 
     methods: {
         reload() {
+            this.getYears()
             this.getBookingDailyWork()
             this.getAgentTransportDailyWork()
             this.weeklyWorkChart()
             this.yearlyIncomeChart()
         },
+        getYears() {
+            api("/summary/api/get-summary-year/").then((data) => {
+                this.year_list = data
+                var this_year = new Date().getFullYear()
+                var year_exist = this.year_list.find(x => x.year_label == this_year)
+                if(! year_exist) {
+                    this.year_list.unshift({year_label: this_year})
+                }
+            })
+        },
+
         getBookingDailyWork() {
             api("/booking/api/get-booking-daily-works/").then((data) => {
                 this.booking_total = data.total
@@ -73,12 +86,14 @@ var dashboard_page = new Vue( {
                 var chart = new CanvasJS.Chart("chartWeeklyWork", {
                     animationEnabled: true,
                     theme: "light2",
-                    title:{
-                        text: "Weekly Works",
-                        fontSize: 30,
-                        // fontColor: "#695A42"
-                    },
                     axisX: {
+                        stripLines: [
+                            {
+                                value: new Date().setHours(0, 0),
+                                showOnTop: true,
+                                color: '#007BFF'
+                            }
+                        ],
                         interval: 1,
                         valueFormatString: "DD MMM YY",
                         labelFontSize: 12,
@@ -137,39 +152,21 @@ var dashboard_page = new Vue( {
         },
 
         yearlyIncomeChart() {
-            api("/api/get-yearly-income/").then((data) => {
-                this.year = data.year
-                this.yearlyDataPoints(data)
-
-                var chart = new CanvasJS.Chart("chartYearlyIncome", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    title:{
-                        text: "Yearly Income - " + this.year,
-                        fontSize: 30,
-                    },
-                    axisX: {
-                        interval: 1,
-                        intervalType: "month",
-                        valueFormatString: "MMM",
-                        labelFontSize: 12,
-                    },
-                    axisY:{
-                        gridColor: "lightgray",
-                        tickColor: "lightgray",
-                        labelFontSize: 12,
-                        includeZero: false
-                    },
-                    data: [{        
-                        type: "line",
-                        color: "#007BFF",    
-                        xValueFormatString: "MMM, YYYY",
-                        yValueFormatString: "#,###.##", 
-                        dataPoints: this.yearly_income
-                    }]
+            this.yearly_income = []
+            if(this.year) {
+                api("/api/get-yearly-income/", "POST", { year: this.year }).then((data) => {
+                    this.year = data.year
+                    this.yearlyDataPoints(data)
+                    this.createIncomeChart()
                 })
-                chart.render();
-            })
+            }
+            else {
+                api("/api/get-yearly-income/").then((data) => {
+                    this.year = data.year
+                    this.yearlyDataPoints(data)
+                    this.createIncomeChart()
+                })
+            }
         },
         yearlyDataPoints(data){
             for (var i = 0; i < 12; i++) {
@@ -178,6 +175,32 @@ var dashboard_page = new Vue( {
                     y: parseFloat(data.total[i])
                 });
             } 
+        },
+        createIncomeChart() {
+            var chart = new CanvasJS.Chart("chartYearlyIncome", {
+                animationEnabled: true,
+                theme: "light2",
+                axisX: {
+                    interval: 1,
+                    intervalType: "month",
+                    valueFormatString: "MMM",
+                    labelFontSize: 12,
+                },
+                axisY:{
+                    gridColor: "lightgray",
+                    tickColor: "lightgray",
+                    labelFontSize: 12,
+                    includeZero: false
+                },
+                data: [{        
+                    type: "line",
+                    color: "#007BFF",    
+                    xValueFormatString: "MMM, YYYY",
+                    yValueFormatString: "#,###.##", 
+                    dataPoints: this.yearly_income
+                }]
+            })
+            chart.render();
         },
     }
 })
@@ -192,6 +215,7 @@ function toolTipContent(e) {
     str += "<span class='text-warning'> " + e.entries[2].dataSeries.name + ":</span> <strong>" + e.entries[2].dataPoint.y+"</strong><br/>"
     str += "<span class='text-warning'> " + e.entries[3].dataSeries.name + ":</span> <strong>" + e.entries[3].dataPoint.y+"</strong><br/>"
     total = e.entries[0].dataPoint.y + e.entries[1].dataPoint.y + e.entries[2].dataPoint.y + e.entries[3].dataPoint.y 
-	str += "<hr class='m-1'><strong><span class='text-danger'><u>Total</u>:</span> " + total + "</strong>"
+    str += "<hr class='m-1'><strong><span class='text-danger'><u>Total</u>:</span> " + total + "</strong>"
+    
 	return str
 }

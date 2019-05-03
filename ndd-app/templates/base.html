@@ -33,7 +33,7 @@
         {% load random_icon %}
         <nav id="nbar"
             class="navbar navbar-expand-sm navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'dashboard-page' %}">
                 <img class="logo my-1" src="{% static 'images/logo.png' %}" height="30">
             </a>
             <ul class="navbar-nav">

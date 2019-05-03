@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
+import json
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -69,26 +70,31 @@ def api_get_weekly_works(request):
 def api_get_income(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-
-            data = {}
-
             year = datetime.today().year
-            data['year'] = year
 
-            total = []
+        elif request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            year = req['year']
 
-            for month in range(0,12):
-                month = str(month+1)
-                month_total = Invoice.objects.filter(Q(customer_week__week__year__year_label=str(year)) & \
-                                Q(customer_week__week__month=month)).aggregate(total=Sum('drayage_total'))['total']
+        else:
+            return JsonResponse('Error', safe=False)
 
-                if month_total:
-                    total.append(month_total)
-                else:
-                    total.append(0)
+        data = {}
+        data['year'] = year
 
-            data['total'] = total
-            print(total)
+        total = []
 
-            return JsonResponse(data, safe=False)
+        for month in range(0,12):
+            month = str(month+1)
+            month_total = Invoice.objects.filter(Q(customer_week__week__year__year_label=str(year)) & \
+                            Q(customer_week__week__month=month)).aggregate(total=Sum('drayage_total'))['total']
+
+            if month_total:
+                total.append(month_total)
+            else:
+                total.append(0)
+
+        data['total'] = total
+
+        return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
