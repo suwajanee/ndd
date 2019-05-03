@@ -55,23 +55,11 @@
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <!-- <li class="nav-item {% if nbar == 'booking-page' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'booking-page' %}">Booking</a>
-                </li>
-                <li class="nav-item {% if nbar == 'agent-transport-page' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'agent-transport-page' %}">สายเรือ</a>
-                </li> -->
                 <li class="nav-item {% if nbar == 'summary-page' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'summary-page' %}">SUMMARY</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <!-- <li class="nav-item {% if nbar == 'export-page' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'export-page' %}">Export</a>
-                </li>
-                <li class="nav-item {% if nbar == 'customer-page' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'customer-page' %}">Customer</a>
-                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-{{ ''|random_icon }}"></i>&nbsp;{{ request.user.username }}&nbsp;</a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

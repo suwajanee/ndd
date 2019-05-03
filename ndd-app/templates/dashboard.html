@@ -3,68 +3,13 @@
 <html>
     <head>
         <title>{% block title %}NDD Dashboard{% endblock %}</title>
-
-        
+ 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+        <link rel="stylesheet" href="{% static 'css/style_dashboard.css' %}" />
         
         <script src="{% static 'js/vue.min.js' %}"></script>
-
-        <style>
-            img.logo {
-                -webkit-filter: drop-shadow(1px 1px 1.5px white)
-                                drop-shadow(-1px -1px 1.5px white)
-                                drop-shadow(1px -1px 1.5px white)
-                                drop-shadow(-1px 1px 1.5px white);
-                -moz-box-shadow: drop-shadow(1px 1px 1.5px white)
-                                 drop-shadow(-1px -1px 1.5px white)
-                                 drop-shadow(1px -1px 1.5px white)
-                                 drop-shadow(-1px 1px 1.5px white);
-                filter: drop-shadow(1px 1px 1.5px white) 
-                        drop-shadow(-1px -1px 1.5px white)
-                        drop-shadow(1px -1px 1.5px white)
-                        drop-shadow(-1px 1px 1.5px white);
-            }
-
-            .sidebar-heading{
-                padding: 1rem;
-                margin-top: 1rem;
-                background-color: #eee;
-                color: #7d7a7a;
-            }
-
-            .sidebar-sticky{
-                position: -webkit-sticky;
-                position: sticky;
-                /* top: 48px; */
-                width: 100%;
-                height: calc(100vh - 80px);
-                padding-top: .5rem;
-                overflow-x: hidden;
-                overflow-y: auto;
-            }
-
-            .sidebar .nav-link {
-                font-weight: 300;
-                color: #333;
-                position: relative;
-                display: block;
-                padding: .5em 1em;
-                text-decoration: none;
-            }
-
-            .sidebar .active {
-                font-weight: 450;
-                color: #007bff;
-                border-left: 3px solid #007bff;
-            }
-
-            .sidebar .nav-link:hover {
-                font-weight: 400;
-                color: #4da3ff;
-                border-left: 3px solid #4da3ff;
-            }
-        </style>
     </head>
 
     <body>
@@ -129,7 +74,7 @@
                 </aside>
 
                 {% verbatim %}
-                    <main class="col">
+                    <main class="col" style="overflow-y: auto; height: calc(100vh - 80px);">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
                             <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
                             <div class="mb-2 mb-md-0">
