@@ -33,13 +33,19 @@
                             <th>เลขที่ใบงาน</th>
                         </thead>
                         <tbody>
-                            <tr v-for="(work, index) in filteredWork" :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id)}">
+                            <tr v-for="(work, index) in filteredWork" 
+                                :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id)}"
+                            >
                                 <td class="text-center align-middle">
                                     <div class="m-0 custom-control custom-checkbox">
                                         <input type="checkbox" class="form-check-input" :id="'work'+ index" v-model="work_selected" :value="work.id" :disabled="work.summary_status=='1'">
                                     </div>
                                 </td>
-                                <td class="text-center">{{ work.date|formatDate }}</td>
+                                <td class="text-center"
+                                    :class="{'table-danger': work.date<summary_invoice.summary_week.date_start, 'table-warning': work.date>summary_invoice.summary_week.date_end}"
+                                >
+                                    {{ work.date|formatDate }}
+                                </td>
                                 <td v-if="customer_type == 'agent-transport'" class="text-center text-primary">
                                     <span v-if="work.operation_type == 'export_loaded'">
                                         ตู้หนักไป

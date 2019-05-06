@@ -22,9 +22,11 @@ def api_get_work_list(request):
             year = req['year']
             customer = req['customer']
 
+            today = datetime.today()
+
             week, week_serializer = get_week_details(week, year)
 
-            bookings = Booking.objects.filter(Q(principal__pk=customer) & ~Q(status=0) & ((Q(date__lte=week.date_end) & Q(date__gte=week.date_start)) | \
+            bookings = Booking.objects.filter(Q(principal__pk=customer) & ~Q(status=0) & ((Q(date__lte=today) & Q(date__gte=week.date_start)) | \
                         (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'booking_no', 'work_id')
 
             serializer = BookingSerializer(bookings, many=True)

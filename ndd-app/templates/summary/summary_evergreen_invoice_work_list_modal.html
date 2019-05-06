@@ -39,7 +39,11 @@
                                             <input v-else type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" :disabled="work.summary_status=='1'">
                                         </div>
                                     </td>
-                                    <td class="text-center">{{ work.date|formatDate }}</td>
+                                    <td class="text-center"
+                                        :class="{'table-danger': work.date<summary_invoice.summary_week.date_start, 'table-warning': work.date>summary_invoice.summary_week.date_end}"    
+                                    >
+                                        {{ work.date|formatDate }}
+                                    </td>
 
                                     <td v-if="customer_type == 'agent-transport'" class="text-center text-primary">
                                         <span v-if="work.operation_type == 'export_loaded'">
@@ -74,7 +78,9 @@
                                             <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_2'" @click="evergreenSelectWork(work.id+'_2', work.id+'_1')" :disabled="work.summary_status=='1'">
                                         </div>
                                     </td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center"
+                                        :class="{'table-danger': work.date<summary_invoice.summary_week.date_start, 'table-warning': work.date>summary_invoice.summary_week.date_end}"    
+                                    >
                                     <td v-if="customer_type == 'agent-transport'" class="text-center text-primary"></td>
                                     <td></td>
                                     <td></td>
