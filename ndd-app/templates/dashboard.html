@@ -78,9 +78,9 @@
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
                             <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
                             <div class="mb-2 mb-md-0">
-                                <!-- <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportWork">
+                                <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportTime">
                                     Time Export
-                                </button> -->
+                                </button>
                                 <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportWork">
                                     Export
                                 </button>
@@ -161,7 +161,7 @@
                                     <div>
                                         <h3 class="card-title mb-3">Weekly Works</h3>
                                     </div>
-                                    <div id="chartWeeklyWork"></div>
+                                    <div id="chartWeeklyWork" style="width: 100%; height: 80%"></div>
                                 </div>
                             </div>
                             <div class="card col-lg mx-3 border rounded" style="height: 55vh;">
@@ -176,15 +176,17 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div id="chartYearlyIncome" style="width: 100%;"></div>
+                                    <div id="chartYearlyIncome" style="width: 100%; height: 80%"></div>
                                 </div>
                             </div>
                         </div>
                     </main>
                 {% endverbatim %}     
             </div>
+            {% include 'export_modal.html' %}
+            {% include 'export_time.html' %}
         </div>
-        {% include 'export_modal.html' %}
+        
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

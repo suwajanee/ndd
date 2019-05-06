@@ -4,6 +4,7 @@ var dashboard_page = new Vue( {
     data: {
         year: '',
         year_list: [],
+        principals: [],
 
         booking_total: 0,
         booking_pending: 0,
@@ -32,11 +33,17 @@ var dashboard_page = new Vue( {
 
     methods: {
         reload() {
+            this.getPrincipals()
             this.getYears()
             this.getBookingDailyWork()
             this.getAgentTransportDailyWork()
             this.weeklyWorkChart()
             this.yearlyIncomeChart()
+        },
+        getPrincipals() {
+            api("/customer/api/get-principals/").then((data) => {
+                this.principals = data
+            })
         },
         getYears() {
             api("/summary/api/get-summary-year/").then((data) => {
