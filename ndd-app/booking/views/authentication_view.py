@@ -11,7 +11,7 @@ def login(request):
     template_name = 'login.html'
 
     if request.user.is_authenticated:
-        return redirect('booking-page')
+        return redirect('dashboard-page')
 
     if request.method == 'POST':
         username = request.POST['username']

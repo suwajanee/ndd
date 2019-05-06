@@ -327,17 +327,5 @@ var booking_table = new Vue( {
                 this.saving = false
             }   
         },
-        exportTime() {
-            this.$refs.exportTime.action = "/booking/time/export/"
-            for(booking in this.bookings){
-                var input = document.createElement("input")
-                input.type = "hidden"
-                input.name = "pk_list"
-                input.value = this.bookings[booking].id
-                this.$refs.exportTime.appendChild(input)
-            }
-            this.$refs.exportTime.submit()
-        },
-
     }
 })

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import Q
 from django.http import HttpResponse
 
 import xlwt
@@ -12,13 +13,20 @@ from customer.models import Principal, Shipper
 
 def export_time(request):
     if request.method == "POST":
-        pk_list = request.POST.getlist("pk_list")
-        request.session['pk_list'] = pk_list
+        customer_id = request.POST['customer']
+        date_from = request.POST['date_from']
+        date_to = request.POST['date_to']
 
         style_xls = StyleXls()
 
+        
+        try:
+            customer = Principal.objects.get(pk=customer_id)
+        except Principal.DoesNotExist:
+            customer = ''
+
         response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="Time.xls"'
+        response['Content-Disposition'] = 'attachment; filename="' + customer.name + '_Time.xls"'
 
         wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
         sheet = wb.add_sheet('Time')
@@ -65,7 +73,7 @@ def export_time(request):
             else:
                 sheet.write(1, col_num, columns[col_num], style)
 
-        rows = Booking.objects.filter(pk__in=pk_list).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
+        rows = Booking.objects.filter(Q(principal=customer) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
                 'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         row_prev = None
@@ -98,10 +106,7 @@ def export_time(request):
                     
                     if col_num == 1:
                         style.alignment = style_xls.align_left()
-                        try:
-                            row[col_num] = Principal.objects.get(pk=row[col_num]).name
-                        except Principal.DoesNotExist:
-                            row[col_num] = ''
+                        row[col_num] = customer.name
 
                     if col_num == 2:
                         style.alignment = style_xls.align_left()

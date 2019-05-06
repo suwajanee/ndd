@@ -15,7 +15,7 @@
         <div id="upper-part" class="container col-12" >
             <div class="row">
                 <div class="col">
-                    <button v-if="nbar=='time'" class="btn btn-primary" @click="exportTime()"><i class="fa fa-download"></i>&nbsp;Export</button>
+                    <template v-if="nbar=='time'"></template>
                     <div v-else class="input-group">
                         <div class="input-group-prepend">
                             <select name="filter_by" class="btn " v-model="filter_by" style="background-color: #CED4DA;">

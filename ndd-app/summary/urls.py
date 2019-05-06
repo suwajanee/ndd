@@ -100,7 +100,4 @@ urlpatterns = [
     url(r'^api/get-summary-year-data/$', summary_chart_data.api_summary_year_total_chart, name='api-get-summary-year-data'),
     url(r'^api/get-summary-customer-data/$', summary_chart_data.api_summary_customer_total_chart, name='api-get-summary-customer-data'),
 
-
-
-
 ]
