@@ -160,7 +160,7 @@ def api_get_summary_weeks_by_year(request):
             req = json.loads( request.body.decode('utf-8') )
             year = req['year']
 
-            week = SummaryWeek.objects.filter(Q(year__year_label=year))
+            week = SummaryWeek.objects.filter(Q(year__year_label=year)).order_by('week')
             week_serializer = SummaryWeekSerializer(week, many=True)
             return JsonResponse(week_serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
