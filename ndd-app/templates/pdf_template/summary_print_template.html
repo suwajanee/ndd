@@ -214,7 +214,7 @@
                         </td>
                     </tr>
 
-                    {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                    {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                         </table>
                             <pdf:nextpage>
                         <table class="table-bordered">
@@ -309,7 +309,7 @@
                                 </td>
                             </tr>
 
-                            {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:other.num == 6 %}
+                            {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                                 </table>
                                     <pdf:nextpage>
                                 <table class="table-bordered">
@@ -528,7 +528,7 @@
                             </td>
                         </tr>
 
-                        {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                        {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                             </table>
                                 <pdf:nextpage>
                             <table class="table-bordered">
