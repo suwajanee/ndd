@@ -32,7 +32,7 @@ class CustomerCustom(models.Model):
     customer_title = models.CharField(max_length=50, null=True, blank=True)
 
     form = models.ForeignKey(FormDetail, on_delete=models.SET_NULL, null=True, blank=True)
-    option = models.CharField(max_length=10, null=True, blank=True)
+    option = models.CharField(max_length=15, null=True, blank=True)
 
     def __str__(self):
         if self.sub_customer:

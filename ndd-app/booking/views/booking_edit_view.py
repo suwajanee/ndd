@@ -52,7 +52,6 @@ def api_save_edit_bookings(request):
                 booking_save.agent = re.sub(' +', ' ', booking['agent'].strip().upper())
                 booking_save.size = re.sub(' +', ' ', booking['size'].strip())
                 booking_save.booking_no = re.sub(' +', ' ', booking['booking_no'].strip())
-                booking_save.start = re.sub(' +', ' ', booking['start'].strip().upper())
                 booking_save.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
                 booking_save.pickup_from = re.sub(' +', ' ', booking['pickup_from'].strip().upper())
                 booking_save.yard_ndd = booking['yard_ndd']

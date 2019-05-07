@@ -18,7 +18,6 @@ class Booking(models.Model):
         ('1', 'NDD'),
         ('0', '-'),
     )
-    start = models.CharField(max_length=25, blank=True, default='')
     pickup_tr = models.CharField(max_length=20, blank=True, default='')
     pickup_from = models.CharField(max_length=25, blank=True, default='')
 
