@@ -53,6 +53,14 @@
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
+                                <input type="radio" id="time_remark" v-model="customer_setting_modal.option" value="time_remark"> 
+                                </div>
+                            </div>
+                            <label class="form-control" for="time_remark">Time Remark (งานเช้า)</label>
+                        </div>
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
                                 <input type="radio" id="apll" v-model="customer_setting_modal.option" value="apll" @click="customer_setting_modal.form=null"> 
                                 </div>
                             </div>
