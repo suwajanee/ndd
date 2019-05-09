@@ -30,7 +30,7 @@
             <table class="mt-3 w-100">
                 <tr>
                     <td class="px-1" style="width: 80px;">INV. NO.</td>
-                    <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]"></td>
+                    <td v-if="table_edit" class="px-1" style="width: 180px; background: Cyan;"><input class="form-control text-center p-1" v-model="invoice_data.invoice_no[0]" maxlength="15"></td>
                     <td v-else class="p-1 text-center" style="width: 180px; background: Cyan; font-weight: 750;">{{ invoice_data.invoice_no[0] }}</td>
                     <td class="text-secondary" style="width: 150px;"></td>
 
@@ -144,7 +144,7 @@
                                     <input class="form-control text-center" v-model="inv_detail.detail.job_no">
                                 </td>
                                 <td>
-                                    <input class="form-control text-center" v-model="inv_detail.work.booking_no"> 
+                                    <input class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150"> 
                                 </td>
                             </template>
                             <td v-else>
@@ -174,7 +174,7 @@
 
                             <td v-if="inv_detail.detail.container==1" class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_1">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_1" maxlength="50">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
@@ -190,7 +190,7 @@
 
                             <td v-else class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_2">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_2" maxlength="50">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
