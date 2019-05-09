@@ -4,6 +4,7 @@ from datetime import datetime
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Case, When
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -32,15 +33,27 @@ def api_filter_agent_transports(request):
                 date_filter = None
 
             if date_filter == None:
-                agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+                agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', \
+                Case(
+                    When(work_type='ep', then='booking_no'),
+                ), 'work_id')
             elif filter_by == "month":
                 month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+                agent_transports = AgentTransport.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', \
+                Case(
+                    When(work_type='ep', then='booking_no'),
+                ), 'work_id')
             else:
-                agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+                agent_transports = AgentTransport.objects.filter(Q(date=date_filter) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', \
+                Case(
+                    When(work_type='ep', then='booking_no'),
+                ), 'work_id')
 
         else:
-            agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+            agent_transports = AgentTransport.objects.filter(Q(date=context['today']) | Q(status__in=[1,3])).order_by('date', 'principal__name', 'shipper__name', 'work_type', \
+            Case(
+                    When(work_type='ep', then='booking_no'),
+                ), 'work_id')
             
         serializer = AgentTransportSerializer(agent_transports, many=True)
         context['agent_transports'] = serializer.data
