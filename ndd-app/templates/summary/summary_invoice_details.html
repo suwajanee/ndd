@@ -167,9 +167,24 @@
                             <td v-else></td>
                             
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150" :id="'0-'+index" @keydown="keyDownArrow(0, index)"> 
-                                <template v-else>
-                                    {{ inv_detail.work.booking_no }}
+                                <template v-if="table_edit">
+                                    <div v-if="index==0 && customer_custom.option=='time_remark'" class="input-group">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                            v-model="inv_detail.work.booking_no" 
+                                            :id="'0-'+index" @keydown="keyDownArrow(0, index)"
+                                        >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-outline-secondary"
+                                                style="padding: 4px;"
+                                                @click="copyToAll(inv_detail.work.booking_no, 'work', 'booking_no')"
+                                            >
+                                            <i class="fa fa-clone"></i></button>
+                                        </div>
+                                    </div>
+                                    <input v-else class="form-control text-center" 
+                                        v-model="inv_detail.work.booking_no" 
+                                        :id="'0-'+index" @keydown="keyDownArrow(0, index)"
+                                    > 
                                 </template>
                             </td>
 
