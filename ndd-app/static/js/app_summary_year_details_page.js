@@ -57,7 +57,12 @@ var summary_year_details = new Vue( {
         },
 
         selectMonth(month){
-            window.location.replace("/summary/" + this.year + "/" + month)
+            if (event.ctrlKey) {
+                window.open("/summary/" + this.year + "/" + month)
+            }
+            else {
+                window.open("/summary/" + this.year + "/" + month, "_self")
+            }
         }
 
     }

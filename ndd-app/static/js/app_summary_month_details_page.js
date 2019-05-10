@@ -75,7 +75,12 @@ var summary_month_details = new Vue( {
         },
 
         selectWeek(week){
-            window.location.replace("/summary/" + this.year + "/" + this.month + "/" + week)
+            if (event.ctrlKey) {
+                window.open("/summary/" + this.year + "/" + this.month + "/" + week)
+            }
+            else {
+                window.open("/summary/" + this.year + "/" + this.month + "/" + week, "_self")
+            }
         },
 
         addSummaryWeek() {
