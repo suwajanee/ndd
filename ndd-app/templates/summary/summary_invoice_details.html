@@ -110,12 +110,14 @@
                         <th rowspan=2 class="border-dark align-middle">
                             Drayage Charge
                         </th>
-                        <th rowspan=2 v-if="customer_form.indexOf('gate_charge') > 0" class="border-dark align-middle">
+
+                        <th rowspan=2 v-if="customer_form[3]=='3_gate_charge'" class="border-dark align-middle">
                             Gate Charge
                         </th>
-                        <th rowspan=2 v-if="customer_form.indexOf('agent') > 0" class="border-dark align-middle">
+                        <th rowspan=2 v-if="customer_form[3]=='3_agent'" class="border-dark align-middle">
                             Agent
                         </th>
+                        
                         <th rowspan=2 v-if="customer_form[2]=='2_remark'" class="border-dark align-middle">
                             Remark<template v-if="customer_custom.option=='2_inv'"><br>(Drayage)</template>
                         </th>
@@ -165,21 +167,21 @@
                             <td v-else></td>
                             
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150"> 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150" :id="'0-'+index" @keydown="keyDownArrow(0, index)"> 
                                 <template v-else>
                                     {{ inv_detail.work.booking_no }}
                                 </template>
                             </td>
 
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.pickup_from" maxlength="25"> 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.pickup_from" maxlength="25" :id="'1-'+index" @keydown="keyDownArrow(1, index)"> 
                                 <template v-else>
                                     {{ inv_detail.work.pickup_from }}
                                 </template>
                             </td>
 
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.return_to" maxlength="25"> 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.return_to" maxlength="25" :id="'2-'+index" @keydown="keyDownArrow(2, index)"> 
                                 <template v-else>
                                     {{ inv_detail.work.return_to }}
                                 </template>
@@ -192,7 +194,10 @@
                             <template v-if="customer_type == 'agent-transport'">
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_1" maxlength="50">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                            :id="'3-'+index" @keydown="keyDownArrow(3, index)"
+                                            v-model="inv_detail.work.container_1" maxlength="50"
+                                        >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
                                                 style="padding: 4px;"
@@ -209,7 +214,10 @@
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
                                     <div v-if="inv_detail.work.size.indexOf('X') > -1">
                                         <div v-if="table_edit" class="input-group">
-                                            <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_2" maxlength="50">
+                                            <input type="text" class="form-control text-center" style="padding: 2px 4px;"
+                                                :id="'4-'+index" @keydown="keyDownArrow(4, index)"
+                                                v-model="inv_detail.work.container_2" maxlength="50"
+                                            >
                                             <div class="input-group-append">
                                                 <button class="btn btn-sm btn-outline-secondary"
                                                     style="padding: 4px;"
@@ -227,7 +235,10 @@
                             <template v-else>
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_no" maxlength="50">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;"
+                                            :id="'3-'+index" @keydown="keyDownArrow(3, index)"
+                                            v-model="inv_detail.work.container_no" maxlength="50"
+                                        >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
                                                 style="padding: 4px;"
@@ -240,11 +251,20 @@
                                         {{ inv_detail.work.container_no }}
                                     </template>
                                 </td>
-                                <td v-if="customer_form.indexOf('container_2') > 0"></td>
+                                <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" >
+                                    <input v-if="table_edit" class="form-control text-center" 
+                                        :id="'4-'+index" @keydown="keyDownArrow(4, index)"
+                                        readonly
+                                    > 
+                                </td>
                             </template>
 
                             <td class="align-middle">
-                                <select v-if="table_edit" class="custom-select size" v-model="inv_detail.work.size">
+                                <select v-if="table_edit" class="custom-select size" 
+                                    :id="customer_form.indexOf('container_2') > 0 ? '5-'+index : '4-'+index" 
+                                    @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(5, index) : keyDownArrow(4, index)" 
+                                    v-model="inv_detail.work.size"
+                                >
                                     <option value=""> -------- </option>
                                     <option value="20'">20'</option>
                                     <option value="20'RF">20'RF</option>
@@ -268,7 +288,11 @@
                             <td class="text-right align-middle">
                                 <template v-if="table_edit">
                                     <div v-if="index==0" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.drayage_charge.drayage">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                            v-model="inv_detail.drayage_charge.drayage" 
+                                            :id="customer_form.indexOf('container_2') > 0 ? '6-'+index : '5-'+index" 
+                                            @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(6, index) : keyDownArrow(5, index)"
+                                        >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
                                                 style="padding: 4px;"
@@ -277,22 +301,34 @@
                                             <i class="fa fa-clone"></i></button>
                                         </div>
                                     </div>
-                                    <input v-else class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                                    <input v-else class="form-control text-center" 
+                                        v-model="inv_detail.drayage_charge.drayage" 
+                                        :id="customer_form.indexOf('container_2') > 0 ? '6-'+index : '5-'+index" 
+                                        @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(6, index) : keyDownArrow(5, index)"
+                                    > 
                                 </template>
                                 <template v-else>
                                     {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
                                 </template>
                             </td>
 
-                            <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.gate_charge.gate" > 
+                            <td v-if="customer_form[3]=='3_gate_charge'" class="text-right align-middle">
+                                <input v-if="table_edit" class="form-control text-center" 
+                                    v-model="inv_detail.gate_charge.gate" 
+                                    :id="customer_form.indexOf('container_2') > 0 ? '7-'+index : '6-'+index" 
+                                    @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(7, index) : keyDownArrow(6, index)"
+                                > 
                                 <template v-else>
                                     {{ eval(inv_detail.gate_charge.gate)|currencyCommas }}
                                 </template>
                             </td>
 
-                            <td v-if="customer_form.indexOf('agent') > 0" class="text-center align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.agent"> 
+                            <td v-if="customer_form[3]=='3_agent'" class="text-center align-middle">
+                                <input v-if="table_edit" class="form-control text-center" 
+                                    v-model="inv_detail.work.agent" 
+                                    :id="customer_form.indexOf('container_2') > 0 ? '7-'+index : '6-'+index" 
+                                    @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(7, index) : keyDownArrow(6, index)"
+                                > 
                                 <template v-else>
                                     {{ inv_detail.work.agent }}
                                 </template>
@@ -301,7 +337,11 @@
                             <td class="text-primary align-middle">
                                 <template v-if="table_edit">
                                     <div v-if="index==0" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.detail.remark">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                            v-model="inv_detail.detail.remark" 
+                                            :id="customer_form.indexOf('container_2') > 0 ? '8-'+index : '7-'+index" 
+                                            @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(8, index) : keyDownArrow(7, index)"
+                                        >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
                                                 style="padding: 4px;"
@@ -310,7 +350,11 @@
                                             <i class="fa fa-clone"></i></button>
                                         </div>
                                     </div>
-                                    <input v-else class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                                    <input v-else class="form-control text-center" 
+                                        v-model="inv_detail.detail.remark" 
+                                        :id="customer_form.indexOf('container_2') > 0 ? '8-'+index : '7-'+index" 
+                                        @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(8, index) : keyDownArrow(7, index)"
+                                    > 
                                 </template>
                                 <template v-else>
                                     {{ inv_detail.detail.remark }}
@@ -329,7 +373,11 @@
                             </td>
 
                             <td class="border-light align-middle" :class="{'bg-processing': inv_detail.detail.note}">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.note" > 
+                                <input v-if="table_edit" class="form-control text-center" 
+                                    v-model="inv_detail.detail.note" 
+                                    :id="customer_form.indexOf('container_2') > 0 ? '9-'+index : '8-'+index" 
+                                    @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(9, index) : keyDownArrow(8, index)"
+                                > 
                                 <template v-else>
                                     {{ inv_detail.detail.note }}
                                 </template>
@@ -395,17 +443,17 @@
                             </td>
 
                             <td class="text-right align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="other.other_charge" > 
+                                <input v-if="table_edit" class="form-control text-center" v-model="other.other_charge"> 
                                 <template v-else>
                                     {{ eval(other.other_charge)|currencyCommas }}
                                 </template>
                             </td>
 
-                            <td v-if="customer_form.indexOf('gate_charge') > 0" class="text-right align-middle">
+                            <td v-if="customer_form[3]=='3_gate_charge'" class="text-right align-middle">
                                 -
                             </td>
 
-                            <td v-if="customer_form.indexOf('agent') > 0" class="text-center align-middle">
+                            <td v-if="customer_form[3]=='3_agent'" class="text-center align-middle">
                                 {{ inv_detail.work.agent }}
                             </td>
 
@@ -449,7 +497,7 @@
 
                         <td class="text-right table-secondary align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
 
-                        <td v-if="customer_form.indexOf('gate_charge') > 0"
+                        <td v-if="customer_form[3]=='3_gate_charge'"
                             class="text-right table-secondary align-middle"
                             :class="{'alert-warning': gateTotal != invoice.gate_total}"
                         >   
@@ -468,7 +516,7 @@
                         <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="align-middle">G.Total</td>
                         <td v-else colspan=8 class="align-middle">G.Total</td>
 
-                        <td v-if="customer_form.indexOf('gate_charge') > 0" colspan=2 class="text-right align-middle">{{ drayageTotal+gateTotal|currencyCommas }}</td>
+                        <td v-if="customer_form[3]=='3_gate_charge'" colspan=2 class="text-right align-middle">{{ drayageTotal+gateTotal|currencyCommas }}</td>
                         <td v-else colspan=2 class="text-right align-middle">{{ drayageTotal|currencyCommas }}</td>
                         <td></td>
                         <td v-if="customer_custom.option == '2_inv'"></td>

@@ -84,17 +84,17 @@
                                     Drayage Charge
                                 </td>
 
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('gate_charge') <= 0 }">
-                                    <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
-                                        <input type="checkbox" class="custom-control-input" id="gate_charge"  value="gate_charge" v-model="form_setting_modal.form_detail">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[3]!='3_gate_charge' }">
+                                    <div class="custom-control custom-radio" style="margin: auto; width:0%;">
+                                        <input type="radio" class="custom-control-input radio-green" id="gate_charge"  value="3_gate_charge" v-model="form_setting_modal.form_detail[3]" >
                                         <label class="custom-control-label" for="gate_charge"></label>
                                     </div>
                                     Gate Charge
                                 </td>
 
-                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail.indexOf('agent') <= 0 }">
-                                    <div class="custom-control custom-checkbox" style="margin: auto; width:0%;">
-                                        <input type="checkbox" class="custom-control-input" id="agent"  value="agent" v-model="form_setting_modal.form_detail">
+                                <td rowspan=2 class="align-middle" :class="{ 'bg-light': form_setting_modal.form_detail[3]!='3_agent' }">
+                                    <div class="custom-control custom-radio" style="margin: auto; width:0%;">
+                                        <input type="radio" class="custom-control-input radio-green" id="agent" value="3_agent" v-model="form_setting_modal.form_detail[3]" >
                                         <label class="custom-control-label" for="agent"></label>
                                     </div>
                                     Agent

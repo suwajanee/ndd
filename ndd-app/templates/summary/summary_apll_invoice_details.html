@@ -109,14 +109,14 @@
                             </td>
 
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.routing"> 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.routing" :id="'0-'+index" @keydown="keyDownArrow(0, index, true)"> 
                                 <template v-else>
                                     {{ inv_detail.detail.routing }}
                                 </template>
                             </td>
 
                             <td class="align-middle">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150"> 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150" :id="'1-'+index" @keydown="keyDownArrow(1, index, true)"> 
                                 <template v-else>
                                     {{ inv_detail.work.booking_no }}
                                 </template>
@@ -127,7 +127,7 @@
 
                             <td class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_no" maxlength="50">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_no" maxlength="50" :id="'2-'+index" @keydown="keyDownArrow(2, index, true)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
@@ -148,7 +148,7 @@
 
                             <td class="text-right">
                                 <template v-if="table_edit">
-                                    <input class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" > 
+                                    <input class="form-control text-center" v-model="inv_detail.drayage_charge.drayage" :id="'3-'+index" @keydown="keyDownArrow(3, index, true)"> 
                                 </template>
                                 <template v-else>
                                     {{ eval(inv_detail.drayage_charge.drayage)|currencyCommas }}
@@ -157,7 +157,7 @@
 
                             <td class="text-right">
                                 <template v-if="table_edit">
-                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.gate" > 
+                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.gate" :id="'4-'+index" @keydown="keyDownArrow(4, index, true)"> 
                                 </template>
                                 <template v-else>
                                     {{ eval(inv_detail.gate_charge.gate)|currencyCommas }}
@@ -166,7 +166,7 @@
 
                             <td class="text-right">
                                 <template v-if="table_edit">
-                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.vat" > 
+                                    <input class="form-control text-center" v-model="inv_detail.gate_charge.vat" :id="'5-'+index" @keydown="keyDownArrow(5, index, true)"> 
                                 </template>
                                 <template v-else>
                                     {{ eval(inv_detail.gate_charge.vat)|currencyCommas }}
@@ -175,7 +175,7 @@
 
                             <td class="text-primary">
                                 <template v-if="table_edit">
-                                    <input class="form-control text-center" v-model="inv_detail.detail.remark" > 
+                                    <input class="form-control text-center" v-model="inv_detail.detail.remark" :id="'6-'+index" @keydown="keyDownArrow(6, index, true)"> 
                                 </template>
                                 <template v-else>
                                     {{ inv_detail.detail.remark }}
@@ -183,7 +183,7 @@
                             </td>
 
                             <td class="border-light" :class="{'bg-processing': inv_detail.detail.note}">
-                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.note" > 
+                                <input v-if="table_edit" class="form-control text-center" v-model="inv_detail.detail.note" :id="'7-'+index" @keydown="keyDownArrow(7, index, true)"> 
                                 <template v-else>
                                     {{ inv_detail.detail.note }}
                                 </template>

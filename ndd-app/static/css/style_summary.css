@@ -135,3 +135,19 @@ select.size {
 .bg-red {
     background-color: Red ;
 }
+
+
+/* Radio button color */
+.custom-radio .radio-green:checked~.custom-control-label::before,
+.custom-radio .radio-green:checked~.custom-control-label::after {
+    background-color: #5cb85c;
+    border-radius: 50%;
+}
+
+.custom-radio .radio-green:active ~ .custom-control-label::before {
+    background-color: gray;
+}
+    
+.custom-radio .radio-green:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(92, 184, 92, 0.30);
+}
