@@ -10,7 +10,7 @@ class BookingAdmin(admin.ModelAdmin):
 
     ordering = ('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
-    search_fields = ['work_id', 'container_no']
+    search_fields = ['work_id', 'booking_no', 'container_no']
 
 class BookingTimeAdmin(admin.ModelAdmin):
     list_display = ('booking', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', \

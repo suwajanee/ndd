@@ -186,6 +186,9 @@
                                         :id="'0-'+index" @keydown="keyDownArrow(0, index)"
                                     > 
                                 </template>
+                                <template v-else>
+                                    {{ inv_detail.work.booking_no }}
+                                </template>
                             </td>
 
                             <td class="align-middle">
