@@ -85,8 +85,8 @@
                 </div>
                 
                 <div class="modal-footer px-5 py-3">
-                    <button v-if="work_list_modal_mode=='create'" class="btn btn-primary" @click="addNewInvoice">Create</button>
-                    <button v-else class="btn btn-primary" @click="addInvoiceDetails(invoice)">Add</button>
+                    <button v-if="work_list_modal_mode=='create'" class="btn btn-primary" @click="addNewInvoice" :disabled="work_selected.length == 0">Create</button>
+                    <button v-else class="btn btn-primary" @click="addInvoiceDetails(invoice)" :disabled="work_selected.length == 0">Add</button>
                 </div>
             </div>
         </div>
