@@ -50,6 +50,7 @@ def agent_transport_edit_summary(agent_transports):
         if 'container_2' in agent_transport:
             agent_transport_save.container_2 = re.sub(' +', ' ', agent_transport['container_2'].strip())
         agent_transport_save.size = re.sub(' +', ' ', agent_transport['size'].strip())
+        agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip())
         agent_transport_save.save()
 
     return True

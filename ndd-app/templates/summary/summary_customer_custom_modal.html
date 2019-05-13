@@ -53,6 +53,14 @@
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
+                                <input type="radio" id="time_remark" v-model="customer_setting_modal.option" value="time_remark"> 
+                                </div>
+                            </div>
+                            <label class="form-control" for="time_remark">Time Remark (งานเช้า)</label>
+                        </div>
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
                                 <input type="radio" id="apll" v-model="customer_setting_modal.option" value="apll" @click="customer_setting_modal.form=null"> 
                                 </div>
                             </div>
@@ -140,12 +148,14 @@
                                 <td rowspan=2 class="align-middle">
                                     Drayage Charge
                                 </td>
-                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[3]=='3_gate_charge'" class="align-middle">
                                     Gate Charge
                                 </td>
-                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail.indexOf('agent') > 0" class="align-middle">
+                                <td rowspan=2 v-if="customer_setting_modal.form.form_detail[3]=='3_agent'" class="align-middle">
                                     Agent
                                 </td>
+                                
                                 <td rowspan=2 v-if="customer_setting_modal.form.form_detail[2]=='2_remark'" class="align-middle">
                                     Remark
                                 </td>

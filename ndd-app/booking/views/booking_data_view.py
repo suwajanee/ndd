@@ -46,6 +46,7 @@ def booking_edit_summary(bookings):
         booking_save.return_to = re.sub(' +', ' ', booking['return_to'].strip())
         booking_save.container_no = re.sub(' +', ' ', booking['container_no'].strip())
         booking_save.size = re.sub(' +', ' ', booking['size'].strip())
+        booking_save.agent = re.sub(' +', ' ', booking['agent'].strip())
         booking_save.save()
 
     return True

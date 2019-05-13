@@ -42,7 +42,7 @@ class InvoiceDetailAdmin(admin.ModelAdmin):
     list_display = ('invoice', 'work', 'drayage_charge', 'gate_charge', 'detail')
     ordering = ('invoice', )
 
-    search_fields = ['invoice__invoice_no', 'work_normal__work_id', 'work_agent_transport__work_id']
+    search_fields = ['invoice__invoice_no', 'work_normal__booking_no', 'work_agent_transport__booking_no', 'work_normal__work_id', 'work_agent_transport__work_id']
 
 
 class InvoiceSettingAdmin(admin.ModelAdmin):

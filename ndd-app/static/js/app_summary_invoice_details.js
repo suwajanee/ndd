@@ -162,6 +162,7 @@ var summary_invoice_details = new Vue( {
             this.invoice = invoice
 
             this.invoice_id = invoice.id
+
             this.invoiceEditFields()
             this.getInvoiceDetails(this.invoice_id)
             this.getFormDefault()
@@ -222,6 +223,13 @@ var summary_invoice_details = new Vue( {
             }
         },
 
+        afterGetInvoiceDetails(data) {
+            this.invoice_data.invoice_no = this.invoice.invoice_no.split(',')
+            this.invoice_detail_list = data
+            this.addWorkKey()
+            this.work_selected = []
+        },
+
         addWorkKey() {
             if(this.customer_type == 'agent-transport') {
                 this.invoice_detail_list.forEach(function(inv_detail) {
@@ -238,6 +246,20 @@ var summary_invoice_details = new Vue( {
             }
         },
 
+        addTimeRemark() {
+            this.invoice_detail_list.forEach(function(inv_detail) { 
+                try {
+                    var time = inv_detail.work.time.split('.')
+                    if(! inv_detail.detail.remark && parseInt(time[0])>0 & parseInt(time[0])<11) {
+                        inv_detail.detail.remark = '**' + inv_detail.work.time + '**'
+                    }
+                }
+                catch(err) {
+                    inv_detail.detail.remark = ''
+                }
+            })
+        },
+
         dataAddSummaryCustomer() {
             var data = {
                 week: this.summary_week_id,
@@ -252,25 +274,19 @@ var summary_invoice_details = new Vue( {
             return data
         },
 
-        afterGetInvoiceDetails(data) {
-            this.invoice_data.invoice_no = this.invoice.invoice_no.split(',')
-            this.invoice_detail_list = data
-            this.addWorkKey()
-            this.work_selected = []
-        },
-
         // Invoice 
         addNewInvoice() {
             var data = this.dataAddSummaryCustomer()
 
             api("/summary/api/add-invoice/", "POST", {summary_details: data}).then((data) => {
                 if(data) {
+                    this.invoice = data
                     this.query.summary_customer = data.customer_week.id
                     if(this.customer_custom.option == 'evergreen') {
                         this.addInvoiceDetailsEvergreen(data)
                     }
                     else {
-                        this.addInvoiceDetails(data)    
+                        this.addInvoiceDetails(data) 
                     }
                     this.reload(data)
                 }
@@ -313,7 +329,11 @@ var summary_invoice_details = new Vue( {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
                 this.invoice_details = true
-                this.afterGetInvoiceDetails(data) 
+                this.afterGetInvoiceDetails(data)
+                if(this.customer_custom.option == 'time_remark') {
+                    this.addTimeRemark()
+                    this.editInvoiceDetails()
+                }
             })
             $('#modalWorkList').modal('hide');
         },

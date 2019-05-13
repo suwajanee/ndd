@@ -70,11 +70,10 @@
                                     Drayage Charge
                                 </td>
 
-                                <td rowspan=2 v-if="form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+                                <td rowspan=2 v-if="form.form_detail[3]=='3_gate_charge'" class="align-middle">
                                     Gate Charge
                                 </td>
-
-                                <td rowspan=2 v-if="form.form_detail.indexOf('agent') > 0" class="align-middle">
+                                <td rowspan=2 v-else-if="form.form_detail[3]=='3_agent'" class="align-middle">
                                     Agent
                                 </td>
 

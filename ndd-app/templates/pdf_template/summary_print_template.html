@@ -102,14 +102,16 @@
                     <td rowspan=2>
                         Drayage Charge
                     </td>
-                    {% if option != '2_inv' %}
-                        {% if 'gate_charge' in form %}
+
+                    {% if form.3 == '3_gate_charge' %}
+                        {% if option != '2_inv' %}
                             <td rowspan=2>
                                 Gate Charge
                             </td>
                         {% endif %}
                     {% endif %}
-                    {% if 'agent' in form %}
+
+                    {% if form.3 == '3_agent' %}
                         <td rowspan=2>
                             Agent
                         </td>
@@ -198,13 +200,13 @@
                             {{ inv_detail.drayage_charge.drayage|result }}
                         </td>
                         {% if option != '2_inv' %}
-                            {% if 'gate_charge' in form %}
+                            {% if form.3 == '3_gate_charge' %}
                                 <td class="text-right px-3" style="width: 2.4in">
                                     {{ inv_detail.gate_charge.gate|result }}
                                 </td>
                             {% endif %}
                         {% endif %}
-                        {% if 'agent' in form %}
+                        {% if form.3 == '3_agent' %}
                             <td style="width: 2.2in">
                                 {{ inv_detail.work.agent }}
                             </td>
@@ -214,7 +216,7 @@
                         </td>
                     </tr>
 
-                    {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                    {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                         </table>
                             <pdf:nextpage>
                         <table class="table-bordered">
@@ -292,14 +294,14 @@
                                 </td>
 
                                 {% if option != '2_inv' %}
-                                    {% if 'gate_charge' in form %}
+                                    {% if form.3 == '3_gate_charge' %}
                                         <td class="text-right px-3" style="width: 2.4in">
                                             -
                                         </td>
                                     {% endif %}
                                 {% endif %}
 
-                                {% if 'agent' in form %}
+                                {% if form.3 == '3_agent' %}
                                     <td style="width: 2.2in">
                                         {{ inv_detail.work.agent }}
                                     </td>
@@ -308,8 +310,9 @@
                                     {{ other.other_remark }}
                                 </td>
                             </tr>
+                            
 
-                            {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:other.num == 6 %}
+                            {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                                 </table>
                                     <pdf:nextpage>
                                 <table class="table-bordered">
@@ -332,7 +335,7 @@
 
                     {% if option != '2_inv' %}
                         <td class="text-right px-3 bg-whitesmoke font-110 bold">
-                            {% if 'gate_charge' in form %}
+                            {% if form.3 == '3_gate_charge' %}
                                 {{ invoice.gate_total|result }}
                             {% else %}
                                 -
@@ -427,7 +430,7 @@
                             Gate Charge
                         </td>
 
-                        {% if 'agent' in form %}
+                        {% if form.3 == '3_agent' %}
                             <td rowspan=2>
                                 Agent
                             </td>
@@ -517,7 +520,7 @@
                                 {{ inv_detail.gate_charge.gate|result }}
                             </td>
 
-                            {% if 'agent' in form %}
+                            {% if form.3 == '3_agent' %}
                                 <td style="width: 2.2in">
                                     {{ inv_detail.work.agent }}
                                 </td>
@@ -528,7 +531,7 @@
                             </td>
                         </tr>
 
-                        {% if rows > 22 and rows|mod:22 > 0 and rows|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
+                        {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
                             </table>
                                 <pdf:nextpage>
                             <table class="table-bordered">

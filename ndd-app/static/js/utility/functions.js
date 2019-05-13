@@ -14,45 +14,43 @@ const api = (endpoint, method, data) => {
 
 
 const keyDownArrow = (field, index) => {
-  var up = index - 1
-  var down = index + 1
-  var right = field + 1
-  var left = field - 1
-  if(event.key == 'ArrowUp') {
-      event.preventDefault()
-      try {
-          document.getElementById(field + '-' + up).focus()
-      }
-      catch(err){
-      }
-  }
-  else if(event.key == 'ArrowDown')
-  {
-      event.preventDefault()
-      try {
-          document.getElementById(field + '-' + down).focus()
-      }
-      catch(err){
-      }
-  }
-  else if(event.key == 'ArrowRight')
-  {
-      event.preventDefault()
-      try {
-          document.getElementById(right + '-' + index).focus()
-      }
-      catch(err){
-      }
-  }
-  else if(event.key == 'ArrowLeft')
-  {
-      event.preventDefault()
-      try {
-          document.getElementById(left + '-' + index).focus()
-      }
-      catch(err){
-      }
-  }
+    var up = index - 1
+    var down = index + 1
+    var right = field + 1
+    var left = field - 1
+
+    if(event.key == 'ArrowUp') {
+        event.preventDefault()
+        try {
+            document.getElementById(field + '-' + up).focus()
+        }
+        catch(err){
+        }
+    }
+    else if(event.key == 'ArrowDown') {
+        event.preventDefault()
+        try {
+            document.getElementById(field + '-' + down).focus()
+        }
+        catch(err){
+        }
+    }
+    else if(event.key == 'ArrowRight') {
+        event.preventDefault()
+        try {
+            document.getElementById(right + '-' + index).focus()
+        }
+        catch(err){
+        }
+    }
+    else if(event.key == 'ArrowLeft') {
+        event.preventDefault()
+        try {
+            document.getElementById(left + '-' + index).focus()
+        }
+        catch(err){
+        }
+    }
 }
 
 const arrayEqual = (arr1, arr2) => {

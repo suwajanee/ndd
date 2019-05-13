@@ -74,6 +74,7 @@
                             <tr v-if="customer.option">
                                 <td class="text-right"><b>Option :</b></td>
                                 <td v-if="customer.option=='2_inv'">2 INV. (แยก Drayage - Gate)</td>
+                                <td v-else-if="customer.option=='time_remark'">Time Remark (งานเช้า)</td>
                                 <td v-else class="w-75">{{ customer.option.toUpperCase() }}</td>
                             </tr>
                             <tr v-if="customer.form">
@@ -125,12 +126,14 @@
                                     <td rowspan=2 class="align-middle">
                                         Drayage Charge
                                     </td>
-                                    <td rowspan=2 v-if="customer.form.form_detail.indexOf('gate_charge') > 0" class="align-middle">
+
+                                    <td rowspan=2 v-if="customer.form.form_detail[3]=='3_gate_charge'" class="align-middle">
                                         Gate Charge
                                     </td>
-                                    <td rowspan=2 v-if="customer.form.form_detail.indexOf('agent') > 0" class="align-middle">
+                                    <td rowspan=2 v-if="customer.form.form_detail[3]=='3_agent'" class="align-middle">
                                         Agent
                                     </td>
+                                    
                                     <td rowspan=2 v-if="customer.form.form_detail[2]=='2_remark'" class="align-middle">
                                         Remark
                                     </td>
