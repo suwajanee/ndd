@@ -60,7 +60,7 @@
                         <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
 
                         <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': parseInt(booking.status) > 1 }">{{ booking.pickup_tr }}</td>
-                        <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
+                        <td v-else-if="['1', '2'].includes(booking.yard_ndd)" class="bg-gold">{{ booking.pickup_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.pickup_tr }">{{ booking.pickup_tr }}</td>
 
                         <td>{{ booking.pickup_from }}</td>
@@ -71,7 +71,7 @@
                         <td class="text-nowrap">{{ booking.factory }}</td>
 
                         <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.backward_tr }}</td>
-                        <td v-else-if="booking.fac_ndd == '1'" class="bg-gold">{{ booking.backward_tr }}</td>
+                        <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">{{ booking.backward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
                         <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.return_tr }}</td>
