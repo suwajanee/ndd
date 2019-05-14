@@ -62,6 +62,19 @@ input.text-lightgray {
 
 
 /* Hide too long text in field */
+.long-text-40 {
+    width: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+}
+.long-text-40:active {
+    overflow: visible;
+    width: auto;
+    display: inline-block;
+}
+
 .long-text {
     width: 60px;
     overflow: hidden;

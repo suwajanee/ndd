@@ -6,7 +6,7 @@
                 <th>PRINT</th>
                 <th></th>
                 <th>DATE</th>
-                <th>PRINCIPAL</th>
+                <th><div class="long-text-40">PRINCIPAL</div></th>
                 <th>SHIPPER</th>
                 <th>AGENT</th>
                 <th>SIZE</th>
@@ -71,9 +71,9 @@
                             </span>
                         </td>
                         
-                        <td class="text-nowrap px-3">{{ agent_transport.date|formatDate }}</td>
+                        <td class="text-nowrap px-1">{{ agent_transport.date|formatDate }}</td>
 
-                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text">{{ agent_transport.principal.name }}</div></td>
+                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
                         <td v-else></td>
 
                         <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper.name }}</td>

@@ -6,7 +6,7 @@
                 <th></th>
                 <th>PRICE</th>
                 <th>DATE</th>
-                <th class="px-4">PRINCIPAL</th>
+                <th><div class="long-text-40">PRINCIPAL</div></th>
                 <th class="px-4">SHIPPER</th>
                 <th class="px-5">AGENT</th>
                 <th>SIZE</th>
@@ -57,7 +57,7 @@
 
                         <td><input type="date" class="form-control" v-model="agent_transport.date" :id="'3-'+index" @keydown="keyDownArrow(3, index)"  @change="editData(agent_transport)" required></td>
 
-                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text">{{ agent_transport.principal.name }}</div></td>
+                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
                         <td v-else></td>
 
                         <td v-if="agent_transport.principal">

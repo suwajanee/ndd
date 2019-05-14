@@ -3,7 +3,7 @@
         <table v-if="bookings.length" class="table-hover time w-100">
             <thead class="text-nowrap bg-lightgray">
                 <th rowspan=2>DATE</th>
-                <th rowspan=2>PRINCIPAL</th>
+                <th rowspan=2><div class="long-text-40">PRINCIPAL</div></th>
                 <th rowspan=2>SHIPPER</th>
                 <th rowspan=2>AGENT</th>
                 <th rowspan=2>SIZE</th>
@@ -47,7 +47,7 @@
                     >
                         <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
-                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
+                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
                         <td v-else></td>
 
                         <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
