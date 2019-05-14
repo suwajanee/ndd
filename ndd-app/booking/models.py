@@ -15,6 +15,7 @@ class Booking(models.Model):
     booking_no = models.CharField(max_length=150, blank=True)
 
     NDD_CHOICES_1 = (
+        ('2', 'Yard'),
         ('1', 'NDD'),
         ('0', '-'),
     )
@@ -28,6 +29,7 @@ class Booking(models.Model):
     backward_tr = models.CharField(max_length=20, blank=True, default='')
 
     NDD_CHOICES_2 = (
+        ('3', 'Yard'),
         ('2', 'Fac'),
         ('1', 'NDD'),
         ('0', '-'),
@@ -61,9 +63,10 @@ class Booking(models.Model):
     nextday = models.CharField(max_length=1, choices=NEXTDAY_CHOICES, default=0)
 
     STATUS_CHOICES = (
+        ('5', 'Return'),
         ('4', 'Factory'),
         ('3', 'Yard'),
-        ('2', 'Finished'),
+        ('2', 'Completed'),
         ('1', '-'),
         ('0', 'Cancel'),
     )
@@ -74,6 +77,8 @@ class Booking(models.Model):
         ('0', '-'),
     )
     summary_status = models.CharField(max_length=1, choices=SUMMARY_STATUS_CHOICES, blank=True, null=True)
+
+    color = JSONField(null=True, blank=True)
 
     def __str__(self) :
         return self.work_id
