@@ -3,7 +3,7 @@
         <table v-if="bookings.length" class="table-hover time w-100">
             <thead class="text-nowrap bg-lightgray">
                 <th rowspan=2>DATE</th>
-                <th rowspan=2>PRINCIPAL</th>
+                <th rowspan=2><div class="long-text-40">PRINCIPAL</div></th>
                 <th rowspan=2>SHIPPER</th>
                 <th rowspan=2>AGENT</th>
                 <th rowspan=2>SIZE</th>
@@ -42,12 +42,12 @@
             <tbody>
                 <template v-for="(booking, index) in bookings">
                     <tr 
-                        :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & ['1', '3', '4'].includes(booking.status), 'alert-danger': booking.closing_date <= tmr & ['1', '3', '4'].includes(booking.status) }" 
+                        :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & ['1', '3', '4', '5'].includes(booking.status), 'alert-danger': booking.closing_date <= tmr & ['1', '3', '4', '5'].includes(booking.status) }" 
                         :key="booking.id"
                     >
                         <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
 
-                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text">{{ booking.principal.name }}</div></td>
+                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
                         <td v-else></td>
 
                         <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
@@ -60,21 +60,21 @@
                         <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
 
                         <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': parseInt(booking.status) > 1 }">{{ booking.pickup_tr }}</td>
-                        <td v-else-if="booking.yard_ndd == '1'" class="bg-gold">{{ booking.pickup_tr }}</td>
+                        <td v-else-if="['1', '2'].includes(booking.yard_ndd)" class="bg-gold">{{ booking.pickup_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.pickup_tr }">{{ booking.pickup_tr }}</td>
 
                         <td>{{ booking.pickup_from }}</td>
                         
-                        <td v-if="['0', '2', '4'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '4'].includes(booking.status) }">{{ booking.forward_tr }}</td>
+                        <td v-if="['0', '2', '4', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '4', '5'].includes(booking.status) }">{{ booking.forward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.forward_tr }">{{ booking.forward_tr }}</td>
 
                         <td class="text-nowrap">{{ booking.factory }}</td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.backward_tr }}</td>
-                        <td v-else-if="booking.fac_ndd == '1'" class="bg-gold">{{ booking.backward_tr }}</td>
+                        <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.backward_tr }}</td>
+                        <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">{{ booking.backward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' }">{{ booking.return_tr }}</td>
+                        <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.return_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
                         
                         <td>{{ booking.return_to }}</td>

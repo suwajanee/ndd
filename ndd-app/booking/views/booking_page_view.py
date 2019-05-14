@@ -33,15 +33,15 @@ def api_filter_bookings(request):
                 date_filter = None
 
             if date_filter == None:
-                bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
             elif filter_by == "month":
                 month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
             else:
-                bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         else:
-            bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+            bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         serializer = BookingSerializer(bookings, many=True)
         context['bookings'] = serializer.data
