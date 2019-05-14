@@ -27,7 +27,7 @@ const keyDownArrow = (field, index) => {
         catch(err){
         }
     }
-    else if(event.key == 'ArrowDown') {
+    else if(event.key == 'ArrowDown' || event.keyCode == 13) {
         event.preventDefault()
         try {
             document.getElementById(field + '-' + down).focus()
