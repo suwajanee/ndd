@@ -30,14 +30,14 @@ def api_save_edit_bookings(request):
                 forward_tr = pickup_tr
                 backward_tr = pickup_tr
                 return_tr = pickup_tr
-                if booking['yard_ndd'] == '1':
+                if booking['yard_ndd'] == '1' or booking['yard_ndd'] == '2':
                     forward_tr = booking['forward_tr']
                     backward_tr = forward_tr
                     return_tr = forward_tr
                 if booking['nextday'] == '1':
                     backward_tr = booking['backward_tr']
                     return_tr = backward_tr
-                if booking['fac_ndd'] == '1':
+                if booking['fac_ndd'] == '1' or booking['fac_ndd'] == '3':
                     return_tr = booking['return_tr']
                 elif booking['fac_ndd'] == '2':
                     backward_tr = booking['backward_tr']
