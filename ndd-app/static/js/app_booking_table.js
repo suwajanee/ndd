@@ -101,37 +101,45 @@ var booking_table = new Vue( {
         },
 
         getColor() {
+            var num = 0
             for(booking in this.bookings) {
 
+                var book = this.bookings[booking]
+
                 if(booking == 0){
-                    this.bookings[booking].color = this.booking_color[this.color_index=0]
+                    num = 1
+                    book.color = this.booking_color[this.color_index=0]
                 }
-                else if(this.bookings[booking].booking_no != this.bookings[booking-1].booking_no){
-                    this.bookings[booking].color = this.booking_color[++this.color_index % 10]
+                else if(book.booking_no != this.bookings[booking-1].booking_no | book.date != this.bookings[booking-1].date){
+                    num = 1
+                    book.color = this.booking_color[++this.color_index % 10]
                 }
                 else{
-                    this.bookings[booking].color = this.booking_color[this.color_index % 10]
+                    num += 1
+                    book.color = this.booking_color[this.color_index % 10]
                 }
 
+                book.num = num
+
                 try {
-                    var time = this.bookings[booking].time.split('.')
+                    var time = book.time.split('.')
                     if(parseInt(time[0])>0 & parseInt(time[0])<11){
-                        this.bookings[booking].timeColor = true
+                        book.timeColor = true
                     }
                     else{
-                        this.bookings[booking].timeColor = false
+                        book.timeColor = false
                     }
                 }
                 catch(err) {
-                    this.bookings[booking].timeColor = false
+                    book.timeColor = false
                 }
 
-                if(! this.bookings[booking].detail || ! ('return_time' in this.bookings[booking].detail)) {
-                    this.$set(this.bookings[booking], 'detail', {})
+                if(! book.detail || ! ('return_time' in book.detail)) {
+                    this.$set(book, 'detail', {})
                 }                
 
-                if(! this.bookings[booking].shipper){
-                    this.bookings[booking].shipper = 0
+                if(! book.shipper){
+                    book.shipper = 0
                 }
             }
         },

@@ -11,7 +11,7 @@
                 <th>AGENT</th>
                 <th>SIZE</th>
                 <th>BOOKING</th>
-
+                <th class="p-0" style="min-width: 25px;"></th>
                 <th>TR</th>
                 <th>FM</th>
                 <th>TR</th>
@@ -69,6 +69,8 @@
 
                         <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
                         <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
+
+                        <td class="p-0" style="min-width: 25px;">{{ booking.num }}</td>
 
                         <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': parseInt(booking.status) > 1 }">{{ booking.pickup_tr }}</td>
                         <td v-else-if="['1', '2'].includes(booking.yard_ndd)" class="bg-gold">{{ booking.pickup_tr }}</td>
@@ -154,10 +156,10 @@
                     </tr>
 
                     <tr v-if="index == bookings.length-1">
-                        <td colspan=29 class="bg-dark"></td>
+                        <td colspan=30 class="bg-dark"></td>
                     </tr>
                     <tr v-else-if="booking.date != bookings[index+1].date">
-                        <td colspan=29 class="bg-dark"></td>
+                        <td colspan=30 class="bg-dark"></td>
                     </tr>
                 </template>
             </tbody>

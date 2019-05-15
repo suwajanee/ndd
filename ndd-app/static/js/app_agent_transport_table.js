@@ -88,20 +88,35 @@ var agent_transport_table = new Vue( {
         },
 
         getColor() {
+            var num = 0
+
             for(agent_transport in this.agent_transports) {
 
+                var agent = this.agent_transports[agent_transport]
+
                 if(agent_transport == 0){
-                    this.agent_transports[agent_transport].color = this.booking_color[this.color_index=0]
+                    agent.color = this.booking_color[this.color_index=0]
                 }
-                else if(this.agent_transports[agent_transport].booking_no != this.agent_transports[agent_transport-1].booking_no){
-                    this.agent_transports[agent_transport].color = this.booking_color[++this.color_index % 10]
+                else if(agent.booking_no != this.agent_transports[agent_transport-1].booking_no){
+                    agent.color = this.booking_color[++this.color_index % 10]
                 }
                 else{
-                    this.agent_transports[agent_transport].color = this.booking_color[this.color_index % 10]
+                    agent.color = this.booking_color[this.color_index % 10]
                 }
 
-                if(! this.agent_transports[agent_transport].shipper){
-                    this.agent_transports[agent_transport].shipper = 0
+                if(agent_transport == 0){
+                    num = 1
+                }
+                else if(agent.date != this.agent_transports[agent_transport-1].date | agent.work_type != this.agent_transports[agent_transport-1].work_type | agent.shipper.id != this.agent_transports[agent_transport-1].shipper.id) {
+                    num = 1
+                }
+                else {
+                    num += 1
+                }
+                agent.num = num
+
+                if(! agent.shipper){
+                    agent.shipper = 0
                 }
 
             }
