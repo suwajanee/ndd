@@ -175,23 +175,23 @@
 
                         <td class="text-nowrap">{{ booking.work_id }}</td>
 
-                        <td :class="{'bg-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
                             <select class="custom-select short py-1 px-2" v-model="booking.nextday" :id="'22-'+index" @keydown="keyDownArrow(22, index)" @change="editData(booking, index, 22)">
                                 <option value="0"> - </option>
                                 <option value="1"> Yes </option>
                             </select>
                         </td>
-                        <td :class="{'bg-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
                             <input v-if="booking.nextday == 1" type="date" class="form-control" v-model="booking.return_date" :id="'23-'+index" @keydown="keyDownArrow(23, index)" @change="editData(booking)">
                             <input v-else type="date" class="form-control" v-model="booking.date" :id="'23-'+index" @keydown="keyDownArrow(23, index)" readonly>
                         </td>
-                        <td :class="{'bg-info':booking.nextday == '1' & booking.status != '0'}">
-                            <input v-if="booking.nextday == 1" class="form-control" v-model="booking.detail.return_time" @change="editData(booking)">
-                            <input v-else class="form-control" v-model="booking.detail.return_time" @change="editData(booking)" readonly>
+                        <td :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
+                            <input v-if="booking.nextday == 1" class="form-control" v-model="booking.detail.return_time" @change="editData(booking)" :id="'24-'+index" @keydown="keyDownArrow(24, index)" @change="editData(booking)">
+                            <input v-else class="form-control" v-model="booking.detail.return_time" :id="'24-'+index" @keydown="keyDownArrow(24, index)" readonly>
                         </td>
                         
-                        <td><input class="form-control" v-model="booking.vessel" maxlength="100" autocomplete=off :id="'24-'+index" @keydown="keyDownArrow(24, index)" @change="editData(booking)"></td>
-                        <td><input name="port" class="form-control" v-model="booking.port" maxlength="50" autocomplete=off :id="'25-'+index" @keydown="keyDownArrow(25, index)" @change="editData(booking)"></td>
+                        <td><input class="form-control" v-model="booking.vessel" maxlength="100" autocomplete=off :id="'25-'+index" @keydown="keyDownArrow(25, index)" @change="editData(booking)"></td>
+                        <td><input name="port" class="form-control" v-model="booking.port" maxlength="50" autocomplete=off :id="'26-'+index" @keydown="keyDownArrow(26, index)" @change="editData(booking)"></td>
                     </tr>
 
                     <tr v-if="index == bookings.length-1">
