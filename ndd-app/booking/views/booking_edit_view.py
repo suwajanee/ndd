@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
+from .booking_add_view import run_work_id
 from .booking_page_view import api_filter_bookings
 from .utility.functions import check_key_detail
 from customer.models import Shipper
@@ -18,8 +19,6 @@ def api_save_edit_bookings(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             bookings = req['bookings']
-
-            print(bookings)
 
             for booking in bookings:
                 if not booking['date']:
@@ -47,6 +46,12 @@ def api_save_edit_bookings(request):
                     return_tr = booking['return_tr']
 
                 booking_save = Booking.objects.get(pk=booking['id'])
+
+                if str(booking_save.date) != booking['date']:
+                    work_id, work_number = run_work_id(booking['date'])
+                    booking_save.work_id = work_id
+                    booking_save.work_number = work_number
+
                 booking_save.status = booking['status']
                 booking_save.time = booking['time']
                 booking_save.date = booking['date']

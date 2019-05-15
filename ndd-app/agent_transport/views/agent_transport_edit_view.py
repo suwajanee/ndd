@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
+from .agent_transport_add_view import run_work_id
 from .agent_transport_page_view import api_filter_agent_transports
 from customer.models import Shipper
 
@@ -29,6 +30,12 @@ def api_save_edit_agent_transport(request):
                     agent_transport['price'] = 0
 
                 agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
+
+                if str(agent_transport_save.date) != agent_transport['date']:
+                    work_id, work_number = run_work_id(agent_transport['date'], agent_transport_save.work_type)
+                    agent_transport_save.work_id = work_id
+                    agent_transport_save.work_number = work_number
+
                 agent_transport_save.status = agent_transport['status']
                 agent_transport_save.operation_type = agent_transport['operation_type']
                 agent_transport_save.price = agent_transport['price']
