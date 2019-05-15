@@ -57,7 +57,8 @@ class Booking(models.Model):
     return_date = models.DateField(blank=True, null=True)
 
     NEXTDAY_CHOICES = (
-        ('1', 'Yes'),
+        ('2', 'ยกลง'),
+        ('1', 'ตัดหาง'),
         ('0', '-'),
     )
     nextday = models.CharField(max_length=1, choices=NEXTDAY_CHOICES, default=0)

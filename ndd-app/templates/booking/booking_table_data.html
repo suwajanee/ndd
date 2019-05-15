@@ -136,16 +136,16 @@
 
                         <td class="text-nowrap">{{ booking.work_id }}</td>
                         
-                        <td class="text-nowrap px-1" :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td class="text-nowrap px-1" :class="{'table-info':booking.nextday == '1' & booking.status != '0', 'table-success':booking.nextday == '2' & booking.status != '0'}">
                             {{ booking.pickup_date|formatDate }}
                         </td>
-                        <td class="text-nowrap px-1" :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td class="text-nowrap px-1" :class="{'table-info':booking.nextday == '1' & booking.status != '0', 'table-success':booking.nextday == '2' & booking.status != '0'}">
                             {{ booking.factory_date|formatDate }}
                         </td>
-                        <td class="text-nowrap px-2" :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td class="text-nowrap px-2" :class="{'table-info':booking.nextday == '1' & booking.status != '0', 'table-success':booking.nextday == '2' & booking.status != '0'}">
                             <b>{{ booking.return_date|formatDate }}</b>
                         </td>
-                        <td class="text-nowrap px-2" :class="{'table-info':booking.nextday == '1' & booking.status != '0'}">
+                        <td class="text-nowrap px-2" :class="{'table-info':booking.nextday == '1' & booking.status != '0', 'table-success':booking.nextday == '2' & booking.status != '0'}">
                             <b>{{ booking.detail.return_time }}</b>
                         </td>
                         

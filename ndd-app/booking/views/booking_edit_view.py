@@ -71,7 +71,7 @@ def api_save_edit_bookings(request):
                 booking_save.closing_time = booking['closing_time']
                 booking_save.remark = re.sub(' +', ' ', booking['remark'].strip())
                 booking_save.nextday = booking['nextday']
-                if booking['nextday'] == '1':
+                if booking['nextday'] == '1' or booking['nextday'] == '2':
                     booking_save.return_date = booking['return_date']
                     booking_save.detail = {}
                     booking_save.detail = check_key_detail(booking_save.detail, booking['detail'], 'return_time', True)
@@ -84,7 +84,7 @@ def api_save_edit_bookings(request):
                         booking_save.detail.pop('return_time')
                     except:
                         pass
-                        
+
                 booking_save.vessel = re.sub(' +', ' ', booking['vessel'].strip())
                 booking_save.port = re.sub(' +', ' ', booking['port'].strip())
                 booking_save.save()
