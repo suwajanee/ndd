@@ -9,9 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import CustomerCustom, Invoice, InvoiceDetail, SummaryCustomer
 from ..serializers import CustomerCustomSerializer, InvoiceSerializer, SummaryCustomerSerializer
 from .summary_customer_view import add_summary_customer, delete_summary_customer
-from .summary_invoice_details_view import check_key_detail
 from .summary_invoice_details_view import delete_invoice_details
 from .summary_week_view import get_week_details
+from booking.views.utility.functions import check_key_detail
 from customer.models import Principal
 from customer.serializers import PrincipalSerializer
 

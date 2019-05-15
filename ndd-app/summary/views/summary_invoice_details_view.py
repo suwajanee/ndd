@@ -9,6 +9,7 @@ from ..models import Invoice, InvoiceDetail
 from ..serializers import InvoiceDetailSerializer
 from booking.models import Booking
 from booking.views.booking_data_view import booking_summary_status, booking_edit_summary
+from booking.views.utility.functions import check_key_detail
 from agent_transport.models import AgentTransport
 from agent_transport.views.agent_transport_data_view import agent_transport_summary_status, agent_transport_edit_summary
 
@@ -269,24 +270,24 @@ def save_invoice_total_charge(invoice, drayage_total, gate_total):
         invoice.gate_total = 0
     return invoice
 
-def check_key_detail(invoice, data, key, pop):
-    if key in data:
-        if data[key]:
-            invoice[key] = data[key]
-        else: 
-            try:
-                if pop:
-                    invoice.pop(key)
-                else:
-                    invoice[key] = ''
-            except:
-                pass
-    else:
-        try:
-            if pop:
-                invoice.pop(key)
-            else:
-                invoice[key] = ''
-        except:
-            pass
-    return invoice
+# def check_key_detail(invoice, data, key, pop):
+#     if key in data:
+#         if data[key]:
+#             invoice[key] = data[key]
+#         else: 
+#             try:
+#                 if pop:
+#                     invoice.pop(key)
+#                 else:
+#                     invoice[key] = ''
+#             except:
+#                 pass
+#     else:
+#         try:
+#             if pop:
+#                 invoice.pop(key)
+#             else:
+#                 invoice[key] = ''
+#         except:
+#             pass
+#     return invoice
