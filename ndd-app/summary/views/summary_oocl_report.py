@@ -75,7 +75,7 @@ def oocl_report(request):
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice).values_list('drayage_charge', 'gate_charge', 'detail').order_by('work_agent_transport__date', 'pk')
         
         work_id = InvoiceDetail.objects.filter(invoice=invoice).values_list('work_agent_transport').order_by('work_agent_transport__date', 'pk')
-        works = AgentTransport.objects.filter(pk__in=work_id).values_list('booking_no', 'pickup_from', 'return_to', 'date', 'container_1', 'size')
+        works = AgentTransport.objects.filter(pk__in=work_id).values_list('booking_no', 'pickup_from', 'return_to', 'date', 'container_1', 'size').order_by('date', 'pk')
 
         if 'customer_name' in invoice.detail:
             customer_name = invoice.detail['customer_name']
