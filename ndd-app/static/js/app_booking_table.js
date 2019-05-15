@@ -169,7 +169,7 @@ var booking_table = new Vue( {
 
         editData: function(booking, index, field) {
             if(index && field) {
-                if(booking.yard_ndd == '1' & field == 9){
+                if(['1', '2'].includes(booking.yard_ndd) & field == 9){
                     this.bookings[index].forward_tr = ''
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
@@ -178,7 +178,7 @@ var booking_table = new Vue( {
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
                 }
-                if(booking.fac_ndd == '1' & field == 13){
+                if(['1', '3'].includes(booking.fac_ndd) & field == 13){
                     this.bookings[index].return_tr = ''
                 }
             }

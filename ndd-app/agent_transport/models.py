@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from datetime import datetime
 from customer.models import Principal, Shipper
@@ -45,8 +46,9 @@ class AgentTransport(models.Model):
     return_date = models.DateField(blank=True, null=True, default='')
 
     STATUS_CHOICES = (
+        ('4', 'Return'),
         ('3', 'Pickup'),
-        ('2', 'Finished'),
+        ('2', 'Completed'),
         ('1', '-'),
         ('0', 'Cancel'),
     )
@@ -57,6 +59,8 @@ class AgentTransport(models.Model):
         ('0', '-'),
     )
     summary_status = models.CharField(max_length=1, choices=SUMMARY_STATUS_CHOICES, blank=True, null=True)
+
+    color = JSONField(null=True, blank=True)
 
     def __str__(self) :
         return self.work_id

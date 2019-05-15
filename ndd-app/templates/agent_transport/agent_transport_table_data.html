@@ -6,7 +6,7 @@
                 <th>PRINT</th>
                 <th></th>
                 <th>DATE</th>
-                <th>PRINCIPAL</th>
+                <th><div class="long-text-40">PRINCIPAL</div></th>
                 <th>SHIPPER</th>
                 <th>AGENT</th>
                 <th>SIZE</th>
@@ -30,7 +30,7 @@
             <tbody>
                 <template v-for="(agent_transport, index) in agent_transports">
                     <tr
-                        :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': ['1', '3'].includes(agent_transport.status) }"
+                        :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': ['1', '3', '4'].includes(agent_transport.status) }"
                         :key="agent_transport.id"
                     >
                         <td class="p-0 align-middle">
@@ -71,9 +71,9 @@
                             </span>
                         </td>
                         
-                        <td class="text-nowrap px-3">{{ agent_transport.date|formatDate }}</td>
+                        <td class="text-nowrap px-1">{{ agent_transport.date|formatDate }}</td>
 
-                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text">{{ agent_transport.principal.name }}</div></td>
+                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
                         <td v-else></td>
 
                         <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper.name }}</td>
@@ -99,13 +99,24 @@
                             </button>
                         </td>
                         
-                        <td v-if="['0', '2'].includes(agent_transport.status)" :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': agent_transport.status == '2' }">{{ agent_transport.return_tr }}</td>
+                        <td v-if="['0', '2', '4'].includes(agent_transport.status)" 
+                            :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': ['2', '4'].includes(agent_transport.status) }"
+                        >
+                            {{ agent_transport.return_tr }}
+                        </td>
                         <td v-else :class="{ 'bg-cyan': agent_transport.return_tr }">{{ agent_transport.return_tr }}</td>
 
                         <td>
                             {{ agent_transport.return_to }}<br>
                             <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle" 
-                                :class="agent_transport.status == '2' ? 'btn-primary' : 'btn-outline-primary'"
+                                :class="['2', '4'].includes(agent_transport.status) ? 'btn-primary' : 'btn-outline-primary'"
+                                style="font-size: 10%; padding: 0px;"
+                                @click="changeStateAgentTransport(agent_transport.id, '4')"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle" 
+                                :class="agent_transport.status == '2' ? 'btn-success' : 'btn-outline-success'"
                                 style="font-size: 10%; padding: 0px;"
                                 @click="changeStateAgentTransport(agent_transport.id, '2')"
                             >
