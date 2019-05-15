@@ -28,7 +28,7 @@ def api_save_add_bookings(request):
 
             bookings = req['bookings']
             details = req['details']
-
+            print(bookings)
             return_date = bookings['return_date']
 
             bookings['principal'] = Principal.objects.get(pk=bookings['principal'])

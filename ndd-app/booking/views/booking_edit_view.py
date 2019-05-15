@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
 from .booking_page_view import api_filter_bookings
+from .utility.functions import check_key_detail
 from customer.models import Shipper
 
 
@@ -17,6 +18,8 @@ def api_save_edit_bookings(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             bookings = req['bookings']
+
+            print(bookings)
 
             for booking in bookings:
                 if not booking['date']:
@@ -70,10 +73,18 @@ def api_save_edit_bookings(request):
                 booking_save.nextday = booking['nextday']
                 if booking['nextday'] == '1':
                     booking_save.return_date = booking['return_date']
+                    booking_save.detail = {}
+                    booking_save.detail = check_key_detail(booking_save.detail, booking['detail'], 'return_time', True)
+                    
                 else:
                     booking_save.pickup_date = booking['date']
                     booking_save.factory_date = booking['date']
                     booking_save.return_date = booking['date']
+                    try:
+                        booking_save.detail.pop('return_time')
+                    except:
+                        pass
+                        
                 booking_save.vessel = re.sub(' +', ' ', booking['vessel'].strip())
                 booking_save.port = re.sub(' +', ' ', booking['port'].strip())
                 booking_save.save()

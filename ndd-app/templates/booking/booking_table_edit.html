@@ -28,8 +28,8 @@
     
                 <th class="px-5">REMARK</th>
                 <th>เลขที่ใบงาน</th>
-                <th>ตัดหาง</th>
-                <th>RETURN</th>
+                <th>ตัดหาง/<br>ยกลง</th>
+                <th colspan=2>RETURN</th>
                 <th class="px-5">VESSEL</th>
                 <th class="px-5">PORT</th>
             </thead> 
@@ -185,16 +185,20 @@
                             <input v-if="booking.nextday == 1" type="date" class="form-control" v-model="booking.return_date" :id="'23-'+index" @keydown="keyDownArrow(23, index)" @change="editData(booking)">
                             <input v-else type="date" class="form-control" v-model="booking.date" :id="'23-'+index" @keydown="keyDownArrow(23, index)" readonly>
                         </td>
+                        <td :class="{'bg-info':booking.nextday == '1' & booking.status != '0'}">
+                            <input v-if="booking.nextday == 1" class="form-control" v-model="booking.detail.return_time" @change="editData(booking)">
+                            <input v-else class="form-control" v-model="booking.detail.return_time" @change="editData(booking)" readonly>
+                        </td>
                         
                         <td><input class="form-control" v-model="booking.vessel" maxlength="100" autocomplete=off :id="'24-'+index" @keydown="keyDownArrow(24, index)" @change="editData(booking)"></td>
                         <td><input name="port" class="form-control" v-model="booking.port" maxlength="50" autocomplete=off :id="'25-'+index" @keydown="keyDownArrow(25, index)" @change="editData(booking)"></td>
                     </tr>
 
                     <tr v-if="index == bookings.length-1">
-                        <td colspan=29 class="bg-dark"></td>
+                        <td colspan=30 class="bg-dark"></td>
                     </tr>
                     <tr v-else-if="booking.date != bookings[index+1].date">
-                        <td colspan=29 class="bg-dark"></td>
+                        <td colspan=30 class="bg-dark"></td>
                     </tr>
                 </template>
             </tbody>

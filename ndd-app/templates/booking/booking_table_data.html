@@ -30,7 +30,7 @@
 
                 <th>PICK UP</th>
                 <th>FACTORY</th>
-                <th>RETURN</th>
+                <th colspan=2>RETURN</th>
                 <th>VESSEL</th>
                 <th>PORT</th>
             </thead> 
@@ -145,16 +145,19 @@
                         <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
                             {{ booking.return_date|formatDate }}
                         </td>
+                        <td class="text-nowrap px-3" :class="{'bg-info text-white':booking.nextday == '1' & booking.status != '0'}">
+                            {{ booking.detail.return_time }}
+                        </td>
                         
                         <td class="text-center px-2"><div class="long-text-80">{{ booking.vessel }}</div></td>
                         <td class="text-center px-2"><div class="long-text">{{ booking.port }}</div></td>
                     </tr>
 
                     <tr v-if="index == bookings.length-1">
-                        <td colspan=28 class="bg-dark"></td>
+                        <td colspan=29 class="bg-dark"></td>
                     </tr>
                     <tr v-else-if="booking.date != bookings[index+1].date">
-                        <td colspan=28 class="bg-dark"></td>
+                        <td colspan=29 class="bg-dark"></td>
                     </tr>
                 </template>
             </tbody>

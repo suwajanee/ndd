@@ -126,6 +126,10 @@ var booking_table = new Vue( {
                     this.bookings[booking].timeColor = false
                 }
 
+                if(! this.bookings[booking].detail || ! ('return_time' in this.bookings[booking].detail)) {
+                    this.$set(this.bookings[booking], 'detail', {})
+                }                
+
                 if(! this.bookings[booking].shipper){
                     this.bookings[booking].shipper = 0
                 }
