@@ -60,7 +60,7 @@ class AgentTransport(models.Model):
     )
     summary_status = models.CharField(max_length=1, choices=SUMMARY_STATUS_CHOICES, blank=True, null=True)
 
-    color = JSONField(null=True, blank=True)
+    detail = JSONField(null=True, blank=True)
 
     def __str__(self) :
         return self.work_id

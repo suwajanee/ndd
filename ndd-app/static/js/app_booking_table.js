@@ -126,6 +126,10 @@ var booking_table = new Vue( {
                     this.bookings[booking].timeColor = false
                 }
 
+                if(! this.bookings[booking].detail || ! ('return_time' in this.bookings[booking].detail)) {
+                    this.$set(this.bookings[booking], 'detail', {})
+                }                
+
                 if(! this.bookings[booking].shipper){
                     this.bookings[booking].shipper = 0
                 }
@@ -174,7 +178,7 @@ var booking_table = new Vue( {
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
                 }
-                if((booking.nextday == '1' & field == 22) | (booking.fac_ndd == '2' & field == 13)){
+                if(((booking.nextday == '1' | booking.nextday == '2') & field == 22) | (booking.fac_ndd == '2' & field == 13)){
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
                 }
