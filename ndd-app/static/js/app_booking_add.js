@@ -33,10 +33,12 @@ var booking_add = new Vue( {
 
             nextday: false,
             return_date: '',
+            detail: {},
 
             closing_date: '',
             closing_time: '',
-            remark: ''
+            remark: '',
+            
         },
     },
 
