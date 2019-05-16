@@ -59,7 +59,7 @@ def api_get_booking_daily_works(request):
             today = datetime.today()
 
             data['cancel'] = Booking.objects.filter(Q(date=today) & Q(status=0)).count()
-            data['pending'] = pending = Booking.objects.filter(Q(date=today) & Q(status__in=[1,3,4])).count()
+            data['pending'] = pending = Booking.objects.filter(Q(date=today) & Q(status__in=[1,3,4,5])).count()
             data['completed'] = completed = Booking.objects.filter(Q(date=today) & Q(status=2)).count()
             data['total'] = pending + completed
 

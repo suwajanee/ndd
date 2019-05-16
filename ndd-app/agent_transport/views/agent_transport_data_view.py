@@ -63,7 +63,7 @@ def api_get_agent_transport_daily_works(request):
             today = datetime.today()
 
             data['cancel'] = AgentTransport.objects.filter(Q(date=today) & Q(status=0)).count()
-            data['pending'] = pending = AgentTransport.objects.filter(Q(date=today) & Q(status__in=[1,3])).count()
+            data['pending'] = pending = AgentTransport.objects.filter(Q(date=today) & Q(status__in=[1,3,4])).count()
             data['completed'] = completed = AgentTransport.objects.filter(Q(date=today) & Q(status=2)).count()
             data['total'] = pending + completed
 
