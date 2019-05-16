@@ -44,13 +44,13 @@ def api_get_weekly_works(request):
                 data4 = {}
 
                 data1['x'] = data2['x'] = data3['x'] = data4['x'] = str(day.date()).split('-')
-                data1['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4])).count()
+                data1['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4, 5])).count()
                 booking_pending.append(data1)
 
                 data2['y'] = Booking.objects.filter(Q(date=day) & Q(status=2)).count()
                 booking_completed.append(data2)
 
-                data3['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[1, 3])).count()
+                data3['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4])).count()
                 agent_pending.append(data3)
 
                 data4['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=2)).count()

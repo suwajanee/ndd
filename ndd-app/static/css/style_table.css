@@ -59,6 +59,13 @@ table.time th {
     background-color: Red!important;
 }
 
+.table-info {
+    background-color: #D9EDF7!important;
+}
+.table-success {
+    background-color: #DFF0D8!important;
+}
+
 input.text-lightgray {
     color: lightgray;
 }
