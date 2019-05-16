@@ -56,7 +56,7 @@
 
                         <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]">
                             {{ booking.time }}<br>
-                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle btn-outline-dark" 
+                            <button v-if="booking.status != '0' && booking.timeColor == false" class="btn btn-sm mt-1 rounded-circle btn-outline-dark" 
                                 style="font-size: 10%; padding: 0px;"
                                 @click="checkColor(booking.id, booking.detail.time, 'time')"
                             >
