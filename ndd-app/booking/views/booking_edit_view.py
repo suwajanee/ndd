@@ -114,3 +114,27 @@ def api_change_state_booking(request):
 
             return JsonResponse(booking.status, safe=False)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_change_color_field(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            booking_id = req['id']
+            field = req['field']
+            color = {field: req['color']}
+
+            booking = Booking.objects.get(pk=booking_id)
+            if not booking.detail:
+                booking.detail = {}
+            booking.detail = check_key_detail(booking.detail, color, field, True)
+            booking.save()
+
+            if field in booking.detail:
+                color_key = booking.detail[field]
+            else:
+                color_key = 0
+
+            return JsonResponse(color_key, safe=False)
+    return JsonResponse('Error', safe=False)

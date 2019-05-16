@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^api/delete-bookings/$', booking_delete_view.api_delete_bookings, name='api-delete-bookings'),
 
     url(r'^api/change-state-booking/$', booking_edit_view.api_change_state_booking, name='api-change-state-booking'),
+    url(r'^api/change-color/$', booking_edit_view.api_change_color_field, name='api-change-color-booking'),
 
     url(r'^api/get-time-bookings/$', booking_time_view.api_get_time_bookings, name='api-get-time-bookings'),
     url(r'^api/save-time-bookings/$', booking_time_view.api_save_time_bookings, name='api-save-time-bookings'),

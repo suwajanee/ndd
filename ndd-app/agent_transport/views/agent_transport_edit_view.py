@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import AgentTransport
 from .agent_transport_add_view import run_work_id
 from .agent_transport_page_view import api_filter_agent_transports
+from booking.views.utility.functions import check_key_detail
 from customer.models import Shipper
 
 
@@ -75,5 +76,29 @@ def api_change_state_agent_transport(request):
             agent_transport.save()
 
             return JsonResponse(agent_transport.status, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_change_color_field(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            agent_id = req['id']
+            field = req['field']
+            color = {field: req['color']}
+
+            agent = AgentTransport.objects.get(pk=agent_id)
+            if not agent.detail:
+                agent.detail = {}
+            agent.detail = check_key_detail(agent.detail, color, field, True)
+            agent.save()
+
+            if field in agent.detail:
+                color_key = agent.detail[field]
+            else:
+                color_key = 0
+
+            return JsonResponse(color_key, safe=False)
     return JsonResponse('Error', safe=False)
     
