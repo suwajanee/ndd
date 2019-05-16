@@ -46,7 +46,7 @@ table.table-bordered-dark > tbody > tr > td{
 }
 td input[type="date"], td input:not([type]), input[type="text"] {
     padding: 2px 4px;
-    font-size: 14px;
+    font-size: 12px;
 }
 #summary-form-setting-page .custom-checkbox input[type="checkbox"] + label::before,
 #summary-form-setting-page .custom-radio input[type="radio"] + label::before {
@@ -132,6 +132,9 @@ select.size {
 }
 .bg-lime {
     background-color: Lime ;
+}
+.bg-cyan {
+    background-color: Cyan ;
 }
 .bg-red {
     background-color: Red ;
