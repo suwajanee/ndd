@@ -16,6 +16,8 @@ var agent_transport_table = new Vue( {
         date_filter: '',
 
         nbar: 'table',
+
+        container_color: {},
         
         booking_color: ['#9977b4', '#dd86b9', '#f497a9', '#f9b489', '#fdcd79', '#fff68f', '#b6d884', '#81cbb5', '#6acade', '#72abdd'],
         color_index: 0,
@@ -35,6 +37,7 @@ var agent_transport_table = new Vue( {
 
     methods: {
         reload() {
+            this.container_color = container_color
             if(localStorage.getItem('filter_by_agent_transport')){
                 this.filter_by = localStorage.getItem('filter_by_agent_transport')
             }
@@ -114,6 +117,10 @@ var agent_transport_table = new Vue( {
                     num += 1
                 }
                 agent.num = num
+
+                if(! agent.detail) {
+                    this.$set(agent, 'detail', {})
+                }  
 
                 if(! agent.shipper){
                     agent.shipper = 0
@@ -199,6 +206,20 @@ var agent_transport_table = new Vue( {
             api("/agent-transport/api/change-state-agent-transport/", "POST", {agent_transport_id: id, state: state}).then((data) => {
                 var agent_transport = this.agent_transports.find(x => x.id == id)
                 agent_transport.status = data
+            })
+        },
+        checkColor(id, color, field) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = (parseInt(color) + 1) % 5
+                if(color==0) { color = '' }
+            }
+
+            api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: field}).then((data) => {
+                var agent = this.agent_transports.find(x => x.id == id)
+                this.$set(agent.detail, field, data)
             })
         },
 
