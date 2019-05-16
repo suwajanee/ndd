@@ -460,7 +460,7 @@ var summary_invoice_details = new Vue( {
                 color = 1
             }
             else {
-                color = (color + 1) % 4
+                color = (color + 1) % 5
                 if(color==0) { color = '' }
             }
 

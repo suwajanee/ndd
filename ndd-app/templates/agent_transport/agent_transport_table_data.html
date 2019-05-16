@@ -127,8 +127,24 @@
                             </button>
                         </td>
 
-                        <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_1 }}</td>
-                        <td class="text-nowrap" style="font-weight: 800;">{{ agent_transport.container_2 }}</td>
+                        <td class="text-nowrap" :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_1]]" style="font-weight: 800;">
+                            {{ agent_transport.container_1 }}<br>
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
+                                style="font-size: 10%; padding: 0px;"
+                                @click="checkColor(agent_transport.id, agent_transport.detail.container_1, 'container_1')"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
+                        <td class="text-nowrap" :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_2]]" style="font-weight: 800;">
+                            {{ agent_transport.container_2 }}<br>
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
+                                style="font-size: 10%; padding: 0px;"
+                                @click="checkColor(agent_transport.id, agent_transport.detail.container_2, 'container_2')"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
 
                         <td class="text-center px-2"><div  class="long-text-80" style="margin:auto;">{{ agent_transport.remark }}</div></td>
 
