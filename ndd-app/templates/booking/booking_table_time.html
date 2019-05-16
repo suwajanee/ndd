@@ -42,7 +42,7 @@
             <tbody>
                 <template v-for="(booking, index) in bookings">
                     <tr 
-                        :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & ['1', '3', '4', '5'].includes(booking.status), 'alert-danger': booking.closing_date <= tmr & ['1', '3', '4', '5'].includes(booking.status) }" 
+                        :class="{'bg-secondary':booking.status==0, 'table-warning': booking.date <= today & ['1', '3', '4', '5'].includes(booking.status), 'table-danger': booking.closing_date <= tmr & ['1', '3', '4', '5'].includes(booking.status) }" 
                         :key="booking.id"
                     >
                         <td class="text-nowrap px-3">{{ booking.date|formatDate }}</td>
@@ -74,13 +74,17 @@
                         <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">{{ booking.backward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
-                        <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.return_tr }}</td>
+                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2'].includes(booking.status) }">{{ booking.return_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
                         
                         <td>{{ booking.return_to }}</td>
 
-                        <td class="text-nowrap" style="font-weight: 800;">{{ booking.container_no }}</td>
-                        <td class="text-nowrap" style="font-weight: 800;">{{ booking.seal_no }}</td>
+                        <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.container_no]]" style="font-weight: 800;">
+                            {{ booking.container_no }}
+                        </td>
+                        <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.seal_no]]" style="font-weight: 800;">
+                            {{ booking.seal_no }}
+                        </td>
                         <td class="px-1"><div class="long-text-80">{{ booking.tare }}</div></td>
 
                         <td class="text-nowrap">{{ booking.work_id }}</td>
