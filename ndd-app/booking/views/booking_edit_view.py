@@ -36,7 +36,7 @@ def api_save_edit_bookings(request):
                     forward_tr = booking['forward_tr']
                     backward_tr = forward_tr
                     return_tr = forward_tr
-                if booking['nextday'] == '1':
+                if booking['nextday'] == '1' or booking['nextday'] == '2':
                     backward_tr = booking['backward_tr']
                     return_tr = backward_tr
                 if booking['fac_ndd'] == '1' or booking['fac_ndd'] == '3':
