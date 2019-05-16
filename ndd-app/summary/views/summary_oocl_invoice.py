@@ -114,7 +114,10 @@ def oocl_invoice(request):
         style.font = style_xls.font_size_16()
         style.borders = style_xls.border_right()
         sheet.write(7, 6, invoice.invoice_no, style)
-        sheet.write(9, 6, invoice.detail['other'], style)
+        if 'other' in invoice.detail:
+            sheet.write(9, 6, invoice.detail['other'], style)
+        else:
+            sheet.write(9, 6, '', style)
         sheet.write(10, 6, '', style)
         sheet.write(11, 6, '', style)
         sheet.write(12, 6, '', style)

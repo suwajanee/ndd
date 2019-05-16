@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
+from .booking_add_view import run_work_id
 from .booking_page_view import api_filter_bookings
 from .utility.functions import check_key_detail
 from customer.models import Shipper
@@ -18,8 +19,6 @@ def api_save_edit_bookings(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             bookings = req['bookings']
-
-            print(bookings)
 
             for booking in bookings:
                 if not booking['date']:
@@ -37,7 +36,7 @@ def api_save_edit_bookings(request):
                     forward_tr = booking['forward_tr']
                     backward_tr = forward_tr
                     return_tr = forward_tr
-                if booking['nextday'] == '1':
+                if booking['nextday'] == '1' or booking['nextday'] == '2':
                     backward_tr = booking['backward_tr']
                     return_tr = backward_tr
                 if booking['fac_ndd'] == '1' or booking['fac_ndd'] == '3':
@@ -47,6 +46,12 @@ def api_save_edit_bookings(request):
                     return_tr = booking['return_tr']
 
                 booking_save = Booking.objects.get(pk=booking['id'])
+
+                if str(booking_save.date) != booking['date']:
+                    work_id, work_number = run_work_id(booking['date'])
+                    booking_save.work_id = work_id
+                    booking_save.work_number = work_number
+
                 booking_save.status = booking['status']
                 booking_save.time = booking['time']
                 booking_save.date = booking['date']
@@ -108,4 +113,28 @@ def api_change_state_booking(request):
             booking.save()
 
             return JsonResponse(booking.status, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_change_color_field(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            
+            booking_id = req['id']
+            field = req['field']
+            color = {field: req['color']}
+
+            booking = Booking.objects.get(pk=booking_id)
+            if not booking.detail:
+                booking.detail = {}
+            booking.detail = check_key_detail(booking.detail, color, field, True)
+            booking.save()
+
+            if field in booking.detail:
+                color_key = booking.detail[field]
+            else:
+                color_key = 0
+
+            return JsonResponse(color_key, safe=False)
     return JsonResponse('Error', safe=False)

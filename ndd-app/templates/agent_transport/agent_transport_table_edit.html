@@ -11,6 +11,7 @@
                 <th class="px-5">AGENT</th>
                 <th>SIZE</th>
                 <th class="px-4">BOOKING</th>
+                <th class="p-0" style="min-width: 25px;"></th>
 
                 <th>TR</th>
                 <th>FM</th>
@@ -27,7 +28,7 @@
             <tbody>
                 <template v-for="(agent_transport, index) in agent_transports">
                     <tr 
-                        :class="{'bg-secondary':agent_transport.status==0, 'alert-warning': ['1', '3', '4'].includes(agent_transport.status) }" 
+                        :class="{'bg-secondary':agent_transport.status==0, 'table-warning': ['1', '3', '4'].includes(agent_transport.status) }" 
                         :key="agent_transport.id"
                     >
                         <td>
@@ -81,6 +82,7 @@
                                 <option value="40'OT">40'OT</option>
                                 <option value="40'GOH">40'GOH</option>
                                 <option value="40'RF">40'RF</option>
+                                <option value="40'FL">40'FL</option>
                                 <option value="45'">45'</option>
                                 <option value="" disabled> -------- </option>
                                 <option value="2X20'">2X20'</option>
@@ -94,6 +96,8 @@
                         <td v-else style="min-width:150px;" :style="{ 'background-color': agent_transport.color }">
                             <input class="form-control" v-model="agent_transport.booking_no" maxlength="150" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(agent_transport)">                            
                         </td>
+
+                        <td class="p-0" style="min-width: 25px;">{{ agent_transport.num }}</td>
 
                         <td v-if="agent_transport.status != '1'" :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': parseInt(agent_transport.status) > 1 }">
                             <input class="form-control" v-model="agent_transport.pickup_tr" maxlength="15" :id="'8-'+index" @keydown="keyDownArrow(8, index)" @change="editData(agent_transport)">
@@ -113,8 +117,12 @@
 
                         <td><input name="return_to" class="form-control" v-model="agent_transport.return_to" maxlength="25" :id="'11-'+index" @keydown="keyDownArrow(11, index)" @change="editData(agent_transport)"></td>
                         
-                        <td><input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_1" maxlength="50" autocomplete=off :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(agent_transport)"></td>
-                        <td><input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_2" maxlength="50" autocomplete=off :id="'13-'+index" @keydown="keyDownArrow(13, index)" @change="editData(agent_transport)"></td>
+                        <td :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_1]]">
+                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_1" maxlength="50" autocomplete=off :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(agent_transport)">
+                        </td>
+                        <td :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_2]]">
+                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_2" maxlength="50" autocomplete=off :id="'13-'+index" @keydown="keyDownArrow(13, index)" @change="editData(agent_transport)">
+                        </td>
 
                         <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px;" v-model="agent_transport.remark" maxlength="250" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(agent_transport)"></textarea></td>
 
@@ -122,12 +130,12 @@
                     </tr>
 
                     <tr v-if="index == agent_transports.length-1">
-                        <td colspan=18 class="bg-dark"></td>
+                        <td colspan=19 class="bg-dark"></td>
                     </tr>
                     <tr
                         v-else-if="agent_transport.date != agent_transports[index+1].date | agent_transport.work_type != agent_transports[index+1].work_type | agent_transport.shipper.id != agent_transports[index+1].shipper.id"
                     >
-                        <td colspan=18 class="bg-dark"></td>
+                        <td colspan=19 class="bg-dark"></td>
                     </tr>
                 </template>
             </tbody>

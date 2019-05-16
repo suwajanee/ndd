@@ -10,6 +10,7 @@
                 <th class="px-4">AGENT</th>
                 <th>SIZE</th>
                 <th class="px-4">BOOKING</th>
+                <th class="p-0" style="min-width: 25px;"></th>
     
                 <th>TR</th>
                 <th>FM</th>
@@ -37,7 +38,7 @@
             <tbody>
                 <template v-for="(booking, index) in bookings">
                     <tr 
-                        :class="{'bg-secondary':booking.status==0, 'alert-warning': booking.date <= today & ['1', '3', '4', '5'].includes(booking.status), 'alert-danger': booking.closing_date <= tmr & ['1', '3', '4', '5'].includes(booking.status) }" 
+                        :class="{'bg-secondary':booking.status==0, 'table-warning': booking.date <= today & ['1', '3', '4', '5'].includes(booking.status), 'table-danger': booking.closing_date <= tmr & ['1', '3', '4', '5'].includes(booking.status) }" 
                         :key="booking.id"
                     >
                         <td>
@@ -50,8 +51,7 @@
                                 <option value="0"> Cancel </option>
                             </select>
                         </td>
-
-                        <td :class="{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)"></td>
+                        <td :class="[{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)"></td>
                         
                         <td><input type="date" class="form-control" v-model="booking.date" :id="'2-'+index" @keydown="keyDownArrow(2, index)"  @change="editData(booking)" required></td>
 
@@ -79,6 +79,7 @@
                                 <option value="40'OT">40'OT</option>
                                 <option value="40'GOH">40'GOH</option>
                                 <option value="40'RF">40'RF</option>
+                                <option value="40'FL">40'FL</option>
                                 <option value="45'">45'</option>
                                 <option value="" disabled> -------- </option>
                                 <option value="2X20'">2X20'</option>
@@ -92,6 +93,8 @@
                         <td v-else style="min-width:150px;" :style="{ 'background-color': booking.color }">
                             <input class="form-control" v-model="booking.booking_no" maxlength="150" autocomplete=off :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(booking)">                            
                         </td>
+
+                        <td class="p-0" style="min-width: 25px;">{{ booking.num }}</td>
 
                         <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': parseInt(booking.status) > 1 }">
                             <input class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(booking)">
@@ -125,17 +128,17 @@
                         <td><input name="factory" class="form-control" v-model="booking.factory" maxlength="25" :id="'11-'+index" @keydown="keyDownArrow(11, index)" @change="editData(booking)"></td>
 
                         <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">
-                            <input v-if="booking.nextday == '1' | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
+                            <input v-if="booking.nextday == 1 | booking.nextday == 2 | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                             <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                         </td>
                         <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">
-                            <input v-if="booking.nextday == '1' | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
+                            <input v-if="booking.nextday == 1 | booking.nextday == 2 | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                             <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                         </td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">
-                            <input v-if="booking.nextday == '1' | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
+                            <input v-if="booking.nextday == 1 | booking.nextday == 2 | booking.fac_ndd == '2'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(booking)">
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                             <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'12-'+index" @keydown="keyDownArrow(12, index)" readonly>
                         </td>
@@ -149,23 +152,27 @@
                             </select>
                         </td>
 
-                        <td v-if="['0', '2', '5'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">
+                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2'].includes(booking.status) }">
                             <input v-if="booking.fac_ndd != '0'" class="form-control" v-model="booking.return_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
-                            <input v-else-if="booking.nextday == '1'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
+                            <input v-else-if="booking.nextday == 1 || booking.nextday == 2" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                         </td>
                         <td v-else :class="{ 'bg-cyan': booking.return_tr }">
                             <input v-if="booking.fac_ndd != '0'" class="form-control" v-model="booking.return_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
-                            <input v-else-if="booking.nextday == '1'" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
+                            <input v-else-if="booking.nextday == 1 || booking.nextday == 2" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                         </td>
                         
                         <td><input name="return_to" class="form-control" v-model="booking.return_to" maxlength="25" :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(booking)"></td>
 
-                        <td><input class="form-control" style="font-weight: 800;" v-model="booking.container_no" maxlength="50" autocomplete=off :id="'16-'+index" @keydown="keyDownArrow(16, index)" @change="editData(booking)"></td>
-                        <td><input class="form-control" style="font-weight: 800;" v-model="booking.seal_no" maxlength="50" autocomplete=off :id="'17-'+index" @keydown="keyDownArrow(17, index)" @change="editData(booking)"></td>
+                        <td :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.container_no]]">
+                            <input class="form-control pb-0" style="font-weight: 800;" v-model="booking.container_no" maxlength="50" autocomplete=off :id="'16-'+index" @keydown="keyDownArrow(16, index)" @change="editData(booking)">
+                        </td>
+                        <td :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.seal_no]]">
+                            <input class="form-control" style="font-weight: 800;" v-model="booking.seal_no" maxlength="50" autocomplete=off :id="'17-'+index" @keydown="keyDownArrow(17, index)" @change="editData(booking)">
+                        </td>
                         <td><input class="form-control" v-model="booking.tare" maxlength="80" autocomplete=off :id="'18-'+index" @keydown="keyDownArrow(18, index)" @change="editData(booking)"></td>
 
                         <td><input type="date" class="form-control" v-model="booking.closing_date" autocomplete=off :id="'19-'+index" @keydown="keyDownArrow(19, index)" @change="editData(booking)"></td>

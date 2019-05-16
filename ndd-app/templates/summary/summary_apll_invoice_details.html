@@ -127,7 +127,7 @@
 
                             <td class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px;" v-model="inv_detail.work.container_no" maxlength="50" :id="'2-'+index" @keydown="keyDownArrow(2, index, true)">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;" v-model="inv_detail.work.container_no" maxlength="50" :id="'2-'+index" @keydown="keyDownArrow(2, index, true)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"

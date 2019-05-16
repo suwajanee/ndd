@@ -19,6 +19,8 @@ var booking_table = new Vue( {
 
         nbar: 'table',
         
+        container_color: {},
+
         booking_color: ['#9977b4', '#dd86b9', '#f497a9', '#f9b489', '#fdcd79', '#fff68f', '#b6d884', '#81cbb5', '#6acade', '#72abdd'],
         color_index: 0,
         action: '',
@@ -35,6 +37,7 @@ var booking_table = new Vue( {
     },
     methods: {
         reload() {
+            this.container_color = container_color
             if(localStorage.getItem('filter_by_booking')){
                 this.filter_by = localStorage.getItem('filter_by_booking')
             }
@@ -101,37 +104,45 @@ var booking_table = new Vue( {
         },
 
         getColor() {
+            var num = 0
             for(booking in this.bookings) {
 
+                var book = this.bookings[booking]
+
                 if(booking == 0){
-                    this.bookings[booking].color = this.booking_color[this.color_index=0]
+                    num = 1
+                    book.color = this.booking_color[this.color_index=0]
                 }
-                else if(this.bookings[booking].booking_no != this.bookings[booking-1].booking_no){
-                    this.bookings[booking].color = this.booking_color[++this.color_index % 10]
+                else if(book.booking_no != this.bookings[booking-1].booking_no | book.date != this.bookings[booking-1].date){
+                    num = 1
+                    book.color = this.booking_color[++this.color_index % 10]
                 }
                 else{
-                    this.bookings[booking].color = this.booking_color[this.color_index % 10]
+                    num += 1
+                    book.color = this.booking_color[this.color_index % 10]
                 }
 
+                book.num = num
+
                 try {
-                    var time = this.bookings[booking].time.split('.')
+                    var time = book.time.split('.')
                     if(parseInt(time[0])>0 & parseInt(time[0])<11){
-                        this.bookings[booking].timeColor = true
+                        book.timeColor = true
                     }
                     else{
-                        this.bookings[booking].timeColor = false
+                        book.timeColor = false
                     }
                 }
                 catch(err) {
-                    this.bookings[booking].timeColor = false
+                    book.timeColor = false
                 }
 
-                if(! this.bookings[booking].detail || ! ('return_time' in this.bookings[booking].detail)) {
-                    this.$set(this.bookings[booking], 'detail', {})
+                if(! book.detail) {
+                    this.$set(book, 'detail', {})
                 }                
 
-                if(! this.bookings[booking].shipper){
-                    this.bookings[booking].shipper = 0
+                if(! book.shipper){
+                    book.shipper = 0
                 }
             }
         },
@@ -178,7 +189,7 @@ var booking_table = new Vue( {
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
                 }
-                if(((booking.nextday == '1' | booking.nextday == '2') & field == 22) | (booking.fac_ndd == '2' & field == 13)){
+                if(((booking.nextday == '1' | (booking.nextday == '2')) & field == 22) | (booking.fac_ndd == '2' & field == 13)){
                     this.bookings[index].backward_tr = ''
                     this.bookings[index].return_tr = ''
                 }
@@ -217,6 +228,20 @@ var booking_table = new Vue( {
             api("/booking/api/change-state-booking/", "POST", {booking_id: id, state: state}).then((data) => {
                 var booking = this.bookings.find(x => x.id == id)
                 booking.status = data
+            })
+        },
+        checkColor(id, color, field) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = (parseInt(color) + 1) % 5
+                if(color==0) { color = '' }
+            }
+
+            api("/booking/api/change-color/", "POST", {id: id, color: color, field: field}).then((data) => {
+                var booking = this.bookings.find(x => x.id == id)
+                this.$set(booking.detail, field, data)
             })
         },
 

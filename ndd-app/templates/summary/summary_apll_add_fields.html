@@ -55,49 +55,63 @@
                 var drayage = this.drayage.split('\n')
                 var gate = this.gate.split('\n')
                 var vat = this.vat.split('\n')
-
-                for(invoice_detail in summary_invoice_details.invoice_detail_list) {
-                    var status = false
-                    var details = summary_invoice_details.invoice_detail_list[invoice_detail]
-
-                    if(details.work.container_no.trim() == container[invoice_detail].trim()) {
-                        status = true
+                
+                var data_list = []
+                for(num in container) {
+                    if(!drayage[num] || drayage[num] == "") {
+                        drayage[num] = ''
                     }
-                   
-                    if(status) {
-                        details.detail.routing = routing[invoice_detail]
-                        if(!drayage[invoice_detail] || drayage[invoice_detail] == ""){
-                            drayage[invoice_detail] = ''
+                    else {
+                        if(drayage[num].trim() == '-') {
+                            drayage[num] = ''
                         }
-                        else {
-                            if(drayage[invoice_detail].trim() == '-') {
-                                drayage[invoice_detail] = ''
-                            }
-                        }
-
-                        if(!gate[invoice_detail] || gate[invoice_detail] == ""){
-                            gate[invoice_detail] = ''
-                        }
-                        else {
-                            if(gate[invoice_detail].trim() == '-') {
-                                gate[invoice_detail] = ''
-                            }
-                        }
-
-                        if(!vat[invoice_detail] || vat[invoice_detail] == ""){
-                            vat[invoice_detail] = ''
-                        }
-                        else {
-                            if(vat[invoice_detail].trim() == '-') {
-                                vat[invoice_detail] = ''
-                            }
-                        }
-
-                        details.drayage_charge.drayage = drayage[invoice_detail].replace(',', '')
-                        details.gate_charge.gate = gate[invoice_detail].replace(',', '')
-                        details.gate_charge.vat = vat[invoice_detail].replace(',', '')
                     }
+
+                    if(!gate[num] || gate[num] == "") {
+                        gate[num] = ''
+                    }
+                    else {
+                        if(gate[num].trim() == '-') {
+                            gate[num] = ''
+                        }
+                    }
+
+                    if(!vat[num] || vat[num] == "") {
+                        vat[num] = ''
+                    }
+                    else {
+                        if(vat[num].trim() == '-') {
+                            vat[num] = ''
+                        }
+                    }
+
+                    var obj = {
+                        container: container[num],
+                        routing: routing[num],
+                        drayage: drayage[num].replace(',', ''),
+                        gate: gate[num].replace(',', ''),
+                        vat: vat[num].replace(',', ''),
+                    }
+
+                    data_list.push(obj)
                 }
+
+                summary_invoice_details.invoice_detail_list.forEach(function(detail) {
+
+                    var work = data_list.filter(data => 
+                        data.container.trim() == detail.work.container_no.trim()
+                    )
+
+                    if(work.length == 1) {
+                        work = work[0]
+                        detail.detail.routing = work.routing
+                        detail.drayage_charge.drayage = work.drayage
+                        detail.gate_charge.gate = work.gate
+                        detail.gate_charge.vat = work.vat
+                    }
+                    
+                })
+                
                 $('#modelAddFieldAPLL').modal('hide')
             },
         }

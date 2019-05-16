@@ -166,10 +166,11 @@
                             </td>
                             <td v-else></td>
                             
-                            <td class="align-middle">
+                            <td class="align-middle px-1">
                                 <template v-if="table_edit">
                                     <div v-if="index==0 && customer_custom.option=='time_remark'" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 200px; " 
+                                            maxlength="150"
                                             v-model="inv_detail.work.booking_no" 
                                             :id="'0-'+index" @keydown="keyDownArrow(0, index)"
                                         >
@@ -181,7 +182,8 @@
                                             <i class="fa fa-clone"></i></button>
                                         </div>
                                     </div>
-                                    <input v-else class="form-control text-center" 
+                                    <input v-else class="form-control text-center" style="width: 200px; margin: auto;"
+                                        maxlength="150"
                                         v-model="inv_detail.work.booking_no" 
                                         :id="'0-'+index" @keydown="keyDownArrow(0, index)"
                                     > 
@@ -212,7 +214,7 @@
                             <template v-if="customer_type == 'agent-transport'">
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_1" maxlength="50"
                                         >
@@ -232,7 +234,7 @@
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
                                     <div v-if="inv_detail.work.size.indexOf('X') > -1">
                                         <div v-if="table_edit" class="input-group">
-                                            <input type="text" class="form-control text-center" style="padding: 2px 4px;"
+                                            <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
                                                 :id="'4-'+index" @keydown="keyDownArrow(4, index)"
                                                 v-model="inv_detail.work.container_2" maxlength="50"
                                             >
@@ -253,7 +255,7 @@
                             <template v-else>
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;"
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_no" maxlength="50"
                                         >
@@ -293,6 +295,7 @@
                                     <option value="40'OT">40'OT</option>
                                     <option value="40'GOH">40'GOH</option>
                                     <option value="40'RF">40'RF</option>
+                                    <option value="40'FL">40'FL</option>
                                     <option value="45'">45'</option>
                                     <option value="" disabled> -------- </option>
                                     <option value="2X20'">2X20'</option>

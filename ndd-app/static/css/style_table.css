@@ -45,11 +45,25 @@ table.time th {
 }
 
 .bg-lime {
-    background: Lime;
+    background-color: Lime!important;
 }
 
 .bg-cyan {
-    background: Cyan;
+    background-color: Cyan!important;
+}
+
+.bg-yellow {
+    background-color: Yellow!important;
+}
+.bg-red {
+    background-color: Red!important;
+}
+
+.table-info {
+    background-color: #D9EDF7!important;
+}
+.table-success {
+    background-color: #DFF0D8!important;
 }
 
 input.text-lightgray {
