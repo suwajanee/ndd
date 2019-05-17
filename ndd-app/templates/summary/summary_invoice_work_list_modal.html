@@ -18,6 +18,7 @@
                     <table v-if="work_list.length" class="table table-bordered table-hover" style="font-size: 14px;">
                         <thead class="text-center">
                             <th>(&nbsp;{{ work_selected.length }}&nbsp;)</th>
+                            <th>Time</th>
                             <th>Date</th>
                             <th v-if="customer_type == 'agent-transport'"></th>
                             <th>Shipper</th>
@@ -36,10 +37,13 @@
                             <tr v-for="(work, index) in filteredWork" 
                                 :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id)}"
                             >
-                                <td class="text-center align-middle">
+                                <td class="text-center align-middle" @click="selectWork(work.id, work.summary_status)">
                                     <div class="m-0 custom-control custom-checkbox">
                                         <input type="checkbox" class="form-check-input" :id="'work'+ index" v-model="work_selected" :value="work.id" :disabled="work.summary_status=='1'">
                                     </div>
+                                </td>
+                                <td class="text-center">
+                                    {{ work.time }}
                                 </td>
                                 <td class="text-center"
                                     :class="{'table-danger': work.date<summary_invoice.summary_week.date_start, 'table-warning': work.date>summary_invoice.summary_week.date_end}"

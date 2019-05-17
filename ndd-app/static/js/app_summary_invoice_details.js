@@ -250,7 +250,7 @@ var summary_invoice_details = new Vue( {
             this.invoice_detail_list.forEach(function(inv_detail) { 
                 try {
                     var time = inv_detail.work.time.split('.')
-                    if(! inv_detail.detail.remark && parseInt(time[0])>0 & parseInt(time[0])<11) {
+                    if(! inv_detail.detail.remark && parseInt(time[0])==6) {
                         inv_detail.detail.remark = '**' + inv_detail.work.time + '**'
                     }
                 }
@@ -258,6 +258,7 @@ var summary_invoice_details = new Vue( {
                     inv_detail.detail.remark = ''
                 }
             })
+            this.editInvoiceDetails()
         },
 
         dataAddSummaryCustomer() {
@@ -325,6 +326,17 @@ var summary_invoice_details = new Vue( {
         },
 
         // Invoice Detail
+        selectWork(id, status) {
+            if(status != '1') {
+                var index = this.work_selected.indexOf(id);
+                if(index > -1) {
+                    this.work_selected.splice(index, 1);
+                }
+                else {
+                    this.work_selected.push(id)
+                }
+            }
+        },
         addInvoiceDetails(invoice) {
             summary_invoice.getInvoice()
             api("/summary/api/add-invoice-details/", "POST", {invoice_id: invoice.id, work_list: this.work_selected, customer_type: this.customer_type}).then((data) => {
@@ -332,7 +344,6 @@ var summary_invoice_details = new Vue( {
                 this.afterGetInvoiceDetails(data)
                 if(this.customer_custom.option == 'time_remark') {
                     this.addTimeRemark()
-                    this.editInvoiceDetails()
                 }
             })
             $('#modalWorkList').modal('hide');
@@ -486,14 +497,18 @@ var summary_invoice_details = new Vue( {
             $('#modalWorkList').modal('hide');
         },
 
-        evergreenSelectWork(work_click, work_action) {
-            var action = this.work_selected.indexOf(work_action)
-            if(this.work_selected.indexOf(work_click) >= 0){
-                this.work_selected.splice(action, 1)                
-            }
-            else {
-                this.work_selected.push(work_click)
-                this.work_selected.push(work_action)
+        evergreenSelectWork(work_click, work_action, id, status) {
+            if(status != '1') {
+                if(this.work_selected.indexOf(work_click) >= 0){
+                    var index_1 = this.work_selected.indexOf(id + '_1')
+                    this.work_selected.splice(index_1, 1)
+                    var index_2 = this.work_selected.indexOf(id + '_2')
+                    this.work_selected.splice(index_2, 1)       
+                }
+                else {
+                    this.work_selected.push(work_click)
+                    this.work_selected.push(work_action)
+                }
             }
         },
 
