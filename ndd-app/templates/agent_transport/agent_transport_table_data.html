@@ -11,7 +11,7 @@
                 <th>AGENT</th>
                 <th>SIZE</th>
                 <th>BOOKING</th>
-                <th class="p-0" style="min-width: 25px;"></th>
+                <th class="p-0" style="min-width: 15px;"></th>
 
                 <th>TR</th>
                 <th>FM</th>
@@ -86,7 +86,7 @@
                         <td v-if="agent_transport.status == '0'" style="min-width:150px;" class="bg-secondary">{{ agent_transport.booking_no }}</td>
                         <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': agent_transport.color }">{{ agent_transport.booking_no }}</td>
 
-                        <td class="p-0" style="min-width: 25px;">{{ agent_transport.num }}</td>
+                        <td class="p-0" style="min-width: 15px; font-size:8px;">{{ agent_transport.num }}</td>
 
                         <td v-if="agent_transport.status != '1'" :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': parseInt(agent_transport.status) > 1 }">{{ agent_transport.pickup_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': agent_transport.pickup_tr }">{{ agent_transport.pickup_tr }}</td>

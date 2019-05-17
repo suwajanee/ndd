@@ -11,7 +11,7 @@
                 <th>AGENT</th>
                 <th>SIZE</th>
                 <th>BOOKING</th>
-                <th class="p-0" style="min-width: 25px;"></th>
+                <th class="p-0" style="min-width: 15px;"></th>
                 <th>TR</th>
                 <th>FM</th>
                 <th>TR</th>
@@ -54,7 +54,7 @@
                             </a>
                         </td>
 
-                        <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0, 'bg-warning': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]">
+                        <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]">
                             {{ booking.time }}<br>
                             <button v-if="booking.status != '0' && booking.timeColor == false" class="btn btn-sm mt-1 rounded-circle btn-outline-dark" 
                                 style="font-size: 10%; padding: 0px;"
@@ -78,7 +78,7 @@
                         <td v-if="booking.status == '0'" style="min-width:150px;" class="bg-secondary">{{ booking.booking_no }}</td>
                         <td v-else class="text-dark" style="min-width:150px;" :style="{ 'background-color': booking.color }">{{ booking.booking_no }}</td>
 
-                        <td class="p-0" style="min-width: 25px;">{{ booking.num }}</td>
+                        <td class="p-0" style="min-width: 15px; font-size:8px;">{{ booking.num }}</td>
 
                         <td v-if="booking.status != '1'" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': parseInt(booking.status) > 1 }">{{ booking.pickup_tr }}</td>
                         <td v-else-if="['1', '2'].includes(booking.yard_ndd)" class="bg-gold">{{ booking.pickup_tr }}</td>

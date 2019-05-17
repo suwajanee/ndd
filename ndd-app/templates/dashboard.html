@@ -105,10 +105,11 @@
                                             <div class="progress" 
                                                 style="height: 8px;"
                                                 data-toggle="tooltip" data-html="true" 
-                                                :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nCancel: ' + booking_cancel "
+                                                :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nNot start: ' + booking_not_start + '\nCancel: ' + booking_cancel "
                                             >
                                                 <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + booking_completed_width + '%'"></div>
                                                 <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + booking_pending_width + '%'"></div>
+                                                <div class="progress-bar bg-secondary" role="progressbar" :style="'width: ' + booking_not_start_width + '%'"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -138,10 +139,11 @@
                                             <div class="progress" 
                                                 style="height: 8px;"
                                                 data-toggle="tooltip" data-html="true" 
-                                                :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nCancel: ' + agent_cancel "
+                                                :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nNot start: ' + agent_not_start + '\nCancel: ' + agent_cancel "
                                             >
                                                 <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + agent_completed_width + '%'"></div>
                                                 <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + agent_pending_width + '%'"></div>
+                                                <div class="progress-bar bg-secondary" role="progressbar" :style="'width: ' + agent_not_start_width + '%'"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -158,8 +160,13 @@
                         <div class="row my-3" >              
                             <div class="card col-lg mx-3 border rounded" style="height: 55vh;">
                                 <div class="card-body mt-2" >
-                                    <div>
-                                        <h3 class="card-title mb-3">Weekly Works</h3>
+                                    <div class="d-flex">
+                                        <div>
+                                            <h3 class="card-title mb-3">Weekly Works</h3>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <input type="date" class="form-control" v-model="date" @change="weeklyWorkChart">
+                                        </div>
                                     </div>
                                     <div id="chartWeeklyWork" style="width: 100%; height: 80%"></div>
                                 </div>
@@ -168,7 +175,7 @@
                                 <div class="card-body mt-2" >
                                     <div class="d-flex">
                                         <div>
-                                            <h3 class="card-title mb-3">Yearly Income - {{ year }}</h3>
+                                            <h3 class="card-title mb-3">Monthly Income - {{ year }}</h3>
                                         </div>
                                         <div class="ml-auto">
                                             <select class="custom-select b-0" v-model="year" @change="yearlyIncomeChart()">
