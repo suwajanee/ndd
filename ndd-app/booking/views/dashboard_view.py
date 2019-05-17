@@ -24,46 +24,55 @@ def dashboard_page(request):
 def api_get_weekly_works(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            
-            today = datetime.today()
-            before_1 = today - timedelta(days=1)
-            before_2 = today - timedelta(days=2)
-            before_3 = today - timedelta(days=3)
-            after_1 = today + timedelta(days=1)
-            after_2 = today + timedelta(days=2)
-            after_3 = today + timedelta(days=3)
+            date = datetime.today()
+        elif request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            date_str = req['date']
+            date = datetime.strptime(date_str, '%Y-%m-%d')
+        else:
+            return JsonResponse('Error', safe=False)
+        
+        before_1 = date - timedelta(days=1)
+        before_2 = date - timedelta(days=2)
+        before_3 = date - timedelta(days=3)
+        after_1 = date + timedelta(days=1)
+        after_2 = date + timedelta(days=2)
+        after_3 = date + timedelta(days=3)
 
-            booking_pending = []
-            booking_completed = []
-            agent_pending = []
-            agent_completed = []
-            for day in [before_3 ,before_2, before_1, today, after_1, after_2, after_3]:
-                data1 = {}
-                data2 = {}
-                data3 = {}
-                data4 = {}
+        booking_pending = []
+        booking_completed = []
+        agent_pending = []
+        agent_completed = []
+        for day in [before_3 ,before_2, before_1, date, after_1, after_2, after_3]:
+            data1 = {}
+            data2 = {}
+            data3 = {}
+            data4 = {}
 
-                data1['x'] = data2['x'] = data3['x'] = data4['x'] = str(day.date()).split('-')
-                data1['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4, 5])).count()
-                booking_pending.append(data1)
+            data1['x'] = data2['x'] = data3['x'] = data4['x'] = str(day.date()).split('-')
+            data1['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4, 5])).count()
+            booking_pending.append(data1)
 
-                data2['y'] = Booking.objects.filter(Q(date=day) & Q(status=2)).count()
-                booking_completed.append(data2)
+            data2['y'] = Booking.objects.filter(Q(date=day) & Q(status=2)).count()
+            booking_completed.append(data2)
 
-                data3['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4])).count()
-                agent_pending.append(data3)
+            data3['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4])).count()
+            agent_pending.append(data3)
 
-                data4['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=2)).count()
-                agent_completed.append(data4)
+            data4['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=2)).count()
+            agent_completed.append(data4)
 
-            response = {
+        response = {
+            'date': date,
+            'data_point': {
                 'booking_pending': booking_pending,
                 'booking_completed': booking_completed,
                 'agent_pending': agent_pending,
                 'agent_completed': agent_completed,
             }
-            
-            return JsonResponse(response, safe=False)
+        }
+        
+        return JsonResponse(response, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

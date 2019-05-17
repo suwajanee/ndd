@@ -3,6 +3,7 @@ var dashboard_page = new Vue( {
     el: '#dashboard-page',
     data: {
         year: '',
+        date: '',
         year_list: [],
         principals: [],
 
@@ -87,65 +88,24 @@ var dashboard_page = new Vue( {
         },
 
         weeklyWorkChart() {
-            api("/api/get-weekly-works/").then((data) => {
-                this.weeklyDataPoints(data)
-
-                var chart = new CanvasJS.Chart("chartWeeklyWork", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    axisX: {
-                        stripLines: [
-                            {
-                                value: new Date().setHours(0, 0),
-                                showOnTop: true,
-                                color: '#007BFF'
-                            }
-                        ],
-                        interval: 1,
-                        valueFormatString: "DD MMM YY",
-                        labelFontSize: 12,
-                    },
-                    axisY:{
-                        gridColor: "lightgray",
-                        tickColor: "lightgray",
-                        labelFontSize: 12,
-                    },
-                    toolTip: {
-                        shared: true,
-                        content: toolTipContent
-                    },
-                    data: [{        
-                            type: "stackedColumn",
-                            showInLegend: true,
-                            name: "Loading",
-                            color: "LightGreen",
-                            dataPoints: this.weekly_works.booking_completed
-                        },
-                        {        
-                            type: "stackedColumn",
-                            showInLegend: true,
-                            name: "Agent",
-                            color: "LightGreen",
-                            dataPoints: this.weekly_works.agent_completed
-                        },
-                        {
-                            type: "stackedColumn",
-                            showInLegend: true,
-                            color: "Khaki",
-                            name: "Loading",
-                            dataPoints: this.weekly_works.booking_pending
-                        },
-                        {        
-                            type: "stackedColumn",
-                            showInLegend: true,
-                            name: "Agent",
-                            color: "Khaki",
-                            dataPoints: this.weekly_works.agent_pending
-                        },
-                    ]
-                });
-                chart.render();
-            })
+            this.weekly_works = {
+                booking_pending: [],
+                booking_completed: [],
+                agent_pending: [],
+                agent_completed: [],
+            }
+            if(this.date) {
+                api("/api/get-weekly-works/", "POST", { date: this.date }).then((data) => {
+                    this.weeklyDataPoints(data.data_point)
+                    this.createWorkChart()
+                })
+            }
+            else {
+                api("/api/get-weekly-works/").then((data) => {
+                    this.weeklyDataPoints(data.data_point)
+                    this.createWorkChart()
+                })
+            }
         },
         weeklyDataPoints(data){
             for (var key in data) {
@@ -156,6 +116,63 @@ var dashboard_page = new Vue( {
                     })
                 }
             }
+        },
+        createWorkChart() {
+            var chart = new CanvasJS.Chart("chartWeeklyWork", {
+                animationEnabled: true,
+                theme: "light2",
+                axisX: {
+                    stripLines: [
+                        {
+                            value: new Date(this.date).setHours(0, 0) || new Date().setHours(0, 0),
+                            showOnTop: true,
+                            color: '#007BFF'
+                        }
+                    ],
+                    interval: 1,
+                    valueFormatString: "DD MMM YY",
+                    labelFontSize: 12,
+                },
+                axisY:{
+                    gridColor: "lightgray",
+                    tickColor: "lightgray",
+                    labelFontSize: 12,
+                },
+                toolTip: {
+                    shared: true,
+                    content: toolTipContent
+                },
+                data: [{        
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        name: "Loading",
+                        color: "LightGreen",
+                        dataPoints: this.weekly_works.booking_completed
+                    },
+                    {        
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        name: "Agent",
+                        color: "LightGreen",
+                        dataPoints: this.weekly_works.agent_completed
+                    },
+                    {
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        color: "Khaki",
+                        name: "Loading",
+                        dataPoints: this.weekly_works.booking_pending
+                    },
+                    {        
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        name: "Agent",
+                        color: "Khaki",
+                        dataPoints: this.weekly_works.agent_pending
+                    },
+                ]
+            });
+            chart.render();
         },
 
         yearlyIncomeChart() {
