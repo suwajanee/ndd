@@ -105,10 +105,11 @@
                                             <div class="progress" 
                                                 style="height: 8px;"
                                                 data-toggle="tooltip" data-html="true" 
-                                                :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nCancel: ' + booking_cancel "
+                                                :title="'Completed: ' + booking_completed + '\nPending: ' + booking_pending + '\nNot start: ' + booking_not_start + '\nCancel: ' + booking_cancel "
                                             >
                                                 <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + booking_completed_width + '%'"></div>
                                                 <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + booking_pending_width + '%'"></div>
+                                                <div class="progress-bar bg-secondary" role="progressbar" :style="'width: ' + booking_not_start_width + '%'"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -138,10 +139,11 @@
                                             <div class="progress" 
                                                 style="height: 8px;"
                                                 data-toggle="tooltip" data-html="true" 
-                                                :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nCancel: ' + agent_cancel "
+                                                :title="'Completed: ' + agent_completed + '\nPending: ' + agent_pending + '\nNot start: ' + agent_not_start + '\nCancel: ' + agent_cancel "
                                             >
                                                 <div class="progress-bar bg-success" role="progressbar" :style="'width: ' + agent_completed_width + '%'"></div>
                                                 <div class="progress-bar bg-warning" role="progressbar" :style="'width: ' + agent_pending_width + '%'"></div>
+                                                <div class="progress-bar bg-secondary" role="progressbar" :style="'width: ' + agent_not_start_width + '%'"></div>
                                             </div>
                                         </div>
                                     </div>

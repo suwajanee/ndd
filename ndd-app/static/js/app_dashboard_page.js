@@ -8,22 +8,28 @@ var dashboard_page = new Vue( {
         principals: [],
 
         booking_total: 0,
+        booking_not_start: 0,
         booking_pending: 0,
         booking_completed: 0,
         booking_cancel: 0,
+        booking_not_start_width: 0,
         booking_pending_width: 0,
         booking_completed_width: 0,
 
         agent_total: 0,
+        agent_not_start: 0,
         agent_pending: 0,
         agent_completed: 0,
         agent_cancel: 0,
+        agent_not_start_width: 0,
         agent_pending_width: 0,
         agent_completed_width: 0,
 
         weekly_works: {
+            booking_not_start: [],
             booking_pending: [],
             booking_completed: [],
+            agent_not_start: [],
             agent_pending: [],
             agent_completed: [],
         },
@@ -60,12 +66,14 @@ var dashboard_page = new Vue( {
         getBookingDailyWork() {
             api("/booking/api/get-booking-daily-works/").then((data) => {
                 this.booking_total = data.total
+                this.booking_not_start = data.not_start
                 this.booking_pending = data.pending
                 this.booking_completed = data.completed
                 this.booking_cancel = data.cancel
 
                 var max = data.total + data.cancel
                 
+                this.booking_not_start_width = this.progressWidth(this.booking_not_start, max)
                 this.booking_pending_width = this.progressWidth(this.booking_pending, max)
                 this.booking_completed_width = this.progressWidth(this.booking_completed, max)
             })
@@ -73,12 +81,14 @@ var dashboard_page = new Vue( {
         getAgentTransportDailyWork() {
             api("/agent-transport/api/get-agent-transport-daily-works/").then((data) => {
                 this.agent_total = data.total
+                this.agent_not_start = data.not_start
                 this.agent_pending = data.pending
                 this.agent_completed = data.completed
                 this.agent_cancel = data.cancel
 
                 var max = data.total + data.cancel
                 
+                this.agent_not_start_width = this.progressWidth(this.agent_not_start, max)
                 this.agent_pending_width = this.progressWidth(this.agent_pending, max)
                 this.agent_completed_width = this.progressWidth(this.agent_completed, max)
             })
@@ -89,8 +99,10 @@ var dashboard_page = new Vue( {
 
         weeklyWorkChart() {
             this.weekly_works = {
+                booking_not_start: [],
                 booking_pending: [],
                 booking_completed: [],
+                agent_not_start: [],
                 agent_pending: [],
                 agent_completed: [],
             }
@@ -170,6 +182,20 @@ var dashboard_page = new Vue( {
                         color: "Khaki",
                         dataPoints: this.weekly_works.agent_pending
                     },
+                    {
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        color: "Gainsboro",
+                        name: "Loading",
+                        dataPoints: this.weekly_works.booking_not_start
+                    },
+                    {        
+                        type: "stackedColumn",
+                        showInLegend: true,
+                        name: "Agent",
+                        color: "Gainsboro",
+                        dataPoints: this.weekly_works.agent_not_start
+                    },
                 ]
             });
             chart.render();
@@ -236,9 +262,11 @@ function toolTipContent(e) {
     str += "<span class='text-primary'><strong>"+ e.entries[0].dataPoint.x.toDateString() +"</strong></span><br/><hr class='m-1'>"
     str += "<span class='text-success'>" + e.entries[0].dataSeries.name + ":</span> <strong>" + e.entries[0].dataPoint.y + "</strong><br/>"
     str += "<span class='text-success'> " + e.entries[1].dataSeries.name + ":</span> <strong>" + e.entries[1].dataPoint.y + "</strong><br/>"
-    str += "<span class='text-warning'> " + e.entries[2].dataSeries.name + ":</span> <strong>" + e.entries[2].dataPoint.y+"</strong><br/>"
-    str += "<span class='text-warning'> " + e.entries[3].dataSeries.name + ":</span> <strong>" + e.entries[3].dataPoint.y+"</strong><br/>"
-    total = e.entries[0].dataPoint.y + e.entries[1].dataPoint.y + e.entries[2].dataPoint.y + e.entries[3].dataPoint.y 
+    str += "<span class='text-warning'> " + e.entries[2].dataSeries.name + ":</span> <strong>" + e.entries[2].dataPoint.y + "</strong><br/>"
+    str += "<span class='text-warning'> " + e.entries[3].dataSeries.name + ":</span> <strong>" + e.entries[3].dataPoint.y + "</strong><br/>"
+    str += "<span class='text-secondary'> " + e.entries[4].dataSeries.name + ":</span> <strong>" + e.entries[4].dataPoint.y + "</strong><br/>"
+    str += "<span class='text-secondary'> " + e.entries[5].dataSeries.name + ":</span> <strong>" + e.entries[5].dataPoint.y + "</strong><br/>"
+    total = e.entries[0].dataPoint.y + e.entries[1].dataPoint.y + e.entries[2].dataPoint.y + e.entries[3].dataPoint.y + e.entries[4].dataPoint.y + e.entries[5].dataPoint.y
     str += "<hr class='m-1'><strong><span class='text-danger'><u>Total</u>:</span> " + total + "</strong>"
     
 	return str

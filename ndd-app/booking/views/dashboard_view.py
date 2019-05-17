@@ -39,8 +39,10 @@ def api_get_weekly_works(request):
         after_2 = date + timedelta(days=2)
         after_3 = date + timedelta(days=3)
 
+        booking_not_start = []
         booking_pending = []
         booking_completed = []
+        agent_not_start = []
         agent_pending = []
         agent_completed = []
         for day in [before_3 ,before_2, before_1, date, after_1, after_2, after_3]:
@@ -48,25 +50,36 @@ def api_get_weekly_works(request):
             data2 = {}
             data3 = {}
             data4 = {}
+            data5 = {}
+            data6 = {}
 
-            data1['x'] = data2['x'] = data3['x'] = data4['x'] = str(day.date()).split('-')
-            data1['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4, 5])).count()
-            booking_pending.append(data1)
+            data1['x'] = data2['x'] = data3['x'] = data4['x'] = data5['x'] = data6['x'] = str(day.date()).split('-')
 
-            data2['y'] = Booking.objects.filter(Q(date=day) & Q(status=2)).count()
-            booking_completed.append(data2)
+            data1['y'] = Booking.objects.filter(Q(date=day) & Q(status=1)).count()
+            booking_not_start.append(data1)
 
-            data3['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[1, 3, 4])).count()
-            agent_pending.append(data3)
+            data2['y'] = Booking.objects.filter(Q(date=day) & Q(status__in=[3, 4, 5])).count()
+            booking_pending.append(data2)
 
-            data4['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=2)).count()
-            agent_completed.append(data4)
+            data3['y'] = Booking.objects.filter(Q(date=day) & Q(status=2)).count()
+            booking_completed.append(data3)
+
+            data4['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=1)).count()
+            agent_not_start.append(data4)
+
+            data5['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status__in=[3, 4])).count()
+            agent_pending.append(data5)
+
+            data6['y'] = AgentTransport.objects.filter(Q(date=day) & Q(status=2)).count()
+            agent_completed.append(data6)
 
         response = {
             'date': date,
             'data_point': {
+                'booking_not_start': booking_not_start,
                 'booking_pending': booking_pending,
                 'booking_completed': booking_completed,
+                'agent_not_start': agent_not_start,
                 'agent_pending': agent_pending,
                 'agent_completed': agent_completed,
             }
