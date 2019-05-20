@@ -2,6 +2,7 @@
 
 import json
 
+from django.db.models import Case, When
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -21,7 +22,13 @@ def api_get_invoice_details(request):
             req = json.loads( request.body.decode('utf-8') )
             invoice_id = req['invoice_id']
 
-            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date', 'pk')
+            # invoice = Invoice.objects.filter(pk=invoice_id)
+            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by(
+                Case(
+                    When(invoice__detail__order_by_remark=True, then='detail__remark'),
+                ),
+                'work_normal__date', 'work_agent_transport__date', 'pk'
+            )
             invoice_details_serializer = InvoiceDetailSerializer(invoice_details, many=True)
 
             return JsonResponse(invoice_details_serializer.data, safe=False)
@@ -155,6 +162,7 @@ def api_edit_invoice_details(request):
             invoice.detail = check_key_detail(invoice.detail, invoice_data, 'customer_name', True)
             invoice.detail = check_key_detail(invoice.detail, invoice_data, 'date_from', True)
             invoice.detail = check_key_detail(invoice.detail, invoice_data, 'other', True)
+            invoice.detail = check_key_detail(invoice.detail, invoice_data, 'order_by_remark', True)
 
             invoice.save()
 

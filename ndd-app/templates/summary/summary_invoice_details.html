@@ -119,7 +119,7 @@
                         </th>
                         
                         <th rowspan=2 v-if="customer_form[2]=='2_remark'" class="border-dark align-middle">
-                            Remark<template v-if="customer_custom.option=='2_inv'"><br>(Drayage)</template>
+                            Remark<template v-if="customer_custom.option=='2_inv'"><br>(Drayage)</template> 
                         </th>
                         <th rowspan=2 v-if="customer_form[2]=='2_job_no'" class="border-dark align-middle">
                             <span class="text-nowrap">Job No.</span>
@@ -531,7 +531,12 @@
                             -
                         </td>
 
-                        <td class="table-secondary"></td>
+                        <td class="table-secondary font-weight-normal">
+                            <div v-if="! table_edit" class="custom-control custom-checkbox d-inline">
+                                <input type="checkbox" class="custom-control-input" id="order_by_remark" v-model="invoice_data.order_by_remark" @change="editInvoiceDetails">
+                                <label class="custom-control-label" for="order_by_remark">Order by remark</label>
+                            </div>
+                        </td>
                         <td v-if="customer_custom.option == '2_inv'" class="table-secondary"></td>
                     </tr>
 

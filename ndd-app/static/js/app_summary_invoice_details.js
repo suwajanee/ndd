@@ -34,6 +34,7 @@ var summary_invoice_details = new Vue( {
             customer_name: '',
             date_from: '',
             other: '',
+            order_by_remark: '',
         },
         
         saving: false,
@@ -220,6 +221,7 @@ var summary_invoice_details = new Vue( {
                 this.invoice_data.customer_name = this.invoice.detail.customer_name
                 this.invoice_data.date_from = this.invoice.detail.date_from
                 this.invoice_data.other = this.invoice.detail.other
+                this.invoice_data.order_by_remark = this.invoice.detail.order_by_remark
             }
         },
 
