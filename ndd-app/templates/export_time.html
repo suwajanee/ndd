@@ -16,10 +16,21 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">CUSTOMER</span>
                         </div>
-                        <select class="custom-select" name="customer" required>
+                        <select class="custom-select" name="customer" v-model="principal_id" @change="getShipper(principal_id)" required>
                             {% verbatim %}
                                 <option value=""> --- Select Customer --- </option>
                                 <option v-for="principal in principals" :value="principal.id">{{ principal.name }}</option>
+                            {% endverbatim %} 
+                        </select>
+                    </div>
+                    <div class="input-group container col-lg-9 my-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CUSTOMER</span>
+                        </div>
+                        <select class="custom-select" name="shipper">
+                            {% verbatim %}
+                                <option value=""> --- All --- </option>
+                                <option v-for="shipper in shippers" :value="shipper.id">{{ shipper.name }}</option>
                             {% endverbatim %} 
                         </select>
                     </div>
