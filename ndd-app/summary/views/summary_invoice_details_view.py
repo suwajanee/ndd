@@ -23,12 +23,10 @@ def api_get_invoice_details(request):
             invoice_id = req['invoice_id']
 
             # invoice = Invoice.objects.filter(pk=invoice_id)
-            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by(
-                Case(
-                    When(invoice__detail__order_by_remark=True, then='detail__remark'),
-                ),
-                'work_normal__date', 'work_agent_transport__date', 'pk'
-            )
+            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date',
+                                Case(
+                                    When(invoice__detail__order_by_remark=True, then='detail__remark'),
+                                ),'pk')
             invoice_details_serializer = InvoiceDetailSerializer(invoice_details, many=True)
 
             return JsonResponse(invoice_details_serializer.data, safe=False)
