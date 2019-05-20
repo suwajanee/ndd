@@ -22,7 +22,6 @@ def api_get_invoice_details(request):
             req = json.loads( request.body.decode('utf-8') )
             invoice_id = req['invoice_id']
 
-            # invoice = Invoice.objects.filter(pk=invoice_id)
             invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date',
                                 Case(
                                     When(invoice__detail__order_by_remark=True, then='detail__remark'),
