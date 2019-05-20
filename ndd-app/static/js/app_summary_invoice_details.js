@@ -25,6 +25,8 @@ var summary_invoice_details = new Vue( {
         filter_work: '',
         work_list: [],
         work_selected: [],
+        filtered_work: [],
+        selected_all: false,
 
         table_edit: false,
         invoice_details: false,
@@ -45,30 +47,33 @@ var summary_invoice_details = new Vue( {
     },
     computed: {
         filteredWork() {
-            if(this.filter_work === '') return this.work_list
-            var lower_filter = this.filter_work.toLowerCase()
-            return this.work_list.filter(work_list => {
+            if(this.filter_work === '') {
+                this.filtered_work = this.work_list
+                return this.work_list
+            }
+            var lower_filter = this.filter_work.trim().toLowerCase()
+            this.filtered_work = this.work_list.filter(work_list => {
                 if(this.customer_type == 'normal'){
                     if(work_list.shipper) {
-                        return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.shipper.name.toLowerCase().includes(lower_filter) 
-                        || work_list.container_no.toLowerCase().includes(lower_filter)
+                        return work_list.booking_no.trim().toLowerCase().includes(lower_filter) || work_list.shipper.name.trim().toLowerCase().includes(lower_filter) 
+                        || work_list.container_no.trim().toLowerCase().includes(lower_filter)
                     }
                     else {
-                        return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.container_no.toLowerCase().includes(lower_filter)
+                        return work_list.booking_no.trim().toLowerCase().includes(lower_filter) || work_list.container_no.trim().toLowerCase().includes(lower_filter)
                     }
                 }
                 else {
                     if(work_list.shipper) {
-                        return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.shipper.name.toLowerCase().includes(lower_filter) ||
-                        work_list.container_1.toLowerCase().includes(lower_filter) || work_list.container_2.toLowerCase().includes(lower_filter)
+                        return work_list.booking_no.trim().toLowerCase().includes(lower_filter) || work_list.shipper.name.trim().toLowerCase().includes(lower_filter) ||
+                        work_list.container_1.trim().toLowerCase().includes(lower_filter) || work_list.container_2.trim().toLowerCase().includes(lower_filter)
                     }
                     else {
-                        return work_list.booking_no.toLowerCase().includes(lower_filter) || work_list.container_1.toLowerCase().includes(lower_filter) || 
-                        work_list.container_2.toLowerCase().includes(lower_filter)
+                        return work_list.booking_no.trim().toLowerCase().includes(lower_filter) || work_list.container_1.trim().toLowerCase().includes(lower_filter) || 
+                        work_list.container_2.trim().toLowerCase().includes(lower_filter)
                     }
                 }
-
-            })  
+            })
+            return this.filtered_work
         },
 
         drayageTotal() {
@@ -328,6 +333,17 @@ var summary_invoice_details = new Vue( {
         },
 
         // Invoice Detail
+        selectAllWork() {
+            this.work_selected = []
+
+            if (this.selected_all) {
+                for (work in this.filtered_work) {
+                    if (this.filtered_work[work].summary_status != '1') {
+                        this.work_selected.push(this.filtered_work[work].id) 
+                    }
+                }
+            }
+        },
         selectWork(id, status) {
             if(status != '1') {
                 var index = this.work_selected.indexOf(id);

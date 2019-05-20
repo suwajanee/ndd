@@ -17,7 +17,12 @@
                     </div>
                     <table v-if="work_list.length" class="table table-bordered table-hover" style="font-size: 14px;">
                         <thead class="text-center">
-                            <th>(&nbsp;{{ work_selected.length }}&nbsp;)</th>
+                            <th>
+                                <div v-if="! table_edit" class="custom-control custom-checkbox d-inline">
+                                    <input type="checkbox" class="custom-control-input" id="work_all" v-model="selected_all" @change="selectAllWork">
+                                    <label class="custom-control-label" for="work_all">(&nbsp;{{ work_selected.length }}&nbsp;)</label>
+                                </div>
+                            </th>
                             <th>Time</th>
                             <th>Date</th>
                             <th v-if="customer_type == 'agent-transport'"></th>
