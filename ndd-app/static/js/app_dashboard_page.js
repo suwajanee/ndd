@@ -6,6 +6,9 @@ var dashboard_page = new Vue( {
         date: '',
         year_list: [],
         principals: [],
+        shippers: [],
+
+        principal_id: '',
 
         booking_total: 0,
         booking_not_start: 0,
@@ -50,6 +53,11 @@ var dashboard_page = new Vue( {
         getPrincipals() {
             api("/customer/api/get-principals/").then((data) => {
                 this.principals = data
+            })
+        },
+        getShipper(principal) {
+            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {
+                this.shippers = data
             })
         },
         getYears() {

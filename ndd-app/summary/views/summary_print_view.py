@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import Case, When
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
@@ -28,7 +29,10 @@ class SummaryPrintView(TemplateView):
             if invoice.customer_week.customer_custom.form:
                 context['form'] = invoice.customer_week.customer_custom.form.form_detail
 
-        invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date', 'pk')
+        invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date',
+                            Case(
+                                When(invoice__detail__order_by_remark=True, then='detail__remark'),
+                            ),'pk')
 
         rows = len(invoice_details)
         num = 0

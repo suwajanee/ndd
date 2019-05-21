@@ -112,7 +112,7 @@
                                 <template v-else>{{ week.date_billing|formatDate }}</template>
                             </td>
 
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle" :class="{'table-success': week.date_end}">
                                 <input v-if="week.id && table_edit" type="date" class="form-control" v-model="customer_note[week.item-1].date_end" @change="editData(customer_note[week.item-1])">
                                 <template v-else>{{ week.date_end|formatDate }}</template>
                             </td>

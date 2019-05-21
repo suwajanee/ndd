@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import Case, When
 from django.db.models import Q
 from django.http import HttpResponse
 
@@ -14,6 +15,7 @@ from customer.models import Principal, Shipper
 def export_time(request):
     if request.method == "POST":
         customer_id = request.POST['customer']
+        shipper_id = request.POST['shipper']
         date_from = request.POST['date_from']
         date_to = request.POST['date_to']
 
@@ -73,8 +75,13 @@ def export_time(request):
             else:
                 sheet.write(1, col_num, columns[col_num], style)
 
-        rows = Booking.objects.filter(Q(principal=customer) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-                'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+        if shipper_id:
+            rows = Booking.objects.filter(Q(principal=customer) & Q(shipper__pk=shipper_id) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
+                    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+        else:
+            rows = Booking.objects.filter(Q(principal=customer) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
+                    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+        
 
         row_prev = None
         booking_prev = None

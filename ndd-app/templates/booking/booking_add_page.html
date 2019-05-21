@@ -157,22 +157,28 @@
                             </div>
 
                             <fieldset class="add_form">
-                                <legend class="add_form">ตัดหาง</legend>
+                                <legend class="add_form">ตัดหาง / ยกลง</legend>
                                 <div class="container input-group mb-2 col-sm-8">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="nextday" v-model="booking_add_form.nextday">
+                                                <input type="checkbox" class="custom-control-input" id="nextday" v-model="nextday">
                                                 <label class="custom-control-label" for="nextday"></label>
                                             </div>
                                         </div>
+                                    </div>
+                                    <select class="custom-select" style="height: 40px; max-width: 90px;" v-model="booking_add_form.nextday" :disabled="nextday==false">
+                                        <option value="1">ตัดหาง</option>
+                                        <option value="2">ยกลง</option>
+                                    </select>
+                                    <div class="input-group-append">
                                         <span class="input-group-text">RETURN DATE</span>
                                     </div>
-                                    <input type="date" class="form-control" v-model="booking_add_form.return_date" :disabled="booking_add_form.nextday == false">
+                                    <input type="date" class="form-control" v-model="booking_add_form.return_date" :disabled="nextday==false">
                                     <div class="input-group-append">
                                         <span class="input-group-text">TIME</span>
                                     </div>
-                                    <input class="form-control" v-model="booking_add_form.detail.return_time" :disabled="booking_add_form.nextday == false">
+                                    <input class="form-control" v-model="booking_add_form.detail.return_time" :disabled="nextday==false">
                                 </div> 
                             </fieldset>
 

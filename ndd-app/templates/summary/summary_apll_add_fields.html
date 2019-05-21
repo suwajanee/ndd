@@ -16,6 +16,7 @@
                             <th>Drayage Charge</th>
                             <th>Gate Charge</th>
                             <th>Vat</th>
+                            <th>Remark</th>
                         </thead>
                         <tbody>
                             <td><textarea class="form-control" rows=10 v-model="routing"></textarea></td>
@@ -23,6 +24,7 @@
                             <td><textarea class="form-control" rows=10 v-model="drayage"></textarea></td>
                             <td><textarea class="form-control" rows=10 v-model="gate"></textarea></td>
                             <td><textarea class="form-control" rows=10 v-model="vat"></textarea></td>
+                            <td><textarea class="form-control" rows=10 v-model="remark"></textarea></td>
                         </tbody>
                     </table>
                 </div>
@@ -46,6 +48,7 @@
             drayage: '',
             gate: '',
             vat: '',
+            remark: '',
         },
 
         methods: {
@@ -55,6 +58,7 @@
                 var drayage = this.drayage.split('\n')
                 var gate = this.gate.split('\n')
                 var vat = this.vat.split('\n')
+                var remark = this.remark.split('\n')
                 
                 var data_list = []
                 for(num in container) {
@@ -91,28 +95,37 @@
                         drayage: drayage[num].replace(',', ''),
                         gate: gate[num].replace(',', ''),
                         vat: vat[num].replace(',', ''),
+                        remark: remark[num],
                     }
 
                     data_list.push(obj)
                 }
+                
+                data_list.forEach(function(data) {
 
-                summary_invoice_details.invoice_detail_list.forEach(function(detail) {
-
-                    var work = data_list.filter(data => 
-                        data.container.trim() == detail.work.container_no.trim()
+                    var work = summary_invoice_details.invoice_detail_list.filter(detail => 
+                        detail.work.container_no.trim() == data.container.trim()
                     )
 
                     if(work.length == 1) {
                         work = work[0]
-                        detail.detail.routing = work.routing
-                        detail.drayage_charge.drayage = work.drayage
-                        detail.gate_charge.gate = work.gate
-                        detail.gate_charge.vat = work.vat
+                        work.detail.routing = data.routing
+                        work.drayage_charge.drayage = data.drayage
+                        work.gate_charge.gate = data.gate
+                        work.gate_charge.vat = data.vat
+                        work.detail.remark = data.remark
                     }
-                    
+
                 })
                 
                 $('#modelAddFieldAPLL').modal('hide')
+
+                this.routing = ''
+                this.container = ''
+                this.drayage = ''
+                this.gate = ''
+                this.vat = ''
+                this.remark = ''
             },
         }
     })

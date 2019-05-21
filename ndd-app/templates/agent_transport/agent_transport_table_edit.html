@@ -63,7 +63,7 @@
 
                         <td v-if="agent_transport.principal">
                             <select class="custom-select shipper" v-model="agent_transport.shipper" @change="editData(agent_transport)" :id="'4-'+index" @keydown="keyDownArrow(4, index)">
-                                <option v-for="shipper in filterEditShipper(agent_transport.principal.id)" :value="shipper">{{ shipper.name }}</option>
+                                <option v-for="shipper in filterEditShipper(agent_transport.principal.id)" :value="shipper" :disabled="shipper.cancel=='1'">{{ shipper.name }}</option>
                             </select>
                         </td>
                         <td v-else></td>

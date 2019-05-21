@@ -33,12 +33,17 @@
                         <tbody>
                             <template v-for="(work, index) in filteredWork">
                                 <tr :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id+'_1')}">
-                                    <td class="text-center align-middle">
+                                    <td v-if="work.size.indexOf('X') > 0" class="text-center align-middle" @click="evergreenSelectWork(work.id+'_1', work.id+'_2', work.id, work.summary_status)" >
                                         <div class="m-0 custom-control custom-checkbox">
-                                            <input v-if="work.size.indexOf('X') > 0" type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" @click="evergreenSelectWork(work.id+'_1', work.id+'_2')" :disabled="work.summary_status=='1'">
-                                            <input v-else type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" :disabled="work.summary_status=='1'">
+                                            <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" :disabled="work.summary_status=='1'">
                                         </div>
                                     </td>
+                                    <td v-else class="text-center align-middle" @click="selectWork(work.id+'_1', work.summary_status)">
+                                        <div class="m-0 custom-control custom-checkbox">
+                                            <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_1'" :disabled="work.summary_status=='1'">
+                                        </div>
+                                    </td>
+
                                     <td class="text-center"
                                         :class="{'table-danger': work.date<summary_invoice.summary_week.date_start, 'table-warning': work.date>summary_invoice.summary_week.date_end}"    
                                     >
@@ -73,9 +78,9 @@
                                     <td class="text-center">{{ work.work_id }}</td>
                                 </tr>
                                 <tr v-if="work.size.indexOf('X') > 0" :class="{'bg-light text-secondary': work.summary_status=='1', 'table-primary': work_selected.includes(work.id+'_2')}">
-                                    <td class="text-center align-middle">
+                                    <td class="text-center align-middle" @click="evergreenSelectWork(work.id+'_2', work.id+'_1', work.id, work.summary_status)" >
                                         <div class="m-0 custom-control custom-checkbox">
-                                            <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_2'" @click="evergreenSelectWork(work.id+'_2', work.id+'_1')" :disabled="work.summary_status=='1'">
+                                            <input type="checkbox" class="form-check-input" v-model="work_selected" :value="work.id+'_2'" :disabled="work.summary_status=='1'">
                                         </div>
                                     </td>
                                     <td class="text-center"
