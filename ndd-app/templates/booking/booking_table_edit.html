@@ -60,7 +60,7 @@
 
                         <td v-if="booking.principal">
                             <select class="custom-select shipper" v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required>
-                                <option v-for="shipper in filterEditShipper(booking.principal.id)" :value="shipper">{{ shipper.name }}</option>
+                                <option v-for="shipper in filterEditShipper(booking.principal.id)" :value="shipper" :disabled="shipper.cancel=='1'">{{ shipper.name }}</option>
                             </select>
                         </td>
                         <td v-else></td>
