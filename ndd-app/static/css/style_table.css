@@ -41,7 +41,7 @@ table.time th {
 }
 
 .bg-gold {
-    background: gold;
+    background: gold!important;
 }
 
 .bg-lime {
