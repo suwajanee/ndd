@@ -8,6 +8,7 @@ var booking_add = new Vue( {
         principal_name: '',
         input_required: false,
         
+        nextday: false,
         details: [{
             date: '',
             time: '',
@@ -31,7 +32,7 @@ var booking_add = new Vue( {
             vessel: '',
             port: '',
 
-            nextday: false,
+            nextday: '1',
             return_date: '',
             detail: {},
 
@@ -113,7 +114,7 @@ var booking_add = new Vue( {
                     return false;
                 }
             }
-            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details}).then((data) => {
+            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, nextday: this.nextday}).then((data) => {
                 if(data == "Success") {
                     window.location.replace("/booking");
                 }

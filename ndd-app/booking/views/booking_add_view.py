@@ -28,6 +28,7 @@ def api_save_add_bookings(request):
 
             bookings = req['bookings']
             details = req['details']
+            nextday = req['nextday']
             return_date = bookings['return_date']
 
             bookings['principal'] = Principal.objects.get(pk=bookings['principal'])
@@ -48,9 +49,7 @@ def api_save_add_bookings(request):
 
             bookings['remark'] = re.sub(' +', ' ', bookings['remark'].strip())
 
-            if bookings['nextday'] == True:
-                bookings['nextday'] = '1'
-            else:
+            if nextday == False:
                 bookings['nextday'] = '0'
             
             for detail in details:
@@ -61,7 +60,7 @@ def api_save_add_bookings(request):
                 bookings['time'] = detail['time']
                 bookings['size'] = detail['size']
 
-                if bookings['nextday'] == '1':
+                if bookings['nextday'] == '1' or bookings['nextday'] == '2':
                     if not return_date:
                         bookings['return_date'] = detail['date']
                 else:
