@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import Booking
-from ..serializers import BookingSerializer
+from ..models import Booking, ContainerSize
+from ..serializers import BookingSerializer, ContainerSizeSerializer
 from summary.views.summary_week_view import get_week_details
 
 
@@ -63,6 +63,24 @@ def api_get_booking_daily_works(request):
             data['pending'] = pending = Booking.objects.filter(Q(date=today) & Q(status__in=[3,4,5])).count()
             data['completed'] = completed = Booking.objects.filter(Q(date=today) & Q(status=2)).count()
             data['total'] = not_start + pending + completed
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_container_size(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            data = {}
+            
+            container_1 = ContainerSize.objects.filter(num=1).order_by('size')
+            container_2 = ContainerSize.objects.filter(num=2).order_by('size')
+
+            serializer_1 = ContainerSizeSerializer(container_1, many=True)
+            serializer_2 = ContainerSizeSerializer(container_2, many=True)
+
+            data['num_1'] = serializer_1.data
+            data['num_2'] = serializer_2.data
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)

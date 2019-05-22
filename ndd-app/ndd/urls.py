@@ -43,7 +43,6 @@ urlpatterns = [
     url(r'^export/$', export_xls_view.export_page, name='export-page'),
     url(r'^export/excel/$', export_xls_view.export_xls, name='export-excel'),
 
-
     # Data
     url(r'^api/get-weekly-works/$', dashboard_view.api_get_weekly_works, name='api-get-weekly-works'),
     url(r'^api/get-yearly-income/$', dashboard_view.api_get_income, name='api-get-yearly-income'),
