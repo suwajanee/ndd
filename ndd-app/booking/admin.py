@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Booking
 from .models import BookingTime
+from .models import ContainerSize
 
 
 class BookingAdmin(admin.ModelAdmin):
@@ -12,9 +13,23 @@ class BookingAdmin(admin.ModelAdmin):
 
     search_fields = ['work_id', 'booking_no', 'container_no']
 
+
 class BookingTimeAdmin(admin.ModelAdmin):
     list_display = ('booking', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', \
     'return_in_time', 'return_out_time')
+
+
+class ContainerSizeAdmin(admin.ModelAdmin):
+    list_display = ('get_container',)
+    def get_container(self, obj):
+        if obj.num == '2':
+            return obj.num + 'X' + obj.size
+        else:
+            return obj.size
+
+    get_container.short_description = 'Container Size'
+    
  
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(BookingTime, BookingTimeAdmin)
+admin.site.register(ContainerSize, ContainerSizeAdmin)

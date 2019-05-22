@@ -96,3 +96,12 @@ class BookingTime(models.Model):
     factory_out_time = JSONField(null=True, blank=True)
     return_in_time = JSONField(null=True, blank=True)
     return_out_time = JSONField(null=True, blank=True)
+
+
+class ContainerSize(models.Model):
+    size = models.CharField(max_length=10, blank=True)
+    NUM_CHOICES = (
+        ('1', '1'),
+        ('2', '2'),
+    )
+    num = models.CharField(max_length=1, choices=NUM_CHOICES, default=1)
