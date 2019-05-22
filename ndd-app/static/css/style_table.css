@@ -181,3 +181,8 @@ select.shipper {
     height: 25px;
     font-size: 12px;
 }
+
+button.status-button {
+    font-size: 0.5rem;
+    padding: 0px;
+}

@@ -56,8 +56,7 @@
 
                         <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]">
                             {{ booking.time }}<br>
-                            <button v-if="booking.status != '0' && booking.timeColor == false" class="btn btn-sm mt-1 rounded-circle btn-outline-dark" 
-                                style="font-size: 10%; padding: 0px;"
+                            <button v-if="booking.status != '0' && booking.timeColor == false" class="btn btn-sm mt-1 rounded-circle btn-outline-dark status-button" 
                                 @click="checkColor(booking.id, booking.detail.time, 'time')"
                             >
                                 <i class="far fa-circle"></i>
@@ -86,9 +85,8 @@
 
                         <td>
                             {{ booking.pickup_from }}<br>
-                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="parseInt(booking.status) > 1 ? 'btn-primary' : 'btn-outline-primary'"
-                                style="font-size: 10%; padding: 0px;" 
                                 @click="changeStateBooking(booking.id, '3')"
                             >
                                 <i class="far fa-circle"></i>
@@ -101,9 +99,8 @@
                         <td class="text-nowrap">
                             {{ booking.factory }}
                             <br>
-                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="['2', '4', '5'].includes(booking.status) ? 'btn-primary' : 'btn-outline-primary'"
-                                style="font-size: 10%; padding: 0px;"  
                                 @click="changeStateBooking(booking.id, '4')"
                             >
                                 <i class="far fa-circle"></i>
@@ -119,16 +116,14 @@
                         
                         <td>
                             {{ booking.return_to }}<br>
-                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                             :class="['2', '5'].includes(booking.status) ? 'btn-primary' : 'btn-outline-primary'"
-                                style="font-size: 10%; padding: 0px;"
                                 @click="changeStateBooking(booking.id, '5')"
                             >
                                 <i class="far fa-circle"></i>
                             </button>
-                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                             :class="booking.status == '2' ? 'btn-success' : 'btn-outline-success'"
-                                style="font-size: 10%; padding: 0px;"
                                 @click="changeStateBooking(booking.id, '2')"
                             >
                                 <i class="far fa-circle"></i>
@@ -137,8 +132,7 @@
 
                         <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.container_no]]" style="font-weight: 800;">
                             {{ booking.container_no }}<br>
-                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
-                                style="font-size: 10%; padding: 0px;"
+                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark status-button" 
                                 @click="checkColor(booking.id, booking.detail.container_no, 'container_no')"
                             >
                                 <i class="far fa-circle"></i>
@@ -146,8 +140,7 @@
                         </td>
                         <td class="text-nowrap" :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.seal_no]]" style="font-weight: 800;">
                             {{ booking.seal_no }}<br>
-                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
-                                style="font-size: 10%; padding: 0px;"
+                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark status-button" 
                                 @click="checkColor(booking.id, booking.detail.seal_no, 'seal_no')"
                             >
                                 <i class="far fa-circle"></i>
