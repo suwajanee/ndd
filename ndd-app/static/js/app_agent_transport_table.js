@@ -9,6 +9,9 @@ var agent_transport_table = new Vue( {
         modal:'',
         shipper_address: [],
 
+        container_size_1: [],
+        container_size_2: [],
+
         checked_agent_transports: [],
         all_checked: false,
 
@@ -38,6 +41,8 @@ var agent_transport_table = new Vue( {
     methods: {
         reload() {
             this.container_color = container_color
+            this.getContainerSize()
+
             if(localStorage.getItem('filter_by_agent_transport')){
                 this.filter_by = localStorage.getItem('filter_by_agent_transport')
             }
@@ -64,6 +69,12 @@ var agent_transport_table = new Vue( {
             this.filterAgentTransports()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
+        },
+        getContainerSize() {
+            api("/booking/api/get-container-size/").then((data) => {
+                this.container_size_1 = data.num_1
+                this.container_size_2 = data.num_2
+            })
         },
 
         filterAgentTransports() {

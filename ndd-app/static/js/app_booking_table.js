@@ -11,6 +11,9 @@ var booking_table = new Vue( {
         modal:'',
         shipper_address: [],
 
+        container_size_1: [],
+        container_size_2: [],
+
         checked_bookings: [],
         all_checked: false,
 
@@ -38,6 +41,8 @@ var booking_table = new Vue( {
     methods: {
         reload() {
             this.container_color = container_color
+            this.getContainerSize()
+
             if(localStorage.getItem('filter_by_booking')){
                 this.filter_by = localStorage.getItem('filter_by_booking')
             }
@@ -73,6 +78,12 @@ var booking_table = new Vue( {
             this.filterTimeBookings()
             this.nbar = 'time'
             window.location.hash = window.location.hash + 'time'
+        },
+        getContainerSize() {
+            api("/booking/api/get-container-size/").then((data) => {
+                this.container_size_1 = data.num_1
+                this.container_size_2 = data.num_2
+            })
         },
 
         filterBookings() {

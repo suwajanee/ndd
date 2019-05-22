@@ -286,21 +286,9 @@
                                     v-model="inv_detail.work.size"
                                 >
                                     <option value=""> -------- </option>
-                                    <option value="20'">20'</option>
-                                    <option value="20'RF">20'RF</option>
-                                    <option value="20'OT">20'OT</option>
-                                    <option value="20'GOH">20'GOH</option>
-                                    <option value="20'TK">20'TK</option>
-                                    <option value="40'">40'</option>
-                                    <option value="40'HC">40'HC</option>
-                                    <option value="40'RF">40'RF</option>
-                                    <option value="40'OT">40'OT</option>
-                                    <option value="40'GOH">40'GOH</option>
-                                    <option value="40'FL">40'FL</option>
-                                    <option value="45'">45'</option>
+                                    <option v-for="container in container_size_1" :value="container.size">{{ container.size }}</option>
                                     <option value="" disabled> -------- </option>
-                                    <option value="2X20'">2X20'</option>
-                                    <option value="2X20'RF">2X20'RF</option>
+                                    <option v-for="container in container_size_2" :value="'2X'+container.size"> 2X{{ container.size }}</option>
                                 </select>   
                                 <template v-else>
                                     <template v-if="inv_detail.work.size">

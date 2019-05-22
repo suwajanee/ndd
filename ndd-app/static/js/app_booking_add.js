@@ -7,6 +7,9 @@ var booking_add = new Vue( {
         shippers: [],
         principal_name: '',
         input_required: false,
+
+        container_size_1: [],
+        container_size_2: [],
         
         nextday: false,
         details: [{
@@ -53,6 +56,7 @@ var booking_add = new Vue( {
     },
     methods: {
         reload() {
+            this.getContainerSize()
             this.getBookingPrincipals()
         },
 
@@ -61,7 +65,6 @@ var booking_add = new Vue( {
                 this.principals = data
             })
         },
-
         getShipper(principal) {
             if(this.booking_add_form.principal != principal.id) {
                 this.booking_add_form.shipper = ''
@@ -72,6 +75,13 @@ var booking_add = new Vue( {
                 this.shippers = data
             })
         },
+        getContainerSize() {
+            api("/booking/api/get-container-size/").then((data) => {
+                this.container_size_1 = data.num_1
+                this.container_size_2 = data.num_2
+            })
+        },
+
         addDetail() {
             this.details.push({
                 date: '',
