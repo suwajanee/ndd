@@ -93,9 +93,8 @@
 
                         <td>
                             {{ agent_transport.pickup_from }}<br>
-                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="parseInt(agent_transport.status) > 1 ? 'btn-primary' : 'btn-outline-primary'"
-                                style="font-size: 10%; padding: 0px;"
                                 @click="changeStateAgentTransport(agent_transport.id, '3')"
                             >
                                 <i class="far fa-circle"></i>
@@ -111,16 +110,14 @@
 
                         <td>
                             {{ agent_transport.return_to }}<br>
-                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="['2', '4'].includes(agent_transport.status) ? 'btn-primary' : 'btn-outline-primary'"
-                                style="font-size: 10%; padding: 0px;"
                                 @click="changeStateAgentTransport(agent_transport.id, '4')"
                             >
                                 <i class="far fa-circle"></i>
                             </button>
-                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle" 
+                            <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="agent_transport.status == '2' ? 'btn-success' : 'btn-outline-success'"
-                                style="font-size: 10%; padding: 0px;"
                                 @click="changeStateAgentTransport(agent_transport.id, '2')"
                             >
                                 <i class="far fa-circle"></i>
@@ -129,8 +126,7 @@
 
                         <td class="text-nowrap" :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_1]]" style="font-weight: 800;">
                             {{ agent_transport.container_1 }}<br>
-                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
-                                style="font-size: 10%; padding: 0px;"
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark status-button" 
                                 @click="checkColor(agent_transport.id, agent_transport.detail.container_1, 'container_1')"
                             >
                                 <i class="far fa-circle"></i>
@@ -138,8 +134,7 @@
                         </td>
                         <td class="text-nowrap" :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_2]]" style="font-weight: 800;">
                             {{ agent_transport.container_2 }}<br>
-                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark" 
-                                style="font-size: 10%; padding: 0px;"
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle float-right btn-outline-dark status-button" 
                                 @click="checkColor(agent_transport.id, agent_transport.detail.container_2, 'container_2')"
                             >
                                 <i class="far fa-circle"></i>
