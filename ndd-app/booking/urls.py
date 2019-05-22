@@ -32,8 +32,10 @@ urlpatterns = [
     # Summary
     url(r'^api/get-work-list/$', booking_data_view.api_get_work_list, name='api-get-booking-work-list'),
 
-
+    # Dashboard
     url(r'^api/get-booking-daily-works/$', booking_data_view.api_get_booking_daily_works, name='api-get-booking-daily-works'),
 
-    
+    # Container Size
+    url(r'^api/get-container-size/$', booking_data_view.api_get_container_size, name='api-get-container-size'),
+
 ]

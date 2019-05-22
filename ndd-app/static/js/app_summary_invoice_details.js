@@ -15,6 +15,9 @@ var summary_invoice_details = new Vue( {
         customer_main: {},
         customer_type: '',
 
+        container_size_1: [],
+        container_size_2: [],
+
         customer_form: [],
         form_default: [],
         booking_field: {},
@@ -169,6 +172,7 @@ var summary_invoice_details = new Vue( {
 
             this.invoice_id = invoice.id
 
+            this.getContainerSize()
             this.invoiceEditFields()
             this.getInvoiceDetails(this.invoice_id)
             this.getFormDefault()
@@ -218,6 +222,12 @@ var summary_invoice_details = new Vue( {
                     this.work_list = data
                 })
             }
+        },
+        getContainerSize() {
+            api("/booking/api/get-container-size/").then((data) => {
+                this.container_size_1 = data.num_1
+                this.container_size_2 = data.num_2
+            })
         },
 
         // Setup Data
