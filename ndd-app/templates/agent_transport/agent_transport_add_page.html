@@ -36,7 +36,7 @@
                                         <input class="form-control" v-model="search_principal" placeholder="search">
                                     </div>
                                     <div class="dropdown-divider"></div>
-                                    <div class="options-list">
+                                    <div class="options-list" style="overflow-y: scroll; max-height: 300px;">
                                         <button v-for="principal in filteredPrincipal" class="dropdown-item" @click.prevent="getShipper(principal)">{{ principal.name }}</button>
                                     </div>
                                 </div>
