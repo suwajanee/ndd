@@ -31,7 +31,7 @@
             <tbody>
                 <template v-for="(agent_transport, index) in agent_transports">
                     <tr
-                        :class="{'bg-secondary':agent_transport.status==0, 'table-warning': ['1', '3', '4'].includes(agent_transport.status) }"
+                        :class="{'bg-secondary':agent_transport.status==0, 'table-success': agent_transport.status=='2'}"
                         :key="agent_transport.id"
                     >
                         <td class="p-0 align-middle">
