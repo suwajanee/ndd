@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
 from .booking_add_view import run_work_id
-from .booking_page_view import api_get_bookings
+from .booking_page_view import api_get_bookings, api_filter_bookings
 from .utility.functions import check_key_detail
 from customer.models import Shipper
 
@@ -19,6 +19,7 @@ def api_save_edit_bookings(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             bookings = req['bookings']
+            filter_mode = req['filter_mode']
 
             for booking in bookings:
                 if not booking['date']:
@@ -94,7 +95,10 @@ def api_save_edit_bookings(request):
                 booking_save.port = re.sub(' +', ' ', booking['port'].strip())
                 booking_save.save()
 
-        return api_get_bookings(request)
+        if filter_mode:
+            return api_filter_bookings(request)
+        else:
+            return api_get_bookings(request)
     return JsonResponse('Error', safe=False)          
 
 @csrf_exempt

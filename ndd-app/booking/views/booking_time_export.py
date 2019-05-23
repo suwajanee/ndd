@@ -21,7 +21,6 @@ def export_time(request):
 
         style_xls = StyleXls()
 
-        
         try:
             customer = Principal.objects.get(pk=customer_id)
         except Principal.DoesNotExist:

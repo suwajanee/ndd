@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
-from .booking_page_view import api_get_bookings
+from .booking_page_view import api_get_bookings, api_filter_bookings
 from summary.models import InvoiceDetail
 
 
@@ -17,6 +17,7 @@ def api_delete_bookings(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             pk_list = req["checked_bookings"]
+            filter_mode = req['filter_mode']
 
             for pk in pk_list:
                 booking = Booking.objects.get(pk=pk)
@@ -37,5 +38,8 @@ def api_delete_bookings(request):
                     detail.delete()
                 booking.delete()
 
-        return api_get_bookings(request)
+        if filter_mode:
+            return api_filter_bookings(request)
+        else:
+            return api_get_bookings(request)
     return JsonResponse('Error', safe=False)      

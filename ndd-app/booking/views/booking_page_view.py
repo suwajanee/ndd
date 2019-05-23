@@ -46,4 +46,39 @@ def api_get_bookings(request):
         serializer = BookingSerializer(bookings, many=True)
         context['bookings'] = serializer.data
         return JsonResponse(context, safe=False)
-    return JsonResponse('Error', safe=False)              
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_filter_bookings(request):
+    if request.user.is_authenticated:
+        context = {}
+        context['tmr'] = datetime.now() + timedelta(days=1)
+        context['today'] = datetime.now()
+
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            filter_data = req['filter_data']
+
+            filter_dict = {}
+
+            set_if_not_none(filter_dict, 'principal__pk', filter_data['principal_id'])
+            set_if_not_none(filter_dict, 'shipper__pk', filter_data['shipper'])
+            set_if_not_none(filter_dict, 'booking_no', filter_data['booking_no'])
+            set_if_not_none(filter_dict, 'remark__contains', filter_data['remark'])
+            set_if_not_none(filter_dict, 'date__gte', filter_data['date_from'])
+            set_if_not_none(filter_dict, 'date__lte', filter_data['date_to'])
+
+            bookings = Booking.objects.filter(**filter_dict).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+
+        else:
+            return api_get_bookings(request)
+            
+        serializer = BookingSerializer(bookings, many=True)
+        context['bookings'] = serializer.data
+
+        return JsonResponse(context, safe=False)
+    return JsonResponse('Error', safe=False)            
+
+def set_if_not_none(mapping, key, value):
+    if value is not None and value:
+        mapping[key] = value
