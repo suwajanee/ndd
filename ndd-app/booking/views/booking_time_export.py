@@ -75,14 +75,18 @@ def export_time(request):
             else:
                 sheet.write(1, col_num, columns[col_num], style)
 
-        if shipper_id:
-            rows = Booking.objects.filter(Q(principal=customer) & Q(shipper__pk=shipper_id) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-                    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
-        else:
-            rows = Booking.objects.filter(Q(principal=customer) & Q(date__lte=date_to) & Q(date__gte=date_from)).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
-                    'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
-        
+        filter_data = {
+            'principal': customer,
+            'date__lte': date_to,
+            'date__gte': date_from
+        }
 
+        if shipper_id:
+            filter_data['shipper__pk'] = shipper_id
+
+        rows = Booking.objects.filter(**filter_data).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
+                'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+ 
         row_prev = None
         booking_prev = None
         booking_index = -1
