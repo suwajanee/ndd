@@ -93,7 +93,7 @@ var booking_table = new Vue( {
             this.action = ''
             this.edit_data = []
             if(this.date_filter) {
-                api("/booking/api/filter-bookings/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
+                api("/booking/api/get-bookings/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
                     this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr
@@ -102,7 +102,7 @@ var booking_table = new Vue( {
                 })
             }
             else {
-                api("/booking/api/filter-bookings/").then((data) => {
+                api("/booking/api/get-bookings/").then((data) => {
                     this.bookings = data.bookings
                     this.today = data.today
                     this.tmr = data.tmr

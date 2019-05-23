@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
 from .agent_transport_add_view import run_work_id
-from .agent_transport_page_view import api_filter_agent_transports
+from .agent_transport_page_view import api_get_agent_transports
 from booking.views.utility.functions import check_key_detail
 from customer.models import Shipper
 
@@ -57,7 +57,7 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.return_date = agent_transport['date']
                 agent_transport_save.save()
 
-        return api_filter_agent_transports(request)
+        return api_get_agent_transports(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

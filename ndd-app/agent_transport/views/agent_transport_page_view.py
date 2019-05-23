@@ -20,7 +20,7 @@ def agent_transport_page(request):
     return render(request, 'agent_transport/agent_transport_page.html', {'nbar': 'agent-transport-page'})
 
 @csrf_exempt
-def api_filter_agent_transports(request):
+def api_get_agent_transports(request):
     if request.user.is_authenticated:
         context = {}
         context['today'] = datetime.now()

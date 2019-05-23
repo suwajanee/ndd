@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
-from .agent_transport_page_view import api_filter_agent_transports
+from .agent_transport_page_view import api_get_agent_transports
 from summary.models import InvoiceDetail
 
 
@@ -37,6 +37,6 @@ def api_delete_agent_transports(request):
                     detail.delete()
                 agent_transport.delete()
 
-        return api_filter_agent_transports(request)
+        return api_get_agent_transports(request)
     return JsonResponse('Error', safe=False)
     

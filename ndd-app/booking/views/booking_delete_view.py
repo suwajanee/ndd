@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
-from .booking_page_view import api_filter_bookings
+from .booking_page_view import api_get_bookings
 from summary.models import InvoiceDetail
 
 
@@ -37,5 +37,5 @@ def api_delete_bookings(request):
                     detail.delete()
                 booking.delete()
 
-        return api_filter_bookings(request)
+        return api_get_bookings(request)
     return JsonResponse('Error', safe=False)      

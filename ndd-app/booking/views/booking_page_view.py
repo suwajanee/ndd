@@ -19,7 +19,7 @@ def booking_page(request):
     return render(request, 'booking/booking_page.html', {'nbar': 'booking-page'})
 
 @csrf_exempt
-def api_filter_bookings(request):
+def api_get_bookings(request):
     if request.user.is_authenticated:
         context = {}
         context['tmr'] = datetime.now() + timedelta(days=1)

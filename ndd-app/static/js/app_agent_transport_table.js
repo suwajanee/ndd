@@ -60,13 +60,13 @@ var agent_transport_table = new Vue( {
         },
 
         getAgentTransportsDataTable() {
-            this.filterAgentTransports()
+            this.getAgentTransports()
             this.nbar = 'table'
         },
         getAgentTransportsEditTable() {
             window.location.hash = ''
             this.getShipper()
-            this.filterAgentTransports()
+            this.getAgentTransports()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
         },
@@ -77,21 +77,21 @@ var agent_transport_table = new Vue( {
             })
         },
 
-        filterAgentTransports() {
+        getAgentTransports() {
             this.loading = true
             this.checked_agent_transports = []
             this.all_checked = false
             this.action = ''
             this.edit_data = []
             if(this.date_filter) {
-                api("/agent-transport/api/filter-agent-transports/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
+                api("/agent-transport/api/get-agent-transports/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
                     this.loading = false
                 })
             }
             else {
-                api("/agent-transport/api/filter-agent-transports/").then((data) => {
+                api("/agent-transport/api/get-agent-transports/").then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
                     this.loading = false
