@@ -63,13 +63,13 @@ var booking_table = new Vue( {
         },
 
         getBookingsDataTable() {
-            this.filterBookings()
+            this.getBookings()
             this.nbar = 'table'
         },
         getBookingsEditTable() {
             window.location.hash = ''
             this.getShipper()
-            this.filterBookings()
+            this.getBookings()
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
         },
@@ -86,7 +86,7 @@ var booking_table = new Vue( {
             })
         },
 
-        filterBookings() {
+        getBookings() {
             this.loading = true
             this.checked_bookings = []
             this.all_checked = false
@@ -121,19 +121,30 @@ var booking_table = new Vue( {
                 var book = this.bookings[booking]
 
                 if(booking == 0){
-                    num = 1
+                    if(book.status != '0') {
+                        num = 1
+                    }
                     book.color = this.booking_color[this.color_index=0]
                 }
                 else if(book.booking_no != this.bookings[booking-1].booking_no | book.date != this.bookings[booking-1].date){
-                    num = 1
+                    if(book.status != '0') {
+                        num = 1
+                    }
                     book.color = this.booking_color[++this.color_index % 10]
                 }
                 else{
-                    num += 1
+                    if(book.status != '0') {
+                        num += 1
+                    }
                     book.color = this.booking_color[this.color_index % 10]
                 }
 
-                book.num = num
+                if(book.status != '0') {
+                    book.num = num
+                }
+                else {
+                    book.num = '-'
+                }
 
                 try {
                     var time = book.time.split('.')
