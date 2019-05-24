@@ -77,7 +77,7 @@
                         <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
                         <td v-else></td>
 
-                        <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;">{{ agent_transport.shipper.name }}</td>
+                        <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;" :style="'color: ' + agent_transport.detail.shipper_text_color" >{{ agent_transport.shipper.name }}</td>
                         <td v-else></td>
 
                         <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ agent_transport.agent }}</div></td>

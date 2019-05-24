@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
 from .agent_transport_add_view import run_work_id
-from .agent_transport_page_view import api_filter_agent_transports
+from .agent_transport_page_view import api_get_agent_transports, api_filter_agent_transports
 from booking.views.utility.functions import check_key_detail
 from customer.models import Shipper
 
@@ -19,6 +19,7 @@ def api_save_edit_agent_transport(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             agent_transports = req['agent_transports']
+            filter_mode = req['filter_mode']
 
             for agent_transport in agent_transports:
                 if not agent_transport['date']:
@@ -55,9 +56,18 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.remark = re.sub(' +', ' ', agent_transport['remark'].strip())          
                 agent_transport_save.pickup_date = agent_transport['date']
                 agent_transport_save.return_date = agent_transport['date']
+
+                if not agent_transport_save.detail:
+                    agent_transport_save.detail = {}
+
+                agent_transport_save.detail = check_key_detail(agent_transport_save.detail, agent_transport['detail'], 'shipper_text_color', True)
+
                 agent_transport_save.save()
 
-        return api_filter_agent_transports(request)
+        if filter_mode:
+            return api_filter_agent_transports(request)
+        else:
+            return api_get_agent_transports(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

@@ -50,7 +50,7 @@
                         <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
                         <td v-else></td>
 
-                        <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;">{{ booking.shipper.name }}</td>
+                        <td v-if="booking.shipper" class="px-2 text-left" style="min-width:250px;" :style="'color: ' + booking.detail.shipper_text_color">{{ booking.shipper.name }}</td>
                         <td v-else></td>
 
                         <td class="text-center px-1"><div class="long-text" style="margin:auto;">{{ booking.agent }}</div></td>

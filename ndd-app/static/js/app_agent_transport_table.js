@@ -4,7 +4,9 @@ var agent_transport_table = new Vue( {
     data: {
         agent_transports: [],
 
+        principals: [],
         shippers: [],
+        shippers_list: [],
 
         modal:'',
         shipper_address: [],
@@ -19,6 +21,15 @@ var agent_transport_table = new Vue( {
         date_filter: '',
 
         nbar: 'table',
+        filter_mode: false,
+        filter_data: {
+            principal_id: '',
+            shipper: '',
+            booking_no: '',
+            remark: '',
+            date_from: '',
+            date_to: '',
+        },
 
         container_color: {},
         
@@ -42,6 +53,7 @@ var agent_transport_table = new Vue( {
         reload() {
             this.container_color = container_color
             this.getContainerSize()
+            this.getPrincipals()
 
             if(localStorage.getItem('filter_by_agent_transport')){
                 this.filter_by = localStorage.getItem('filter_by_agent_transport')
@@ -60,13 +72,24 @@ var agent_transport_table = new Vue( {
         },
 
         getAgentTransportsDataTable() {
-            this.filterAgentTransports()
+            if(this.filter_mode) {
+                this.filterAgentTransports()
+            }
+            else {
+                this.getAgentTransports()
+            }
             this.nbar = 'table'
+            window.location.hash = ''
         },
         getAgentTransportsEditTable() {
             window.location.hash = ''
-            this.getShipper()
-            this.filterAgentTransports()
+            this.getShipperList()
+            if(this.filter_mode) {
+                this.filterAgentTransports()
+            }
+            else {
+                this.getAgentTransports()
+            }
             this.nbar = 'edit'
             window.location.hash = window.location.hash + 'edit'
         },
@@ -76,22 +99,33 @@ var agent_transport_table = new Vue( {
                 this.container_size_2 = data.num_2
             })
         },
+        getPrincipals() {
+            api("/customer/api/get-principals/", "POST", {work_type: 'agent-transport'}).then((data) => {
+                this.principals = data
+            })
+        },
+        getShipper(principal) {
+            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {
+                this.shippers = data
+            })
+        },
 
-        filterAgentTransports() {
+        getAgentTransports() {
             this.loading = true
             this.checked_agent_transports = []
             this.all_checked = false
             this.action = ''
             this.edit_data = []
+            this.filter_mode = false
             if(this.date_filter) {
-                api("/agent-transport/api/filter-agent-transports/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
+                api("/agent-transport/api/get-agent-transports/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
                     this.loading = false
                 })
             }
             else {
-                api("/agent-transport/api/filter-agent-transports/").then((data) => {
+                api("/agent-transport/api/get-agent-transports/").then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
                     this.loading = false
@@ -99,6 +133,35 @@ var agent_transport_table = new Vue( {
             }
             localStorage.setItem('filter_by_agent_transport', this.filter_by)
             localStorage.setItem('date_filter_agent_transport', this.date_filter)
+        },
+        filterAgentTransports() {
+            this.loading = true
+            this.checked_agent_transports = []
+            this.all_checked = false
+            this.action = ''
+            this.edit_data = []
+            this.filter_mode = true
+            if(this.filter_data.principal_id | this.filter_data.shipper | this.filter_data.booking_no | this.filter_data.remark | this.filter_data.date_from | this.filter_data.date_to) {
+                api("/agent-transport/api/filter-agent-transports/", "POST", {filter_data: this.filter_data}).then((data) => {
+                    this.agent_transports = data.agent_transports
+                    this.getColor()
+                    this.loading = false
+                })
+            }
+            else {
+                this.getAgentTransports()
+            }
+        },
+        clearFilterAgentTransports() {
+            this.filter_data = {
+                principal_id: '',
+                shipper: '',
+                booking_no: '',
+                remark: '',
+                date_from: '',
+                date_to: '',
+            }
+            this.getAgentTransports()
         },
 
         getColor() {
@@ -119,15 +182,27 @@ var agent_transport_table = new Vue( {
                 }
 
                 if(agent_transport == 0){
-                    num = 1
+                    if(agent.status != '0') {
+                        num = 1
+                    }
                 }
                 else if(agent.date != this.agent_transports[agent_transport-1].date | agent.work_type != this.agent_transports[agent_transport-1].work_type | agent.shipper.id != this.agent_transports[agent_transport-1].shipper.id) {
-                    num = 1
+                    if(agent.status != '0') {
+                        num = 1
+                    }
                 }
                 else {
-                    num += 1
+                    if(agent.status != '0') {
+                        num += 1      
+                    }
                 }
-                agent.num = num
+
+                if(agent.status != '0') {
+                    agent.num = num
+                }
+                else {
+                    agent.num = '-'
+                }
 
                 if(! agent.detail) {
                     this.$set(agent, 'detail', {})
@@ -140,13 +215,13 @@ var agent_transport_table = new Vue( {
             }
         },
 
-        getShipper() {
+        getShipperList() {
             api("/customer/api/get-shippers/").then((data) => {
-                this.shippers = data
+                this.shippers_list = data
             })
         },
         filterEditShipper(customer_id) {
-            return this.shippers.filter(shipper => shipper.principal == customer_id )           
+            return this.shippers_list.filter(shipper => shipper.principal == customer_id )           
         },
 
         currencyCommas(price){
@@ -194,13 +269,24 @@ var agent_transport_table = new Vue( {
                 this.edit_data.push(agent_transport)
             }
         },
+        editColorData: function(agent_transport) {
+            if(agent_transport.detail.shipper_text_color) {
+                if(agent_transport.detail.shipper_text_color == '#000000') {
+                    agent_transport.detail.shipper_text_color = ''
+                }
+            }
+            
+            if(this.edit_data.indexOf(agent_transport) === -1) {
+                this.edit_data.push(agent_transport)
+            }            
+        },
         saveEditAgentTransport() {
             this.loading = true
             this.saving = true
             this.checked_agent_transports = []
             this.all_checked = false         
             if(this.edit_data.length) {
-                api("/agent-transport/api/save-edit-agent-transports/", "POST", { agent_transports: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
+                api("/agent-transport/api/save-edit-agent-transports/", "POST", { agent_transports: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter, filter_mode: this.filter_mode, filter_data: this.filter_data }).then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
                     this.edit_data = []
@@ -260,7 +346,7 @@ var agent_transport_table = new Vue( {
         deleteAgentTransports() {
             this.loading = true
             this.action = ''
-            api("/agent-transport/api/delete-agent-transports/", "POST", { checked_agent_transports: this.checked_agent_transports, filter_by: this.filter_by, date_filter: this.date_filter }).then((data) => {
+            api("/agent-transport/api/delete-agent-transports/", "POST", { checked_agent_transports: this.checked_agent_transports, filter_by: this.filter_by, date_filter: this.date_filter, filter_mode: this.filter_mode, filter_data: this.filter_data }).then((data) => {
                 this.agent_transports = data.agent_transports
                 this.getColor()
 
