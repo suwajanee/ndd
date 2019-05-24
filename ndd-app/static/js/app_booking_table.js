@@ -3,7 +3,6 @@ var booking_table = new Vue( {
     el: '#booking-table',
     data: {
         bookings: [],
-        today: '',
         tmr: '',
 
         principals: [],
@@ -129,7 +128,6 @@ var booking_table = new Vue( {
             if(this.date_filter) {
                 api("/booking/api/get-bookings/", "POST", {filter_by: this.filter_by, date_filter: this.date_filter}).then((data) => {
                     this.bookings = data.bookings
-                    this.today = data.today
                     this.tmr = data.tmr
                     this.getColor()
                     this.loading = false
@@ -138,7 +136,6 @@ var booking_table = new Vue( {
             else {
                 api("/booking/api/get-bookings/").then((data) => {
                     this.bookings = data.bookings
-                    this.today = data.today
                     this.tmr = data.tmr
                     this.getColor()
                     this.loading = false
@@ -157,7 +154,6 @@ var booking_table = new Vue( {
             if(this.filter_data.principal_id | this.filter_data.shipper | this.filter_data.booking_no | this.filter_data.remark | this.filter_data.date_from | this.filter_data.date_to) {
                 api("/booking/api/filter-bookings/", "POST", {filter_data: this.filter_data}).then((data) => {
                     this.bookings = data.bookings
-                    this.today = data.today
                     this.tmr = data.tmr
                     this.getColor()
                     this.loading = false
@@ -308,7 +304,6 @@ var booking_table = new Vue( {
             if(this.edit_data.length) {
                 api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter, filter_mode: this.filter_mode, filter_data: this.filter_data }).then((data) => {
                     this.bookings = data.bookings
-                    this.today = data.today
                     this.tmr = data.tmr
                     this.getColor()
                     this.edit_data = []
@@ -387,7 +382,6 @@ var booking_table = new Vue( {
             if(this.checked_bookings.length) {
                 api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
                     this.bookings = data.bookings
-                    this.today = data.today
                     this.tmr = data.tmr
 
                     this.getColor()
@@ -405,7 +399,6 @@ var booking_table = new Vue( {
                     }
                     else {
                         this.bookings = data.bookings
-                        this.today = data.today
                         this.tmr = data.tmr
 
                         this.getColor()
@@ -424,7 +417,6 @@ var booking_table = new Vue( {
                     booking['booking_time'] = time
                 }
                 else {
-                // if(! booking.hasOwnProperty("booking_time")) {
                     booking['booking_time'] = {
                         pickup_in_time: {time: ''},
                         pickup_out_time: {time: ''},

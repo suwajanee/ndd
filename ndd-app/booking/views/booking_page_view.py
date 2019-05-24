@@ -22,8 +22,8 @@ def booking_page(request):
 def api_get_bookings(request):
     if request.user.is_authenticated:
         context = {}
-        context['tmr'] = datetime.now() + timedelta(days=1)
-        context['today'] = datetime.now()
+        today = datetime.now()
+        context['tmr'] = today + timedelta(days=1)
 
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
@@ -33,15 +33,15 @@ def api_get_bookings(request):
                 date_filter = None
 
             if date_filter == None:
-                bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter(Q(date=today) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
             elif filter_by == "month":
                 month_of_year = datetime.strptime(date_filter, '%Y-%m')
-                bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter((Q(date__month=month_of_year.month) & Q(date__year=month_of_year.year)) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=today)) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
             else:
-                bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=context['today'])) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+                bookings = Booking.objects.filter(Q(date=date_filter) | ((Q(closing_date__lte=context['tmr']) | Q(date__lte=today)) & Q(status__in=[1,3,4,5]))).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         else:
-            bookings = Booking.objects.filter(Q(date=context['today']) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
+            bookings = Booking.objects.filter(Q(date=today) | Q(status__in=[1,3,4,5])).order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
 
         serializer = BookingSerializer(bookings, many=True)
         context['bookings'] = serializer.data
@@ -52,8 +52,8 @@ def api_get_bookings(request):
 def api_filter_bookings(request):
     if request.user.is_authenticated:
         context = {}
-        context['tmr'] = datetime.now() + timedelta(days=1)
-        context['today'] = datetime.now()
+        today = datetime.now()
+        context['tmr'] = today + timedelta(days=1)
 
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
