@@ -24,6 +24,7 @@
 .table-cont td {
     padding: 5px;
     min-width: 50px;
+    color: black;
 }
 
 .table-cont tbody {
@@ -148,24 +149,28 @@ input:not([type]), input[type="text"], input[type="number"] {
     padding: 2px 4px;
     font-size: 12px;
     text-align: center;
+    color: black;
 }
 
 td input[type="date"] {
     max-width: 120px;
     padding: 2px 4px;
     font-size: 12px;
+    color: black;
 }
 
 select.short {
     min-width: 60px;
     height: 25px;
     font-size: 12px;
+    color: black;
 }
 
 select.status {
     min-width: 80px;
     height: 25px;
     font-size: 11px;
+    color: black;
 }
 
 select.size {
@@ -173,13 +178,19 @@ select.size {
     padding: 0px 12px;
     height: 25px;
     font-size: 12px;
+    color: black;
 }
 
 select.shipper {
-    min-width: 250px;
+    max-width: 250px;
     padding: 0px 5px;
     height: 25px;
     font-size: 12px;
+    color: black;
+}
+input[type="color"].shipper {
+    height: 25px;
+    max-width: 25px;
 }
 
 button.status-button {

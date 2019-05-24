@@ -77,9 +77,14 @@ def api_save_edit_bookings(request):
                 booking_save.closing_time = booking['closing_time']
                 booking_save.remark = re.sub(' +', ' ', booking['remark'].strip())
                 booking_save.nextday = booking['nextday']
+
+                if not booking_save.detail:
+                    booking_save.detail = {}
+
+                booking_save.detail = check_key_detail(booking_save.detail, booking['detail'], 'shipper_text_color', True)
+
                 if booking['nextday'] == '1' or booking['nextday'] == '2':
                     booking_save.return_date = booking['return_date']
-                    booking_save.detail = {}
                     booking_save.detail = check_key_detail(booking_save.detail, booking['detail'], 'return_time', True)
                     
                 else:

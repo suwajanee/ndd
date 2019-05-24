@@ -287,14 +287,24 @@ var booking_table = new Vue( {
             
             if(this.edit_data.indexOf(booking) === -1) {
                 this.edit_data.push(booking)
+            }            
+        },
+        editColorData: function(booking) {
+            if(booking.detail.shipper_text_color) {
+                if(booking.detail.shipper_text_color == '#000000') {
+                    booking.detail.shipper_text_color = ''
+                }
             }
             
+            if(this.edit_data.indexOf(booking) === -1) {
+                this.edit_data.push(booking)
+            }            
         },
         saveEditBooking() {
             this.loading = true
             this.saving = true
             this.checked_bookings = []
-            this.all_checked = false         
+            this.all_checked = false   
             if(this.edit_data.length) {
                 api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter, filter_mode: this.filter_mode, filter_data: this.filter_data }).then((data) => {
                     this.bookings = data.bookings

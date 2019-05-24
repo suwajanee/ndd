@@ -58,12 +58,13 @@
                         <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
                         <td v-else></td>
 
-                        <td v-if="booking.principal">
-                            <select class="custom-select shipper" v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required>
+                        <td style="min-width: 290px;" v-if="booking.principal">
+                            <select class="custom-select shipper" :style="'color: ' + booking.detail.shipper_text_color" v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required>
                                 <option v-for="shipper in filterEditShipper(booking.principal.id)" :value="shipper" :disabled="shipper.cancel=='1'">{{ shipper.name }}</option>
                             </select>
+                            <input type="color" class="form-control p-0 shipper float-right" v-model="booking.detail.shipper_text_color" @change="editColorData(booking)">
                         </td>
-                        <td v-else></td>
+                        <td style="min-width: 350px;" v-else></td>
                         
                         <td><input name="agent" class="form-control" v-model="booking.agent" maxlength="100" :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)"></td>
                         
