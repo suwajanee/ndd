@@ -206,6 +206,17 @@ var agent_transport_table = new Vue( {
                 this.edit_data.push(agent_transport)
             }
         },
+        editColorData: function(agent_transport) {
+            if(agent_transport.detail.shipper_text_color) {
+                if(agent_transport.detail.shipper_text_color == '#000000') {
+                    agent_transport.detail.shipper_text_color = ''
+                }
+            }
+            
+            if(this.edit_data.indexOf(agent_transport) === -1) {
+                this.edit_data.push(agent_transport)
+            }            
+        },
         saveEditAgentTransport() {
             this.loading = true
             this.saving = true

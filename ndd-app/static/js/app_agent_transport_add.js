@@ -34,6 +34,7 @@ var agent_transport_add = new Vue( {
             pickup_from: '',
             return_to: '',
 
+            detail: {},
             remark: ''
         },
     },

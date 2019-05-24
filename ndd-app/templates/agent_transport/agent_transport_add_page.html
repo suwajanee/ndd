@@ -46,10 +46,11 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">SHIPPER</span>
                                 </div>
-                                <select class="custom-select" v-model="agent_transport_add_form.shipper" :class="{'alert-danger': input_required == true & agent_transport_add_form.shipper == ''}" required>
+                                <select class="custom-select" v-model="agent_transport_add_form.shipper" :style="'color: ' + agent_transport_add_form.detail.shipper_text_color" :class="{'alert-danger': input_required == true & agent_transport_add_form.shipper == ''}" required>
                                     <option value=""> -------- </option>
                                     <option v-for="shipper in shippers" :value="shipper.id"> {{ shipper.name }} </option>
                                 </select>
+                                <input type="color" class="form-control p-1 col-1" style="height: 38;" v-model="agent_transport_add_form.detail.shipper_text_color">
                             </div>
 
                             <div class="input-group mb-3">

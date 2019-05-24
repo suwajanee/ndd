@@ -55,6 +55,12 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.remark = re.sub(' +', ' ', agent_transport['remark'].strip())          
                 agent_transport_save.pickup_date = agent_transport['date']
                 agent_transport_save.return_date = agent_transport['date']
+
+                if not agent_transport_save.detail:
+                    agent_transport_save.detail = {}
+
+                agent_transport_save.detail = check_key_detail(agent_transport_save.detail, agent_transport['detail'], 'shipper_text_color', True)
+
                 agent_transport_save.save()
 
         return api_get_agent_transports(request)
