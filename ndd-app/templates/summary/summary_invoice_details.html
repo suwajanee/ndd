@@ -134,6 +134,9 @@
                         <th rowspan=2 class="align-middle table-light" v-if="customer_main.work_type=='agent-transport'">
                             NOTE
                         </th>
+                        <th rowspan=2 class="align-middle table-light" v-if="customer_custom.option=='time_remark'">
+                            NOTE
+                        </th>
                         <th rowspan=2 class="align-middle table-light">
                             NOTE
                         </th>
@@ -383,6 +386,12 @@
                             <td class="align-middle text-danger border-light" v-if="customer_main.work_type=='agent-transport'">
                                 {{ inv_detail.work.pickup_tr }}<template v-if="inv_detail.work.pickup_tr!=inv_detail.work.return_tr">/{{ inv_detail.work.return_tr }}</template>
                             </td>
+                            <td class="align-middle text-danger border-light" v-if="customer_custom.option=='time_remark'">
+                                {{ inv_detail.work.pickup_tr }}
+                                <template v-if="inv_detail.work.yard_ndd!=0">/{{ inv_detail.work.forward_tr }}</template>
+                                <template v-if="inv_detail.work.nextday!=0 | inv_detail.work.fac_ndd==2">/{{ inv_detail.work.backward_tr }}</template>
+                                <template v-if="inv_detail.work.fac_ndd!=0">/{{ inv_detail.work.return_tr }}</template>
+                            </td>
 
                             <td class="border-light align-middle" :class="{'bg-processing': inv_detail.detail.note}">
                                 <input v-if="table_edit" class="form-control text-center" 
@@ -481,6 +490,7 @@
                             </td>
 
                             <td v-if="customer_main.work_type=='agent-transport'" class="border-light"></td>
+                            <td v-if="customer_custom.option=='time_remark'" class="border-light"></td>
 
                             <td class="border-light align-middle">
                                 <div v-if="table_edit" class="btn-group">
