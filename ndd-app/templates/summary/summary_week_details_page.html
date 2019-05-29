@@ -91,6 +91,9 @@
                                 <template v-else>
                                     {{ week.customer.name }}
                                 </template>
+                                <template v-if="week.work_list">
+                                    <i class="fas fa-exclamation text-danger float-right"></i>
+                                </template>
                             </td>
                             <td v-else 
                                 class="text-left align-middle cell-click"
@@ -98,6 +101,9 @@
                                 @click="selectCustomer(week.customer.id + '__')"
                             >
                                 {{ week.customer.name }}
+                                <template v-if="week.work_list">
+                                    <i class="fas fa-exclamation text-danger float-right"></i>
+                                </template>
                             </td>
 
                             <td class="text-right align-middle">{{ week.drayage_total|currencyCommas }}</td>

@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import CustomerCustom, Invoice, SummaryCustomer, SummaryWeek, Year
 from ..serializers import CustomerCustomSerializer
 from ..serializers import SummaryWeekSerializer
+from agent_transport.models import AgentTransport
+from booking.models import Booking
 from customer.models import Principal
 from customer.serializers import PrincipalSerializer
 
@@ -121,6 +123,16 @@ def api_get_summary_week_details(request):
                 principal_serializer = PrincipalSerializer(customer, many=False)
                 principal_data = principal_serializer.data
 
+                if customer.work_type == 'normal':
+                    work = Booking.objects.filter(Q(principal=customer) & ~Q(status=0) & Q(date__lte=week_detail.date_end) & ~Q(summary_status='1')).count()
+                else:
+                    work = AgentTransport.objects.filter(Q(principal=customer) & ~Q(status=0) & Q(date__lte=week_detail.date_end) & ~Q(summary_status='1')).count()
+
+                if work > 0:
+                    work_list = True
+                else:
+                    work_list = False
+
                 sub_customers = CustomerCustom.objects.filter(Q(customer=customer)).order_by('customer__name','sub_customer')
                 if sub_customers:
                     customer_total = 0
@@ -128,6 +140,7 @@ def api_get_summary_week_details(request):
                     for sub_customer in sub_customers:
                         data = {}
                         data['customer'] = principal_data
+                        data['work_list'] = work_list
 
                         customer_custom_serializer = CustomerCustomSerializer(sub_customer, many=False)
                         data['customer_custom'] = customer_custom_serializer.data
@@ -142,6 +155,7 @@ def api_get_summary_week_details(request):
                 else:
                     data = {}
                     data['customer'] = principal_data
+                    data['work_list'] = work_list
                     summary_customer = SummaryCustomer.objects.filter(Q(week=week_detail) & Q(customer_main=customer))
                     if summary_customer:
                         data = summary_customer_json(data, summary_customer)
