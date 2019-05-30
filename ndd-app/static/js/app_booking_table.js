@@ -33,6 +33,7 @@ var booking_table = new Vue( {
         },
         
         container_color: {},
+        time_color: {},
 
         booking_color: ['#9977b4', '#dd86b9', '#f497a9', '#f9b489', '#fdcd79', '#fff68f', '#b6d884', '#81cbb5', '#6acade', '#72abdd'],
         color_index: 0,
@@ -50,7 +51,8 @@ var booking_table = new Vue( {
     },
     methods: {
         reload() {
-            this.container_color = container_color
+            this.container_color = container_seal_color
+            this.time_color = time_color
             this.getContainerSize()
             this.getPrincipals()
 
@@ -209,7 +211,7 @@ var booking_table = new Vue( {
 
                 try {
                     var time = book.time.split('.')
-                    if(parseInt(time[0])>0 & parseInt(time[0])<11){
+                    if(parseInt(time[0])>2 & parseInt(time[0])<10){
                         book.timeColor = true
                     }
                     else{

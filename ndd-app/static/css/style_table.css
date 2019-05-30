@@ -48,6 +48,9 @@ table.time th {
 .bg-lime {
     background-color: Lime!important;
 }
+.bg-lightgreen {
+    background-color: #ccffcc!important;
+}
 
 .bg-cyan {
     background-color: Cyan!important;
@@ -56,6 +59,10 @@ table.time th {
 .bg-yellow {
     background-color: Yellow!important;
 }
+.bg-lightyellow {
+    background-color: #ffffcc!important;
+}
+
 .bg-red {
     background-color: Red!important;
 }
