@@ -65,8 +65,21 @@
                         
                         <td class="text-nowrap px-1">{{ booking.date|formatDate }}</td>
 
-                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
-                        <td v-else></td>
+                        <td v-if="booking.principal" class="px-1" :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.print]]">
+                            <div class="long-text-40 text-left">{{ booking.principal.name }}</div>
+                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle btn-outline-dark status-button d-block mx-auto" 
+                                @click="checkPrint(booking.id, booking.detail.print)"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
+                        <td v-else :class="[{'bg-secondary':booking.status==0}, container_color[booking.detail.print]]">
+                            <button v-if="booking.status != '0'" class="btn btn-sm mt-1 rounded-circle btn-outline-dark status-button d-block mx-auto" 
+                                @click="checkPrint(booking.id, booking.detail.print)"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
 
                         <td v-if="booking.shipper" class="px-2 text-left" style="min-width:240px;" :style="'color: ' + booking.detail.shipper_text_color">{{ booking.shipper.name }}</td>
                         <td v-else></td>

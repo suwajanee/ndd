@@ -319,6 +319,18 @@ var agent_transport_table = new Vue( {
                 this.$set(agent.detail, field, data)
             })
         },
+        checkPrint(id, color) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = ''
+            }
+            api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: 'print'}).then((data) => {
+                var agent = this.agent_transports.find(x => x.id == id)
+                this.$set(agent.detail, 'print', data)
+            })
+        },
 
         selectAll() {
             this.checked_agent_transports = []
