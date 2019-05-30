@@ -74,8 +74,21 @@
                         
                         <td class="text-nowrap px-1">{{ agent_transport.date|formatDate }}</td>
 
-                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
-                        <td v-else></td>
+                        <td v-if="agent_transport.principal" class="px-1" :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.print]]">
+                            <div class="long-text-40 text-left">{{ agent_transport.principal.name }}</div>
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle btn-outline-dark status-button d-block mx-auto"
+                                @click="checkPrint(agent_transport.id, agent_transport.detail.print)"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
+                        <td v-else :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.print]]">
+                            <button v-if="agent_transport.status != '0'" class="btn btn-sm mt-1 rounded-circle btn-outline-dark status-button d-block mx-auto" 
+                                @click="checkPrint(agent_transport.id, agent_transport.detail.print)"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                        </td>
 
                         <td v-if="agent_transport.shipper" class="px-2 text-left" style="min-width:250px;" :style="'color: ' + agent_transport.detail.shipper_text_color" >{{ agent_transport.shipper.name }}</td>
                         <td v-else></td>

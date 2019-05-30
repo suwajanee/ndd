@@ -336,6 +336,18 @@ var booking_table = new Vue( {
                 this.$set(booking.detail, field, data)
             })
         },
+        checkPrint(id, color) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = ''
+            }
+            api("/booking/api/change-color/", "POST", {id: id, color: color, field: 'print'}).then((data) => {
+                var booking = this.bookings.find(x => x.id == id)
+                this.$set(booking.detail, 'print', data)
+            })
+        },
 
         selectAll() {
             this.checked_bookings = []
