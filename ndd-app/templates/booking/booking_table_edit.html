@@ -51,7 +51,7 @@
                                 <option value="0"> Cancel </option>
                             </select>
                         </td>
-                        <td :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, container_color[booking.detail.time]]"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)"></td>
+                        <td :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, time_color[booking.detail.time]]"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)"></td>
                         
                         <td><input type="date" class="form-control" v-model="booking.date" :id="'2-'+index" @keydown="keyDownArrow(2, index)"  @change="editData(booking)" required></td>
 

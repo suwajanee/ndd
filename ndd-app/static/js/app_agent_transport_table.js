@@ -51,7 +51,7 @@ var agent_transport_table = new Vue( {
 
     methods: {
         reload() {
-            this.container_color = container_color
+            this.container_color = container_seal_color
             this.getContainerSize()
             this.getPrincipals()
 
