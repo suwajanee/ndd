@@ -27,7 +27,7 @@ def api_get_work_list(request):
             week, week_serializer = get_week_details(week, year)
 
             agent_transports = AgentTransport.objects.filter(Q(principal__pk=customer) & ~Q(status=0) & ((Q(date__lte=today) & Q(date__gte=week.date_start)) | \
-                                (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'work_type', 'booking_no', 'work_id')
+                                (Q(date__lte=week.date_end) & ~Q(summary_status='1')))).order_by('date', 'shipper__name', 'work_type', 'operation_type', 'booking_no', 'work_id')
 
             serializer = AgentTransportSerializer(agent_transports, many=True)
             return JsonResponse(serializer.data, safe=False)

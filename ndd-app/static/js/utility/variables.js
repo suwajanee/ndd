@@ -11,4 +11,17 @@ const container_color = {
     4: 'bg-red'
 }
 
+const container_seal_color = {
+    1: 'bg-lime',
+    2: 'bg-lightgreen',
+    3: 'bg-yellow',
+    4: 'bg-cyan'
+}
+const time_color = {
+    1: 'bg-lime',
+    2: 'bg-lightyellow',
+    3: 'bg-yellow',
+    4: 'bg-cyan'
+}
+
 const _month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

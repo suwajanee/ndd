@@ -51,7 +51,7 @@ var agent_transport_table = new Vue( {
 
     methods: {
         reload() {
-            this.container_color = container_color
+            this.container_color = container_seal_color
             this.getContainerSize()
             this.getPrincipals()
 
@@ -317,6 +317,18 @@ var agent_transport_table = new Vue( {
             api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: field}).then((data) => {
                 var agent = this.agent_transports.find(x => x.id == id)
                 this.$set(agent.detail, field, data)
+            })
+        },
+        checkPrint(id, color) {
+            if(! color) {
+                color = 1
+            }
+            else {
+                color = ''
+            }
+            api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: 'print'}).then((data) => {
+                var agent = this.agent_transports.find(x => x.id == id)
+                this.$set(agent.detail, 'print', data)
             })
         },
 
