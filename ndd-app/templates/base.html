@@ -41,7 +41,7 @@
                     <a class="nav-link my-1" href="{% url 'dashboard-page' %}"><i class="fa fa-home"></i></a>
                 </li>
                 <li class="nav-item dropdown {% if nbar == 'booking-page' or nbar == 'agent-transport-page' %}active{% endif %}">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarOperation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if nbar == 'booking-page' %}
                             Booking
                         {% elif nbar == 'agent-transport-page' %}
@@ -50,13 +50,25 @@
                             Operation
                         {% endif %}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div class="dropdown-menu" aria-labelledby="navbarOperation">
                         <a class="dropdown-item" href="{% url 'booking-page' %}">Booking</a>
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <li class="nav-item {% if nbar == 'summary-page' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'summary-page' %}">SUMMARY</a>
+                <li class="nav-item dropdown {% if nbar == 'summary-page' %}active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarFinance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if nbar == 'summary-page' %}
+                            Summary
+                        {% elif nbar == 'cheque-page' %}
+                            Cheque
+                        {% else %}
+                            Finance
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarFinance">
+                        <a class="dropdown-item" href="{% url 'summary-page' %}">Summary</a>
+                        <a class="dropdown-item" href="{% url 'cheque-page' %}">Cheque</a>
+                    </div>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

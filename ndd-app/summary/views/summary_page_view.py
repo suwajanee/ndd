@@ -14,6 +14,11 @@ def summary_page(request):
     return render(request, 'summary/summary_page.html', {'nbar': 'summary-page'})
 
 @login_required(login_url=reverse_lazy('login'))
+def cheque_page(request):
+    return render(request, 'summary/cheque_page.html', {'nbar': 'cheque-page'})
+
+
+@login_required(login_url=reverse_lazy('login'))
 def summary_form_setting_page(request):
     return render(request, 'summary/summary_form_setting_page.html', {'nbar': 'summary-page'})
 
