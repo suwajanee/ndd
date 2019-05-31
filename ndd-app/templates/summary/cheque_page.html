@@ -15,27 +15,116 @@
         </ol>
     </nav>
 
-    <div class="col-lg-8 container">
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="pill" href="#home">Due</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="pill" href="#menu1">Accept</a>
-        </li>
-    </ul>
+    <div class="row my-4 col-lg-7">
+        <div class="col input-group mb-3 container">
+            <div class="input-group-prepend">
+                <span class="input-group-text">YEAR</span>
+            </div>
+            <input class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text">MONTH</span>
+            </div>
+            <input class="form-control">
+        </div>
+        <div class="col input-group mb-3 container">
+            <div class="input-group-prepend">
+                <span class="input-group-text">DATE FROM</span>
+            </div>
+            <input type="date" class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text">TO</span>
+            </div>
+            <input type="date" class="form-control">
+        </div>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div id="home" class="container tab-pane active"><br>
-            <h3>HOME</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-1">
+            <button class="btn ml-3 my-1 col-12">DUE</button>
+            <button class="btn ml-3 my-1 col-12">ACCEPT</button>
         </div>
-        <div id="menu1" class="container tab-pane fade"><br>
-            <h3>Menu 1</h3>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div class="col-11 px-5">
+            <h3 class="text-center mb-3">ครบกำหนดรับเช็ค</h3>
+            <table class="table table-hover text-center">
+                <thead class="text-nowrap">
+                    <th>CUSTOMER</th>
+                    <th>WEEK</th>
+                    <th>TOTAL</th>
+                    <th>จำนวนตู้</th>
+                    <th>วันที่วางบิล</th>
+                    <th>วันครบกำหนด</th>
+                </thead>
+                <tbody>
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    </div>
+
+    <!-- <div class="col-lg-12 m-1 container">
+        <button class="btn">DUE</button>
+        <button class="btn m-1">ACCEPT</button>
+
+        <h3 class="text-center">ครบกำหนดรับเช็ค</h3>
+        <table class="table table-hover text-center">
+            <thead class="text-nowrap">
+                <th>CUSTOMER</th>
+                <th>WEEK</th>
+                <th>TOTAL</th>
+                <th>จำนวนตู้</th>
+                <th>วันที่วางบิล</th>
+                <th>วันครบกำหนด</th>
+            </thead>
+            <tbody>
+                <tr>
+
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+
+    <!-- <div class="col-lg-8 container">
+        <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="pill" href="#due">Due</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#accept">Accept</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="due" class="container tab-pane active"><br>
+                <h3 class="text-center">ครบกำหนดรับเช็ค</h3>
+                <table class="table table-hover text-center">
+                    <thead class="text-nowrap">
+                        <th>CUSTOMER</th>
+                        <th>WEEK</th>
+                        <th>TOTAL</th>
+                        <th>จำนวนตู้</th>
+                        <th>วันที่วางบิล</th>
+                        <th>วันครบกำหนด</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="accept" class="container tab-pane fade"><br>
+                <h3>รับเช็ค</h3>
+                <table>
+                    <tr>
+
+                    </tr>
+                </table>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div> -->
 
 {% endblock %}
