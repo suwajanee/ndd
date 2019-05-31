@@ -124,7 +124,7 @@
                         <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">{{ booking.backward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2', '5'].includes(booking.status) }">{{ booking.return_tr }}</td>
+                        <td v-if="['0', '2'].includes(booking.status)" :class="[ {'bg-secondary': booking.status == '0', 'bg-lime' : ['2'].includes(booking.status) & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">{{ booking.return_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
                         
                         <td>
@@ -137,7 +137,7 @@
                             </button>
                             <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                             :class="booking.status == '2' ? 'btn-success' : 'btn-outline-success'"
-                                @click="changeStateBooking(booking.id, '2')"
+                                @click="changeStateBooking(booking.id, '2', booking.status, booking.detail.morning_work)"
                             >
                                 <i class="far fa-circle"></i>
                             </button>

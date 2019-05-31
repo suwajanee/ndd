@@ -115,7 +115,7 @@
                         </td>
                         
                         <td v-if="['0', '2', '4'].includes(agent_transport.status)" 
-                            :class="{ 'bg-secondary': agent_transport.status == '0', 'bg-lime': ['2', '4'].includes(agent_transport.status) }"
+                            :class="[ {'bg-secondary': agent_transport.status == '0', 'bg-lime': ['2', '4'].includes(agent_transport.status) & ! agent_transport.detail.morning_work}, morning_color[agent_transport.detail.morning_work] ]"
                         >
                             {{ agent_transport.return_tr }}
                         </td>
@@ -131,7 +131,7 @@
                             </button>
                             <button v-if="agent_transport.status != '0'" class="btn mt-1 rounded-circle status-button" 
                                 :class="agent_transport.status == '2' ? 'btn-success' : 'btn-outline-success'"
-                                @click="changeStateAgentTransport(agent_transport.id, '2')"
+                                @click="changeStateAgentTransport(agent_transport.id, '2', agent_transport.status, agent_transport.detail.morning_work)"
                             >
                                 <i class="far fa-circle"></i>
                             </button>

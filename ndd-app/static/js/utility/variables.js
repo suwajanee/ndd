@@ -23,5 +23,9 @@ const time_color = {
     3: 'bg-yellow',
     4: 'bg-cyan'
 }
+const morning_color = {
+    1: 'bg-pink',
+    2: 'bg-orange',
+}
 
 const _month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

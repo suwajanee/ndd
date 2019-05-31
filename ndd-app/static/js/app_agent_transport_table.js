@@ -32,6 +32,7 @@ var agent_transport_table = new Vue( {
         },
 
         container_color: {},
+        morning_color: {},
         
         booking_color: ['#9977b4', '#dd86b9', '#f497a9', '#f9b489', '#fdcd79', '#fff68f', '#b6d884', '#81cbb5', '#6acade', '#72abdd'],
         color_index: 0,
@@ -52,6 +53,7 @@ var agent_transport_table = new Vue( {
     methods: {
         reload() {
             this.container_color = container_seal_color
+            this.morning_color = morning_color
             this.getContainerSize()
             this.getPrincipals()
 
@@ -299,11 +301,26 @@ var agent_transport_table = new Vue( {
                 this.saving = false
             }
         },
-        changeStateAgentTransport(id, state) {
-            api("/agent-transport/api/change-state-agent-transport/", "POST", {agent_transport_id: id, state: state}).then((data) => {
-                var agent_transport = this.agent_transports.find(x => x.id == id)
-                agent_transport.status = data
-            })
+        changeStateAgentTransport(id, state, status, color) {
+            if(status && status == '2') {
+                if(! color) {
+                    color = 1
+                }
+                else {
+                    color = (parseInt(color) + 1) % 3
+                    if(color==0) { color = '' }
+                }
+                api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: 'morning_work'}).then((data) => {
+                    var agent = this.agent_transports.find(x => x.id == id)
+                    this.$set(agent.detail, 'morning_work', data)
+                })
+            }
+            else {
+                api("/agent-transport/api/change-state-agent-transport/", "POST", {agent_transport_id: id, state: state}).then((data) => {
+                    var agent_transport = this.agent_transports.find(x => x.id == id)
+                    agent_transport.status = data
+                })
+            }
         },
         checkColor(id, color, field) {
             if(! color) {
