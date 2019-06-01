@@ -142,7 +142,7 @@
                             </select>
                         </td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2'].includes(booking.status) }">
+                        <td v-if="['0', '2'].includes(booking.status)" :class="[{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2'].includes(booking.status) & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">
                             <input v-if="booking.fac_ndd != '0'" class="form-control" v-model="booking.return_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
                             <input v-else-if="booking.nextday == 1 || booking.nextday == 2" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>

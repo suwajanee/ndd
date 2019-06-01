@@ -34,6 +34,7 @@ var booking_table = new Vue( {
         
         container_color: {},
         time_color: {},
+        morning_color: {},
 
         booking_color: ['#9977b4', '#dd86b9', '#f497a9', '#f9b489', '#fdcd79', '#fff68f', '#b6d884', '#81cbb5', '#6acade', '#72abdd'],
         color_index: 0,
@@ -53,6 +54,7 @@ var booking_table = new Vue( {
         reload() {
             this.container_color = container_seal_color
             this.time_color = time_color
+            this.morning_color = morning_color
             this.getContainerSize()
             this.getPrincipals()
 
@@ -318,11 +320,26 @@ var booking_table = new Vue( {
                 this.saving = false
             }
         },
-        changeStateBooking(id, state) {
-            api("/booking/api/change-state-booking/", "POST", {booking_id: id, state: state}).then((data) => {
-                var booking = this.bookings.find(x => x.id == id)
-                booking.status = data
-            })
+        changeStateBooking(id, state, status, color) {
+            if(status && status == '2') {
+                if(! color) {
+                    color = 1
+                }
+                else {
+                    color = (parseInt(color) + 1) % 3
+                    if(color==0) { color = '' }
+                }
+                api("/booking/api/change-color/", "POST", {id: id, color: color, field: 'morning_work'}).then((data) => {
+                    var booking = this.bookings.find(x => x.id == id)
+                    this.$set(booking.detail, 'morning_work', data)
+                })
+            }
+            else {
+                api("/booking/api/change-state-booking/", "POST", {booking_id: id, state: state}).then((data) => {
+                    var booking = this.bookings.find(x => x.id == id)
+                    booking.status = data
+                })
+            }
         },
         checkColor(id, color, field) {
             if(! color) {
