@@ -445,7 +445,7 @@
                                     {{ inv_detail.work.container_1 }}
                                 </td>
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle">
-                                    {{ inv_detail.work.container_2 }}
+                                    <template v-if="inv_detail.work.size.indexOf('X') > -1">{{ inv_detail.work.container_2 }}</template>
                                 </td>
                             </template>
                             <template v-else>
