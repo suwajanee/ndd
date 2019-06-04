@@ -117,9 +117,11 @@ var booking_table = new Vue( {
             })
         },
         getShipper(principal) {
-            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {
-                this.shippers = data
-            })
+            if(principal) {
+                api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {
+                    this.shippers = data
+                })
+            }
         },
 
         getBookings() {
@@ -155,7 +157,9 @@ var booking_table = new Vue( {
             this.action = ''
             this.edit_data = []
             this.filter_mode = true
-            if(this.filter_data.principal_id | this.filter_data.shipper | this.filter_data.booking_no | this.filter_data.remark | this.filter_data.date_from | this.filter_data.date_to) {
+            if(this.filter_data.date_to) {
+            }
+            if(this.filter_data.principal_id || this.filter_data.shipper || this.filter_data.booking_no || this.filter_data.remark || this.filter_data.date_from || this.filter_data.date_to) {
                 api("/booking/api/filter-bookings/", "POST", {filter_data: this.filter_data}).then((data) => {
                     this.bookings = data.bookings
                     this.tmr = data.tmr

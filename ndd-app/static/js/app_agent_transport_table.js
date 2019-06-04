@@ -143,7 +143,7 @@ var agent_transport_table = new Vue( {
             this.action = ''
             this.edit_data = []
             this.filter_mode = true
-            if(this.filter_data.principal_id | this.filter_data.shipper | this.filter_data.booking_no | this.filter_data.remark | this.filter_data.date_from | this.filter_data.date_to) {
+            if(this.filter_data.principal_id || this.filter_data.shipper || this.filter_data.booking_no || this.filter_data.remark || this.filter_data.date_from || this.filter_data.date_to) {
                 api("/agent-transport/api/filter-agent-transports/", "POST", {filter_data: this.filter_data}).then((data) => {
                     this.agent_transports = data.agent_transports
                     this.getColor()
