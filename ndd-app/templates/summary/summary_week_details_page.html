@@ -76,7 +76,7 @@
                         <th class="align-middle border-dark">Remark</th>
                     </thead>
                     <tbody>
-                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.detail}">
+                        <tr v-for="(week, index) in summary_week_details" class="text-right" :class="{'bg-secondary': ! week.id, 'alert-success': week.id && week_details.status==1 && ! week.remark}">
                             <td v-if="week.id" class="text-center align-middle">{{ week.item }}</td>
                             <td v-else class="text-center align-middle"></td>
 
@@ -118,14 +118,14 @@
                                 <template v-else>{{ week.date_billing|formatDate }}</template>
                             </td>
 
-                            <td class="text-center align-middle" :class="{'table-success': week.date_end}">
-                                <input v-if="week.id && table_edit" type="date" class="form-control" v-model="customer_note[week.item-1].date_end" @change="editData(customer_note[week.item-1])">
-                                <template v-else>{{ week.date_end|formatDate }}</template>
+                            <td class="text-center align-middle" :class="{'table-success': week.date_due}">
+                                <input v-if="week.id && table_edit" type="date" class="form-control" v-model="customer_note[week.item-1].date_due" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.date_due|formatDate }}</template>
                             </td>
 
-                            <td class="text-center align-middle" :class="{'bg-warning': week.detail}">
-                                <input v-if="week.id && table_edit" class="form-control" v-model="customer_note[week.item-1].detail" @change="editData(customer_note[week.item-1])">
-                                <template v-else>{{ week.detail }}</template>
+                            <td class="text-center align-middle" :class="{'bg-warning': week.remark}">
+                                <input v-if="week.id && table_edit" class="form-control" v-model="customer_note[week.item-1].remark" @change="editData(customer_note[week.item-1])">
+                                <template v-else>{{ week.remark }}</template>
                             </td>
                         </tr>
 
