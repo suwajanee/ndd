@@ -25,7 +25,7 @@ class SummaryWeekAdmin(admin.ModelAdmin):
 
 
 class SummaryCustomerAdmin(admin.ModelAdmin):
-    list_display = ('customer', 'week', 'date_billing', 'date_end', 'detail', 'status')
+    list_display = ('customer', 'week', 'date_billing', "date_due", "date_accept", 'detail', 'status')
     ordering = ('week',)
 
     search_fields = ['customer_main__name', 'customer_custom__customer__name', 'week__week']
