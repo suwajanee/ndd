@@ -19,3 +19,7 @@ def check_key_detail(obj, data, key, pop):
         except:
             pass
     return obj
+
+def set_if_not_none(mapping, key, value):
+    if value is not None and value:
+        mapping[key] = value

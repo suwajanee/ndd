@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Booking
 from ..serializers import BookingSerializer
+from .utility.functions import set_if_not_none
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -78,7 +79,3 @@ def api_filter_bookings(request):
 
         return JsonResponse(context, safe=False)
     return JsonResponse('Error', safe=False)            
-
-def set_if_not_none(mapping, key, value):
-    if value is not None and value:
-        mapping[key] = value

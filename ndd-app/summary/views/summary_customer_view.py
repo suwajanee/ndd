@@ -6,8 +6,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import CustomerCustom, Invoice, SummaryCustomer, SummaryWeek
-from customer.models import Principal
 from booking.views.utility.functions import check_key_detail
+from customer.models import Principal
 
 
 @csrf_exempt
