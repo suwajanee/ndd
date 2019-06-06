@@ -27,12 +27,13 @@ def api_edit_summary_customer_detail(request):
                     date_billing = None
                 if not date_due:
                     date_due = None
-                if detail['remark'] and not summary_customer.detail:
-                    summary_customer.detail = {}
+                if 'remark' in detail:
+                    if not summary_customer.detail:
+                        summary_customer.detail = {}
+                    summary_customer.detail = check_key_detail(summary_customer.detail, detail, 'remark', True)
 
                 summary_customer.date_billing = date_billing
                 summary_customer.date_due = date_due
-                summary_customer.detail = check_key_detail(summary_customer.detail, detail, 'remark', True)
                 summary_customer.save()
 
             return JsonResponse(True, safe=False)
