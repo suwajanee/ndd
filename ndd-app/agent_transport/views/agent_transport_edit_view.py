@@ -33,8 +33,20 @@ def api_save_edit_agent_transport(request):
 
                 agent_transport_save = AgentTransport.objects.get(pk=agent_transport['id'])
 
-                if str(agent_transport_save.date) != agent_transport['date']:
-                    work_id, work_number = run_work_id(agent_transport['date'], agent_transport_save.work_type)
+                if agent_transport['operation_type'] == 'export_empty' or agent_transport['operation_type'] == 'import_empty':
+                    work_type = 'ep'
+                elif agent_transport['operation_type'] == 'export_loaded' or agent_transport['operation_type'] == 'import_loaded':
+                    work_type = 'fc'
+
+                if agent_transport_save.work_type == work_type:
+                    operation = False
+                else:
+                    operation = True
+                
+                if str(agent_transport_save.date) != agent_transport['date'] or operation:
+                    work_id, work_number = run_work_id(agent_transport['date'], work_type)
+
+                    agent_transport_save.work_type = work_type
                     agent_transport_save.work_id = work_id
                     agent_transport_save.work_number = work_number
 
