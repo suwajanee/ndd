@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import CustomerCustom, Invoice, SummaryCustomer, SummaryWeek
+from booking.views.utility.functions import check_key_detail
 from customer.models import Principal
 
 
@@ -18,18 +19,21 @@ def api_edit_summary_customer_detail(request):
 
             for detail in details:
                 date_billing = detail['date_billing']
-                date_end = detail['date_end']
+                date_due = detail['date_due']
 
                 summary_customer = SummaryCustomer.objects.get(pk=detail['id'])
 
                 if not date_billing:
                     date_billing = None
-                if not date_end:
-                    date_end = None
-                
+                if not date_due:
+                    date_due = None
+                if 'remark' in detail:
+                    if not summary_customer.detail:
+                        summary_customer.detail = {}
+                    summary_customer.detail = check_key_detail(summary_customer.detail, detail, 'remark', True)
+
                 summary_customer.date_billing = date_billing
-                summary_customer.date_end = date_end
-                summary_customer.detail = detail['detail']
+                summary_customer.date_due = date_due
                 summary_customer.save()
 
             return JsonResponse(True, safe=False)

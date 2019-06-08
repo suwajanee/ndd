@@ -146,6 +146,15 @@ select.size {
 }
 
 
+/* Cheque page */
+.table-orange {
+    background-color: #ffbb99 ;
+}
+.table-hover .table-orange:hover {
+    background-color: #ffaa80 ;
+}
+
+
 /* Radio button color */
 .custom-radio .radio-green:checked~.custom-control-label::before,
 .custom-radio .radio-green:checked~.custom-control-label::after {

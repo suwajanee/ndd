@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import AgentTransport
 from ..serializers import AgentTransportSerializer
-from booking.views.booking_page_view import set_if_not_none
+from booking.views.utility.functions import set_if_not_none
 
 
 @login_required(login_url=reverse_lazy('login'))

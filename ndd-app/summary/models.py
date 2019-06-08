@@ -69,11 +69,12 @@ class SummaryCustomer(models.Model):
     week = models.ForeignKey(SummaryWeek, on_delete=models.SET_NULL, null=True, blank=True)
 
     date_billing = models.DateField(blank=True, null=True)
-    date_end = models.DateField(blank=True, null=True)
+    date_due = models.DateField(blank=True, null=True)
+    date_accept = models.DateField(blank=True, null=True)
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=0)
 
-    detail = models.CharField(max_length=100, null=True, blank=True, default='')
+    detail = JSONField(null=True, blank=True)
 
     @property
     def customer(self):

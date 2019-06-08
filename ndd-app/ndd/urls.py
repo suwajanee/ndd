@@ -23,6 +23,7 @@ from booking.views import authentication_view
 from booking.views import dashboard_view
 from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
+from summary.views import summary_page_view
 
 
 urlpatterns = [
@@ -42,6 +43,8 @@ urlpatterns = [
 
     url(r'^export/$', export_xls_view.export_page, name='export-page'),
     url(r'^export/excel/$', export_xls_view.export_xls, name='export-excel'),
+
+    url(r'^cheque/$', summary_page_view.cheque_page, name='cheque-page'),
 
     # Data
     url(r'^api/get-weekly-works/$', dashboard_view.api_get_weekly_works, name='api-get-weekly-works'),

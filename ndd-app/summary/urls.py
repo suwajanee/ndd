@@ -1,5 +1,6 @@
 from django.conf.urls import url
 
+from .views import cheque_data_view
 from .views import summary_apll_invoice
 from .views import summary_chart_data
 from .views import summary_customer_custom_view
@@ -99,5 +100,9 @@ urlpatterns = [
     # Chart
     url(r'^api/get-summary-year-data/$', summary_chart_data.api_summary_year_total_chart, name='api-get-summary-year-data'),
     url(r'^api/get-summary-customer-data/$', summary_chart_data.api_summary_customer_total_chart, name='api-get-summary-customer-data'),
+
+    # Cheque
+    url(r'^api/get-cheque-data/$', cheque_data_view.api_get_cheque_data, name='api-get-cheque-data'),
+    url(r'^api/edit-cheque-accept-date/$', cheque_data_view.api_edit_cheque_accept_date, name='api-edit-cheque-accept-date'),
 
 ]

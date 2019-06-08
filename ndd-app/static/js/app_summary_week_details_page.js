@@ -94,8 +94,8 @@ var summary_week_details = new Vue( {
                     this.summary_week_details[week].item = ++this.item
 
                     customer_data.date_billing = this.summary_week_details[week].date_billing
-                    customer_data.date_end = this.summary_week_details[week].date_end
-                    customer_data.detail = this.summary_week_details[week].detail
+                    customer_data.date_due = this.summary_week_details[week].date_due
+                    customer_data.remark = this.summary_week_details[week].remark
 
                     this.customer_note.push(customer_data)
 

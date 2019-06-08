@@ -190,7 +190,7 @@
                         </td>
                         {% if 'container_2' in form %}
                             <td style="width: 3in;">
-                                {{ inv_detail.work.container_2 }}
+                                {% if 'X' in inv_detail.work.size %}{{ inv_detail.work.container_2 }}{% endif %}
                             </td>
                         {% endif %}
                         <td style="width: 1.6in;">
@@ -282,7 +282,7 @@
 
                                 {% if 'container_2' in form %}
                                     <td style="width: 3in;">
-                                        {{ inv_detail.work.container_2 }}
+                                        {% if 'X' in inv_detail.work.size %}{{ inv_detail.work.container_2 }}{% endif %}
                                     </td>
                                 {% endif %}
 
