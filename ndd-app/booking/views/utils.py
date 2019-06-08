@@ -67,6 +67,33 @@ class StyleXls():
         pattern.pattern_fore_colour = xlwt.Style.colour_map['aqua']
         return pattern
 
+    def bg_turquoise(self):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern.pattern_fore_colour = xlwt.Style.colour_map['turquoise']
+        return pattern
+
+    def bg_time(self, index):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        color = ['bright_green', 'light_yellow', 'yellow', 'turquoise']
+        pattern.pattern_fore_colour = xlwt.Style.colour_map[color[index]]
+        return pattern
+
+    def bg_container_seal(self, index):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        color = ['bright_green', 'light_green', 'yellow', 'turquoise']
+        pattern.pattern_fore_colour = xlwt.Style.colour_map[color[index]]
+        return pattern
+
+    def bg_count(self, index):
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        color = ['rose', 'light_orange']
+        pattern.pattern_fore_colour = xlwt.Style.colour_map[color[index]]
+        return pattern
+
     def bg_booking(self, index):
         pattern = xlwt.Pattern()
         pattern.pattern = xlwt.Pattern.SOLID_PATTERN

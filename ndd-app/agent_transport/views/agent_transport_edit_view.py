@@ -37,6 +37,8 @@ def api_save_edit_agent_transport(request):
                     work_type = 'ep'
                 elif agent_transport['operation_type'] == 'export_loaded' or agent_transport['operation_type'] == 'import_loaded':
                     work_type = 'fc'
+                elif agent_transport['operation_type'] == '':
+                    work_type = agent_transport_save.work_type
 
                 if agent_transport_save.work_type == work_type:
                     operation = False

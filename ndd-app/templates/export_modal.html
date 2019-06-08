@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="modal fade" id="modalExportWork" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Export Work</h5>
@@ -12,7 +12,16 @@
             <form ref="exportExcel" method="POST" action="{% url 'export-excel' %}">
                 <div class="modal-body">
                     {% csrf_token %}
-                    <input type="month" name="month_export" class="form-control container col-6 my-3" required>
+                    <div class="input-group container col-lg-9 my-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">DATE FROM</span>
+                        </div>
+                        <input type="date" name="date_from" class="form-control" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">TO</span>
+                        </div>
+                        <input type="date" name="date_to" class="form-control" required>
+                    </div>
                 </div>
                 <div class="modal-footer pt-3 pb-0">
                     <button class="btn btn-primary">Export</button>
