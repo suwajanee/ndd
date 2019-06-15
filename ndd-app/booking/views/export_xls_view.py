@@ -243,7 +243,7 @@ def export_xls(request):
 
         # Sheet body, remaining rows
         rows = AgentTransport.objects.filter(**filter_data).values_list('operation_type', 'date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from','return_tr', 'return_to', \
-        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'work_type', 'price', 'status', 'detail').order_by('date', 'principal__name', 'shipper__name', 'work_type', 'operation_type', \
+        'container_1', 'container_2', 'remark', 'work_id', 'pickup_date', 'return_date', 'yard_ndd', 'work_type', 'price', 'status', 'detail').order_by('date', 'principal__name', 'shipper__name', 'work_type', 'operation_type', \
         Case(When(work_type='ep', then='booking_no'),), 'work_id')
 
         row_num = 0
@@ -265,14 +265,14 @@ def export_xls(request):
 
                 if row_prev[0] != row[0] or row_prev[1] != row[1] or row_prev[3] != row[3] or row_prev[len(row)-4] != row[len(row)-4]:
                     style = style_xls.bg_black()
-                    ws_agent_transport.write_merge(row_num, row_num, 0, len(row)-5, '', style)
+                    ws_agent_transport.write_merge(row_num, row_num, 0, len(row)-6, '', style)
                     row_num += 1
                     ws_agent_transport.row(row_num).height_mismatch = True
                     ws_agent_transport.row(row_num).height = 20*25
 
             row_prev = row
 
-            for col_num in range(len(row)-4):
+            for col_num in range(len(row)-5):
                 style = xlwt.XFStyle()
                 style.borders = style_xls.border_cell()
                 style.alignment = style_xls.align_center()
@@ -317,6 +317,9 @@ def export_xls(request):
                 if col_num == 7 or col_num == 9:
                     if row[col_num] != '':
                         style.pattern = style_xls.bg_sky_blue()
+
+                    if col_num == 7 and row[len(row)-5] in ['1', '2']:
+                        style.pattern = style_xls.bg_yellow() 
 
                     if row[len(row)-2] == '3' and col_num == 7:
                         style.pattern = style_xls.bg_bright_green()

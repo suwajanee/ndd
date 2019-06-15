@@ -63,10 +63,10 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip().upper())
                 agent_transport_save.size = re.sub(' +', ' ', agent_transport['size'].strip())
                 agent_transport_save.booking_no = re.sub(' +', ' ', agent_transport['booking_no'].strip())
-                agent_transport_save.pickup_tr = re.sub(' +', ' ', agent_transport['pickup_tr'].strip())
+                agent_transport_save.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
                 agent_transport_save.pickup_from = re.sub(' +', ' ', agent_transport['pickup_from'].strip().upper())
                 agent_transport_save.yard_ndd = agent_transport['yard_ndd']
-                agent_transport_save.return_tr = re.sub(' +', ' ', agent_transport['return_tr'].strip())
+                agent_transport_save.return_tr = re.sub(' +', ' ', return_tr.strip())
                 agent_transport_save.return_to = re.sub(' +', ' ', agent_transport['return_to'].strip().upper())
                 agent_transport_save.container_1 = re.sub(' +', ' ', agent_transport['container_1'].strip())
                 agent_transport_save.container_2 = re.sub(' +', ' ', agent_transport['container_2'].strip())
