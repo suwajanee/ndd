@@ -13,8 +13,16 @@ class AgentTransport(models.Model):
     size = models.CharField(max_length=20, blank=True)
     booking_no = models.CharField(max_length=150, blank=True)
 
+    NDD_CHOICES = (
+        ('2', 'Yard'),
+        ('1', 'NDD'),
+        ('0', '-'),
+    )
     pickup_tr = models.CharField(max_length=20, blank=True, default='')
     pickup_from = models.CharField(max_length=25, blank=True, default='')
+
+    yard_ndd = models.CharField(max_length=1, choices=NDD_CHOICES, default=0)
+
     return_tr = models.CharField(max_length=20, blank=True, default='')
     return_to = models.CharField(max_length=25, blank=True, default='')
 
