@@ -38,6 +38,10 @@ class AgentTransportPrintView(TemplateView):
                 template_name = 'pdf_template/agent_transport_fw_template.html'
             elif template == 'backward':
                 template_name = 'pdf_template/agent_transport_bw_template.html'
+            elif template == 'yard_ndd':
+                template_name = 'pdf_template/agent_transport_yard_ndd_template.html'
+            elif template == 'ndd_return':
+                template_name = 'pdf_template/agent_transport_ndd_return_template.html'
             else:
                 template_name = 'pdf_template/agent_transport_full_template.html'
 
