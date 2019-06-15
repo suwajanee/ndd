@@ -24,9 +24,11 @@ def api_save_edit_agent_transport(request):
             for agent_transport in agent_transports:
                 if not agent_transport['date']:
                     agent_transport['date'] = None
-                
-                if not agent_transport['return_tr']:
-                    agent_transport['return_tr'] = agent_transport['pickup_tr']
+
+                pickup_tr = agent_transport['pickup_tr']
+                return_tr = pickup_tr
+                if agent_transport['yard_ndd'] == '1' or agent_transport['yard_ndd'] == '2':
+                    return_tr = agent_transport['return_tr']
 
                 if agent_transport['price'] == 'NaN':
                     agent_transport['price'] = 0
@@ -61,9 +63,10 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip().upper())
                 agent_transport_save.size = re.sub(' +', ' ', agent_transport['size'].strip())
                 agent_transport_save.booking_no = re.sub(' +', ' ', agent_transport['booking_no'].strip())
-                agent_transport_save.pickup_tr = re.sub(' +', ' ', agent_transport['pickup_tr'].strip())
+                agent_transport_save.pickup_tr = re.sub(' +', ' ', pickup_tr.strip())
                 agent_transport_save.pickup_from = re.sub(' +', ' ', agent_transport['pickup_from'].strip().upper())
-                agent_transport_save.return_tr = re.sub(' +', ' ', agent_transport['return_tr'].strip())
+                agent_transport_save.yard_ndd = agent_transport['yard_ndd']
+                agent_transport_save.return_tr = re.sub(' +', ' ', return_tr.strip())
                 agent_transport_save.return_to = re.sub(' +', ' ', agent_transport['return_to'].strip().upper())
                 agent_transport_save.container_1 = re.sub(' +', ' ', agent_transport['container_1'].strip())
                 agent_transport_save.container_2 = re.sub(' +', ' ', agent_transport['container_2'].strip())
