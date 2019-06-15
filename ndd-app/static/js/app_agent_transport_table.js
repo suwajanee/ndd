@@ -266,7 +266,13 @@ var agent_transport_table = new Vue( {
             this.$refs.printAgentTransportForm.submit()
         },
 
-        editData(agent_transport) {
+        editData(agent_transport, index, field) {
+            if(index && field) {
+                if(['1', '2'].includes(agent_transport.yard_ndd) & field == 10){
+                    this.agent_transports[index].return_tr = ''
+                }
+            }
+
             if(this.edit_data.indexOf(agent_transport) === -1) {
                 this.edit_data.push(agent_transport)
             }
