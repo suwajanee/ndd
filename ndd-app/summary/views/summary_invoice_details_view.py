@@ -3,6 +3,7 @@
 import json
 
 from django.db.models import Case, When
+from django.db.models.expressions import RawSQL
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -22,10 +23,12 @@ def api_get_invoice_details(request):
             req = json.loads( request.body.decode('utf-8') )
             invoice_id = req['invoice_id']
 
-            invoice_details = InvoiceDetail.objects.filter(invoice__pk=invoice_id).order_by('work_normal__date', 'work_agent_transport__date',
-                                Case(
-                                    When(invoice__detail__order_by_remark=True, then='detail__remark'),
-                                ),'pk')
+            invoice = Invoice.objects.get(pk=invoice_id)
+            if 'order_by_remark' in invoice.detail:
+                invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date', 'detail__remark', 'pk')
+            else:
+                invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date', 'pk')
+
             invoice_details_serializer = InvoiceDetailSerializer(invoice_details, many=True)
 
             return JsonResponse(invoice_details_serializer.data, safe=False)
