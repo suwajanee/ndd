@@ -3,7 +3,7 @@
 import json
 
 from django.db.models import Case, When
-from django.db.models.expressions import RawSQL
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -217,15 +217,20 @@ def api_delete_invoice_detail(request):
             invoice_id = req['invoice_id']
             invoice_detail_id = req['invoice_detail_id']
             customer_type = req['customer_type']
-            if 'work_id' in req:
-                work_id = req['work_id']    
-                invoice_detail_id = InvoiceDetail.objects.filter(work_agent_transport__pk=work_id)
 
-            status = delete_invoice_details(invoice_detail_id, customer_type)
-            
             invoice = Invoice.objects.get(pk=invoice_id)
             invoice = save_invoice_total_charge(invoice, req['drayage_total'], req['gate_total'])
             invoice.save()
+
+            if 'work_id' in req:
+                work_id = req['work_id']
+
+                if 'copy' in invoice.detail:  
+                    invoice_detail_id = InvoiceDetail.objects.filter(Q(work_agent_transport__pk=work_id) & Q(detail__has_key='copy'))
+                else:
+                    invoice_detail_id = InvoiceDetail.objects.filter(Q(work_agent_transport__pk=work_id) & ~Q(detail__has_key='copy'))
+
+            status = delete_invoice_details(invoice_detail_id, customer_type)
 
             return api_get_invoice_details(request)
     return JsonResponse('Error', safe=False)
@@ -258,14 +263,16 @@ def delete_invoice_details(invoice_detail, customer_type):
     if customer_type == 'normal':
         invoice_details = InvoiceDetail.objects.filter(pk__in=invoice_detail)
         work_list = invoice_details.values_list('work_normal', flat=True)
-
-        status = booking_summary_status(work_list, '0')
+        
+        if invoice_details and not 'copy' in invoice_details[0].detail:
+            status = booking_summary_status(work_list, '0')
     
     elif customer_type == 'agent-transport':
         invoice_details = InvoiceDetail.objects.filter(pk__in=invoice_detail)
         work_list = invoice_details.values_list('work_agent_transport', flat=True)
 
-        status = agent_transport_summary_status(work_list, '0')
+        if invoice_details and not 'copy' in invoice_details[0].detail:
+            status = agent_transport_summary_status(work_list, '0')
 
     invoice_details.delete()
     return True
@@ -277,25 +284,3 @@ def save_invoice_total_charge(invoice, drayage_total, gate_total):
     else:
         invoice.gate_total = 0
     return invoice
-
-# def check_key_detail(invoice, data, key, pop):
-#     if key in data:
-#         if data[key]:
-#             invoice[key] = data[key]
-#         else: 
-#             try:
-#                 if pop:
-#                     invoice.pop(key)
-#                 else:
-#                     invoice[key] = ''
-#             except:
-#                 pass
-#     else:
-#         try:
-#             if pop:
-#                 invoice.pop(key)
-#             else:
-#                 invoice[key] = ''
-#         except:
-#             pass
-#     return invoice
