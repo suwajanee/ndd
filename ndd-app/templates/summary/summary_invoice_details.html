@@ -32,10 +32,19 @@
 
     <div>
         {% verbatim %}
-            <h2 v-if="customer_custom.customer_title" class="text-center">{{ customer_custom.customer_title }}</h2>
-            <h2 v-else-if="customer_custom.sub_customer" class="text-center">{{ customer_custom.sub_customer }}</h2>
-            <h2 v-else class="text-center">{{ customer_main.name }}</h2>
-    
+            <div class="text-center pt-0" :class="{'text-primary': invoice.detail.copy==true}">
+                <h2 v-if="customer_custom.customer_title" class="d-inline">{{ customer_custom.customer_title }}</h2>
+                <h2 v-else-if="customer_custom.sub_customer" class="d-inline">{{ customer_custom.sub_customer }}</h2>
+                <h2 v-else class="d-inline">{{ customer_main.name }}</h2>
+                <div class="dropright d-inline">
+                    <button v-if="! table_edit" type="button" class="btn btn-sm btn-outline-secondary d-inline ml-2 align-top rounded-circle p-1" id="dropdownCopyInv" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i></button>
+                    
+                    <div class="dropdown-menu m-2" aria-labelledby="dropdownCopyInv">
+                        <button class="dropdown-item" type="button" @click="copyInvoice">Copy</button>
+                    </div>
+                </div>
+            </div>
+
             <table class="mt-3 w-100">
                 <tr>
                     <td class="px-1" style="width: 80px;">INV. NO.</td>
@@ -53,7 +62,7 @@
                         </div>
                     </td>
 
-                    <td rowspan=2 class="text-primary text-right" style="width: 400px;">
+                    <td rowspan=2 class="text-primary text-right" style="width: 410px;">
                         <template v-if="table_edit">
                             <template v-if="customer_custom.option == 'oocl'"><div class="form-inline float-right"><label for="ap_billing_no" class="mr-2">AP BILLING NO :</label><input id="ap_billing_no"  class="form-control text-center p-1 mx-1" v-model="invoice_data.other"></div></template>
                             <template v-else-if="customer_form[1]=='1_diesel_rate'">DIESEL RATE : {{ diesel_rate }}</template>
@@ -172,7 +181,7 @@
                             <td class="align-middle px-1">
                                 <template v-if="table_edit">
                                     <div v-if="index==0 && customer_custom.option=='time_remark'" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 200px; " 
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 200px; " 
                                             maxlength="150"
                                             v-model="inv_detail.work.booking_no" 
                                             :id="'0-'+index" @keydown="keyDownArrow(0, index)"
@@ -185,7 +194,7 @@
                                             <i class="fa fa-clone"></i></button>
                                         </div>
                                     </div>
-                                    <input v-else class="form-control text-center" style="width: 200px; margin: auto;"
+                                    <input v-else class="form-control text-center" style="max-width: 200px; margin: auto;"
                                         maxlength="150"
                                         v-model="inv_detail.work.booking_no" 
                                         :id="'0-'+index" @keydown="keyDownArrow(0, index)"
@@ -217,7 +226,7 @@
                             <template v-if="customer_type == 'agent-transport'">
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_1" maxlength="50"
                                         >
@@ -237,7 +246,7 @@
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
                                     <div v-if="inv_detail.work.size.indexOf('X') > -1">
                                         <div v-if="table_edit" class="input-group">
-                                            <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
+                                            <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
                                                 :id="'4-'+index" @keydown="keyDownArrow(4, index)"
                                                 v-model="inv_detail.work.container_2" maxlength="50"
                                             >
@@ -258,7 +267,7 @@
                             <template v-else>
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
                                     <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;"
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_no" maxlength="50"
                                         >
@@ -507,35 +516,35 @@
                         </tr>
                     </template>
 
-                    <tr class="text-center font-weight-bold">
-                        <td v-if="! table_edit" class="align-middle p-1">
-                            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'">
+                    <tr class="table-secondary text-center font-weight-bold">
+                        <td v-if="! table_edit" class="align-middle p-1" :class="{'bg-light': ! invoice.detail.copy}">
+                            <button v-if="! invoice.detail.copy" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </td>
 
-                        <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="table-secondary align-middle">Total</td>
-                        <td v-else colspan=8 class="table-secondary align-middle">Total</td>
+                        <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="align-middle">Total</td>
+                        <td v-else colspan=8 class="align-middle">Total</td>
 
-                        <td class="text-right table-secondary align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
+                        <td class="text-right align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
 
                         <td v-if="customer_form[3]=='3_gate_charge'"
-                            class="text-right table-secondary align-middle"
+                            class="text-right align-middle"
                             :class="{'alert-warning': gateTotal != invoice.gate_total}"
                         >   
                             {{ gateTotal|currencyCommas }}
                         </td>
-                        <td v-else class="text-right table-secondary">
+                        <td v-else class="text-right ">
                             -
                         </td>
 
-                        <td class="table-secondary font-weight-normal">
+                        <td class="font-weight-normal">
                             <div v-if="! table_edit" class="custom-control custom-checkbox d-inline">
                                 <input type="checkbox" class="custom-control-input" id="order_by_remark" v-model="invoice_data.order_by_remark" @change="editInvoiceDetails">
                                 <label class="custom-control-label" for="order_by_remark">Order by remark</label>
                             </div>
                         </td>
-                        <td v-if="customer_custom.option == '2_inv'" class="table-secondary"></td>
+                        <td v-if="customer_custom.option == '2_inv'"></td>
                     </tr>
 
                     <tr class="text-center table-secondary font-weight-bold">
@@ -558,7 +567,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title w-100 text-center">Invoice</h2>
+                        <h2 class="modal-title w-100 text-center">Invoice</h2>  
                         <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -572,7 +581,7 @@
                                 <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
                             </select>
                         </div>
-                        <div class="input-group container">
+                        <div class="input-group mb-3 container">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">WEEK</span>
                             </div>

@@ -23,9 +23,19 @@
 
     <div>
         {% verbatim %}
-            <h2 v-if="customer_custom.customer_title" class="text-center">{{ customer_custom.customer_title }}</h2>
-            <h2 v-else-if="customer_custom.sub_customer" class="text-center">{{ customer_custom.sub_customer }}</h2>
-            <h2 v-else class="text-center">{{ customer_main.name }}</h2>
+            <div class="text-center pt-0" :class="{'text-primary': invoice.detail.copy==true}">
+                <h2 v-if="customer_custom.customer_title" class="d-inline">{{ customer_custom.customer_title }}</h2>
+                <h2 v-else-if="customer_custom.sub_customer" class="d-inline">{{ customer_custom.sub_customer }}</h2>
+                <h2 v-else class="d-inline">{{ customer_main.name }}</h2>
+
+                <div class="dropright d-inline">
+                    <button v-if="! table_edit" type="button" class="btn btn-sm btn-outline-secondary d-inline ml-2 align-top rounded-circle p-1" id="dropdownCopyInv" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i></button>
+                    
+                    <div class="dropdown-menu m-2" aria-labelledby="dropdownCopyInv">
+                        <button class="dropdown-item" type="button" @click="copyInvoice">Copy</button>
+                    </div>
+                </div>
+            </div>
 
             <table class="mt-3 w-100">
                 <tr>
@@ -355,17 +365,17 @@
                         </tr>
                     </template>
 
-                    <tr class="text-center font-weight-bold">
-                        <td v-if="! table_edit" class="align-middle p-1">
-                            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'"><i class="fa fa-plus"></i></button>
+                    <tr class="table-secondary text-center font-weight-bold">
+                        <td v-if="! table_edit" class="align-middle p-1" :class="{'bg-light': ! invoice.detail.copy}">
+                            <button v-if="! invoice.detail.copy" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#modalWorkList" @click="work_list_modal_mode='add'"><i class="fa fa-plus"></i></button>
                         </td>
 
-                        <td v-if="table_edit" colspan=9 class="table-secondary">Total</td>
-                        <td v-else colspan=8 class="table-secondary">Total</td>
+                        <td v-if="table_edit" colspan=9>Total</td>
+                        <td v-else colspan=8>Total</td>
 
-                        <td class="text-right table-secondary" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
-                        <td class="text-right table-secondary">-</td>
-                        <td class="table-secondary"></td>
+                        <td class="text-right" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
+                        <td class="text-right">-</td>
+                        <td></td>
                     </tr>
 
                     <tr class="text-center table-secondary font-weight-bold">
