@@ -342,6 +342,15 @@ var summary_invoice_details = new Vue( {
             }
         },
 
+        copyInvoice() {
+            api("/summary/api/copy-invoice/", "POST", {invoice_id: this.invoice_id, invoice_detail: this.invoice_detail_list}).then((data) => {
+                if(data) {
+                    summary_invoice.getInvoice()
+                    this.reload(data)
+                }
+            })
+        },
+
         // Invoice Detail
         selectAllWork() {
             this.work_selected = []

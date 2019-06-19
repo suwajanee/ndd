@@ -30,13 +30,13 @@ def api_get_cheque_data(request):
                 set_if_not_none(filter_dict, 'date_due__month', month)
                 set_if_not_none(filter_dict, 'date_due__gte', date_from)
                 set_if_not_none(filter_dict, 'date_due__lte', date_to)
-                summary_list = SummaryCustomer.objects.filter(**filter_dict).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer')
+                summary_list = SummaryCustomer.objects.filter(**filter_dict).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer', 'week__week')
             elif mode == 'accept':
                 set_if_not_none(filter_dict, 'date_accept__year', year)
                 set_if_not_none(filter_dict, 'date_accept__month', month)
                 set_if_not_none(filter_dict, 'date_accept__gte', date_from)
                 set_if_not_none(filter_dict, 'date_accept__lte', date_to)
-                summary_list = SummaryCustomer.objects.filter(**filter_dict).order_by('date_accept', 'customer_main__name', 'customer_custom__sub_customer')
+                summary_list = SummaryCustomer.objects.filter(**filter_dict).order_by('date_accept', 'customer_main__name', 'customer_custom__sub_customer', 'week__week')
             else:
                 filter_dict = {
                     'date_due__lte': today,
@@ -50,7 +50,7 @@ def api_get_cheque_data(request):
                     'date_accept__month': month,
                     'date_accept__year': year
                 }               
-                summary_list = SummaryCustomer.objects.filter(Q(**filter_dict) | (~Q(**date_due) & Q(**date_accept))).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer')
+                summary_list = SummaryCustomer.objects.filter(Q(**filter_dict) | (~Q(**date_due) & Q(**date_accept))).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer', 'week__week')
                 
             data_list = []
             for summary in summary_list:

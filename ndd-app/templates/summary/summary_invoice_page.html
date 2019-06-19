@@ -75,7 +75,7 @@
                     </th>
                 </thead>
                 <tbody>
-                    <tr v-for="(inv, index) in invoices" :class="{'table-success': inv.status==1, 'table-warning': inv.status==0}">
+                    <tr v-for="(inv, index) in invoices" :class="{'table-success': inv.status==1, 'table-warning': inv.status==0, 'text-primary': inv.detail.copy==true}">
                         <td class="text-center">
                             {{ index + 1 }}
                         </td>

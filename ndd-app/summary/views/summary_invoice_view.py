@@ -174,3 +174,32 @@ def api_delete_invoice_week(request):
 
             return JsonResponse(check_summary_customer, safe=False)
     return JsonResponse('Error', safe=False)
+
+
+@csrf_exempt
+def api_copy_invoice(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            invoice_id = req['invoice_id']
+            invoice_detail_list = req['invoice_detail']
+
+            invoice = Invoice.objects.get(pk=invoice_id)
+            invoice_count = Invoice.objects.filter(customer_week=invoice.customer_week).count()
+            invoice.pk = None
+            invoice.invoice_no = invoice_count + 1
+            invoice.status = 0
+            invoice.detail['copy'] = True
+            invoice.save()
+            
+            invoice_serializer = InvoiceSerializer(invoice, many=False)
+
+            for detail in invoice_detail_list:
+                invoice_detail = InvoiceDetail.objects.get(pk=detail['id'])
+                invoice_detail.pk = None
+                invoice_detail.invoice = invoice
+                invoice_detail.detail['copy'] = True
+                invoice_detail.save()
+
+            return JsonResponse(invoice_serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)

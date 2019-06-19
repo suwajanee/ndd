@@ -124,7 +124,7 @@ select.size {
 
 /* Status color */
 .bg-processing {
-    background-color: #ffec80;
+    background-color: #ffec80!important;
 }
 .bg-finished {
     background-color: #A5DC86;

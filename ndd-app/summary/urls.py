@@ -74,6 +74,8 @@ urlpatterns = [
     url(r'^api/edit-invoice-week/$', summary_invoice_view.api_edit_invoice_week, name='api-edit-invoice-week'),
     url(r'^api/delete-invoice-week/$', summary_invoice_view.api_delete_invoice_week, name='api-delete-invoice-week'),
 
+    url(r'^api/copy-invoice/$', summary_invoice_view.api_copy_invoice, name='api-copy-invoice'),
+
     # Invoice Details
     url(r'^api/get-invoice-details/$', summary_invoice_details_view.api_get_invoice_details, name='api-get-invoice-details'),
     url(r'^api/add-invoice-details/$', summary_invoice_details_view.api_add_invoice_details, name='api-add-invoice-details'),
