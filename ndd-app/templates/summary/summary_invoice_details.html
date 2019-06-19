@@ -225,8 +225,8 @@
 
                             <template v-if="customer_type == 'agent-transport'">
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
-                                    <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
+                                    <div v-if="table_edit" class="input-group" style="width: 160px;">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_1" maxlength="50"
                                         >
@@ -245,8 +245,8 @@
 
                                 <td v-if="customer_form.indexOf('container_2') > 0" class="text-center align-middle" :class="container_color[inv_detail.detail.color2]">
                                     <div v-if="inv_detail.work.size.indexOf('X') > -1">
-                                        <div v-if="table_edit" class="input-group">
-                                            <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
+                                        <div v-if="table_edit" class="input-group" style="width: 160px;">
+                                            <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                                 :id="'4-'+index" @keydown="keyDownArrow(4, index)"
                                                 v-model="inv_detail.work.container_2" maxlength="50"
                                             >
@@ -266,8 +266,8 @@
                             </template>
                             <template v-else>
                                 <td class="text-center align-middle" :class="container_color[inv_detail.detail.color1]">
-                                    <div v-if="table_edit" class="input-group">
-                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 150px; margin: auto;"
+                                    <div v-if="table_edit" class="input-group" style="width: 160px;">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
                                             v-model="inv_detail.work.container_no" maxlength="50"
                                         >
@@ -337,11 +337,27 @@
                             </td>
 
                             <td v-if="customer_form[3]=='3_gate_charge'" class="text-right align-middle">
-                                <input v-if="table_edit" class="form-control text-center" 
-                                    v-model="inv_detail.gate_charge.gate" 
-                                    :id="customer_form.indexOf('container_2') > 0 ? '7-'+index : '6-'+index" 
-                                    @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(7, index) : keyDownArrow(6, index)"
-                                > 
+                                <template v-if="table_edit">
+                                    <div v-if="index==0" class="input-group">
+                                        <input type="text" class="form-control text-center" style="padding: 2px 4px;" 
+                                            v-model="inv_detail.gate_charge.gate" 
+                                            :id="customer_form.indexOf('container_2') > 0 ? '7-'+index : '6-'+index" 
+                                            @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(7, index) : keyDownArrow(6, index)"
+                                        >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-outline-secondary"
+                                                style="padding: 4px;"
+                                                @click="copyToAll(inv_detail.gate_charge.gate, 'gate_charge', 'gate')"
+                                            >
+                                            <i class="fa fa-clone"></i></button>
+                                        </div>
+                                    </div>
+                                    <input v-else class="form-control text-center" 
+                                        v-model="inv_detail.gate_charge.gate" 
+                                        :id="customer_form.indexOf('container_2') > 0 ? '7-'+index : '6-'+index" 
+                                        @keydown="customer_form.indexOf('container_2') > 0 ? keyDownArrow(7, index) : keyDownArrow(6, index)"
+                                    > 
+                                </template>
                                 <template v-else>
                                     {{ eval(inv_detail.gate_charge.gate)|currencyCommas }}
                                 </template>
@@ -526,11 +542,11 @@
                         <td v-if="customer_form.indexOf('container_2') > 0" colspan=9 class="align-middle">Total</td>
                         <td v-else colspan=8 class="align-middle">Total</td>
 
-                        <td class="text-right align-middle" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
+                        <td class="text-right align-middle" :class="{'bg-processing': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
 
                         <td v-if="customer_form[3]=='3_gate_charge'"
                             class="text-right align-middle"
-                            :class="{'alert-warning': gateTotal != invoice.gate_total}"
+                            :class="{'bg-processing': gateTotal != invoice.gate_total}"
                         >   
                             {{ gateTotal|currencyCommas }}
                         </td>
@@ -581,7 +597,7 @@
                                 <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
                             </select>
                         </div>
-                        <div class="input-group mb-3 container">
+                        <div class="input-group container">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">WEEK</span>
                             </div>

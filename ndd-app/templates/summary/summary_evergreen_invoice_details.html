@@ -183,8 +183,8 @@
                             </td>
 
                             <td v-if="inv_detail.detail.container==1" class="text-center" :class="container_color[inv_detail.detail.color1]">
-                                <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;" v-model="inv_detail.work.container_1" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
+                                <div v-if="table_edit" class="input-group" style="width: 160px;">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_1" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
@@ -199,8 +199,8 @@
                             </td>
 
                             <td v-else class="text-center" :class="container_color[inv_detail.detail.color1]">
-                                <div v-if="table_edit" class="input-group">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; width: 150px; margin: auto;" v-model="inv_detail.work.container_2" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
+                                <div v-if="table_edit" class="input-group" style="width: 160px;">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_2" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
@@ -373,7 +373,7 @@
                         <td v-if="table_edit" colspan=9>Total</td>
                         <td v-else colspan=8>Total</td>
 
-                        <td class="text-right" :class="{'alert-warning': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
+                        <td class="text-right" :class="{'bg-processing': drayageTotal != invoice.drayage_total}">{{ drayageTotal|currencyCommas }}</td>
                         <td class="text-right">-</td>
                         <td></td>
                     </tr>
