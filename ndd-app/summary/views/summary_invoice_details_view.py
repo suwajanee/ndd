@@ -2,7 +2,6 @@
 
 import json
 
-from django.db.models import Case, When
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
