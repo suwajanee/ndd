@@ -3,6 +3,7 @@
 import re
 import json
 
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -10,7 +11,7 @@ from ..models import Booking
 from .booking_add_view import run_work_id
 from .booking_page_view import api_get_bookings, api_filter_bookings
 from .utility.functions import check_key_detail
-from customer.models import Shipper
+from customer.models import Principal, Shipper
 
 
 @csrf_exempt
@@ -56,8 +57,11 @@ def api_save_edit_bookings(request):
                 booking_save.status = booking['status']
                 booking_save.time = booking['time']
                 booking_save.date = booking['date']
+                if booking['principal']:
+                    booking_save.principal = Principal.objects.get(pk=booking['principal']['id'])
                 if booking['shipper']:
-                    booking_save.shipper = Shipper.objects.get(pk=booking['shipper']['id'])
+                    booking_save.shipper = Shipper.objects.get(Q(pk=booking['shipper']['id']))
+                    
                 booking_save.agent = re.sub(' +', ' ', booking['agent'].strip().upper())
                 booking_save.size = re.sub(' +', ' ', booking['size'].strip())
                 booking_save.booking_no = re.sub(' +', ' ', booking['booking_no'].strip())
