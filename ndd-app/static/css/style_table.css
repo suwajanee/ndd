@@ -164,6 +164,10 @@ input:not([type]), input[type="text"], input[type="number"] {
     font-size: 12px;
     text-align: center;
     color: black;
+    background-color: transparent;
+}
+input:not([type]):read-only, input[type="text"]:read-only, input[type="number"]:read-only {
+    background-color: rgba(0, 0, 0, 0.2)
 }
 
 td input[type="date"] {
@@ -171,6 +175,10 @@ td input[type="date"] {
     padding: 2px 4px;
     font-size: 12px;
     color: black;
+    background-color: transparent;
+}
+td input[type="date"]:read-only {
+    background-color: rgba(0, 0, 0, 0.2)
 }
 
 select.short {
@@ -178,13 +186,22 @@ select.short {
     height: 25px;
     font-size: 12px;
     color: black;
+    background-color: transparent;
 }
+
+
 
 select.status {
     min-width: 80px;
     height: 25px;
     font-size: 11px;
     color: black;
+    background-color: transparent;
+    
+}
+
+td select:focus {
+    background-color: white;
 }
 
 select.size {
@@ -193,6 +210,7 @@ select.size {
     height: 25px;
     font-size: 12px;
     color: black;
+    background-color: transparent;
 }
 
 select.shipper {
@@ -201,10 +219,13 @@ select.shipper {
     height: 25px;
     font-size: 12px;
     color: black;
+    background-color: transparent; 
 }
+
 input[type="color"].shipper {
     height: 25px;
     max-width: 25px;
+    background-color: transparent;
 }
 
 button.status-button {

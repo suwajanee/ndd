@@ -121,7 +121,7 @@ var booking_add = new Vue( {
             for(var i=0; i < form.elements.length; i++){
                 if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
                     this.input_required = true
-                    return false;
+                    return false
                 }
             }
             api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, nextday: this.nextday}).then((data) => {
