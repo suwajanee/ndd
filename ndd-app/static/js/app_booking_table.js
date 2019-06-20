@@ -116,13 +116,6 @@ var booking_table = new Vue( {
                 this.principals = data
             })
         },
-        getShipper(principal) {
-            if(principal) {
-                api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {
-                    this.shippers = data
-                })
-            }
-        },
 
         getBookings() {
             this.loading = true
@@ -305,11 +298,19 @@ var booking_table = new Vue( {
             }            
         },
         saveEditBooking() {
-            this.loading = true
-            this.saving = true
-            this.checked_bookings = []
-            this.all_checked = false   
             if(this.edit_data.length) {
+                for(index in this.edit_data) {
+                    var data = this.edit_data[index]
+                    var shippers = this.filterEditShipper(data.principal.id)
+                    if(! shippers.some(shipper => shipper.id == data.shipper.id)) {
+                        alert('Fill in the Shipper')
+                        return false
+                    }
+                }
+                this.loading = true
+                this.saving = true
+                this.checked_bookings = []
+                this.all_checked = false 
                 api("/booking/api/save-edit-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter, filter_mode: this.filter_mode, filter_data: this.filter_data }).then((data) => {
                     this.bookings = data.bookings
                     this.tmr = data.tmr
@@ -318,10 +319,6 @@ var booking_table = new Vue( {
                     this.loading = false
                     this.saving = false
                 })
-            }
-            else {
-                this.loading = false
-                this.saving = false
             }
         },
         changeStateBooking(id, state, status, color) {

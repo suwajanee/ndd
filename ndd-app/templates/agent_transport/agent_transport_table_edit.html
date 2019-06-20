@@ -6,7 +6,7 @@
                 <th></th>
                 <th>PRICE</th>
                 <th>DATE</th>
-                <th><div class="long-text-40">PRINCIPAL</div></th>
+                <th>PRINCIPAL</th>
                 <th class="px-4">SHIPPER</th>
                 <th class="px-5">AGENT</th>
                 <th>SIZE</th>
@@ -33,7 +33,7 @@
                         :key="agent_transport.id"
                     >
                         <td>
-                            <select class="custom-select status py-1 px-2" v-model="agent_transport.status" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(agent_transport)">
+                            <select class="custom-select status py-1 px-2" v-model="agent_transport.status" :id="'-1-'+index" @keydown="keyDownArrow(-1, index)" @change="editData(agent_transport)">
                                 <option value="1"> - </option>
                                 <option value="3"> Pickup </option>
                                 <option value="4"> Return </option>
@@ -43,7 +43,7 @@
                         </td>
 
                         <td>
-                            <select class="custom-select status py-1 px-2" v-model="agent_transport.operation_type" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(agent_transport)">
+                            <select class="custom-select status py-1 px-2" v-model="agent_transport.operation_type" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(agent_transport)">
                                 <option value=""> -------- </option>
                                 <option value="export_loaded"> ตู้หนักไป </option>
                                 <option value="import_loaded"> ตู้หนักกลับ </option>
@@ -53,17 +53,23 @@
                         </td>
 
                         <td>
-                            <input v-if="agent_transport.price != '0.00'" type="number" class="form-control" min=0 v-model="agent_transport.price" :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(agent_transport)">
-                            <input v-else type="number" class="form-control" min=0 v-model="agent_transport.price" :value="agent_transport.price=0" :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(agent_transport)">
+                            <input v-if="agent_transport.price != '0.00'" type="number" class="form-control" min=0 v-model="agent_transport.price" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(agent_transport)">
+                            <input v-else type="number" class="form-control" min=0 v-model="agent_transport.price" :value="agent_transport.price=0" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(agent_transport)">
                         </td>
 
-                        <td><input type="date" class="form-control" v-model="agent_transport.date" :id="'3-'+index" @keydown="keyDownArrow(3, index)"  @change="editData(agent_transport)" required></td>
+                        <td><input type="date" class="form-control" v-model="agent_transport.date" :id="'2-'+index" @keydown="keyDownArrow(2, index)"  @change="editData(agent_transport)" required></td>
 
-                        <td v-if="agent_transport.principal" class="px-1 text-left"><div class="long-text-40">{{ agent_transport.principal.name }}</div></td>
-                        <td v-else></td>
+                        <td style="min-width: 120px;">
+                            <select class="custom-select shipper" v-model="agent_transport.principal" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(agent_transport)" required>
+                                <option v-for="principal in principals" :value="principal" :disabled="principal.cancel=='1'">{{ principal.name }}</option>
+                            </select>
+                        </td>
 
                         <td v-if="agent_transport.principal" style="min-width: 290px;">
-                            <select class="custom-select shipper" :style="'color: ' + agent_transport.detail.shipper_text_color" v-model="agent_transport.shipper" @change="editData(agent_transport)" :id="'4-'+index" @keydown="keyDownArrow(4, index)">
+                            <select class="custom-select shipper" :style="'color: ' + agent_transport.detail.shipper_text_color"
+                                :class="{'bg-pink': ! filterEditShipper(agent_transport.principal.id).some(shipper => shipper.id == agent_transport.shipper.id)}" 
+                                v-model="agent_transport.shipper" @change="editData(agent_transport)" :id="'4-'+index" @keydown="keyDownArrow(4, index)"
+                            >
                                 <option v-for="shipper in filterEditShipper(agent_transport.principal.id)" :value="shipper" :disabled="shipper.cancel=='1'">{{ shipper.name }}</option>
                             </select>
                             <input type="color" class="form-control p-0 shipper float-right" v-model="agent_transport.detail.shipper_text_color" @change="editColorData(agent_transport)">
@@ -128,7 +134,7 @@
                             <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_2" maxlength="50" autocomplete=off :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(agent_transport)">
                         </td>
 
-                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px;" v-model="agent_transport.remark" maxlength="250" :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(agent_transport)"></textarea></td>
+                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px; background: transparent; color: black;" v-model="agent_transport.remark" maxlength="250" :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(agent_transport)"></textarea></td>
 
                         <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                     </tr>

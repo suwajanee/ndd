@@ -5,7 +5,7 @@
                 <th>STATUS</th>
                 <th>TIME</th>
                 <th>DATE</th>
-                <th><div class="long-text-40">PRINCIPAL</div></th>
+                <th>PRINCIPAL</th>
                 <th>SHIPPER</th>
                 <th class="px-4">AGENT</th>
                 <th>SIZE</th>
@@ -42,7 +42,7 @@
                         :key="booking.id"
                     >
                         <td>
-                            <select class="custom-select status py-1 px-2" v-model="booking.status" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)">
+                            <select class="custom-select status py-1 px-2" v-model="booking.status" :id="'-1-'+index" @keydown="keyDownArrow(-1, index)" @change="editData(booking)">
                                 <option value="1"> - </option>
                                 <option value="3"> Yard </option>
                                 <option value="4"> Factory </option>
@@ -51,15 +51,21 @@
                                 <option value="0"> Cancel </option>
                             </select>
                         </td>
-                        <td :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, time_color[booking.detail.time]]"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)"></td>
+                        <td :class="[{'bg-secondary':booking.status==0, 'bg-yellow': booking.timeColor == true & booking.status!=0}, time_color[booking.detail.time]]"><input class="form-control" style="width:80px;" v-model="booking.time" maxlength="30" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)"></td>
                         
-                        <td><input type="date" class="form-control" v-model="booking.date" :id="'2-'+index" @keydown="keyDownArrow(2, index)"  @change="editData(booking)" required></td>
+                        <td><input type="date" class="form-control" v-model="booking.date" :id="'1-'+index" @keydown="keyDownArrow(1, index)"  @change="editData(booking)" required></td>
 
-                        <td v-if="booking.principal" class="px-1 text-left"><div class="long-text-40">{{ booking.principal.name }}</div></td>
-                        <td v-else></td>
+                        <td style="min-width: 120px;">
+                            <select class="custom-select shipper" v-model="booking.principal" :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(booking)" required>
+                                <option v-for="principal in principals" :value="principal" :disabled="principal.cancel=='1'">{{ principal.name }}</option>
+                            </select>
+                        </td>
 
                         <td style="min-width: 290px;" v-if="booking.principal">
-                            <select class="custom-select shipper" :style="'color: ' + booking.detail.shipper_text_color" v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required>
+                            <select class="custom-select shipper" :style="'color: ' + booking.detail.shipper_text_color" 
+                                :class="{'bg-pink': ! filterEditShipper(booking.principal.id).some(shipper => shipper.id == booking.shipper.id)}" 
+                                v-model="booking.shipper" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)" required
+                            >
                                 <option v-for="shipper in filterEditShipper(booking.principal.id)" :value="shipper" :disabled="shipper.cancel=='1'">{{ shipper.name }}</option>
                             </select>
                             <input type="color" class="form-control p-0 shipper float-right" v-model="booking.detail.shipper_text_color" @change="editColorData(booking)">
@@ -168,7 +174,7 @@
                         <td><input type="date" class="form-control" v-model="booking.closing_date" autocomplete=off :id="'19-'+index" @keydown="keyDownArrow(19, index)" @change="editData(booking)"></td>
                         <td><input class="form-control" v-model="booking.closing_time" maxlength="5" autocomplete=off :id="'20-'+index" @keydown="keyDownArrow(20, index)" @change="editData(booking)"></td>
 
-                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px;" v-model="booking.remark" maxlength="250" :id="'21-'+index" @keydown="keyDownArrow(21, index)" @change="editData(booking)"></textarea></td>
+                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px; background: transparent; color: black;" v-model="booking.remark" maxlength="250" :id="'21-'+index" @keydown="keyDownArrow(21, index)" @change="editData(booking)"></textarea></td>
 
                         <td class="text-nowrap">{{ booking.work_id }}</td>
 

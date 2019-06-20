@@ -10,7 +10,7 @@ from ..models import AgentTransport
 from .agent_transport_add_view import run_work_id
 from .agent_transport_page_view import api_get_agent_transports, api_filter_agent_transports
 from booking.views.utility.functions import check_key_detail
-from customer.models import Shipper
+from customer.models import Principal, Shipper
 
 
 @csrf_exempt
@@ -58,6 +58,8 @@ def api_save_edit_agent_transport(request):
                 agent_transport_save.operation_type = agent_transport['operation_type']
                 agent_transport_save.price = agent_transport['price']
                 agent_transport_save.date = agent_transport['date']
+                if agent_transport['principal']:
+                    agent_transport_save.principal = Principal.objects.get(pk=agent_transport['principal']['id'])
                 if agent_transport['shipper']:
                     agent_transport_save.shipper = Shipper.objects.get(pk=agent_transport['shipper']['id'])
                 agent_transport_save.agent = re.sub(' +', ' ', agent_transport['agent'].strip().upper())
