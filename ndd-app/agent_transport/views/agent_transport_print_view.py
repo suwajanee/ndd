@@ -34,16 +34,24 @@ class AgentTransportPrintView(TemplateView):
             template = request.POST["template"]
             address = request.POST["address"]
 
+            template_name = 'pdf_template/agent_transport_template.html'
+
             if template == 'forward':
-                template_name = 'pdf_template/agent_transport_fw_template.html'
+                context['trip'] = [1]
+                context['work_type'] = '/1'
             elif template == 'backward':
-                template_name = 'pdf_template/agent_transport_bw_template.html'
+                context['trip'] = [2]
+                context['work_type'] = '/2'
             elif template == 'yard_ndd':
-                template_name = 'pdf_template/agent_transport_yard_ndd_template.html'
+                context['trip'] = [1]
+                context['ndd'] = [2]
+                context['work_type'] = '.1'
             elif template == 'ndd_return':
-                template_name = 'pdf_template/agent_transport_ndd_return_template.html'
+                context['trip'] = [2]
+                context['ndd'] = [1]
+                context['work_type'] = '.2'
             else:
-                template_name = 'pdf_template/agent_transport_full_template.html'
+                context['trip'] = [1, 2]
 
             if address == 'other':
                 context['address'] = request.POST["address_other"]

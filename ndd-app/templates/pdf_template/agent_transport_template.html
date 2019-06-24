@@ -43,7 +43,6 @@
         <tr>
           <td colspan=8>
             <img src="{{ static_dir }}/images/head.jpg" style="width:100%; height:auto;">
-
           </td>
         </tr>
         <tr>
@@ -86,9 +85,9 @@
 
           <tr class="big">
             <td colspan=2 class="pl-5">บุ๊คกิ้ง / Booking</td>
-            <td colspan=2 class="center text-blue">{{ agent_transport.booking_no }}</td>
+            <td colspan=2 class="center text-blue">{% if 1 in trip %}{{ agent_transport.booking_no }}{% endif %}</td>
             <td colspan=2 class="pl-5">เอเย่นต์ / Agent</td>
-            <td colspan=2 class="center pr-5 text-blue">{{ agent_transport.agent }}</td>
+            <td colspan=2 class="center pr-5 text-blue">{% if 1 in trip %}{{ agent_transport.agent }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2 class="pl-5"></td>
@@ -101,7 +100,7 @@
             <td colspan=2 class="pl-5">ลักษณะงาน / JOB TYPE</td>
             <td colspan=3 class="center text-blue"></td>
             <td colspan=1 class="pl-5">เลขที่ใบงาน</td>
-            <td colspan=2 class="center pr-5 text-blue">{{ agent_transport.work_id }} .1</td>
+            <td colspan=2 class="center pr-5 text-blue">{% if 1 in trip %}{{ agent_transport.work_id }}{{ work_type }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2 class="pl-5"></td>
@@ -112,7 +111,7 @@
 
           <tr class="big">
             <td class="pl-5">ขนาดตู้</td>
-            <td class="center text-blue">{{ agent_transport.size }}</td>
+            <td class="center text-blue">{% if 1 in trip %}{{ agent_transport.size }}{% endif %}</td>
             <td colspan=6></td>
           </tr>
           <tr class="small">
@@ -123,9 +122,9 @@
 
           <tr class="big">
             <td class="pl-5">หมายเลขตู้ 1</td>
-            <td colspan=3 class="center pr-5 text-blue">{{ agent_transport.container_1 }}</td>
+            <td colspan=3 class="center pr-5 text-blue">{% if 1 in trip %}{{ agent_transport.container_1 }}{% endif %}</td>
             <td class="pl-5">หมายเลขตู้ 2</td>
-            <td colspan=3 class="center pr-5 text-blue">{{ agent_transport.container_2 }}</td>
+            <td colspan=3 class="center pr-5 text-blue">{% if 1 in trip %}{{ agent_transport.container_2 }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td class="pl-5">CONTR NO.</td>
@@ -136,11 +135,11 @@
 
           <tr class="big">
             <td colspan=2 class="pl-5">ผู้ว่าจ้าง / Principal</td>
-            <td colspan=2 class="center text-blue">{{ agent_transport.principal }}</td>
+            <td colspan=2 class="center text-blue">{% if 1 in trip %}{{ agent_transport.principal }}{% endif %}</td>
             <td class="center">จาก</td>
-            <td class="center text-blue">{{ agent_transport.pickup_from }}</td>
+            <td class="center text-blue">{% if 1 in trip %}{{ agent_transport.pickup_from }}{% endif %}</td>
             <td class="center">ถึง</td>
-            <td class="text-blue">NDD</td>
+            <td class="text-blue">{% if 1 in trip %}{% if 2 in ndd %}NDD{% else %}{{ agent_transport.return_to }}{% endif %}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2></td>
@@ -160,9 +159,9 @@
 
           <tr class="big">
             <td colspan=2 class="pl-5">บุ๊คกิ้ง / Booking</td>
-            <td colspan=2 class="center text-blue"></td>
+            <td colspan=2 class="center text-blue">{% if 2 in trip %}{{ agent_transport.booking_no }}{% endif %}</td>
             <td colspan=2 class="pl-5">เอเย่นต์ / Agent</td>
-            <td colspan=2 class="center pr-5 text-blue"></td>
+            <td colspan=2 class="center pr-5 text-blue">{% if 2 in trip %}{{ agent_transport.agent }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2 class="pl-5"></td>
@@ -175,7 +174,7 @@
             <td colspan=2 class="pl-5">ลักษณะงาน / JOB TYPE</td>
             <td colspan=3 class="center text-blue"></td>
             <td colspan=1 class="pl-5">เลขที่ใบงาน</td>
-            <td colspan=2 class="center pr-5 text-blue"></td>
+            <td colspan=2 class="center pr-5 text-blue">{% if 2 in trip %}{{ agent_transport.work_id }}{{ work_type }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2 class="pl-5"></td>
@@ -186,7 +185,7 @@
 
           <tr class="big">
             <td class="pl-5">ขนาดตู้</td>
-            <td class="center text-blue"></td>
+            <td class="center text-blue">{% if 2 in trip %}{{ agent_transport.size }}{% endif %}</td>
             <td colspan=6></td>
           </tr>
           <tr class="small">
@@ -197,9 +196,9 @@
 
           <tr class="big">
             <td class="pl-5">หมายเลขตู้ 1</td>
-            <td colspan=3 class="center pr-5 text-blue"></td>
+            <td colspan=3 class="center pr-5 text-blue">{% if 2 in trip %}{{ agent_transport.container_1 }}{% endif %}</td>
             <td class="pl-5">หมายเลขตู้ 2</td>
-            <td colspan=3 class="center pr-5 text-blue"></td>
+            <td colspan=3 class="center pr-5 text-blue">{% if 2 in trip %}{{ agent_transport.container_2 }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td class="pl-5">CONTR NO.</td>
@@ -210,11 +209,11 @@
 
           <tr class="big">
             <td colspan=2 class="pl-5">ผู้ว่าจ้าง / Principal</td>
-            <td colspan=2 class="center text-blue"></td>
+            <td colspan=2 class="center text-blue">{% if 2 in trip %}{{ agent_transport.principal }}{% endif %}</td>
             <td class="center">จาก</td>
-            <td class="center text-blue"></td>
+            <td class="center text-blue">{% if 2 in trip %}{% if 1 in ndd %}NDD{% else %}{{ agent_transport.pickup_from }}{% endif %}{% endif %}</td>
             <td class="center">ถึง</td>
-            <td class="text-blue"></td>
+            <td class="text-blue">{% if 2 in trip %}{{ agent_transport.return_to }}{% endif %}</td>
           </tr>
           <tr class="small">
             <td colspan=2></td>

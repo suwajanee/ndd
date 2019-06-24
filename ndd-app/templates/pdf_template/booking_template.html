@@ -47,8 +47,6 @@
 </head>
 
 <body>
-    {% block content %}
-    {% if booking %}
 
     <div id="header_content"><img src="{{ static_dir }}/images/head.jpg" style="width:100%; height:auto;"></div>
     <!-- HTML Content -->
@@ -91,18 +89,17 @@
               <td class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;"></td>
               <td>ซอยตู้</td>
             </tr>
-            <!-- {% endif %} -->
+
             </table>
     </div>
 
     <!-- HTML Content -->
     <div id="right_content">
         <table>
-            <!-- {% if booking %} -->
             <tr class="big">
-                <td></td><td></td><td></td>
+                <td></td><td></td>
               <td width=60px class="text-right">เลขที่</td>
-              <td width=150px class="center text-blue">{{ booking.work_id }}.4</td>
+              <td colspan=2 width=150px class="center text-blue">{{ booking.work_id }}{{ work_type }}</td>
             </tr>
             <tr class="small">
               <td colspan=5></td>
@@ -159,9 +156,9 @@
             </tr>
             <tr class="big">
               <td class="pl-5">หมายเลขตู้</td>
-              <td colspan=3 class="center text-blue pr-5 border-r">{{ booking.container_no }}</td>
+              <td colspan=3 class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.container_no }}{% endif %}</td>
               <td class="pl-5">หมายเลขตู้</td>
-              <td colspan=3 class="center text-blue pr-5">{{ booking.container_no }}</td>
+              <td colspan=3 class="center text-blue pr-5">{% if 2 in trip %}{{ booking.container_no }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">CONTR NO.</td>
@@ -171,13 +168,13 @@
             </tr>
             <tr class="big">
               <td class="pl-5">ขนาดตู้</td>
-              <td class="center text-blue">{{ booking.size }}</td>
+              <td class="center text-blue">{% if 1 in trip %}{{ booking.size }}{% endif %}</td>
               <td class="text-center" style="padding-left: -10px;">หมายเลขซีล</td>
-              <td class="center text-blue pr-5 border-r">{{ booking.seal_no }}</td>
+              <td class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.seal_no }}{% endif %}</td>
               <td class="pl-5">ขนาดตู้</td>
-              <td class="center text-blue">{{ booking.size }}</td>
+              <td class="center text-blue">{% if 2 in trip %}{{ booking.size }}{% endif %}</td>
               <td class="text-center" style="padding-left: -10px;">หมายเลขซีล</td>
-              <td class="center text-blue pr-5">{{ booking.seal_no }}</td>
+              <td class="center text-blue pr-5">{% if 2 in trip %}{{ booking.seal_no }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">SIZE</td>
@@ -191,9 +188,9 @@
             </tr>
             <tr class="big">
               <td class="pl-5">Agent Name</td>
-              <td colspan=3 class="center text-blue pr-5 border-r">{{ booking.agent }}</td>
+              <td colspan=3 class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.agent }}{% endif %}</td>
               <td class="pl-5">Agent Name</td>
-              <td colspan=3 class="center text-blue pr-5">{{ booking.agent }}</td>
+              <td colspan=3 class="center text-blue pr-5">{% if 2 in trip %}{{ booking.agent }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5"></td>
@@ -203,9 +200,9 @@
             </tr>
             <tr class="big">
               <td class="pl-5">หมายเลขจองเรือ</td>
-              <td colspan=3 class="center text-blue pr-5 border-r">{{ booking.booking_no }}</td>
+              <td colspan=3 class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.booking_no }}{% endif %}</td>
               <td class="pl-5">หมายเลขจองเรือ</td>
-              <td colspan=3 class="center text-blue pr-5">{{ booking.booking_no }}</td>
+              <td colspan=3 class="center text-blue pr-5">{% if 2 in trip %}{{ booking.booking_no }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">BOOKING NO.</td>
@@ -223,13 +220,13 @@
             </tr>
             <tr class="big">
               <td class="pl-5">จาก</td>
-              <td class="center text-blue">NDD</td>
+              <td class="center text-blue">{% if 1 in trip %}{% if 1 in ndd %}NDD{% else %}{{ booking.pickup_from }}{% endif %}{% endif %}</td>
               <td class="text-center">ถึง</td>
-              <td class="center text-blue pr-5 border-r">{{ booking.factory }}</td>
+              <td class="center text-blue pr-5 border-r">{% if 1 in trip %}{% if 2 in ndd %}NDD{% else %}{{ booking.factory }}{% endif %}{% endif %}</td>
               <td class="pl-5">จาก</td>
-              <td class="center text-blue">{{ booking.factory }}</td>
+              <td class="center text-blue">{% if 2 in trip %}{% if 3 in ndd %}NDD{% else %}{{ booking.factory }}{% endif %}{% endif %}</td>
               <td class="text-center">ถึง</td>
-              <td class="center text-blue pr-5">{{ booking.return_to }}</td>
+              <td class="center text-blue pr-5">{% if 2 in trip %}{% if 4 in ndd %}NDD{% else %}{{ booking.return_to }}{% endif %}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">FROM</td>
@@ -243,13 +240,13 @@
             </tr>
             <tr class="big">
               <td width=350px class="pl-5">วันปฏิบัติงาน</td>
-              <td width=350px class="center text-blue">{{ booking.factory_date | date:'d-m-y' }}</td>
+              <td width=350px class="center text-blue">{% if 1 in trip %}{{ booking.pickup_date | date:'d-m-y' }}{% endif %}</td>
               <td width=250px class="text-center">ถึง</td>
-              <td width=350px class="center text-blue pr-5 border-r">{{ booking.factory_date | date:'d-m-y' }}</td>
+              <td width=350px class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.factory_date | date:'d-m-y' }}{% endif %}</td>
               <td width=350px class="pl-5">วันปฏิบัติงาน</td>
-              <td width=350px class="center text-blue">{{ booking.factory_date | date:'d-m-y' }}</td>
+              <td width=350px class="center text-blue">{% if 2 in trip %}{{ booking.factory_date | date:'d-m-y' }}{% endif %}</td>
               <td width=250px class="text-center">ถึง</td>
-              <td width=350px class="center text-blue pr-5">{{ booking.return_date | date:'d-m-y' }}</td>
+              <td width=350px class="center text-blue pr-5">{% if 2 in trip %}{{ booking.return_date | date:'d-m-y' }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">Date of Work</td>
@@ -285,9 +282,9 @@
               </tr>
             <tr class="big">
               <td class="pl-5">ชื่อเรือ</td>
-              <td colspan=3 class="center text-blue pr-5 border-r">{{ booking.vessel }}</td>
+              <td colspan=3 class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.vessel }}{% endif %}</td>
               <td class="pl-5">ชื่อเรือ</td>
-              <td colspan=3 class="center text-blue pr-5">{{ booking.vessel }}</td>
+              <td colspan=3 class="center text-blue pr-5">{% if 2 in trip %}{{ booking.vessel }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td class="pl-5">Vessel name</td>
@@ -297,9 +294,9 @@
             </tr>
             <tr class="big">
               <td colspan=2 class="center pl-5">เวลาปิดรับตู้</td>
-              <td colspan=2 class="center text-blue pr-5 border-r">{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
+              <td colspan=2 class="center text-blue pr-5 border-r">{% if 1 in trip %}{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}{% endif %}</td>
               <td colspan=2 class="center pl-5">เวลาปิดรับตู้</td>
-              <td colspan=2 class="center text-blue pr-5">{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}</td>
+              <td colspan=2 class="center text-blue pr-5">{% if 2 in trip %}{{ booking.closing_date | date:'d-m-y' }}&nbsp;&nbsp;&nbsp;{{ booking.closing_time }}{% endif %}</td>
             </tr>
             <tr class="small">
               <td colspan=2 class="pl-5"></td>
@@ -364,9 +361,6 @@
           </div>
         </div>
         
-        
-        {% endif %}
-        {% endblock %}
 
 
 </body>
