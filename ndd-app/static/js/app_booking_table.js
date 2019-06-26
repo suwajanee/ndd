@@ -10,6 +10,7 @@ var booking_table = new Vue( {
         shippers_list: [],
 
         modal:'',
+        container_print_size: false,
         shipper_address: [],
 
         container_size_1: [],
@@ -47,6 +48,8 @@ var booking_table = new Vue( {
         print: {
             template: '',
             address: '',
+            couple: false,
+            work_with: '',
             address_other: ''
         }
     },
@@ -240,11 +243,19 @@ var booking_table = new Vue( {
             return this.shippers_list.filter(shipper => shipper.principal == customer_id )           
         },
 
-        printFormModal(id, shipper_id) {
+        printFormModal(id, shipper_id, size) {
             this.modal = id
             this.shipper_address = []
             this.print.address_other = ''
+            this.print.couple = false
+            this.print.work_with =  ''
             this.print.template = 'full'
+            if(size.indexOf('20')) {
+                this.container_print_size = true
+            }
+            else {
+                this.container_print_size = false
+            }
 
             if(shipper_id == null) {
                 this.print.address = 'other'

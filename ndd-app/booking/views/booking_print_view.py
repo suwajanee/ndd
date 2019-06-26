@@ -36,13 +36,7 @@ class BookingPrintView(TemplateView):
 
             template_name = 'pdf_template/booking_template.html'
             
-            if template == 'forward':
-                context['trip'] = [1]
-                context['work_type'] = '/1'
-            elif template == 'backward':
-                context['trip'] = [2]
-                context['work_type'] = '/2'
-            elif template == 'yard_ndd':
+            if template == 'yard_ndd':
                 context['trip'] = [1]
                 context['ndd'] = [2]
                 context['work_type'] = '/1.1'
@@ -62,8 +56,28 @@ class BookingPrintView(TemplateView):
                 context['trip'] = [2]
                 context['ndd'] = [3]
                 context['work_type'] = '/3.1'
+            elif template == 'forward':
+                context['trip'] = [1]
+                context['work_type'] = '/4.1'
+            elif template == 'ndd_fac':
+                context['trip'] = [1]
+                context['ndd'] = [1]
+                context['work_type'] = '/4.2'
+            elif template == 'backward':
+                context['trip'] = [2]
+                context['work_type'] = '/5.1'
+            elif template == 'fac_ndd':
+                context['trip'] = [2]
+                context['ndd'] = [4]
+                context['work_type'] = '/5.2'
             else:
                 context['trip'] = [1, 2]
+
+            if "couple" in request.POST:
+                context['couple'] = True
+                booking_2 = Booking.objects.filter(work_id=request.POST["work_with"].strip())
+                if len(booking_2):
+                    context['booking_2'] = booking_2[0]
             
             if address == 'other':
                 context['address'] = request.POST["address_other"]
