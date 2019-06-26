@@ -106,6 +106,11 @@ var agent_transport_table = new Vue( {
                 this.principals = data
             })
         },
+        getShipper(principal) {	
+            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {	
+                this.shippers = data	
+            })	
+        },
 
         getAgentTransports() {
             this.loading = true
