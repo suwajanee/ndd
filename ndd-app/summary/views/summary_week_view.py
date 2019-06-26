@@ -188,7 +188,8 @@ def summary_customer_json(data, summary_customer):
         data['date_billing'] = customer.date_billing
         data['date_due'] = customer.date_due
         if customer.detail:
-            data['remark'] = customer.detail['remark']
+            if 'remark' in customer.detail:
+                data['remark'] = customer.detail['remark']
         data['status'] = customer.status
 
         invoice = Invoice.objects.filter(Q(customer_week = customer))

@@ -67,42 +67,54 @@
                 var size = this.size.split('\n')
                 var drayage = this.drayage.split('\n')
                 var remark = this.remark.split('\n')
-
-                for(invoice_detail in summary_invoice_details.invoice_detail_list) {
-                    var status = false
-                    var details = summary_invoice_details.invoice_detail_list[invoice_detail].detail
-                    var charge = summary_invoice_details.invoice_detail_list[invoice_detail].drayage_charge.drayage
-
-                    if(details.container == 1) {
-                        if(summary_invoice_details.invoice_detail_list[invoice_detail].work.container_1 == container[invoice_detail]) {
-                            status = true
-                        }
+                
+                var data_list = []
+                for(num in container) {
+                    if(!drayage[num] || drayage[num] == "") {
+                        drayage[num] = ''
                     }
                     else {
-                        if(summary_invoice_details.invoice_detail_list[invoice_detail].work.container_2 == container[invoice_detail]) {
-                            status = true
+                        if(drayage[num].trim() == '-') {
+                            drayage[num] = ''
                         }
-
                     }
-                    if(status) {
-                        details.job_no = job_no[invoice_detail]
-                        details.from = from[invoice_detail]
-                        details.to = to[invoice_detail]
-                        details.date = date[invoice_detail]
-                        details.size = size[invoice_detail]
-                        details.remark = remark[invoice_detail]
 
-                        if(!drayage[invoice_detail] || drayage[invoice_detail] == ""){
-                            drayage[invoice_detail] = charge
-                        }
-                        else {
-                            if(drayage[invoice_detail].trim() == '-') {
-                                drayage[invoice_detail] = charge
-                            }
-                        }
-                        summary_invoice_details.invoice_detail_list[invoice_detail].drayage_charge.drayage = drayage[invoice_detail]
+                    var obj = {
+                        job_no: job_no[num],
+                        from: from[num],
+                        to: to[num],
+                        date: date[num],
+                        container: container[num],
+                        size: size[num],
+                        drayage: drayage[num].replace(',', ''),
+                        remark: remark[num],
                     }
+
+                    data_list.push(obj)
                 }
+
+                data_list.forEach(function(data) {
+
+                    var work = summary_invoice_details.invoice_detail_list.filter(detail => 
+                        (detail.work.container_1.trim() == data.container.trim() && detail.detail.container == 1) ||
+                        (detail.work.container_2.trim() == data.container.trim() && detail.detail.container == 2)
+                    )
+
+                    if(work.length == 1) {
+                        work = work[0]
+                        var detail = work.detail
+
+                        detail.job_no = data.job_no
+                        detail.from = data.from
+                        detail.to = data.to
+                        detail.date = data.date
+                        detail.size = data.size
+                        work.drayage_charge.drayage = data.drayage
+                        detail.remark = data.remark
+                    }
+
+                })
+                
                 $('#modelAddFieldEvergreen').modal('hide')
 
                 this.job_no = ''
