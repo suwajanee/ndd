@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Principal, Shipper, ShipperAddress
 from ..serializers import PrincipalSerializer, ShipperSerializer, ShipperAddressSerializer
+from booking.models import Booking
 
 
 @csrf_exempt
@@ -34,9 +35,7 @@ def api_get_shippers(request):
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             principal_id = req['principal']
-
             shippers = Shipper.objects.filter(Q(principal=principal_id) & Q(cancel=0)).order_by('name')
-
         else:
             shippers = Shipper.objects.all().order_by('cancel', 'name')
 
@@ -50,7 +49,14 @@ def api_get_shipper_address(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
-            shipper_id = req['shipper_id']
+            if 'work_id' in req:
+                work_id = req['work_id']
+                try:
+                    shipper_id = Booking.objects.get(work_id=work_id.strip()).shipper.pk
+                except:
+                    return JsonResponse('Error', safe=False)
+            else:
+                shipper_id = req['shipper_id']
             
             shipper_address = ShipperAddress.objects.filter(shipper=shipper_id).order_by('address_type')
             serializer = ShipperAddressSerializer(shipper_address, many=True)
