@@ -29,6 +29,9 @@ tr {border:none;}
 .pt-5 {
     padding-top: 5px
 }
+.pt-2 {
+    padding-top: 2px
+}
 
 .pt-10 {
     padding-top: 10px
@@ -72,7 +75,7 @@ td.border-b {
 .text-footer {
     font-size: 16px;
     font-weight: bold;
-    padding-top: 5px
+    padding-top: 2px
 }
 
 .text-8 {
