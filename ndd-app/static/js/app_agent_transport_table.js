@@ -22,6 +22,7 @@ var agent_transport_table = new Vue( {
 
         nbar: 'table',
         filter_mode: false,
+        require_input: false,
         filter_data: {
             principal_id: '',
             shipper: '',
@@ -106,10 +107,15 @@ var agent_transport_table = new Vue( {
                 this.principals = data
             })
         },
-        getShipper(principal) {	
-            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {	
-                this.shippers = data	
-            })	
+        getShipper(principal) {
+            if(! principal) {
+                this.shippers = []
+            }
+            else {
+                api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {	
+                    this.shippers = data	
+                })
+            }	
         },
 
         getAgentTransports() {
@@ -137,6 +143,11 @@ var agent_transport_table = new Vue( {
             localStorage.setItem('date_filter_agent_transport', this.date_filter)
         },
         filterAgentTransports() {
+            this.require_input = false
+            if(! this.filter_data.date_from || ! this.filter_data.date_to){
+                this.require_input = true
+                return false
+            }
             this.loading = true
             this.checked_agent_transports = []
             this.all_checked = false

@@ -112,11 +112,11 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">DATE FROM</span>
                                 </div>
-                                <input type="date" class="form-control" v-model="filter_data.date_from">
+                                <input type="date" class="form-control" :class="{'alert-danger': require_input && !filter_data.date_from}" v-model="filter_data.date_from">
                                 <div class="input-group-append">
                                     <span class="input-group-text">TO</span>
                                 </div>
-                                <input type="date" class="form-control" v-model="filter_data.date_to">
+                                <input type="date" class="form-control" :class="{'alert-danger': require_input && !filter_data.date_to}" v-model="filter_data.date_to">
                             </div>
 
                         {% endverbatim %}
