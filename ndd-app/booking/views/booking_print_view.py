@@ -11,20 +11,6 @@ from ndd.settings import STATICFILES_DIRS
 
 class BookingPrintView(TemplateView):
 
-    def get(self, request, pk):
-        context = {}
-        context['static_dir'] = STATICFILES_DIRS[0]
-        context['booking'] = get_object_or_404(Booking, pk=pk)
-
-        if request.session['template_name'+pk]:               
-            template_name = request.session['template_name'+pk]
-            context['address'] = request.session['address'+pk]
-
-            request.session['template_name'+pk] = template_name
-            request.session['address'+pk] = context['address']
-
-        return render_pdf(template_name, context)
-    
     def post(self, request, pk):
         context = {}
         context['static_dir'] = STATICFILES_DIRS[0]
@@ -72,12 +58,6 @@ class BookingPrintView(TemplateView):
                 context['work_type'] = '/5.2'
             else:
                 context['trip'] = [1, 2]
-
-            if "couple" in request.POST:
-                context['couple'] = True
-                booking_2 = Booking.objects.filter(work_id=request.POST["work_with"].strip())
-                if len(booking_2):
-                    context['booking_2'] = booking_2[0]
             
             if address == 'other':
                 context['address'] = request.POST["address_other"]
@@ -89,9 +69,25 @@ class BookingPrintView(TemplateView):
                     context['address'] = shipper_address.address
                 except ShipperAddress.DoesNotExist:
                     context['address'] = ''
-
-        request.session['template_name'+pk] = template_name
-        request.session['address'+pk] = context['address'] 
+            if "couple" in request.POST:
+                context['couple'] = True
+                booking_2 = Booking.objects.filter(work_id=request.POST["work_with"].strip())
+                if len(booking_2):
+                    context['booking_2'] = booking_2[0]
+                
+                if 'couple_address' in request.POST:
+                    address_2 = request.POST["address_2"]
+                    context['couple_address'] = True
+                    if address_2 == 'other':
+                        context['address_2'] = request.POST["address_other_2"]
+                    elif address_2 == 'none':
+                        context['address_2'] = ''
+                    else:
+                        try:
+                            shipper_address_2 = ShipperAddress.objects.get(pk=address_2)
+                            context['address_2'] = shipper_address_2.address
+                        except ShipperAddress.DoesNotExist:
+                            context['address_2'] = ''
 
         return render_pdf(template_name, context)
             

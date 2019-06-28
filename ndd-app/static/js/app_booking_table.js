@@ -12,6 +12,8 @@ var booking_table = new Vue( {
         modal:'',
         container_print_size: false,
         shipper_address: [],
+        shipper_address_2: [],
+        couple_error: false,
 
         container_size_1: [],
         container_size_2: [],
@@ -24,6 +26,7 @@ var booking_table = new Vue( {
 
         nbar: 'table',
         filter_mode: false,
+        require_input: false,
         filter_data: {
             principal_id: '',
             shipper: '',
@@ -47,10 +50,13 @@ var booking_table = new Vue( {
 
         print: {
             template: '',
-            address: '',
             couple: false,
             work_with: '',
-            address_other: ''
+            address: '',
+            address_other: '',
+            couple_address: false,
+            address_2: '',
+            address_other_2: ''
         }
     },
     methods: {
@@ -119,10 +125,16 @@ var booking_table = new Vue( {
                 this.principals = data
             })
         },
-        getShipper(principal) {	
-            api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {	
-                this.shippers = data	
-            })	
+        getShipper(principal) {
+            this.filter_data.shipper = ''
+            if(! principal) {
+                this.shippers = []
+            }
+            else {
+                api("/customer/api/get-shippers/", "POST", {principal: principal}).then((data) => {	
+                    this.shippers = data	
+                })
+            }
         },
 
         getBookings() {
@@ -152,14 +164,17 @@ var booking_table = new Vue( {
             localStorage.setItem('date_filter_booking', this.date_filter)
         },
         filterBookings() {
+            this.require_input = false
+            if(! this.filter_data.date_from || ! this.filter_data.date_to){
+                this.require_input = true
+                return false
+            }
             this.loading = true
             this.checked_bookings = []
             this.all_checked = false
             this.action = ''
             this.edit_data = []
             this.filter_mode = true
-            if(this.filter_data.date_to) {
-            }
             if(this.filter_data.principal_id || this.filter_data.shipper || this.filter_data.booking_no || this.filter_data.remark || this.filter_data.date_from || this.filter_data.date_to) {
                 api("/booking/api/filter-bookings/", "POST", {filter_data: this.filter_data}).then((data) => {
                     this.bookings = data.bookings
@@ -251,9 +266,13 @@ var booking_table = new Vue( {
         printFormModal(id, shipper_id, size) {
             this.modal = id
             this.shipper_address = []
+            this.couple_error = false
+
             this.print.address_other = ''
+            this.print.address_other_2 = ''
             this.print.couple = false
             this.print.work_with =  ''
+            this.print.couple_address = false
             this.print.template = 'full'
             if(size.indexOf('20')) {
                 this.container_print_size = true
@@ -277,7 +296,42 @@ var booking_table = new Vue( {
                 })
             }
         },
+        getAddressFromWorkId(work_id) {
+            this.couple_error = false
+            api("/customer/api/shipper-address/", "POST", {work_id: work_id}).then((data) => {
+                if(data == 'Error') {
+                    this.couple_error = true
+                    this.print.couple_address = false
+                }
+                else {
+                    this.shipper_address_2 = data
+                    this.print.couple_address = true
+                    if(this.shipper_address_2.length) {
+                        this.print.address_2 = this.shipper_address_2[0].id
+                    }
+                    else {
+                        this.print.address_2 = 'other'
+                    }
+                }
+            })
+        },
         printSubmit(id) {
+            this.couple_error = false
+            if(this.print.couple) {
+                api("/booking/api/check-work-id/", "POST", {work_id: this.print.work_with}).then((data) => {
+                    if(data == 'Error') {
+                        this.couple_error = true
+                    }
+                    else {
+                        this.submitForm(id)
+                    }
+                })    
+            }
+            else {
+                this.submitForm(id)
+            }   
+        },
+        submitForm(id) {
             this.$refs.printBookingForm.action = "/booking/print/" + id +"/"
             this.$refs.printBookingForm.submit()
         },

@@ -142,7 +142,7 @@
 
         <div id="table_content">
             <table class="border-out">
-                <tr class="center pt-5">
+                <tr class="center pt-2">
                     <td colspan=4 class="border-r">{% if 1 in trip %}งานเที่ยวไป{% endif %}</td>
                     <td colspan=4>{% if 2 in trip %}งานเที่ยวกลับ{% endif %}</td>
                 </tr>
@@ -206,14 +206,22 @@
                     <td class="pl-5">BOOKING NO.</td>
                     <td colspan=3 class="center pr-5">....................................................................</td>
                 </tr>
+                
                 <tr class="big">
-                    <td class="pl-5">งานบรรทุก</td>
-                    <td colspan=7 class="center text-blue pr-5">{{ booking.shipper }}</td>
+                    {% if not couple %}
+                        <td class="pl-5">งานบรรทุก</td>
+                        <td colspan=7 class="center text-blue pr-5">{{ booking.shipper }}</td>
+                    {% else %}
+                        <td class="pl-5">งานบรรทุก</td>
+                        <td colspan=3 class="center text-blue pr-5 {% if not 1 in trip and couple %}text-red{% endif %}">{% if 1 in trip %}{{ booking.shipper }}{% elif couple %}{{ booking_2.shipper }}{% endif %}</td>
+                        <td colspan=4 class="center text-blue pr-5 {% if not 2 in trip and couple %}text-red{% endif %}">{% if 2 in trip %}{{ booking.shipper }}{% elif couple %}{{ booking_2.shipper }}{% endif %}</td>
+                    {% endif %}
                 </tr>
                 <tr class="small">
                     <td class="pl-5">FOR</td>
                     <td colspan=7 class="center pr-5">...................................................................................................................................................................</td>
                 </tr>
+
                 <tr class="big">
                     <td class="pl-5">จาก</td>
                     <td class="center text-blue">{% if 1 in trip %}{% if 1 in ndd %}NDD{% else %}{{ booking.pickup_from }}{% endif %}{% endif %}</td>
@@ -314,13 +322,20 @@
                 </tr>
 
                 <tr class="big">
-                    <td class="pl-5">หมายเหตุ</td>
-                    <td colspan=7 class="text-blue pr-5">{{ booking.remark }}</td>
+                    {% if not couple %}
+                        <td class="pl-5">หมายเหตุ</td>
+                        <td colspan=7 class="text-blue pr-5">{{ booking.remark }}</td>
+                    {% else %}
+                        <td class="pl-5">หมายเหตุ</td>
+                        <td colspan=3 class="text-blue pr-5 {% if not 1 in trip and couple %}text-red{% endif %}">{% if 1 in trip %}{{ booking.remark }}{% elif couple %}{{ booking_2.remark }}{% endif %}</td>
+                        <td colspan=4 class="text-blue pr-5 {% if not 2 in trip and couple %}text-red{% endif %}">{% if 2 in trip %}{{ booking.remark }}{% elif couple %}{{ booking_2.remark }}{% endif %}</td>
+                    {% endif %}
                 </tr>
                 <tr class="small">
                     <td class="pl-5">REMARK</td>
                     <td colspan=7 class="center pr-5">...................................................................................................................................................................</td>
                 </tr>
+
                 <tr class="big">
                     <td colspan=2 class="center pl-5"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;สภาพตู้สะอาด</td>
                     <td colspan=2 class="center"><img src="{{ static_dir }}/images/square.png" style="width:14px; height:auto;">&nbsp;พื้นตู้สะอาด,ไม่มีเสี้ยน,คราบน้ำมัน</td>
@@ -356,15 +371,31 @@
                 </tr>
             </table>
             <div class="mt-5">
-                <table width=80%>
+                <table width=100%>
+                    {% if couple_address %}
                     <tr>
-                        <td width=20% style="vertical-align: top;">
+                        <td colspan=2 style="vertical-align: top;">
                             ออกใบเสร็จ
                         </td>
-                        <td class="text-16 text-blue">
-                            {{ address | linebreaks }}
-                        </td>
                     </tr>
+                    <tr>
+                        <td width=50% class="text-16 text-blue pl-5 {% if not 1 in trip and couple %}text-red{% endif %}" style="vertical-align: top;">
+                            {% if 1 in trip %}{{ address | linebreaks }}{% elif couple %}{{ address_2 | linebreaks }}{% endif %}
+                        </td>
+                        <td width=50% class="text-16 text-blue pl-5 {% if not 2 in trip and couple %}text-red{% endif %}" style="vertical-align: top;">
+                            {% if 2 in trip %}{{ address | linebreaks }}{% elif couple %}{{ address_2 | linebreaks }}{% endif %}
+                        </td>   
+                    </tr>
+                    {% else %}
+                        <tr>
+                            <td width=20% style="vertical-align: top;">
+                                ออกใบเสร็จ
+                            </td>
+                            <td class="text-16 text-blue">
+                                {{ address | linebreaks }}
+                            </td>
+                        </tr>
+                    {% endif %}
                 </table>
             </div>
         </div>

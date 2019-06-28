@@ -14,6 +14,20 @@ from summary.views.summary_week_view import get_week_details
 
 
 @csrf_exempt
+def api_check_work_id(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            work_id = req['work_id']
+            try:
+                bookings = Booking.objects.get(work_id=work_id.strip())                
+                return JsonResponse('Existing', safe=False)
+            except:
+                return JsonResponse('Error', safe=False)
+
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
 def api_get_work_list(request):
     if request.user.is_authenticated:
         if request.method == "POST":

@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^api/get-bookings/$', booking_page_view.api_get_bookings, name='api-get-bookings'),
     url(r'^api/filter-bookings/$', booking_page_view.api_filter_bookings, name='api-filter-bookings'),
 
+    url(r'^api/check-work-id/$', booking_data_view.api_check_work_id, name='api-check-work-id'),
+
     url(r'^api/save-add-bookings/$', booking_add_view.api_save_add_bookings, name='api-save-add-bookings'),
     url(r'^api/save-edit-bookings/$', booking_edit_view.api_save_edit_bookings, name='api-save-edit-bookings'),
     url(r'^api/delete-bookings/$', booking_delete_view.api_delete_bookings, name='api-delete-bookings'),

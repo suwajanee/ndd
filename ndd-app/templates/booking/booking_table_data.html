@@ -296,52 +296,95 @@
                                 >
                                 <label class="custom-control-label" for="couple">คู่กับงาน</label>
                             </div>
-                            <input class="form-control ml-2 w-25 d-inline" name="work_with" v-model="print.work_with" :disabled="! print.couple">
+                            <input class="form-control ml-2 w-25 d-inline" :class="{'bg-pink': print.couple && couple_error}" name="work_with" v-model="print.work_with" :disabled="! print.couple" :required="print.couple">
+                            <button class="btn btn-sm btn-outline-primary py-0 mx-2" @click.prevent="getAddressFromWorkId(print.work_with)" :disabled="! print.couple"><i class="fas fa-address-book"></i></button>
                         </div>
 
                         <hr style="border-width: 3px;">
 
-                        <div class="row mb-2">
+                        <div class="row">
                             <div class="col">
-                                ADDRESS
-                            </div>
-                        </div>
-
-                        <div class="container col-md-11 address-part">
-                            {% verbatim %}
-                                <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
-                                    <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" :id="'address-'+index" name="address" v-model="print.address" :value="address.id">
-                                        <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index">Shipper ( {{ address.address_type }} )</label>
-                                        <label v-else class="custom-control-label" :for="'address-'+index">Shipper</label>
-                                    </div> 
-                                </div>
-                                                            
-                                <div class="row">
-                                    <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="address-other" name="address" v-model="print.address" value="other">
-                                        <label class="custom-control-label" for="address-other">Other</label>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        ADDRESS
                                     </div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="w-100 my-2">
-                                        <textarea class="form-control" rows="3" style="font-size: 12px;" maxlength="400" name="address_other" v-model="print.address_other" :disabled="print.address != 'other'"></textarea>
-                                    </div>
-                                </div>
+                                <div class="container col-md-11 address-part">
+                                    {% verbatim %}
+                                        <div class="row" v-if="shipper_address.length" v-for="(address, index) in shipper_address">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" :id="'address-'+index" name="address" v-model="print.address" :value="address.id">
+                                                <label v-if="address.address_type" class="custom-control-label" :for="'address-'+index">Shipper ( {{ address.address_type }} )</label>
+                                                <label v-else class="custom-control-label" :for="'address-'+index">Shipper</label>
+                                            </div> 
+                                        </div>
                                                                     
-                                <div class="row">
-                                    <div class="col custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="address-none" name="address" v-model="print.address" value="none">
-                                        <label class="custom-control-label" for="address-none">None</label>
+                                        <div class="row">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="address-other" name="address" v-model="print.address" value="other">
+                                                <label class="custom-control-label" for="address-other">Other</label>
+                                            </div>
+                                        </div>
+        
+                                        <div class="row">
+                                            <div class="w-100 my-2">
+                                                <textarea class="form-control" rows="2" style="font-size: 12px;" maxlength="400" name="address_other" v-model="print.address_other" :disabled="print.address != 'other'"></textarea>
+                                            </div>
+                                        </div>
+                                                                            
+                                        <div class="row">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="address-none" name="address" v-model="print.address" value="none">
+                                                <label class="custom-control-label" for="address-none">None</label>
+                                            </div>
+                                        </div>
+                                    {% endverbatim %}
+                                </div>
+                            </div>
+                            <div v-if="print.couple_address" class="col">
+                                <input type="hidden" name="couple_address" v-model="print.couple_address">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        ADDRESS 2
                                     </div>
                                 </div>
-                            {% endverbatim %}
-                        </div>
+                                <div class="container col-md-11 address-part">
+                                    {% verbatim %}
+                                        <div class="row" v-if="shipper_address_2.length" v-for="(address_2, index) in shipper_address_2">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" :id="'address_2-'+index" name="address_2" v-model="print.address_2" :value="address_2.id">
+                                                <label v-if="address_2.address_type" class="custom-control-label" :for="'address_2-'+index">Shipper ( {{ address_2.address_type }} )</label>
+                                                <label v-else class="custom-control-label" :for="'address_2-'+index">Shipper</label>
+                                            </div> 
+                                        </div>
+                                                                    
+                                        <div class="row">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="address_2-other" name="address_2" v-model="print.address_2" value="other">
+                                                <label class="custom-control-label" for="address_2-other">Other</label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="w-100 my-2">
+                                                <textarea class="form-control" rows="2" style="font-size: 12px;" maxlength="400" name="address_other_2" v-model="print.address_other_2" :disabled="print.address_2 != 'other'"></textarea>
+                                            </div>
+                                        </div>
+                                                                            
+                                        <div class="row">
+                                            <div class="col custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="address_2-none" name="address_2" v-model="print.address_2" value="none">
+                                                <label class="custom-control-label" for="address_2-none">None</label>
+                                            </div>
+                                        </div>
+                                    {% endverbatim %}
+                                </div>
+                            </div>
+                        </div>    
                     </div>            
                         
                     <div class="modal-footer d-flex justify-content-center">
-                        <button class="btn btn-primary" @click="printSubmit(modal)">Print</button>
+                        <button class="btn btn-primary" @click.prevent="printSubmit(modal)">Print</button>
                     </div>
                 </form>
             </div>
