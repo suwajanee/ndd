@@ -108,6 +108,7 @@ var agent_transport_table = new Vue( {
             })
         },
         getShipper(principal) {
+            this.filter_data.shipper = ''
             if(! principal) {
                 this.shippers = []
             }

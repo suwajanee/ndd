@@ -125,7 +125,8 @@ var booking_table = new Vue( {
                 this.principals = data
             })
         },
-        getShipper(principal) {	
+        getShipper(principal) {
+            this.filter_data.shipper = ''
             if(! principal) {
                 this.shippers = []
             }
