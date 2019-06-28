@@ -259,6 +259,7 @@ var booking_table = new Vue( {
             this.couple_error = false
 
             this.print.address_other = ''
+            this.print.address_other_2 = ''
             this.print.couple = false
             this.print.work_with =  ''
             this.print.couple_address = false
