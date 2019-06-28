@@ -200,7 +200,7 @@ var agent_transport_table = new Vue( {
                         num = 1
                     }
                 }
-                else if(agent.date != this.agent_transports[agent_transport-1].date | agent.work_type != this.agent_transports[agent_transport-1].work_type | agent.shipper.id != this.agent_transports[agent_transport-1].shipper.id) {
+                else if(agent.date != this.agent_transports[agent_transport-1].date || agent.work_type != this.agent_transports[agent_transport-1].work_type || agent.operation_type != this.agent_transports[agent_transport-1].operation_type || agent.shipper.id != this.agent_transports[agent_transport-1].shipper.id) {
                     if(agent.status != '0') {
                         num = 1
                     }

@@ -167,7 +167,7 @@
                         <td colspan=20 class="bg-dark"></td>
                     </tr>
                     <tr
-                        v-else-if="agent_transport.date != agent_transports[index+1].date | agent_transport.work_type != agent_transports[index+1].work_type | agent_transport.shipper.id != agent_transports[index+1].shipper.id | agent_transport.operation_type != agent_transports[index+1].operation_type"
+                        v-else-if="agent_transport.date != agent_transports[index+1].date || agent_transport.work_type != agent_transports[index+1].work_type || agent_transport.shipper.id != agent_transports[index+1].shipper.id || agent_transport.operation_type != agent_transports[index+1].operation_type"
                     >
                         <td colspan=20 class="bg-dark"></td>
                     </tr>
