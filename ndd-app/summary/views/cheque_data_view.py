@@ -136,15 +136,15 @@ def cheque_data_json(json, data):
 
     detail_list = InvoiceDetail.objects.filter(Q(invoice__customer_week=data))
     if customer.work_type == 'normal':
-        container_1 = detail_list.filter(~Q(work_normal__size__contains='2X')).count()
-        container_2 = detail_list.filter(Q(work_normal__size__contains='2X')).count()*2
+        container_1 = detail_list.filter(~Q(work_normal__size__contains='2X') & ~Q(detail__has_key='copy')).count()
+        container_2 = detail_list.filter(Q(work_normal__size__contains='2X') & ~Q(detail__has_key='copy')).count()*2
         json['container'] = container_1 + container_2
     else:
-        container_e_1 = detail_list.filter(Q(work_agent_transport__work_type='ep') & ~Q(work_agent_transport__size__contains='2X')).count()
-        container_e_2 = detail_list.filter(Q(work_agent_transport__work_type='ep') & Q(work_agent_transport__size__contains='2X')).count()*2
+        container_e_1 = detail_list.filter(Q(work_agent_transport__work_type='ep') & ~Q(work_agent_transport__size__contains='2X') & ~Q(detail__has_key='copy')).count()
+        container_e_2 = detail_list.filter(Q(work_agent_transport__work_type='ep') & Q(work_agent_transport__size__contains='2X') & ~Q(detail__has_key='copy')).count()*2
 
-        container_f_1 = detail_list.filter(Q(work_agent_transport__work_type='fc') & ~Q(work_agent_transport__size__contains='2X')).count()
-        container_f_2 = detail_list.filter(Q(work_agent_transport__work_type='fc') & Q(work_agent_transport__size__contains='2X')).count()*2
+        container_f_1 = detail_list.filter(Q(work_agent_transport__work_type='fc') & ~Q(work_agent_transport__size__contains='2X') & ~Q(detail__has_key='copy')).count()
+        container_f_2 = detail_list.filter(Q(work_agent_transport__work_type='fc') & Q(work_agent_transport__size__contains='2X') & ~Q(detail__has_key='copy')).count()*2
 
         container_e = container_e_1 + container_e_2
         container_f = container_f_1 + container_f_2
