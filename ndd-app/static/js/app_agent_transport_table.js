@@ -145,7 +145,7 @@ var agent_transport_table = new Vue( {
         },
         filterAgentTransports() {
             this.require_input = false
-            if(! this.filter_data.date_from || ! this.filter_data.date_to){
+            if((! this.filter_data.booking_no && ! this.filter_data.remark) && (! this.filter_data.date_from || ! this.filter_data.date_to)){
                 this.require_input = true
                 return false
             }
