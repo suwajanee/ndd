@@ -94,23 +94,23 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Booking No</span>
                                 </div>
-                                <input class="form-control text-left" v-model="filter_data.booking_no">
+                                <input class="form-control text-left" :class="{'bg-lightyellow': require_input && !filter_data.booking_no}" v-model="filter_data.booking_no">
                             </div>
                             <div class="input-group container col-lg-9 my-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">REMARK</span>
                                 </div>
-                                <input class="form-control text-left" v-model="filter_data.remark">
+                                <input class="form-control text-left" :class="{'bg-lightyellow': require_input && !filter_data.remark}" v-model="filter_data.remark">
                             </div>
                             <div class="input-group container col-lg-9 my-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">DATE FROM</span>
                                 </div>
-                                <input type="date" class="form-control" :class="{'alert-danger': require_input && !filter_data.date_from}" v-model="filter_data.date_from">
+                                <input type="date" class="form-control" :class="{'bg-lightyellow': require_input && !filter_data.date_from}" v-model="filter_data.date_from">
                                 <div class="input-group-append">
                                     <span class="input-group-text">TO</span>
                                 </div>
-                                <input type="date" class="form-control" :class="{'alert-danger': require_input && !filter_data.date_to}" v-model="filter_data.date_to">
+                                <input type="date" class="form-control" :class="{'bg-lightyellow': require_input && !filter_data.date_to}" v-model="filter_data.date_to">
                             </div>
 
                         {% endverbatim %}
