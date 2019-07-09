@@ -34,6 +34,7 @@ urlpatterns = [
     path('agent-transport/', include('agent_transport.urls')),
     path('customer/', include('customer.urls')),
     path('summary/', include('summary.urls')),
+    path('employee/', include('employee.urls')),
 
     url(r'^dashboard/$', dashboard_view.dashboard_page, name='dashboard-page'),
     url(r'^staff/$', authentication_view.login, name='login'),
