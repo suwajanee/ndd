@@ -46,12 +46,7 @@ img.logo {
     color: #7d7a7a;
 }
 .sidebar-sticky{
-    position: -webkit-sticky;
-    position: sticky;
-    /* top: 48px; */
-    width: 100%;
     height: calc(100vh - 80px);
-    padding-top: .5rem;
     overflow-x: hidden;
     overflow-y: auto;
 }
