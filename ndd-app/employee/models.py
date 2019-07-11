@@ -5,6 +5,7 @@ from django.db import models
 
 class Job(models.Model):
     job_title = models.CharField(max_length=15, blank=True, null=True, default='')
+    ordering = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self) :
         return self.job_title
