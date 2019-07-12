@@ -5,7 +5,6 @@ from django.db import models
 
 class Job(models.Model):
     job_title = models.CharField(max_length=15, blank=True, null=True, default='')
-    ordering = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self) :
         return self.job_title
@@ -30,7 +29,10 @@ class Driver(models.Model):
     pat_pass_expired_date = models.DateField(blank=True, null=True, default=None)
 
     def __str__(self) :
-        return self.employee.first_name + ' ' + self.employee.last_name
+        if self.employee:
+            return self.employee.first_name + ' ' + self.employee.last_name
+        else:
+            return str(self.pk)
 
 
 class Salary(models.Model):
@@ -40,4 +42,7 @@ class Salary(models.Model):
     to_date = models.DateField(blank=True, null=True, default=None)
 
     def __str__(self) :
-        return self.employee.first_name + ' ' + self.employee.last_name
+        if self.employee:
+            return self.employee.first_name + ' ' + self.employee.last_name
+        else:
+            return str(self.pk)
