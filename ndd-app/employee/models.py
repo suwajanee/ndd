@@ -4,7 +4,8 @@ from django.db import models
 # Create your models here.
 
 class Job(models.Model):
-    job_title = models.CharField(max_length=15, blank=True, null=True, default='')
+    job_title = models.CharField(max_length=15, blank=True, null=True)
+    number = models.CharField(max_length=2, blank=True, null=True, default='0')
 
     def __str__(self) :
         return self.job_title
@@ -15,7 +16,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=True, null=True, default='')
     birth_date = models.DateField(blank=True, null=True, default=None)
     hire_date = models.DateField(blank=True, null=True, default=None)
-    status = models.CharField(max_length=100, blank=True, null=True, default='')
+    status = models.CharField(max_length=10, blank=True, null=True, default='')
     job = models.ForeignKey(Job, on_delete=models.SET_NULL, null=True, blank=True)
     detail = JSONField(null=True, blank=True, default=dict)
 
