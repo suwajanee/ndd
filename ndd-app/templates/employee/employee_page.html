@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Employee {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_employee.css' %}" />
+{% endblock %}
+
+{% block content %}
+    
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
+            <div class="sidebar-sticky px-3">
+                <h6 class="sidebar-heading">
+                    <span>Job</span>
+                </h6>
+                <a class="nav-link" href="#">
+                    All
+                    <span class="badge badge-pill badge-primary float-right">10</span>
+                </a>
+                <a class="nav-link active" href="#">
+                    <i class="fas fa-angle-right"></i>&nbsp; Officer
+                    <span class="badge badge-pill badge-primary float-right">10</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-angle-right"></i>&nbsp; Driver
+                    <span class="badge badge-pill badge-primary float-right">50</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-angle-right"></i>&nbsp; Mechanic
+                    <span class="badge badge-pill badge-primary float-right">5</span>
+                </a>
+
+                <h6 class="sidebar-heading">
+                    <span>Other</span>
+                </h6>
+                <a class="nav-link" href="#">
+                    Don't active
+                    <span class="badge badge-pill badge-secondary float-right">10</span>
+                </a>
+                <a class="nav-link" href="#">
+                    Salary
+                </a>
+
+                <!-- <h6 class="sidebar-heading">
+                    <span>Salary</span>
+                </h6>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-caret-right"></i>&nbsp; Salary
+                </a> -->
+            </div>
+        </aside>
+
+        <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0 bg-white border-bottom">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Employee</li>
+                </ol>
+            </nav>
+            <div class="m-5 row">
+                <table class="table table-hover table-bordered col-9 container">
+                    <thead>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Tel
+                        </th>
+                        <th>
+                            Account
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                Suwajanee Janchote
+                            </td>
+                            <td>
+                                0850474117
+                            </td>
+                            <td>
+                                1234567894
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <div class="row m-5">
+                <div class="col">
+                    <div class="card border rounded">
+                        <div class="card-body">
+                            <h4 class="card-title">Officer</h4>
+                            <p class="card-text">Some example text. Some example text.</p>
+                            <a href="#" class="card-link">Card link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border rounded">
+                        <div class="card-body">
+                            <h4 class="card-title">Driver</h4>
+                            <p class="card-text">Some example text. Some example text.</p>
+                            <a href="#" class="card-link">Card link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border rounded">
+                        <div class="card-body">
+                            <h4 class="card-title">Mechanic</h4>
+                            <p class="card-text">Some example text. Some example text.</p>
+                            <a href="#" class="card-link">Card link</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </main>
+    </div>
+</div>
+
+
+
+    
+{% endblock %}
