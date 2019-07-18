@@ -147,7 +147,7 @@
 
                             <fieldset class="add_form">
                                 <legend class="add_form">ตัดหาง / ยกลง</legend>
-                                <div class="container input-group mb-2 col-sm-8">
+                                <div class="container input-group mb-2 col-sm-11">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <div class="custom-control custom-checkbox">
@@ -163,7 +163,7 @@
                                     <div class="input-group-append">
                                         <span class="input-group-text">RETURN DATE</span>
                                     </div>
-                                    <input type="date" class="form-control" v-model="booking_add_form.return_date" :disabled="nextday==false">
+                                    <input type="date" class="form-control" style="min-width: 160px;" v-model="booking_add_form.return_date" :disabled="nextday==false">
                                     <div class="input-group-append">
                                         <span class="input-group-text">TIME</span>
                                     </div>
