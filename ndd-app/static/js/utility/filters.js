@@ -39,3 +39,35 @@ Vue.filter('currencyCommas', function(price) {
     
     return x1 + '.' + x2
 })
+
+
+Vue.filter('formatTel', function(value) {
+    if(value == null || value == ''){
+        return 
+    }
+
+    let cleaned = ('' + value).replace(/\D/g, '')
+    let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+
+    if (match) {
+        return match[1] + '-' + match[2] + '-' + match[3]
+    };
+
+    return
+})
+
+
+Vue.filter('formatAccount', function(value) {
+    if(value == null || value == ''){
+        return 
+    }
+
+    let cleaned = ('' + value).replace(/\D/g, '')
+    let match = cleaned.match(/^(\d{3})(\d{1})(\d{5})(\d{1})$/)
+
+    if (match) {
+        return match[1] + '-' + match[2] + '-' + match[3] + '-' + match[4]
+    };
+
+    return
+})

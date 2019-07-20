@@ -58,3 +58,9 @@
     border-left: 3px solid #4da3ff;
     background-color: #fdfdfd;
 }
+
+
+input.small-font {
+    font-size: 11px;
+    font-weight: bold;
+}

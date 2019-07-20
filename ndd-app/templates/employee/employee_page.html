@@ -9,28 +9,29 @@
 
 {% block content %}
     
-<div class="container-fluid">
+<div id="employee-page" class="container-fluid">
     <div class="row">
         <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
             <div class="sidebar-sticky px-3">
                 <h6 class="sidebar-heading">
                     <span>Job</span>
                 </h6>
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if not job %}active{% endif %}" href="{% url 'employee-page' %}">
                     All
-                    <span class="badge badge-pill badge-primary float-right">10</span>
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
+
                 </a>
-                <a class="nav-link active" href="#">
+                <a class="nav-link {% if job == 'officer' %}active{% endif %}" href="{% url 'employee-officer-page' %}">
                     <i class="fas fa-angle-right"></i>&nbsp; Officer
-                    <span class="badge badge-pill badge-primary float-right">10</span>
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="officer_count" />
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if job == 'driver' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
                     <i class="fas fa-angle-right"></i>&nbsp; Driver
-                    <span class="badge badge-pill badge-primary float-right">50</span>
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="driver_count" />
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if job == 'mechanic' %}active{% endif %}" href="{% url 'employee-mechanic-page' %}">
                     <i class="fas fa-angle-right"></i>&nbsp; Mechanic
-                    <span class="badge badge-pill badge-primary float-right">5</span>
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="mechanic_count" />
                 </a>
 
                 <h6 class="sidebar-heading">
@@ -38,18 +39,11 @@
                 </h6>
                 <a class="nav-link" href="#">
                     Don't active
-                    <span class="badge badge-pill badge-secondary float-right">10</span>
                 </a>
                 <a class="nav-link" href="#">
                     Salary
                 </a>
 
-                <!-- <h6 class="sidebar-heading">
-                    <span>Salary</span>
-                </h6>
-                <a class="nav-link" href="#">
-                    <i class="fas fa-caret-right"></i>&nbsp; Salary
-                </a> -->
             </div>
         </aside>
 
@@ -57,11 +51,17 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb m-0 bg-white border-bottom">
                     <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Employee</li>
+                    {% if job %}
+                        <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ job|title }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item active" aria-current="page">Employee</li>
+                    {% endif %}
                 </ol>
             </nav>
-            <div class="m-5 row">
-                <table class="table table-hover table-bordered col-9 container">
+            <h2 class="mt-5 text-center">{{ job|title }}</h2>
+            <div class="mt-4 row">
+                <table class="table table-hover table-bordered col-9 container text-center">
                     <thead>
                         <th>
                             #
@@ -69,7 +69,7 @@
                         <th>
                             Name
                         </th>
-                        <th>
+                        <th v-if="!job">
                             Job
                         </th>
                         <th>
@@ -80,60 +80,44 @@
                         </th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                Suwajanee Janchote
-                            </td>
-                            <td>
-                                Officer
-                            </td>
-                            <td>
-                                0850474117
-                            </td>
-                            <td>
-                                1234567894
-                            </td>
+                        <tr v-for="(emp, index) in employees">
+                            {% verbatim %}
+                                <td>
+                                    {{ index+1 }}
+                                </td>
+                                <td class="text-left">
+                                    {{ emp.first_name }} {{ emp.last_name }}
+                                </td>
+                                <td v-if="!job">
+                                    {{ emp.job.job_title }}
+                                </td>
+                                <td>
+                                    {{ emp.detail.tel|formatTel }}
+                                </td>
+                                <td>
+                                    {{ emp.detail.account|formatAccount }}
+                                </td>
+                            {% endverbatim %}
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- <div class="row m-5">
-                <div class="col">
-                    <div class="card border rounded">
-                        <div class="card-body">
-                            <h4 class="card-title">Officer</h4>
-                            <p class="card-text">Some example text. Some example text.</p>
-                            <a href="#" class="card-link">Card link</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border rounded">
-                        <div class="card-body">
-                            <h4 class="card-title">Driver</h4>
-                            <p class="card-text">Some example text. Some example text.</p>
-                            <a href="#" class="card-link">Card link</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border rounded">
-                        <div class="card-body">
-                            <h4 class="card-title">Mechanic</h4>
-                            <p class="card-text">Some example text. Some example text.</p>
-                            <a href="#" class="card-link">Card link</a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </main>
     </div>
 </div>
 
 
+<script type="application/javascript" src="{% static 'js/app_employee_page.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+
+<script type="application/javascript">
+
+    window.addEventListener("load", function() {   
+        employee_page.reload("{{ job }}");
+    });
+
+</script>
 
     
 {% endblock %}
