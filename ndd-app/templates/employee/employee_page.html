@@ -16,10 +16,9 @@
                 <h6 class="sidebar-heading">
                     <span>Job</span>
                 </h6>
-                <a class="nav-link {% if not job %}active{% endif %}" href="{% url 'employee-page' %}">
+                <a class="nav-link {% if not job and not page %}active{% endif %}" href="{% url 'employee-page' %}">
                     All
                     <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
-
                 </a>
                 <a class="nav-link {% if job == 'officer' %}active{% endif %}" href="{% url 'employee-officer-page' %}">
                     <i class="fas fa-angle-right"></i>&nbsp; Officer
@@ -37,10 +36,11 @@
                 <h6 class="sidebar-heading">
                     <span>Other</span>
                 </h6>
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if page == 'not_active' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
                     Don't active
+                    <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="not_active_count" />
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
                     Salary
                 </a>
 
@@ -51,56 +51,17 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb m-0 bg-white border-bottom">
                     <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                    {% if job %}
+                    {% if job or page %}
                         <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ job|title }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
                     {% else %}
                         <li class="breadcrumb-item active" aria-current="page">Employee</li>
                     {% endif %}
                 </ol>
             </nav>
-            <h2 class="mt-5 text-center">{{ job|title }}</h2>
+            <h2 class="mt-5 text-center">{{ title }}</h2>
             <div class="mt-4 row">
-                <table class="table table-hover table-bordered col-9 container text-center">
-                    <thead>
-                        <th>
-                            #
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th v-if="!job">
-                            Job
-                        </th>
-                        <th>
-                            Tel
-                        </th>
-                        <th>
-                            Account
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(emp, index) in employees">
-                            {% verbatim %}
-                                <td>
-                                    {{ index+1 }}
-                                </td>
-                                <td class="text-left">
-                                    {{ emp.first_name }} {{ emp.last_name }}
-                                </td>
-                                <td v-if="!job">
-                                    {{ emp.job.job_title }}
-                                </td>
-                                <td>
-                                    {{ emp.detail.tel|formatTel }}
-                                </td>
-                                <td>
-                                    {{ emp.detail.account|formatAccount }}
-                                </td>
-                            {% endverbatim %}
-                        </tr>
-                    </tbody>
-                </table>
+                {% include 'employee/employee_detail.html' %}
             </div>
         </main>
     </div>
@@ -114,7 +75,7 @@
 <script type="application/javascript">
 
     window.addEventListener("load", function() {   
-        employee_page.reload("{{ job }}");
+        employee_page.reload("{{ job }}", "{{ page }}");
     });
 
 </script>

@@ -4,11 +4,16 @@ var employee_page = new Vue( {
     data: {
         employees: [],
         job: '',
+        today: new Date(),
+        date_compare: new Date(),
 
         emp_count: 0,
         officer_count: 0,
         driver_count: 0,
         mechanic_count: 0,
+        not_active_count: 0,
+
+        edit: false,
         // month_list: [],
 
         // min_date: '',
@@ -21,7 +26,7 @@ var employee_page = new Vue( {
         // date_to: '',
 
         // mode: 'due',
-        // edit: false,
+        // edit: false, 
         // loading: false,
 
         // cheque_list: [],
@@ -33,16 +38,23 @@ var employee_page = new Vue( {
     },
 
     methods: {
-        reload(job) {
-            // this.getYears()
-            // this.month_list = _month
+        reload(job, page) {
 
-            // var today = new Date()
-            // this.year = today.getUTCFullYear()
-            // this.month = today.getUTCMonth() + 1
-            this.getEmployees(job)
             this.getEmployeeCount()
 
+            if(! page) {
+                this.getEmployees(job)
+                this.date_compare.setDate(this.today.getDate() + 8)
+            }
+            else {
+                if(page == 'not_active') {
+                    this.getNotActiveEmployee()
+                }
+                else if(page == 'salary') {
+                    this.getEmployeeSalary()
+                }
+
+            }
         },
         getEmployeeCount() {
             api("/employee/api/get-employee-count/").then((data) => {
@@ -50,66 +62,65 @@ var employee_page = new Vue( {
                 this.officer_count = data.officer
                 this.driver_count = data.driver
                 this.mechanic_count = data.mechanic
-            }) 
+                this.not_active_count = data.not_active
+            })
         },
+        
         getEmployees(job) {
             if(job) {
                 this.job = job
                 api("/employee/api/get-employee/", "POST", {job: job}).then((data) => {
                     this.employees = data
-                }) 
+                    this.employeeData()
+                })
             }
             else {
                 this.job = ''
                 api("/employee/api/get-employee/").then((data) => {
                     this.employees = data
-                }) 
-            } 
+                    this.employeeData()
+                })
+            }
         },
-        // getCheque() {
-        //     this.date_from = ''
-        //     this.date_to = ''
+        getNotActiveEmployee(){
+            this.job = ''
+            api("/employee/api/get-not-active-employee/").then((data) => {
+                this.employees = data
+            })
+        },
+        getEmployeeSalary(){
+            this.job = ''
+            api("/employee/api/get-employee-salary/").then((data) => {
+                this.employees = data
+            })
+        },
 
-        //     var last_day = new Date(this.year, this.month, 0).getDate()
-        //     var month = (this.month<10?'0':'') + this.month
-        //     this.min_date = this.year + '-' + month + '-01'
-        //     this.max_date = this.year + '-' + month + '-' + last_day
+        employeeData() {
+            if(this.job == 'driver'){
+                this.employees.forEach(function(emp) {
+                    emp.age = employee_page.calcYear(emp.birth_date)
+                    emp.work_period = employee_page.calcYear(emp.hire_date)
+                    if(emp.pat_pass_expired_date) {
+                        emp.pat_pass_expired_date = new Date(emp.pat_pass_expired_date)
+                    }
+                    else {
+                        emp.pat_pass_expired_date = ''
+                    }
+                })
+            }
+            else {
+                this.employees.forEach(function(emp) {
+                    emp.age = employee_page.calcYear(emp.birth_date)
+                    emp.work_period = employee_page.calcYear(emp.hire_date)
+                })
+            }
+        },
+        calcYear(date_string) {
+            if(date_string) {
+                var date = new Date(date_string)
+                return Math.floor((Date.now() - date) / (31557600000))
+            }
+        }
 
-        //     this.getChequeData(this.mode)
-        // },
-        // getChequeData(mode) {
-        //     this.loading = true
-        //     this.mode = mode
-        //     api("/summary/api/get-cheque-data/", "POST", {year: this.year, month: this.month, date_from: this.date_from, date_to: this.date_to, mode: mode}).then((data) => {
-        //         this.cheque_list = data.detail
-        //         this.today = data.today
-        //         this.due_total = data.due_total
-        //         this.accept_total = data.accept_total
-
-        //         this.totalCalc()
-        //         this.loading = false 
-        //     })
-        // },
-        // totalCalc() {
-        //     var total = 0
-        //     this.cheque_list.forEach(function(cheque) {
-        //         total += parseFloat(cheque.total)
-        //     })
-        //     this.total = total
-        // },
-
-        // editData(cheque) {
-        //     if(this.edit_data.indexOf(cheque) === -1) {
-        //         this.edit_data.push(cheque)
-        //     }
-        // },
-        // saveEditChequeAcceptDate() {
-        //     if(this.edit_data.length){
-        //         api("/summary/api/edit-cheque-accept-date/", "POST", { cheque_details: this.edit_data }).then((data) => {
-        //             this.getChequeData(this.mode)
-        //         })
-        //     }
-        //     this.edit = false
-        // },
     }
 })
