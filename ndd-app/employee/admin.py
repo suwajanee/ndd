@@ -6,7 +6,7 @@ from .models import Salary
 
 # Register your models here.
 class JobAdmin(admin.ModelAdmin):
-    list_display = ('job_title', 'number')
+    list_display = ('job_title', 'number', 'starting_salary')
     ordering = ('number',)
 
 
