@@ -41,16 +41,8 @@ def api_get_cheque_data(request):
                 filter_dict = {
                     'date_due__lte': today,
                     'date_accept__isnull': True
-                }  
-                date_due = {
-                    'date_due__month': month,
-                    'date_due__year': year,
-                }
-                date_accept = {
-                    'date_accept__month': month,
-                    'date_accept__year': year
-                }               
-                summary_list = SummaryCustomer.objects.filter(Q(**filter_dict) | (~Q(**date_due) & Q(**date_accept))).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer', 'week__week')
+                }                
+                summary_list = SummaryCustomer.objects.filter(Q(**filter_dict)).order_by('date_due', 'customer_main__name', 'customer_custom__sub_customer', 'week__week')
                 
             data_list = []
             for summary in summary_list:
