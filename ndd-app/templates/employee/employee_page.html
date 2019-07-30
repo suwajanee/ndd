@@ -59,6 +59,9 @@
                     {% endif %}
                 </ol>
             </nav>
+            {% if not page %}
+                <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> Add</button>
+            {% endif %}
             <h2 class="mt-5 text-center">{{ title }}</h2>
             <div class="mt-4 row">
                 {% include 'employee/employee_detail.html' %}

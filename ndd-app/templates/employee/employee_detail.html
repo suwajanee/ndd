@@ -54,14 +54,19 @@
                     <td>
                         {{ emp.license_type }}
                     </td>
-                    <td :class="{'table-warning': emp.pat_pass_expired_date && (date_compare > emp.pat_pass_expired_date)}" style="max-width: 100px;">
+                    <td :class="{'table-warning': emp.pat_expired && (date_compare > emp.pat_expired)}" style="max-width: 100px;">
                         <input v-if="edit" type="date" class="form-control">
                         <template v-else>
-                            {{ emp.pat_pass_expired_date|formatDate }}
+                            {{ emp.pat_expired|formatDate }}
                         </template>
                     </td>
                     <td class="border-white bg-white" style="width: 60px;">
-                        <button class="btn btn-sm btn-outline-warning rounded-circle py-1"><i class="fas fa-info"></i></button>
+                        <button 
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(emp.employee, emp.license_type, emp.pat_pass_expired_date)"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
                     </td>
                 {% endverbatim %} 
             {% elif page == 'salary' %}
@@ -106,7 +111,12 @@
                         {{ emp.detail.account|formatAccount }}
                     </td>
                     <td class="border-white bg-white" style="width: 60px;">
-                        <button class="btn btn-sm btn-outline-warning rounded-circle py-1"><i class="fas fa-info"></i></button>
+                        <button 
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(emp)"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
                     </td>
                 {% endverbatim %}       
             {% endif %}
@@ -121,3 +131,5 @@
     </tbody>
     
 </table>
+
+{% include 'employee/employee_modal.html' %}

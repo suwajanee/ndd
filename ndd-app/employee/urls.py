@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import employee_data_view
 from .views import employee_page_view
+from .views import employee_add_view
 
 
 urlpatterns = [
@@ -18,5 +19,7 @@ urlpatterns = [
 
     url(r'^api/get-not-active-employee/$', employee_data_view.api_get_not_active_employee, name='api-get-not-active-employee'),
     url(r'^api/get-employee-salary/$', employee_data_view.api_get_employee_salary, name='api-get-employee-salary'),
+    
+    url(r'^api/add-employee/$', employee_add_view.api_add_employee, name='api-add-employee'),
 
 ]
