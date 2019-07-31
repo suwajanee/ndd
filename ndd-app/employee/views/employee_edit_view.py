@@ -50,6 +50,6 @@ def api_edit_employee(request):
 def edit_employee_driver(emp_data):
     driver = Driver.objects.get(id=emp_data['driver_id'])
     driver.license_type = emp_data['license_type']
-    driver.pat_pass_expired_date = emp_data['pat_pass_expired_date']
+    driver.pat_pass_expired_date = emp_data['pat_pass_expired_date'] or None
     driver.save()
     return driver

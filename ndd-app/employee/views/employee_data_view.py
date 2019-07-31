@@ -98,7 +98,7 @@ def api_get_employee_salary(request):
     if request.user.is_authenticated:
         if request.method == "GET":
 
-            employee = Salary.objects.filter(employee__status='active').order_by('employee__job__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
+            employee = Salary.objects.filter(employee__status='active', to_date=None).order_by('employee__job__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
             serializer = SalarySerializer(employee, many=True)
         
             return JsonResponse(serializer.data, safe=False)
