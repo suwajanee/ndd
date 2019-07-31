@@ -3,6 +3,7 @@ from django.conf.urls import url
 from .views import employee_data_view
 from .views import employee_page_view
 from .views import employee_add_view
+from .views import employee_edit_view
 
 
 urlpatterns = [
@@ -21,5 +22,6 @@ urlpatterns = [
     url(r'^api/get-employee-salary/$', employee_data_view.api_get_employee_salary, name='api-get-employee-salary'),
     
     url(r'^api/add-employee/$', employee_add_view.api_add_employee, name='api-add-employee'),
+    url(r'^api/edit-employee/$', employee_edit_view.api_edit_employee, name='api-edit-employee'),
 
 ]

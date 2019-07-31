@@ -77,7 +77,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">JOB TITLE</span>
                         </div>
-                        <select class="custom-select" v-model="emp_data.job" :class="{'alert-danger': input_required == true & emp_data.job == ''}">
+                        <select class="custom-select" v-model="emp_data.job" :class="{'alert-danger': input_required == true & emp_data.job == ''}" :disabled="emp_data.id">
                             <option value="">--------</option>
                             <option value="officer">Officer</option>
                             <option value="driver">Driver</option>
@@ -89,7 +89,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">LICENSE TYPE</span>
                         </div>
-                        <select class="custom-select col-2" style="height: 40px;" v-model="emp_data.license_type">
+                        <select class="custom-select col-2" v-model="emp_data.license_type">
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
@@ -128,7 +128,7 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">FIRE DATE</span>
                                 </div>
-                                <input type="date" class="form-control" v-model="emp_data.fire_date">
+                                <input type="date" class="form-control" :class="{'alert-danger': input_required == true & emp_data.fire_date == ''}" v-model="emp_data.fire_date">
                             </template>
                         </div>
                     </template>
@@ -140,7 +140,7 @@
                 <button v-if="modal_add_mode" class="btn btn-primary" @click="addEmployees">Add</button>
                 <template v-else>
                     <button class="btn btn-link text-danger mr-auto mx-5">Remove Employee</button>
-                    <button class="btn btn-primary mx-5">Save</button>
+                    <button class="btn btn-primary mx-5" @click="editEmployees">Save</button>
 
                 </template>
             </div>

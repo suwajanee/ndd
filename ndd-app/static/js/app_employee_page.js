@@ -203,13 +203,29 @@ var employee_page = new Vue( {
             this.input_required = false
             if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || this.emp_data.job == ''){
                 this.input_required = true
-                return false;
+                return false
             }
             else {
                 api("/employee/api/add-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.job, this.page)
-                        $('#modalEmployee').modal('hide');
+                        $('#modalEmployee').modal('hide')
+                    }
+                })
+            }
+        },
+
+        editEmployees() {
+            this.input_required = false
+            if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || (this.emp_data.status == 'terminated' && this.emp_data.fire_date == '')){
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/employee/api/edit-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.job, this.page)
+                        $('#modalEmployee').modal('hide')
                     }
                 })
             }
