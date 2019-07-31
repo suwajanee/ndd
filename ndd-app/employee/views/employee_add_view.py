@@ -10,8 +10,6 @@ from ..models import Driver
 from ..models import Employee
 from ..models import Job
 from ..models import Salary
-from ..serializers import DriverSerializer
-from ..serializers import EmployeeSerializer
 
 
 @csrf_exempt
@@ -23,11 +21,6 @@ def api_add_employee(request):
 
             job_title = emp_data['job']
             job = Job.objects.get(job_title=job_title)
-
-            # if not emp_data['birth_date']:
-            #     emp_data['birth_date'] = None
-            # if not emp_data['hire_date']:
-            #     emp_data['hire_date'] = None
             
             data = {
                 'first_name': emp_data['first_name'],
@@ -50,7 +43,6 @@ def api_add_employee(request):
             if job_title == 'driver':
                 add_employee_driver(employee, emp_data)
 
-
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
 
@@ -68,7 +60,6 @@ def add_employee_starting_salary(emp, salary):
     return salary
 
 def add_employee_driver(emp, emp_data):
-    print(emp_data)
     data = {
         'employee': emp,
         'license_type': emp_data['license_type'] or '3',
