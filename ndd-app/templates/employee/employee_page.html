@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block content %}
-    
+
+{% load has_group %}
 <div id="employee-page" class="container-fluid">
     <div class="row">
         <aside class="col-md-2 d-none d-md-block bg-light sidebar px-0" style="overflow-y: auto;">
@@ -40,9 +41,11 @@
                     Don't active
                     <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="not_active_count" />
                 </a>
-                <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
-                    Salary
-                </a>
+                {% if request.user|has_group:'salary_change' %}
+                    <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
+                        Salary
+                    </a>
+                {% endif %}
 
             </div>
         </aside>
