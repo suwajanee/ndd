@@ -18,40 +18,22 @@ var employee_page = new Vue( {
         not_active_count: 0,
         not_active_except_driver: 0,
 
-        edit: false,
+        edit_table: false,
+        edit_data: [],
 
         modal_add_mode: true,
         input_required: false,
         emp_data: {
             job: '',
         },
-        // month_list: [],
 
-        // min_date: '',
-        // max_date: '',
-
-        // today: '',
-        // year: '',
-        // month: '',
-        // date_from: '',
-        // date_to: '',
-
-        // mode: 'due',
-        // edit: false, 
-        // loading: false,
-
-        // cheque_list: [],
-        // total: 0,
-        // due_total: 0,
-        // accept_total: 0,
-
-        // edit_data: [],
     },
 
     methods: {
         reload(job, page) {
 
             this.getEmployeeCount()
+            this.edit_data = []
 
             if(! page) {
                 this.getEmployees(job)
@@ -229,6 +211,22 @@ var employee_page = new Vue( {
                     }
                 })
             }
+        },
+        editData(driver) {
+            if(this.edit_data.indexOf(driver) === -1) {
+                this.edit_data.push(driver)
+            }
+        },
+        editPatExpiredDriver() {
+            if(this.edit_data){
+                api("/employee/api/edit-pat-expired-driver/", "POST", {drivers: this.edit_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.job, this.page)
+                        
+                    }
+                })
+            }
+            this.edit_table = false
         },
 
         deleteEmployees(emp_id) {

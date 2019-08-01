@@ -46,10 +46,25 @@ def api_edit_employee(request):
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
 
-
 def edit_employee_driver(emp_data):
     driver = Driver.objects.get(id=emp_data['driver_id'])
     driver.license_type = emp_data['license_type']
     driver.pat_pass_expired_date = emp_data['pat_pass_expired_date'] or None
     driver.save()
     return driver
+
+
+@csrf_exempt
+def api_edit_pat_expired_driver(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            drivers = req['drivers']
+
+            for driver in drivers:
+                driver_data = Driver.objects.get(pk=driver['id'])
+                driver_data.pat_pass_expired_date = driver['pat_pass_expired_date'] or None
+                driver_data.save()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)

@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'^api/edit-employee/$', employee_edit_view.api_edit_employee, name='api-edit-employee'),
     url(r'^api/delete-employee/$', employee_delete_view.api_delete_employee, name='api-delete-employee'),
 
+    url(r'^api/edit-pat-expired-driver/$', employee_edit_view.api_edit_pat_expired_driver, name='api-edit-pat-expired-driver'),
+
 ]
