@@ -12,7 +12,7 @@ class JobAdmin(admin.ModelAdmin):
 
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'birth_date', 'hire_date', 'job', 'detail', 'status')
-    ordering = ('first_name', 'last_name')
+    ordering = ('job__number', 'first_name', 'last_name')
     search_fields = ['first_name', 'last_name']
 
 
@@ -23,7 +23,7 @@ class DriverAdmin(admin.ModelAdmin):
 
 class SalaryAdmin(admin.ModelAdmin):
     list_display = ('employee', 'salary', 'from_date', 'to_date')
-    ordering = ('employee__first_name', 'employee__last_name')
+    ordering = ('employee__job__number', 'employee__first_name', 'employee__last_name')
 
 
 admin.site.register(Job, JobAdmin)

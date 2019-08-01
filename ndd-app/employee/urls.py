@@ -4,6 +4,7 @@ from .views import employee_data_view
 from .views import employee_page_view
 from .views import employee_add_view
 from .views import employee_edit_view
+from .views import employee_delete_view
 
 
 urlpatterns = [
@@ -23,5 +24,6 @@ urlpatterns = [
     
     url(r'^api/add-employee/$', employee_add_view.api_add_employee, name='api-add-employee'),
     url(r'^api/edit-employee/$', employee_edit_view.api_edit_employee, name='api-edit-employee'),
+    url(r'^api/delete-employee/$', employee_delete_view.api_delete_employee, name='api-delete-employee'),
 
 ]

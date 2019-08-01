@@ -231,6 +231,17 @@ var employee_page = new Vue( {
             }
         },
 
+        deleteEmployees(emp_id) {
+            if (confirm('Are you sure?')){
+                api("/employee/api/delete-employee/", "POST", {emp_id: emp_id}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.job, this.page)
+                        $('#modalEmployee').modal('hide')
+                    }
+                })
+            }
+        },
+
 
     }
 })
