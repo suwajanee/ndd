@@ -103,3 +103,16 @@ def api_get_employee_salary(request):
         
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_salary_history(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            emp_id = req['emp_id']
+
+            salary = Salary.objects.filter(employee__pk=emp_id).order_by('-from_date', '-pk')
+            serializer = SalarySerializer(salary, many=True)
+        
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)

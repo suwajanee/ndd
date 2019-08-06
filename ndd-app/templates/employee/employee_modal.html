@@ -1,4 +1,4 @@
-<!-- POPUP : Add new employee -->
+<!-- POPUP : Employee Data -->
 <div class="modal fade" id="modalEmployee" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -135,11 +135,10 @@
 
                 </div>
             </div>
-            <div class="modal-footer d-flex justify-content-center">
-                
+            <div class="modal-footer d-flex justify-content-center">    
                 <button v-if="modal_add_mode" class="btn btn-primary" @click="addEmployees">Add</button>
                 <template v-else>
-                    <button class="btn btn-link text-danger mr-auto mx-5" @click="deleteEmployees(emp_data.id)">Remove Employee</button>
+                    <button class="btn btn-link text-danger mr-auto mx-5" @click="deleteEmployees(emp_data.id)">Delete Employee</button>
                     <button class="btn btn-primary mx-5" @click="editEmployees">Save</button>
                 </template>
             </div>

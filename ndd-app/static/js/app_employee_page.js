@@ -26,6 +26,8 @@ var employee_page = new Vue( {
         emp_data: {
             job: '',
         },
+        salary_data: {},
+        salary_history: [],
 
     },
 
@@ -34,6 +36,7 @@ var employee_page = new Vue( {
 
             this.getEmployeeCount()
             this.edit_data = []
+            this.input_required = false
 
             if(! page) {
                 this.getEmployees(job)
@@ -138,11 +141,12 @@ var employee_page = new Vue( {
                 var year =  Math.floor(diff_date / (31536000000))
                 var month = Math.floor((diff_date % 31536000000)/2628000000)
 
-                return year + '/' + month
+                return year + 'y ' + month + 'm'
             }
         },
 
         employeeModal(emp, driver) {
+            this.input_required = false
             if(emp) {
                 this.modal_add_mode = false
                 this.emp_data = {
@@ -150,8 +154,8 @@ var employee_page = new Vue( {
                     first_name: emp.first_name,
                     last_name: emp.last_name,
                     birth_date: emp.birth_date,
-                    tel: emp.detail.tel,
-                    account: emp.detail.account,
+                    tel: emp.detail.tel || '',
+                    account: emp.detail.account || '',
                     hire_date: emp.hire_date,
                     job: emp.job.job_title,
                     status: emp.status,
@@ -179,6 +183,23 @@ var employee_page = new Vue( {
                     pat_pass_expired_date: '',
                 }
             }
+        },
+        salaryModal(emp, salary) {
+            this.input_required = false
+            var emp_id = emp.id
+            this.salary_data = {
+                emp_id: emp_id,
+                salary_id: salary.id,
+                first_name: emp.first_name,
+                last_name: emp.last_name,
+                account: emp.detail.account,
+                old_salary: salary.salary,
+                new_salary: '',
+                edit_salary: false,
+            }
+            api("/employee/api/get-salary-history/", "POST", {emp_id: emp_id}).then((data) => {
+                this.salary_history = data
+            })
         },
 
         addEmployees() {
@@ -222,11 +243,30 @@ var employee_page = new Vue( {
                 api("/employee/api/edit-pat-expired-driver/", "POST", {drivers: this.edit_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.job, this.page)
-                        
                     }
                 })
             }
             this.edit_table = false
+        },
+
+        editSalary() {
+            this.input_required = false
+            if(isNaN(parseFloat(this.salary_data.new_salary))) {
+                this.input_required = true
+                return false
+            }
+            else if(parseFloat(this.salary_data.old_salary) == parseFloat(this.salary_data.new_salary) || this.salary_data.new_salary == '') {
+                $('#modalEmployeeSalary').modal('hide')
+                return false
+            }
+            else {
+                api("/employee/api/edit-salary/", "POST", {emp_id: this.salary_data.emp_id, salary_id: this.salary_data.salary_id, new_salary: this.salary_data.new_salary}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.job, this.page)
+                        $('#modalEmployeeSalary').modal('hide')
+                    }
+                })
+            }
         },
 
         deleteEmployees(emp_id) {

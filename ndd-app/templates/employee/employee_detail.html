@@ -32,9 +32,6 @@
                 Salary
             </th>
         {% endif %}
-        <!-- <th style="width: 60px;">
-            Edit
-        </th> -->
     </thead>
     <tbody v-if="employees.length || drivers.length">
         
@@ -94,7 +91,12 @@
                             {{ emp.salary|currencyCommas }}
                         </td>
                         <td class="border-white bg-white" style="width: 60px;">
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-history"></i></button>
+                            <button class="btn btn-sm btn-outline-primary"
+                                data-toggle="modal" data-target="#modalEmployeeSalary"
+                                @click="salaryModal(emp.employee, emp)"
+                            >
+                                <i class="fas fa-history"></i>
+                            </button>
                         </td>
                     {% endverbatim %} 
                 </tr>
@@ -172,3 +174,4 @@
 </table>
 
 {% include 'employee/employee_modal.html' %}
+{% include 'employee/employee_modal_salary.html' %}

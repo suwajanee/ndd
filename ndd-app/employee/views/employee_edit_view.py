@@ -68,3 +68,32 @@ def api_edit_pat_expired_driver(request):
 
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
+
+
+@csrf_exempt
+def api_edit_employee_salary(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            salary_id = req['salary_id']
+            emp_id = req['emp_id']
+            new_salary = req['new_salary']
+
+            today = datetime.now()
+
+            old_salary = Salary.objects.get(pk=salary_id)
+            old_salary.to_date = today
+            old_salary.save()
+
+            data = {
+                'employee': Employee.objects.get(pk=emp_id),
+                'salary': float(new_salary),
+                'from_date': today
+            }
+
+            salary = Salary(**data)
+            salary.save()
+
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
