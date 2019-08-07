@@ -86,7 +86,7 @@ var customer_page = new Vue( {
             else{
                 api("/customer/api/save-add-customer/", "POST", { customer: this.add_customer_form }).then((data) => {
                     this.getPrincipals(data)
-                    $('#modalAddCustomer').modal('hide');
+                    $('#modalAddCustomer').modal('hide')
                     this.add_customer_form.name = ''
                     this.add_customer_form.work_type = 'normal'   
                 })

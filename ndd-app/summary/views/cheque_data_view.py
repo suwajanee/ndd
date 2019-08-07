@@ -70,13 +70,8 @@ def api_edit_cheque_accept_date(request):
             cheque_details = req['cheque_details']
 
             for detail in cheque_details:
-                date_accept = detail['date_accept']
-
                 summary_customer = SummaryCustomer.objects.get(pk=detail['id'])
-                if not date_accept:
-                    date_accept = None
-
-                summary_customer.date_accept = date_accept
+                summary_customer.date_accept = detail['date_accept'] or None
                 summary_customer.save()
 
             return JsonResponse(True, safe=False)
