@@ -7,8 +7,6 @@ class Job(models.Model):
     job_title = models.CharField(max_length=15, blank=True, null=True)
     number = models.CharField(max_length=2, blank=True, null=True, default='0')
 
-    starting_salary = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-
     def __str__(self) :
         return self.job_title
 
