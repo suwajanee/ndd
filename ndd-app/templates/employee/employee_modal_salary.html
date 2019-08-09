@@ -38,7 +38,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">NEW SALARY</span>
                         </div>
-                        <input type="number" class="form-control" v-model="salary_data.new_salary" :class="{'alert-danger': input_required}" :readonly="! salary_data.edit_salary">
+                        <input type="number" class="form-control" v-model="salary_data.new_salary" min=0 :class="{'alert-danger': input_required}" :readonly="! salary_data.edit_salary">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <input type="checkbox" style="outline: none;" v-model="salary_data.edit_salary">
