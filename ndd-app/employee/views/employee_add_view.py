@@ -38,7 +38,7 @@ def api_add_employee(request):
             employee = Employee(**data)
             employee.save()
 
-            add_employee_starting_salary(employee, job.starting_salary)
+            add_employee_starting_salary(employee, emp_data['salary'])
 
             if job_title == 'driver':
                 add_employee_driver(employee, emp_data)
@@ -50,7 +50,7 @@ def api_add_employee(request):
 def add_employee_starting_salary(emp, salary):  
     data = {
         'employee': emp,
-        'salary': salary,
+        'salary': float(salary) or 0,
         'from_date': emp.hire_date or datetime.now()
     }
 

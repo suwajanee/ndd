@@ -178,6 +178,7 @@ var employee_page = new Vue( {
                     tel: '',
                     account: '',
                     hire_date: '',
+                    salary: 0,
                     job: this.job,
                     license_type: '3',
                     pat_pass_expired_date: '',
@@ -205,6 +206,10 @@ var employee_page = new Vue( {
         addEmployees() {
             this.input_required = false
             if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || this.emp_data.job == ''){
+                this.input_required = true
+                return false
+            }
+            else if(isNaN(parseFloat(this.emp_data.salary))) {
                 this.input_required = true
                 return false
             }

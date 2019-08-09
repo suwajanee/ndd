@@ -73,6 +73,13 @@
                         <input class="form-control col-2" v-model="emp_data.exp" readonly>
                     </div>
 
+                    <div v-if="modal_add_mode" class="input-group my-3 col-lg-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">SALARY</span>
+                        </div>
+                        <input type="number" class="form-control" v-model="emp_data.salary" min=0 :class="{'alert-danger': input_required == true & isNaN(parseFloat(emp_data.salary))}">
+                    </div>
+
                     <div class="input-group my-2 col-lg-6">
                         <div class="input-group-prepend">
                             <span class="input-group-text">JOB TITLE</span>
@@ -93,20 +100,9 @@
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
-                        <!-- <div class="input-group-append">
-                            <span class="input-group-text">PAT Expired</span>
-                        </div>
-                        <input type="date" class="form-control" v-model="emp_data.pat_pass_expired_date"> -->
                     </div>
 
                     <div v-if="emp_data.job=='driver'" class="input-group mb-3 col-lg-10 px-5">
-                        <!-- <div class="input-group-prepend">
-                            <span class="input-group-text">LICENSE TYPE</span>
-                        </div>
-                        <select class="custom-select col-2" style="height: 40px;" v-model="emp_data.license_type">
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select> -->
                         <div class="input-group-prepend">
                             <span class="input-group-text">PAT Expired</span>
                         </div>
