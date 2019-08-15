@@ -9,6 +9,7 @@
 
 {% block content %}
 
+    {% load has_group %}
     <div id="summary-breadcrumb" >
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
@@ -23,54 +24,64 @@
     </div>
 
     <div id="summary-month-details" >
-        {% verbatim %}
-            <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek">
+        
+            <!-- <button class="btn btn-outline-primary position-absolute m-3" style="right:0px;" data-toggle="modal" data-target="#modalSummaryWeek">
                 <i class="fa fa-plus-circle"></i>&nbsp;Week
-            </button>
-            <div class="row col-md-11">
-                <table v-if="loading==false" class="table table-bordered table-bordered-dark table-hover">
-                    <thead class="text-center">
-                        <th class="align-middle border-dark">Customer Name</th>
-                        
-                        <th v-if="! weeks.length" class="border-dark"></th>
-                        <th v-else v-for="(week, index) in weeks" class="cell-click align-middle border-dark"
-                            :class="{'alert-warning': week.status==0, 'alert-success': week.status==1}" @click="selectWeek(week.week)"
-                        >
-                            WK. {{ week.week }} <br> ( {{ week.date_start|formatDate }} - {{ week.date_end|formatDate }} )
-                        </th>
+            </button> -->
+            <div class="row col-lg-12 p-0">
+                <div class="col-11">
+                    {% verbatim %}
+                        <table v-if="loading==false" class="table table-bordered table-bordered-dark table-hover">
+                            <thead class="text-center">
+                                <th class="align-middle border-dark">Customer Name</th>
+                                
+                                <th v-if="! weeks.length" class="border-dark"></th>
+                                <th v-else v-for="(week, index) in weeks" class="cell-click align-middle border-dark"
+                                    :class="{'alert-warning': week.status==0, 'alert-success': week.status==1}" @click="selectWeek(week.week)"
+                                >
+                                    WK. {{ week.week }} <br> ( {{ week.date_start|formatDate }} - {{ week.date_end|formatDate }} )
+                                </th>
 
-                        <th class="align-middle border-dark"><u>Total</u></th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(month_detail, index) in summary_month_details" class="text-right" :style="'background:'+ month_detail.color">
-                            <td v-if="month_detail.sub_customer" class="text-left align-middle">{{ month_detail.sub_customer }}</td>
-                            <td v-else class="text-left align-middle">{{ month_detail.customer }}</td>
+                                <th class="align-middle border-dark"><u>Total</u></th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(month_detail, index) in summary_month_details" class="text-right" :style="'background:'+ month_detail.color">
+                                    <td v-if="month_detail.sub_customer" class="text-left align-middle">{{ month_detail.sub_customer }}</td>
+                                    <td v-else class="text-left align-middle">{{ month_detail.customer }}</td>
 
-                            <td v-if="! weeks.length" style="min-width:120px;"></td>
-                            <td v-else v-for="(week, week_index) in weeks" class="align-middle" :class="{'bg-secondary': ! month_detail.total[week_index]}" style="min-width:120px;">{{ month_detail.total[week_index]|currencyCommas }}</td>
+                                    <td v-if="! weeks.length" style="min-width:120px;"></td>
+                                    <td v-else v-for="(week, week_index) in weeks" class="align-middle" :class="{'bg-secondary': ! month_detail.total[week_index]}" style="min-width:120px;">{{ month_detail.total[week_index]|currencyCommas }}</td>
 
-                            <td class="align-middle" style="min-width:120px;">{{ total_customer[index]|currencyCommas }}</td>
+                                    <td class="align-middle" style="min-width:120px;">{{ total_customer[index]|currencyCommas }}</td>
 
-                            <td v-if="month_detail.cusotomer_total" class="text-center align-middle"><b>{{ month_detail.cusotomer_total|currencyCommas }}</b></td>
-                        </tr>
+                                    <td v-if="month_detail.cusotomer_total" class="text-center align-middle"><b>{{ month_detail.cusotomer_total|currencyCommas }}</b></td>
+                                </tr>
 
-                        <tr class="text-right" >
-                            <td class="text-center"><u><b>Total</b></u></td>
+                                <tr class="text-right" >
+                                    <td class="text-center"><u><b>Total</b></u></td>
 
-                            <td v-if="! weeks.length"></td>
-                            <td v-else v-for="week in total_week" class="alert-primary"><b>{{ week|currencyCommas }}</b></td>
+                                    <td v-if="! weeks.length"></td>
+                                    <td v-else v-for="week in total_week" class="alert-primary"><b>{{ week|currencyCommas }}</b></td>
 
-                            <td class="bg-lime"><b>{{ total_month|currencyCommas }}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div v-else class="container mt-5">
-                    <div style="color: lightgray;">
-                        <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                                    <td class="bg-lime"><b>{{ total_month|currencyCommas }}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% endverbatim %}
+                    <div v-else class="container mt-5">
+                        <div style="color: lightgray;">
+                            <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                        </div>
                     </div>
                 </div>
+                <div class="col-1 text-right p-0">
+                    <button class="btn btn-outline-primary my-3" data-toggle="modal" data-target="#modalSummaryWeek">
+                        <i class="fa fa-plus-circle"></i>&nbsp;Week
+                    </button>
+                </div>
+
             </div>
-        {% endverbatim %}
+        
 
         {% include 'summary/summary_week_modal.html' %}
 

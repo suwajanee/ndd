@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from .views import cheque_data_view
+from .views import commission_view
 from .views import summary_apll_invoice
 from .views import summary_chart_data
 from .views import summary_customer_custom_view
@@ -28,8 +29,9 @@ urlpatterns = [
     url(r'^(?P<year>\d+)/$', summary_page_view.summary_year_details_page, name='summary-year-details-page'),
     url(r'^(?P<year>\d+)/(?P<month>\d+)/$', summary_page_view.summary_month_details_page, name='summary-month-details-page'),
     url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
-    url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/$', summary_page_view.summary_week_details_page, name='summary-week-details-page'),
     url(r'^(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/(?P<customer>\w+)/$', summary_page_view.summary_invoice_page, name='summary-invoice-page'),
+
+    url(r'^commission/$', summary_page_view.commission_page, name='summary-commission-page'),
 
 
     # Summary Year
@@ -60,6 +62,7 @@ urlpatterns = [
     url(r'^api/add-summary-week/$', summary_week_view.api_add_summary_week, name='api-add-summary-week'),
     url(r'^api/edit-summary-week/$', summary_week_view.api_edit_summary_week, name='api-edit-summary-week'),
     url(r'^api/get-summary-weeks-by-year/$', summary_week_view.api_get_summary_weeks_by_year, name='api-get-summary-weeks-by-year'),
+    url(r'^api/get-summary-weeks-by-month/$', summary_week_view.api_get_summary_weeks_by_month, name='api-get-summary-weeks-by-month'),
     url(r'^api/summary-weeks-status/$', summary_week_view.api_summary_week_status, name='api-summary-weeks-status'),
 
     # Summary Customer
@@ -106,5 +109,8 @@ urlpatterns = [
     # Cheque
     url(r'^api/get-cheque-data/$', cheque_data_view.api_get_cheque_data, name='api-get-cheque-data'),
     url(r'^api/edit-cheque-accept-date/$', cheque_data_view.api_edit_cheque_accept_date, name='api-edit-cheque-accept-date'),
+
+    # Commission
+    url(r'^api/get-commission-data/$', commission_view.api_get_commission_data, name='api-get-commission-data'),
 
 ]
