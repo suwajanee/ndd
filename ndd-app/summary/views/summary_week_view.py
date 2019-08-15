@@ -179,6 +179,19 @@ def api_get_summary_weeks_by_year(request):
             return JsonResponse(week_serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
+@csrf_exempt
+def api_get_summary_weeks_by_month(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads( request.body.decode('utf-8') )
+            year = req['year']
+            month = req['month']
+
+            week = SummaryWeek.objects.filter(Q(year__year_label=year) & Q(month=month)).order_by('week')
+            week_serializer = SummaryWeekSerializer(week, many=True)
+            return JsonResponse(week_serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+
 
 # Method
 def summary_customer_json(data, summary_customer):
