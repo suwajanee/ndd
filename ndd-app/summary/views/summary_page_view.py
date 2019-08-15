@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -69,6 +68,5 @@ def summary_invoice_page(request, year, month, week, customer):
     return render(request, 'summary/summary_invoice_page.html', {'nbar': 'summary-page', 'year': year, 'month': month, 'week': week, 'customer': customer, 'customer_text': customer_text})
 
 @login_required(login_url=reverse_lazy('login'))
-@permission_required('salary.can_change', login_url=reverse_lazy('login'))
 def commission_page(request):
     return render(request, 'summary/commission_page.html', {'nbar': 'commission-page'})
