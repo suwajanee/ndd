@@ -2,8 +2,8 @@ var commission_page = new Vue( {
     
     el: '#commission-page',
     data: {
+        loading: false,
         principals: [],
-
         search_principal: '',
 
         year_list: [],
@@ -12,29 +12,13 @@ var commission_page = new Vue( {
 
         invoice_detail: [],
 
-        // min_date: '',
-        // max_date: '',
-
-        // today: '',
         work: 'ndd',
         work_type: '',
         year: '',
         month: '',
         week: '',
         customer: '',
-        // date_from: '',
-        // date_to: '',
 
-        // mode: 'due',
-        // edit: false,
-        // loading: false,
-
-        // cheque_list: [],
-        // total: 0,
-        // due_total: 0,
-        // accept_total: 0,
-
-        // edit_data: [],
     },
     computed: {
         filteredPrincipal() {
@@ -74,12 +58,14 @@ var commission_page = new Vue( {
         },
 
         getCommissionData(reset_week) {
+            this.loading = true
             if(reset_week){
                 this.week = ''
                 this.getWeeks()
             }
             api("/summary/api/get-commission-data/", "POST", {year: this.year, month: this.month, week: this.week, customer: this.customer.id, work: this.work, work_type: this.work_type}).then((data) => {
                 this.invoice_detail = data
+                this.loading = false
             })
         },
 
