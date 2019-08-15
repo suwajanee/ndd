@@ -31,6 +31,7 @@
 
     <body class="bg-light" style="min-width:1000px;">
         {% load random_icon %}
+        {% load has_group %}
         <nav id="nbar"
             class="navbar navbar-expand-sm navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}">
             <a class="navbar-brand" href="{% url 'dashboard-page' %}">
@@ -55,12 +56,14 @@
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <li class="nav-item dropdown {% if nbar == 'summary-page' or nbar == 'cheque-page'  %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar == 'summary-page' or nbar == 'cheque-page' or nbar == 'commission-page' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarFinance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if nbar == 'summary-page' %}
                             Summary
                         {% elif nbar == 'cheque-page' %}
                             Cheque
+                        {% elif nbar == 'commission-page' %}
+                            ค่าชอ.
                         {% else %}
                             Finance
                         {% endif %}
@@ -68,6 +71,9 @@
                     <div class="dropdown-menu" aria-labelledby="navbarFinance">
                         <a class="dropdown-item" href="{% url 'summary-page' %}">Summary</a>
                         <a class="dropdown-item" href="{% url 'cheque-page' %}">Cheque</a>
+                        {% if request.user|has_group:'salary_change' %}
+                            <a class="dropdown-item" href="{% url 'summary-commission-page' %}">ค่าชอ.</a>
+                        {% endif %}
                     </div>
                 </li>
             </ul>

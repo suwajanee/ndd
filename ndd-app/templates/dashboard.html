@@ -14,6 +14,7 @@
 
     <body>
         {% load random_icon %}
+        {% load has_group %}
         <nav id="nbar" class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
             <a class="navbar-brand" href="{% url 'dashboard-page' %}">
                 <img class="logo my-1" src="{% static 'images/logo.png' %}" height="45">
@@ -60,6 +61,11 @@
                         <a class="nav-link" href="{% url 'cheque-page' %}">
                             <i class="fa fa-money-check-alt"></i>&nbsp; Cheque
                         </a>
+                        {% if request.user|has_group:'salary_change' %}
+                            <a class="nav-link" href="{% url 'summary-commission-page' %}">
+                                <i class="fas fa-coins"></i>&nbsp; ค่าชอ.
+                            </a>
+                        {% endif %}
 
                         <h6 class="sidebar-heading">
                             <span>Database</span>
