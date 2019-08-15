@@ -30,3 +30,43 @@ button.text-lightgray, .text-lightgray {
 ::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
+
+
+/* Switch input */
+.switch-field {
+    overflow: hidden;
+}
+.switch-field input {
+    height: 0px;
+    width: 0px;
+    border: 0;
+    overflow: hidden;
+}
+.switch-field label {
+    float: left;
+} 
+.switch-field label {
+    display: inline-block;
+    width: 100px;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    text-align: center;
+    padding: 7px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.switch-field label:hover {
+    cursor: pointer;
+}
+.switch-field input:checked + label {
+    background-color: #E9ECEF;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.switch-field label:last-of-type {
+    border-radius: 0 4px 4px 0;
+}

@@ -55,3 +55,12 @@ class InvoiceDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvoiceDetail
         fields = '__all__'
+
+
+class CommissionSerializer(serializers.ModelSerializer):
+    invoice = InvoiceSerializer()
+    work_normal = BookingSerializer()
+    work_agent_transport = AgentTransportSerializer()
+    class Meta:
+        model = InvoiceDetail
+        fields = '__all__'

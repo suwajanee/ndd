@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Commission {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_customer.css' %}" />
+{% endblock %}
+
+{% block content %}
+    
+    <div id="commission-page">
+        <div class="container-fluid">
+            <div class="row">
+                <aside class="col-sm-2 d-none d-sm-block bg-light sidebar px-0" style="overflow-y: auto;">
+                    <div id="searchCustomer" class="m-3">
+                        <input class="form-control" placeholder="Search Customer" v-model="search_principal">          
+                    </div>
+
+                    <div id="customerList" class="border-top p-0">
+                        <div class="list-group">
+                            <button 
+                                v-for="principal in filteredPrincipal"
+                                v-if="principal.name.toLowerCase() != 'evergreen'"
+                                class="list-group-item list-group-item-action" 
+                                :class="{'bg-light text-lightgray': principal.cancel == '1'}"
+                                @click="selectCustomer(principal)"
+                            >
+                                <div class="row p-0">
+                                    <div class="col-8 text-truncate">
+                                        {% verbatim %}
+                                            {{ principal.name }}
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                            </button>                      
+                        </div>
+                    </div>
+                </aside>
+
+                <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 bg-white border-bottom">
+                            <li class="breadcrumb-item"><a href="{% url 'summary-page' %}">SUMMARY</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">ค่าชอ.</li>
+
+                        </ol>
+                    </nav>
+
+                    <div v-if="customer">
+                        {% verbatim %}
+                            <div class="m-4 text-secondary">
+                                <h1 class="mb-0 text-truncate text-center">{{ customer.name }}</h1>
+                            </div>
+                            <div class="row col-lg-6 mt-4">    
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">YEAR</span>
+                                    </div>
+                                    <select class="custom-select" v-model="year" @change="getCommissionData(true)">
+                                        <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">MONTH</span>
+                                    </div>
+                                    <select class="custom-select" v-model="month" @change="getCommissionData(true)">
+                                        <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">WEEK</span>
+                                    </div>
+                                    <select class="custom-select" v-model="week" @change="getCommissionData(false)">
+                                        <option value="">--- All ---</option>
+                                        <option v-for="week in week_list" :value="week.id">{{ week.week }}</option>
+                                    </select>
+                                </div>   
+                            </div>
+                            <div class="row col-lg-6 mb-4">
+                                <div class="switch-field">
+                                    <input type="radio" id="work_ndd" v-model="work" value="ndd" @change="getCommissionData(false)" />
+                                    <label for="work_ndd">NDD</label>
+                                    <input type="radio" id="work_vts" v-model="work" value="vts" @change="getCommissionData(false)" />
+                                    <label for="work_vts">VTS</label>
+                                </div>
+                                <div class="switch-field mx-4">
+                                    <input type="radio" id="work_type_all" v-model="work_type" value="" @change="getCommissionData(false)" />
+                                    <label for="work_type_all">All</label>
+                                    <input type="radio" id="work_type_ep" v-model="work_type" value="ep" @change="getCommissionData(false)" />
+                                    <label for="work_type_ep">EP</label>
+                                    <input type="radio" id="work_type_fc" v-model="work_type" value="fc" @change="getCommissionData(false)" />
+                                    <label for="work_type_fc">FC</label>
+                                </div>
+                            </div>
+
+                            <div class="container col-lg-10">
+                                <table class="table table-hover table-bordered text-center">
+                                    <thead>
+                                        <th>Tr</th>
+                                        <th>Customer Name</th>
+                                        <th>Booking</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Date</th>
+                                        <th>Container 1</th>
+                                        <th>Container 2</th>
+                                        <th>Size</th>
+                                    </thead>
+                                    <tbody v-if="invoice_detail.length">
+                                        <tr v-for="detail in invoice_detail">
+                                            <td>
+                                                {{ detail.work_agent_transport.pickup_tr }}<template v-if="detail.work_agent_transport.pickup_tr!=detail.work_agent_transport.return_tr">/{{ detail.work_agent_transport.return_tr }}</template>
+                                            </td>
+                                            <td class="text-left">
+                                                <template v-if="detail.invoice.detail.customer_name">
+                                                    {{ detail.invoice.detail.customer_name }}
+                                                </template>
+                                                <template v-else-if="detail.work_agent_transport.shipper.name">
+                                                    {{ detail.work_agent_transport.shipper.name }}
+                                                </template>
+                                                <template v-else></template>
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.booking_no }}
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.pickup_from }}
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.return_to }}
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.date|formatDate }}
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.container_1 }}
+                                            </td>
+                                            <td>
+                                                {{ detail.work_agent_transport.container_2 }}
+                                            </td>
+                                            <td>
+                                                <template v-if="detail.work_agent_transport.size.indexOf('X') == -1">1X</template>{{ detail.work_agent_transport.size }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan=9 class="text-center text-secondary">
+                                                ไม่พบข้อมูล
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endverbatim %}
+                    </div>
+                    
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="application/javascript" src="{% static 'js/app_commission_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            commission_page.reload();
+        });
+
+    </script>
+
+{% endblock %}
