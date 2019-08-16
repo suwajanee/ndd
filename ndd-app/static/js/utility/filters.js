@@ -53,7 +53,7 @@ Vue.filter('formatTel', function(value) {
         return match[1] + '-' + match[2] + '-' + match[3]
     };
 
-    return
+    return value
 })
 
 
@@ -69,5 +69,5 @@ Vue.filter('formatAccount', function(value) {
         return match[1] + '-' + match[2] + '-' + match[3] + '-' + match[4]
     };
 
-    return
+    return value
 })

@@ -39,8 +39,6 @@ var commission_page = new Vue( {
             this.month = today.getUTCMonth() + 1
 
             this.getWeeks()
-
-            // this.getCheque()
         },
 
         getAgentTransportPrincipals() {
