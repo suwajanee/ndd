@@ -38,7 +38,7 @@
                     <span>Other</span>
                 </h6>
                 <a class="nav-link {% if page == 'not_active' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
-                    Don't active
+                    Former Employee
                     <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="not_active_count" />
                 </a>
                 {% if request.user|has_group:'salary_change' %}
