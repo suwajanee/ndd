@@ -38,6 +38,8 @@ var commission_page = new Vue( {
             this.year = today.getUTCFullYear()
             this.month = today.getUTCMonth() + 1
 
+            this.getWeeks()
+
             // this.getCheque()
         },
 
