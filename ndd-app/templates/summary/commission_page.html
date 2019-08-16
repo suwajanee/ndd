@@ -140,7 +140,9 @@
                                                 {{ detail.work_agent_transport.container_1 }}
                                             </td>
                                             <td>
-                                                {{ detail.work_agent_transport.container_2 }}
+                                                <template v-if="detail.work_agent_transport.size.indexOf('X') > -1">
+                                                    {{ detail.work_agent_transport.container_2 }}
+                                                </template>
                                             </td>
                                             <td>
                                                 <template v-if="detail.work_agent_transport.size.indexOf('X') == -1">1X</template>{{ detail.work_agent_transport.size }}
