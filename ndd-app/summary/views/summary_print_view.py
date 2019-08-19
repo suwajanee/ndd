@@ -34,20 +34,10 @@ class SummaryPrintView(TemplateView):
                                 When(invoice__detail__order_by_remark=True, then='detail__remark'),
                             ),'pk')
 
-        rows = len(invoice_details)
-        num = 0
-
         booking_len = []
         customer_len = []   
         for detail in invoice_details:
             customer_name = detail.work.shipper.name
-
-            detail.detail['num'] = num = num + 1
-            if 'other' in detail.drayage_charge:
-                rows += len(detail.drayage_charge['other'])
-                for other in detail.drayage_charge['other']:
-                    other['num'] = num = num + 1
-
             booking_len.append(len(detail.work.booking_no))
 
             if 'customer_name' in invoice.detail:
@@ -60,7 +50,6 @@ class SummaryPrintView(TemplateView):
 
         context['invoice'] = invoice
         context['invoice_details'] = invoice_details
-        context['rows'] = rows + 2
 
         return render_pdf(template_name, context)
 
@@ -78,17 +67,6 @@ class SummaryEvergreenPrintView(TemplateView):
 
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_agent_transport__date', 'pk')
 
-        rows = len(invoice_details)
-        num = 0
-
-        for detail in invoice_details:
-            detail.detail['num'] = num = num + 1
-            if 'other' in detail.drayage_charge:
-                rows += len(detail.drayage_charge['other'])
-                for other in detail.drayage_charge['other']:
-                    other['num'] = num = num + 1
-
         context['invoice_details'] = invoice_details
-        context['rows'] = rows + 2
 
         return render_pdf(template_name, context)
