@@ -23,7 +23,7 @@
                                 v-for="principal in filteredPrincipal"
                                 v-if="principal.name.toLowerCase() != 'evergreen'"
                                 class="list-group-item list-group-item-action" 
-                                :class="{'bg-light text-lightgray': principal.cancel == '1'}"
+                                :class="{'bg-light text-lightgray': principal.cancel == '1', 'bg-light': loading}"
                                 @click="selectCustomer(principal)"
                             >
                                 <div class="row p-0">

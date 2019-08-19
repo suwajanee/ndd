@@ -70,10 +70,10 @@ var commission_page = new Vue( {
         },
 
         selectCustomer(customer) {
-            
-            this.customer = customer
-            this.getCommissionData()
-
+            if(! this.loading) {
+                this.customer = customer
+                this.getCommissionData()
+            }
         }
        
     }
