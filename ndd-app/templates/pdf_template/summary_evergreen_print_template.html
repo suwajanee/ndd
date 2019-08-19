@@ -149,12 +149,6 @@
                         </td>
                     </tr>
 
-                    {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
-                        </table>
-                            <pdf:nextpage>
-                        <table class="table-bordered">
-                    {% endif %}
-
                     {% if inv_detail.drayage_charge.other %}
                         {% for other in inv_detail.drayage_charge.other %}
                             {% if other.color == 0 %}
@@ -207,13 +201,6 @@
                                     {{ other.other_remark }}
                                 </td>
                             </tr>
-
-                            {% if rows > 22 and inv_detail.detail.num|mod:22 > 0 and inv_detail.detail.num|mod:22 < 6 and rows|minus:inv_detail.detail.num == 6 %}
-                                </table>
-                                    <pdf:nextpage>
-                                <table class="table-bordered">
-                            {% endif %}
-
                         {% endfor %}
                     {% endif %}  
                 {% endfor %}
