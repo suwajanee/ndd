@@ -4,6 +4,7 @@ from .models import Driver
 from .models import Employee
 from .models import Job
 from .models import Salary
+from truck.serializers import TruckSerializer
 
 
 class JobSerializer(serializers.ModelSerializer):   
@@ -21,6 +22,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 class DriverSerializer(serializers.ModelSerializer):
         employee = EmployeeSerializer()
+        truck = TruckSerializer()
         class Meta:
                 model = Driver
                 fields = '__all__'
