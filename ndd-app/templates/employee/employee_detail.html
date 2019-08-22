@@ -3,6 +3,11 @@
         <th class="align-middle" style="width: 60px;">
             #
         </th>
+        {% if job == 'driver' %}
+            <th class="align-middle">
+                Truck
+            </th>
+        {% endif %}
         <th class="align-middle">
             Name
         </th>
@@ -40,6 +45,11 @@
                     {% verbatim %}
                         <td>
                             {{ index+1 }}
+                        </td>
+                        <td>
+                            <template v-if="driver.truck">
+                                {{ driver.truck.number }}
+                            </template>
                         </td>
                         <td class="text-left">
                             {{ driver.employee.first_name }} {{ driver.employee.last_name }}
