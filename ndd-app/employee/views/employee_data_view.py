@@ -59,7 +59,7 @@ def api_get_employee(request):
             job = req['job']
 
             if job == 'driver':
-                employee = Driver.objects.filter(employee__status='active').order_by('employee__hire_date', 'employee__first_name', 'employee__last_name')
+                employee = Driver.objects.filter(employee__status='active').order_by('truck__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
                 serializer = DriverSerializer(employee, many=True)
                 data = {
                     'emp': [],

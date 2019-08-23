@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Employee {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/style_employee.css' %}" />
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb m-0 bg-white border-bottom">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Truck</li>
+    </ol>
+</nav>
+
+{% endblock %}
