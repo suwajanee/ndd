@@ -11,12 +11,14 @@ class TruckManufacturer(models.Model):
 
 
 class Truck(models.Model):
-    number = models.CharField(max_length=3, blank=True, null=True)
+    number = models.CharField(max_length=5, blank=True, null=True)
     license_plate = models.CharField(max_length=7, blank=True, null=True)
     manufacturer = models.ForeignKey(TruckManufacturer, on_delete=models.SET_NULL, blank=True, null=True)
 
     driver = models.OneToOneField(Driver, on_delete=models.SET_NULL, blank=True, null=True)
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
+
+    status = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.number
