@@ -9,7 +9,7 @@ class TruckManufacturerAdmin(admin.ModelAdmin):
 
 
 class TruckAdmin(admin.ModelAdmin):
-    list_display = ('number', 'license_plate', 'manufacturer', 'driver', 'tax_expired_date')
+    list_display = ('number', 'license_plate', 'manufacturer', 'driver', 'tax_expired_date', 'status')
     ordering = ('number', )
 
 
