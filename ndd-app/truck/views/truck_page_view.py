@@ -7,4 +7,4 @@ from django.urls import reverse_lazy
 
 @login_required(login_url=reverse_lazy('login'))
 def truck_page(request):
-    return render(request, 'truck/truck_page.html', {'nbar': 'database-page', 'title': 'Employee'})
+    return render(request, 'truck/truck_page.html', {'nbar': 'database-page', 'page': 'truck'})

@@ -1,18 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Employee {% endblock %}
+{% block title %} Truck {% endblock %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_employee.css' %}" />
 {% endblock %}
 
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb m-0 bg-white border-bottom">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Truck</li>
-    </ol>
-</nav>
+<div id="employee-page" class="container-fluid">
+    <div class="row">
+        <aside class="col-2 d-block bg-light sidebar px-0">
+            <div class="sidebar-sticky px-3">
+                <h6 class="sidebar-heading">
+                    <span>Details</span>
+                </h6>
+                <a class="nav-link {% if page == 'truck' %}active{% endif %}" href="{% url 'truck-page' %}">
+                    Truck
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" value="0" />
+                </a>
+                <a class="nav-link" href="#">
+                    Chassis
+                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" value="0" />
+                </a>
+                
+                <hr class="my-4">
+
+                <a class="nav-link" href="{% url 'employee-page' %}">
+                    <i class="fa fa-user-alt"></i>&nbsp; Employee
+                </a>
+            </div>
+        </aside>
+
+        <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0 bg-white border-bottom">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Truck</li>
+                </ol>
+            </nav>
+
+            <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
+           
+        </main>
+    </div>
+</div>
 
 {% endblock %}
