@@ -10,81 +10,86 @@
 {% block content %}
 
 {% load has_group %}
-<div id="employee-page" class="container-fluid">
-    <div class="row">
-        <aside class="col-sm-2 d-none d-sm-block bg-light sidebar px-0" style="overflow-y: auto;">
-            <div class="sidebar-sticky px-3">
-                <h6 class="sidebar-heading">
-                    <span>Job</span>
-                </h6>
-                <a class="nav-link {% if not job and not page %}active{% endif %}" href="{% url 'employee-page' %}">
-                    All
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
-                </a>
-                <a class="nav-link {% if job == 'officer' %}active{% endif %}" href="{% url 'employee-officer-page' %}">
-                    <i class="fas fa-angle-right"></i>&nbsp; Officer
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="officer_count" />
-                </a>
-                <a class="nav-link {% if job == 'driver' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
-                    <i class="fas fa-angle-right"></i>&nbsp; Driver
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="driver_count" />
-                </a>
-                <a class="nav-link {% if job == 'mechanic' %}active{% endif %}" href="{% url 'employee-mechanic-page' %}">
-                    <i class="fas fa-angle-right"></i>&nbsp; Mechanic
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="mechanic_count" />
-                </a>
-
-                <h6 class="sidebar-heading">
-                    <span>Other</span>
-                </h6>
-                <a class="nav-link {% if page == 'not_active' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
-                    Former Employee
-                    <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="not_active_count" />
-                </a>
-                {% if request.user|has_group:'salary_change' %}
-                    <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
-                        Salary
+    <div id="employee-page" class="container-fluid">
+        <div class="row">
+            <aside class="col-2 d-block bg-light sidebar px-0">
+                <div class="sidebar-sticky px-3">
+                    <h6 class="sidebar-heading">
+                        <span>Jobs</span>
+                    </h6>
+                    <a class="nav-link {% if not job and not page %}active{% endif %}" href="{% url 'employee-page' %}">
+                        All
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
                     </a>
-                {% endif %}
-
-            </div>
-        </aside>
-
-        <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb m-0 bg-white border-bottom">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                    {% if job or page %}
-                        <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-                    {% else %}
-                        <li class="breadcrumb-item active" aria-current="page">Employee</li>
+                    <a class="nav-link {% if job == 'officer' %}active{% endif %}" href="{% url 'employee-officer-page' %}">
+                        <i class="fas fa-angle-right"></i>&nbsp; Officer
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="officer_count" />
+                    </a>
+                    <a class="nav-link {% if job == 'driver' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
+                        <i class="fas fa-angle-right"></i>&nbsp; Driver
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="driver_count" />
+                    </a>
+                    <a class="nav-link {% if job == 'mechanic' %}active{% endif %}" href="{% url 'employee-mechanic-page' %}">
+                        <i class="fas fa-angle-right"></i>&nbsp; Mechanic
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="mechanic_count" />
+                    </a>
+                    
+                    <h6 class="sidebar-heading">
+                        <span>Other</span>
+                    </h6>
+                    <a class="nav-link {% if page == 'not_active' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
+                        Former Employee
+                        <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="not_active_count" />
+                    </a>
+                    {% if request.user|has_group:'salary_change' %}
+                        <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
+                            Salary
+                        </a>
                     {% endif %}
-                </ol>
-            </nav>
-            {% if not page %}
-                <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> Add</button>
-            {% endif %}
-            <h2 class="mt-5 text-center">{{ title }}</h2>
-            <div class="mt-4 row">
-                {% include 'employee/employee_detail.html' %}
-            </div>
-        </main>
+                    
+                    <hr class="my-4">
+
+                    <a class="nav-link" href="{% url 'truck-page' %}">
+                        <i class="fa fa-truck"></i>&nbsp; Truck
+                    </a>
+                </div>
+            </aside>
+
+            <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb m-0 bg-white border-bottom">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                        {% if job or page %}
+                            <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active" aria-current="page">Employee</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+                {% if not page %}
+                    <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> Add</button>
+                {% endif %}
+                <h2 class="mt-5 text-center">{{ title }}</h2>
+                <div class="mt-4 row">
+                    {% include 'employee/employee_detail.html' %}
+                </div>
+            </main>
+        </div>
     </div>
-</div>
 
 
-<script type="application/javascript" src="{% static 'js/app_employee_page.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_employee_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
 
-<script type="application/javascript">
+    <script type="application/javascript">
 
-    window.addEventListener("load", function() {   
-        employee_page.reload("{{ job }}", "{{ page }}");
-    });
+        window.addEventListener("load", function() {   
+            employee_page.reload("{{ job }}", "{{ page }}");
+        });
 
-</script>
+    </script>
 
     
 {% endblock %}

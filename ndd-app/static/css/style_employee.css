@@ -23,6 +23,10 @@
 
 
 /* Sidebar */
+.sidebar{
+    overflow-y: auto;
+    min-width: 180px;
+}
 .sidebar-heading{
     padding: 1rem;
     margin-top: 1rem;
@@ -30,11 +34,7 @@
     color: #7d7a7a;
 }
 .sidebar-sticky{
-    /* position: -webkit-sticky;
-    position: sticky; */
-    /* width: 100%; */
     height: calc(100vh - 80px);
-    /* padding-top: .5rem; */
     overflow-x: hidden;
     overflow-y: auto;
 }
