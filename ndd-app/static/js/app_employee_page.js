@@ -7,7 +7,6 @@ var employee_page = new Vue( {
 
         job: '',
         page: '',
-        today: new Date(),
         date_compare: new Date(),
 
         emp_count: 0,
@@ -43,7 +42,8 @@ var employee_page = new Vue( {
 
             if(! page) {
                 this.getEmployees(job)
-                this.date_compare.setDate(this.today.getDate() + 8)
+                this.date_compare = new Date()
+                this.date_compare.setDate(this.date_compare.getDate() + 8)
             }
             else {
                 this.page = page
