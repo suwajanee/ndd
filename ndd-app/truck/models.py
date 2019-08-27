@@ -36,5 +36,7 @@ class Chassis(models.Model):
     
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
 
+    status = models.CharField(max_length=10, blank=True, null=True)
+
     def __str__(self):
         return self.number
