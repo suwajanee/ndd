@@ -5,7 +5,7 @@ from .models import Chassis
 
 # Register your models here.
 class TruckManufacturerAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'category', )
 
 
 class TruckAdmin(admin.ModelAdmin):

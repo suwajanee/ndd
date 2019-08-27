@@ -5,8 +5,11 @@ from employee.models import Driver
 
 class TruckManufacturer(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
+    category = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
+        if self.category:
+            return self.name + ' (' + self.category + ')'
         return self.name
 
 
