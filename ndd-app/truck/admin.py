@@ -14,7 +14,7 @@ class TruckAdmin(admin.ModelAdmin):
 
 
 class ChassisAdmin(admin.ModelAdmin):
-    list_display = ('number', 'license_plate', 'tax_expired_date')
+    list_display = ('number', 'license_plate', 'manufacturer', 'tax_expired_date')
     ordering = ('number', )
 
 

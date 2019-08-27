@@ -32,6 +32,8 @@ class Truck(models.Model):
 class Chassis(models.Model):
     number = models.CharField(max_length=3, blank=True, null=True)
     license_plate = models.CharField(max_length=7, blank=True, null=True)
+    manufacturer = models.ForeignKey(TruckManufacturer, on_delete=models.SET_NULL, blank=True, null=True)
+    
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
 
     def __str__(self):
