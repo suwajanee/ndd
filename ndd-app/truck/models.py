@@ -19,7 +19,9 @@ class Truck(models.Model):
     manufacturer = models.ForeignKey(TruckManufacturer, on_delete=models.SET_NULL, blank=True, null=True)
 
     driver = models.OneToOneField(Driver, on_delete=models.SET_NULL, blank=True, null=True)
+    
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
+    pat_pass_expired_date = models.DateField(blank=True, null=True, default=None)
 
     status = models.CharField(max_length=10, blank=True, null=True)
 
