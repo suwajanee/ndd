@@ -39,139 +39,137 @@
         {% endif %}
     </thead>
     <tbody v-if="employees.length || drivers.length">
-        
-            {% if job == 'driver' %}
-                <tr v-for="(driver, index) in drivers" >
-                    {% verbatim %}
-                        <td>
-                            {{ index+1 }}
-                        </td>
-                        <td>
-                            <template v-if="driver.truck">
-                                {{ driver.truck.number }}
-                            </template>
-                        </td>
-                        <td class="text-left">
-                            {{ driver.employee.first_name }} {{ driver.employee.last_name }}
-                        </td>
-                        <td>
-                            {{ driver.employee.detail.tel|formatTel }}
-                        </td>
-                        <td>
-                            {{ driver.employee.detail.account|formatAccount }}
-                        </td>
-                        <td>
-                            {{ driver.license_type }}
-                        </td>
-                        <td :class="{'table-warning': driver.pat_expired && (date_compare > driver.pat_expired)}" style="max-width: 100px;">
-                            <input v-if="edit_table" type="date" class="form-control" v-model="driver.pat_pass_expired_date" @change="editData(driver)">
-                            <template v-else>
-                                {{ driver.pat_expired|formatDate }}
-                            </template>
-                        </td>
-                        <td class="border-white bg-white" style="width: 60px;">
-                            <button 
-                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                                data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(driver.employee, driver)"
-                            >
-                                <i class="fas fa-info"></i>
-                            </button>
-                        </td>
-                    {% endverbatim %} 
-                </tr>
-            {% elif page == 'salary' %}
-                <tr v-for="(emp, index) in employees" >
-                    {% verbatim %}
-                        <td>
-                            {{ index+1 }}
-                        </td>
-                        <td class="text-left">
-                            {{ emp.employee.first_name }} {{ emp.employee.last_name }}
-                        </td>
-                        <td class="text-capitalize">
-                            {{ emp.employee.job.job_title }}
-                        </td>
-                        <td>
-                            {{ emp.employee.detail.tel|formatTel }}
-                        </td>
-                        <td>
-                            {{ emp.employee.detail.account|formatAccount }}
-                        </td>
-                        <td class="text-right">
-                            {{ emp.salary|currencyCommas }}
-                        </td>
-                        <td class="border-white bg-white" style="width: 60px;">
-                            <button class="btn btn-sm btn-outline-primary"
-                                data-toggle="modal" data-target="#modalEmployeeSalary"
-                                @click="salaryModal(emp.employee, emp)"
-                            >
-                                <i class="fas fa-history"></i>
-                            </button>
-                        </td>
-                    {% endverbatim %} 
-                </tr>
-            {% else %} 
-                <tr v-for="(emp, index) in employees" >
-                    {% verbatim %}
-                        <td>
-                            {{ index+1 }}
-                        </td>
-                        <td class="text-left">
-                            {{ emp.first_name }} {{ emp.last_name }}
-                        </td>
-                        <td v-if="! job" class="text-capitalize">
-                            {{ emp.job.job_title }}
-                        </td>
-                        <td>
-                            {{ emp.detail.tel|formatTel }}
-                        </td>
-                        <td>
-                            {{ emp.detail.account|formatAccount }}
-                        </td>
-                        <td class="border-white bg-white" style="width: 60px;">
-                            <button 
-                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                                data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(emp)"
-                            >
-                                <i class="fas fa-info"></i>
-                            </button>
-                        </td>
-                    {% endverbatim %}
-                </tr>
-                <tr v-for="(driver, index) in drivers" >
-                    {% verbatim %}
-                        <td>
-                            <template v-if="page == 'not_active'">
-                                {{ not_active_except_driver + index + 1 }}
-                            </template>
-                            <template v-else>
-                                {{ active_except_driver + index + 1 }}
-                            </template>
-                        </td>
-                        <td class="text-left">
-                            {{ driver.employee.first_name }} {{ driver.employee.last_name }}
-                        </td>
-                        <td v-if="! job" class="text-capitalize">
-                            {{ driver.employee.job.job_title }}
-                        </td>
-                        <td>
-                            {{ driver.employee.detail.tel|formatTel }}
-                        </td>
-                        <td>
-                            {{ driver.employee.detail.account|formatAccount }}
-                        </td>
-                        <td class="border-white bg-white" style="width: 60px;">
-                            <button 
-                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                                data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(driver.employee, driver)"
-                            >
-                                <i class="fas fa-info"></i>
-                            </button>
-                        </td>
-                    {% endverbatim %}
-                </tr>  
-            {% endif %}
-        </tr>
+        {% if job == 'driver' %}
+            <tr v-for="(driver, index) in drivers" >
+                {% verbatim %}
+                    <td>
+                        {{ index+1 }}
+                    </td>
+                    <td>
+                        <template v-if="driver.truck">
+                            {{ driver.truck.number }}
+                        </template>
+                    </td>
+                    <td class="text-left">
+                        {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                    </td>
+                    <td>
+                        {{ driver.employee.detail.tel|formatTel }}
+                    </td>
+                    <td>
+                        {{ driver.employee.detail.account|formatAccount }}
+                    </td>
+                    <td>
+                        {{ driver.license_type }}
+                    </td>
+                    <td :class="{'table-warning': driver.pat_expired && (date_compare > driver.pat_expired)}" style="max-width: 100px;">
+                        <input v-if="edit_table" type="date" class="form-control" v-model="driver.pat_pass_expired_date" @change="editData(driver)">
+                        <template v-else>
+                            {{ driver.pat_expired|formatDate }}
+                        </template>
+                    </td>
+                    <td class="border-white bg-white" style="width: 60px;">
+                        <button 
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(driver.employee, driver)"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </td>
+                {% endverbatim %} 
+            </tr>
+        {% elif page == 'salary' %}
+            <tr v-for="(emp, index) in employees" >
+                {% verbatim %}
+                    <td>
+                        {{ index+1 }}
+                    </td>
+                    <td class="text-left">
+                        {{ emp.employee.first_name }} {{ emp.employee.last_name }}
+                    </td>
+                    <td class="text-capitalize">
+                        {{ emp.employee.job.job_title }}
+                    </td>
+                    <td>
+                        {{ emp.employee.detail.tel|formatTel }}
+                    </td>
+                    <td>
+                        {{ emp.employee.detail.account|formatAccount }}
+                    </td>
+                    <td class="text-right">
+                        {{ emp.salary|currencyCommas }}
+                    </td>
+                    <td class="border-white bg-white" style="width: 60px;">
+                        <button class="btn btn-sm btn-outline-primary"
+                            data-toggle="modal" data-target="#modalEmployeeSalary"
+                            @click="salaryModal(emp.employee, emp)"
+                        >
+                            <i class="fas fa-history"></i>
+                        </button>
+                    </td>
+                {% endverbatim %} 
+            </tr>
+        {% else %} 
+            <tr v-for="(emp, index) in employees" >
+                {% verbatim %}
+                    <td>
+                        {{ index+1 }}
+                    </td>
+                    <td class="text-left">
+                        {{ emp.first_name }} {{ emp.last_name }}
+                    </td>
+                    <td v-if="! job" class="text-capitalize">
+                        {{ emp.job.job_title }}
+                    </td>
+                    <td>
+                        {{ emp.detail.tel|formatTel }}
+                    </td>
+                    <td>
+                        {{ emp.detail.account|formatAccount }}
+                    </td>
+                    <td class="border-white bg-white" style="width: 60px;">
+                        <button 
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(emp)"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </td>
+                {% endverbatim %}
+            </tr>
+            <tr v-for="(driver, index) in drivers" >
+                {% verbatim %}
+                    <td>
+                        <template v-if="page == 'not_active'">
+                            {{ not_active_except_driver + index + 1 }}
+                        </template>
+                        <template v-else>
+                            {{ active_except_driver + index + 1 }}
+                        </template>
+                    </td>
+                    <td class="text-left">
+                        {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                    </td>
+                    <td v-if="! job" class="text-capitalize">
+                        {{ driver.employee.job.job_title }}
+                    </td>
+                    <td>
+                        {{ driver.employee.detail.tel|formatTel }}
+                    </td>
+                    <td>
+                        {{ driver.employee.detail.account|formatAccount }}
+                    </td>
+                    <td class="border-white bg-white" style="width: 60px;">
+                        <button 
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#modalEmployee" @click="employeeModal(driver.employee, driver)"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </td>
+                {% endverbatim %}
+            </tr>  
+        {% endif %}
     </tbody>
     <tbody v-else>
         <tr>

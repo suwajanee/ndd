@@ -92,22 +92,24 @@
                         </select>
                     </div>
 
-                    <div v-if="emp_data.job=='driver'" class="input-group mb-1 container px-5">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">LICENSE TYPE</span>
+                    <template v-if="emp_data.job=='driver'">
+                        <div class="input-group mb-1 container px-5">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">LICENSE TYPE</span>
+                            </div>
+                            <select class="custom-select col-2" v-model="emp_data.license_type">
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
                         </div>
-                        <select class="custom-select col-2" v-model="emp_data.license_type">
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
 
-                    <div v-if="emp_data.job=='driver'" class="input-group mb-3 col-lg-10 px-5">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">PAT Expired</span>
+                        <div class="input-group mb-3 col-lg-10 px-5">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">PAT Expired</span>
+                            </div>
+                            <input type="date" class="form-control" v-model="emp_data.pat_pass_expired_date">
                         </div>
-                        <input type="date" class="form-control" v-model="emp_data.pat_pass_expired_date">
-                    </div>
+                    </template>
                     
                     <template v-if="emp_data.status">
                         <hr class="my-4">
@@ -134,8 +136,8 @@
             <div class="modal-footer d-flex justify-content-center">    
                 <button v-if="modal_add_mode" class="btn btn-primary" @click="addEmployees">Add</button>
                 <template v-else>
-                    <button class="btn btn-link text-danger mr-auto mx-5" @click="deleteEmployees(emp_data.id)">Delete Employee</button>
-                    <button class="btn btn-primary mx-5" @click="editEmployees">Save</button>
+                    <!-- <button class="btn btn-link text-danger mr-auto mx-5" @click="deleteEmployees(emp_data.id)">Delete Employee</button> -->
+                    <button class="btn btn-primary" @click="editEmployees">Save</button>
                 </template>
             </div>
         </div>

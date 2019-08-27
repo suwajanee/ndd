@@ -23,6 +23,8 @@ var employee_page = new Vue( {
 
         modal_add_mode: true,
         input_required: false,
+
+        // truck_choices: [],
         emp_data: {
             job: '',
         },
@@ -35,6 +37,7 @@ var employee_page = new Vue( {
         reload(job, page) {
 
             this.getEmployeeCount()
+            // this.getTruckChoices()
             this.edit_data = []
             this.input_required = false
 
@@ -64,6 +67,11 @@ var employee_page = new Vue( {
                 this.not_active_except_driver = data.not_active_except_driver
             })
         },
+        // getTruckChoices() {
+        //     api("/truck/api/get-truck-choices/").then((data) => {
+        //         this.truck_choices = data
+        //     })
+        // },
         
         getEmployees(job) {
             if(job) {
