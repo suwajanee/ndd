@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import TruckManufacturer
+from .models import Manufacturer
 from .models import Truck
 from .models import Chassis
 
 # Register your models here.
-class TruckManufacturerAdmin(admin.ModelAdmin):
+class ManufacturerAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', )
 
 
@@ -18,6 +18,6 @@ class ChassisAdmin(admin.ModelAdmin):
     ordering = ('number', )
 
 
-admin.site.register(TruckManufacturer, TruckManufacturerAdmin)
+admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Truck, TruckAdmin)
 admin.site.register(Chassis, ChassisAdmin)
