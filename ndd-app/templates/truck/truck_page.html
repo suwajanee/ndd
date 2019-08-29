@@ -8,42 +8,66 @@
 {% endblock %}
 
 {% block content %}
-<div id="employee-page" class="container-fluid">
-    <div class="row">
-        <aside class="col-2 d-block bg-light sidebar px-0">
-            <div class="sidebar-sticky px-3">
-                <h6 class="sidebar-heading">
-                    <span>Details</span>
-                </h6>
-                <a class="nav-link {% if page == 'truck' %}active{% endif %}" href="{% url 'truck-page' %}">
-                    Truck
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" value="0" />
-                </a>
-                <a class="nav-link" href="#">
-                    Chassis
-                    <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" value="0" />
-                </a>
-                
-                <hr class="my-4">
+    <div id="truck-page" class="container-fluid">
+        <div class="row">
+            <aside class="col-2 d-block bg-light sidebar px-0">
+                <div class="sidebar-sticky px-3">
+                    <h6 class="sidebar-heading">
+                        <span>Details</span>
+                    </h6>
+                    <a class="nav-link {% if page == 'truck' %}active{% endif %}" href="{% url 'truck-page' %}">
+                        Truck
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="truck_count" />
+                    </a>
+                    <a class="nav-link {% if page == 'chassis' %}active{% endif %}" href="{% url 'chassis-page' %}">
+                        Chassis
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="chassis_count" />
+                    </a>
 
-                <a class="nav-link" href="{% url 'employee-page' %}">
-                    <i class="fa fa-user-alt"></i>&nbsp; Employee
-                </a>
-            </div>
-        </aside>
+                    <h6 class="sidebar-heading">
+                        <span>Other</span>
+                    </h6>
+                    <a class="nav-link {% if page == 'sold' %}active{% endif %}" href="{% url 'truck-page' %}">
+                        Sold
+                    </a>
+                    
+                    <hr class="my-4">
 
-        <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb m-0 bg-white border-bottom">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Truck</li>
-                </ol>
-            </nav>
+                    <a class="nav-link" href="{% url 'employee-driver-page' %}">
+                        <i class="fa fa-user-alt"></i>&nbsp; Driver
+                    </a>
+                </div>
+            </aside>
 
-            <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
-           
-        </main>
+            <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb m-0 bg-white border-bottom">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                    </ol>
+                </nav>
+
+                <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
+
+                <h2 class="mt-5 text-center">{{ title }}</h2>
+                <div class="mt-4 row">
+                    {% include 'truck/truck_detail.html' %}
+                </div>
+            
+            </main>
+        </div>
     </div>
-</div>
+
+    <script type="application/javascript" src="{% static 'js/app_truck_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+
+    <script type="application/javascript">
+
+        window.addEventListener("load", function() {   
+            truck_page.reload("{{ page }}")
+        });
+
+    </script>
 
 {% endblock %}

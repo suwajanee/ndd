@@ -79,7 +79,7 @@ var employee_page = new Vue( {
                 api("/employee/api/get-employee/", "POST", {job: job}).then((data) => {
                     this.employees = data.emp
                     this.drivers = data.driver
-                    this.employeeDetail()
+                    this.settingDetail()
                 })
             }
             else {
@@ -87,7 +87,7 @@ var employee_page = new Vue( {
                 api("/employee/api/get-employee/").then((data) => {
                     this.employees = data.emp
                     this.drivers = data.driver
-                    this.employeeDetail()
+                    this.settingDetail()
                 })
             }
         },
@@ -96,7 +96,7 @@ var employee_page = new Vue( {
             api("/employee/api/get-not-active-employee/").then((data) => {
                 this.employees = data.emp
                 this.drivers = data.driver
-                this.employeeDetail()
+                this.settingDetail()
             })
         },
         getEmployeeSalary(){
@@ -106,7 +106,7 @@ var employee_page = new Vue( {
             })
         },
 
-        employeeDetail() {
+        settingDetail() {
             this.drivers.forEach(function(driver) {
                 driver.employee.age = employee_page.calcAge(driver.employee.birth_date)
                 driver.employee.exp = employee_page.calcExp(driver.employee.hire_date)

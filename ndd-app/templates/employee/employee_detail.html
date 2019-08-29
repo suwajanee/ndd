@@ -62,7 +62,7 @@
                     <td>
                         {{ driver.license_type }}
                     </td>
-                    <td :class="{'table-warning': driver.pat_expired && (date_compare > driver.pat_expired)}" style="max-width: 100px;">
+                    <td :class="{'table-warning': date_compare > driver.pat_expired}" style="max-width: 100px;">
                         <input v-if="edit_table" type="date" class="form-control" v-model="driver.pat_pass_expired_date" @change="editData(driver)">
                         <template v-else>
                             {{ driver.pat_expired|formatDate }}
