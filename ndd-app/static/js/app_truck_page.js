@@ -7,7 +7,7 @@ var truck_page = new Vue ({
         truck_list: [],
         chassis_list: [],
 
-        date_compare: new Date(),
+        date_compare: '',
 
         drivers: [],
 
@@ -27,9 +27,6 @@ var truck_page = new Vue ({
             this.getTruckChassisCount()
             this.getDriver()
             this.getManufacturer()
-
-            this.date_compare = new Date()
-            this.date_compare.setDate(this.date_compare.getDate() + 8)
             
             if(page == 'truck') {
                 this.getTruck()
@@ -52,33 +49,21 @@ var truck_page = new Vue ({
         },
         getTruck() {
             api("/truck/api/get-truck").then((data) => {
-                this.truck_list = data
-                this.settingDetail()
+                this.truck_list = data.truck
+                this.date_compare = data.date_compare
+                // this.settingDetail()
             })
         },
         getChassis() {
             api("/truck/api/get-chassis").then((data) => {
-                this.chassis_list = data
-                this.settingDetail()
+                this.chassis_list = data.chassis
+                this.date_compare = data.date_compare
             })
         },
         getDriver() {
             api("/employee/api/get-employee/", "POST", {job: 'driver'}).then((data) => {
                 this.drivers = data.driver
             })
-        },
-        settingDetail() {
-            if(this.page == 'truck') {
-                this.truck_list.forEach(function(truck) {
-                    truck.tax_expired = new Date(truck.tax_expired_date)
-                    truck.pat_expired = new Date(truck.pat_pass_expired_date)
-                })
-            }
-            else {
-                this.chassis_list.forEach(function(chassis) {
-                    chassis.tax_expired = new Date(chassis.tax_expired_date)
-                })
-            }
         },
 
         editData(data) {
@@ -87,13 +72,14 @@ var truck_page = new Vue ({
             }
         },
         editExpiredDate() {
-            if(this.edit_data) {
+            if(this.edit_data.length) {
                 api("/truck/api/edit-expired-date/", "POST", {category: this.page, details: this.edit_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                     }
                 })
             }
+            this.edit_table = false
         }
 
 

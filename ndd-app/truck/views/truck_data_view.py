@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
 import json
 
 from django.db.models import Q
@@ -68,9 +69,15 @@ def api_get_manufacturer(request):
 def api_get_truck(request):
     if request.user.is_authenticated:
         if request.method == "GET":
+            data = {}
             truck = Truck.objects.filter(~Q(status='sold')).order_by('number')
             serializer = TruckSerializer(truck, many=True)
-            return JsonResponse(serializer.data, safe=False)
+
+            data = {
+                'truck': serializer.data,
+                'date_compare': get_date_compare(7)
+            }
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
@@ -79,5 +86,16 @@ def api_get_chassis(request):
         if request.method == "GET":
             chassis = Chassis.objects.filter(~Q(status='sold')).order_by('number')
             serializer = ChassisSerializer(chassis, many=True)
-            return JsonResponse(serializer.data, safe=False)
+
+            data = {
+                'chassis': serializer.data,
+                'date_compare': get_date_compare(7)
+            }
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+
+def get_date_compare(date):
+    today = datetime.now()
+    date_compare = today + timedelta(days=date)
+    return date_compare

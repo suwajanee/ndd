@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
 import json
 
 from django.db.models import Q
@@ -59,18 +60,23 @@ def api_get_employee(request):
             job = req['job']
 
             if job == 'driver':
+                today = datetime.now()
+                date_compare = today + timedelta(days=7)
+
                 employee = Driver.objects.filter(employee__status='active').order_by('truck__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
                 serializer = DriverSerializer(employee, many=True)
                 data = {
                     'emp': [],
-                    'driver': serializer.data
+                    'driver': serializer.data,
+                    'date_compare': date_compare
                 } 
             else:
                 employee = Employee.objects.filter(status='active', job__job_title=job).order_by('hire_date', 'first_name', 'last_name')
                 serializer = EmployeeSerializer(employee, many=True)
                 data = {
                     'emp': serializer.data,
-                    'driver': []
+                    'driver': [],
+                    'date_compare': ''
                 }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)

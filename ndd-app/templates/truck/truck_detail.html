@@ -42,13 +42,13 @@
                             {{ truck.manufacturer.name }}
                         </template>
                     </td>
-                    <td :class="{'table-warning': date_compare > truck.tax_expired}">
+                    <td :class="{'table-warning': date_compare > truck.tax_expired_date}">
                         <input v-if="edit_table" type="date" class="form-control" v-model="truck.tax_expired_date" @change="editData(truck)">
                         <template v-else>
                             {{ truck.tax_expired_date|formatDate }}
                         </template>
                     </td>
-                    <td :class="{'table-warning': date_compare > truck.pat_expired}">
+                    <td :class="{'table-warning': date_compare > truck.pat_pass_expired_date}">
                         <input v-if="edit_table" type="date" class="form-control" v-model="truck.pat_pass_expired_date" @change="editData(truck)">
                         <template v-else>
                             {{ truck.pat_pass_expired_date|formatDate }}
@@ -81,7 +81,7 @@
                             {{ chassis.manufacturer.name }}
                         </template>
                     </td>
-                    <td :class="{'table-warning': date_compare > chassis.tax_expired}">
+                    <td :class="{'table-warning': date_compare > chassis.tax_expired_date}">
                         <input v-if="edit_table" type="date" class="form-control" v-model="chassis.tax_expired_date" @change="editData(chassis)">
                         <template v-else>
                             {{ chassis.tax_expired_date|formatDate }}

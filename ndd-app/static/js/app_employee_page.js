@@ -7,7 +7,7 @@ var employee_page = new Vue( {
 
         job: '',
         page: '',
-        date_compare: new Date(),
+        date_compare: '',
 
         emp_count: 0,
         officer_count: 0,
@@ -23,7 +23,6 @@ var employee_page = new Vue( {
         modal_add_mode: true,
         input_required: false,
 
-        // truck_choices: [],
         emp_data: {
             job: '',
         },
@@ -36,14 +35,11 @@ var employee_page = new Vue( {
         reload(job, page) {
 
             this.getEmployeeCount()
-            // this.getTruckChoices()
             this.edit_data = []
             this.input_required = false
 
             if(! page) {
                 this.getEmployees(job)
-                this.date_compare = new Date()
-                this.date_compare.setDate(this.date_compare.getDate() + 8)
             }
             else {
                 this.page = page
@@ -79,6 +75,7 @@ var employee_page = new Vue( {
                 api("/employee/api/get-employee/", "POST", {job: job}).then((data) => {
                     this.employees = data.emp
                     this.drivers = data.driver
+                    this.date_compare = data.date_compare
                     this.settingDetail()
                 })
             }
@@ -110,13 +107,6 @@ var employee_page = new Vue( {
             this.drivers.forEach(function(driver) {
                 driver.employee.age = employee_page.calcAge(driver.employee.birth_date)
                 driver.employee.exp = employee_page.calcExp(driver.employee.hire_date)
-                if(driver.pat_pass_expired_date) {
-                    driver.pat_expired = new Date(driver.pat_pass_expired_date)
-                }
-                else {
-                    driver.pat_expired = ''
-                }
-
             })
 
             this.employees.forEach(function(emp) {
@@ -252,7 +242,7 @@ var employee_page = new Vue( {
             }
         },
         editPatExpiredDriver() {
-            if(this.edit_data){
+            if(this.edit_data.length){
                 api("/employee/api/edit-pat-expired-driver/", "POST", {drivers: this.edit_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.job, this.page)
