@@ -16,7 +16,7 @@ from .views import summary_year_view
 
 from .views import summary_damco_invoice
 from .views import summary_oocl_invoice
-from .views import summary_oocl_report
+from .views import summary_report_export
 from .views.summary_print_view import SummaryPrintView, SummaryEvergreenPrintView
 
 
@@ -95,7 +95,7 @@ urlpatterns = [
     url(r'^print-evergreen/(?P<pk>\d+)/$', SummaryEvergreenPrintView.as_view(), name='summary-evergreen-print'),
 
     # Export
-    url(r'^export/oocl-report/$', summary_oocl_report.oocl_report, name='summary-oocl-report'),
+    url(r'^export/report/$', summary_report_export.report_export, name='summary-report'),
     url(r'^export/oocl-invoice/$', summary_oocl_invoice.oocl_invoice, name='summary-oocl-invoice'),
     url(r'^export/damco-invoice/$', summary_damco_invoice.damco_invoice, name='summary-damco-invoice'),
 

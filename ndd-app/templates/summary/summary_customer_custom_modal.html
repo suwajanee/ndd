@@ -66,8 +66,6 @@
                             </div>
                             <label class="form-control bg-light" for="apll">APLL</label>
                         </div>
-                    </template>
-                    <template v-if="principal_type=='normal'">
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
@@ -78,6 +76,14 @@
                         </div>
                     </template>
                     <template v-else>
+                        <div class="input-group mb-1 col-md-8 container">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                <input type="radio" id="report" v-model="customer_setting_modal.option" value="report"> 
+                                </div>
+                            </div>
+                            <label class="form-control" for="report">REPORT</label>
+                        </div>
                         <div class="input-group mb-1 col-md-8 container">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">

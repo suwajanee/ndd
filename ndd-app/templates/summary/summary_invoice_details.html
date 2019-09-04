@@ -3,7 +3,8 @@
     <div class="row my-3">
         <div class="col">
             <a v-if="! table_edit" class="btn btn-primary" :href="'/summary/print/'+invoice_id" target="_blank" >Print</a>
-            <button v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-primary"  data-toggle="modal" data-target="#modalReportOocl">Report</button>
+            <button v-if="customer_custom.option == 'oocl' & ! table_edit" class="btn btn-outline-primary"  data-toggle="modal" data-target="#modalReport">Report</button>
+            <button v-if="customer_custom.option == 'report' & ! table_edit" class="btn btn-outline-primary"  data-toggle="modal" data-target="#modalReport">Report</button>
       
             <form class="d-inline" v-if="customer_custom.option == 'oocl' & ! table_edit" action="{% url 'summary-oocl-invoice' %}" method="POST">
                 {% csrf_token %}
@@ -33,9 +34,10 @@
     <div>
         {% verbatim %}
             <div class="text-center pt-0" :class="{'text-primary': invoice.detail.copy==true}">
-                <h2 v-if="customer_custom.customer_title" class="d-inline">{{ customer_custom.customer_title }}</h2>
+                <!-- <h2 v-if="customer_custom.customer_title" class="d-inline">{{ customer_custom.customer_title }}</h2>
                 <h2 v-else-if="customer_custom.sub_customer" class="d-inline">{{ customer_custom.sub_customer }}</h2>
-                <h2 v-else class="d-inline">{{ customer_main.name }}</h2>
+                <h2 v-else class="d-inline">{{ customer_main.name }}</h2> -->
+                <h2 class="d-inline">{{ title }}</h2>
                 <div class="dropright d-inline">
                     <button v-if="! table_edit" type="button" class="btn btn-sm btn-outline-secondary d-inline ml-2 align-top rounded-circle p-1" id="dropdownCopyInv" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i></button>
                     
@@ -615,11 +617,11 @@
         {% endverbatim %}
     </div>
 
-    <!-- OOCL report modal -->
-    <div v-if="customer_custom.option == 'oocl'" class="modal fade" id="modalReportOocl" tabindex="-1" role="dialog" aria-hidden="true">    
+    <!-- Report modal -->
+    <div v-if="customer_custom.option == 'oocl' || customer_custom.option == 'report'" class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-hidden="true">    
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form ref="reportOocl" method="POST" action="{% url 'summary-oocl-report' %}">
+                <form ref="reportOocl" method="POST" action="{% url 'summary-report' %}">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h2 class="modal-title w-100 text-center">Report</h2>
@@ -629,19 +631,21 @@
                     </div>
                     <div class="modal-body p-5">
                         <div class="input-group mb-3 container">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">REPORT OOCL</span>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text">(</span>
-                            </div>
                             {% verbatim %}
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">REPORT {{ title }}</span>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">(</span>
+                                </div>
                                 <input type="hidden" name="invoice_id" :value="invoice.id">
+                                <input type="hidden" name="title" :value="title">
+
+                                <input class="form-control text-center" name="report_name" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">)</span>
+                                </div>
                             {% endverbatim %}
-                            <input class="form-control text-center" name="report_name" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text">)</span>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer px-5 py-3">
