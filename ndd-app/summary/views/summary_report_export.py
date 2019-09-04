@@ -5,19 +5,21 @@ from django.http import HttpResponse
 import xlwt
 
 from ..models import Invoice, InvoiceDetail
-from .utils_oocl import StyleXls
+from .utils_report import StyleXls
 from agent_transport.models import AgentTransport
+from customer.models import Shipper
 
 
-def oocl_report(request):
+def report_export(request):
     if request.method == 'POST':
         report_name = request.POST['report_name']
         invoice_id = request.POST['invoice_id']
+        title = request.POST['title']
 
         style_xls = StyleXls()
 
         response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="REPORT OOCL (' + report_name + ').xls"'
+        response['Content-Disposition'] = 'attachment; filename="REPORT ' + title + ' (' + report_name + ').xls"'
 
         wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
         sheet = wb.add_sheet(report_name)
@@ -39,7 +41,7 @@ def oocl_report(request):
         title_style = style_xls.title_style()
         sheet.row(0).height_mismatch = True
         sheet.row(0).height = 20*22
-        sheet.write_merge(0, 0, 0, 10, 'OOCL', title_style)
+        sheet.write_merge(0, 0, 0, 10, title, title_style)
 
         style = xlwt.XFStyle()
         style.font = style_xls.font_size_13()
@@ -75,12 +77,18 @@ def oocl_report(request):
         invoice_details = InvoiceDetail.objects.filter(invoice=invoice).values_list('drayage_charge', 'gate_charge', 'detail').order_by('work_agent_transport__date', 'pk')
         
         work_id = InvoiceDetail.objects.filter(invoice=invoice).values_list('work_agent_transport').order_by('work_agent_transport__date', 'pk')
-        works = AgentTransport.objects.filter(pk__in=work_id).values_list('booking_no', 'pickup_from', 'return_to', 'date', 'container_1', 'size').order_by('date', 'pk')
+        works = AgentTransport.objects.filter(pk__in=work_id).values_list('booking_no', 'pickup_from', 'return_to', 'date', 'container_1', 'size', 'shipper').order_by('date', 'pk')
+
+        style = xlwt.XFStyle()
+        style.font = style_xls.font_size_13()
+        style.alignment = style_xls.align_left()
+        if 'other' in invoice.detail:
+            sheet.write_merge(1, 1, 9, 10, invoice.detail['other'], style)
 
         if 'customer_name' in invoice.detail:
             customer_name = invoice.detail['customer_name']
         else:
-            customer_name = 'OOCL'
+            customer_name = ''
         
         row_num = 4
         index = 0
@@ -98,13 +106,18 @@ def oocl_report(request):
             
             sheet.write(row_num, 0, index+1, style)
 
+            work = works[index]
+
             style.alignment = style_xls.align_left()
-            sheet.write(row_num, 1, customer_name, style)
+            if customer_name:
+                sheet.write(row_num, 1, customer_name, style)
+            else:
+                shipper_name = Shipper.objects.get(pk=work[6])
+                sheet.write(row_num, 1, shipper_name.name, style)
 
             style.alignment = style_xls.align_center()
 
-            work = works[index]
-            for col_num in range(len(works[index])):
+            for col_num in range(len(works[index])-1):
                 if col_num == 3:
                     style.num_format_str = 'D MMM YY'
                     sheet.write(row_num, col_num+2, work[col_num], style)
