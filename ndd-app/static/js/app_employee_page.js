@@ -76,7 +76,6 @@ var employee_page = new Vue( {
                     this.employees = data.emp
                     this.drivers = data.driver
                     this.date_compare = data.date_compare
-                    this.settingDetail()
                 })
             }
             else {
@@ -84,7 +83,6 @@ var employee_page = new Vue( {
                 api("/employee/api/get-employee/").then((data) => {
                     this.employees = data.emp
                     this.drivers = data.driver
-                    this.settingDetail()
                 })
             }
         },
@@ -93,7 +91,6 @@ var employee_page = new Vue( {
             api("/employee/api/get-not-active-employee/").then((data) => {
                 this.employees = data.emp
                 this.drivers = data.driver
-                this.settingDetail()
             })
         },
         getEmployeeSalary(){
@@ -158,13 +155,17 @@ var employee_page = new Vue( {
                     job: emp.job.job_title,
                     status: emp.status,
                     fire_date: emp.detail.fire_date || '',
-                    age: emp.age || '',
-                    exp: emp.exp || ''
                 }
                 if(driver){
                     this.emp_data.driver_id = driver.id
                     this.emp_data.license_type = driver.license_type
                     this.emp_data.pat_pass_expired_date = driver.pat_pass_expired_date || ''
+                    this.emp_data.age = this.calcAge(driver.employee.birth_date) || ''
+                    this.emp_data.exp = this.calcExp(driver.employee.hire_date, driver.employee.detail.fire_date || '') || ''
+                }
+                else {
+                    this.emp_data.age = this.calcAge(emp.birth_date) || ''
+                    this.emp_data.exp = this.calcExp(emp.hire_date, emp.detail.fire_date || '') || ''
                 }
             }
             else {
