@@ -286,13 +286,37 @@
                             </div>
                         </div>
 
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                REUSE
+                            </div>
+                            <div class="col custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="template-yard_fac_reuse" name="template" v-model="print.template" value="yard_fac_reuse" @change="print.couple=false">
+                                <label class="custom-control-label" for="template-yard_fac_reuse">Yard - Fac - REUSE</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="template-reuse_return" name="template" v-model="print.template" value="reuse_return" @change="print.couple=false">
+                                <label class="custom-control-label" for="template-reuse_return">REUSE - Return</label>
+                            </div>
+                            <div class="col custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="template-reuse_ndd" name="template" v-model="print.template" value="reuse_ndd" @change="print.couple=false">
+                                <label class="custom-control-label" for="template-reuse_ndd">REUSE - NDD</label>
+                            </div>
+                        </div>
+
                         <hr style="border-width: 3px;">
 
                         <div class="row">
                             <div class="col-md-3">วิ่ง 2 ตู้</div>
                             <div class="custom-control custom-checkbox d-inline">
                                 <input type="checkbox" class="custom-control-input" id="couple" name="couple" v-model="print.couple"
-                                    :disabled="container_print_size || ['full', 'yard_fac_ndd', 'ndd_fac_ndd', 'ndd_fac_return'].includes(print.template)"
+                                    :disabled="container_print_size || !['yard_ndd', 'ndd_return', 'forward', 'backward', 'ndd_fac', 'fac_ndd'].includes(print.template)"
                                 >
                                 <label class="custom-control-label" for="couple">คู่กับงาน</label>
                             </div>
