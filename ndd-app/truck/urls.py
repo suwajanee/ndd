@@ -8,6 +8,7 @@ from .views import truck_page_view
 urlpatterns = [
     url(r'^$', truck_page_view.truck_page, name='truck-page'),
     url(r'^chassis/$', truck_page_view.chassis_page, name='chassis-page'),
+    url(r'^sold/$', truck_page_view.sold_page, name='sold-page'),
 
 
     url(r'^api/get-truck-chassis-count/$', truck_data_view.api_get_truck_chassis_count, name='api-get-truck-chassis-count'),

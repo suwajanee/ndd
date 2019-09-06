@@ -27,7 +27,7 @@
                     <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
-                    <a class="nav-link {% if page == 'sold' %}active{% endif %}" href="{% url 'truck-page' %}">
+                    <a class="nav-link {% if page == 'sold' %}active{% endif %}" href="{% url 'sold-page' %}">
                         Sold
                     </a>
                     
@@ -47,7 +47,7 @@
                     </ol>
                 </nav>
 
-                <button class="btn btn-success m-3 float-right" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
 
                 <h2 class="mt-5 text-center">{{ title }}</h2>
                 <div class="mt-4 row">

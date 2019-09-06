@@ -1,4 +1,83 @@
-<table class="table table-hover table-bordered col-7 container text-center">
+<template v-if="page=='sold'">
+    <div class="col"></div>
+    <div class="col-5">
+        <h5 class="text-center"> Truck </h5>
+        <table class="table table-hover table-bordered col-6 text-center">
+            <thead>
+                <th class="align-middle" style="width: 60px;">
+                    #
+                </th>
+                <th class="align-middle">
+                    License Plate
+                </th>
+                <th class="align-middle">
+                    Manufacturer
+                </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        123
+                    </td>
+                    <td class="text-capitalize">
+                        Hino
+                    </td>
+                    <td class="border-white bg-white text-left">
+                        <button
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-5">
+        <h5 class="text-center"> Chassis </h5>
+        <table class="table table-hover table-bordered col-6 text-center">
+            <thead>
+                <th class="align-middle" style="width: 60px;">
+                    #
+                </th>
+                <th class="align-middle">
+                    License Plate
+                </th>
+                <th class="align-middle">
+                    Manufacturer
+                </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        123
+                    </td>
+                    <td class="text-capitalize">
+                        Hino
+                    </td>
+                    <td class="border-white bg-white text-left">
+                        <button
+                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                            data-toggle="modal" data-target="#"
+                        >
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div class="col"></div>
+</template>
+<table v-else class="table table-hover table-bordered col-7 container text-center">
     <thead>
         <th class="align-middle" style="width: 60px;">
             #
