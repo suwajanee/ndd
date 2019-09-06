@@ -224,13 +224,13 @@
 
                 <tr class="big">
                     <td class="pl-5">จาก</td>
-                    <td class="center text-blue">{% if 1 in trip %}{% if 1 in ndd %}NDD{% else %}{{ booking.pickup_from }}{% endif %}{% endif %}</td>
+                    <td class="center text-blue">{% if 1 in trip %}{% if reuse1 %}REUSE{% elif 1 in ndd %}NDD{% else %}{{ booking.pickup_from }}{% endif %}{% endif %}</td>
                     <td class="text-center">ถึง</td>
                     <td class="center text-blue pr-5 border-r">{% if 1 in trip %}{% if 2 in ndd %}NDD{% else %}{{ booking.factory }}{% endif %}{% endif %}</td>
                     <td class="pl-5">จาก</td>
                     <td class="center text-blue">{% if 2 in trip %}{% if 3 in ndd %}NDD{% else %}{{ booking.factory }}{% endif %}{% endif %}</td>
                     <td class="text-center">ถึง</td>
-                    <td class="center text-blue pr-5">{% if 2 in trip %}{% if 4 in ndd %}NDD{% else %}{{ booking.return_to }}{% endif %}{% endif %}</td>
+                    <td class="center text-blue pr-5">{% if 2 in trip %}{% if reuse2 %}REUSE{% elif 4 in ndd %}NDD{% else %}{{ booking.return_to }}{% endif %}{% endif %}</td>
                 </tr>
                 <tr class="small">
                     <td class="pl-5">FROM</td>
