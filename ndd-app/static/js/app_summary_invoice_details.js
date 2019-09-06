@@ -14,6 +14,7 @@ var summary_invoice_details = new Vue( {
         customer_custom: {},
         customer_main: {},
         customer_type: '',
+        title: '',
 
         container_size_1: [],
         container_size_2: [],
@@ -245,6 +246,16 @@ var summary_invoice_details = new Vue( {
             this.invoice_detail_list = data
             this.addWorkKey()
             this.work_selected = []
+
+            if(this.customer_custom.customer_title) {
+                this.title = this.customer_custom.customer_title
+            }
+            else if(this.customer_custom.sub_customer) {
+                this.title = this.customer_custom.sub_customer
+            }
+            else {
+                this.title = this.customer_main.name
+            }
         },
 
         addWorkKey() {

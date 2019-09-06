@@ -42,6 +42,7 @@ class BookingPrintView(TemplateView):
                 context['trip'] = [2]
                 context['ndd'] = [3]
                 context['work_type'] = '/3.1'
+
             elif template == 'forward':
                 context['trip'] = [1]
                 context['work_type'] = '/4.1'
@@ -56,6 +57,20 @@ class BookingPrintView(TemplateView):
                 context['trip'] = [2]
                 context['ndd'] = [4]
                 context['work_type'] = '/5.2'
+
+            elif template == 'yard_fac_reuse':
+                context['trip'] = [1,2]
+                context['reuse2'] = True
+                context['work_type'] = '/RE.1'
+            elif template == 'reuse_return':
+                context['trip'] = [1,2]
+                context['reuse1'] = True
+                context['work_type'] = '/RE.2'
+            elif template == 'reuse_ndd':
+                context['trip'] = [1,2]
+                context['reuse1'] = True
+                context['ndd'] = [4]
+                context['work_type'] = '/RE.3'
             else:
                 context['trip'] = [1, 2]
             

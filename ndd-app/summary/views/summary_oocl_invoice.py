@@ -7,7 +7,7 @@ from django.http import HttpResponse
 import xlwt
 
 from ..models import Invoice, InvoiceDetail
-from .utils_oocl import StyleXls
+from .utils_report import StyleXls
 from ndd.settings import STATICFILES_DIRS
 
 
