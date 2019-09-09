@@ -94,6 +94,23 @@ def api_get_chassis(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+@csrf_exempt
+def api_get_sold(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            truck = Truck.objects.filter(status='sold').order_by('number')
+            chassis = Chassis.objects.filter(status='sold').order_by('number')
+
+            truck_serializer = TruckSerializer(truck, many=True)
+            chassis_serializer = ChassisSerializer(chassis, many=True)
+
+            data = {
+                'truck': truck_serializer.data,
+                'chassis': chassis_serializer.data
+            }
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
+
 
 def get_date_compare(date):
     today = datetime.now()

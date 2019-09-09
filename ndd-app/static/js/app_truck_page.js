@@ -31,8 +31,11 @@ var truck_page = new Vue ({
             if(page == 'truck') {
                 this.getTruck()
             }
-            else {
+            else if(page == 'chassis') {
                 this.getChassis()
+            }
+            else {
+                this.getSold()
             }
         },
 
@@ -58,6 +61,13 @@ var truck_page = new Vue ({
             api("/truck/api/get-chassis").then((data) => {
                 this.chassis_list = data.chassis
                 this.date_compare = data.date_compare
+            })
+        },
+        getSold() {
+            api("/truck/api/get-sold").then((data) => {
+                this.truck_list = data.truck
+                this.chassis_list = data.chassis
+                console.log(this.chassis_length)
             })
         },
         getDriver() {

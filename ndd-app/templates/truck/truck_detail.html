@@ -1,4 +1,4 @@
-<template v-if="page=='sold'">
+{% if page == 'sold' %}
     <div class="col"></div>
     <div class="col-5">
         <h5 class="text-center"> Truck </h5>
@@ -14,24 +14,35 @@
                     Manufacturer
                 </th>
             </thead>
-            <tbody>
+            <tbody v-if="truck_list.length">
+                <tr v-for="(truck, index) in truck_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index+1 }}
+                        </td>
+                        <td>
+                            {{ truck.license_plate }}
+                        </td>
+                        <td class="text-capitalize">
+                            <template v-if="truck.manufacturer">
+                                {{ truck.manufacturer.name }}
+                            </template>
+                        </td>
+                        <td class="border-white bg-white" style="width: 60px;">
+                            <button
+                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                                data-toggle="modal" data-target="#"
+                            >
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </td>
+                    {% endverbatim %}
+                </tr>
+            </tbody>
+            <tbody v-else>
                 <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        123
-                    </td>
-                    <td class="text-capitalize">
-                        Hino
-                    </td>
-                    <td class="border-white bg-white text-left">
-                        <button
-                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                            data-toggle="modal" data-target="#"
-                        >
-                            <i class="fas fa-info"></i>
-                        </button>
+                    <td colspan=3 class="text-center text-secondary">
+                        ไม่พบข้อมูล
                     </td>
                 </tr>
             </tbody>
@@ -51,24 +62,35 @@
                     Manufacturer
                 </th>
             </thead>
-            <tbody>
+            <tbody v-if="chassis_list.length">
+                <tr v-for="(chassis, index) in chassis_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index+1 }}
+                        </td>
+                        <td>
+                            {{ chassis.license_plate }}
+                        </td>
+                        <td class="text-capitalize">
+                            <template v-if="chassis.manufacturer">
+                                {{ chassis.manufacturer.name }}
+                            </template>
+                        </td>
+                        <td class="border-white bg-white" style="width: 60px;">
+                            <button
+                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                                data-toggle="modal" data-target="#"
+                            >
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </td>
+                    {% endverbatim %}
+                </tr>
+            </tbody>
+            <tbody v-else>
                 <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        123
-                    </td>
-                    <td class="text-capitalize">
-                        Hino
-                    </td>
-                    <td class="border-white bg-white text-left">
-                        <button
-                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                            data-toggle="modal" data-target="#"
-                        >
-                            <i class="fas fa-info"></i>
-                        </button>
+                    <td colspan=3 class="text-center text-secondary">
+                        ไม่พบข้อมูล
                     </td>
                 </tr>
             </tbody>
@@ -76,109 +98,121 @@
         </table>
     </div>
     <div class="col"></div>
-</template>
-<table v-else class="table table-hover table-bordered col-7 container text-center">
-    <thead>
-        <th class="align-middle" style="width: 60px;">
-            #
-        </th>
-        <th class="align-middle">
-            No.
-        </th>
-        <th class="align-middle">
-            License Plate
-        </th>
-        <th class="align-middle">
-            Manufacturer
-        </th>
-        {% if page == 'truck' %}
-            <th class="align-middle">
-                PAT Expired
+{% else %}
+    <table class="table table-hover table-bordered col-7 container text-center">
+        <thead>
+            <th class="align-middle" style="width: 60px;">
+                #
             </th>
-        {% endif %}
-        <th class="align-middle">
-            Tax Expired
-            <button v-if="! edit_table" class="btn btn-sm btn-outline-info float-right" @click="edit_table=!edit_table"><i class="fa fa-edit"></i></button>
-            <button v-else class="btn btn-sm btn-outline-success float-right" @click="editExpiredDate"><i class="fa fa-save"></i></button>
-        </th>
-    </thead>
+            <th class="align-middle">
+                No.
+            </th>
+            <th class="align-middle">
+                License Plate
+            </th>
+            <th class="align-middle">
+                Manufacturer
+            </th>
+            {% if page == 'truck' %}
+                <th class="align-middle">
+                    PAT Expired
+                </th>
+            {% endif %}
+            <th class="align-middle">
+                Tax Expired
+                <button v-if="! edit_table" class="btn btn-sm btn-outline-info float-right" @click="edit_table=!edit_table"><i class="fa fa-edit"></i></button>
+                <button v-else class="btn btn-sm btn-outline-success float-right" @click="editExpiredDate"><i class="fa fa-save"></i></button>
+            </th>
+        </thead>
 
-    <tbody v-if="truck_list.length || chassis_list.length">
-        {% if page == 'truck' %}
-            <tr v-for="(truck, index) in truck_list">
-                {% verbatim %}
-                    <td>
-                        {{ index+1 }}
-                    </td>
-                    <td>
-                        {{ truck.number }}
-                    </td>
-                    <td>
-                        {{ truck.license_plate }}
-                    </td>
-                    <td class="text-capitalize">
-                        <template v-if="truck.manufacturer">
-                            {{ truck.manufacturer.name }}
-                        </template>
-                    </td>
-                    <td :class="{'table-warning': date_compare > truck.tax_expired_date}">
-                        <input v-if="edit_table" type="date" class="form-control" v-model="truck.tax_expired_date" @change="editData(truck)">
-                        <template v-else>
-                            {{ truck.tax_expired_date|formatDate }}
-                        </template>
-                    </td>
-                    <td :class="{'table-warning': date_compare > truck.pat_pass_expired_date}">
-                        <input v-if="edit_table" type="date" class="form-control" v-model="truck.pat_pass_expired_date" @change="editData(truck)">
-                        <template v-else>
-                            {{ truck.pat_pass_expired_date|formatDate }}
-                        </template>
-                    </td>
-                    <td class="border-white bg-white" style="width: 60px;">
-                        <button
-                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                            data-toggle="modal" data-target="#"
-                        >
-                            <i class="fas fa-info"></i>
-                        </button>
-                    </td>
-                {% endverbatim %}
+        <tbody v-if="truck_list.length || chassis_list.length">
+            {% if page == 'truck' %}
+                <tr v-for="(truck, index) in truck_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index+1 }}
+                        </td>
+                        <td>
+                            {{ truck.number }}
+                        </td>
+                        <td>
+                            {{ truck.license_plate }}
+                        </td>
+                        <td class="text-capitalize">
+                            <template v-if="truck.manufacturer">
+                                {{ truck.manufacturer.name }}
+                            </template>
+                        </td>
+                        <td :class="{'table-warning': date_compare > truck.tax_expired_date}">
+                            <input v-if="edit_table" type="date" class="form-control" v-model="truck.tax_expired_date" @change="editData(truck)">
+                            <template v-else>
+                                {{ truck.tax_expired_date|formatDate }}
+                            </template>
+                        </td>
+                        <td :class="{'table-warning': date_compare > truck.pat_pass_expired_date}">
+                            <input v-if="edit_table" type="date" class="form-control" v-model="truck.pat_pass_expired_date" @change="editData(truck)">
+                            <template v-else>
+                                {{ truck.pat_pass_expired_date|formatDate }}
+                            </template>
+                        </td>
+                        <td class="border-white bg-white" style="width: 60px;">
+                            <button
+                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                                data-toggle="modal" data-target="#"
+                            >
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </td>
+                    {% endverbatim %}
+                </tr>
+            {% else %}
+                <tr v-for="(chassis, index) in chassis_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index+1 }}
+                        </td>
+                        <td>
+                            {{ chassis.number }}
+                        </td>
+                        <td>
+                            {{ chassis.license_plate }}
+                        </td>
+                        <td class="text-capitalize">
+                            <template v-if="chassis.manufacturer">
+                                {{ chassis.manufacturer.name }}
+                            </template>
+                        </td>
+                        <td :class="{'table-warning': date_compare > chassis.tax_expired_date}">
+                            <input v-if="edit_table" type="date" class="form-control" v-model="chassis.tax_expired_date" @change="editData(chassis)">
+                            <template v-else>
+                                {{ chassis.tax_expired_date|formatDate }}
+                            </template>
+                        </td>
+                        <td class="border-white bg-white" style="width: 60px;">
+                            <button
+                                class="btn btn-sm btn-outline-warning rounded-circle py-1"
+                                data-toggle="model" data-target="#"
+                            >
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </td>
+
+                    {% endverbatim %}
+                </tr>
+            {% endif %}
+            
+
+        </tbody>
+        <tbody v-else>
+            <tr>
+                {% if page == 'truck' %}
+                    <td colspan=6 class="text-center text-secondary">
+                {% else %}
+                    <td colspan=5 class="text-center text-secondary">
+                {% endif %}
+                    ไม่พบข้อมูล
+                </td>
             </tr>
-        {% else %}
-            <tr v-for="(chassis, index) in chassis_list">
-                {% verbatim %}
-                    <td>
-                        {{ index+1 }}
-                    </td>
-                    <td>
-                        {{ chassis.number }}
-                    </td>
-                    <td>
-                        {{ chassis.license_plate }}
-                    </td>
-                    <td class="text-capitalize">
-                        <template v-if="chassis.manufacturer">
-                            {{ chassis.manufacturer.name }}
-                        </template>
-                    </td>
-                    <td :class="{'table-warning': date_compare > chassis.tax_expired_date}">
-                        <input v-if="edit_table" type="date" class="form-control" v-model="chassis.tax_expired_date" @change="editData(chassis)">
-                        <template v-else>
-                            {{ chassis.tax_expired_date|formatDate }}
-                        </template>
-                    </td>
-                    <td class="border-white bg-white" style="width: 60px;">
-                        <button
-                            class="btn btn-sm btn-outline-warning rounded-circle py-1"
-                            data-toggle="model" data-target="#"
-                        >
-                            <i class="fas fa-info"></i>
-                        </button>
-                    </td>
-
-                {% endverbatim %}
-            </tr>
-        {% endif %}
-        
-
-    </tbody>
-</table>
+        </tbody>
+    </table>
+{% endif %}

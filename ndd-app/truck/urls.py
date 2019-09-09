@@ -17,6 +17,7 @@ urlpatterns = [
     
     url(r'^api/get-truck/$', truck_data_view.api_get_truck, name='api-get-truck'),
     url(r'^api/get-chassis/$', truck_data_view.api_get_chassis, name='api-get-chassis'),
+    url(r'^api/get-sold/$', truck_data_view.api_get_sold, name='api-get-sold'),
 
 
     url(r'^api/edit-expired-date/$', truck_edit_view.api_edit_expired_date, name='api-edit-expired-date'),
