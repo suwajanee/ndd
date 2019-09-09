@@ -93,15 +93,15 @@ def api_edit_customer_custom(request):
 
     return JsonResponse('Error', safe=False)
 
-@csrf_exempt
-def api_delete_customer_custom(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            req = json.loads( request.body.decode('utf-8') )
-            setting_id = req["setting_id"]
+# @csrf_exempt
+# def api_delete_customer_custom(request):
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             req = json.loads( request.body.decode('utf-8') )
+#             setting_id = req["setting_id"]
 
-            customer_setting = CustomerCustom.objects.get(pk=setting_id)
-            customer_setting.delete()
+#             customer_setting = CustomerCustom.objects.get(pk=setting_id)
+#             customer_setting.delete()
 
-            return api_get_customer_custom(request)
-    return JsonResponse('Error', safe=False)  
+#             return api_get_customer_custom(request)
+#     return JsonResponse('Error', safe=False)  

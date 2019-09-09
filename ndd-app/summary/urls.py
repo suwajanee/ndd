@@ -51,7 +51,7 @@ urlpatterns = [
     url(r'^api/get-customer-custom/$', summary_customer_custom_view.api_get_customer_custom, name='api-get-customer-custom'),
     url(r'^api/add-customer-custom/$', summary_customer_custom_view.api_add_customer_custom, name='api-add-customer-custom'),
     url(r'^api/edit-customer-custom/$', summary_customer_custom_view.api_edit_customer_custom, name='api-edit-customer-custom'),
-    url(r'^api/delete-customer-custom/$', summary_customer_custom_view.api_delete_customer_custom, name='api-delete-customer-custom'),
+    # url(r'^api/delete-customer-custom/$', summary_customer_custom_view.api_delete_customer_custom, name='api-delete-customer-custom'),
 
     # Summary Month
     url(r'^api/get-summary-month-details/$', summary_month_view.api_get_summary_month_details, name='api-get-summary-month-details'),
