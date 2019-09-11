@@ -47,8 +47,10 @@
                     </ol>
                 </nav>
 
-                <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
-
+                {% if page != 'sold' %}
+                    <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#" ><i class="fa fa-plus"></i> Add</button>
+                {% endif %}
+                
                 <h2 class="mt-5 text-center">{{ title }}</h2>
                 <div class="mt-4 row">
                     {% include 'truck/truck_detail.html' %}
