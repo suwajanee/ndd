@@ -29,9 +29,9 @@ var dashboard_page = new Vue( {
         agent_completed_width: 0,
 
         truck_total: 0,
-        truck_active: 0,
-        truck_repair: 0,
-        truck_active_width: 0,
+        truck_available: 0,
+        truck_maintanance: 0,
+        truck_available_width: 0,
 
         weekly_works: {
             booking_not_start: [],
@@ -110,10 +110,10 @@ var dashboard_page = new Vue( {
         getDailyTruck() {
             api("/truck/api/get-daily-trucks/").then((data) => {
                 this.truck_total = data.total
-                this.truck_active = data.active
-                this.truck_repair = data.repair
+                this.truck_available = data.available
+                this.truck_maintanance = data.maintanance
 
-                this.truck_active_width = this.progressWidth(this.truck_active, this.truck_total)
+                this.truck_available_width = this.progressWidth(this.truck_available, this.truck_total)
             })
         },
         progressWidth(val, max) {

@@ -67,7 +67,6 @@ var truck_page = new Vue ({
             api("/truck/api/get-sold").then((data) => {
                 this.truck_list = data.truck
                 this.chassis_list = data.chassis
-                console.log(this.chassis_length)
             })
         },
         getDriver() {

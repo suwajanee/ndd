@@ -28,13 +28,13 @@ def api_get_truck_choices(request):
 def api_get_daily_trucks(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            active = Truck.objects.filter(status='active').count()
-            repair = Truck.objects.filter(status='repair').count()
+            available = Truck.objects.filter(status='available').count()
+            maintanance = Truck.objects.filter(status='maintanance').count()
 
             data = {
-                'active': active,
-                'repair': repair,
-                'total': active + repair
+                'available': available,
+                'maintanance': maintanance,
+                'total': available + maintanance
             }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
