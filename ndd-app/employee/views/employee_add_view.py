@@ -32,7 +32,7 @@ def api_add_employee(request):
                 },
                 'hire_date': emp_data['hire_date'] or None,
                 'job': job,
-                'status': 'active'
+                'status': 'a'
             }
 
             employee = Employee(**data)

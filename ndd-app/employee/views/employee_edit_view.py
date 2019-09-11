@@ -33,7 +33,7 @@ def api_edit_employee(request):
             emp.hire_date = emp_data['hire_date'] or None
             emp.status = status
 
-            if status == 'active':
+            if status == 'a':
                 emp.detail.pop("fire_date", None)
             else:
                 emp.detail['fire_date'] = emp_data['fire_date'] or None

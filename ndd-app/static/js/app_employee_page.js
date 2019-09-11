@@ -14,8 +14,8 @@ var employee_page = new Vue( {
         driver_count: 0,
         mechanic_count: 0,
         active_except_driver: 0,
-        not_active_count: 0,
-        not_active_except_driver: 0,
+        terminated_count: 0,
+        terminated_except_driver: 0,
 
         edit_table: false,
         edit_data: [],
@@ -43,7 +43,7 @@ var employee_page = new Vue( {
             }
             else {
                 this.page = page
-                if(page == 'not_active') {
+                if(page == 'terminated') {
                     this.getNotActiveEmployee()
                 }
                 else if(page == 'salary') {
@@ -59,8 +59,8 @@ var employee_page = new Vue( {
                 this.driver_count = data.driver
                 this.mechanic_count = data.mechanic
                 this.active_except_driver = data.active_except_driver
-                this.not_active_count = data.not_active
-                this.not_active_except_driver = data.not_active_except_driver
+                this.terminated_count = data.terminated
+                this.terminated_except_driver = data.terminated_except_driver
             })
         },
         // getTruckChoices() {
@@ -108,7 +108,7 @@ var employee_page = new Vue( {
 
             this.employees.forEach(function(emp) {
                 emp.age = employee_page.calcAge(emp.birth_date)
-                if(employee_page.page == 'not_active'){
+                if(employee_page.page == 'terminated'){
                     emp.exp = employee_page.calcExp(emp.hire_date, emp.detail.fire_date || '')
                 }
                 else {
@@ -224,7 +224,7 @@ var employee_page = new Vue( {
 
         editEmployees() {
             this.input_required = false
-            if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || (this.emp_data.status == 'terminated' && this.emp_data.fire_date == '')){
+            if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || (this.emp_data.status == 't' && this.emp_data.fire_date == '')){
                 this.input_required = true
                 return false
             }

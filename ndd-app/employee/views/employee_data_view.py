@@ -19,12 +19,12 @@ from ..serializers import SalarySerializer
 def api_get_employee_count(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            officer = Employee.objects.filter(status='active', job__job_title='officer').count()
-            driver = Employee.objects.filter(status='active', job__job_title='driver').count()
-            mechanic = Employee.objects.filter(status='active', job__job_title='mechanic').count()
+            officer = Employee.objects.filter(status='a', job__job_title='officer').count()
+            driver = Employee.objects.filter(status='a', job__job_title='driver').count()
+            mechanic = Employee.objects.filter(status='a', job__job_title='mechanic').count()
 
-            not_active = Employee.objects.filter(status='terminated').count()
-            not_active_driver = Driver.objects.filter(employee__status='terminated').count()
+            terminated = Employee.objects.filter(status='t').count()
+            terminated_driver = Driver.objects.filter(employee__status='t').count()
 
             data = {
                 'emp': officer + driver + mechanic,
@@ -32,8 +32,8 @@ def api_get_employee_count(request):
                 'driver': driver,
                 'mechanic': mechanic,
                 'active_except_driver': officer + mechanic,
-                'not_active': not_active,
-                'not_active_except_driver': not_active - not_active_driver
+                'terminated': terminated,
+                'terminated_except_driver': terminated - terminated_driver
             }
 
             return JsonResponse(data, safe=False)
@@ -43,10 +43,10 @@ def api_get_employee_count(request):
 def api_get_employee(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            employee = Employee.objects.filter(Q(status='active') & (Q(job__job_title='officer') | Q(job__job_title='mechanic'))).order_by('job__number', 'hire_date', 'first_name', 'last_name')
+            employee = Employee.objects.filter(Q(status='a') & (Q(job__job_title='officer') | Q(job__job_title='mechanic'))).order_by('job__number', 'hire_date', 'first_name', 'last_name')
             emp_serializer = EmployeeSerializer(employee, many=True)
 
-            driver = Driver.objects.filter(employee__status='active').order_by('employee__hire_date', 'employee__first_name', 'employee__last_name')
+            driver = Driver.objects.filter(employee__status='a').order_by('employee__hire_date', 'employee__first_name', 'employee__last_name')
             driver_serializer = DriverSerializer(driver, many=True)
 
             data = {
@@ -63,7 +63,7 @@ def api_get_employee(request):
                 today = datetime.now()
                 date_compare = today + timedelta(days=7)
 
-                employee = Driver.objects.filter(employee__status='active').order_by('truck__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
+                employee = Driver.objects.filter(employee__status='a').order_by('truck__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
                 serializer = DriverSerializer(employee, many=True)
                 data = {
                     'emp': [],
@@ -71,7 +71,7 @@ def api_get_employee(request):
                     'date_compare': date_compare
                 } 
             else:
-                employee = Employee.objects.filter(status='active', job__job_title=job).order_by('hire_date', 'first_name', 'last_name')
+                employee = Employee.objects.filter(status='a', job__job_title=job).order_by('hire_date', 'first_name', 'last_name')
                 serializer = EmployeeSerializer(employee, many=True)
                 data = {
                     'emp': serializer.data,
@@ -86,10 +86,10 @@ def api_get_not_active_employee(request):
     if request.user.is_authenticated:
         if request.method == "GET":
 
-            employee = Employee.objects.filter(Q(status='terminated') & (Q(job__job_title='officer') | Q(job__job_title='mechanic'))).order_by('job__number', 'first_name', 'last_name')
+            employee = Employee.objects.filter(Q(status='t') & (Q(job__job_title='officer') | Q(job__job_title='mechanic'))).order_by('job__number', 'first_name', 'last_name')
             emp_serializer = EmployeeSerializer(employee, many=True)
 
-            driver = Driver.objects.filter(employee__status='terminated').order_by('employee__hire_date', 'employee__first_name', 'employee__last_name')
+            driver = Driver.objects.filter(employee__status='t').order_by('employee__hire_date', 'employee__first_name', 'employee__last_name')
             driver_serializer = DriverSerializer(driver, many=True)
 
             data = {
@@ -104,7 +104,7 @@ def api_get_employee_salary(request):
     if request.user.is_authenticated:
         if request.method == "GET":
 
-            employee = Salary.objects.filter(employee__status='active', to_date=None).order_by('employee__job__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
+            employee = Salary.objects.filter(employee__status='a', to_date=None).order_by('employee__job__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
             serializer = SalarySerializer(employee, many=True)
         
             return JsonResponse(serializer.data, safe=False)

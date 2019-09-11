@@ -114,15 +114,15 @@
                     <template v-if="emp_data.status">
                         <hr class="my-4">
 
-                        <div class="input-group mt-4 mb-3 container" :class="{'col-lg-5': emp_data.status!='terminated'}">
+                        <div class="input-group mt-4 mb-3 container" :class="{'col-lg-5': emp_data.status!='t'}">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">STATUS</span>
                             </div>
-                            <select class="custom-select" :class="{'col-3': emp_data.status=='terminated'}" style="height: 40px;" v-model="emp_data.status">
-                                <option value="active">Active</option>
-                                <option value="terminated">Terminated</option>
+                            <select class="custom-select" :class="{'col-3': emp_data.status=='t'}" style="height: 40px;" v-model="emp_data.status">
+                                <option value="a">Active</option>
+                                <option value="t">Terminated</option>
                             </select>
-                            <template v-if="emp_data.status=='terminated'">
+                            <template v-if="emp_data.status=='t'">
                                 <div class="input-group-append">
                                     <span class="input-group-text">FIRE DATE</span>
                                 </div>

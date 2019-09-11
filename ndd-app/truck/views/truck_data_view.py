@@ -19,7 +19,7 @@ from ..serializers import TruckSerializer
 def api_get_truck_choices(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            truck = Truck.objects.filter(~Q(status='sold')).order_by('number')
+            truck = Truck.objects.filter(~Q(status='s')).order_by('number')
             serializer = TruckSerializer(truck, many=True)
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -28,8 +28,8 @@ def api_get_truck_choices(request):
 def api_get_daily_trucks(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            active = Truck.objects.filter(status='active').count()
-            maintanance = Truck.objects.filter(status='maintanance').count()
+            active = Truck.objects.filter(status='a').count()
+            maintanance = Truck.objects.filter(status='m').count()
 
             data = {
                 'active': active,
@@ -43,8 +43,8 @@ def api_get_daily_trucks(request):
 def api_get_truck_chassis_count(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            truck = Truck.objects.filter(~Q(status='sold')).count()
-            chassis = Chassis.objects.filter(~Q(status='sold')).count()
+            truck = Truck.objects.filter(~Q(status='s')).count()
+            chassis = Chassis.objects.filter(~Q(status='s')).count()
 
             data = {
                 'truck': truck,
@@ -70,7 +70,7 @@ def api_get_truck(request):
     if request.user.is_authenticated:
         if request.method == "GET":
             data = {}
-            truck = Truck.objects.filter(~Q(status='sold')).order_by('number')
+            truck = Truck.objects.filter(~Q(status='s')).order_by('number')
             serializer = TruckSerializer(truck, many=True)
 
             data = {
@@ -84,7 +84,7 @@ def api_get_truck(request):
 def api_get_chassis(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            chassis = Chassis.objects.filter(~Q(status='sold')).order_by('number')
+            chassis = Chassis.objects.filter(~Q(status='s')).order_by('number')
             serializer = ChassisSerializer(chassis, many=True)
 
             data = {
@@ -98,8 +98,8 @@ def api_get_chassis(request):
 def api_get_sold(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            truck = Truck.objects.filter(status='sold').order_by('number')
-            chassis = Chassis.objects.filter(status='sold').order_by('number')
+            truck = Truck.objects.filter(status='s').order_by('number')
+            chassis = Chassis.objects.filter(status='s').order_by('number')
 
             truck_serializer = TruckSerializer(truck, many=True)
             chassis_serializer = ChassisSerializer(chassis, many=True)

@@ -140,8 +140,8 @@
             <tr v-for="(driver, index) in drivers" >
                 {% verbatim %}
                     <td>
-                        <template v-if="page == 'not_active'">
-                            {{ not_active_except_driver + index + 1 }}
+                        <template v-if="page == 'terminated'">
+                            {{ terminated_except_driver + index + 1 }}
                         </template>
                         <template v-else>
                             {{ active_except_driver + index + 1 }}
