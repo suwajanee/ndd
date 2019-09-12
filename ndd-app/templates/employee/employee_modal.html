@@ -24,12 +24,10 @@
                         <input 
                             class="form-control" autocomplete=off maxlength="50" placeholder="First Name" v-model="emp_data.first_name"
                             :class="{'alert-danger': input_required == true & emp_data.first_name == ''}"
-                            required
                         >
                         <input 
                             class="form-control" autocomplete=off maxlength="50" placeholder="Last Name" v-model="emp_data.last_name" 
                             :class="{'alert-danger': input_required == true & emp_data.last_name == ''}"
-                            required
                         >
                     </div>
                     

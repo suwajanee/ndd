@@ -3,7 +3,8 @@ var truck_page = new Vue ({
     el: '#truck-page',
     data: {
         page: '',
-        manufacturer_list: [],
+        truck_manu_list: [],
+        chassis_manu_list: [],
         truck_list: [],
         chassis_list: [],
 
@@ -16,6 +17,12 @@ var truck_page = new Vue ({
 
         edit_table: false,
         edit_data: [],
+        
+        modal_truck_mode: '',
+        modal_add_mode: true,
+        input_required: false,
+
+        truck_chassis_data: {}
 
 
     },
@@ -46,8 +53,9 @@ var truck_page = new Vue ({
             })
         },
         getManufacturer() {
-            api("/truck/api/get-manufacturer/", "POST", {category: this.page}).then((data) => {
-                this.manufacturer_list = data
+            api("/truck/api/get-manufacturer/").then((data) => {
+                this.truck_manu_list = data.truck_manu
+                this.chassis_manu_list = data.chassis_manu
             })
         },
         getTruck() {
@@ -89,6 +97,37 @@ var truck_page = new Vue ({
                 })
             }
             this.edit_table = false
+        },
+
+        modalTruckChassis(mode, data) {
+            this.input_required = false
+            this.modal_truck_mode = mode
+            if(data) {
+                this.modal_add_mode = false
+                this.truck_chassis_data = {
+                    id: data.id,
+                    number: data.number,
+                    license_plate: data.license_plate,
+                    manufacturer: data.manufacturer.id,
+
+                    tax_expired_date: data.tax_expired_date,
+                    status: data.status
+                }
+                if(this.page == 'truck') {
+                    this.truck_chassis_data.pat_pass_expired_date = data.pat_pass_expired_date
+                }
+            }
+            else {
+                this.modal_add_mode = true
+                this.truck_chassis_data = {
+                    number: '',
+                    license_plate: '',
+                    manufacturer: '',
+                    
+                    tax_expired_date: '',
+                    pat_pass_expired_date: '',
+                }
+            }
         }
 
 

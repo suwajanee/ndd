@@ -56,13 +56,19 @@ def api_get_truck_chassis_count(request):
 @csrf_exempt
 def api_get_manufacturer(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            req = json.loads(request.body.decode('utf-8'))
-            category = req['category']
+        if request.method == "GET":
+            truck_manu = Manufacturer.objects.filter(category='t').order_by('name')
+            chassis_manu = Manufacturer.objects.filter(category='c').order_by('name')
 
-            manufacturer = Manufacturer.objects.filter(category=category)
-            serializer = ManufacturerSerializer(manufacturer, many=True)
-            return JsonResponse(serializer.data, safe=False)
+            truck_serializer = ManufacturerSerializer(truck_manu, many=True)
+            chassis_serializer = ManufacturerSerializer(chassis_manu, many=True)
+
+            data = {
+                'truck_manu': truck_serializer.data,
+                'chassis_manu': chassis_serializer.data
+            }
+
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

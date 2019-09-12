@@ -1,15 +1,20 @@
 <!-- POPUP : Employee Data -->
-<div class="modal fade" id="modalTruck" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalTruckChassis" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold">
-                    <template>
-                        Add New Truck
+                    <template v-if="modal_add_mode">
+                        Add New {{ title }}
                     </template>
-                    <!-- <template v-else>
-                        Edit Truck
-                    </template> -->
+                    <template v-else>
+                        <template v-if="modal_truck_mode">
+                            Edit Truck
+                        </template>
+                        <template v-else>
+                            Edit Chassis
+                        </template>
+                    </template>
                 </h4>
                 <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
                     <span aria-hidden="true">&times;</span>
@@ -19,10 +24,10 @@
                 <div class="container col-lg-10">
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">TRUCK NO.</span>
+                            <span class="input-group-text">NO.</span>
                         </div>
                         <input 
-                            class="form-control" autocomplete=off maxlength="5" required
+                            class="form-control" autocomplete=off maxlength="5" v-model="truck_chassis_data.number"
                         >
                     </div>
 
@@ -31,7 +36,7 @@
                             <span class="input-group-text">LICENSE PLATE</span>
                         </div>
                         <input 
-                            class="form-control" autocomplete=off maxlength="7" required
+                            class="form-control" autocomplete=off maxlength="7" v-model="truck_chassis_data.license_plate"
                         >
                     </div>
 
@@ -39,26 +44,32 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">MANUFACTURER</span>
                         </div>
-                        <select class="custom-select">
+                        <select class="custom-select text-capitalize" v-model="truck_chassis_data.manufacturer">
                             {% verbatim %}
-                                <option v-for="manu in manufacturer_list" :value="manu.id">{{ manu.name }}</option>
+                                <option value="">--------</option>
+                                <template v-if="modal_truck_mode">
+                                    <option v-for="manu in truck_manu_list" class="text-capitalize" :value="manu.id">{{ manu.name }}</option>
+                                </template>
+                                <template v-else>
+                                    <option v-for="manu in chassis_manu_list" class="text-capitalize" :value="manu.id">{{ manu.name }}</option>
+                                </template>
                             {% endverbatim %}
                         </select>
                     </div>
                     
                     <hr class="my-4">
 
-                    <div class="input-group my-3 container">
+                    <div v-if="modal_truck_mode" class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">PAT EXPIRED</span>
                         </div>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" v-model="truck_chassis_data.pat_pass_expired_date">
                     </div>
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">TAX EXPIRED</span>
                         </div>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" v-model="truck_chassis_data.tax_expired_date">
                     </div>
 
                     <hr class="my-4">
@@ -67,7 +78,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">STATUS</span>
                         </div>
-                        <select class="custom-select">
+                        <select class="custom-select" v-model="truck_chassis_data.status">
                             <option value="a">Active</option>
                             <option value="m">Maintanance</option>
                             <option value="s">Sold</option>
@@ -77,7 +88,11 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">    
-                <button class="btn btn-primary" >Add</button>
+                <button v-if="modal_add_mode" class="btn btn-primary" >Add</button>
+                <template v-else>
+                    <button v-if="modal_truck_mode" class="btn btn-primary">Save</button>
+                    <button v-else class="btn btn-primary">Save</button>
+                </template>
                 <!-- <button v-if="modal_add_mode" class="btn btn-primary" >Add</button>
                 <template v-else>
                     <button class="btn btn-primary">Save</button>

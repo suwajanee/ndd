@@ -6,6 +6,7 @@ from .models import Chassis
 # Register your models here.
 class ManufacturerAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', )
+    ordering = ('-category', 'name')
 
 
 class TruckAdmin(admin.ModelAdmin):
