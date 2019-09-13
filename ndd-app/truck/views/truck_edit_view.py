@@ -37,6 +37,44 @@ def api_edit_expired_date(request):
                 return JsonResponse('Success', safe=False)
     
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_edit_truck(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            data = req['truck']
+
+            truck = Truck.objects.get(pk=data['id'])
+            truck.number = data['number']
+            truck.license_plate = data['license_plate']
+            truck.manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+            truck.tax_expired_date = data['tax_expired_date'] or None
+            truck.pat_pass_expired_date = data['pat_pass_expired_date'] or None
+            truck.status = data['status']
+            truck.save()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_edit_chassis(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            data = req['chassis']
+
+            chassis = Chassis.objects.get(pk=data['id'])
+            chassis.number = data['number']
+            chassis.license_plate = data['license_plate']
+            chassis.manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+            chassis.tax_expired_date = data['tax_expired_date'] or None
+            chassis.status = data['status']
+            chassis.save()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
+
             
 
                 

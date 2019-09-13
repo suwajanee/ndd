@@ -28,6 +28,7 @@
                         </div>
                         <input 
                             class="form-control" autocomplete=off maxlength="5" v-model="truck_chassis_data.number"
+                            :class="{'alert-danger': input_required && ! truck_chassis_data.number}"
                         >
                     </div>
 
@@ -44,7 +45,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">MANUFACTURER</span>
                         </div>
-                        <select class="custom-select text-capitalize" v-model="truck_chassis_data.manufacturer">
+                        <select 
+                            class="custom-select text-capitalize" v-model="truck_chassis_data.manufacturer"
+                            :class="{'alert-danger': input_required && ! truck_chassis_data.manufacturer }"
+                        >
                             {% verbatim %}
                                 <option value="">--------</option>
                                 <template v-if="modal_truck_mode">
@@ -71,27 +75,31 @@
                         </div>
                         <input type="date" class="form-control" v-model="truck_chassis_data.tax_expired_date">
                     </div>
+                    <template v-if="! modal_add_mode">
+                        <hr class="my-4">
 
-                    <hr class="my-4">
-
-                    <div class="input-group my-3 container">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">STATUS</span>
+                        <div class="input-group my-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">STATUS</span>
+                            </div>
+                            <select class="custom-select" v-model="truck_chassis_data.status">
+                                <option value="a">Active</option>
+                                <option value="m">Maintanance</option>
+                                <option value="s">Sold</option>
+                            </select>
                         </div>
-                        <select class="custom-select" v-model="truck_chassis_data.status">
-                            <option value="a">Active</option>
-                            <option value="m">Maintanance</option>
-                            <option value="s">Sold</option>
-                        </select>
-                    </div>
+                    </template>
 
                 </div>
             </div>
-            <div class="modal-footer d-flex justify-content-center">    
-                <button v-if="modal_add_mode" class="btn btn-primary" >Add</button>
+            <div class="modal-footer d-flex justify-content-center"> 
+                <template v-if="modal_add_mode">
+                    <button v-if="modal_truck_mode" class="btn btn-primary" @click="addTruck">Add</button>
+                    <button v-else class="btn btn-primary" @click="addChassis">Add</button>
+                </template>   
                 <template v-else>
-                    <button v-if="modal_truck_mode" class="btn btn-primary">Save</button>
-                    <button v-else class="btn btn-primary">Save</button>
+                    <button v-if="modal_truck_mode" class="btn btn-primary" @click="editTruck">Save</button>
+                    <button v-else class="btn btn-primary" @click="editChassis">Save</button>
                 </template>
                 <!-- <button v-if="modal_add_mode" class="btn btn-primary" >Add</button>
                 <template v-else>

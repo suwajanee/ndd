@@ -83,6 +83,7 @@ var truck_page = new Vue ({
             })
         },
 
+
         editData(data) {
             if(this.edit_data.indexOf(data) === -1) {
                 this.edit_data.push(data)
@@ -113,7 +114,7 @@ var truck_page = new Vue ({
                     tax_expired_date: data.tax_expired_date,
                     status: data.status
                 }
-                if(this.page == 'truck') {
+                if(mode) {
                     this.truck_chassis_data.pat_pass_expired_date = data.pat_pass_expired_date
                 }
             }
@@ -128,7 +129,71 @@ var truck_page = new Vue ({
                     pat_pass_expired_date: '',
                 }
             }
-        }
+        },
+        addTruck() {
+            this.input_required = false
+            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/add-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
+                        $('#modalTruckChassis').modal('hide')
+                    }
+                })
+            }
+        },
+        addChassis() {
+            this.input_required = false
+            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/add-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
+                        $('#modalTruckChassis').modal('hide')
+                    }
+                })
+            }
+        },
+
+        editTruck() {
+            this.input_required = false
+            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/edit-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
+                        $('#modalTruckChassis').modal('hide')
+                    }
+                })
+            }
+        },
+        editChassis() {
+            this.input_required = false
+            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/edit-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
+                        $('#modalTruckChassis').modal('hide')
+                    }
+                })
+            }
+        },
+
+        
+      
 
 
 
