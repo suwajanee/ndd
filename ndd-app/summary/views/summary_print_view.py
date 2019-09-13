@@ -29,10 +29,11 @@ class SummaryPrintView(TemplateView):
             if invoice.customer_week.customer_custom.form:
                 context['form'] = invoice.customer_week.customer_custom.form.form_detail
 
-        invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date',
+        invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by(
                             Case(
                                 When(invoice__detail__order_by_remark=True, then='detail__remark'),
-                            ),'pk')
+                            ),
+                            'work_normal__date', 'work_agent_transport__date', 'pk')
 
         booking_len = []
         customer_len = []   
