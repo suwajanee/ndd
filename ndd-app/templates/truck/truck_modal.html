@@ -16,7 +16,7 @@
                         </template>
                     </template>
                 </h4>
-                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none; ">
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -45,10 +45,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">MANUFACTURER</span>
                         </div>
-                        <select 
-                            class="custom-select text-capitalize" v-model="truck_chassis_data.manufacturer"
-                            :class="{'alert-danger': input_required && ! truck_chassis_data.manufacturer }"
-                        >
+                        <select class="custom-select text-capitalize" v-model="truck_chassis_data.manufacturer">
                             {% verbatim %}
                                 <option value="">--------</option>
                                 <template v-if="modal_truck_mode">
@@ -105,6 +102,45 @@
                 <template v-else>
                     <button class="btn btn-primary">Save</button>
                 </template> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP -->
+<div class="modal fade" id="modalManufacturer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">
+                    <template v-if="modal_add_mode">Add Manufacturer</template>
+                    <template v-else>Edit Manufacturer</template>
+                </h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-10 container">
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Name</span>
+                        </div>
+                        <input
+                            class="form-control" autocomplete=off maxlength=30 v-model="manufacturer_data.name"
+                            :class="{'alert-danger': input_required && ! manufacturer_data.name}"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <template v-if="modal_add_mode">
+                    <button class="btn btn-primary" @click="addManufacturer">Add</button>
+                </template>
+                <template v-else>
+                    <button class="btn btn-link text-danger mr-auto">Delete</button>
+                    <button class="btn btn-primary" @click="editManufacturer">Save</button>
+                </template>
             </div>
         </div>
     </div>

@@ -22,7 +22,8 @@ var truck_page = new Vue ({
         modal_add_mode: true,
         input_required: false,
 
-        truck_chassis_data: {}
+        truck_chassis_data: {},
+        manufacturer_data: ''
 
 
     },
@@ -100,16 +101,39 @@ var truck_page = new Vue ({
             this.edit_table = false
         },
 
+        modalManufacturer(mode, data) {
+            this.input_required = false
+            if(data) {
+                this.modal_add_mode = false
+                this.manufacturer_data = {
+                    id: data.id,
+                    name: data.name,
+                    category: mode
+                }
+            }
+            else {
+                this.modal_add_mode = true
+                this.manufacturer_data = {
+                    name: '',
+                    category: mode
+                }
+            }
+        },
+
         modalTruckChassis(mode, data) {
             this.input_required = false
             this.modal_truck_mode = mode
             if(data) {
                 this.modal_add_mode = false
+                var manufacturer = ''
+                if(data.manufacturer) {
+                    manufacturer = data.manufacturer.id
+                }
                 this.truck_chassis_data = {
                     id: data.id,
                     number: data.number,
                     license_plate: data.license_plate,
-                    manufacturer: data.manufacturer.id,
+                    manufacturer: manufacturer,
 
                     tax_expired_date: data.tax_expired_date,
                     status: data.status
@@ -132,7 +156,7 @@ var truck_page = new Vue ({
         },
         addTruck() {
             this.input_required = false
-            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+            if(! this.truck_chassis_data.number) {
                 this.input_required = true
                 return false
             }
@@ -147,7 +171,7 @@ var truck_page = new Vue ({
         },
         addChassis() {
             this.input_required = false
-            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+            if(! this.truck_chassis_data.number) {
                 this.input_required = true
                 return false
             }
@@ -160,10 +184,25 @@ var truck_page = new Vue ({
                 })
             }
         },
+        addManufacturer() {
+            this.input_required = false
+            if(! this.manufacturer_data.name) {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/add-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
+                        $('#modalManufacturer').modal('hide')
+                    }
+                })
+            }
+        },
 
         editTruck() {
             this.input_required = false
-            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+            if(! this.truck_chassis_data.number) {
                 this.input_required = true
                 return false
             }
@@ -178,7 +217,7 @@ var truck_page = new Vue ({
         },
         editChassis() {
             this.input_required = false
-            if(this.truck_chassis_data.number == '' || this.truck_chassis_data.manufacturer == '') {
+            if(! this.truck_chassis_data.number) {
                 this.input_required = true
                 return false
             }
@@ -191,6 +230,22 @@ var truck_page = new Vue ({
                 })
             }
         },
+
+        editManufacturer() {
+            this.input_required = false
+            if(! this.manufacturer_data.name) {
+                this.input_required = true
+                return false
+            }
+            else {
+                api("/truck/api/edit-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.manufacturer)
+                        $('#modalManufacturer').modal('hide')
+                    }
+                })
+            }
+        }
 
         
       

@@ -45,10 +45,14 @@ def api_edit_truck(request):
             req = json.loads(request.body.decode('utf-8'))
             data = req['truck']
 
+            manufacturer = None
+            if data['manufacturer']:
+                manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+
             truck = Truck.objects.get(pk=data['id'])
             truck.number = data['number']
             truck.license_plate = data['license_plate']
-            truck.manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+            truck.manufacturer = manufacturer 
             truck.tax_expired_date = data['tax_expired_date'] or None
             truck.pat_pass_expired_date = data['pat_pass_expired_date'] or None
             truck.status = data['status']
@@ -64,10 +68,14 @@ def api_edit_chassis(request):
             req = json.loads(request.body.decode('utf-8'))
             data = req['chassis']
 
+            manufacturer = None
+            if data['manufacturer']:
+                manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+
             chassis = Chassis.objects.get(pk=data['id'])
             chassis.number = data['number']
             chassis.license_plate = data['license_plate']
-            chassis.manufacturer = Manufacturer.objects.get(pk=data['manufacturer'])
+            chassis.manufacturer = manufacturer
             chassis.tax_expired_date = data['tax_expired_date'] or None
             chassis.status = data['status']
             chassis.save()
@@ -75,6 +83,19 @@ def api_edit_chassis(request):
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
 
+@csrf_exempt
+def api_edit_manufacturer(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            data = req['manufacturer']
+
+            manufacturer = Manufacturer.objects.get(pk=data['id'])
+            manufacturer.name = data['name'].title().strip()
+            manufacturer.save()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
             
 
                 

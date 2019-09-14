@@ -14,5 +14,9 @@ def chassis_page(request):
     return render(request, 'truck/truck_page.html', {'nbar': 'database-page', 'page': 'chassis', 'title': 'Chassis'})
 
 @login_required(login_url=reverse_lazy('login'))
+def manufacturer_page(request):
+    return render(request, 'truck/truck_page.html', {'nbar': 'database-page', 'page': 'manufacturer', 'title': 'Manufacturer'})
+
+@login_required(login_url=reverse_lazy('login'))
 def sold_page(request):
     return render(request, 'truck/truck_page.html', {'nbar': 'database-page', 'page': 'sold', 'title': 'Sold'})

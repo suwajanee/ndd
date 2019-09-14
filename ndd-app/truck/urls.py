@@ -9,6 +9,7 @@ from .views import truck_page_view
 urlpatterns = [
     url(r'^$', truck_page_view.truck_page, name='truck-page'),
     url(r'^chassis/$', truck_page_view.chassis_page, name='chassis-page'),
+    url(r'^manufacturer/$', truck_page_view.manufacturer_page, name='manufacturer-page'),
     url(r'^sold/$', truck_page_view.sold_page, name='sold-page'),
 
     url(r'^api/get-truck-chassis-count/$', truck_data_view.api_get_truck_chassis_count, name='api-get-truck-chassis-count'),
@@ -21,9 +22,11 @@ urlpatterns = [
 
     url(r'^api/add-truck/$', truck_add_view.api_add_truck, name='api-add-truck'),
     url(r'^api/add-chassis/$', truck_add_view.api_add_chassis, name='api-add-chassis'),
+    url(r'^api/add-manufacturer/$', truck_add_view.api_add_manufacturer, name='api-add-manufacturer'),
 
     url(r'^api/edit-truck/$', truck_edit_view.api_edit_truck, name='api-edit-truck'),
     url(r'^api/edit-chassis/$', truck_edit_view.api_edit_chassis, name='api-edit-chassis'),
+    url(r'^api/edit-manufacturer/$', truck_edit_view.api_edit_manufacturer, name='api-edit-manufacturer'),
     url(r'^api/edit-expired-date/$', truck_edit_view.api_edit_expired_date, name='api-edit-expired-date'),
 
     # Dashboard

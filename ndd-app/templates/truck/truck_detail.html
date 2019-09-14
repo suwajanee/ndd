@@ -1,8 +1,90 @@
-{% if page == 'sold' %}
+{% if page == 'manufacturer' %}
+    <div class="col"></div>
+    <div class="col-3">
+        <h5 class="text-center"> Truck </h5>
+        <table class="table table-hover table-bordered text-center">
+            <thead>
+                <th class="align-middle" style="width: 60px;">
+                    #
+                </th>
+                <th class="align-middle">
+                    Name
+                </th>
+                <th class="align-middle" style="width: 60px;">
+                    <button class="btn btn-sm btn-outline-success"
+                        data-toggle="modal" data-target="#modalManufacturer" @click="modalManufacturer('t')"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </th>
+            </thead>
+            <tbody v-if="truck_manu_list.length">
+                <tr v-for="(manu, index) in truck_manu_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index +1 }}
+                        </td>
+                        <td class="text-left">
+                            {{ manu.name }}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-warning"
+                                data-toggle="modal" data-target="#modalManufacturer" @click="modalManufacturer('t', manu)"
+                            >
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </td>
+                    {% endverbatim %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col"></div>
+    <div class="col-3">
+        <h5 class="text-center"> Chassis </h5>
+        <table class="table table-hover table-bordered text-center">
+            <thead>
+                <th class="align-middle" style="width: 60px;">
+                    #
+                </th>
+                <th class="align-middle">
+                    Name
+                </th>
+                <th class="align-middle" style="width: 60px;">
+                    <button class="btn btn-sm btn-outline-success"
+                        data-toggle="modal" data-target="#modalManufacturer" @click="modalManufacturer('c')"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </th>
+            </thead>
+            <tbody v-if="chassis_manu_list.length">
+                <tr v-for="(manu, index) in chassis_manu_list">
+                    {% verbatim %}
+                        <td>
+                            {{ index+1 }}
+                        </td>
+                        <td class="text-left">
+                            {{ manu.name }}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-warning" 
+                                data-toggle="modal" data-target="#modalManufacturer" @click="modalManufacturer('c', manu)"
+                            >
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </td>
+                    {% endverbatim %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col"></div>
+{% elif page == 'sold' %}
     <div class="col"></div>
     <div class="col-5">
         <h5 class="text-center"> Truck </h5>
-        <table class="table table-hover table-bordered col-6 text-center">
+        <table class="table table-hover table-bordered text-center">
             <thead>
                 <th class="align-middle" style="width: 60px;">
                     #
@@ -29,7 +111,7 @@
                         <td>
                             {{ truck.license_plate }}
                         </td>
-                        <td class="text-capitalize">
+                        <td>
                             <template v-if="truck.manufacturer">
                                 {{ truck.manufacturer.name }}
                             </template>
@@ -56,7 +138,7 @@
     </div>
     <div class="col-5">
         <h5 class="text-center"> Chassis </h5>
-        <table class="table table-hover table-bordered col-6 text-center">
+        <table class="table table-hover table-bordered text-center">
             <thead>
                 <th class="align-middle" style="width: 60px;">
                     #
@@ -83,7 +165,7 @@
                         <td>
                             {{ chassis.license_plate }}
                         </td>
-                        <td class="text-capitalize">
+                        <td>
                             <template v-if="chassis.manufacturer">
                                 {{ chassis.manufacturer.name }}
                             </template>
@@ -150,7 +232,7 @@
                         <td>
                             {{ truck.license_plate }}
                         </td>
-                        <td class="text-capitalize">
+                        <td>
                             <template v-if="truck.manufacturer">
                                 {{ truck.manufacturer.name }}
                             </template>
@@ -190,7 +272,7 @@
                         <td>
                             {{ chassis.license_plate }}
                         </td>
-                        <td class="text-capitalize">
+                        <td>
                             <template v-if="chassis.manufacturer">
                                 {{ chassis.manufacturer.name }}
                             </template>

@@ -27,6 +27,9 @@
                     <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
+                    <a class="nav-link {% if page == 'manufacturer' %}active{% endif %}" href="{% url 'manufacturer-page' %}">
+                        Manufacturer
+                    </a>
                     <a class="nav-link {% if page == 'sold' %}active{% endif %}" href="{% url 'sold-page' %}">
                         Sold
                     </a>
