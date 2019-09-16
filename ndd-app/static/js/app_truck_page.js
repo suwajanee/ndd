@@ -156,7 +156,7 @@ var truck_page = new Vue ({
         },
         addTruck() {
             this.input_required = false
-            if(! this.truck_chassis_data.number) {
+            if(! this.truck_chassis_data.number.trim()) {
                 this.input_required = true
                 return false
             }
@@ -171,7 +171,7 @@ var truck_page = new Vue ({
         },
         addChassis() {
             this.input_required = false
-            if(! this.truck_chassis_data.number) {
+            if(! this.truck_chassis_data.number.trim()) {
                 this.input_required = true
                 return false
             }
@@ -186,7 +186,7 @@ var truck_page = new Vue ({
         },
         addManufacturer() {
             this.input_required = false
-            if(! this.manufacturer_data.name) {
+            if(! this.manufacturer_data.name.trim()) {
                 this.input_required = true
                 return false
             }
@@ -202,7 +202,7 @@ var truck_page = new Vue ({
 
         editTruck() {
             this.input_required = false
-            if(! this.truck_chassis_data.number) {
+            if(! this.truck_chassis_data.number.trim()) {
                 this.input_required = true
                 return false
             }
@@ -217,7 +217,7 @@ var truck_page = new Vue ({
         },
         editChassis() {
             this.input_required = false
-            if(! this.truck_chassis_data.number) {
+            if(! this.truck_chassis_data.number.trim()) {
                 this.input_required = true
                 return false
             }
@@ -233,14 +233,25 @@ var truck_page = new Vue ({
 
         editManufacturer() {
             this.input_required = false
-            if(! this.manufacturer_data.name) {
+            if(! this.manufacturer_data.name.trim()) {
                 this.input_required = true
                 return false
             }
             else {
                 api("/truck/api/edit-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.manufacturer)
+                        this.reload(this.page)
+                        $('#modalManufacturer').modal('hide')
+                    }
+                })
+            }
+        },
+
+        deleteManufacturer(id) {
+            if(confirm('Are you sure?')) {
+                api("/truck/api/delete-manufacturer/", "POST", {id: id}).then((data) => {
+                    if(data == 'Success') {
+                        this.reload(this.page)
                         $('#modalManufacturer').modal('hide')
                     }
                 })

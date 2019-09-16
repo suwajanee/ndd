@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import truck_add_view
 from .views import truck_data_view
+from .views import truck_delete_view
 from .views import truck_edit_view
 from .views import truck_page_view
 
@@ -29,10 +30,12 @@ urlpatterns = [
     url(r'^api/edit-manufacturer/$', truck_edit_view.api_edit_manufacturer, name='api-edit-manufacturer'),
     url(r'^api/edit-expired-date/$', truck_edit_view.api_edit_expired_date, name='api-edit-expired-date'),
 
+    url(r'^api/delete-manufacturer/$', truck_delete_view.api_delete_manufacturer, name='api-delete-manufacturer'),
+
     # Dashboard
     url(r'^api/get-daily-trucks/$', truck_data_view.api_get_daily_trucks, name='api-get-daily-trucks'),
 
     # Driver page
-    url(r'^api/get-truck-choices/$', truck_data_view.api_get_truck_choices, name='api-get-truck-choices'),
+    # url(r'^api/get-truck-choices/$', truck_data_view.api_get_truck_choices, name='api-get-truck-choices'),
 
 ]
