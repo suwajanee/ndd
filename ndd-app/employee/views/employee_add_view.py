@@ -10,6 +10,7 @@ from ..models import Driver
 from ..models import Employee
 from ..models import Job
 from ..models import Salary
+from truck.models import Truck
 
 
 @csrf_exempt
@@ -32,7 +33,7 @@ def api_add_employee(request):
                 },
                 'hire_date': emp_data['hire_date'] or None,
                 'job': job,
-                'status': 'active'
+                'status': 'a'
             }
 
             employee = Employee(**data)
@@ -60,6 +61,8 @@ def add_employee_starting_salary(emp, salary):
     return salary
 
 def add_employee_driver(emp, emp_data):
+    truck_id = emp_data['truck'] or ''
+
     data = {
         'employee': emp,
         'license_type': emp_data['license_type'] or '3',
@@ -68,5 +71,10 @@ def add_employee_driver(emp, emp_data):
 
     driver = Driver(**data)
     driver.save()
+
+    if truck_id:
+        truck = Truck.objects.get(pk=truck_id)
+        truck.driver = driver
+        truck.save()
 
     return driver

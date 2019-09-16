@@ -17,7 +17,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ('employee', 'license_type', 'pat_pass_expired_date')
+    list_display = ('employee', 'truck', 'license_type', 'pat_pass_expired_date')
     ordering = ('employee__first_name', 'employee__last_name')
     search_fields = ['employee__first_name', 'employee__last_name']
 

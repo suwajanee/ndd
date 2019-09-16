@@ -24,7 +24,7 @@ def api_get_invoice_details(request):
 
             invoice = Invoice.objects.get(pk=invoice_id)
             if 'order_by_remark' in invoice.detail:
-                invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('detail__remark', 'work_normal__date', 'work_agent_transport__date', 'pk')
+                invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date', 'detail__remark', 'pk')
             else:
                 invoice_details = InvoiceDetail.objects.filter(invoice=invoice).order_by('work_normal__date', 'work_agent_transport__date', 'pk')
 

@@ -10,6 +10,7 @@ from ..models import Driver
 from ..models import Employee
 from ..models import Job
 from ..models import Salary
+from truck.models import Truck
 
 
 @csrf_exempt
@@ -33,7 +34,7 @@ def api_edit_employee(request):
             emp.hire_date = emp_data['hire_date'] or None
             emp.status = status
 
-            if status == 'active':
+            if status == 'a':
                 emp.detail.pop("fire_date", None)
             else:
                 emp.detail['fire_date'] = emp_data['fire_date'] or None
@@ -47,12 +48,25 @@ def api_edit_employee(request):
     return JsonResponse('Error', safe=False)
 
 def edit_employee_driver(emp_data):
+    truck_id = emp_data['truck'] or None
+
     driver = Driver.objects.get(id=emp_data['driver_id'])
     driver.license_type = emp_data['license_type']
-    driver.pat_pass_expired_date = emp_data['pat_pass_expired_date'] or None
+    driver.pat_pass_expired_date = emp_data['pat_pass_expired_date'] or None  
     driver.save()
-    return driver
 
+    try:       
+        old_truck = Truck.objects.get(pk=driver.truck.pk)
+        old_truck.driver = None
+        old_truck.save()
+    except:
+        pass
+
+    if truck_id:
+        truck = Truck.objects.get(pk=truck_id)
+        truck.driver = driver
+        truck.save()
+    return driver
 
 @csrf_exempt
 def api_edit_pat_expired_driver(request):
@@ -68,7 +82,6 @@ def api_edit_pat_expired_driver(request):
 
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
-
 
 @csrf_exempt
 def api_edit_employee_salary(request):

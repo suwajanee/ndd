@@ -24,7 +24,7 @@ def employee_mechanic_page(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def employee_not_active_page(request):
-    return render(request, 'employee/employee_page.html', {'nbar': 'database-page', 'page': 'not_active', 'title': 'Former Employee'})
+    return render(request, 'employee/employee_page.html', {'nbar': 'database-page', 'page': 'terminated', 'title': 'Former Employee'})
 
 @login_required(login_url=reverse_lazy('login'))
 @permission_required('employee.change_salary', login_url=reverse_lazy('login'))
