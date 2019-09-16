@@ -13,14 +13,19 @@ from ..models import Chassis
 from ..serializers import ChassisSerializer
 from ..serializers import ManufacturerSerializer
 from ..serializers import TruckSerializer
+from employee.models import Driver
 
 
 @csrf_exempt
-def api_get_truck_choices(request):
+def api_check_truck_driver(request):
     if request.user.is_authenticated:
-        if request.method == "GET":
-            truck = Truck.objects.filter(~Q(status='s')).order_by('number')
-            serializer = TruckSerializer(truck, many=True)
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            truck_id = req['truck_id']
+
+            truck = Truck.objects.filter(pk=truck_id)
+            serializer = TruckSerializer(truck[0], many=False)
+
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 

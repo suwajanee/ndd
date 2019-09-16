@@ -5,6 +5,8 @@ var employee_page = new Vue( {
         employees: [],
         drivers: [],
 
+        truck_list: [],
+
         job: '',
         page: '',
         date_compare: '',
@@ -22,7 +24,9 @@ var employee_page = new Vue( {
 
         modal_add_mode: true,
         input_required: false,
+        warning_truck_driver: false,
 
+        check_truck_driver: '',
         emp_data: {
             job: '',
         },
@@ -35,6 +39,7 @@ var employee_page = new Vue( {
         reload(job, page) {
 
             this.getEmployeeCount()
+            this.getTruckList()
             this.edit_data = []
             this.input_required = false
 
@@ -63,11 +68,27 @@ var employee_page = new Vue( {
                 this.terminated_except_driver = data.terminated_except_driver
             })
         },
-        // getTruckChoices() {
-        //     api("/truck/api/get-truck-choices/").then((data) => {
-        //         this.truck_choices = data
-        //     })
-        // },
+        getTruckList() {
+            api("/truck/api/get-truck/").then((data) => {
+                this.truck_list = data.truck
+            })
+        },
+
+        checkTruckDriver(truck) {
+            this.warning_truck_driver = false
+            if(this.emp_data.truck) {
+                api("/truck/api/check-truck-driver/", "POST", {truck_id: truck}).then((data) => {
+                    this.check_truck_driver = data.driver
+    
+                    if(! this.check_truck_driver || this.emp_data.driver_id == this.check_truck_driver) {
+                        this.warning_truck_driver = false
+                    }
+                    else {
+                        this.warning_truck_driver = true
+                    }
+                })
+            }
+        },
         
         getEmployees(job) {
             if(job) {
@@ -142,6 +163,7 @@ var employee_page = new Vue( {
 
         employeeModal(emp, driver) {
             this.input_required = false
+            this.warning_truck_driver = false
             if(emp) {
                 this.modal_add_mode = false
                 this.emp_data = {
@@ -157,11 +179,17 @@ var employee_page = new Vue( {
                     fire_date: emp.detail.fire_date || '',
                 }
                 if(driver){
+                    var truck = ''
+                    if(driver.truck) {
+                        truck = driver.truck.id
+                    }
                     this.emp_data.driver_id = driver.id
                     this.emp_data.license_type = driver.license_type
                     this.emp_data.pat_pass_expired_date = driver.pat_pass_expired_date || ''
                     this.emp_data.age = this.calcAge(driver.employee.birth_date) || ''
                     this.emp_data.exp = this.calcExp(driver.employee.hire_date, driver.employee.detail.fire_date || '') || ''
+
+                    this.emp_data.truck = truck
                 }
                 else {
                     this.emp_data.age = this.calcAge(emp.birth_date) || ''
@@ -181,6 +209,7 @@ var employee_page = new Vue( {
                     job: this.job,
                     license_type: '3',
                     pat_pass_expired_date: '',
+                    truck: '',
                 }
             }
         },
@@ -204,7 +233,7 @@ var employee_page = new Vue( {
 
         addEmployees() {
             this.input_required = false
-            if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || this.emp_data.job == ''){
+            if(! this.emp_data.first_name.trim() || ! this.emp_data.last_name.trim() || ! this.emp_data.job || this.warning_truck_driver){
                 this.input_required = true
                 return false
             }
@@ -224,7 +253,7 @@ var employee_page = new Vue( {
 
         editEmployees() {
             this.input_required = false
-            if(this.emp_data.first_name == '' || this.emp_data.last_name == '' || (this.emp_data.status == 't' && this.emp_data.fire_date == '')){
+            if(! this.emp_data.first_name.trim() || ! this.emp_data.last_name.trim() || this.warning_truck_driver || (this.emp_data.status == 't' && ! this.emp_data.fire_date)){
                 this.input_required = true
                 return false
             }
