@@ -8,10 +8,13 @@ from .views import truck_page_view
 
 
 urlpatterns = [
-    url(r'^$', truck_page_view.truck_page, name='truck-page'),
+    url(r'^truck/$', truck_page_view.truck_page, name='truck-page'),
     url(r'^chassis/$', truck_page_view.chassis_page, name='chassis-page'),
     url(r'^manufacturer/$', truck_page_view.manufacturer_page, name='manufacturer-page'),
     url(r'^sold/$', truck_page_view.sold_page, name='sold-page'),
+
+    url(r'^vts/truck/$', truck_page_view.sup_truck_page, name='sup-truck-page'),
+    url(r'^vts/chassis/$', truck_page_view.sup_chassis_page, name='sup-chassis-page'),
 
     url(r'^api/get-truck-chassis-count/$', truck_data_view.api_get_truck_chassis_count, name='api-get-truck-chassis-count'),
 

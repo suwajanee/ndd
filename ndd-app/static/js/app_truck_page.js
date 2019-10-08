@@ -3,6 +3,8 @@ var truck_page = new Vue ({
     el: '#truck-page',
     data: {
         page: '',
+        owner_mode: '',
+
         truck_manu_list: [],
         chassis_manu_list: [],
         truck_list: [],
@@ -14,6 +16,8 @@ var truck_page = new Vue ({
 
         truck_count: 0,
         chassis_count: 0,
+        sup_truck_count: 0,
+        sup_chassis_count: 0,
 
         edit_table: false,
         edit_data: [],
@@ -29,12 +33,16 @@ var truck_page = new Vue ({
     },
 
     methods: {
-        reload(page) {
+        reload(page, owner) {
             this.page = page
             this.edit_data = []
             this.getTruckChassisCount()
             this.getDriver()
             this.getManufacturer()
+
+            if(owner) {
+                this.owner_mode = owner
+            }
             
             if(page == 'truck') {
                 this.getTruck()
@@ -48,32 +56,34 @@ var truck_page = new Vue ({
         },
 
         getTruckChassisCount() {
-            api("/truck/api/get-truck-chassis-count/").then((data) => {
+            api("/truck-chassis/api/get-truck-chassis-count/").then((data) => {
                 this.truck_count = data.truck
                 this.chassis_count = data.chassis
+                this.sup_truck_count = data.sub_truck
+                this.sup_chassis_count = data.sub_chassis
             })
         },
         getManufacturer() {
-            api("/truck/api/get-manufacturer/").then((data) => {
+            api("/truck-chassis/api/get-manufacturer/").then((data) => {
                 this.truck_manu_list = data.truck_manu
                 this.chassis_manu_list = data.chassis_manu
             })
         },
         getTruck() {
-            api("/truck/api/get-truck").then((data) => {
+            api("/truck-chassis/api/get-truck/", "POST", {owner: this.owner_mode}).then((data) => {
                 this.truck_list = data.truck
                 this.date_compare = data.date_compare
                 // this.settingDetail()
             })
         },
         getChassis() {
-            api("/truck/api/get-chassis").then((data) => {
+            api("/truck-chassis/api/get-chassis/", "POST", {owner: this.owner_mode}).then((data) => {
                 this.chassis_list = data.chassis
                 this.date_compare = data.date_compare
             })
         },
         getSold() {
-            api("/truck/api/get-sold").then((data) => {
+            api("/truck-chassis/api/get-sold/", "POST", {owner: this.owner_mode}).then((data) => {
                 this.truck_list = data.truck
                 this.chassis_list = data.chassis
             })
@@ -92,7 +102,7 @@ var truck_page = new Vue ({
         },
         editExpiredDate() {
             if(this.edit_data.length) {
-                api("/truck/api/edit-expired-date/", "POST", {category: this.page, details: this.edit_data}).then((data) => {
+                api("/truck-chassis/api/edit-expired-date/", "POST", {category: this.page, details: this.edit_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                     }
@@ -136,6 +146,8 @@ var truck_page = new Vue ({
                     manufacturer: manufacturer,
 
                     tax_expired_date: data.tax_expired_date,
+
+                    owner: data.owner,
                     status: data.status
                 }
                 if(mode) {
@@ -151,6 +163,8 @@ var truck_page = new Vue ({
                     
                     tax_expired_date: '',
                     pat_pass_expired_date: '',
+
+                    owner: this.owner_mode
                 }
             }
         },
@@ -161,7 +175,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/add-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
+                api("/truck-chassis/api/add-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalTruckChassis').modal('hide')
@@ -176,7 +190,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/add-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
+                api("/truck-chassis/api/add-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalTruckChassis').modal('hide')
@@ -191,7 +205,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/add-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
+                api("/truck-chassis/api/add-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalManufacturer').modal('hide')
@@ -207,7 +221,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/edit-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
+                api("/truck-chassis/api/edit-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalTruckChassis').modal('hide')
@@ -222,7 +236,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/edit-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
+                api("/truck-chassis/api/edit-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalTruckChassis').modal('hide')
@@ -238,7 +252,7 @@ var truck_page = new Vue ({
                 return false
             }
             else {
-                api("/truck/api/edit-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
+                api("/truck-chassis/api/edit-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalManufacturer').modal('hide')
@@ -249,7 +263,7 @@ var truck_page = new Vue ({
 
         deleteManufacturer(id) {
             if(confirm('Are you sure?')) {
-                api("/truck/api/delete-manufacturer/", "POST", {id: id}).then((data) => {
+                api("/truck-chassis/api/delete-manufacturer/", "POST", {id: id}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.page)
                         $('#modalManufacturer').modal('hide')

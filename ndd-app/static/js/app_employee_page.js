@@ -69,7 +69,7 @@ var employee_page = new Vue( {
             })
         },
         getTruckList() {
-            api("/truck/api/get-truck/").then((data) => {
+            api("/truck-chassis/api/get-truck/").then((data) => {
                 this.truck_list = data.truck
             })
         },
@@ -77,7 +77,7 @@ var employee_page = new Vue( {
         checkTruckDriver(truck) {
             this.warning_truck_driver = false
             if(this.emp_data.truck) {
-                api("/truck/api/check-truck-driver/", "POST", {truck_id: truck}).then((data) => {
+                api("/truck-chassis/api/check-truck-driver/", "POST", {truck_id: truck}).then((data) => {
                     this.check_truck_driver = data.driver
     
                     if(! this.check_truck_driver || this.emp_data.driver_id == this.check_truck_driver) {

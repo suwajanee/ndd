@@ -35,7 +35,7 @@ urlpatterns = [
     path('customer/', include('customer.urls')),
     path('summary/', include('summary.urls')),
     path('employee/', include('employee.urls')),
-    path('truck/', include('truck.urls')),
+    path('truck-chassis/', include('truck.urls')),
 
     url(r'^dashboard/$', dashboard_view.dashboard_page, name='dashboard-page'),
     url(r'^staff/$', authentication_view.login, name='login'),
