@@ -18,6 +18,8 @@ class Employee(models.Model):
     hire_date = models.DateField(blank=True, null=True, default=None)
     status = models.CharField(max_length=10, blank=True, null=True, default='')
     job = models.ForeignKey(Job, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    co = models.CharField(max_length=5, blank=True, null=True, default='ndd')
     detail = JSONField(null=True, blank=True, default=dict)
 
     def __str__(self) :
