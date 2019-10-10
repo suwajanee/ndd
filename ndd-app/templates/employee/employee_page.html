@@ -15,7 +15,7 @@
             <aside class="col-2 d-block bg-light sidebar px-0">
                 <div class="sidebar-sticky px-3">
                     <h6 class="sidebar-heading">
-                        <span>Jobs</span>
+                        <span>NDD</span>
                     </h6>
                     <a class="nav-link {% if not job and not page %}active{% endif %}" href="{% url 'employee-page' %}">
                         All
@@ -25,7 +25,7 @@
                         <i class="fas fa-angle-right"></i>&nbsp; Officer
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="officer_count" />
                     </a>
-                    <a class="nav-link {% if job == 'driver' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
+                    <a class="nav-link {% if job == 'driver' and co == 'ndd' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
                         <i class="fas fa-angle-right"></i>&nbsp; Driver
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="driver_count" />
                     </a>
@@ -33,13 +33,22 @@
                         <i class="fas fa-angle-right"></i>&nbsp; Mechanic
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="mechanic_count" />
                     </a>
-                    
+
+                    <h6 class="sidebar-heading">
+                        <span>VTS</span>
+                    </h6>
+                    <a class="nav-link {% if job == 'driver' and co == 'vts' %}active{% endif %}" href="{% url 'sup-driver-page' %}">
+                        <i class="fas fa-angle-right"></i>&nbsp; Driver
+                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="sup_driver_count" />
+                    </a>
+
+                    <hr class="my-4"> 
+
                     <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
                     <a class="nav-link {% if page == 'terminated' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
                         Former Employee
-                        <input type="button" class="btn btn-sm badge-pill badge-secondary py-0 float-right small-font" :value="terminated_count" />
                     </a>
                     {% if request.user|has_group:'salary_change' %}
                         <a class="nav-link {% if page == 'salary' %}active{% endif %}" href="{% url 'employee-salary-page' %}">
@@ -61,7 +70,7 @@
                         <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
                         {% if job or page %}
                             <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ title }} <template v-if="co=='vts'">(VTS)</template></li>
                         {% else %}
                             <li class="breadcrumb-item active" aria-current="page">Employee</li>
                         {% endif %}
@@ -69,8 +78,23 @@
                 </nav>
                 {% if not page %}
                     <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> Add</button>
+                {% else %}
+                    <div class="switch-field m-3 position-absolute" style="right:0;">
+                        <template v-if="page=='terminated'">
+                            <input type="radio" id="work_ndd" v-model="co" value="ndd" @change="getNotActiveEmployee" />
+                            <label for="work_ndd">NDD</label>
+                            <input type="radio" id="work_vts" v-model="co" value="vts" @change="getNotActiveEmployee" />
+                            <label for="work_vts">VTS</label>
+                        </template>
+                        <template v-else>
+                            <input type="radio" id="work_ndd" v-model="co" value="ndd" @change="getEmployeeSalary" />
+                            <label for="work_ndd">NDD</label>
+                            <input type="radio" id="work_vts" v-model="co" value="vts" @change="getEmployeeSalary" />
+                            <label for="work_vts">VTS</label>
+                        </template>
+                    </div>
                 {% endif %}
-                <h2 class="mt-5 text-center">{{ title }}</h2>
+                <h2 class="mt-5 text-center">{{ title }} <template v-if="co=='vts'">(VTS)</template></h2>
                 <div class="mt-4 row">
                     {% include 'employee/employee_detail.html' %}
                 </div>
@@ -86,7 +110,7 @@
     <script type="application/javascript">
 
         window.addEventListener("load", function() {   
-            employee_page.reload("{{ job }}", "{{ page }}")
+            employee_page.reload("{{ job }}", "{{ co }}", "{{ page }}")
         });
 
     </script>

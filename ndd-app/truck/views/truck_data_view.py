@@ -90,13 +90,23 @@ def api_get_truck(request):
 
             data = {}
             truck = Truck.objects.filter(~Q(status='s') & Q(owner=owner)).order_by('number')
-            serializer = TruckSerializer(truck, many=True)
 
+            serializer = TruckSerializer(truck, many=True)
             data = {
                 'truck': serializer.data,
                 'date_compare': get_date_compare(7)
             }
             return JsonResponse(data, safe=False)
+            
+        elif request.method == "GET":
+            truck = Truck.objects.filter(~Q(status='s')).order_by('owner', 'number')
+
+            serializer = TruckSerializer(truck, many=True)
+            data = {
+                'truck': serializer.data
+            }
+            return JsonResponse(data, safe=False)
+
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

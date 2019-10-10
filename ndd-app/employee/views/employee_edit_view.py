@@ -32,6 +32,8 @@ def api_edit_employee(request):
                 'account': emp_data['account']
             }
             emp.hire_date = emp_data['hire_date'] or None
+
+            emp.co = emp_data['co']
             emp.status = status
 
             if status == 'a':

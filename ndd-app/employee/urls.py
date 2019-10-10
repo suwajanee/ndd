@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^not-active/$', employee_page_view.employee_not_active_page, name='employee-not-active-page'),
     url(r'^salary/$', employee_page_view.employee_salary_page, name='employee-salary-page'),
 
+    url(r'^vts/driver/$', employee_page_view.sup_driver_page, name='sup-driver-page'),
+
     url(r'^api/get-employee/$', employee_data_view.api_get_employee, name='api-get-employee'),
     url(r'^api/get-employee-count/$', employee_data_view.api_get_employee_count, name='api-get-employee-count'),
 
