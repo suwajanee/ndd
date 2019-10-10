@@ -108,7 +108,7 @@ var dashboard_page = new Vue( {
             })
         },
         getDailyTruck() {
-            api("/truck/api/get-daily-trucks/").then((data) => {
+            api("/truck-chassis/api/get-daily-trucks/").then((data) => {
                 this.truck_total = data.total
                 this.truck_active = data.active
                 this.truck_maintanance = data.maintanance

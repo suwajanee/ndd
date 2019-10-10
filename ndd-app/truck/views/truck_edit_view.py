@@ -55,6 +55,7 @@ def api_edit_truck(request):
             truck.manufacturer = manufacturer 
             truck.tax_expired_date = data['tax_expired_date'] or None
             truck.pat_pass_expired_date = data['pat_pass_expired_date'] or None
+            truck.owner = data['owner']
             truck.status = data['status']
             truck.save()
 
@@ -77,6 +78,7 @@ def api_edit_chassis(request):
             chassis.license_plate = data['license_plate']
             chassis.manufacturer = manufacturer
             chassis.tax_expired_date = data['tax_expired_date'] or None
+            chassis.owner = data['owner']
             chassis.status = data['status']
             chassis.save()
 

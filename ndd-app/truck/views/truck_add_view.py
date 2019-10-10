@@ -31,6 +31,7 @@ def api_add_truck(request):
                 'manufacturer': manufacturer,
                 'tax_expired_date': data['tax_expired_date'] or None,
                 'pat_pass_expired_date': data['pat_pass_expired_date'] or None,
+                'owner': data['owner'] or 'ndd',
                 'status': 'a'
             }
 
@@ -56,6 +57,7 @@ def api_add_chassis(request):
                 'license_plate': data['license_plate'],
                 'manufacturer': manufacturer,
                 'tax_expired_date': data['tax_expired_date'] or None,
+                'owner': data['owner'] or 'ndd',
                 'status': 'a'
             }
 

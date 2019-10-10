@@ -14,7 +14,7 @@ class Manufacturer(models.Model):
 
 
 class Truck(models.Model):
-    number = models.CharField(max_length=5, blank=True, null=True)
+    number = models.CharField(max_length=15, blank=True, null=True)
     license_plate = models.CharField(max_length=7, blank=True, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, blank=True, null=True)
 
@@ -23,6 +23,7 @@ class Truck(models.Model):
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
     pat_pass_expired_date = models.DateField(blank=True, null=True, default=None)
 
+    owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
     status = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
@@ -36,6 +37,7 @@ class Chassis(models.Model):
     
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
 
+    owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
     status = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):

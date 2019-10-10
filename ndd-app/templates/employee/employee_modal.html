@@ -71,13 +71,6 @@
                         <input class="form-control col-2" v-model="emp_data.exp" readonly>
                     </div>
 
-                    <div v-if="modal_add_mode" class="input-group my-3 col-lg-6">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">SALARY</span>
-                        </div>
-                        <input type="number" class="form-control" v-model="emp_data.salary" min=0 :class="{'alert-danger': input_required && isNaN(parseFloat(emp_data.salary))}">
-                    </div>
-
                     <div class="input-group my-2 col-lg-6">
                         <div class="input-group-prepend">
                             <span class="input-group-text">JOB TITLE</span>
@@ -91,6 +84,7 @@
                     </div>
 
                     <template v-if="emp_data.job=='driver'">
+                        
                         <div class="input-group mb-1 container px-5">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">TRUCK NO.</span>
@@ -121,6 +115,14 @@
                             </div>
                             <input type="date" class="form-control" v-model="emp_data.pat_pass_expired_date">
                         </div>
+
+                        <div class="switch-field d-flex justify-content-center">
+                            <input type="radio" id="work_ndd_modal" v-model="emp_data.co" value="ndd" />
+                            <label for="work_ndd_modal">NDD</label>
+                            <input type="radio" id="work_vts_modal" v-model="emp_data.co" value="vts" />
+                            <label for="work_vts_modal">VTS</label>
+                        </div>
+
                     </template>
                     
                     <template v-if="emp_data.status">

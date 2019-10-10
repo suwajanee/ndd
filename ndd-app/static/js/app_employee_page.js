@@ -7,6 +7,7 @@ var employee_page = new Vue( {
 
         truck_list: [],
 
+        co: '',
         job: '',
         page: '',
         date_compare: '',
@@ -14,9 +15,9 @@ var employee_page = new Vue( {
         emp_count: 0,
         officer_count: 0,
         driver_count: 0,
+        sup_driver_count: 0,
         mechanic_count: 0,
         active_except_driver: 0,
-        terminated_count: 0,
         terminated_except_driver: 0,
 
         edit_table: false,
@@ -36,13 +37,14 @@ var employee_page = new Vue( {
     },
 
     methods: {
-        reload(job, page) {
+        reload(job, co, page) {
 
             this.getEmployeeCount()
             this.getTruckList()
             this.edit_data = []
             this.input_required = false
 
+            this.co = co
             if(! page) {
                 this.getEmployees(job)
             }
@@ -62,14 +64,14 @@ var employee_page = new Vue( {
                 this.emp_count = data.emp
                 this.officer_count = data.officer
                 this.driver_count = data.driver
+                this.sup_driver_count = data.sup_driver
                 this.mechanic_count = data.mechanic
                 this.active_except_driver = data.active_except_driver
-                this.terminated_count = data.terminated
                 this.terminated_except_driver = data.terminated_except_driver
             })
         },
         getTruckList() {
-            api("/truck/api/get-truck/").then((data) => {
+            api("/truck-chassis/api/get-truck/").then((data) => {
                 this.truck_list = data.truck
             })
         },
@@ -77,7 +79,7 @@ var employee_page = new Vue( {
         checkTruckDriver(truck) {
             this.warning_truck_driver = false
             if(this.emp_data.truck) {
-                api("/truck/api/check-truck-driver/", "POST", {truck_id: truck}).then((data) => {
+                api("/truck-chassis/api/check-truck-driver/", "POST", {truck_id: truck}).then((data) => {
                     this.check_truck_driver = data.driver
     
                     if(! this.check_truck_driver || this.emp_data.driver_id == this.check_truck_driver) {
@@ -93,7 +95,7 @@ var employee_page = new Vue( {
         getEmployees(job) {
             if(job) {
                 this.job = job
-                api("/employee/api/get-employee/", "POST", {job: job}).then((data) => {
+                api("/employee/api/get-employee/", "POST", {job: job, co: this.co}).then((data) => {
                     this.employees = data.emp
                     this.drivers = data.driver
                     this.date_compare = data.date_compare
@@ -109,14 +111,14 @@ var employee_page = new Vue( {
         },
         getNotActiveEmployee(){
             this.job = ''
-            api("/employee/api/get-not-active-employee/").then((data) => {
+            api("/employee/api/get-not-active-employee/", "POST", {co: this.co}).then((data) => {
                 this.employees = data.emp
                 this.drivers = data.driver
             })
         },
         getEmployeeSalary(){
             this.job = ''
-            api("/employee/api/get-employee-salary/").then((data) => {
+            api("/employee/api/get-employee-salary/", "POST", {co: this.co}).then((data) => {
                 this.employees = data
             })
         },
@@ -177,8 +179,12 @@ var employee_page = new Vue( {
                     job: emp.job.job_title,
                     status: emp.status,
                     fire_date: emp.detail.fire_date || '',
+                    co: emp.co,
+
+                    age: this.calcAge(emp.birth_date) || '',
+                    exp: this.calcExp(emp.hire_date, emp.detail.fire_date || '') || ''
                 }
-                if(driver){
+                if(driver) {
                     var truck = ''
                     if(driver.truck) {
                         truck = driver.truck.id
@@ -191,10 +197,10 @@ var employee_page = new Vue( {
 
                     this.emp_data.truck = truck
                 }
-                else {
-                    this.emp_data.age = this.calcAge(emp.birth_date) || ''
-                    this.emp_data.exp = this.calcExp(emp.hire_date, emp.detail.fire_date || '') || ''
-                }
+                // else {
+                //     this.emp_data.age = this.calcAge(emp.birth_date) || ''
+                //     this.emp_data.exp = this.calcExp(emp.hire_date, emp.detail.fire_date || '') || ''
+                // }
             }
             else {
                 this.modal_add_mode = true
@@ -205,8 +211,8 @@ var employee_page = new Vue( {
                     tel: '',
                     account: '',
                     hire_date: '',
-                    salary: 0,
                     job: this.job,
+                    co: this.co,
                     license_type: '3',
                     pat_pass_expired_date: '',
                     truck: '',
@@ -237,14 +243,10 @@ var employee_page = new Vue( {
                 this.input_required = true
                 return false
             }
-            else if(isNaN(parseFloat(this.emp_data.salary))) {
-                this.input_required = true
-                return false
-            }
             else {
                 api("/employee/api/add-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.job, this.page)
+                        this.reload(this.job, this.co, this.page)
                         $('#modalEmployee').modal('hide')
                     }
                 })
@@ -260,7 +262,7 @@ var employee_page = new Vue( {
             else {
                 api("/employee/api/edit-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.job, this.page)
+                        this.reload(this.job, this.co, this.page)
                         $('#modalEmployee').modal('hide')
                     }
                 })
@@ -275,7 +277,7 @@ var employee_page = new Vue( {
             if(this.edit_data.length){
                 api("/employee/api/edit-pat-expired-driver/", "POST", {drivers: this.edit_data}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.job, this.page)
+                        this.reload(this.job, this.co, this.page)
                     }
                 })
             }
@@ -295,7 +297,7 @@ var employee_page = new Vue( {
             else {
                 api("/employee/api/edit-salary/", "POST", {emp_id: this.salary_data.emp_id, salary_id: this.salary_data.salary_id, new_salary: this.salary_data.new_salary}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.job, this.page)
+                        this.reload(this.job, this.co, this.page)
                         $('#modalEmployeeSalary').modal('hide')
                     }
                 })
@@ -306,7 +308,7 @@ var employee_page = new Vue( {
             if (confirm('Are you sure?')){
                 api("/employee/api/delete-employee/", "POST", {emp_id: emp_id}).then((data) => {
                     if(data == 'Success') {
-                        this.reload(this.job, this.page)
+                        this.reload(this.job, this.co, this.page)
                         $('#modalEmployee').modal('hide')
                     }
                 })

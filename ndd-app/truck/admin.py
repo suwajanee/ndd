@@ -10,13 +10,13 @@ class ManufacturerAdmin(admin.ModelAdmin):
 
 
 class TruckAdmin(admin.ModelAdmin):
-    list_display = ('number', 'license_plate', 'manufacturer', 'driver', 'tax_expired_date', 'pat_pass_expired_date', 'status')
-    ordering = ('number', )
+    list_display = ('number', 'owner', 'license_plate', 'manufacturer', 'driver', 'tax_expired_date', 'pat_pass_expired_date', 'status')
+    ordering = ('owner', 'number', )
 
 
 class ChassisAdmin(admin.ModelAdmin):
-    list_display = ('number', 'license_plate', 'manufacturer', 'tax_expired_date', 'status')
-    ordering = ('number', )
+    list_display = ('number', 'owner', 'license_plate', 'manufacturer', 'tax_expired_date', 'status')
+    ordering = ('owner', 'number', )
 
 
 admin.site.register(Manufacturer, ManufacturerAdmin)

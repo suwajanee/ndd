@@ -22,6 +22,13 @@
             </div>
             <div class="modal-body">
                 <div class="container col-lg-10">
+                    <div class="switch-field my-3 d-flex justify-content-center">
+                        <input type="radio" id="work_ndd" v-model="truck_chassis_data.owner" value="ndd" />
+                        <label for="work_ndd">NDD</label>
+                        <input type="radio" id="work_vts" v-model="truck_chassis_data.owner" value="vts" />
+                        <label for="work_vts">VTS</label>
+                    </div>
+
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">NO.</span>

@@ -48,12 +48,17 @@ def api_get_daily_trucks(request):
 def api_get_truck_chassis_count(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            truck = Truck.objects.filter(~Q(status='s')).count()
-            chassis = Chassis.objects.filter(~Q(status='s')).count()
+            truck = Truck.objects.filter(~Q(status='s') & Q(owner='ndd')).count()
+            chassis = Chassis.objects.filter(~Q(status='s') & Q(owner='ndd')).count()
+
+            sub_truck = Truck.objects.filter(~Q(status='s') & Q(owner='vts')).count()
+            sub_chassis = Chassis.objects.filter(~Q(status='s') & Q(owner='vts')).count()
 
             data = {
                 'truck': truck,
-                'chassis': chassis
+                'chassis': chassis,
+                'sub_truck': sub_truck,
+                'sub_chassis': sub_chassis,
             }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -79,23 +84,39 @@ def api_get_manufacturer(request):
 @csrf_exempt
 def api_get_truck(request):
     if request.user.is_authenticated:
-        if request.method == "GET":
-            data = {}
-            truck = Truck.objects.filter(~Q(status='s')).order_by('number')
-            serializer = TruckSerializer(truck, many=True)
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            owner = req['owner']
 
+            data = {}
+            truck = Truck.objects.filter(~Q(status='s') & Q(owner=owner)).order_by('number')
+
+            serializer = TruckSerializer(truck, many=True)
             data = {
                 'truck': serializer.data,
                 'date_compare': get_date_compare(7)
             }
             return JsonResponse(data, safe=False)
+            
+        elif request.method == "GET":
+            truck = Truck.objects.filter(~Q(status='s')).order_by('owner', 'number')
+
+            serializer = TruckSerializer(truck, many=True)
+            data = {
+                'truck': serializer.data
+            }
+            return JsonResponse(data, safe=False)
+
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
 def api_get_chassis(request):
     if request.user.is_authenticated:
-        if request.method == "GET":
-            chassis = Chassis.objects.filter(~Q(status='s')).order_by('number')
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            owner = req['owner']
+
+            chassis = Chassis.objects.filter(~Q(status='s') & Q(owner=owner)).order_by('number')
             serializer = ChassisSerializer(chassis, many=True)
 
             data = {
@@ -108,9 +129,12 @@ def api_get_chassis(request):
 @csrf_exempt
 def api_get_sold(request):
     if request.user.is_authenticated:
-        if request.method == "GET":
-            truck = Truck.objects.filter(status='s').order_by('number')
-            chassis = Chassis.objects.filter(status='s').order_by('number')
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            owner = req['owner']
+            
+            truck = Truck.objects.filter(Q(status='s') & Q(owner=owner)).order_by('number')
+            chassis = Chassis.objects.filter(Q(status='s') & Q(owner=owner)).order_by('number')
 
             truck_serializer = TruckSerializer(truck, many=True)
             chassis_serializer = ChassisSerializer(chassis, many=True)
