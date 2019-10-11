@@ -2,6 +2,7 @@
 
 from django.http import HttpResponse
 
+import re
 import xlwt
 
 from ..models import Invoice, InvoiceDetail
@@ -17,6 +18,8 @@ def report_export(request):
         title = request.POST['title']
 
         style_xls = StyleXls()
+
+        report_name = re.sub('[^a-zA-Z0-9 ]+', '-', report_name)
 
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="REPORT ' + title + ' (' + report_name + ').xls"'
