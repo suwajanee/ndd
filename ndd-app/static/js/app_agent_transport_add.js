@@ -7,6 +7,7 @@ var agent_transport_add = new Vue( {
         shippers: [],
         principal_name: '',
         input_required: false,
+        quantity_warning: false,
 
         container_size_1: [],
         container_size_2: [],
@@ -113,20 +114,33 @@ var agent_transport_add = new Vue( {
 
         saveAddAgentTransports() {
             this.input_required = false
+            this.quantity_warning = false
             var form = this.$refs.addAgentTransportForm
             for(var i=0; i < form.elements.length; i++){
                 if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
                     this.input_required = true
-                    return false;
                 }
             }
 
-            api("/agent-transport/api/save-add-agent-transports/", "POST", {agent_transports: this.agent_transport_add_form, details: this.details}).then((data) => {
-                if(data == "Success") {
-                    window.location.replace("/agent-transport");
+            this.details.forEach(function(detail) {
+                if(detail.quantity < 1) {
+                    agent_transport_add.quantity_warning = true
+                }
+                else if(detail.quantity > 150) {
+                    agent_transport_add.quantity_warning = true
                 }
             })
-        },
 
+            if(this.input_required || this.quantity_warning) {
+                return false
+            }
+            else {
+                api("/agent-transport/api/save-add-agent-transports/", "POST", {agent_transports: this.agent_transport_add_form, details: this.details}).then((data) => {
+                    if(data == "Success") {
+                        window.location.replace("/agent-transport");
+                    }
+                })
+            }
+        },
     }
 })
