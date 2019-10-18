@@ -101,11 +101,14 @@ var booking_add = new Vue( {
         },
 
         addContainerDetail(index) {
-            this.details[index].container.push({
-                container_no: '',
-                seal_no: ''
-            })
-            this.details[index].quantity += 1
+            var containers = this.details[index].container
+            if(containers.length < 150) {
+                containers.push({
+                    container_no: '',
+                    seal_no: ''
+                })
+                this.details[index].quantity += 1
+            }
         },
         deleteContainerDetail(index, index_cont) {
             this.details[index].container.splice(index_cont,1)

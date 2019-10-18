@@ -93,11 +93,14 @@ var agent_transport_add = new Vue( {
         },
 
         addContainerDetail(index) {
-            this.details[index].container.push({
-                container_1: '',
-                container_2: ''
-            })
-            this.details[index].quantity += 1
+            var containers = this.details[index].container
+            if(containers.length < 150) {
+                this.details[index].container.push({
+                    container_1: '',
+                    container_2: ''
+                })
+                this.details[index].quantity += 1
+            }
         },
         deleteContainerDetail(index, index_cont) {
             this.details[index].container.splice(index_cont,1)
