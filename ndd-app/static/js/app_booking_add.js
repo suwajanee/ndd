@@ -7,6 +7,7 @@ var booking_add = new Vue( {
         shippers: [],
         principal_name: '',
         input_required: false,
+        quantity_warning: false,
 
         container_size_1: [],
         container_size_2: [],
@@ -100,11 +101,14 @@ var booking_add = new Vue( {
         },
 
         addContainerDetail(index) {
-            this.details[index].container.push({
-                container_no: '',
-                seal_no: ''
-            })
-            this.details[index].quantity += 1
+            var containers = this.details[index].container
+            if(containers.length < 150) {
+                containers.push({
+                    container_no: '',
+                    seal_no: ''
+                })
+                this.details[index].quantity += 1
+            }
         },
         deleteContainerDetail(index, index_cont) {
             this.details[index].container.splice(index_cont,1)
@@ -117,19 +121,33 @@ var booking_add = new Vue( {
 
         saveAddBookings() {
             this.input_required = false
+            this.quantity_warning = false
             var form = this.$refs.addBookingForm
             for(var i=0; i < form.elements.length; i++){
                 if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
                     this.input_required = true
-                    return false
                 }
             }
-            api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, nextday: this.nextday}).then((data) => {
-                if(data == "Success") {
-                    window.location.replace("/booking");
+
+            this.details.forEach(function(detail) {
+                if(detail.quantity < 1) {
+                    booking_add.quantity_warning = true
+                }
+                else if(detail.quantity > 150) {
+                    booking_add.quantity_warning = true
                 }
             })
-        },
 
+            if(this.input_required || this.quantity_warning) {
+                return false
+            }
+            else {
+                api("/booking/api/save-add-bookings/", "POST", {bookings: this.booking_add_form, details: this.details, nextday: this.nextday}).then((data) => {
+                    if(data == "Success") {
+                        window.location.replace("/booking");
+                    }
+                })
+            }  
+        },
     }
 })

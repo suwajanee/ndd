@@ -27,7 +27,7 @@
                                 <button v-if="agent_transport_add_form.principal" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ principal_name }}
                                 </button>
-                                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{'alert-danger': input_required == true}">
+                                <button v-else class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{'alert-danger': input_required}">
                                     --------
                                 </button>
 
@@ -46,7 +46,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">SHIPPER</span>
                                 </div>
-                                <select class="custom-select" v-model="agent_transport_add_form.shipper" :style="'color: ' + agent_transport_add_form.detail.shipper_text_color" :class="{'alert-danger': input_required == true & agent_transport_add_form.shipper == ''}" required>
+                                <select class="custom-select" v-model="agent_transport_add_form.shipper" :style="'color: ' + agent_transport_add_form.detail.shipper_text_color" :class="{'alert-danger': input_required & ! agent_transport_add_form.shipper}" required>
                                     <option value=""> -------- </option>
                                     <option v-for="shipper in shippers" :value="shipper.id"> {{ shipper.name }} </option>
                                 </select>
@@ -93,8 +93,8 @@
                                 <div v-for="(detail, index) in details">
                                     <hr v-if="index != 0" class="my-4">
                                     <div class="input-group mb-2 col-md-12">
-                                        <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required == true & detail.date == ''}" required>
-                                        <select class="custom-select col-md-4" style="height: 40px;" v-model="detail.size" :class="{'alert-danger': input_required == true & detail.size == ''}" required>
+                                        <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required & ! detail.date}" required>
+                                        <select class="custom-select col-md-4" style="height: 40px;" v-model="detail.size" :class="{'alert-danger': input_required & ! detail.size}" required>
                                             <option value=""> -- SIZE -- </option>
                                             <option v-for="container in container_size_1" :value="container.size">{{ container.size }}</option>
                                             <option value="" disabled> -------- </option>
@@ -103,8 +103,8 @@
 
                                         <input 
                                             type="number" class="form-control col-md-2" 
-                                            v-model="detail.quantity" min=1 placeholder="QTY" 
-                                            :class="{'alert-danger': input_required == true & detail.quantity == ''}" 
+                                            v-model="detail.quantity" min=1 max=150 placeholder="QTY" 
+                                            :class="{'alert-danger': input_required & ! detail.quantity, 'alert-warning': quantity_warning && (detail.quantity < 1 || detail.quantity > 150)}" 
                                             :disabled="detail.container_input" required
                                         >
 
