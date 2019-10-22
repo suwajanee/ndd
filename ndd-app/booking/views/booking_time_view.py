@@ -34,9 +34,25 @@ def api_get_time_bookings(request):
         serializer_booking = BookingSerializer(bookings, many=True)
         context['bookings'] = serializer_booking.data
 
-        booking_time = BookingTime.objects.filter(booking__pk__in=pk_list).order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id')
-        serializer_time = BookingTimeSerializer(booking_time, many=True)
-        context['booking_time'] = serializer_time.data
+        data_list = []
+        for booking in bookings:
+            booking_time = BookingTime.objects.filter(booking=booking)
+
+            data = {
+                'booking': booking.pk,
+                'booking_time': {},
+            }
+            key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+
+            for key in key_array:
+                try:
+                    data['booking_time'][key] = booking_time.get(key=key).time
+                except:
+                    data['booking_time'][key] = ''
+
+            data_list.append(data)
+
+        context['booking_time'] = data_list
 
         return JsonResponse(context, safe=False)
     return JsonResponse('Error', safe=False)                  
@@ -60,6 +76,8 @@ def api_save_time_bookings(request):
                 return_in = booking_time['return_in_time']
                 return_out = booking_time['return_out_time']
 
+                # booking_work = Booking.objects.get(pk=booking['id'])
+
                 try:
                     booking_time = BookingTime.objects.filter(booking__pk=booking['id'])
                 except:
@@ -69,6 +87,18 @@ def api_save_time_bookings(request):
                         factory_out['time'] or return_in['time'] or return_out['time']
 
                 if time_update:
+                    # for key in ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']:
+                    #     data = {
+                    #         'booking': booking_work,
+                    #         'key': key,
+                    #         'time': 
+                    #     }
+                    #     try:
+                    #         time_key = booking_time.get(key=key)
+                    #         time_key['']
+                    #     except:
+                    #         object_key = None
+
                     data = {
                         'booking': Booking.objects.get(pk=booking['id']),
                         'pickup_in_time': pickup_in,
@@ -90,4 +120,34 @@ def api_save_time_bookings(request):
                         booking_time.delete()
 
             return JsonResponse('Success', safe=False)
-    return JsonResponse('Error', safe=False)                  
+    return JsonResponse('Error', safe=False)     
+
+
+
+@csrf_exempt
+def api_add_time(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            bookings = BookingTime.objects.values_list('booking', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time').order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id', 'pk')
+
+            key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+
+            for booking in bookings:
+                print('11111111111111111111')
+                work = Booking.objects.get(pk=booking[0])
+
+                for item in range(1, len(booking)):
+
+                    time = booking[item]['time']
+                    if time:
+                        data = {
+                            'booking': work,
+                            'key': key_array[item-1],
+                            'time': time
+                        }
+                        print(data)
+
+                        booking_save = BookingTime(**data)
+                        booking_save.save()
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)     
