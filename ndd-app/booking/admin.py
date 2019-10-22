@@ -20,6 +20,8 @@ class BookingTimeAdmin(admin.ModelAdmin):
 
     ordering = ('booking__work_id', 'key')
 
+    search_fields = ['booking__work_id']
+
 
 class ContainerSizeAdmin(admin.ModelAdmin):
     list_display = ('get_container',)
