@@ -26,6 +26,8 @@ def export_time(request):
         except Principal.DoesNotExist:
             customer = ''
 
+        key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+        
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="' + customer.name + '_Time.xls"'
 
@@ -140,18 +142,22 @@ def export_time(request):
 
                 sheet.write(row_num, col_num, row[col_num], style)
 
-            row_time = BookingTime.objects.filter(booking__pk=row[16]).values_list('pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', \
-                        'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time')
+            # Time
+            booking_time = BookingTime.objects.filter(booking__pk=row[16])
+            if len(booking_time):
 
-            if len(row_time):
-                row_time = row_time[0]
-                
-                for col_time in range(len(row_time)):
-                    if row_time[col_time]['time']:
+                col_time = 16
+                for key in key_array:
+                    time_exist = booking_time.filter(key=key).first()
+
+                    if time_exist:
                         style.pattern = style_xls.bg_bright_green()
+                        time = time_exist.time
                     else:
                         style.pattern = style_xls.bg_none()
-                    sheet.write(row_num, col_time + 16, row_time[col_time]['time'], style)
+                        time = ''
+                    sheet.write(row_num, col_time, time, style)
+                    col_time += 1
 
             else:
                 for col_time in range(16, 24):
