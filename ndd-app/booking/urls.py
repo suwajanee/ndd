@@ -42,15 +42,4 @@ urlpatterns = [
     # Container Size
     url(r'^api/get-container-size/$', booking_data_view.api_get_container_size, name='api-get-container-size'),
 
-
-
-
-    # Change model
-
-    # 1 migrate ก่อน
-    # 2 copy จากอันเก่า มา key ใหม่
-    url(r'^api/add-key-time/$', booking_time_view.api_add_time, name='api-add-key-time'),
-    # 3 remove data เก่า
-    url(r'^api/remove-data/$', booking_time_view.api_remove_data, name='api-remove-data'),
-
 ]
