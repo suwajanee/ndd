@@ -134,4 +134,13 @@ def api_add_time(request):
                         booking_save = BookingTime(**data)
                         booking_save.save()
             return JsonResponse('Success', safe=False)
-    return JsonResponse('Error', safe=False)     
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_remove_data(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            bookings = BookingTime.objects.filter(key='').delete()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
