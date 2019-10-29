@@ -16,7 +16,11 @@ class BookingAdmin(admin.ModelAdmin):
 
 class BookingTimeAdmin(admin.ModelAdmin):
     list_display = ('booking', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', \
-    'return_in_time', 'return_out_time')
+    'return_in_time', 'return_out_time', 'key', 'time')
+
+    ordering = ('booking__work_id', 'key')
+
+    search_fields = ['booking__work_id']
 
 
 class ContainerSizeAdmin(admin.ModelAdmin):

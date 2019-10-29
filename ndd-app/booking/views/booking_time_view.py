@@ -34,9 +34,25 @@ def api_get_time_bookings(request):
         serializer_booking = BookingSerializer(bookings, many=True)
         context['bookings'] = serializer_booking.data
 
-        booking_time = BookingTime.objects.filter(booking__pk__in=pk_list).order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id')
-        serializer_time = BookingTimeSerializer(booking_time, many=True)
-        context['booking_time'] = serializer_time.data
+        data_list = []
+        for booking in bookings:
+            booking_time = BookingTime.objects.filter(booking=booking)
+
+            data = {
+                'booking': booking.pk,
+                'booking_time': {},
+            }
+            key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+
+            for key in key_array:
+                try:
+                    data['booking_time'][key] = booking_time.get(key=key).time
+                except:
+                    data['booking_time'][key] = ''
+
+            data_list.append(data)
+
+        context['booking_time'] = data_list
 
         return JsonResponse(context, safe=False)
     return JsonResponse('Error', safe=False)                  
@@ -49,45 +65,77 @@ def api_save_time_bookings(request):
             bookings = req['bookings']
 
             for booking in bookings:
-                booking_time = booking['booking_time']
+                time = booking['booking_time']
 
-                pickup_in = booking_time['pickup_in_time']
-                pickup_out = booking_time['pickup_out_time']
-                factory_in = booking_time['factory_in_time']
-                factory_load_start = booking_time['factory_load_start_time']
-                factory_load_finish = booking_time['factory_load_finish_time']
-                factory_out = booking_time['factory_out_time']
-                return_in = booking_time['return_in_time']
-                return_out = booking_time['return_out_time']
+                pickup_in = time['pickup_in']
+                pickup_out = time['pickup_out']
+                factory_in = time['factory_in']
+                factory_load_start = time['factory_load_start']
+                factory_load_finish = time['factory_load_finish']
+                factory_out = time['factory_out']
+                return_in = time['return_in']
+                return_out = time['return_out']
 
-                try:
-                    booking_time = BookingTime.objects.filter(booking__pk=booking['id'])
-                except:
-                    booking_time = None
+                booking_work = Booking.objects.get(pk=booking['id'])
 
-                time_update = pickup_in['time'] or pickup_out['time'] or factory_in['time'] or factory_load_start['time'] or factory_load_finish['time'] or \
-                        factory_out['time'] or return_in['time'] or return_out['time']
+                time_update = pickup_in or pickup_out or factory_in or factory_load_start or factory_load_finish or factory_out or return_in or return_out
+
+                key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
 
                 if time_update:
-                    data = {
-                        'booking': Booking.objects.get(pk=booking['id']),
-                        'pickup_in_time': pickup_in,
-                        'pickup_out_time': pickup_out,
-                        'factory_in_time': factory_in,
-                        'factory_load_start_time': factory_load_start,
-                        'factory_load_finish_time': factory_load_finish,
-                        'factory_out_time': factory_out,
-                        'return_in_time': return_in,
-                        'return_out_time': return_out,
-                    }
-                    if booking_time:
-                        time = booking_time.update(**data)
-                    else:
-                        time = BookingTime(**data)
-                        time.save()
+                    for key in key_array:
+
+                        if time[key]:
+
+                            time_save, created = BookingTime.objects.update_or_create(
+                                booking=booking_work, key=key,
+                                defaults={'time': time[key]},
+                            )
+
+                        else:
+                            BookingTime.objects.filter(booking=booking_work, key=key).delete()
+
                 else:
-                    if booking_time:
-                        booking_time.delete()
+                    BookingTime.objects.filter(booking=booking_work).delete()
 
             return JsonResponse('Success', safe=False)
-    return JsonResponse('Error', safe=False)                  
+    return JsonResponse('Error', safe=False)     
+
+
+
+@csrf_exempt
+def api_add_time(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            bookings = BookingTime.objects.values_list('booking', 'pickup_in_time', 'pickup_out_time', 'factory_in_time', 'factory_load_start_time', 'factory_load_finish_time', 'factory_out_time', 'return_in_time', 'return_out_time').order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id', 'pk')
+
+            key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+
+            for booking in bookings:
+                print('11111111111111111111')
+                work = Booking.objects.get(pk=booking[0])
+
+                for item in range(1, len(booking)):
+
+                    time = booking[item]['time']
+                    if time:
+                        data = {
+                            'booking': work,
+                            'key': key_array[item-1],
+                            'time': time
+                        }
+                        print(data)
+
+                        booking_save = BookingTime(**data)
+                        booking_save.save()
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_remove_data(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            bookings = BookingTime.objects.filter(key='').delete()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)

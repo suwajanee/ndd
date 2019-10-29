@@ -514,22 +514,22 @@ var booking_table = new Vue( {
         },
         addTimeFields(booking_time) {
             this.bookings.forEach(function(booking) {
-                var time = booking_time.find(time => time.booking.id == booking.id)
+                var time = booking_time.find(time => time.booking == booking.id)
                 if(time) {
-                    booking['booking_time'] = time
+                    booking['booking_time'] = time.booking_time
                 }
-                else {
-                    booking['booking_time'] = {
-                        pickup_in_time: {time: ''},
-                        pickup_out_time: {time: ''},
-                        factory_in_time: {time: ''},
-                        factory_load_start_time: {time: ''},
-                        factory_load_finish_time: {time: ''},
-                        factory_out_time: {time: ''},
-                        return_in_time: {time: ''},
-                        return_out_time: {time: ''},
-                    }
-                }
+                // else {
+                //     booking['booking_time'] = {
+                //         pickup_in_time: {time: ''},
+                //         pickup_out_time: {time: ''},
+                //         factory_in_time: {time: ''},
+                //         factory_load_start_time: {time: ''},
+                //         factory_load_finish_time: {time: ''},
+                //         factory_out_time: {time: ''},
+                //         return_in_time: {time: ''},
+                //         return_out_time: {time: ''},
+                //     }
+                // }
             })
         },
         saveTimeBooking() {
