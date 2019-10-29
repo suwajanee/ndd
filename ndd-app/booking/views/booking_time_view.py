@@ -86,11 +86,6 @@ def api_save_time_bookings(request):
                     for key in key_array:
 
                         if time[key]:
-                            data = {
-                                'booking': booking_work,
-                                'key': key,
-                                'time': time[key] 
-                            }
 
                             time_save, created = BookingTime.objects.update_or_create(
                                 booking=booking_work, key=key,
