@@ -76,7 +76,7 @@
                         </td>
                         <td v-else style="min-width: 290px;"></td>
 
-                        <td><input name="agent" class="form-control" v-model="agent_transport.agent" maxlength="100" :id="'5-'+index" @keydown="keyDownArrow(5, index)" @change="editData(agent_transport)"></td>
+                        <td><input name="agent" class="form-control" v-model="agent_transport.agent" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)" @change="editData(agent_transport)"></td>
 
                         <td>
                             <select class="custom-select size" v-model="agent_transport.size" :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(agent_transport)">
@@ -88,10 +88,10 @@
                         </td>
 
                         <td v-if="agent_transport.status == '0'" style="min-width:150px;" class="bg-secondary">
-                            <input class="form-control" v-model="agent_transport.booking_no" maxlength="150" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(agent_transport)">
+                            <input class="form-control" v-model="agent_transport.booking_no" maxlength="120" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(agent_transport)">
                         </td>
                         <td v-else style="min-width:150px;" :style="{ 'background-color': agent_transport.color }">
-                            <input class="form-control" v-model="agent_transport.booking_no" maxlength="150" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(agent_transport)">                            
+                            <input class="form-control" v-model="agent_transport.booking_no" maxlength="120" autocomplete=off :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(agent_transport)">                            
                         </td>
 
                         <td class="p-0" style="min-width: 15px; font-size:8px;">{{ agent_transport.num }}</td>
@@ -128,13 +128,13 @@
                         <td><input name="return_to" class="form-control" v-model="agent_transport.return_to" maxlength="25" :id="'12-'+index" @keydown="keyDownArrow(12, index)" @change="editData(agent_transport)"></td>
                         
                         <td :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_1]]">
-                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_1" maxlength="50" autocomplete=off :id="'13-'+index" @keydown="keyDownArrow(13, index)" @change="editData(agent_transport)">
+                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_1" maxlength="25" autocomplete=off :id="'13-'+index" @keydown="keyDownArrow(13, index)" @change="editData(agent_transport)">
                         </td>
                         <td :class="[{'bg-secondary':agent_transport.status==0}, container_color[agent_transport.detail.container_2]]">
-                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_2" maxlength="50" autocomplete=off :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(agent_transport)">
+                            <input class="form-control" style="font-weight: 800;" v-model="agent_transport.container_2" maxlength="25" autocomplete=off :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(agent_transport)">
                         </td>
 
-                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px; background: transparent; color: black;" v-model="agent_transport.remark" maxlength="250" :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(agent_transport)"></textarea></td>
+                        <td><textarea class="form-control text-center" rows="1" style="padding: 2px 4px; font-size: 11px; background: transparent; color: black;" v-model="agent_transport.remark" :id="'15-'+index" @keydown="keyDownArrow(15, index)" @change="editData(agent_transport)"></textarea></td>
 
                         <td class="text-nowrap">{{ agent_transport.work_id }}</td>
                     </tr>
