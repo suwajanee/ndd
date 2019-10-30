@@ -57,14 +57,14 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">AGENT</span>
                                 </div>
-                                <input name="agent" class="form-control" v-model="booking_add_form.agent" maxlength="100">
+                                <input name="agent" class="form-control" v-model="booking_add_form.agent" maxlength="50">
                             </div>
                             
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">BOOKING NO.</span>
                                 </div>
-                                <input class="form-control" v-model="booking_add_form.booking_no" maxlength="150">
+                                <input class="form-control" v-model="booking_add_form.booking_no" maxlength="120">
                             </div>
 
                             <fieldset class="add_form">
@@ -74,7 +74,7 @@
 
                                     <div class="input-group mb-2 col-md-12">
                                         <input type="date" class="form-control" v-model="detail.date" :class="{'alert-danger': input_required & ! detail.date}" required>
-                                        <input class="form-control col-md-2" v-model="detail.time" maxlength="10" placeholder="TIME">
+                                        <input class="form-control col-md-2" v-model="detail.time" maxlength="25" placeholder="TIME">
                                         <select class="custom-select col-md-3" style="height: 40px;" v-model="detail.size" :class="{'alert-danger': input_required & ! detail.size}" required>
                                             <option value=""> -- SIZE -- </option>
                                             <option v-for="container in container_size_1" :value="container.size">{{ container.size }}</option>
@@ -106,8 +106,8 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">{{ index_cont + 1 }}</span>
                                                 </div>
-                                                <input class="form-control" v-model="container.container_no" maxlength="50" placeholder="CONTAINER NO">
-                                                <input class="form-control" v-model="container.seal_no" maxlength="50" placeholder="SEAL NO">
+                                                <input class="form-control" v-model="container.container_no" maxlength="25" placeholder="CONTAINER NO">
+                                                <input class="form-control" v-model="container.seal_no" maxlength="25" placeholder="SEAL NO">
                                             </div>
                                             <button v-if="index_cont==0" class="btn btn-dark btn-sm btn-circle" @click.prevent="addContainerDetail(index)"><i class="fa fa-plus"></i></button>
                                             <button v-else class="btn btn-secondary btn-sm btn-circle" @click.prevent="deleteContainerDetail(index, index_cont)"><i class="fa fa-minus"></i></button>
@@ -183,7 +183,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">REMARK</span>
                                 </div>
-                                <textarea name="remark" class="form-control" style="min-height: 40px;" v-model="booking_add_form.remark" maxlength="250"></textarea>
+                                <textarea name="remark" class="form-control" style="min-height: 40px;" v-model="booking_add_form.remark"></textarea>
                             </div>
                         {% endverbatim %}
                     </form>
