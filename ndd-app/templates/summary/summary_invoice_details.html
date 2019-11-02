@@ -184,7 +184,7 @@
                                 <template v-if="table_edit">
                                     <div v-if="index==0 && customer_custom.option=='time_remark'" class="input-group">
                                         <input type="text" class="form-control text-center" style="padding: 2px 4px; max-width: 200px; " 
-                                            maxlength="150"
+                                            maxlength="120"
                                             v-model="inv_detail.work.booking_no" 
                                             :id="'0-'+index" @keydown="keyDownArrow(0, index)"
                                         >
@@ -197,7 +197,7 @@
                                         </div>
                                     </div>
                                     <input v-else class="form-control text-center" style="max-width: 200px; margin: auto;"
-                                        maxlength="150"
+                                        maxlength="120"
                                         v-model="inv_detail.work.booking_no" 
                                         :id="'0-'+index" @keydown="keyDownArrow(0, index)"
                                     > 
@@ -230,7 +230,7 @@
                                     <div v-if="table_edit" class="input-group" style="width: 160px;">
                                         <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
-                                            v-model="inv_detail.work.container_1" maxlength="50"
+                                            v-model="inv_detail.work.container_1" maxlength="25"
                                         >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
@@ -250,7 +250,7 @@
                                         <div v-if="table_edit" class="input-group" style="width: 160px;">
                                             <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                                 :id="'4-'+index" @keydown="keyDownArrow(4, index)"
-                                                v-model="inv_detail.work.container_2" maxlength="50"
+                                                v-model="inv_detail.work.container_2" maxlength="25"
                                             >
                                             <div class="input-group-append">
                                                 <button class="btn btn-sm btn-outline-secondary"
@@ -271,7 +271,7 @@
                                     <div v-if="table_edit" class="input-group" style="width: 160px;">
                                         <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                             :id="'3-'+index" @keydown="keyDownArrow(3, index)"
-                                            v-model="inv_detail.work.container_no" maxlength="50"
+                                            v-model="inv_detail.work.container_no" maxlength="25"
                                         >
                                         <div class="input-group-append">
                                             <button class="btn btn-sm btn-outline-secondary"
@@ -290,7 +290,7 @@
                                         <div v-if="table_edit" class="input-group" style="width: 160px;">
                                             <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;"
                                                 :id="'4-'+index" @keydown="keyDownArrow(4, index)"
-                                                v-model="inv_detail.work.seal_no" maxlength="50"
+                                                v-model="inv_detail.work.seal_no" maxlength="25"
                                             >
                                             <div class="input-group-append">
                                                 <button class="btn btn-sm btn-outline-secondary"

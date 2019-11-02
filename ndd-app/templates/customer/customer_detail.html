@@ -84,7 +84,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">NAME</span>
                     </div>
-                    <input class="form-control" :class="{'alert-danger': input_required == true & edit_customer_form.name == ''}" autocomplete=off maxlength="150" v-model="edit_customer_form.name"> 
+                    <input class="form-control" :class="{'alert-danger': input_required == true & edit_customer_form.name == ''}" autocomplete=off maxlength="120" v-model="edit_customer_form.name"> 
                 </div>
 
                 <div class="md-form mb-3 float-right text-secondary">
@@ -123,7 +123,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">NAME</span>
                     </div>
-                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" autocomplete=off maxlength="150" v-model="add_shipper_name">
+                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" autocomplete=off maxlength="120" v-model="add_shipper_name">
                 </div>
 
                 <div class="row mt-3">
@@ -136,8 +136,8 @@
                             </div>
                             <hr>
                             <div class="row entry mt-2" v-for="(address, index) in add_shipper_address">
-                                <div class="col-2"><input class="form-control" autocomplete=off maxlength="50" v-model="address.type"></div>
-                                <div class="col-9"><textarea rows=3 class="form-control" maxlength="500" autocomplete=off v-model="address.address"></textarea></div>
+                                <div class="col-2"><input class="form-control" autocomplete=off maxlength="20" v-model="address.type"></div>
+                                <div class="col-9"><textarea rows=3 class="form-control" autocomplete=off v-model="address.address"></textarea></div>
                                 <div class="col-1">
                                     <button v-if="index==0" class="btn btn-outline-success" @click="addShipperAddress('add')"><i class="fa fa-plus"></i></button>
                                     <button v-else class="btn btn-outline-danger" @click="deleteShipperAddress(index, 'add')"><i class="fa fa-minus"></i></button>
@@ -169,7 +169,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">NAME</span>
                     </div>
-                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" maxlength="150" autocomplete=off v-model="edit_shipper_form.name">                                            
+                    <input class="form-control" :class="{'alert-danger': input_required == true & add_shipper_name == ''}" maxlength="120" autocomplete=off v-model="edit_shipper_form.name">                                            
                 </div>
 
                 <div class="row mt-3">
@@ -181,8 +181,8 @@
                         </div>
                         <hr>
                         <div class="row entry mt-2" v-for="(address, index) in edit_shipper_address">
-                            <div class="col-2"><input class="form-control" autocomplete=off maxlength="50" v-model="address.type"></div>
-                            <div class="col-9"><textarea rows=3 class="form-control" maxlength="500" autocomplete=off v-model="address.address"></textarea></div>
+                            <div class="col-2"><input class="form-control" autocomplete=off maxlength="20" v-model="address.type"></div>
+                            <div class="col-9"><textarea rows=3 class="form-control" autocomplete=off v-model="address.address"></textarea></div>
 
                             <div class="col-1">
                                 <button v-if="index==edit_shipper_address.length-1" class="btn btn-outline-success" @click="addShipperAddress('edit')"><i class="fa fa-plus"></i></button>

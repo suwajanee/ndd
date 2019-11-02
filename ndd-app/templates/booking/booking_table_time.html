@@ -90,35 +90,35 @@
                         <td class="text-nowrap">{{ booking.work_id }}</td>
 
                         <td :class="{'bg-lime': booking.booking_time.pickup_in}">
-                            <input class="form-control" v-model="booking.booking_time.pickup_in" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.pickup_in" maxlength="10" :id="'0-'+index" @keydown="keyDownArrow(0, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.pickup_out}">
-                            <input class="form-control" v-model="booking.booking_time.pickup_out" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.pickup_out" maxlength="10" :id="'1-'+index" @keydown="keyDownArrow(1, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.factory_in}">
-                            <input class="form-control" v-model="booking.booking_time.factory_in" :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.factory_in" maxlength="10" :id="'2-'+index" @keydown="keyDownArrow(2, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.factory_load_start}">
-                            <input class="form-control" v-model="booking.booking_time.factory_load_start" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.factory_load_start" maxlength="10" :id="'3-'+index" @keydown="keyDownArrow(3, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.factory_load_finish}">
-                            <input class="form-control" v-model="booking.booking_time.factory_load_finish" :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.factory_load_finish" maxlength="10" :id="'4-'+index" @keydown="keyDownArrow(4, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.factory_out}">
-                            <input class="form-control" v-model="booking.booking_time.factory_out" :id="'5-'+index" @keydown="keyDownArrow(5, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.factory_out" maxlength="10" :id="'5-'+index" @keydown="keyDownArrow(5, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.return_in}"> 
-                            <input class="form-control" v-model="booking.booking_time.return_in" :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.return_in" maxlength="10" :id="'6-'+index" @keydown="keyDownArrow(6, index)" @change="editData(booking)">
                         </td>
 
                         <td :class="{'bg-lime': booking.booking_time.return_out}">
-                            <input class="form-control" v-model="booking.booking_time.return_out" :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(booking)">
+                            <input class="form-control" v-model="booking.booking_time.return_out" maxlength="10" :id="'7-'+index" @keydown="keyDownArrow(7, index)" @change="editData(booking)">
                         </td>
                     </tr>
 

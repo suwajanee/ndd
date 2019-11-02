@@ -145,7 +145,7 @@
                                     <input class="form-control text-center" v-model="inv_detail.detail.job_no" :id="'0-'+index" @keydown="keyDownArrow(0, index)">
                                 </td>
                                 <td>
-                                    <input class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="150" :id="'1-'+index" @keydown="keyDownArrow(1, index)"> 
+                                    <input class="form-control text-center" v-model="inv_detail.work.booking_no" maxlength="120" :id="'1-'+index" @keydown="keyDownArrow(1, index)"> 
                                 </td>
                             </template>
                             <td v-else>
@@ -175,7 +175,7 @@
 
                             <td v-if="inv_detail.detail.container==1" class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group" style="width: 160px;">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_1" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_1" maxlength="25" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"
@@ -191,7 +191,7 @@
 
                             <td v-else class="text-center" :class="container_color[inv_detail.detail.color1]">
                                 <div v-if="table_edit" class="input-group" style="width: 160px;">
-                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_2" maxlength="50" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
+                                    <input type="text" class="form-control text-center" style="padding: 2px 4px; margin: auto;" v-model="inv_detail.work.container_2" maxlength="25" :id="'5-'+index" @keydown="keyDownArrow(5, index)">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-outline-secondary"
                                             style="padding: 4px;"

@@ -35,7 +35,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('invoice_no', 'customer_week', 'drayage_total', 'gate_total', 'status', 'detail')
     ordering = ('customer_week__week__year', 'customer_week__week', 'invoice_no')
 
-    search_fields = ['invoice_no']
+    search_fields = ['invoice_no', 'customer_week__customer_main__name']
 
 
 class InvoiceDetailAdmin(admin.ModelAdmin):

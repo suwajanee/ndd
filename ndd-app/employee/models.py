@@ -16,7 +16,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50, blank=True, null=True, default='')
     birth_date = models.DateField(blank=True, null=True, default=None)
     hire_date = models.DateField(blank=True, null=True, default=None)
-    status = models.CharField(max_length=10, blank=True, null=True, default='')
+    status = models.CharField(max_length=1, blank=True, null=True, default='')
     job = models.ForeignKey(Job, on_delete=models.SET_NULL, null=True, blank=True)
     
     co = models.CharField(max_length=5, blank=True, null=True, default='ndd')

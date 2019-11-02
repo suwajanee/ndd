@@ -5,7 +5,7 @@ from employee.models import Driver
 
 class Manufacturer(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
-    category = models.CharField(max_length=10, blank=True, null=True)
+    category = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):
         if self.category:
@@ -24,7 +24,7 @@ class Truck(models.Model):
     pat_pass_expired_date = models.DateField(blank=True, null=True, default=None)
 
     owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
-    status = models.CharField(max_length=10, blank=True, null=True)
+    status = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):
         return self.number
@@ -38,7 +38,7 @@ class Chassis(models.Model):
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
 
     owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
-    status = models.CharField(max_length=10, blank=True, null=True)
+    status = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):
         return self.number

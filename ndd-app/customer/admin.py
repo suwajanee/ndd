@@ -12,11 +12,10 @@ class PrincipalAdmin(admin.ModelAdmin):
     list_display = ('name', 'work_type', 'cancel')
 
 class ShipperAdmin(admin.ModelAdmin):
-    form = ShipperForm
     list_display = ('principal', 'name', 'cancel')
 
 class ShipperAddressAdmin(admin.ModelAdmin):
-    form = ShipperForm
+    # form = ShipperForm
     list_display = ('shipper', 'address_type', 'address')
 
 
