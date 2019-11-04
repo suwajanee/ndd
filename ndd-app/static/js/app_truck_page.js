@@ -37,7 +37,6 @@ var truck_page = new Vue ({
             this.page = page
             this.edit_data = []
             this.getTruckChassisCount()
-            this.getDriver()
             this.getManufacturer()
 
             if(owner) {
@@ -73,7 +72,6 @@ var truck_page = new Vue ({
             api("/truck-chassis/api/get-truck/", "POST", {owner: this.owner_mode}).then((data) => {
                 this.truck_list = data.truck
                 this.date_compare = data.date_compare
-                // this.settingDetail()
             })
         },
         getChassis() {
@@ -88,12 +86,6 @@ var truck_page = new Vue ({
                 this.chassis_list = data.chassis
             })
         },
-        getDriver() {
-            api("/employee/api/get-employee/", "POST", {job: 'driver'}).then((data) => {
-                this.drivers = data.driver
-            })
-        },
-
 
         editData(data) {
             if(this.edit_data.indexOf(data) === -1) {
