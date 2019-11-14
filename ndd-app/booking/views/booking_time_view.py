@@ -99,4 +99,79 @@ def api_save_time_bookings(request):
                     BookingTime.objects.filter(booking=booking_work).delete()
 
             return JsonResponse('Success', safe=False)
-    return JsonResponse('Error', safe=False)     
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_time_new(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            bookings = BookingTime.objects.all().values_list('booking',flat = True).order_by('booking__date', 'booking__principal__name', 'booking__shipper__name', 'booking__booking_no', 'booking__work_id', 'pk').distinct()
+            booking_list = list(dict.fromkeys(bookings))
+            
+            # print(booking_list)
+
+            key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
+
+            for book in booking_list:
+                
+                booking = Booking.objects.get(pk=book)
+                booking_time = BookingTime.objects.filter(booking__pk=book)
+
+                _pickup = booking_time.filter(key__contains='pickup')
+                _factory = booking_time.filter(key__contains='factory')
+                _return = booking_time.filter(key__contains='return')
+
+                pickup_time = {}
+                factory_time = {}
+                return_time = {}
+
+                if _pickup:
+                    pickup_in = _pickup.filter(key='pickup_in').first()
+                    pickup_out = _pickup.filter(key='pickup_out').first()
+
+                    if pickup_in:
+                        pickup_time['in'] = pickup_in.time
+                    if pickup_out:
+                        pickup_time['out'] = pickup_out.time
+
+                if _factory:
+                    factory_in = _factory.filter(key='factory_in').first()
+                    factory_load_start = _factory.filter(key='factory_load_start').first()
+                    factory_load_finish = _factory.filter(key='factory_load_finish').first()
+                    factory_out = _factory.filter(key='factory_out').first()
+
+                    if factory_in:
+                        factory_time['in'] = factory_in.time
+                    if factory_load_start:
+                        factory_time['start'] = factory_load_start.time
+                    if factory_load_finish:
+                        factory_time['finish'] = factory_load_finish.time
+                    if factory_out:
+                        factory_time['out'] = factory_out.time
+
+                if _return:
+                    return_in = _return.filter(key='return_in').first()
+                    return_out = _return.filter(key='return_out').first()
+
+                    if return_in:
+                        return_time['in'] = return_in.time
+                    if return_out:
+                        return_time['out'] = return_out.time
+
+
+                data = {
+                    'booking': booking,
+                    'pickup_time': pickup_time,
+                    'factory_time': factory_time,
+                    'return_time': return_time
+                }
+
+                # print(data)
+
+                # print('----------------')
+
+                add_booking_time = BookingTime(**data)
+                add_booking_time.save()
+
+            return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
