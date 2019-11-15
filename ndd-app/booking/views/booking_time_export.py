@@ -82,12 +82,21 @@ def export_time(request):
             'date__gte': date_from
         }
 
+        filter_time = {
+            'booking__principal': customer,
+            'booking__date__lte': date_to,
+            'booking__date__gte': date_from
+        }
+
         if shipper_id:
             filter_data['shipper__pk'] = shipper_id
+            filter_time['booking__shipper__pk'] = shipper_id
 
         rows = Booking.objects.filter(**filter_data).values_list('date', 'principal', 'shipper', 'agent', 'size', 'booking_no', 'pickup_tr', 'pickup_from', 'forward_tr', \
                 'factory', 'backward_tr', 'return_tr', 'return_to', 'container_no', 'seal_no', 'work_id', 'pk').order_by('date', 'principal__name', 'shipper__name', 'booking_no', 'work_id')
- 
+
+        booking_time_list = BookingTime.objects.filter(**filter_time)
+
         row_prev = None
         booking_prev = None
         booking_index = -1
@@ -143,20 +152,40 @@ def export_time(request):
                 sheet.write(row_num, col_num, row[col_num], style)
 
             # Time
-            booking_time = BookingTime.objects.filter(booking__pk=row[16])
-            if len(booking_time):
+            booking_time = booking_time_list.filter(booking__pk=row[16]).first()
+            if booking_time:
+                data_list = [''] * 8
 
+                pickup_time = booking_time.pickup_time
+                factory_time = booking_time.factory_time
+                return_time = booking_time.return_time
+
+                if 'in' in pickup_time:
+                    data_list[0] = booking_time.pickup_time['in']
+                if 'out' in pickup_time:
+                    data_list[1] = booking_time.pickup_time['out']
+
+                if 'in' in factory_time:
+                    data_list[2] = booking_time.factory_time['in']
+                if 'start' in factory_time:
+                    data_list[3] = booking_time.factory_time['start']
+                if 'finish' in factory_time:
+                    data_list[4] = booking_time.factory_time['finish']
+                if 'out' in factory_time:
+                    data_list[5] = booking_time.factory_time['out']
+
+                if 'in' in return_time:
+                    data_list[6] = booking_time.return_time['in']
+                if 'out' in return_time:
+                    data_list[7] = booking_time.return_time['out']
+                
                 col_time = 16
-                for key in key_array:
-                    time_exist = booking_time.filter(key=key).first()
-
-                    if time_exist:
+                for data in data_list:
+                    if data:
                         style.pattern = style_xls.bg_bright_green()
-                        time = time_exist.time
                     else:
                         style.pattern = style_xls.bg_none()
-                        time = ''
-                    sheet.write(row_num, col_time, time, style)
+                    sheet.write(row_num, col_time, data, style)
                     col_time += 1
 
             else:
