@@ -13,7 +13,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class BookingTimeSerializer(serializers.ModelSerializer):
-        booking = BookingSerializer()
         class Meta:
                 model = BookingTime
                 fields = '__all__'

@@ -48,5 +48,6 @@ urlpatterns = [
     # 1 migrate ก่อน
     # 2 copy จากอันเก่า มา key ใหม่
     url(r'^api/time-new/$', booking_time_view.api_time_new, name='api-time-new'),
+    url(r'api/remove-data/$', booking_time_view.api_remove_data, name='api-remove-data'),
 
 ]
