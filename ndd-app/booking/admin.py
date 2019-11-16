@@ -17,7 +17,7 @@ class BookingAdmin(admin.ModelAdmin):
 class BookingTimeAdmin(admin.ModelAdmin):
     list_display = ('booking', 'pickup_time', 'factory_time', 'return_time')
 
-    ordering = ('booking__work_id')
+    ordering = ('booking__work_id',)
 
     search_fields = ['booking__work_id']
 
