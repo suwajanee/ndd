@@ -480,6 +480,7 @@ var booking_table = new Vue( {
 
         filterTimeBookings() {
             this.loading = true
+            this.bookings = []
             this.edit_data = []
             if(this.checked_bookings.length) {
                 api("/booking/api/get-time-bookings/", "POST", {checked_bookings: this.checked_bookings}).then((data) => {
@@ -495,7 +496,7 @@ var booking_table = new Vue( {
             }
             else {
                 api("/booking/api/get-time-bookings/").then((data) => {
-                    if(data == 'Not found') {
+                    if(data == 'Error') {
                         this.bookings = []
                         this.loading = false
                     }
@@ -514,29 +515,24 @@ var booking_table = new Vue( {
         },
         addTimeFields(booking_time) {
             this.bookings.forEach(function(booking) {
-                var time = booking_time.find(time => time.booking == booking.id)
-                if(time) {
-                    booking['booking_time'] = time.booking_time
+                var time_result = booking_time.find(time => time.booking === booking.id)
+                if(time_result) {
+                    booking['pickup_time'] = time_result.pickup_time
+                    booking['factory_time'] = time_result.factory_time
+                    booking['return_time'] = time_result.return_time
                 }
-                // else {
-                //     booking['booking_time'] = {
-                //         pickup_in_time: {time: ''},
-                //         pickup_out_time: {time: ''},
-                //         factory_in_time: {time: ''},
-                //         factory_load_start_time: {time: ''},
-                //         factory_load_finish_time: {time: ''},
-                //         factory_out_time: {time: ''},
-                //         return_in_time: {time: ''},
-                //         return_out_time: {time: ''},
-                //     }
-                // }
+                else {
+                    booking['pickup_time'] = {}
+                    booking['factory_time'] = {}
+                    booking['return_time'] = {}
+                }
             })
         },
         saveTimeBooking() {
             this.loading = true
             this.saving = true
             if(this.edit_data.length) {
-                api("/booking/api/save-time-bookings/", "POST", { bookings: this.edit_data, filter_by: this.filter_by, date_filter: this.date_filter }).then(() => {
+                api("/booking/api/save-time-bookings/", "POST", { bookings: this.edit_data }).then(() => {
                     this.filterTimeBookings()
                     this.loading = false
                     this.saving = false

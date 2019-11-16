@@ -91,6 +91,10 @@ class BookingTime(models.Model):
     key = models.CharField(max_length=25, blank=True, null=True, default='')
     time = models.CharField(max_length=10, blank=True, null=True, default='')
 
+    pickup_time = JSONField(null=True, blank=True, default=dict)
+    factory_time = JSONField(null=True, blank=True, default=dict)
+    return_time = JSONField(null=True, blank=True, default=dict)
+
 
 class ContainerSize(models.Model):
     size = models.CharField(max_length=10, blank=True)
