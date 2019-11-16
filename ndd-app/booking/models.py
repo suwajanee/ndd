@@ -88,9 +88,6 @@ class Booking(models.Model):
 class BookingTime(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="bookingtimes")
 
-    key = models.CharField(max_length=25, blank=True, null=True, default='')
-    time = models.CharField(max_length=10, blank=True, null=True, default='')
-
     pickup_time = JSONField(null=True, blank=True, default=dict)
     factory_time = JSONField(null=True, blank=True, default=dict)
     return_time = JSONField(null=True, blank=True, default=dict)
