@@ -25,8 +25,6 @@ def export_time(request):
             customer = Principal.objects.get(pk=customer_id)
         except Principal.DoesNotExist:
             customer = ''
-
-        key_array = ['pickup_in', 'pickup_out', 'factory_in', 'factory_load_start', 'factory_load_finish', 'factory_out', 'return_in', 'return_out']
         
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="' + customer.name + '_Time.xls"'
