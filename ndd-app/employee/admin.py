@@ -11,7 +11,7 @@ class JobAdmin(admin.ModelAdmin):
 
 
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'co', 'birth_date', 'hire_date', 'job', 'detail', 'status')
+    list_display = ('name_title', 'first_name', 'last_name', 'co', 'birth_date', 'hire_date', 'job', 'detail', 'status')
     ordering = ('co', 'job__number', 'first_name', 'last_name')
     search_fields = ['first_name', 'last_name']
 

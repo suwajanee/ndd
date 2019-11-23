@@ -12,6 +12,7 @@ class Job(models.Model):
 
 
 class Employee(models.Model):
+    name_title = models.CharField(max_length=5, blank=True, null=True, default='')
     first_name = models.CharField(max_length=50, blank=True, null=True, default='')
     last_name = models.CharField(max_length=50, blank=True, null=True, default='')
     birth_date = models.DateField(blank=True, null=True, default=None)

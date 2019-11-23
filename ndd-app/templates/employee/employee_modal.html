@@ -17,6 +17,36 @@
             </div>
             <div class="modal-body">
                 <div class="container col-lg-10">
+                    <div class="container">
+                        <!-- <div class="switch-field">
+                            <input type="radio" id="name_title_1" value="" />
+                            <label for="name_title_1">นาย</label>
+                            <input type="radio" id="name_title_2" value="" />
+                            <label for="name_title_2">น.ส.</label>
+                            <input type="radio" id="name_title_3" value="" />
+                            <label for="name_title_3">นาง</label>
+
+                        </div> -->
+                        <div class="custom-control custom-radio d-inline">
+                            <input type="radio" class="custom-control-input" id="name_title_1" v-model="emp_data.name_title" value="นาย" />
+                            <label class="custom-control-label" for="name_title_1">นาย</label>
+                        </div>  
+                        <div class="custom-control custom-radio d-inline mx-2">
+                            <input type="radio" class="custom-control-input" id="name_title_2" v-model="emp_data.name_title" value="น.ส." />
+                            <label class="custom-control-label" for="name_title_2">น.ส.</label>
+                        </div>  
+                        <div class="custom-control custom-radio d-inline">
+                            <input type="radio" class="custom-control-input" id="name_title_3" v-model="emp_data.name_title" value="นาง" />
+                            <label class="custom-control-label" for="name_title_3">นาง</label>
+                        </div>  
+
+
+                        
+                            
+                        <!-- <label class="radio-inline"><input type="radio" name="optradio" checked>Option 1</label>
+                        <label class="radio-inline"><input type="radio" name="optradio">Option 2</label>
+                        <label class="radio-inline"><input type="radio" name="optradio">Option 3</label> -->
+                    </div>
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">NAME</span>

@@ -24,6 +24,7 @@ def api_add_employee(request):
             job = Job.objects.get(job_title=job_title)
             
             data = {
+                'name_title': emp_data['name_title'],
                 'first_name': emp_data['first_name'],
                 'last_name': emp_data['last_name'],
                 'birth_date': emp_data['birth_date'] or None,

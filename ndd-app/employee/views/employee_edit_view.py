@@ -24,6 +24,7 @@ def api_edit_employee(request):
             job_title = emp_data['job']
 
             emp = Employee.objects.get(id=emp_data['id'])
+            emp.name_title = emp_data['name_title']
             emp.first_name = emp_data['first_name']
             emp.last_name = emp_data['last_name']
             emp.birth_date = emp_data['birth_date'] or None

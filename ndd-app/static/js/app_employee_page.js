@@ -170,6 +170,7 @@ var employee_page = new Vue( {
                 this.modal_add_mode = false
                 this.emp_data = {
                     id: emp.id,
+                    name_title: emp.name_title,
                     first_name: emp.first_name,
                     last_name: emp.last_name,
                     birth_date: emp.birth_date,
@@ -205,6 +206,7 @@ var employee_page = new Vue( {
             else {
                 this.modal_add_mode = true
                 this.emp_data = {
+                    name_title: 'นาย',
                     first_name: '',
                     last_name: '',
                     birth_date: '',
@@ -225,6 +227,7 @@ var employee_page = new Vue( {
             this.salary_data = {
                 emp_id: emp_id,
                 salary_id: salary.id,
+                name_title: emp.name_title,
                 first_name: emp.first_name,
                 last_name: emp.last_name,
                 account: emp.detail.account,
