@@ -1,65 +1,43 @@
 import xlwt
 
 class StyleXls():
-    def font_tahoma(self):
+    def font_browallia(self):
         font = xlwt.Font()
-        font.name = 'Tahoma'
+        font.name = 'BrowalliaUPC'
         return font
 
     # Font
-    def font_size_16(self):
-        font = self.font_tahoma()
-        font.height = 20*16
+    def font_size_18(self):
+        font = self.font_browallia()
+        font.height = 20*18
         return font
 
-    def font_size_16_bold(self):
-        font = self.font_tahoma()
+    def font_size_18_bold(self):
+        font = self.font_browallia()
         font.bold = True
-        font.height = 20*16
+        font.height = 20*18
         return font
 
-    def font_size_20_i(self):
-        font = self.font_tahoma()
+    def font_size_18_i(self):
+        font = self.font_browallia()
         font.italic = True
+        font.height = 20*18
+        return font
+
+    def font_size_20(self):
+        font = self.font_browallia()
         font.height = 20*20
         return font
 
-    def font_size_20_bold(self):
-        font = self.font_tahoma()
+    def font_size_22(self):
+        font = self.font_browallia()
+        font.height = 20*22
+        return font
+
+    def font_size_22_bold(self):
+        font = self.font_browallia()
         font.bold = True
-        font.height = 20*20
-        return font
-
-    def font_size_30(self):
-        font = self.font_tahoma()
-        font.height = 20*30
-        return font
-
-    def font_size_28(self):
-        font = self.font_tahoma()
-        font.height = 20*28
-        return font
-
-    def font_size_26(self):
-        font = self.font_tahoma()
-        font.height = 20*26
-        return font
-
-    def font_size_26_bold(self):
-        font = self.font_tahoma()
-        font.bold = True
-        font.height = 20*26
-        return font
-
-    def font_size_25(self):
-        font = self.font_tahoma()
-        font.height = 20*25
-        return font
-
-    def font_size_30_bold(self):
-        font = self.font_tahoma()
-        font.bold = True
-        font.height = 20*30
+        font.height = 20*22
         return font
 
     # Alignment
