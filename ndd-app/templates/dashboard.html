@@ -61,6 +61,9 @@
                         <a class="nav-link" href="{% url 'cheque-page' %}">
                             <i class="fa fa-money-check-alt"></i>&nbsp; Cheque
                         </a>
+                        <a class="nav-link" href="{% url 'daily-expense-page' %}">
+                            <i class="fas fa-shipping-fast"></i>&nbsp; รายงานการวิ่งงาน
+                        </a>
                         {% if request.user|has_group:'salary_change' %}
                             <a class="nav-link" href="{% url 'summary-commission-page' %}">
                                 <i class="fas fa-coins"></i>&nbsp; ค่าชอ.
