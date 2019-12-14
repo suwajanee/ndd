@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} {{ title }} {% endblock %}
+{% block title %} ค่าใช้จ่าย {% endblock %}
 
 {% block extra_head %}
-    <link rel="stylesheet" href="{% static 'css/style_transport_report.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -38,77 +38,106 @@
             
 
             <h4 class="text-center">{{ date|formatDate }}</h4>
-            <table class="table table-hover table-bordered text-center">
-                <thead>
-                    <tr>
-                        <th rowspan=2 class="align-middle">วันที่</th>
-                        <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
-                        <th rowspan=2 class="align-middle">เบอร์รถ</th>
-                        <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
-                        <th rowspan=2 class="align-middle">ชื่อลูกค้า</th>
+            <div style="overflow-x: auto;">
+                <table class="table table-hover table-bordered text-center report-table" >
+                    <thead>
+                        <tr>
+                            <th rowspan=2 class="align-middle">วันที่</th>
+                            <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
+                            <th rowspan=2 class="align-middle">เบอร์รถ</th>
+                            <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
+                            <th rowspan=2 class="align-middle">ชื่อลูกค้า</th>
 
-                        <th colspan=8 class="align-middle">ค่าใช้จ่ายของบริษัท</th>
-                        <th colspan=4 class="align-middle">สำรองจ่ายแทนลูกค้า</th>
+                            <th colspan=8 class="align-middle">ค่าใช้จ่ายของบริษัท</th>
+                            <th colspan=4 class="align-middle">สำรองจ่ายแทนลูกค้า</th>
 
-                        <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
-                    </tr>
-                    <tr>
-                        <th class="align-middle">ทางด่วน</th>
-                        <th class="align-middle">ผ่านท่า</th>
-                        <th class="align-middle">ทำยาง</th>
-                        <th class="align-middle">ตำรวจ</th>
-                        <th class="align-middle">ช, ค่ายก</th>
-                        <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
-                        <th class="align-middle">อื่นๆ</th>
-                        <th class="align-middle">รวม</th>
+                            <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">ทางด่วน</th>
+                            <th class="align-middle">ผ่านท่า</th>
+                            <th class="align-middle">ทำยาง</th>
+                            <th class="align-middle">ตำรวจ</th>
+                            <th class="align-middle">ช, ค่ายก</th>
+                            <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
+                            <th class="align-middle">อื่นๆ</th>
+                            <th class="align-middle">รวม</th>
 
-                        <th class="align-middle">ค่าคืนตู้</th>
-                        <th class="align-middle">ผ่านท่า</th>
-                        <th class="align-middle">อื่นๆ</th>
-                        <th class="align-middle">รวม</th>
-                    </tr>
-                </thead>
-                <tbody v-if="report_list.length" class="bg-white">    
-                    <tr v-for="report in report_list">
-                        <td>{{ report.work_order.work_date|formatDate }}</td>
-                        <td class="text-left">{{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}</td>
-                        <td>{{ report.work_order.truck.number }}</td>
-                        <td>
-                            {{ report.work_order.work.work_id }}
-                            <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
-                        </td>
-                        <td>{{ report.work_order.work.principal.name }}</td>
-
-                        <td>{{ eval(report.co_expense.toll)|currencyCommas}}</td>
-                        <td>{{ report.co_expense.co_gate|currencyCommas }}</td>
-                        <td>{{ report.co_expense.tire|currencyCommas }}</td>
-                        <td>{{ report.co_expense.fine|currencyCommas }}</td>
-                        <td>{{ report.co_expense.thc|currencyCommas }}</td>
-                        <td>{{ report.co_expense.service|currencyCommas }}</td>
-                        <td>{{ report.co_expense.co_other|currencyCommas }}</td>
-
-                        <td>{{ report.total_expense.company|currencyCommas }}</td>
-
-                        <td>{{ report.cus_expense.return|currencyCommas }}</td>
-                        <td>{{ report.cus_expense.cus_gate|currencyCommas }}</td>
-                        <td>{{ report.cus_expense.cus_other|currencyCommas }}</td>
-
-                        <td>{{ report.total_expense.customer|currencyCommas }}</td>
-
-                        <td>{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
-
-                    </tr>
-                    
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan=18 class="text-center text-secondary">
-                            ไม่พบข้อมูล
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <th class="align-middle">ค่าคืนตู้</th>
+                            <th class="align-middle">ผ่านท่า</th>
+                            <th class="align-middle">อื่นๆ</th>
+                            <th class="align-middle">รวม</th>
+                            <!-- <th>{{ driver_list }}</th> -->
+                        </tr>
+                    </thead>
+                    <tbody v-if="report_list.length != 0" class="bg-white">
+                        <template v-for="driver in driver_list">
+                            <template v-if="driver.report_list.length != 0">
+                                <tr v-for="report in driver.report_list">
+                                    <td>{{ report.work_order.work_date|formatDate }}</td>
+                                    <td class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
+                                    <td>{{ report.work_order.truck.number }}</td>
+                                    <td>
+                                        {{ report.work_order.work.work_id }}
+                                        <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
+                                    </td>
+                                    <td>{{ report.work_order.work.principal.name }}</td>
             
+                                    <td>{{ eval(report.co_expense.toll)|currencyCommas}}</td>
+                                    <td>{{ report.co_expense.co_gate|currencyCommas }}</td>
+                                    <td>{{ report.co_expense.tire|currencyCommas }}</td>
+                                    <td>{{ report.co_expense.fine|currencyCommas }}</td>
+                                    <td>{{ report.co_expense.thc|currencyCommas }}</td>
+                                    <td>{{ report.co_expense.service|currencyCommas }}</td>
+                                    <td>{{ report.co_expense.co_other|currencyCommas }}</td>
+            
+                                    <td>{{ report.total_expense.company|currencyCommas }}</td>
+            
+                                    <td>{{ report.cus_expense.return|currencyCommas }}</td>
+                                    <td>{{ report.cus_expense.cus_gate|currencyCommas }}</td>
+                                    <td>{{ report.cus_expense.cus_other|currencyCommas }}</td>
+            
+                                    <td>{{ report.total_expense.customer|currencyCommas }}</td>
+            
+                                    <td>{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
+            
+                                </tr>
+                            </template>
+                            
+                            <tr v-else class="bg-light">
+                                <td></td>
+                                <td class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
+                                <td v-for="i in 16"></td>
+                            </tr>
+
+                            <tr class="bg-light">
+                                <td colspan=18></td>
+                            </tr>
+                        </template>    
+                        
+                        
+                    </tbody>
+                    <tbody v-else>
+                        <template v-for="driver in driver_list">
+                            <tr class="bg-light">
+                                <td></td>
+                                <td class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
+                                <td v-for="i in 16"></td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td colspan=18></td>
+                            </tr>
+
+                        </template>
+                        
+                        <!-- <tr>
+                            <td colspan=18 class="text-center text-secondary">
+                                ไม่พบข้อมูล {{ driver_list }}
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     {% endverbatim %}
 </div>
@@ -122,10 +151,7 @@
 <script type="application/javascript">
 
     window.addEventListener("load", function() {
-        console.log(0)
-        console.log("{{ co }}")
         daily_expense_page.reload("{{ date }}", "{{ co }}")
-        // transport_report_page.reload()
     })
 
 </script>

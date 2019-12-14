@@ -121,11 +121,30 @@ def api_get_employee_salary(request):
 def api_get_salary_history(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            req = json.loads( request.body.decode('utf-8') )
+            req = json.loads(request.body.decode('utf-8'))
             emp_id = req['emp_id']
 
             salary = Salary.objects.filter(employee__pk=emp_id).order_by('-from_date', '-pk')
             serializer = SalarySerializer(salary, many=True)
         
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+
+@csrf_exempt
+def api_get_all_driver(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            co = req['co']
+
+            if co == 'ndd':
+                order = 'employee__co'
+            else:
+                order = '-employee__co'
+
+            driver = Driver.objects.all().order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
+            serializer = DriverSerializer(driver, many=True)
+
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)

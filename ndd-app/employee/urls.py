@@ -35,4 +35,7 @@ urlpatterns = [
     url(r'^api/delete-employee/$', employee_delete_view.api_delete_employee, name='api-delete-employee'),
 
 
+    url(r'api/get-all-driver/$', employee_data_view.api_get_all_driver, name='api-get-all-driver'),
+
+
 ]
