@@ -71,6 +71,23 @@ const sumArray = (arr) => {
     return
 }
 
+const sumObjectArray = (arr, key1, key2) => {
+    if(arr){
+        return arr.reduce(function (total, value) {
+            value = value[key1]
+            if(key2) {
+                value = value[key2]
+            }
+            // console.log(value)
+            if(! value) {
+                value = 0
+            }
+            return total + value
+        }, 0)
+    }
+    return
+}
+
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',
     data: {

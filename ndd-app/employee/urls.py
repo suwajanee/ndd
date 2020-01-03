@@ -36,6 +36,7 @@ urlpatterns = [
 
 
     url(r'api/get-all-driver/$', employee_data_view.api_get_all_driver, name='api-get-all-driver'),
+    url(r'api/get-active-driver/$', employee_data_view.api_get_active_driver, name='api-get-active-driver'),
 
 
 ]

@@ -55,13 +55,13 @@
 /* Track */
 ::-webkit-scrollbar-track {
     background: #f1f1f1; 
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #888; 
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
 
 /* Handle on hover */
@@ -70,6 +70,61 @@
 }
 
 
-.report-table td, .report-table th {
+
+.table-fix-head td, .table-fix-head th {
     font-size: 14px;
+}
+
+/* Table fix head */
+.table-fix-head {
+    overflow-y: auto;
+    height: calc(100vh - 221px);
+    border-top: 1px solid silver;
+}
+.head-date {
+    height: calc(100vh - 221px);
+}
+.head-driver {
+    height: calc(100vh - 253px);
+}
+  
+.table-fix-head table {
+    border-collapse: collapse;
+    width: 100vw;
+}
+
+.table-fix-head tr th {
+    position: sticky;
+    top: 0;
+    background: #e1e6ea;
+    box-shadow: 0 2px 3px 0 silver;
+    /* box-shadow: 1px -2px 2px 0 lightgray; */
+    /* border-top: 1px solid lightgray; */
+}
+
+tr.second-header th {
+    top: 45px;
+}
+
+div.note-msg {
+    display: none;
+
+    position: absolute;
+    margin-top: -30px;
+    
+    border: 1px solid DimGray ;
+    border-radius: 3px;
+
+    background: #FFF3CD;
+    color: DimGray ;
+
+    padding: 4px;
+    font-size: 12px;
+}
+
+div.note-alert {
+    float: right;
+    border-radius: 50%;
+    background: red;
+    padding: 4px;
 }

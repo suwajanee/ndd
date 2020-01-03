@@ -13,6 +13,9 @@ from ..models import ExpenseSummaryDate
 from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
 from ..serializers import ExpenseSummaryDateSerializer
+from employee.models import Driver
+from employee.models import Employee
+from employee.serializers import EmployeeSerializer
 
 
 @csrf_exempt
@@ -41,6 +44,34 @@ def api_get_daily_expense(request):
 
         return JsonResponse(data, safe=False)
 
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_daily_driver_expense(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            date = req['date']
+            driver_id = req['driver']
+
+            driver = Employee.objects.get(pk=driver_id)
+            driver_serializer = EmployeeSerializer(driver, many=False)
+
+            try:
+                truck = Driver.objects.get(employee=driver).truck.pk
+            except:
+                truck = ''
+
+            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date')
+            work_serializer = ExpenseSerializer(work_expense, many=True)
+
+            data = {
+                "driver": driver_serializer.data,
+                "truck": truck,
+                "report": work_serializer.data
+            }
+
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
 

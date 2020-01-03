@@ -148,3 +148,21 @@ def api_get_all_driver(request):
 
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_active_driver(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            co = req['co']
+
+            if co == 'ndd':
+                order = 'employee__co'
+            else:
+                order = '-employee__co'
+
+            driver = Driver.objects.filter(employee__status='a').order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
+            serializer = DriverSerializer(driver, many=True)
+
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
