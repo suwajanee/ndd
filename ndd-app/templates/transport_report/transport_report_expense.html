@@ -57,9 +57,8 @@
                             </div>
                         </div>
                     </div>
-
                     <template>
-                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" style="right:0;">Add Expense</button>
+                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpense" style="right:0;">Add Expense</button>
                         <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="urlFormat()">
                             <input type="radio" id="work_ndd" v-model="co" value="ndd" />
                             <label for="work_ndd">NDD</label>
@@ -110,13 +109,13 @@
                             <th class="align-middle">รวม</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody" v-if="expense_list.length != 0" class="bg-white">
+                    <tbody id="tbody" v-if="expense_list.length" class="bg-white">
                         {% if driver %}
                             <template v-if="driver_id">
                                 <template v-for="report in expense_list">
                         {% else %}
                             <template v-for="driver in driver_report_list">
-                                <template v-if="driver.report_list.length != 0">
+                                <template v-if="driver.report_list.length">
                                     <template v-for="report in driver.report_list">
                         {% endif %}
                             {% verbatim %}
@@ -302,6 +301,8 @@
             </div>
         </div>
     </div>
+
+    {% include 'transport_report/transport_report_expense_modal.html' %}
 
 
     <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
