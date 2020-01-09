@@ -324,17 +324,30 @@ var agent_transport_table = new Vue( {
             }
         },
         changeStateAgentTransport(id, state, status, color) {
-            if(status && status == '2') {
-                if(! color) {
-                    color = 1
+            if(state == status && ['2', '4'].includes(state)) {
+                if(state == '2') {
+                    var key = 'morning_work'
+                    if(! color) {
+                        color = 1
+                    }
+                    else {
+                        color = (parseInt(color) + 1) % 3
+                        if(color==0) { color = '' }
+                    }
                 }
-                else {
-                    color = (parseInt(color) + 1) % 3
-                    if(color==0) { color = '' }
+                else if(state == '4') {
+                    var key = 'count'
+                    if(! color) {
+                        color = 1
+                    }
+                    else {
+                        color = ''
+                    }
                 }
-                api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: 'morning_work'}).then((data) => {
+                
+                api("/agent-transport/api/change-color/", "POST", {id: id, color: color, field: key}).then((data) => {
                     var agent = this.agent_transports.find(x => x.id == id)
-                    this.$set(agent.detail, 'morning_work', data)
+                    this.$set(agent.detail, key, data)
                 })
             }
             else {

@@ -188,6 +188,10 @@ def export_xls(request):
                         style.pattern = style_xls.bg_bright_green()
                     elif row[len(row)-2] == '5' and col_num in [7, 9 ,11]:
                         style.pattern = style_xls.bg_bright_green()
+
+                    elif row[len(row)-2] == '5' and 'count' in row[len(row)-1] and col_num == 12:
+                        style.pattern = style_xls.bg_yellow()
+                        
                     elif row[len(row)-2] == '2':
                         style.pattern = style_xls.bg_bright_green()
                         if 'morning_work' in row[len(row)-1] and col_num == 12:
@@ -269,6 +273,11 @@ def export_xls(request):
                     row_num += 1
                     ws_agent_transport.row(row_num).height_mismatch = True
                     ws_agent_transport.row(row_num).height = 20*25
+            else:
+                try:
+                    row[3] = Shipper.objects.get(pk=row[3]).name
+                except Shipper.DoesNotExist:
+                    row[3] = ''
 
             row_prev = row
 
@@ -325,7 +334,10 @@ def export_xls(request):
                         style.pattern = style_xls.bg_bright_green()
                     elif row[len(row)-2] in ['4', '2'] and col_num in [7, 9]:
                         style.pattern = style_xls.bg_bright_green()
-                        if 'morning_work' in row[len(row)-1] and row[len(row)-2] == '2' and col_num == 9:
+
+                        if row[len(row)-2] == '4' and 'count' in row[len(row)-1] and col_num == 9:
+                            style.pattern = style_xls.bg_yellow() 
+                        elif row[len(row)-2] == '2' and 'morning_work' in row[len(row)-1] and col_num == 9:
                             index = int(row[len(row)-1]['morning_work'])-1
                             style.pattern = style_xls.bg_count(index)
 
@@ -341,6 +353,8 @@ def export_xls(request):
                         operation = 'ตู้เปล่าไป'
                     elif  row[col_num] == 'import_empty':
                         operation = 'ตู้เปล่ากลับ'
+                    else:
+                        operation = ''
 
                     ws_agent_transport.write(row_num, col_num, '**' + operation + ' ' + str(row[len(row)-3]) + '**', style)
                 else:

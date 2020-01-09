@@ -1,4 +1,4 @@
-<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': agent_transports.length }">
+<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-fix-head': agent_transports.length }">
     {% verbatim %}
         <table v-if="agent_transports.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
@@ -116,7 +116,11 @@
                             </select>
                         </td>
 
-                        <td v-if="['0', '2', '4'].includes(agent_transport.status)" :class="[ {'bg-secondary': agent_transport.status == '0', 'bg-lime': ['2', '4'].includes(agent_transport.status) & ! agent_transport.detail.morning_work}, morning_color[agent_transport.detail.morning_work] ]">
+                        <td v-if="['0', '2'].includes(agent_transport.status)" :class="[ {'bg-secondary': agent_transport.status == '0', 'bg-lime': agent_transport.status == '2' & ! agent_transport.detail.morning_work}, morning_color[agent_transport.detail.morning_work] ]">
+                            <input v-if="['1', '2'].includes(agent_transport.yard_ndd)" class="form-control" v-model="agent_transport.return_tr" maxlength="15" :id="'11-'+index" @keydown="keyDownArrow(11, index)" @change="editData(agent_transport)">
+                            <input v-else class="form-control" v-model="agent_transport.pickup_tr" maxlength="15" :id="'11-'+index" @keydown="keyDownArrow(11, index)" readonly>
+                        </td>
+                        <td v-else-if="agent_transport.status == '4'" :class="[{'bg-yellow': agent_transport.detail.count}, 'bg-lime']" >
                             <input v-if="['1', '2'].includes(agent_transport.yard_ndd)" class="form-control" v-model="agent_transport.return_tr" maxlength="15" :id="'11-'+index" @keydown="keyDownArrow(11, index)" @change="editData(agent_transport)">
                             <input v-else class="form-control" v-model="agent_transport.pickup_tr" maxlength="15" :id="'11-'+index" @keydown="keyDownArrow(11, index)" readonly>
                         </td>
