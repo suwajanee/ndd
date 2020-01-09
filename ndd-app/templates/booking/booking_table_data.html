@@ -1,7 +1,7 @@
-<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
+<div v-if="loading==false" class="w-100" :class="{ 'table-fix-head': bookings.length }">
     {% verbatim %}
-        <table v-if="bookings.length" class="table-hover w-100" style="color: black;">
-            <thead class="text-nowrap bg-lightgray"> 
+        <table v-if="bookings.length" class="table-hover w-100 " style="color: black;">
+            <thead class="text-nowrap bg-lightgray "> 
                 <th class="align-middle"><input type="checkbox" @click="selectAll()" v-model="all_checked"></th>
                 <th>PRINT</th>
                 <th>TIME</th>
@@ -124,14 +124,15 @@
                         <td v-else-if="['1', '3'].includes(booking.fac_ndd)" class="bg-gold">{{ booking.backward_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.backward_tr }">{{ booking.backward_tr }}</td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="[ {'bg-secondary': booking.status == '0', 'bg-lime' : ['2'].includes(booking.status) & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">{{ booking.return_tr }}</td>
+                        <td v-if="['0', '2'].includes(booking.status)" :class="[ {'bg-secondary': booking.status == '0', 'bg-lime' : booking.status == '2' & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">{{ booking.return_tr }}</td>
+                        <td v-else-if="booking.status == '5' && booking.detail.count" class="bg-yellow">{{ booking.return_tr }}</td>
                         <td v-else :class="{ 'bg-cyan': booking.return_tr }">{{ booking.return_tr }}</td>
                         
                         <td>
                             {{ booking.return_to }}<br>
                             <button v-if="booking.status != '0'" class="btn mt-1 rounded-circle status-button" 
                             :class="['2', '5'].includes(booking.status) ? 'btn-primary' : 'btn-outline-primary'"
-                                @click="changeStateBooking(booking.id, '5')"
+                                @click="changeStateBooking(booking.id, '5', booking.status, booking.detail.count)"
                             >
                                 <i class="far fa-circle"></i>
                             </button>

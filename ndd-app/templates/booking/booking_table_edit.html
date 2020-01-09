@@ -1,4 +1,4 @@
-<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-cont': bookings.length }">
+<div v-if="loading==false" id="table-cont" class="w-100" :class="{ 'table-fix-head': bookings.length }">
     {% verbatim %}
         <table v-if="bookings.length" class="table-hover w-100">
             <thead class="text-nowrap bg-lightgray"> 
@@ -148,7 +148,13 @@
                             </select>
                         </td>
 
-                        <td v-if="['0', '2'].includes(booking.status)" :class="[{ 'bg-secondary': booking.status == '0', 'bg-lime': ['2'].includes(booking.status) & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">
+                        <td v-if="['0', '2'].includes(booking.status)" :class="[{ 'bg-secondary': booking.status == '0', 'bg-lime': booking.status == '2' & ! booking.detail.morning_work}, morning_color[booking.detail.morning_work] ]">
+                            <input v-if="booking.fac_ndd != '0'" class="form-control" v-model="booking.return_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
+                            <input v-else-if="booking.nextday == 1 || booking.nextday == 2" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
+                            <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
+                            <input v-else class="form-control" v-model="booking.pickup_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
+                        </td>
+                        <td v-else-if="booking.status == '5' && booking.detail.count" class="bg-yellow">
                             <input v-if="booking.fac_ndd != '0'" class="form-control" v-model="booking.return_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" @change="editData(booking)">
                             <input v-else-if="booking.nextday == 1 || booking.nextday == 2" class="form-control" v-model="booking.backward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>
                             <input v-else-if="['1', '2'].includes(booking.yard_ndd)" class="form-control" v-model="booking.forward_tr" maxlength="15" :id="'14-'+index" @keydown="keyDownArrow(14, index)" readonly>

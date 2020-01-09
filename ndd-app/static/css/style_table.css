@@ -1,36 +1,35 @@
-/* Fix header table when scroll */
-.table-cont{
+/* Table fix head */
+.table-fix-head {
     overflow-y: auto;
-    position: absolute;
-    bottom: 0; 
+    height: calc(100vh - 152px);
     box-shadow: 0 0 1px 1px gray;
 }
-
-.table-cont table, .table-cont td {
+.table-fix-head table {
+    border-collapse: collapse;
+    margin-top: -1px;
+    width: 100vw;
+}
+.table-fix-head th {
+    position: sticky;
+    top: -1px;
+    background: #D3D3D3;
+    padding: 10 5px;
+    border: 1px solid gray;
+    box-shadow: 3px 2px 3px 1px dimgray; 
+}
+tr.second-header th {
+    top: 25px;
+}
+.table-fix-head table, .table-fix-head td {
     font-size: 14px;
     border: 1px solid gray;
     text-align: center;
 }
-
-.table-cont thead {
-    box-shadow: 0 0 4px 2px gray;
-}
-
-.table-cont th {
-    padding: 10 5px;
-    box-shadow: 0 0 0 1px gray; 
-}
-
-.table-cont td {
+.table-fix-head td {
     padding: 5px;
     min-width: 50px;
     color: black;
 }
-
-.table-cont tbody {
-    background: white;
-}
-
 table.time th {
     padding: 3 5px;
 }
