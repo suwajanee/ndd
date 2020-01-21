@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
+from employee.models import Employee
+
 
 @login_required(login_url=reverse_lazy('login'))
 def expense_page(request):
@@ -15,4 +17,5 @@ def date_expense_page(request, date, co):
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_expense_page(request, date, driver):
-    return render(request, 'transport_report/transport_report_expense.html', {'nbar': 'transport-report-page', 'date': date, 'driver': driver})
+    co = Employee.objects.get(pk=driver).co
+    return render(request, 'transport_report/transport_report_expense.html', {'nbar': 'transport-report-page', 'date': date, 'co': co, 'driver': driver})

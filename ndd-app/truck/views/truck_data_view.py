@@ -151,3 +151,23 @@ def get_date_compare(date):
     today = datetime.now()
     date_compare = today + timedelta(days=date)
     return date_compare
+
+
+@csrf_exempt
+def api_get_active_truck(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            co = req['co']
+
+            if co == 'ndd':
+                order = 'owner'
+            else:
+                order = '-owner'
+
+            truck = Truck.objects.filter(~Q(status='s')).order_by(order, 'number')
+            serializer = TruckSerializer(truck, many=True)
+
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+

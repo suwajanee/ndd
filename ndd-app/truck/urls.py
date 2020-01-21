@@ -42,4 +42,6 @@ urlpatterns = [
     # url(r'^api/get-truck-choices/$', truck_data_view.api_get_truck_choices, name='api-get-truck-choices'),
     url(r'^api/check-truck-driver/$', truck_data_view.api_check_truck_driver, name='api-check-truck-driver'),
 
+    # Transport Report page
+    url(r'^api/get-active-truck/$', truck_data_view.api_get_active_truck, name='api-active-truck'),
 ]
