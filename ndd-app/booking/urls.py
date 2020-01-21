@@ -42,4 +42,7 @@ urlpatterns = [
     # Container Size
     url(r'^api/get-container-size/$', booking_data_view.api_get_container_size, name='api-get-container-size'),
 
+    # Transport Report
+    url(r'^api/get-normal-work-by-work-id/$', booking_data_view.api_get_normal_work_by_work_id, name='api-get-normal-work-by-work-id')
+
 ]
