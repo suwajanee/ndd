@@ -1,181 +1,250 @@
-<div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">
-                    New Report
-                </h4>
-                <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group my-3 container">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">DRIVER</span>
-                    </div>
-                    <button class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        
+{% load static %}
+{% verbatim %}
+    <div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        <template v-if="modal_add_mode">
+                            Add New Report:
+                        </template>
+                        <template v-else>
+                            Edit Report:
+                        </template>
+                        <span class="text-primary">{{ date|formatDate }}</span>
+                    </h4>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                        
-                    <div class="dropdown-menu dropdown-menu-right w-75">
-                        <div class="dropdown-item">
-                            <input class="form-control" v-model="search-driver" placeholder="Search Driver">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                            <button class="dropdown-item" v-for="driver in filterDriver"><mark>{{ driver.employee.co }}</mark> {{ driver.employee.first_name }} {{ driver.employee.last_name }}</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group-append">
-                        <span class="input-group-text">TRUCK</span>
-                    </div>
-                    <select class="custom-select">
-                        <option></option>
-                    </select>
                 </div>
-
-                <div class="row container my-3">
-                    <div class="input-group col-7">
+                <div class="modal-body">
+                    <div class="input-group my-3 container">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">WORK</span>
+                            <span class="input-group-text">DRIVER</span>
                         </div>
-                        <input class="form-control">
+
+                        <button id="driverDropdown" class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <template v-if="report_order.driver">
+                                {{ report_order.driver.first_name }} {{ report_order.driver.last_name }}
+                                <span class="badge badge-pill badge-primary float-right m-1">{{ report_order.driver.co.toUpperCase() }}</span>
+                            </template>
+                            <template v-else>
+                                --------
+                            </template>
+                        </button>
+                            
+                        <div class="dropdown-menu w-75">
+                            <div class="dropdown-item">
+                                <input class="form-control" v-model="search_driver" placeholder="Search Driver">
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                <button class="dropdown-item" v-for="driver in filterDriver" @click="report_order.driver=driver.employee, report_order.truck=driver.truck || {}">
+                                    {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">{{ driver.employee.co.toUpperCase() }}</span>
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="input-group-append">
-                            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                            <span class="input-group-text">TRUCK NO</span>
+                        </div>
+                        <div>
+                            <button id="truckDropdown"  class="custom-select text-left rounded-right" style="min-width: 110px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ report_order.truck.number || '--------' }}
+                                <span v-if="report_order.truck.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': report_order.truck.owner != co}">{{ report_order.truck.owner.toUpperCase() }}</span>
+                            </button>
+                            <div class="dropdown-menu w-25">
+                                <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                    <button class="dropdown-item" v-for="truck in truck_list" @click="report_order.truck=truck">
+                                        {{ truck.number }}
+                                        <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">{{ truck.owner.toUpperCase() }}</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-2 px-0">
-                        <select class="custom-select">
-                            <option value="">-</option>
-                            <option value="1.1">1.1</option>
-                            <option value="1.2">1.2</option>
-                            <option value="2.1">2.1</option>
-                            <option value="2.2">2.2</option>
-                            <option value="3.1">3.1</option>
-                            <option disabled> -------- </option>
-                            <option value="4.1">4.1</option>
-                            <option value="4.2">4.2</option>
-                            <option value="5.1">5.1</option>
-                            <option value="5.2">5.2</option>
-                            <option disabled> -------- </option>
-                            <option value="RE.1">RE.1</option>
-                            <option value="RE.2">RE.2</option>
-                            <option value="RE.3">RE.3</option>
-                        </select>
-                    </div>
-
-                    <div class="col px-2">
-                        <div class="custom-control custom-checkbox m-2">
-                            <input id="doubleCheck" type="checkbox" class="custom-control-input">
-                            <label class="custom-control-label" for="doubleCheck"><b>(+)</b></label>
+                    <div class="row container my-3">
+                        <div class="input-group col-7">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">WORK</span>
+                            </div>
+                            <input class="form-control" v-model="search_work_id">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" @click="getWorkByworkId(search_work_id)"><i class="fas fa-search"></i></button>
+                            </div>
                         </div>
+
+                        <template v-if="report_work_id">
+                            <div class="col-2 px-0">
+                                <select class="custom-select" v-model="report_order.order_type" @change="report_order.double_container=false">
+                                    <option value="">-</option>
+                                    <template v-if="modal_type=='normal'">
+                                        <option value="1.1">1.1</option>
+                                        <option value="1.2">1.2</option>
+                                        <option value="2.1">2.1</option>
+                                        <option value="2.2">2.2</option>
+                                        <option value="3.1">3.1</option>
+                                        <option disabled> -------- </option>
+                                        <option value="4.1">4.1</option>
+                                        <option value="4.2">4.2</option>
+                                        <option value="5.1">5.1</option>
+                                        <option value="5.2">5.2</option>
+                                        <option disabled> -------- </option>
+                                        <option value="RE.1">RE.1</option>
+                                        <option value="RE.2">RE.2</option>
+                                        <option value="RE.3">RE.3</option>
+                                    </template>
+                                    <template v-else>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option disabled> -------- </option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </template>
+                                    
+                                </select>
+                            </div>
+
+                            <div v-if="double_show.includes(report_order.order_type) && work_data.size >= 0 && modal_type=='normal'" class="col px-2">
+                                <div class="custom-control custom-checkbox m-2">
+                                    <input id="doubleCheck" type="checkbox" class="custom-control-input" v-model="report_order.double_container">
+                                    <label class="custom-control-label" for="doubleCheck"><b>(+)</b></label>
+                                </div>
+                            </div>
+                        </template>
                     </div>
+
+                    <template v-if="report_work_id">
+
+                        <hr class="my-4">
+
+                        <h4 class="text-center my-3">
+                            {{ report_work_id }}
+                            <template v-if="report_order.order_type"> / {{ report_order.order_type }}<template v-if="report_order.double_container"> +</template></template>
+                        </h4>
+
+                        <div class="input-group my-3 col-6">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">DATE</span>
+                            </div>
+                            <input type="date" class="form-control" v-model="report_order.work_date" >
+                        </div>
+
+                        <div class="input-group my-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">CUSTOMER</span>
+                            </div>
+                            <input class="form-control" v-model="work_data.customer" readonly>
+                            <input class="form-control" v-model="report_detail.customer_name">
+                        </div>
+                        <div class="input-group my-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">REMARK</span>
+                            </div>
+                            <input class="form-control" v-model="report_detail.remark">
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="text-center my-3"><u>ค่าใช้จ่าย</u></h5>
+                        <div class="px-3 text-center">
+                            <h6><mark>ค่าใช้จ่ายบริษัท</mark></h6>
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>ทางด่วน</th>
+                                        <th>ผ่านท่า</th>
+                                        <th>ทำยาง</th>
+                                        <th>ตำรวจ</th>
+                                        <th>ช., ค่ายก</th>
+                                        <th>ค่าบริการ</th>
+                                        <th>อื่นๆ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-light text-center text-small">
+                                        <td>{{ sumString(report_co_expense.co_toll)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_gate)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_tire)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_fine)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_thc)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_service)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_co_expense.co_other)|currencyCommas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_toll_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_gate_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_tire_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_fine_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_thc_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_service_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_other_note"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h6><mark>สำรองจ่ายแทนลูกค้า</mark></h6>
+                            <table class="table table-sm table-bordered container w-50">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>คืนตู้</th>
+                                        <th>ผ่านท่า</th>
+                                        <th>อื่นๆ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-light text-center text-small">
+                                        <td>{{ sumString(report_cus_expense.cus_return)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_cus_expense.cus_gate)|currencyCommas }}</td>
+                                        <td>{{ sumString(report_cus_expense.cus_other)|currencyCommas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.cus_return_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.cus_gate_note"></td>
+                                        <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.cus_other_note"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        
+                        </div>
+                    </template>
                 </div>
 
-                <hr class="my-4">
-
-                <h4 class="text-center my-3"></h4>
-
-                <div class="input-group my-3 col-6">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">DATE</span>
-                    </div>
-                    <input type="date" class="form-control">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-primary">Save</button>
                 </div>
-
-                <div class="input-group my-3 container">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">CUSTOMER</span>
-                    </div>
-                    <input class="form-control" readonly>
-                    <input class="form-control">
-                </div>
-                <div class="input-group my-3 container">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">REMARK</span>
-                    </div>
-                    <input class="form-control">
-                </div>
-
-                <hr class="my-4">
-
-                <h5 class="text-center my-3">ค่าใช้จ่าย</h5>
-                <div class="px-3 text-center">
-                    <h6><mark>ค่าใช้จ่ายบริษัท</mark></h6>
-                    <table class="table table-sm table-bordered">
-                        <tr class="text-center">
-                            <th>ทางด่วน</th>
-                            <th>ผ่านท่า</th>
-                            <th>ยาง</th>
-                            <th>ตำรวจ</th>
-                            <th>ช.</th>
-                            <th>บริการ</th>
-                            <th>อื่นๆ</th>
-                        </tr>
-                        <tr>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                        </tr>
-                    </table>
-
-                    <h6><mark>สำรองจ่ายแทนลูกค้า</mark></h6>
-                    <table class="table table-sm table-bordered container w-50">
-                        <tr class="text-center">
-                            <th>คืนตู้</th>
-                            <th>ผ่านท่า</th>
-                            <th>อื่นๆ</th>
-                        </tr>
-                        <tr>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                            <td><input class="form-control"></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                            <td><input class="form-control" placeholder="Note"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
-</div>
 
 
-   
-                
+    <script>
+        const sumString = (arr) => {
+            try {
+                return eval(arr)
+            }
+            catch {
+                return 0
+            }
+        }
+    </script>
 
 
-                    
-                    
-                </div>
-                <div class="modal-footer d-flex justify-content-center"> 
-
-                            <button class="btn btn-primary" >Save</button>
-
-                    </div>
-            </div>
-        </div>
-    </div>
+{% endverbatim %}
+        

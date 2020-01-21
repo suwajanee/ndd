@@ -88,6 +88,30 @@ const sumObjectArray = (arr, key1, key2) => {
     return
 }
 
+const show_note = () => {
+    var tbody = document.getElementById("tbody")
+    tbody.addEventListener('mousedown', function(e) {
+        e = e || window.event
+        var target = e.target 
+        var alert = target.children[0]
+        if(alert && target.tagName == "TD") {
+            alert.style.display = "block"                   
+        }
+    }, false)  
+}
+
+const hide_note = () => {
+    var tbody = document.getElementById("tbody")
+    tbody.addEventListener('mouseup', function(e) {
+        e = e || window.event
+        var target = e.target
+        var alert = target.children[0]
+        if(alert && target.tagName == "TD") {
+            alert.style.display = "none"
+        }
+    }, false)
+}
+
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',
     data: {

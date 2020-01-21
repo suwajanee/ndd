@@ -13,6 +13,7 @@ from ..models import ExpenseSummaryDate
 from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
 from ..serializers import ExpenseSummaryDateSerializer
+from ..serializers import TruckSerializer
 from employee.models import Driver
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
@@ -58,16 +59,19 @@ def api_get_daily_driver_expense(request):
             driver_serializer = EmployeeSerializer(driver, many=False)
 
             try:
-                truck = Driver.objects.get(employee=driver).truck.pk
+                truck = Driver.objects.get(employee=driver).truck
+                truck_serializer = TruckSerializer(truck, many=False)
+                truck_data = truck_serializer.data
+
             except:
-                truck = ''
+                truck_data = {}
 
             work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date')
             work_serializer = ExpenseSerializer(work_expense, many=True)
 
             data = {
                 "driver": driver_serializer.data,
-                "truck": truck,
+                "truck": truck_data,
                 "report": work_serializer.data
             }
 

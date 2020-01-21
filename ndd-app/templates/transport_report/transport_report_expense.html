@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block content %}
-    <div id="daily-expense-page">
+    <div id="expense-page">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white border-bottom">
                 <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">รายงานการวิ่งงาน</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'expense-page' %}">ค่าใช้จ่าย</a></li>
                 {% if driver %}
                     {% verbatim %}
-                        <li class="breadcrumb-item"><a :href="'/transport-report/expense/' + date + '/' + co">{{ date|formatDate }}</a></li>
+                        <li class="breadcrumb-item"><a :href="'/transport-report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ driver_data.first_name }} {{ driver_data.last_name }}</li>
                     {% endverbatim %}
                 {% else %}
@@ -40,7 +40,8 @@
                             <span class="input-group-text">DRIVER</span>
                         </div>
                         <button v-if="driver_id" class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <mark>{{ driver_data.co }}</mark>  {{ driver_data.first_name }} {{ driver_data.last_name }}
+                            {{ driver_data.first_name }} {{ driver_data.last_name }}
+                            <span class="badge badge-pill badge-primary float-right m-1">{{ co.toUpperCase() }}</span>
                         </button>
                         <button v-else class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             --------
@@ -53,12 +54,15 @@
                             <div class="dropdown-divider"></div>
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
                                 <button class="dropdown-item" @click="urlFormat()"> -------- </button>
-                                <button v-for="driver in filterDriver" class="dropdown-item" @click="urlFormat(driver.employee.id)"><mark>{{ driver.employee.co }}</mark> {{ driver.employee.first_name }} {{ driver.employee.last_name }}</button>
+                                <button v-for="driver in filterDriver" class="dropdown-item" @click="urlFormat(driver.employee.id)">
+                                    {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co }">{{ driver.employee.co.toUpperCase() }}</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                     <template>
-                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpense" style="right:0;">Add Expense</button>
+                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpense" data-backdrop="static" style="right:0;" @click="modalReport()">Add Expense</button>
                         <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="urlFormat()">
                             <input type="radio" id="work_ndd" v-model="co" value="ndd" />
                             <label for="work_ndd">NDD</label>
@@ -84,10 +88,10 @@
                             <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
                             <th rowspan=2 class="align-middle">เบอร์รถ</th>
                             <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
-                            <th rowspan=2 class="align-middle">ชื่อลูกค้า</th>
+                            <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
 
-                            <th colspan=8 class="align-middle">ค่าใช้จ่ายของบริษัท</th>
-                            <th colspan=4 class="align-middle">สำรองจ่ายแทนลูกค้า</th>
+                            <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
+                            <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
 
                             <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
 
@@ -101,12 +105,12 @@
                             <th class="align-middle">ช, ค่ายก</th>
                             <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
                             <th class="align-middle">อื่นๆ</th>
-                            <th class="align-middle">รวม</th>
+                            <th class="align-middle right-thick">รวม</th>
 
                             <th class="align-middle">ค่าคืนตู้</th>
                             <th class="align-middle">ผ่านท่า</th>
                             <th class="align-middle">อื่นๆ</th>
-                            <th class="align-middle">รวม</th>
+                            <th class="align-middle right-thick">รวม</th>
                         </tr>
                     </thead>
                     <tbody id="tbody" v-if="expense_list.length" class="bg-white">
@@ -130,7 +134,7 @@
                                         {{ report.work_order.work.work_id }}
                                         <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
                                     </td>
-                                    <td>{{ report.work_order.work.principal.name }}</td>
+                                    <td class="right-thick">{{ report.work_order.work.principal.name }}</td>
 
                                     <td @mousedown="show_note" @mouseup="hide_note">      
                                         <template v-if="report.work_order.detail.toll_note">
@@ -201,7 +205,7 @@
                                         </template>
                                         {{ eval(report.co_expense.co_other)|currencyCommas }}</td>
 
-                                    <td class="font-weight-bold">{{ report.total_expense.company|currencyCommas }}</td>
+                                    <td class="font-weight-bold right-thick">{{ report.total_expense.company|currencyCommas }}</td>
 
                                     <td @mousedown="show_note" @mouseup="hide_note">
                                         <template v-if="report.work_order.detail.return_note">
@@ -233,12 +237,11 @@
                                         {{ eval(report.cus_expense.cus_other)|currencyCommas }}
                                     </td>
 
-                                    <td class="font-weight-bold">{{ report.total_expense.customer|currencyCommas }}</td>
+                                    <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
 
                                     <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
                                     <td >
-
-                                        <button class="btn btn-sm btn-outline-warning"><i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpense" data-backdrop="static" @click="modalReport(report)"><i class="fa fa-edit"></i></button>
                                     </td>
                                 </tr>
                                 
@@ -248,7 +251,7 @@
                         {% if driver %}
                             <tr>
                                 {% verbatim %}
-                                <td colspan=17></td>
+                                <td colspan=17 class="right-thick"></td>
                                 <td class="table-danger font-weight-bold">{{ driver_data.total|currencyCommas }}</td>
                                 <td></td>
                                 {% endverbatim %}
@@ -260,11 +263,20 @@
                                 <tr v-else class="bg-light">
                                     <td></td>
                                     <td class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
-                                    <td v-for="i in 17"></td>
+                                    <td v-for="i in 2"></td>
+                                    <td class="right-thick"></td>
+                                    <td v-for="i in 7"></td>
+                                    <td class="right-thick"></td>
+                                    <td v-for="i in 3"></td>
+                                    <td class="right-thick"></td>
+                                    <td v-for="i in 2"></td>
+
                                 </tr>
 
                                 <tr class="bg-light">
-                                    <td colspan=17></td>
+                                    <td colspan=5 class="right-thick"></td>
+                                    <td colspan=8 class="right-thick"></td>
+                                    <td colspan=4 class="right-thick"></td>
                                     <td class="table-danger font-weight-bold">{{ driver.total|currencyCommas }}</td>
                                     <td></td>
                                 </tr>
@@ -290,8 +302,9 @@
                                         <td v-for="i in 17"></td>
                                     </tr>
                                     <tr class="bg-light">
-                                        <td colspan=18></td>
+                                        <td colspan=17></td>
                                         <td class="table-danger"> - </td>
+                                        <td></td>
                                     </tr>
                                 </template>
                             </template>
@@ -300,9 +313,10 @@
                 </table>
             </div>
         </div>
-    </div>
 
-    {% include 'transport_report/transport_report_expense_modal.html' %}
+        {% include 'transport_report/transport_report_expense_modal.html' %}
+
+    </div>
 
 
     <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
@@ -313,12 +327,14 @@
     <script type="application/javascript">
         
         window.addEventListener("load", function() {
-            if("{{ co }}") {
-                daily_expense_page.date_reload("{{ date }}", "{{ co }}")
-            }
-            else if("{{ driver }}") {
-                daily_expense_page.driver_reload("{{ date }}", "{{ driver }}")
-            }
+            // if("{{ co }}") {
+            //     daily_expense_page.date_reload("{{ date }}", "{{ co }}")
+            // }
+            // else if("{{ driver }}") {
+            //     daily_expense_page.driver_reload("{{ date }}", "{{ co }}", "{{ driver }}")
+            // }
+
+            daily_expense_page.reload("{{ date }}", "{{ co }}", "{{ driver }}")
         })
 
     </script>
