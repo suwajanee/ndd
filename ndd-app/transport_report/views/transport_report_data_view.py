@@ -58,6 +58,8 @@ def api_get_daily_driver_expense(request):
             driver = Employee.objects.get(pk=driver_id)
             driver_serializer = EmployeeSerializer(driver, many=False)
 
+            co = driver.co
+
             try:
                 truck = Driver.objects.get(employee=driver).truck
                 truck_serializer = TruckSerializer(truck, many=False)
@@ -67,12 +69,17 @@ def api_get_daily_driver_expense(request):
                 truck_data = {}
 
             work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date')
-            work_serializer = ExpenseSerializer(work_expense, many=True)
+
+            co_work_expense = work_expense.filter(work_order__truck__owner=co)
+            not_co_work_expense = work_expense.filter(~Q(work_order__truck__owner=co))
+
+            co_work = ExpenseSerializer(co_work_expense, many=True)
+            not_co_work = ExpenseSerializer(not_co_work_expense, many=True)
 
             data = {
                 "driver": driver_serializer.data,
                 "truck": truck_data,
-                "report": work_serializer.data
+                "report": [co_work.data, not_co_work.data]
             }
 
             return JsonResponse(data, safe=False)

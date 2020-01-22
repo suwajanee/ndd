@@ -43,38 +43,6 @@ var daily_expense_page = new Vue ({
         report_co_expense: {},
         report_cus_expense: {},
 
-        // empty_work_data: {},
-        // empty_detail: {
-        //     customer_name: '',
-        //     remark: '',
-        //     co_toll_note: '',
-        //     co_gate_note: '',
-        //     co_tire_note: '',
-        //     co_fine_note: '',
-        //     co_thc_note: '',
-        //     co_service_note: '',
-        //     co_other_note: '',
-        //     cus_return_note: '',
-        //     cus_gate_note: '',
-        //     cus_other_note: '',
-        // },
-        // empty_co_expense: {
-        //     co_toll: '',
-        //     co_gate: '',
-        //     co_tire: '',
-        //     co_fine: '',
-        //     co_thc: '',
-        //     co_service: '',
-        //     co_other: ''
-        // },
-        // empty_cus_expense: {
-        //     cus_return: '',
-        //     cus_gate: '',
-        //     cus_other: ''
-        // },
-
-        
-
         
 
     },
@@ -139,8 +107,11 @@ var daily_expense_page = new Vue ({
                 this.driver_data = data.driver
                 this.default_truck = data.truck
                 this.expense_list = data.report
+                
+                this.driver_data['total'] = []
+                this.driver_data['total'][0] = this.calcTotalExpense(this.expense_list[0])
+                this.driver_data['total'][1] = this.calcTotalExpense(this.expense_list[1])
 
-                this.driver_data['total'] = this.calcTotalExpense(this.expense_list)
             })
         },
 
@@ -199,6 +170,9 @@ var daily_expense_page = new Vue ({
                 
                 this.modal_type = work.principal.work_type
                 this.report_work_id = work.work_id
+                this.search_work_id = work.work_id
+
+
                 this.report_order = {
                     driver: work_order.driver.employee,
                     truck: work_order.truck,
@@ -244,11 +218,12 @@ var daily_expense_page = new Vue ({
         },
 
         getWorkByworkId(work_id) {
-            var work_id_substr = work_id.substr(0, 2).toLowerCase()
+            work_id = work_id.trim().toUpperCase()
+            var work_id_substr = work_id.substr(0, 2)
 
             this.report_order.order_type = ''
             this.report_order.double_container = false
-            if(['ep', 'fc'].includes(work_id_substr)) {
+            if(['EP', 'FC'].includes(work_id_substr)) {
                 api("/agent-transport/api/get-agent-transport-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
                     if(data) {
                         this.modal_type = 'agent-transport'
@@ -281,6 +256,10 @@ var daily_expense_page = new Vue ({
                 })
 
             }
+        },
+
+        testLog() {
+            console.log(this.report_detail)
         }
         
     }
