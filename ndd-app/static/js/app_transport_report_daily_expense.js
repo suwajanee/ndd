@@ -2,6 +2,7 @@ var daily_expense_page = new Vue ({
 
     el: '#expense-page',
     data: {
+        loading: false,
         page: '',
 
         co: '',
@@ -19,18 +20,17 @@ var daily_expense_page = new Vue ({
         
         transport_list: [],
 
-        // empty_order: {
-        //     driver: '',
-        //     truck: '',
-        //     work_id: '',
-        //     order_type: '',
-        //     double_container: false,
-        //     work_date: '',
-        // },
-
+        modal_warning: false,
         modal_add_mode: false,
         search_work_id: '',
         double_show: ['1.1', '3.1', '4.1', '4.2', '5.1', '5.2'],
+        work_data: {},
+        work_driver_data: {
+            co: '',
+        },
+        work_truck_data: {
+            owner: '',
+        },
 
         modal_type: 'normal',
         report_work_id: '',
@@ -38,12 +38,12 @@ var daily_expense_page = new Vue ({
             driver: '',
             truck: '',
         },
-        work_data: {},
         report_detail: {},
+        report_price: {},
         report_co_expense: {},
         report_cus_expense: {},
 
-        
+        expense_format_status: {},
 
     },
 
@@ -86,12 +86,13 @@ var daily_expense_page = new Vue ({
         },
 
         getDailyExpense() {
+            this.loading = true
             if(this.date && this.co) {
                 api("/transport-report/api/get-daily-expense/", "POST", {date: this.date, co: this.co}).then((data) => {
                     this.date = data.date
                     this.expense_list = data.work_expense
                     this.matchDriverReport()
-                    
+                    this.loading = false 
                 })
             }
             else {
@@ -99,10 +100,12 @@ var daily_expense_page = new Vue ({
                     this.date = data.date
                     this.expense_list = data.work_expense
                     this.matchDriverReport()
+                    this.loading = false
                 })
             }
         },
         getDailyDriverExpense() {
+            this.loading = true
             api("/transport-report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
                 this.driver_data = data.driver
                 this.default_truck = data.truck
@@ -112,6 +115,7 @@ var daily_expense_page = new Vue ({
                 this.driver_data['total'][0] = this.calcTotalExpense(this.expense_list[0])
                 this.driver_data['total'][1] = this.calcTotalExpense(this.expense_list[1])
 
+                this.loading = false
             })
         },
 
@@ -161,6 +165,25 @@ var daily_expense_page = new Vue ({
 
 
         modalReport(report) {
+
+            this.expense_format_status = {
+                0: true,
+                1: true,
+                2: true,
+                3: true,
+                4: true,
+                5: true,
+                6: true,
+
+                7: true,
+                8: true,
+                9: true,
+
+                10: true,
+                11: true,
+                12: true,
+            }
+  
             if(report) {
                 this.modal_add_mode = false
                 this.search_work_id = ''
@@ -172,44 +195,48 @@ var daily_expense_page = new Vue ({
                 this.report_work_id = work.work_id
                 this.search_work_id = work.work_id
 
+                this.work_driver_data = work_order.driver.employee
+                this.work_truck_data = work_order.truck
 
                 this.report_order = {
-                    driver: work_order.driver.employee,
-                    truck: work_order.truck,
+                    pk: work_order.id,
+                    driver: work_order.driver.employee.id,
+                    truck: work_order.truck.id,
                     clear_date: work_order.clear_date,
                     work_date: work_order.work_date,
-                    // work_id: work.work_id,
                     order_type: work_order.order_type,
-                    double_container: work_order.double_container
+                    double_container: work_order.double_container,
+
+                    expense_pk: report.id,
                 }
                 this.work_data = {
                     size: work.size.indexOf('20'),
                     customer: work.principal.name,
                 }
                 this.report_detail = Object.assign({}, work_order.detail)
+                this.report_price = Object.assign({}, work_order.price)
                 this.report_co_expense = Object.assign({}, report.co_expense)
                 this.report_cus_expense = Object.assign({}, report.cus_expense)
             }
             else {
                 this.modal_add_mode = true
                 this.search_work_id = ''
-                // this.report_order = Object.assign({}, this.empty_order)
-                // this.report_detail = Object.assign({}, this.empty_detail)
-                // this.report_co_expense = Object.assign({}, this.empty_co_expense)
-                // this.report_cus_expense = Object.assign({}, this.empty_cus_expense)
 
-                // this.work_data = Object.assign({}, this.empty_work_data)
                 this.modal_type = ''
                 this.report_work_id = ''
 
+                this.work_driver_data = this.driver_data
+                this.work_truck_data = this.default_truck
+
                 this.report_order = {
                     clear_date: this.date,
-                    driver: this.driver_data,
-                    truck: this.default_truck || {},
+                    driver: this.driver_id,
+                    truck: this.default_truck.id || '',
                     order_type: '',
                     double_container: false,
                 }
                 this.report_detail = {}
+                this.report_price = {}
                 this.report_co_expense = {}
                 this.report_cus_expense = {}
                 this.work_data = {}
@@ -257,9 +284,104 @@ var daily_expense_page = new Vue ({
 
             }
         },
+        selectDriver(driver) {
+            this.report_order.driver = driver.employee.id
+            this.work_driver_data = driver.employee
 
-        testLog() {
-            console.log(this.report_detail)
+            if(driver.truck) {
+                this.report_order.truck = driver.truck.id
+                this.work_truck_data = driver.truck
+            }
+            else {
+                this.report_order.truck = ''
+                this.work_truck_data = {}
+            }
+        },
+        selectTruck(truck) {
+            this.report_order.truck = truck.id
+            this.work_truck_data = truck
+        },
+
+        // เช็ค String Format (Expense)
+        checkExpenseFormat(str, index) {
+            try {
+                eval(str)
+                this.expense_format_status[index] = true
+            }
+            catch {
+                this.expense_format_status[index] = false
+            }
+        },
+
+        sumString(str) {
+            try {
+                return eval(str)
+            }
+            catch {
+                return 0
+            }
+
+        },
+
+        totalExpense(obj) {
+            var array = Object.values(obj)
+            return sumStringArray(array)
+        },
+
+
+        addOrEditExpenseReport() {
+            this.modal_warning = false
+
+            var status_array = Object.values(this.expense_format_status)
+            var expense_status = status_array.every(Boolean)
+
+            if(!this.report_order.driver || !this.report_order.truck || !this.modal_type || !this.report_work_id || !expense_status) {
+                this.modal_warning = true
+                return false
+            }
+            else {
+                remove_empty_key(this.report_detail)
+                remove_empty_key(this.report_co_expense)
+                remove_empty_key(this.report_cus_expense)
+                remove_empty_key(this.report_price)
+
+                var total = {
+                    company: this.totalExpense(this.report_co_expense),
+                    customer: this.totalExpense(this.report_cus_expense)
+                }
+
+                var work_data = {
+                    work_type: this.modal_type,
+                    work_id: this.report_work_id,
+                    work_order: this.report_order,
+                    detail: this.report_detail,
+                    price: this.report_price,
+                    co_expense: this.report_co_expense,
+                    cus_expense: this. report_cus_expense,
+                    total_expense: total
+                }
+                if(this.modal_add_mode) {
+                    api("/transport-report/api/add-expense-report/", "POST", work_data).then((data) => {
+                        if(data=='Success') {
+                            this.urlFormat(this.driver_id)
+                        }
+                    })
+                }
+                else {
+                    api("/transport-report/api/edit-expense-report/", "POST", work_data).then((data) => {
+                        if(data=='Success') {
+                            if(this.driver_id) {
+                                this.urlFormat(this.driver_id)
+                            }
+                            else {
+                                this.urlFormat()
+                            }
+                        }
+                    })
+                }
+                
+            }
+
         }
         
     }

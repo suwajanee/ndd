@@ -79,7 +79,13 @@
 
             {% endverbatim %}
 
-            <div class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left:50%; transform: translate(-50%, 10%); color: lightgray;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
+                
                 <table class="table table-hover table-bordered text-center report-table m-0" >
                     <thead>
                         <tr>
@@ -88,6 +94,9 @@
                             <th rowspan=2 class="align-middle">เบอร์รถ</th>
                             <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
                             <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
+
+                            <th rowspan=2 class="align-middle right-thick">ราคา</th>
+                            <th rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
 
                             <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
                             <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
@@ -112,14 +121,14 @@
                             <th class="align-middle right-thick">รวม</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody" v-if="expense_list.length" class="bg-white">
+                    <tbody id="tbody" class="bg-white">
                         {% if driver %}
                             <template v-for="(co_expense_list, index) in expense_list">
-                                <template v-if="co_expense_list.length ">
+                                <template v-if="co_expense_list && co_expense_list.length">
                                     <template v-for="report in co_expense_list">
                         {% else %}
                             <template v-for="driver in driver_report_list">
-                                <template v-if="driver.report_list.length">
+                                <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
                         {% endif %}
                                 {% verbatim %}
@@ -134,16 +143,29 @@
                                                 {{ report.work_order.work.work_id }}
                                                 <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
                                             </td>
-                                            <td class="right-thick">{{ report.work_order.work.principal.name }}</td>
+                                            <td class="right-thick">
+                                                <template v-if="report.work_order.detail.customer_name">
+                                                    {{ report.work_order.detail.customer_name }}
+                                                </template>
+                                                <template v-else>
+                                                    {{ report.work_order.work.principal.name }}
+                                                </template>
+                                            </td>
+
+                                            <td class="right-thick">
+                                                {{ eval(report.work_order.price.work)|currencyCommas }}
+                                            </td>
+                                            <td>{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                            <td class="right-thick">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">      
-                                                <template v-if="report.work_order.detail.toll_note">
+                                                <template v-if="report.work_order.detail.co_toll_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.toll_note }}
+                                                        {{ report.work_order.detail.co_toll_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.co_expense.toll)|currencyCommas }}
+                                                {{ eval(report.co_expense.co_toll)|currencyCommas }}
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
@@ -157,43 +179,43 @@
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.tire_note">
+                                                <template v-if="report.work_order.detail.co_tire_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.tire_note }}
+                                                        {{ report.work_order.detail.co_tire_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.co_expense.tire)|currencyCommas }}
+                                                {{ eval(report.co_expense.co_tire)|currencyCommas }}
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.fine_note">
+                                                <template v-if="report.work_order.detail.co_fine_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.fine_note }}
+                                                        {{ report.work_order.detail.co_fine_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.co_expense.fine)|currencyCommas }}
+                                                {{ eval(report.co_expense.co_fine)|currencyCommas }}
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.thc_note">
+                                                <template v-if="report.work_order.detail.co_thc_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.thc_note }}
+                                                        {{ report.work_order.detail.co_thc_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.co_expense.thc)|currencyCommas }}
+                                                {{ eval(report.co_expense.co_thc)|currencyCommas }}
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.service_note">
+                                                <template v-if="report.work_order.detail.co_service_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.service_note }}
+                                                        {{ report.work_order.detail.co_service_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.co_expense.service)|currencyCommas }}
+                                                {{ eval(report.co_expense.co_service)|currencyCommas }}
                                             </td>
                                             
                                             <td @mousedown="show_note" @mouseup="hide_note">
@@ -208,13 +230,13 @@
                                             <td class="font-weight-bold right-thick">{{ report.total_expense.company|currencyCommas }}</td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.return_note">
+                                                <template v-if="report.work_order.detail.cus_return_note">
                                                     <div class="note-msg">
-                                                        {{ report.work_order.detail.return_note }}
+                                                        {{ report.work_order.detail.cus_return_note }}
                                                     </div>
                                                     <div class="note-alert"></div>
                                                 </template>
-                                                {{ eval(report.cus_expense.return)|currencyCommas }}
+                                                {{ eval(report.cus_expense.cus_return)|currencyCommas }}
                                             </td>
 
                                             <td @mousedown="show_note" @mouseup="hide_note">
@@ -257,6 +279,8 @@
                                     <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
 
                                     <td v-for="i in 2"></td>
+                                    <td v-for="i in 2" class="right-thick"></td>
+                                    <td></td>
                                     <td class="right-thick"></td>
                                     <td v-for="i in 7"></td>
                                     <td class="right-thick"></td>
@@ -267,6 +291,8 @@
 
                                 <tr class="bg-light">
                                     <td colspan=5 class="right-thick"></td>
+                                    <td class="right-thick"></td>
+                                    <td colspan=2 class="right-thick"></td>
                                     <td colspan=8 class="right-thick"></td>
                                     <td colspan=4 class="right-thick"></td>
 
@@ -279,13 +305,14 @@
                             {% endverbatim %}
 
                             <tr v-if="driver_id" class="table-secondary">
-                                <td colspan=19></td>
+                                <td colspan=22></td>
                             </tr>
 
                         </template>
+                        
                     </tbody>
 
-                    <tbody v-else>
+                    <!-- <tbody v-else>
                         {% verbatim %}
                             <template v-if="!driver_id" >
                                 <template v-if="driver_report_list.length" v-for="driver in driver_report_list">
@@ -302,7 +329,7 @@
                                 </template>
                             </template>
                         {% endverbatim %}
-                    </tbody>
+                    </tbody> -->
                 </table>
             </div>
         </div>

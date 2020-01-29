@@ -64,6 +64,7 @@ const checkNull = (value) => {
     return ''
 }
 
+// รวม Number Array
 const sumArray = (arr) => {
     if(arr){
         return arr.reduce((a, b) => a + b, 0)
@@ -71,6 +72,15 @@ const sumArray = (arr) => {
     return
 }
 
+// รวม String Array
+const sumStringArray = (arr) => {
+    if(arr){
+        return arr.reduce((a, b) => eval(a) + eval(b), 0)
+    }
+    return
+}
+
+// รวม Object Array ที่ obj[key1] หรือ obj[key1][key2]
 const sumObjectArray = (arr, key1, key2) => {
     if(arr){
         return arr.reduce(function (total, value) {
@@ -88,6 +98,7 @@ const sumObjectArray = (arr, key1, key2) => {
     return
 }
 
+// Transport Report: Show/Hide note
 const show_note = () => {
     var tbody = document.getElementById("tbody")
     tbody.addEventListener('mousedown', function(e) {
@@ -110,6 +121,23 @@ const hide_note = () => {
             alert.style.display = "none"
         }
     }, false)
+}
+
+// Remove unused key in object
+const remove_empty_key = (obj) => {
+    // Object.keys(obj).forEach(key => ! obj[key] && delete obj[key])
+
+    Object.keys(obj).forEach(key => {
+        if(obj[key]) {
+            obj[key] = obj[key].trim()
+        }
+        else {
+            delete obj[key]
+        }
+    })
+
+    return obj
+
 }
 
 var summary_breadcrumb = new Vue( {

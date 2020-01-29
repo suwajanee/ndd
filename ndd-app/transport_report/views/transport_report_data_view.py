@@ -35,7 +35,7 @@ def api_get_daily_expense(request):
         else:
             return JsonResponse('Error', safe=False)
 
-        work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date')
+        work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date', 'pk')
         serializer = ExpenseSerializer(work_expense, many=True)
 
         data = {
@@ -68,7 +68,7 @@ def api_get_daily_driver_expense(request):
             except:
                 truck_data = {}
 
-            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date')
+            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
 
             co_work_expense = work_expense.filter(work_order__truck__owner=co)
             not_co_work_expense = work_expense.filter(~Q(work_order__truck__owner=co))
@@ -99,7 +99,7 @@ def api_get_by_summary_date(request):
             from_date = all_summary_date.filter(date__lt=date.selected.date).order_by('-date').first()
 
             work_expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_before_date)) \
-                .order_by('work_order__driver__truck__number', 'work_order__driver__employee_first_name', 'work_order__work_date')
+                .order_by('work_order__driver__truck__number', 'work_order__driver__employee_first_name', 'work_order__work_date', 'pk')
 
             serializer = ExpenseSerializer(work_expense, many=True)
 

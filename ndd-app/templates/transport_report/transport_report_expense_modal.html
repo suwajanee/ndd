@@ -24,9 +24,9 @@
                         </div>
 
                         <button id="driverDropdown" class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <template v-if="report_order.driver">
-                                {{ report_order.driver.name_title }} {{ report_order.driver.first_name }} {{ report_order.driver.last_name }}
-                                <span class="badge badge-pill badge-primary float-right m-1">{{ report_order.driver.co.toUpperCase() }}</span>
+                            <template v-if="work_driver_data">
+                                {{ work_driver_data.name_title }} {{ work_driver_data.first_name }} {{ work_driver_data.last_name }}
+                                <span class="badge badge-pill badge-primary float-right m-1">{{ work_driver_data.co.toUpperCase() }}</span>
                             </template>
                             <template v-else>
                                 --------
@@ -39,7 +39,7 @@
                             </div>
                             <div class="dropdown-divider"></div>
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                                <button class="dropdown-item" v-for="driver in filterDriver" @click="report_order.driver=driver.employee, report_order.truck=driver.truck || {}">
+                                <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
                                     {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
@@ -50,13 +50,13 @@
                             <span class="input-group-text">TRUCK NO</span>
                         </div>
                         <div>
-                            <button id="truckDropdown"  class="custom-select text-left rounded-right" style="min-width: 110px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ report_order.truck.number || '--------' }}
-                                <span v-if="report_order.truck.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': report_order.truck.owner != co}">{{ report_order.truck.owner.toUpperCase() }}</span>
+                            <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 110px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ work_truck_data.number || '--------' }}
+                                <span v-if="work_truck_data.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': work_truck_data.owner != co}">{{ work_truck_data.owner.toUpperCase() }}</span>
                             </button>
                             <div class="dropdown-menu w-25">
                                 <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                                    <button class="dropdown-item" v-for="truck in truck_list" @click="report_order.truck=truck">
+                                    <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
                                         {{ truck.number }}
                                         <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">{{ truck.owner.toUpperCase() }}</span>
                                     </button>
@@ -70,7 +70,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">WORK</span>
                             </div>
-                            <input class="form-control" v-model="search_work_id">
+                            <input class="form-control" :class="{'alert-warning': modal_warning && ! report_work_id}" v-model="search_work_id">
                             <div class="input-group-append">
                                 <button class="btn btn-secondary" @click="getWorkByworkId(search_work_id)"><i class="fas fa-search"></i></button>
                             </div>
@@ -145,6 +145,58 @@
                             </div>
                             <input class="form-control" v-model="report_detail.remark">
                         </div>
+                        
+                        <!-- <div class="input-group my-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">PRICE</span>
+                            </div>
+                            <div class="input-group-append bg-light">
+                                <span class="input-group-text">{{ sumString(report_price.work)|currencyCommas }}</span>
+                            </div>
+                            <input class="form-control" v-model="report_price.work">
+
+                            <div class="input-group-append">
+                                <span class=""></span>
+                            </div>
+                        </div> -->
+
+                        <div class="col-lg-9 container">
+                            <div class="row">
+                                <table class="col-lg-4 mx-4 table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>ราคา</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-light text-center text-small">
+                                            <td :class="{'table-warning': ! expense_format_status[10]}">{{ sumString(report_price.work)|currencyCommas }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="form-control p-1" v-model="report_price.work" @change="checkExpenseFormat(report_price.work, 10)"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="col-lg mx-4 table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>เบี้ยเลี้ยง</th>
+                                            <th>ค้างคืน</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-light text-center text-small">
+                                            <td :class="{'table-warning': ! expense_format_status[11]}">{{ sumString(report_price.allowance)|currencyCommas }}</td>
+                                            <td :class="{'table-warning': ! expense_format_status[12]}">{{ sumString(report_price.overnight)|currencyCommas }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="form-control p-1" v-model="report_price.allowance" @change="checkExpenseFormat(report_price.allowance, 11)"></td>
+                                            <td><input class="form-control p-1" v-model="report_price.overnight" @change="checkExpenseFormat(report_price.overnight, 12)"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
                         <hr class="my-4">
 
@@ -165,22 +217,22 @@
                                 </thead>
                                 <tbody>
                                     <tr class="bg-light text-center text-small">
-                                        <td>{{ sumString(report_co_expense.co_toll)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_gate)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_tire)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_fine)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_thc)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_service)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_co_expense.co_other)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[0]}">{{ sumString(report_co_expense.co_toll)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[1]}">{{ sumString(report_co_expense.co_gate)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[2]}">{{ sumString(report_co_expense.co_tire)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[3]}">{{ sumString(report_co_expense.co_fine)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[4]}">{{ sumString(report_co_expense.co_thc)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[5]}">{{ sumString(report_co_expense.co_service)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[6]}">{{ sumString(report_co_expense.co_other)|currencyCommas }}</td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll" @change="checkExpenseFormat(report_co_expense.co_toll, 0)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate" @change="checkExpenseFormat(report_co_expense.co_gate, 1)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire" @change="checkExpenseFormat(report_co_expense.co_tire, 2)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine" @change="checkExpenseFormat(report_co_expense.co_fine, 3)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc" @change="checkExpenseFormat(report_co_expense.co_thc, 4)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service" @change="checkExpenseFormat(report_co_expense.co_service, 5)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other" @change="checkExpenseFormat(report_co_expense.co_other, 6)"></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.co_toll_note"></td>
@@ -205,14 +257,14 @@
                                 </thead>
                                 <tbody>
                                     <tr class="bg-light text-center text-small">
-                                        <td>{{ sumString(report_cus_expense.cus_return)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_cus_expense.cus_gate)|currencyCommas }}</td>
-                                        <td>{{ sumString(report_cus_expense.cus_other)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[7]}">{{ sumString(report_cus_expense.cus_return)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[8]}">{{ sumString(report_cus_expense.cus_gate)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[9]}">{{ sumString(report_cus_expense.cus_other)|currencyCommas }}</td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" @change="checkExpenseFormat(report_cus_expense.cus_return, 7)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" @change="checkExpenseFormat(report_cus_expense.cus_gate, 8)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" @change="checkExpenseFormat(report_cus_expense.cus_other, 9)"></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control p-1" placeholder="Note" v-model="report_detail.cus_return_note"></td>
@@ -227,7 +279,7 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn-primary" @click="addOrEditExpenseReport">Save</button>
                 </div>
             </div>
         </div>
@@ -235,14 +287,14 @@
 
 
     <script>
-        const sumString = (arr) => {
-            try {
-                return eval(arr)
-            }
-            catch {
-                return 0
-            }
-        }
+        // const sumString = (arr) => {
+        //     try {
+        //         return eval(arr)
+        //     }
+        //     catch {
+        //         return 0
+        //     }
+        // }
     </script>
 
 

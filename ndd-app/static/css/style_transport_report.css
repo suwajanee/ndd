@@ -135,3 +135,7 @@ div.note-alert {
 }
 
 
+.table-sm input::placeholder {
+    color: lightgray;
+  }
+
