@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import transport_report_add_view
 from .views import transport_report_data_view
+from .views import transport_report_delete_view
 from .views import transport_report_edit_view
 from .views import transport_report_page_view
 
@@ -18,10 +19,15 @@ urlpatterns = [
 
     url(r'^api/get-by-summary-date/$', transport_report_data_view.api_get_by_summary_date, name='api-get-by-summary-date'),
 
-
+    # Add
     url(r'^api/add-expense-report/$', transport_report_add_view.api_add_expense_report, name='api-add-expense-report'),
 
+    # Edit
     url(r'api/edit-expense-report/$', transport_report_edit_view.api_edit_expense_report, name='api-edit-expense-report'),
+
+    # Delete
+    url(r'api/delete-expense-report/$', transport_report_delete_view.api_delete_expense_report, name='api-delete-expense-report'),
+
 
 ]
 

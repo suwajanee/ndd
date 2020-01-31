@@ -279,7 +279,9 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary" @click="addOrEditExpenseReport">Save</button>
+                <!-- <div class="modal-footer "> -->
+                    <button class="btn btn-link text-danger float-left mr-auto mx-3" @click="deleteExpenseReport(report_order.pk)">Delete Report</button>
+                    <button class="btn btn-primary mx-3" @click="addOrEditExpenseReport">Save</button>
                 </div>
             </div>
         </div>

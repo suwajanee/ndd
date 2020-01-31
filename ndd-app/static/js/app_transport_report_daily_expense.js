@@ -382,7 +382,23 @@ var daily_expense_page = new Vue ({
                 
             }
 
+        },
+
+        deleteExpenseReport(id) {
+            if(confirm('Are you sure?')) {
+                api("/transport-report/api/delete-expense-report/", "POST", {id: id}).then((data) => {
+                    if(data=='Success') {
+                        if(this.driver_id) {
+                            this.urlFormat(this.driver_id)
+                        }
+                        else {
+                            this.urlFormat()
+                        }
+                    }
+                })
+            }
         }
+        
         
     }
 })
