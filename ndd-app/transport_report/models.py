@@ -33,6 +33,8 @@ class WorkOrder(models.Model):
     def __str__(self):
         if self.order_type:
             order_type = ' / ' + self.order_type
+            if self.double_container:
+                order_type += ' +'
         else:
             order_type = ''
 

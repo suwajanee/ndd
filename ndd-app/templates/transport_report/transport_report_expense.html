@@ -27,19 +27,20 @@
         <div>
             {% verbatim %}
                 <div class="row m-0" style="width: 100vw;">
-                    <!-- <div class="input-group m-3 col-2">
+                    <!-- <div class="input-group my-3 col-2">
                         <div class="input-group-prepend">
                             <span class="input-group-text">DATE</span>
                         </div>
                         <input type="date" class="form-control" v-model="date" @change="urlFormat(driver_id)" required>
                     </div> -->
-                    <input type="date" class="form-control m-3 col-2" v-model="date" @change="urlFormat(driver_id)" required>
+                    <div class="input-group my-3 col-5" style="max-height: 40px;" >
+                    <input type="date" class="form-control col-4" v-model="date" @change="urlFormat(driver_id)" required>
 
-                    <div class="input-group my-3 col-3">
-                        <div class="input-group-prepend">
+                    
+                        <div class="input-group-append">
                             <span class="input-group-text">DRIVER</span>
                         </div>
-                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="min-height: 40px; overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}
                             <span class="badge badge-pill badge-primary float-right m-1">{{ co.toUpperCase() }}</span>
                         </button>
@@ -47,7 +48,7 @@
                             --------
                         </button>
 
-                        <div class="dropdown-menu dropdown-menu-right w-75">                    
+                        <div class="dropdown-menu w-50">                    
                             <div class="dropdown-item">
                                 <input class="form-control" v-model="search_driver" placeholder="search">
                             </div>
@@ -61,17 +62,67 @@
                             </div>
                         </div>
                     </div>
-                    <template>
-                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpense" data-backdrop="static" style="right:0;" @click="modalReport()">Add Expense</button>
+
+                    <div class="input-group my-3  col-3">
+  
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">COL</span>
+                            </div>
+                            <div class="btn-group">
+                                <button class="custom-select text-left rounded-right" data-toggle="dropdown" style="height: 40px; border-bottom-left-radius: 0; border-top-left-radius: 0; max-width: 160px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; ">
+                                    <template v-if="col_price || col_allowance || col_remark">
+                                        <template v-if="col_price">ราคา; </template>
+                                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                        <template v-if="col_remark">Remark; </template>
+                                    </template>
+                                    <template v-else>
+                                        Non selected
+                                    </template>
+                                </button>
+                                <ul class="multiselect-container dropdown-menu">
+                                    <li>
+                                        <a>
+                                            <label class="checkbox">
+                                                <input type="checkbox" v-model="col_price"> ราคา
+                                            </label>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <label class="checkbox">
+                                                <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                            </label>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <label class="checkbox">
+                                                <input type="checkbox" v-model="col_remark"> Remark
+                                            </label>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    <!-- <div class="custom-control custom-checkbox mx-2">
+                        <input id="showPrice" type="checkbox" class="custom-control-input" v-model="show_price">
+                        <label class="custom-control-label" for="showPrice">ราคา</label>
+                    </div> -->
+                    <!-- <div class="custom-control custom-checkbox m-2">
+                        <input id="doubleCheck" type="checkbox" class="custom-control-input" v-model="report_order.double_container">
+                        <label class="custom-control-label" for="doubleCheck"><b>(+)</b></label>
+                    </div> -->
+                    <div class="p-0 float-right">
+                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
                         <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="urlFormat()">
                             <input type="radio" id="work_ndd" v-model="co" value="ndd" />
                             <label for="work_ndd">NDD</label>
                             <input type="radio" id="work_vts" v-model="co" value="vts" />
                             <label for="work_vts">VTS</label>
                         </div>
-
-                    </template>
-                    
+                        
+                        
+                    </div>
                 </div>
                 
                 <h4 class="text-center">{{ date|formatDate }}</h4>
@@ -86,17 +137,18 @@
             </div>
             <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
                 
-                <table class="table table-hover table-bordered text-center report-table m-0" >
+                <table class="table table-hover table-bordered text-center report-table m-0">
                     <thead>
                         <tr>
-                            <th rowspan=2 class="align-middle">วันที่</th>
+                            <th rowspan=2 class="align-middle" style="max-width: 95px;">วันที่</th>
                             <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
                             <th rowspan=2 class="align-middle">เบอร์รถ</th>
                             <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
                             <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
+                            <th v-if="col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
 
-                            <th rowspan=2 class="align-middle right-thick">ราคา</th>
-                            <th rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
+                            <th v-if="col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
+                            <th v-if="col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
 
                             <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
                             <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
@@ -139,7 +191,7 @@
                                             <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
 
                                             <td>{{ report.work_order.truck.number }}</td>
-                                            <td>
+                                            <td style="max-width: 140px;">
                                                 {{ report.work_order.work.work_id }}
                                                 <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
                                             </td>
@@ -152,12 +204,19 @@
                                                 </template>
                                             </td>
 
-                                            <td class="right-thick">
+                                            <td  v-if="col_remark" class="right-thick" style="max-width: 160px;">
+                                                {{ report.work_order.detail.remark }}
+                                            </td>
+
+                                            <td v-if="col_price" class="right-thick alert-info">
                                                 {{ eval(report.work_order.price.work)|currencyCommas }}
                                             </td>
-                                            <td>{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                            <td class="right-thick">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
 
+                                            <template v-if="col_allowance">
+                                                <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                                <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+                                            </template>
+                                            
                                             <td @mousedown="show_note" @mouseup="hide_note">      
                                                 <template v-if="report.work_order.detail.co_toll_note">
                                                     <div class="note-msg">
@@ -263,7 +322,7 @@
 
                                             <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
                                             <td >
-                                                <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpense" data-backdrop="static" @click="modalReport(report)"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
                                         
@@ -279,9 +338,13 @@
                                     <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
 
                                     <td v-for="i in 2"></td>
-                                    <td v-for="i in 2" class="right-thick"></td>
-                                    <td></td>
                                     <td class="right-thick"></td>
+                                    <td v-if="col_remark" class="right-thick"></td>
+                                    <td v-if="col_price" class="right-thick"></td>
+                                    <template v-if="col_allowance">
+                                        <td></td>
+                                        <td class="right-thick"></td>
+                                    </template>
                                     <td v-for="i in 7"></td>
                                     <td class="right-thick"></td>
                                     <td v-for="i in 3"></td>
@@ -291,8 +354,9 @@
 
                                 <tr class="bg-light">
                                     <td colspan=5 class="right-thick"></td>
-                                    <td class="right-thick"></td>
-                                    <td colspan=2 class="right-thick"></td>
+                                    <td v-if="col_remark" class="right-thick"></td>
+                                    <td v-if="col_price" class="right-thick"></td>
+                                    <td v-if="col_allowance" colspan=2 class="right-thick"></td>
                                     <td colspan=8 class="right-thick"></td>
                                     <td colspan=4 class="right-thick"></td>
 
@@ -305,7 +369,7 @@
                             {% endverbatim %}
 
                             <tr v-if="driver_id" class="table-secondary">
-                                <td colspan=22></td>
+                                <td colspan=23></td>
                             </tr>
 
                         </template>
@@ -334,11 +398,11 @@
             </div>
         </div>
 
-        {% include 'transport_report/transport_report_expense_modal.html' %}
-
     </div>
 
+    {% include 'transport_report/transport_report_expense_modal.html' %}
 
+    
     <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>

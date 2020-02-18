@@ -81,6 +81,7 @@ tr.text-small td {
 /* Table fix head */
 .table-fix-head {
     overflow-y: auto;
+    overflow-x: auto;
     /* height: calc(100vh - 221px); */
     border-top: 1px solid silver;
 }
@@ -101,6 +102,13 @@ tr.text-small td {
     top: -1;
     background: #e1e6ea;
     box-shadow: 0 2px 3px 0 silver;
+    padding: 5px;
+    /* padding-left: 5px; */
+}
+
+.table-fix-head tr td {
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 tr td.right-thick, tr th.right-thick {
@@ -108,7 +116,7 @@ tr td.right-thick, tr th.right-thick {
 }
 
 tr.second-header th {
-    top: 44px;
+    top: 30px;
 }
 
 div.note-msg {
@@ -116,6 +124,7 @@ div.note-msg {
 
     position: absolute;
     margin-top: -30px;
+    margin-left: 20px;
     
     border: 1px solid DimGray ;
     box-shadow: 2px 2px 0 0 DimGray;
@@ -137,5 +146,19 @@ div.note-alert {
 
 .table-sm input::placeholder {
     color: lightgray;
-  }
+}
+
+
+/* Multiselect */
+
+ul.multiselect-container {
+    padding-left: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+button.multiselect {
+    border: 1px solid lightgray;
+    background: white;
+}
 

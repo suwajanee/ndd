@@ -105,7 +105,7 @@ const show_note = () => {
         e = e || window.event
         var target = e.target 
         var alert = target.children[0]
-        if(alert && target.tagName == "TD") {
+        if(alert && alert.tagName == "DIV" && target.tagName == "TD") {
             alert.style.display = "block"                   
         }
     }, false)  
@@ -117,7 +117,7 @@ const hide_note = () => {
         e = e || window.event
         var target = e.target
         var alert = target.children[0]
-        if(alert && target.tagName == "TD") {
+        if(alert && alert.tagName == "DIV" && target.tagName == "TD") {
             alert.style.display = "none"
         }
     }, false)

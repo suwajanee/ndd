@@ -1,6 +1,6 @@
 {% load static %}
 {% verbatim %}
-    <div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modalExpenseReport" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -50,7 +50,7 @@
                             <span class="input-group-text">TRUCK NO</span>
                         </div>
                         <div>
-                            <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 110px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ work_truck_data.number || '--------' }}
                                 <span v-if="work_truck_data.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': work_truck_data.owner != co}">{{ work_truck_data.owner.toUpperCase() }}</span>
                             </button>
@@ -72,7 +72,7 @@
                             </div>
                             <input class="form-control" :class="{'alert-warning': modal_warning && ! report_work_id}" v-model="search_work_id">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" @click="getWorkByworkId(search_work_id)"><i class="fas fa-search"></i></button>
+                                <button class="btn btn-secondary" @click="getWorkByWorkId(search_work_id)"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
 
@@ -280,8 +280,14 @@
 
                 <div class="modal-footer d-flex justify-content-center">
                 <!-- <div class="modal-footer "> -->
-                    <button class="btn btn-link text-danger float-left mr-auto mx-3" @click="deleteExpenseReport(report_order.pk)">Delete Report</button>
-                    <button class="btn btn-primary mx-3" @click="addOrEditExpenseReport">Save</button>
+                    <template v-if="! modal_add_mode">
+                        <button class="btn btn-link text-danger float-left mr-auto mx-3" @click="deleteExpenseReport(report_order.pk)">Delete Report</button>
+                        <button class="btn btn-primary mx-3" @click="addOrEditExpenseReport">Save</button>
+                    </template>
+                    <template v-else>
+                        <button class="btn btn-primary" @click="addOrEditExpenseReport">Add</button>
+                    </template>
+
                 </div>
             </div>
         </div>
@@ -299,6 +305,6 @@
         // }
     </script>
 
-
 {% endverbatim %}
-        
+
+<script type="application/javascript" src="{% static 'js/app_transport_report_modal.js' %}"></script>
