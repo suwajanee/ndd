@@ -57,7 +57,7 @@
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <li class="nav-item dropdown {% if nbar == 'summary-page' or nbar == 'cheque-page' or nbar == 'commission-page' %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar != 'booking-page' and nbar != 'agent-transport-page' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarFinance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if nbar == 'summary-page' %}
                             Summary

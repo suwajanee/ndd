@@ -183,8 +183,8 @@
                                 <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
                         {% endif %}
-                                {% verbatim %}
-                                        <tr>
+                                <tr>
+                                        {% verbatim %}
                                             <td>{{ report.work_order.work_date|formatDate }}</td>
 
                                             <td v-if="driver_id" class="text-left">{{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}</td>
@@ -216,117 +216,20 @@
                                                 <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
                                                 <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
                                             </template>
-                                            
-                                            <td @mousedown="show_note" @mouseup="hide_note">      
-                                                <template v-if="report.work_order.detail.co_toll_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_toll_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_toll)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_gate_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_gate_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_gate)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_tire_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_tire_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_tire)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_fine_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_fine_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_fine)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_thc_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_thc_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_thc)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_service_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_service_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_service)|currencyCommas }}
-                                            </td>
-                                            
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.co_other_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.co_other_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.co_expense.co_other)|currencyCommas }}</td>
-
-                                            <td class="font-weight-bold right-thick">{{ report.total_expense.company|currencyCommas }}</td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.cus_return_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.cus_return_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.cus_expense.cus_return)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.cus_gate_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.cus_gate_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.cus_expense.cus_gate)|currencyCommas }}
-                                            </td>
-
-                                            <td @mousedown="show_note" @mouseup="hide_note">
-                                                <template v-if="report.work_order.detail.cus_other_note">
-                                                    <div class="note-msg">
-                                                        {{ report.work_order.detail.cus_other_note }}
-                                                    </div>
-                                                    <div class="note-alert"></div>
-                                                </template>
-                                                {{ eval(report.cus_expense.cus_other)|currencyCommas }}
-                                            </td>
-
+                                        {% endverbatim %}
+                                        
+                                        <!-- Expense Fields -->
+                                        {% include 'transport_report/transport_report_expense_table.html' %}
+                                                
+                                        {% verbatim %}
                                             <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
 
                                             <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
                                             <td >
                                                 <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
                                             </td>
-                                        </tr>
-                                        
-                                    {% endverbatim %}
+                                        {% endverbatim %}
+                                    </tr>       
                                 </template>
                             </template>
 
