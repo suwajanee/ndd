@@ -20,8 +20,8 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 
 class ExpenseSummaryDateAdmin(admin.ModelAdmin):
-    list_display = ('date', 'month', 'co')
-    ordering = ('date', 'co')
+    list_display = ('date', 'month', 'year', 'co')
+    ordering = ('-date', 'co')
 
 
 admin.site.register(WorkOrder, WorkOrderAdmin)

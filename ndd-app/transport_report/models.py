@@ -4,6 +4,7 @@ from django.db import models
 from agent_transport.models import AgentTransport
 from booking.models import Booking
 from employee.models import Driver
+from summary.models import Year
 from truck.models import Truck
 
 
@@ -64,8 +65,12 @@ class Expense(models.Model):
 class ExpenseSummaryDate(models.Model):
     date = models.DateField(blank=True, null=True, default=None)
     month = models.CharField(max_length=2, blank=True, null=True)
+    year = models.ForeignKey(Year, on_delete=models.SET_NULL, blank=True, null=True)
     co = models.CharField(max_length=5, blank=True, null=True)
 
     def __str__(self):
-        return str(self.date) + ' / ' + self.month + ' (' + self.co + ')'
+        if self.year:
+            return str(self.date) + ' / ' + self.month + '/' + self.year.year_label + ' (' + self.co + ')'
+        else:
+            return str(self.date) + ' / ' + self.month + '/' + ' (' + self.co + ')'
 
