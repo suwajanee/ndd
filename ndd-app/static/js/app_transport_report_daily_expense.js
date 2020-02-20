@@ -55,7 +55,6 @@ var daily_expense_page = new Vue ({
             }
         },
     
-        
 
         urlFormat(driver) {
             if(driver){
@@ -70,6 +69,10 @@ var daily_expense_page = new Vue ({
             this.loading = true
             if(this.date && this.co) {
                 api("/transport-report/api/get-daily-expense/", "POST", {date: this.date, co: this.co}).then((data) => {
+                    if(! data) {
+                        window.location.replace("/dashboard")
+                        return false
+                    }
                     this.date = data.date
                     this.expense_list = data.work_expense
                     this.matchDriverReport()
@@ -88,6 +91,10 @@ var daily_expense_page = new Vue ({
         getDailyDriverExpense() {
             this.loading = true
             api("/transport-report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
+                if(! data) {
+                    window.location.replace("/dashboard")
+                    return false
+                }
                 this.driver_data = report_modal.driver_data = data.driver
                 report_modal.default_truck = data.truck
                 this.expense_list = data.report
@@ -99,7 +106,6 @@ var daily_expense_page = new Vue ({
                 this.loading = false
             })
         },
-
 
 
         matchDriverReport() {

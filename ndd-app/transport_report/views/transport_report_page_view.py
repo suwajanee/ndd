@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
@@ -17,5 +18,8 @@ def date_expense_page(request, date, co):
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_expense_page(request, date, driver):
-    co = Employee.objects.get(pk=driver).co
+    try:
+        co = Employee.objects.get(pk=driver).co
+    except:
+        return HttpResponseRedirect('/dashboard')
     return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'transport-report-page', 'date': date, 'co': co, 'driver': driver})

@@ -30,7 +30,10 @@ def api_get_daily_expense(request):
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
             co = req['co']
-            date = datetime.strptime(date, '%Y-%m-%d')
+            try:
+                date = datetime.strptime(date, '%Y-%m-%d')
+            except:
+                return JsonResponse(False, safe=False)
 
         else:
             return JsonResponse('Error', safe=False)
@@ -54,9 +57,13 @@ def api_get_daily_driver_expense(request):
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
             driver_id = req['driver']
-
-            driver = Employee.objects.get(pk=driver_id)
-            driver_serializer = EmployeeSerializer(driver, many=False)
+            
+            try:
+                date = datetime.strptime(date, '%Y-%m-%d')
+                driver = Employee.objects.get(pk=driver_id)
+                driver_serializer = EmployeeSerializer(driver, many=False)
+            except:
+                return JsonResponse(False, safe=False)
 
             co = driver.co
 
