@@ -38,7 +38,7 @@ var cheque_page = new Vue( {
             this.getCheque()
         },
         getYears() {
-            api("/summary/api/get-summary-year/").then((data) => {
+            api("/summary/api/get-year/").then((data) => {
                 this.year_list = data
             })
         },

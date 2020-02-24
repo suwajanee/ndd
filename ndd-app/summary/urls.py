@@ -36,6 +36,7 @@ urlpatterns = [
 
     # Summary Year
     url(r'^api/add-year/$', summary_year_view.api_add_year, name='api-add-year'),
+    url(r'^api/get-year/$', summary_year_view.api_get_year, name='api-get-year'),
     url(r'^api/get-summary-year/$', summary_year_view.api_get_summary_year, name='api-get-summary-year'),
 
     url(r'^api/get-summary-year-details/$', summary_year_view.api_get_summary_year_details, name='api-get-summary-year-details'),

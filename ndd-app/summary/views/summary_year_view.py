@@ -14,6 +14,15 @@ from ..serializers import YearSerializer
 
 
 @csrf_exempt
+def api_get_year(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            years = Year.objects.all().order_by('-year_label')
+            serializer = YearSerializer(years, many=True)
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
 def api_get_summary_year(request):
     if request.user.is_authenticated:
         summary_year = []
@@ -35,11 +44,11 @@ def api_get_summary_year(request):
                 summary_year.append(data)
 
             return JsonResponse(summary_year, safe=False)
-        else:
-            years = Year.objects.all().order_by('-year_label')
-            serializer = YearSerializer(years, many=True)
+        # else:
+        #     years = Year.objects.all().order_by('-year_label')
+        #     serializer = YearSerializer(years, many=True)
 
-            return JsonResponse(serializer.data, safe=False)
+        #     return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

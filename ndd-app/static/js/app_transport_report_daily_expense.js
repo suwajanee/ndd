@@ -56,7 +56,7 @@ var daily_expense_page = new Vue ({
         },
     
 
-        urlFormat(driver) {
+        changeUrl(driver) {
             if(driver){
                 window.open("/transport-report/daily-expense/" + this.date + "/" + driver, "_self")
             }

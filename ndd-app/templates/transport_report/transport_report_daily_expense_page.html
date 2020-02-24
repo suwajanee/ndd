@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} ค่าใช้จ่าย {% endblock %}
+{% block title %} Expense {% endblock %}
 
 {% block extra_head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
@@ -10,7 +10,7 @@
 {% block content %}
     <div id="expense-page">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb m-0 bg-white border-bottom">
+            <ol class="breadcrumb m-0 bg-white">
                 <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">รายงานการวิ่งงาน</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'expense-page' %}">ค่าใช้จ่าย</a></li>
                 {% if driver %}
@@ -34,7 +34,7 @@
                         <input type="date" class="form-control" v-model="date" @change="urlFormat(driver_id)" required>
                     </div> -->
                     <div class="input-group my-3 col-5" style="max-height: 40px;" >
-                    <input type="date" class="form-control col-4" v-model="date" @change="urlFormat(driver_id)" required>
+                    <input type="date" class="form-control col-4" v-model="date" @change="changeUrl(driver_id)" required>
 
                     
                         <div class="input-group-append">
@@ -54,8 +54,8 @@
                             </div>
                             <div class="dropdown-divider"></div>
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                                <button class="dropdown-item" @click="urlFormat()"> -------- </button>
-                                <button v-for="driver in filterDriver" class="dropdown-item" @click="urlFormat(driver.employee.id)">
+                                <button class="dropdown-item" @click="changeUrl()"> -------- </button>
+                                <button v-for="driver in filterDriver" class="dropdown-item" @click="changeUrl(driver.employee.id)">
                                     {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co }">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
@@ -114,7 +114,7 @@
                     </div> -->
                     <div class="p-0 float-right">
                         <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
-                        <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="urlFormat()">
+                        <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl()">
                             <input type="radio" id="work_ndd" v-model="co" value="ndd" />
                             <label for="work_ndd">NDD</label>
                             <input type="radio" id="work_vts" v-model="co" value="vts" />
@@ -137,7 +137,7 @@
             </div>
             <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
                 
-                <table class="table table-hover table-bordered text-center report-table m-0">
+                <table class="table table-hover table-bordered text-center report-table m-0 w-100">
                     <thead>
                         <tr>
                             <th rowspan=2 class="align-middle" style="max-width: 95px;">วันที่</th>

@@ -47,7 +47,7 @@ var commission_page = new Vue( {
             })
         },
         getYears() {
-            api("/summary/api/get-summary-year/").then((data) => {
+            api("/summary/api/get-year/").then((data) => {
                 this.year_list = data
             })
         },
