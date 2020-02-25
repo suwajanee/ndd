@@ -58,6 +58,8 @@ urlpatterns = [
     url(r'^summary-date/(?P<year>\d+)/$', expense_summary_date_view.summary_date_page, name='summary-date-page'),
     url(r'^summary-date/api/get-summary-date/$', expense_summary_date_view.api_get_summary_date, name='api-get-summary-date'),
     url(r'^summary-date/api/add-summary-date/$', expense_summary_date_view.api_add_summary_date, name='api-add-summary-date'),
+    url(r'^summary-date/api/edit-summary-date/$', expense_summary_date_view.api_edit_summary_date, name='api-edit-summary-date'),
+    url(r'^summary-date/api/delete-summary-date/$', expense_summary_date_view.api_delete_summary_date, name='api-delete-summary-date'),
 
 ]
 

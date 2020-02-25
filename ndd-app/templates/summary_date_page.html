@@ -110,16 +110,16 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">YEAR</span>
                         </div>
-                        <input class="form-control" v-model="modal_summary_date.year" disabled>
+                        <input class="form-control" v-model="modal_data.year" disabled>
                     </div>
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">MONTH</span>
                         </div>
-                        <input class="form-control" v-model="month[modal_summary_date.month]" disabled>
+                        <input class="form-control" v-model="month[modal_data.month]" disabled>
                         <div class="input-group-append">
                             {% verbatim %}
-                                <span class="input-group-text"># {{ modal_summary_date.phase }}</span>
+                                <span class="input-group-text"># {{ modal_data.phase }}</span>
                             {% endverbatim %}
                         </div>
                     </div>
@@ -127,11 +127,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">DATE</span>
                         </div>
-                        <input type="date" class="form-control" v-model="modal_summary_date.date">
+                        <input type="date" class="form-control" v-model="modal_data.date">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button v-if="! modal_summary_date.pk" class="btn btn-primary" @click="addSummaryDate">Save</button>
+                    <button v-if="! modal_data.pk" class="btn btn-primary" @click="addSummaryDate">Save</button>
+                    <button v-else class="btn btn-primary" @click="updateSummaryDate">Save</button>
                 </div>
             </div>
         </div>

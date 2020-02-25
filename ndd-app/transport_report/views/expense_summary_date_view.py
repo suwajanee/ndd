@@ -83,3 +83,30 @@ def api_add_summary_date(request):
 
             return api_get_summary_date(request)
     return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def api_edit_summary_date(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            pk = req['pk']
+            date = req['date']
+
+            summary_date = ExpenseSummaryDate.objects.get(pk=pk)
+            summary_date.date = date
+            summary_date.save()
+
+            return api_get_summary_date(request)
+    return JsonResponse(False, safe=False)
+
+@csrf_exempt
+def api_delete_summary_date(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            pk = req['pk']
+
+            summary_date = ExpenseSummaryDate.objects.get(pk=pk).delete()
+
+            return api_get_summary_date(request)
+    return JsonResponse(False, safe=False)

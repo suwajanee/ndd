@@ -7,7 +7,7 @@ var summary_date_page = new Vue ({
         ndd_list: [],
         vts_list: [],
 
-        modal_summary_date: {},
+        modal_data: {},
 
     },
 
@@ -38,7 +38,7 @@ var summary_date_page = new Vue ({
         },
 
         getModalSummaryDate(co, month, phase, date, id) {
-            this.modal_summary_date = {
+            this.modal_data = {
                 pk: id,
                 year: this.year,
                 month: month,
@@ -49,8 +49,8 @@ var summary_date_page = new Vue ({
         },
 
         addSummaryDate() {
-            if(this.modal_summary_date.date) {
-                api("/summary-date/api/add-summary-date/", "POST", this.modal_summary_date).then((data) => {
+            if(this.modal_data.date) {
+                api("/summary-date/api/add-summary-date/", "POST", this.modal_data).then((data) => {
                     if(data) {
                         this.ndd_list = data.ndd
                         this.vts_list = data.vts 
@@ -59,8 +59,27 @@ var summary_date_page = new Vue ({
                 })
             }
             $('#modalSummaryDate').modal('hide')
+        },
 
-        }
+        updateSummaryDate() {
+            if(this.modal_data.date) {
+                api("/summary-date/api/edit-summary-date/", "POST", this.modal_data).then((data) => {
+                    if(data) {
+                        this.ndd_list = data.ndd
+                        this.vts_list = data.vts
+                    }
+                })
+            }
+            else {
+                api("/summary-date/api/delete-summary-date/", "POST", this.modal_data).then((data) => {
+                    if(data) {
+                        this.ndd_list = data.ndd
+                        this.vts_list = data.vts
+                    }
+                })
+            }
+            $('#modalSummaryDate').modal('hide')
+        },
 
 
     }
