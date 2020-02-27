@@ -44,7 +44,8 @@ img.logo {
     min-width: 180px;
 }
 .sidebar-heading{
-    padding: 1rem;
+    padding: 10px;
+    /* padding: 1rem; */
     margin-top: 1rem;
     background-color: #eee;
     color: #7d7a7a;

@@ -8,6 +8,7 @@ var summary_date_page = new Vue ({
         vts_list: [],
 
         modal_data: {},
+        min_date: '',
 
     },
 
@@ -46,6 +47,26 @@ var summary_date_page = new Vue ({
                 co: co,
                 date: date
             }
+
+            try {
+                if(co=='ndd') {
+                    var co_list = this.ndd_list
+                }
+                else {
+                    var co_list = this.vts_list
+                }
+
+                if(phase==1) {
+                    var before = co_list[month-1]
+                    this.date_min = before[before.length-1].date
+                }
+                else {
+                    this.date_min = co_list[month][phase-2].date
+                }
+            }
+            catch {
+                this.date_min = ''
+            }    
         },
 
         addSummaryDate() {
@@ -80,7 +101,5 @@ var summary_date_page = new Vue ({
             }
             $('#modalSummaryDate').modal('hide')
         },
-
-
     }
 })
