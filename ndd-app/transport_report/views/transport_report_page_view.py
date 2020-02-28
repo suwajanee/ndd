@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -10,7 +12,8 @@ from employee.models import Employee
 
 @login_required(login_url=reverse_lazy('login'))
 def expense_page(request):
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'transport-report-page', 'co': 'ndd'})
+    date = datetime.now().strftime('%Y-%m-%d')
+    return HttpResponseRedirect('/transport-report/daily-expense/' + date + '/ndd' )
 
 @login_required(login_url=reverse_lazy('login'))
 def date_expense_page(request, date, co):

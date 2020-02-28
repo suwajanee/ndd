@@ -58,14 +58,14 @@ var summary_date_page = new Vue ({
 
                 if(phase==1) {
                     var before = co_list[month-1]
-                    this.date_min = before[before.length-1].date
+                    this.min_date = before[before.length-1].date
                 }
                 else {
-                    this.date_min = co_list[month][phase-2].date
+                    this.min_date = co_list[month][phase-2].date
                 }
             }
             catch {
-                this.date_min = ''
+                this.min_date = ''
             }    
         },
 

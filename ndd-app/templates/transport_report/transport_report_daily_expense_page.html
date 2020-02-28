@@ -12,7 +12,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
                 <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">รายงานการวิ่งงาน</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'expense-page' %}">ค่าใช้จ่าย</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'daily-expense-page' %}">ค่าใช้จ่าย</a></li>
                 {% if driver %}
                     {% verbatim %}
                         <li class="breadcrumb-item"><a :href="'/transport-report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>

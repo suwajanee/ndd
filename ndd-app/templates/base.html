@@ -77,6 +77,7 @@
                         {% if request.user|has_group:'salary_change' %}
                             <a class="dropdown-item" href="{% url 'summary-commission-page' %}">ค่าชอ.</a>
                         {% endif %}
+                        <a class="dropdown-item" href="{% url 'daily-expense-page' %}">รายงานการวิ่งงาน</a>
                     </div>
                 </li>
             </ul>
