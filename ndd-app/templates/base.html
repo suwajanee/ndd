@@ -42,12 +42,10 @@
                 <li class="nav-item">
                     <a class="nav-link my-1" href="{% url 'dashboard-page' %}"><i class="fa fa-home"></i></a>
                 </li>
-                <li class="nav-item dropdown {% if nbar == 'booking-page' or nbar == 'agent-transport-page' %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar == 'operation' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarOperation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if nbar == 'booking-page' %}
-                            Booking
-                        {% elif nbar == 'agent-transport-page' %}
-                            สายเรือ
+                        {% if nbar == 'operation' %}
+                            {{ title }}
                         {% else %}
                             Operation
                         {% endif %}
@@ -57,16 +55,10 @@
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <li class="nav-item dropdown {% if nbar != 'booking-page' and nbar != 'agent-transport-page' and nbar != 'database-page' %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar == 'finance' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarFinance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if nbar == 'summary-page' %}
-                            Summary
-                        {% elif nbar == 'cheque-page' %}
-                            Cheque
-                        {% elif nbar == 'commission-page' %}
-                            ค่าชอ.
-                        {% elif nbar == 'transport-report-page' %}
-                            รายงานการวิ่งงาน
+                        {% if nbar == 'finance' %}
+                            {{ title }}
                         {% else %}
                             Finance
                         {% endif %}
@@ -77,6 +69,17 @@
                         {% if request.user|has_group:'salary_change' %}
                             <a class="dropdown-item" href="{% url 'summary-commission-page' %}">ค่าชอ.</a>
                         {% endif %}
+                    </div>
+                </li>
+                <li class="nav-item dropdown {% if nbar == 'report-page' %}active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarReport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if nbar == 'report-page' %}
+                            {{ title }}
+                        {% else %}
+                            Report
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarReport">
                         <a class="dropdown-item" href="{% url 'daily-expense-page' %}">รายงานการวิ่งงาน</a>
                     </div>
                 </li>

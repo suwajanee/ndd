@@ -8,16 +8,19 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 
 from employee.models import Employee
+from summary.models import Year
 
 
 @login_required(login_url=reverse_lazy('login'))
-def expense_page(request):
+def daily_expense_page(request):
     date = datetime.now().strftime('%Y-%m-%d')
     return HttpResponseRedirect('/transport-report/daily-expense/' + date + '/ndd' )
 
 @login_required(login_url=reverse_lazy('login'))
 def date_expense_page(request, date, co):
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'transport-report-page', 'date': date, 'co': co})
+    if co != 'ndd' and co != 'vts':
+        return HttpResponseRedirect('/dashboard')
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'date': date, 'co': co})
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_expense_page(request, date, driver):
@@ -25,4 +28,4 @@ def driver_expense_page(request, date, driver):
         co = Employee.objects.get(pk=driver).co
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'transport-report-page', 'date': date, 'co': co, 'driver': driver})
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'date': date, 'co': co, 'driver': driver})

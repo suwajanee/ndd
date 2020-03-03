@@ -9,7 +9,7 @@ from .views import transport_report_page_view
 
 urlpatterns = [
 
-    url(r'^daily-expense/$', transport_report_page_view.expense_page, name='daily-expense-page'),
+    url(r'^daily-expense/$', transport_report_page_view.daily_expense_page, name='daily-expense-page'),
     url(r'^daily-expense/(?P<date>\d[-\w]+)/(?P<co>[a-z]{3})', transport_report_page_view.date_expense_page, name='date-expense-page'),
     url(r'^daily-expense/(?P<date>\d[-\w]+)/(?P<driver>\d+)/$', transport_report_page_view.driver_expense_page, name='driver-expense-page'),
 

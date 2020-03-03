@@ -62,14 +62,21 @@
                         <a class="nav-link" href="{% url 'cheque-page' %}">
                             <i class="fa fa-money-check-alt"></i>&nbsp; Cheque
                         </a>
-                        <a class="nav-link" href="{% url 'daily-expense-page' %}">
+                        <!-- <a class="nav-link" href="{% url 'daily-expense-page' %}">
                             <i class="fas fa-truck-moving"></i>&nbsp; รายงานการวิ่งงาน
-                        </a>
+                        </a> -->
                         {% if request.user|has_group:'salary_change' %}
                             <a class="nav-link" href="{% url 'summary-commission-page' %}">
                                 <i class="fas fa-coins"></i>&nbsp; ค่าชอ.
                             </a>
                         {% endif %}
+
+                        <h6 class="sidebar-heading">
+                            <span>Report</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 'daily-expense-page' %}">
+                            <i class="fas fa-truck-moving"></i>&nbsp; รายงานการวิ่งงาน
+                        </a>
                         <hr class="my-0 mx-1">
                         <a class="nav-link" :href="'/summary-date/' + year + '/'">
                             <i class="fas fa-calendar-alt"></i>&nbsp; วันปิดค่าใช้จ่าย

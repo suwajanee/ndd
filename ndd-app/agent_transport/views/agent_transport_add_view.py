@@ -18,7 +18,7 @@ from customer.models import Principal, Shipper
 
 @login_required(login_url=reverse_lazy('login'))
 def agent_trnasport_add_page(request):
-    return render(request, 'agent_transport/agent_transport_add_page.html', {'nbar': 'agent-transport-page'})
+    return render(request, 'agent_transport/agent_transport_add_page.html', {'nbar': 'operation', 'title': 'สายเรือ'})
 
 @csrf_exempt
 def api_save_add_agent_transports(request):
