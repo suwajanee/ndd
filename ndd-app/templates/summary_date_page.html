@@ -30,7 +30,7 @@
         <div class="row w-100" >
             <div class="col"></div>
             <div class="col-4">
-                <h4 class="text-center mb-3"><u>NDD</u></h4>
+                <h5 class="text-center mb-3"><u>NDD</u></h5>
                 <table class="table table-bordered text-center">
                     <thead>
                         <th>MONTH</th>
@@ -48,7 +48,7 @@
                                 </td>
                                 <template v-if="ndd_date.length == 1">
                                     <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 2, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                    <td><div class="btn-lick p-0 text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                    <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                                 </template>
                                 <td v-else-if="ndd_date.length == 2">
                                     <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 3, '')"><i class="far fa-calendar-alt"></i></button>
@@ -56,7 +56,7 @@
                             </template>
                             <template v-else>
                                 <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 1, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                <td v-for="i in 2"><div class="btn-lick p-0 text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-for="i in 2"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>
@@ -64,7 +64,7 @@
             </div>
             <div class="col"></div>
             <div class="col-3">
-                <h4 class="text-center mb-3"><u>VTS</u></h4>
+                <h5 class="text-center mb-3"><u>VTS</u></h5>
                 <table class="table table-bordered text-center">
                     <thead class="text-center">
                         <th>MONTH</th>
@@ -84,7 +84,7 @@
                             </template>
                             <template v-else>
                                 <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('vts', month_index, 1, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                <td><div class="btn-lick p-0 text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>

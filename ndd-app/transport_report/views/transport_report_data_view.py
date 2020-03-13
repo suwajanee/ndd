@@ -14,6 +14,7 @@ from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
 from ..serializers import ExpenseSummaryDateSerializer
 from ..serializers import TruckSerializer
+from booking.views.utility.functions import set_if_not_none
 from employee.models import Driver
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
@@ -93,25 +94,85 @@ def api_get_daily_driver_expense(request):
     return JsonResponse('Error', safe=False)
 
 
+
+
 @csrf_exempt
-def api_get_by_summary_date(request):
+def api_get_expense_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
-            summary_date_id = req['summary_date_id']
+            year = int(req['year'])
+            month = int(req['month'])
+            period = int(req['period'])
+            co = req['co']
 
-            all_summary_date = ExpenseSummaryDate.objects.all()
+            if co == 'ndd':
+                period_num = 3
+            else:
+                period_num = 2
 
-            to_before_date = all_summary_date.get(pk=summary_date_id)
-            from_date = all_summary_date.filter(date__lt=date.selected.date).order_by('-date').first()
+            summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
 
-            work_expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_before_date)) \
-                .order_by('work_order__driver__truck__number', 'work_order__driver__employee_first_name', 'work_order__work_date', 'pk')
+            selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
+            
+            if period == 0:
+                from_date = get_last_month_date(summary_date_list, month, year)
 
-            serializer = ExpenseSerializer(work_expense, many=True)
+                if selected_month:
+                    to_date = selected_month.first().date
 
-            return JsonResponse(serializer.data, safe=False)
+                    if len(selected_month) < period_num:
+                        to_date = check_next_date(summary_date_list, to_date)    
+                else:
+                    to_date = check_next_date(summary_date_list, from_date)    
+            else:
+                to_date = selected_month.order_by('date')[period-1].date
+                print(to_date)
+
+
+                if period == 1:
+                    from_date = get_last_month_date(summary_date_list, month, year)
+                else:
+                    from_date = summary_date_list.filter(date__lt=to_date).first().date
+
+
+            expense = Expense.objects.filter(work_order__truck__owner=co)
+
+            if to_date:
+                expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
+            else:
+                expense = expense.filter(work_order__clear_date__gte=from_date)
+            
+
+            expense = expense.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
+                    'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
+
+            expense_serializer = ExpenseSerializer(expense, many=True)
+
+            period_serializer = ExpenseSummaryDateSerializer(selected_month, many=True)
+
+            data = {
+                'period': period_serializer.data,
+                'expense': expense_serializer.data
+            }
+
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+def get_last_month_date(date_list, month, year):
+    if month == 1:
+        last_month = date_list.filter(Q(year__year_label=year-1) & Q(month=12))
+    else:
+        last_month = date_list.filter(Q(year__year_label=year) & Q(month=month-1))
 
+    if last_month:
+        return last_month.first().date
+    else:
+        return datetime(year, month, 1)
 
+def check_next_date(date_list, date):
+    next_date = date_list.filter(date__gt=date)
+    if len(next_date):
+        return next_date.last().date
+    else:
+        return False

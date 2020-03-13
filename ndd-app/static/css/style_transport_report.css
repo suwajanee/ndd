@@ -107,8 +107,10 @@ tr.text-small td {
 }
 
 .table-fix-head tr td {
-    padding-right: 5px;
-    padding-left: 5px;
+    /* padding-right: 5px;
+    padding-left: 5px; */
+    padding: 6px;
+    vertical-align: middle;
 }
 
 tr td.right-thick, tr th.right-thick {
@@ -157,8 +159,17 @@ ul.multiselect-container {
     overflow-y: auto;
 }
 
-button.multiselect {
-    border: 1px solid lightgray;
-    background: white;
+button.multi-select {
+    /* border: 1px solid lightgray;
+    background: white; */
+    /* height: 40px; */
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+
 

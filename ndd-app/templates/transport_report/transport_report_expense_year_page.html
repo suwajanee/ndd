@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Expense {% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+<div id="summary-date-page">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb m-0 bg-white">
+            <li class="breadcrumb-item">รายงานการวิ่งงาน</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ year }}</li>
+        </ol>
+    </nav>
+
+    {% verbatim %}
+        <div class="input-group mt-5 mb-4 col-2 container">
+            <div class="input-group-prepend">
+                <span class="input-group-text">YEAR</span>
+            </div>
+            <select class="custom-select" v-model="year">
+                <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+            </select>
+        </div>
+
+        <div class="row w-100">
+            <div class="col"></div>
+            <div class="col-4">
+                <h5 class="text-center mb-3">NDD</h5>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <th>MONTH</th>
+                        <th>#1</th>
+                        <th>#2</th>
+                        <th>#3</th>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="(ndd_date, month_index) in ndd_list">
+                            <td><a href="#">{{ month[month_index] }}</a></td>
+                            <template v-if="ndd_date.length">
+                                <td v-for="(date, phase) in ndd_date">
+                                    <button class="btn btn-link p-0">{{ date.date|formatDate }}</button>
+                                </td>
+                                <template v-if="ndd_date.length < 3">
+                                    <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                    <td v-if="ndd_date.length == 1"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                </template>
+                            </template>
+                            <template v-else>
+                                <td v-for="i in 3"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col"></div>
+            <div class="col-3">
+                <h5 class="text-center mb-3">VTS</h5>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <th>MONTH</th>
+                        <th>#1</th>
+                        <th>#2</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(vts_date, month_index) in vts_list">
+                            <td><a href="#">{{ month[month_index] }}</a></td>
+                            <template v-if="vts_date.length">
+                                <td v-for="(date, phase) in vts_date">
+                                    <button class="btn btn-link p-0">{{ date.date|formatDate }}</button>
+                                </td>
+                                <td v-if="vts_date.length == 1"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                            </template>
+                            <template v-else>
+                                <td v-for="i in 2"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col"></div>
+        </div>
+
+    {% endverbatim %}
+</div>
+
+
+<script type="application/javascript" src="{% static 'js/app_transport_report_summary_date.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+<script type="application/javascript">
+
+    window.addEventListener("load", function() {
+        summary_date_page.reload("{{ year }}")
+    })
+</script>
+
+{% endblock %}
+
