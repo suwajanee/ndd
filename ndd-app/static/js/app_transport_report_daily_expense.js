@@ -58,17 +58,17 @@ var daily_expense_page = new Vue ({
 
         changeUrl(driver) {
             if(driver){
-                window.open("/transport-report/daily-expense/" + this.date + "/" + driver, "_self")
+                window.open("/report/daily-expense/" + this.date + "/" + driver, "_self")
             }
             else {
-                window.open("/transport-report/daily-expense/" + this.date + "/" + this.co, "_self")
+                window.open("/report/daily-expense/" + this.date + "/" + this.co, "_self")
             }
         },
 
         getDailyExpense() {
             this.loading = true
             if(this.date && this.co) {
-                api("/transport-report/api/get-daily-expense/", "POST", {date: this.date, co: this.co}).then((data) => {
+                api("/report/api/get-daily-expense/", "POST", {date: this.date, co: this.co}).then((data) => {
                     if(! data) {
                         window.location.replace("/dashboard")
                         return false
@@ -79,18 +79,18 @@ var daily_expense_page = new Vue ({
                     this.loading = false 
                 })
             }
-            else {
-                api("/transport-report/api/get-daily-expense/").then((data) => {
-                    this.date = data.date
-                    this.expense_list = data.work_expense
-                    this.matchDriverReport()
-                    this.loading = false
-                })
-            }
+            // else {
+            //     api("/report/api/get-daily-expense/").then((data) => {
+            //         this.date = data.date
+            //         this.expense_list = data.work_expense
+            //         this.matchDriverReport()
+            //         this.loading = false
+            //     })
+            // }
         },
         getDailyDriverExpense() {
             this.loading = true
-            api("/transport-report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
+            api("/report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
                 if(! data) {
                     window.location.replace("/dashboard")
                     return false

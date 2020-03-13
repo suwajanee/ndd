@@ -15,7 +15,7 @@
                 <li class="breadcrumb-item"><a href="{% url 'daily-expense-page' %}">ค่าใช้จ่าย</a></li>
                 {% if driver %}
                     {% verbatim %}
-                        <li class="breadcrumb-item"><a :href="'/transport-report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
+                        <li class="breadcrumb-item"><a :href="'/report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ driver_data.first_name }} {{ driver_data.last_name }}</li>
                     {% endverbatim %}
                 {% else %}
@@ -69,7 +69,8 @@
                                 <span class="input-group-text">COL</span>
                             </div>
                             <div class="btn-group">
-                                <button class="custom-select text-left rounded-right" data-toggle="dropdown" style="height: 40px; border-bottom-left-radius: 0; border-top-left-radius: 0; max-width: 160px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; ">
+                                <!-- <button class="custom-select text-left rounded-right" data-toggle="dropdown" style="height: 40px; border-bottom-left-radius: 0; border-top-left-radius: 0; max-width: 160px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; "> -->
+                                <button class="custom-select text-left rounded-right multi-select" style="height: 40px;" data-toggle="dropdown">
                                     <template v-if="col_price || col_allowance || col_remark">
                                         <template v-if="col_price">ราคา; </template>
                                         <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
@@ -136,7 +137,6 @@
                 </div>
             </div>
             <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
-                
                 <table class="table table-hover table-bordered text-center report-table m-0 w-100">
                     <thead>
                         <tr>
@@ -146,15 +146,15 @@
                             <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
                             <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
                             <th v-if="col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
-
+                
                             <th v-if="col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
                             <th v-if="col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
-
+                
                             <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
                             <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
-
+                
                             <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
-
+                
                             <th rowspan=2 class="align-middle">Edit</th>
                         </tr>
                         <tr class="second-header">
@@ -166,7 +166,7 @@
                             <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
                             <th class="align-middle">อื่นๆ</th>
                             <th class="align-middle right-thick">รวม</th>
-
+                
                             <th class="align-middle">ค่าคืนตู้</th>
                             <th class="align-middle">ผ่านท่า</th>
                             <th class="align-middle">อื่นๆ</th>
@@ -217,18 +217,18 @@
                                                 <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
                                             </template>
                                         {% endverbatim %}
-                                        
+
                                         <!-- Expense Fields -->
                                         {% include 'transport_report/transport_report_expense_table.html' %}
                                                 
-                                        {% verbatim %}
+                                        <!-- {% verbatim %}
                                             <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
 
                                             <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
                                             <td >
                                                 <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
                                             </td>
-                                        {% endverbatim %}
+                                        {% endverbatim %} -->
                                     </tr>       
                                 </template>
                             </template>

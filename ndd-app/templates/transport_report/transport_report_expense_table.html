@@ -1,4 +1,3 @@
-
 {% verbatim %}
 
     <td @mousedown="show_note" @mouseup="hide_note">      
@@ -100,6 +99,12 @@
             <div class="note-alert"></div>
         </template>
         {{ eval(report.cus_expense.cus_other)|currencyCommas }}
+    </td>
+
+    <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
+    <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
+    <td>
+        <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
     </td>
     
 {% endverbatim %}

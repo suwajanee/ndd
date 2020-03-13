@@ -241,7 +241,7 @@ var report_modal = new Vue ({
                 }
 
                 if(this.modal_add_mode) {
-                    api("/transport-report/api/add-expense-report/", "POST", work_data).then((data) => {
+                    api("/report/api/add-expense-report/", "POST", work_data).then((data) => {
                         if(data=='Success') {
                             // daily_expense_page.urlFormat(this.driver_id)
                             $('#modalExpenseReport').modal('hide');
@@ -250,7 +250,7 @@ var report_modal = new Vue ({
                     })
                 }
                 else {
-                    api("/transport-report/api/edit-expense-report/", "POST", work_data).then((data) => {
+                    api("/report/api/edit-expense-report/", "POST", work_data).then((data) => {
                         if(data=='Success') {
                             $('#modalExpenseReport').modal('hide');
                             this.pageReload()
@@ -263,7 +263,7 @@ var report_modal = new Vue ({
 
         deleteExpenseReport(id) {
             if(confirm('Are you sure?')) {
-                api("/transport-report/api/delete-expense-report/", "POST", {id: id}).then((data) => {
+                api("/report/api/delete-expense-report/", "POST", {id: id}).then((data) => {
                     if(data=='Success') {
                         $('#modalExpenseReport').modal('hide');
                         this.pageReload()
