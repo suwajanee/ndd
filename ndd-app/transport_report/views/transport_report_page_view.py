@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -13,14 +13,17 @@ from summary.models import Year
 
 @login_required(login_url=reverse_lazy('login'))
 def daily_expense_page(request):
-    date = datetime.now().strftime('%Y-%m-%d/ndd')
+    date = datetime.now() - timedelta(days=1)
+    if date.strftime('%w') == '0':
+        date = date - timedelta(days=1)
+    date = date.strftime('%Y-%m-%d/ndd')
     return HttpResponseRedirect('/report/daily-expense/' + date )
 
 @login_required(login_url=reverse_lazy('login'))
 def date_expense_page(request, date, co):
     if co != 'ndd' and co != 'vts':
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'date': date, 'co': co})
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่ายประจำวัน', 'date': date, 'co': co})
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_expense_page(request, date, driver):
@@ -28,7 +31,7 @@ def driver_expense_page(request, date, driver):
         co = Employee.objects.get(pk=driver).co
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'date': date, 'co': co, 'driver': driver})
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่ายประจำวัน', 'date': date, 'co': co, 'driver': driver})
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -47,26 +50,32 @@ def monthly_expense_page(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def expense_page(request, year, month, co):
+    month = int(month)
+    check_return = check_url_format(year, month, co)
     
-    check_url_format(year, month, co)
-    
-    return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่าย', 'year': year, 'month': month, 'co': co, 'period': '0'})
+    if check_return: 
+        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'year': year, 'month': month, 'co': co, 'period': '0'})
+    else:
+        return HttpResponseRedirect('/dashboard')
 
 @login_required(login_url=reverse_lazy('login'))
 def period_expense_page(request, year, month, co, period):
+    month = int(month)
+    check_return = check_url_format(year, month, co)
 
-    check_url_format(year, month, co)
-
-    return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่าย', 'year': year, 'month': month, 'co': co, 'period': period})
+    if check_return:
+        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'year': year, 'month': month, 'co': co, 'period': period})
+    else:
+        return HttpResponseRedirect('/dashboard')
 
 
 def check_url_format(year, month, co):
     try:
         get_year = Year.objects.get(year_label=year)
     except:
-        return HttpResponseRedirect('/dashboard')
+        return False
 
-    month = int(month)
     if (month < 1 or month > 12) or (co != 'ndd' and co != 'vts'):
         return HttpResponseRedirect('/dashboard')
+        return False
     return True

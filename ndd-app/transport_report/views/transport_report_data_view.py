@@ -127,8 +127,6 @@ def api_get_expense_report(request):
                     to_date = check_next_date(summary_date_list, from_date)    
             else:
                 to_date = selected_month.order_by('date')[period-1].date
-                print(to_date)
-
 
                 if period == 1:
                     from_date = get_last_month_date(summary_date_list, month, year)
@@ -147,17 +145,40 @@ def api_get_expense_report(request):
             expense = expense.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
                     'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
+            pk_list = expense.values_list('pk', flat=True).distinct()
+            remark_list = get_values_list(expense, 'work_order__detail__remark')
+            work_normal_list = get_values_list(expense, 'work_order__work_normal__work_id')
+            work_agent_list = get_values_list(expense, 'work_order__work_agent_transport__work_id')
+
+            detail_customer_list = get_values_list(expense, 'work_order__detail__customer_name')
+
+            customer = expense.filter(~Q(work_order__detail__has_key='customer_name'))
+            normal_customer_list = get_values_list(customer, 'work_order__work_normal__principal__name')
+            agent_customer_list = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
+
+            work_list = sorted(work_normal_list + work_agent_list)
+            customer_list = sorted(detail_customer_list + normal_customer_list + agent_customer_list)
+
             expense_serializer = ExpenseSerializer(expense, many=True)
 
             period_serializer = ExpenseSummaryDateSerializer(selected_month, many=True)
 
             data = {
                 'period': period_serializer.data,
-                'expense': expense_serializer.data
+                'expense': expense_serializer.data,
+                'pk_list': list(pk_list),
+                'work_list': work_list,
+                'remark_list': remark_list,
+                'customer_list': customer_list
             }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+def get_values_list(expense_list, col):
+    query_set = expense_list.order_by(col).values_list(col, flat=True).distinct()
+
+    return list(filter(None, query_set))
 
 def get_last_month_date(date_list, month, year):
     if month == 1:
@@ -172,7 +193,7 @@ def get_last_month_date(date_list, month, year):
 
 def check_next_date(date_list, date):
     next_date = date_list.filter(date__gt=date)
-    if len(next_date):
+    if next_date:
         return next_date.last().date
     else:
-        return False
+        return datetime.now()

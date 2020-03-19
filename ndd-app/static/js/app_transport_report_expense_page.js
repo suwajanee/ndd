@@ -60,6 +60,10 @@ var expense_page = new Vue ({
             api("/report/api/get-expense-report/", "POST", filter).then((data) => {
                 this.report_list = data.expense
                 this.period_list = data.period
+                console.log(data.pk_list)
+                console.log(data.work_list)
+                console.log(data.remark_list)
+                console.log(data.customer_list)
             })
         }
 

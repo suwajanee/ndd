@@ -171,5 +171,54 @@ button.multi-select {
     white-space: nowrap;
 }
 
+/* Day color */
+.sun-color {
+    background-color: #ffcccc;
+}
+.table-hover .sun-color:hover, input.sun-color {
+    background-color: #ffb3b3;
+}
+.mon-color, input.mon-color {
+    background-color: #ffffcc;
+}
+.table-hover .mon-color:hover {
+    background-color: #ffffb3;
+}
+
+.tue-color, input.tue-color {
+    background-color: #ffcce6;
+}
+.table-hover .tue-color:hover {
+    background-color: #ffb3da;
+}
+
+.wed-color, input.wed-color {
+    background-color: #d9ffcc;
+}
+.table-hover .wed-color:hover {
+    background-color: #c6ffb3;
+}
+
+.thu-color, input.thu-color {
+    background-color: #ffe6cc;
+}
+.table-hover .thu-color:hover {
+    background-color: #ffdab3;
+}
+
+.fri-color, input.fri-color {
+    background-color: #ccffff;
+}
+.table-hover .fri-color:hover {
+    background-color: #b3ffff;
+}
+
+.sat-color, input.sat-color {
+    background-color: #e0ccff;
+}
+.table-hover .sat-color:hover {
+    background-color: #d1b3ff;
+}
+
 
 

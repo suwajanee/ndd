@@ -34,7 +34,7 @@
                         <input type="date" class="form-control" v-model="date" @change="urlFormat(driver_id)" required>
                     </div> -->
                     <div class="input-group my-3 col-5" style="max-height: 40px;" >
-                    <input type="date" class="form-control col-4" v-model="date" @change="changeUrl(driver_id)" required>
+                    <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
 
                     
                         <div class="input-group-append">
@@ -305,10 +305,9 @@
 
     {% include 'transport_report/transport_report_expense_modal.html' %}
 
-    
-    <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>    
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
 
 
     <script type="application/javascript">

@@ -137,7 +137,11 @@
                     </tr>
                 </thead>
                 <tbody id="tbody" v-if="report_list.length" class="bg-white">
-                    <tr v-for="report in report_list">
+                    <!-- Hereeeeeeeeeeeee -->
+                    <template v-for="(report, index) in report_list">
+                        <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
+                        <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
+                        <tr>
                         {% verbatim %}
                             <td>{{ report.work_order.work_date|formatDate }}</td>
                             <td>
@@ -173,6 +177,7 @@
 
                         {% include 'transport_report/transport_report_expense_table.html' %}
                     </tr>
+                    </template>
                     
                     
                 </tbody>
@@ -191,10 +196,11 @@
 
 {% include 'transport_report/transport_report_expense_modal.html' %}
 
-<script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
+
 
 <script type="application/javascript">
     window.addEventListener("load", function() {
