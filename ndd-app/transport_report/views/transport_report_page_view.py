@@ -23,7 +23,7 @@ def daily_expense_page(request):
 def date_expense_page(request, date, co):
     if co != 'ndd' and co != 'vts':
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่ายประจำวัน', 'date': date, 'co': co})
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'Daily Expense', 'date': date, 'co': co})
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_expense_page(request, date, driver):
@@ -31,7 +31,7 @@ def driver_expense_page(request, date, driver):
         co = Employee.objects.get(pk=driver).co
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'ค่าใช้จ่ายประจำวัน', 'date': date, 'co': co, 'driver': driver})
+    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'Daily Expense', 'date': date, 'co': co, 'driver': driver})
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -40,7 +40,7 @@ def expense_year_page(request, year):
         get_year = Year.objects.get(year_label=year)
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_expense_year_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'year': year})
+    return render(request, 'transport_report/transport_report_expense_year_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year})
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -54,7 +54,7 @@ def expense_page(request, year, month, co):
     check_return = check_url_format(year, month, co)
     
     if check_return: 
-        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'year': year, 'month': month, 'co': co, 'period': '0'})
+        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
     else:
         return HttpResponseRedirect('/dashboard')
 
@@ -64,7 +64,7 @@ def period_expense_page(request, year, month, co, period):
     check_return = check_url_format(year, month, co)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'รายงานการวิ่งงาน', 'year': year, 'month': month, 'co': co, 'period': period})
+        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': period})
     else:
         return HttpResponseRedirect('/dashboard')
 
