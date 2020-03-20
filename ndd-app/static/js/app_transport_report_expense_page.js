@@ -2,6 +2,7 @@ var expense_page = new Vue ({
 
     el: '#expense-page',
     data: {
+        loading: false,
         year: '',
         month: '',
         co: '',
@@ -11,28 +12,33 @@ var expense_page = new Vue ({
         month_list: [],
         full_month_list: [],
 
-        loading: false,
-
         col_price: true,
         col_allowance: true,
         col_remark: true,
 
         report_list: [],
-        period_list: []
+        period_list: [],
+
+        driver_list: [],
+        truck_list: [],
     },
 
     methods: {
         reload(year, month, co, period) {
             this.year = year
             this.month = month
-            this.co = co
+            this.co = report_modal.co = co
             this.period = period
             
             this.getYear()
             this.month_list = _month
             this.full_month_list = _full_month
 
+            this.getActiveDriver()
+            this.getActiveTruck()
             this.getExpenseReport()
+
+            report_modal.daily_page = false
         },
 
         getYear() {
@@ -51,6 +57,7 @@ var expense_page = new Vue ({
         },
 
         getExpenseReport() {
+            this.loading = true
             var filter = {
                 year: this.year,
                 month: this.month,
@@ -64,8 +71,21 @@ var expense_page = new Vue ({
                 console.log(data.work_list)
                 console.log(data.remark_list)
                 console.log(data.customer_list)
+                this.loading = false
+            })
+        },
+
+        getActiveDriver() {
+            api("/employee/api/get-active-driver/", "POST", {co: this.co}).then((data) => {
+                this.driver_list = report_modal.driver_list = data
+            })
+        },
+        getActiveTruck() {
+            api("/truck-chassis/api/get-active-truck/", "POST", {co: this.co}).then((data) => {
+                this.truck_list = report_modal.truck_list = data
             })
         }
+
 
         
     }

@@ -98,6 +98,7 @@ const sumObjectArray = (arr, key1, key2) => {
     return
 }
 
+// Get day color row
 const getDayColor = (date) => {
     var day_color = ['sun-color', 'mon-color', 'tue-color', 'wed-color', 'thu-color', 'fri-color', 'sat-color']
     date = new Date(date)

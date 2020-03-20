@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Expense {% endblock %}
+{% block title %} Daily Expense {% endblock %}
 
 {% block extra_head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
@@ -11,8 +11,8 @@
     <div id="expense-page">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">รายงานการวิ่งงาน</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'daily-expense-page' %}">ค่าใช้จ่าย</a></li>
+                <li class="breadcrumb-item">Report</li>
+                <li class="breadcrumb-item"><a href="{% url 'daily-expense-page' %}">Daily Expense</a></li>
                 {% if driver %}
                     {% verbatim %}
                         <li class="breadcrumb-item"><a :href="'/report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
@@ -34,7 +34,7 @@
                         <input type="date" class="form-control" v-model="date" @change="urlFormat(driver_id)" required>
                     </div> -->
                     <div class="input-group my-3 col-5" style="max-height: 40px;" >
-                    <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
+                        <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
 
                     
                         <div class="input-group-append">

@@ -3,7 +3,6 @@ var daily_expense_page = new Vue ({
     el: '#expense-page',
     data: {
         loading: false,
-        page: '',
 
         co: '',
         date: '',
@@ -22,8 +21,6 @@ var daily_expense_page = new Vue ({
         col_price: true,
         col_allowance: true,
         col_remark: false,
-        // show_allowance: true,
-        // show_col: ['price', 'allowance'],
 
     },
 
@@ -79,14 +76,6 @@ var daily_expense_page = new Vue ({
                     this.loading = false 
                 })
             }
-            // else {
-            //     api("/report/api/get-daily-expense/").then((data) => {
-            //         this.date = data.date
-            //         this.expense_list = data.work_expense
-            //         this.matchDriverReport()
-            //         this.loading = false
-            //     })
-            // }
         },
         getDailyDriverExpense() {
             this.loading = true

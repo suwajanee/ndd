@@ -2,9 +2,15 @@ var report_modal = new Vue ({
 
     el: '#modalExpenseReport',
     data: {
+        daily_page: true,
+
         co: '',
         date: '',
         driver_id: '',
+
+        year: '',
+        month: '',
+        period: '',
 
         search_driver: '',
         driver_list: [],
@@ -243,9 +249,8 @@ var report_modal = new Vue ({
                 if(this.modal_add_mode) {
                     api("/report/api/add-expense-report/", "POST", work_data).then((data) => {
                         if(data=='Success') {
-                            // daily_expense_page.urlFormat(this.driver_id)
                             $('#modalExpenseReport').modal('hide');
-                            daily_expense_page.reload(this.date, this.co, this.driver_id)
+                            daily_expense_page.getDailyDriverExpense()
                         }
                     })
                 }
@@ -273,13 +278,16 @@ var report_modal = new Vue ({
         },
 
         pageReload() {
-            if(this.driver_id) {
-                daily_expense_page.reload(this.date, this.co, this.driver_id)
+            if(this.daily_page) {
+                if(this.driver_id) {
+                    daily_expense_page.getDailyDriverExpense()
+                }
+                else {
+                    daily_expense_page.getDailyExpense()
+                }
             }
             else {
-                daily_expense_page.reload(this.date, this.co)
-
-                // daily_expense_page.urlFormat()
+                expense_page.getExpenseReport()
             }
         }
     }
