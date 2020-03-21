@@ -21,8 +21,39 @@ var expense_page = new Vue ({
 
         driver_list: [],
         truck_list: [],
+
+        // filter
+        search_driver: '',
+        driver_data: {
+            co: ''
+        },
+        driver_id: '',
+        truck_data: {},
+        truck_id: ''
+        
+    },
+    computed: {
+        filterDriver() {
+            if(this.search_driver === '') return this.driver_list
+            var search = this.search_driver.trim().toLowerCase()
+            return this.driver_list.filter(driver => {
+                var driver_name = driver.employee.first_name + ' ' + driver.employee.last_name
+                return driver_name.toLowerCase().includes(search)
+            })
+        }
     },
 
+
+    computed: {
+        filterDriver() {
+            if(this.search_driver === '') return this.driver_list
+            var search = this.search_driver.trim().toLowerCase()
+            return this.driver_list.filter(driver => {
+                var driver_name = driver.employee.first_name + ' ' + driver.employee.last_name
+                return driver_name.toLowerCase().includes(search)
+            })
+        }
+    },
     methods: {
         reload(year, month, co, period) {
             this.year = year
@@ -84,7 +115,32 @@ var expense_page = new Vue ({
             api("/truck-chassis/api/get-active-truck/", "POST", {co: this.co}).then((data) => {
                 this.truck_list = report_modal.truck_list = data
             })
+        },
+
+
+        selectDriver(driver) {
+            if(driver) {
+                this.driver_id = driver.id
+                this.driver_data = driver.employee
+            }
+            else {
+                this.driver_id = ''
+                this.driver_data = {co: ''}
+            }
+            
+        },
+        selectTruck(truck) {
+            if(truck) {
+                this.truck_id = truck.id
+                this.truck_data = truck
+            }
+            else {
+                this.truck_id = ''
+                this.truck_data = {}
+            }
         }
+
+
 
 
         

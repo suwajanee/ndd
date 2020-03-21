@@ -24,7 +24,7 @@
                             </select>
                         </div>
                         <input name="date_filter" :type="filter_by" class="form-control rounded-right mr-2" v-model="date_filter" style="max-width: 200px;" v-on:change="getBookings()" :disabled="filter_mode">
-                        <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modelFilter"><i class="fas fa-filter"></i></button>
+                        <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button>
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
             {% include 'booking/booking_table_time.html' %}
         </div>
 
-        <div class="modal fade" id="modelFilter" aria-hidden="true">
+        <div class="modal fade" id="modalFilter" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">

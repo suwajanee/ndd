@@ -47,6 +47,8 @@
                         <option>3</option> -->
                     </select>
                 </div>
+                <!-- <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button> -->
+                <button class="btn btn-outline-secondary my-3" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
 
                 <div class="input-group my-3 col-3">
                     <div class="input-group-prepend">
@@ -137,7 +139,6 @@
                     </tr>
                 </thead>
                 <tbody id="tbody" v-if="report_list.length" class="bg-white">
-                    <!-- Hereeeeeeeeeeeee -->
                     <template v-for="(report, index) in report_list">
                         <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
                         <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
@@ -191,10 +192,18 @@
             </table>
 
         </div>
+
     </div>
+
+    {% include 'transport_report/transport_report_filter_modal.html' %}
+    
 </div>
 
+
+
 {% include 'transport_report/transport_report_expense_modal.html' %}
+
+
 
 <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>

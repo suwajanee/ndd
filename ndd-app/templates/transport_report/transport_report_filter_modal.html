@@ -1,0 +1,74 @@
+{% verbatim %}
+    <div class="modal fade" id="modalFilterExpense" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        Filter Report
+                    </h4>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group my-3 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">DRIVER</span>
+                        </div>
+                        <button id="driverDropdown" class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <template v-if="driver_id">
+                                {{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}
+                                <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver_data.co != co}">
+                                    {{ driver_data.co.toUpperCase() }}
+                                </span>
+                            </template>
+                            <template v-else>
+                                --------
+                            </template>
+                        </button>
+
+                        <div class="dropdown-menu w-75">
+                            <div class="dropdown-item">
+                                <input class="form-control" v-model="search_driver" placeholder="Search Driver">
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                <button class="dropdown-item" @click="selectDriver('')"> -------- </button>
+                                <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
+                                    {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">
+                                        {{ driver.employee.co.toUpperCase() }}
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group-append">
+                            <span class="input-group-text">TRUCK NO</span>
+                        </div>
+                        <div>
+                            <button id="truckDropdown" class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ truck_data.number || '--------' }}
+                                <span v-if="truck_id" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck_data.owner != co}">
+                                    {{ truck_data.owner.toUpperCase() }}
+                                </span>
+                            </button>
+                            <div class="dropdown-menu w-25">
+                                <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                    <button class="dropdown-item" @click="selectTruck('')"> -------- </button>
+                                    <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
+                                        {{ truck.number }}
+                                        <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">
+                                            {{ truck.owner.toUpperCase() }}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endverbatim %}
