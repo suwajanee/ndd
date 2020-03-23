@@ -94,7 +94,43 @@ def api_get_daily_driver_expense(request):
     return JsonResponse('Error', safe=False)
 
 
+@csrf_exempt
+def api_filter_expense_report(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf- 8'))
+            
+            pk_list = req['pk']
+            driver_list = req['driver']
+            truck_list = req['truck']
+            work_list = req['work']
+            customer_list = req['customer']
+            remark_list = req['remark']
 
+            expense_report = Expense.objects.filter(pk__in=pk_list)
+
+            filter_dict = {}
+
+            set_if_not_none(filter_dict, 'work_order__driver__employee__pk__in', driver_list)
+            set_if_not_none(filter_dict, 'work_order__truck__pk__in', truck_list)
+
+            set_if_not_none(filter_dict, 'work_order__work_normal__principal__name__in', customer_list)
+            set_if_not_none(filter_dict, 'work_order__work_agent_transport__principal__name__in', customer_list)
+            set_if_not_none(filter_dict, 'work_order__detail__customer_name__in', customer_list)
+
+            set_if_not_none(filter_dict, 'work_order__detail__remark__in', remark_list)
+
+            filtered_report = expense_report.filter(**filter_dict)
+            filtered_report = order_expense_report(filtered_report)
+
+            serializer = ExpenseSerializer(filtered_report, many=True)
+
+            return JsonResponse(serializer.data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+def order_expense_report(report):
+    return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
+                    'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
 @csrf_exempt
 def api_get_expense_report(request):
@@ -142,8 +178,10 @@ def api_get_expense_report(request):
                 expense = expense.filter(work_order__clear_date__gte=from_date)
             
 
-            expense = expense.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
-                    'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
+            # expense = expense.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
+            #         'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
+
+            expense = order_expense_report(expense)
 
             pk_list = expense.values_list('pk', flat=True).distinct()
             remark_list = get_values_list(expense, 'work_order__detail__remark')

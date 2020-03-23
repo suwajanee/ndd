@@ -25,11 +25,16 @@ var expense_page = new Vue ({
         // filter
         search_driver: '',
         driver_data: {
-            co: ''
+            // co: ''
         },
         driver_id: '',
         truck_data: {},
-        truck_id: ''
+        truck_id: '',
+
+        pk_list: [],
+        work_list: [],
+        customer_list: [],
+        remark_list: [],
         
     },
     computed: {
@@ -98,10 +103,12 @@ var expense_page = new Vue ({
             api("/report/api/get-expense-report/", "POST", filter).then((data) => {
                 this.report_list = data.expense
                 this.period_list = data.period
-                console.log(data.pk_list)
-                console.log(data.work_list)
-                console.log(data.remark_list)
-                console.log(data.customer_list)
+
+                this.pk_list = data.pk_list
+                this.work_list = data.work_list
+                this.customer_list = data.customer_list
+                this.remark_list = data.remark_list
+
                 this.loading = false
             })
         },
@@ -125,7 +132,7 @@ var expense_page = new Vue ({
             }
             else {
                 this.driver_id = ''
-                this.driver_data = {co: ''}
+                this.driver_data = {}
             }
             
         },
