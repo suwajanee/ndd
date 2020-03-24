@@ -68,6 +68,7 @@
 
                     </div>
 
+
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">WORK ID</span>
@@ -77,8 +78,44 @@
                             <option v-for="work in work_list">{{ work }}</option>
                         </select>
                     </div>
-
-                    <div class="input-group my-3 container">
+                    {{ customers }}
+                    {{ customer_list }}
+                    <div class="input-group my-3 col-12">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CUSTOMER</span>
+                        </div>
+                        <div class="btn-group col-6 p-0">
+                            <button class="custom-select text-left rounded-right multi-select m-0" data-toggle="dropdown">
+                                <template v-if="customers.length==customer_list.length">
+                                    All customers selected
+                                </template>
+                                <template v-else-if="customers.length>3">
+                                    {{ customers.length }} customers selected
+                                </template>
+                                <template v-else-if="customers.length">
+                                    {{ customers.toString() }}
+                                </template>
+                                <template v-else>
+                                    Nothing selected
+                                </template>
+                            </button>
+                            <ul class="multiselect-container dropdown-menu col-12">
+                                <li>
+                                    <label class="checkbox">
+                                        <!-- Hereeeeeeeeee -->
+                                        <input type="checkbox" @change="customers = customer_list"> Select all
+                                    </label>
+                                </li>
+                                <li v-for="customer in customer_list">
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="customers" :value="customer"> {{ customer }}
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">CUSTOMER</span>
                         </div>
@@ -86,7 +123,7 @@
                             <option> -------- </option>
                             <option v-for="customer in customer_list">{{ customer }}</option>
                         </select>
-                    </div>
+                    </div> -->
 
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">

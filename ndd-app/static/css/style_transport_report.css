@@ -165,7 +165,7 @@ button.multi-select {
     /* height: 40px; */
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    max-width: 160px;
+    /* max-width: 160px; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -35,20 +35,10 @@ var expense_page = new Vue ({
         work_list: [],
         customer_list: [],
         remark_list: [],
+
+        customers: [],
         
     },
-    computed: {
-        filterDriver() {
-            if(this.search_driver === '') return this.driver_list
-            var search = this.search_driver.trim().toLowerCase()
-            return this.driver_list.filter(driver => {
-                var driver_name = driver.employee.first_name + ' ' + driver.employee.last_name
-                return driver_name.toLowerCase().includes(search)
-            })
-        }
-    },
-
-
     computed: {
         filterDriver() {
             if(this.search_driver === '') return this.driver_list
@@ -106,10 +96,17 @@ var expense_page = new Vue ({
 
                 this.pk_list = data.pk_list
                 this.work_list = data.work_list
-                this.customer_list = data.customer_list
+                this.customer_list = this.customers = data.customer_list
                 this.remark_list = data.remark_list
 
                 this.loading = false
+            })
+        },
+
+        filterExpenseReport() {
+            this.loading = true
+            api("report/api/filter-expense-report/", "POST", {}).then((data) => {
+                this.report_list = data
             })
         },
 
