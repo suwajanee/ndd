@@ -36,7 +36,11 @@ var expense_page = new Vue ({
         customer_list: [],
         remark_list: [],
 
-        customers: [],
+        all_customer: true,
+        all_remark: true,
+
+        customer_selected: [],
+        remark_selected: [],
         
     },
     computed: {
@@ -96,8 +100,8 @@ var expense_page = new Vue ({
 
                 this.pk_list = data.pk_list
                 this.work_list = data.work_list
-                this.customer_list = this.customers = data.customer_list
-                this.remark_list = data.remark_list
+                this.customer_list = this.customer_selected = data.customer_list
+                this.remark_list = this.remark_selected = data.remark_list
 
                 this.loading = false
             })
@@ -141,6 +145,40 @@ var expense_page = new Vue ({
             else {
                 this.truck_id = ''
                 this.truck_data = {}
+            }
+        },
+
+        selectAllCustomer() {
+            if(this.all_customer) {
+                this.customer_selected = this.customer_list
+            }
+            else {
+                this.customer_selected = []
+            }
+        },
+        selectCustomer() {
+            if(this.customer_selected.length == this.customer_list.length) {
+                this.all_customer = true
+            }
+            else {
+                this.all_customer = false
+            }
+        },
+
+        selectAllRemark() {
+            if(this.all_remark) {
+                this.remark_selected = this.remark_list
+            }
+            else {
+                this.remark_selected = []
+            }
+        },
+        selectRemark() {
+            if(this.remark_selected.length == this.remark_list.length) {
+                this.all_remark = true
+            }
+            else {
+                this.all_remark = false
             }
         }
 
