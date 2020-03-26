@@ -148,43 +148,22 @@ var expense_page = new Vue ({
             }
         },
 
-        selectAllCustomer() {
-            if(this.all_customer) {
-                this.customer_selected = this.customer_list
+        multiSelectAll(input) {
+            if(this['all_' + input]) {
+                this[input + '_selected'] = this[input + '_list']
             }
             else {
-                this.customer_selected = []
+                this[input + '_selected'] = []
             }
         },
-        selectCustomer() {
-            if(this.customer_selected.length == this.customer_list.length) {
-                this.all_customer = true
+        multiSelectCheck(input) {
+            if(this[input + '_selected'].length == this[input + '_list'].length) {
+                this['all_' + input] = true
             }
             else {
-                this.all_customer = false
+                this['all_' + input] = false
             }
         },
-
-        selectAllRemark() {
-            if(this.all_remark) {
-                this.remark_selected = this.remark_list
-            }
-            else {
-                this.remark_selected = []
-            }
-        },
-        selectRemark() {
-            if(this.remark_selected.length == this.remark_list.length) {
-                this.all_remark = true
-            }
-            else {
-                this.all_remark = false
-            }
-        }
-
-
-
-
         
     }
 })

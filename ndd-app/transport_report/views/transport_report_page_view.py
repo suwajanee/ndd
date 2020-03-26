@@ -54,7 +54,7 @@ def expense_page(request, year, month, co):
     check_return = check_url_format(year, month, co)
     
     if check_return: 
-        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
+        return render(request, 'transport_report/transport_report_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
     else:
         return HttpResponseRedirect('/dashboard')
 
@@ -64,7 +64,7 @@ def period_expense_page(request, year, month, co, period):
     check_return = check_url_format(year, month, co)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_monthly_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': period})
+        return render(request, 'transport_report/transport_report_expense_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year, 'month': month, 'co': co, 'period': period})
     else:
         return HttpResponseRedirect('/dashboard')
 

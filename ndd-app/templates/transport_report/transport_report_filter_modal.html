@@ -11,6 +11,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
+
+                    <div class="input-group my-3 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">WORK ID</span>
+                        </div>
+                        <input class="form-control col-6" placeholder="--- All works ---">
+                        <!-- <select class="custom-select col-6">
+                            <option> -------- </option>
+                            <option v-for="work in work_list">{{ work }}</option>
+                        </select> -->
+                    </div>
+
                     <div class="input-group my-3 container">
                         <div class="input-group-prepend">
                             <span class="input-group-text">DRIVER</span>
@@ -23,7 +35,7 @@
                                 </span>
                             </template>
                             <template v-else>
-                                --------
+                                --- All drivers ---
                             </template>
                         </button>
 
@@ -48,7 +60,7 @@
                         </div>
                         <div>
                             <button id="truckDropdown" class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ truck_data.number || '--------' }}
+                                {{ truck_data.number || '--- All trucks ---' }}
                                 <span v-if="truck_id" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck_data.owner != co}">
                                     {{ truck_data.owner.toUpperCase() }}
                                 </span>
@@ -69,15 +81,7 @@
                     </div>
 
 
-                    <div class="input-group my-3 container">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">WORK ID</span>
-                        </div>
-                        <select class="custom-select col-6">
-                            <option> -------- </option>
-                            <option v-for="work in work_list">{{ work }}</option>
-                        </select>
-                    </div>
+                    
 
                     <div class="input-group my-3 col-12">
                         <div class="input-group-prepend">
@@ -85,7 +89,7 @@
                         </div>
                         <div class="btn-group col-6 p-0">
                             <button class="custom-select text-left rounded-right multi-select m-0" data-toggle="dropdown">
-                                <template v-if="customer_selected.length==customer_list.length">
+                                <template v-if="all_customer">
                                     All selected ( {{ customer_selected.length }} )
                                 </template>
                                 <template v-else-if="customer_selected.length>3">
@@ -101,14 +105,13 @@
                             <ul class="multiselect-container dropdown-menu col-12 p-2">
                                 <li>
                                     <label class="checkbox mb-0">
-                                        <!-- Hereeeeeeeeee -->
-                                        <input type="checkbox" v-model="all_customer" @change="selectAllCustomer"> Select all ( {{ customer_list.length }} )
+                                        <input type="checkbox" v-model="all_customer" @change="multiSelectAll('customer')"> Select all ( {{ customer_list.length }} )
                                     </label>
                                 </li>
                                 <hr class="my-2">
                                 <li v-for="customer in customer_list">
                                     <label class="checkbox">
-                                        <input type="checkbox" v-model="customer_selected" :value="customer" @change="selectCustomer"> {{ customer }}
+                                        <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck('customer')"> {{ customer }}
                                     </label>
                                 </li>
                             </ul>
@@ -121,7 +124,7 @@
                         </div>
                         <div class="btn-group col-6 p-0">
                             <button class="custom-select text-left rounded-right multi-select m-0" data-toggle="dropdown">
-                                <template v-if="remark_selected.length==remark_list.length">
+                                <template v-if="all_remark">
                                     All selected ( {{ remark_selected.length }} )
                                 </template>
                                 <template v-else-if="remark_selected.length>3">
@@ -137,38 +140,18 @@
                             <ul class="multiselect-container dropdown-menu col-12 p-2">
                                 <li>
                                     <label class="checkbox mb-0">
-                                        <input type="checkbox" v-model="all_remark" @change="selectAllRemark"> Select all ( {{ remark_list.length }} )
+                                        <input type="checkbox" v-model="all_remark" @change="multiSelectAll('remark')"> Select all ( {{ remark_list.length }} )
                                     </label>
                                 </li>
                                 <hr class="my-2">
                                 <li v-for="remark in remark_list">
                                     <label class="checkbox">
-                                        <input type="checkbox" v-model="remark_selected" :value="remark" @change="selectRemark"> {{ remark }}
+                                        <input type="checkbox" v-model="remark_selected" :value="remark" @change="multiSelectCheck('remark')"> {{ remark }}
                                     </label>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    
-                    <!-- <div class="input-group my-3 container">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">CUSTOMER</span>
-                        </div>
-                        <select class="custom-select">
-                            <option> -------- </option>
-                            <option v-for="customer in customer_list">{{ customer }}</option>
-                        </select>
-                    </div> -->
-
-                    <!-- <div class="input-group my-3 container">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">REMARK</span>
-                        </div>
-                        <select class="custom-select">
-                            <option> -------- </option>
-                            <option v-for="remark in remark_list">{{ remark }}</option>
-                        </select>
-                    </div> -->
 
                 </div>
 

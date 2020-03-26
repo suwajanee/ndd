@@ -145,7 +145,7 @@
                         <tr>
                         {% verbatim %}
                             <td>{{ report.work_order.work_date|formatDate }}</td>
-                            <td>
+                            <td class="text-left">
                                 {{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}
                             </td>
                             <td>{{ report.work_order.truck.number }}</td>

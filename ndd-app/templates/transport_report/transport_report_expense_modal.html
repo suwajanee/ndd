@@ -50,7 +50,8 @@
                             <span class="input-group-text">TRUCK NO</span>
                         </div>
                         <div>
-                            <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <!-- <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                            <button id="truckDropdown"  class="custom-select text-left multi-select" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ work_truck_data.number || '--------' }}
                                 <span v-if="work_truck_data.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': work_truck_data.owner != co}">{{ work_truck_data.owner.toUpperCase() }}</span>
                             </button>
