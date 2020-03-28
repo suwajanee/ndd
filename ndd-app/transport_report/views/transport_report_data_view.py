@@ -100,27 +100,45 @@ def api_filter_expense_report(request):
         if request.method == "POST":
             req = json.loads(request.body.decode('utf- 8'))
             
-            pk_list = req['pk']
-            driver_list = req['driver']
-            truck_list = req['truck']
-            work_list = req['work']
-            customer_list = req['customer']
-            remark_list = req['remark']
+            pk_list = req['pk_list']
+            work = req['work']
+            driver = req['driver']
+            truck = req['truck']
+            customer_list = req['customer_list']
+            remark_list = req['remark_list']
 
-            expense_report = Expense.objects.filter(pk__in=pk_list)
+            if work:
+                # filter_dict = {}
 
-            filter_dict = {}
+                condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
 
-            set_if_not_none(filter_dict, 'work_order__driver__employee__pk__in', driver_list)
-            set_if_not_none(filter_dict, 'work_order__truck__pk__in', truck_list)
+                # set_if_not_none(filter_dict, 'work_order__work_normal__work_id', work)
+                # set_if_not_none(filter_dict, 'work_order__work_agent_transport__work_id', work)
+                filtered_report = Expense.objects.filter(condition)
+            else:
 
-            set_if_not_none(filter_dict, 'work_order__work_normal__principal__name__in', customer_list)
-            set_if_not_none(filter_dict, 'work_order__work_agent_transport__principal__name__in', customer_list)
-            set_if_not_none(filter_dict, 'work_order__detail__customer_name__in', customer_list)
+                expense_report = Expense.objects.filter(pk__in=pk_list)
 
-            set_if_not_none(filter_dict, 'work_order__detail__remark__in', remark_list)
+                if customer_list:
+                    condition = Q(work_order__work_normal__principal__name__in=customer_list) | Q(work_order__work_agent_transport__principal__name__in=customer_list) | \
+                                Q(work_order__detail__customer_name__in=customer_list)
+                    
+                    expense_report = expense_report.filter(condition)
 
-            filtered_report = expense_report.filter(**filter_dict)
+                filter_dict = {}
+                
+
+                set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
+                set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
+
+                # set_if_not_none(filter_dict, 'work_order__work_normal__principal__name__in', customer_list)
+                # set_if_not_none(filter_dict, 'work_order__work_agent_transport__principal__name__in', customer_list)
+                # set_if_not_none(filter_dict, 'work_order__detail__customer_name__in', customer_list)
+
+                set_if_not_none(filter_dict, 'work_order__detail__remark__in', remark_list)
+
+                filtered_report = expense_report.filter(**filter_dict)
+
             filtered_report = order_expense_report(filtered_report)
 
             serializer = ExpenseSerializer(filtered_report, many=True)

@@ -16,7 +16,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">WORK ID</span>
                         </div>
-                        <input class="form-control" placeholder="--- All works ---">
+                        <input 
+                            class="form-control col-6" placeholder="--- All works ---" v-model="work_id"
+                            :disabled="driver_id || truck_id || ! all_customer || ! all_remark"
+                        >
                         <!-- <select class="custom-select col-6">
                             <option> -------- </option>
                             <option v-for="work in work_list">{{ work }}</option>
@@ -27,8 +30,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">DRIVER</span>
                         </div>
-                        <button id="driverDropdown" class="custom-select text-left rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <template v-if="driver_id">
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
+                            <template v-if="driver_id && ! work_id">
                                 {{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}
                                 <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver_data.co != co}">
                                     {{ driver_data.co.toUpperCase() }}
@@ -45,7 +48,7 @@
                             </div>
                             <div class="dropdown-divider"></div>
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                                <button class="dropdown-item" @click="selectDriver('')"> -------- </button>
+                                <button class="dropdown-item" @click="selectDriver('')"> --- All --- </button>
                                 <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
                                     {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">
@@ -60,15 +63,20 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">TRUCK NO</span>
                         </div>
-                        <button id="truckDropdown" class="custom-select text-left rounded-right col-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ truck_data.number || '--- All trucks ---' }}
-                            <span v-if="truck_id" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck_data.owner != co}">
-                                {{ truck_data.owner.toUpperCase() }}
-                            </span>
+                        <button class="custom-select text-left rounded-right col-6" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
+                            <template v-if="truck_id && ! work_id">
+                                {{ truck_data.number || '--- All trucks ---' }}
+                                <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck_data.owner != co}">
+                                    {{ truck_data.owner.toUpperCase() }}
+                                </span>
+                            </template>
+                            <template v-else>
+                                --- All trucks ---
+                            </template>   
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right col-4">
+                        <div class="dropdown-menu dropdown-menu-right col-5">
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
-                                <button class="dropdown-item" @click="selectTruck('')"> -------- </button>
+                                <button class="dropdown-item" @click="selectTruck('')"> --- All --- </button>
                                 <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
                                     {{ truck.number }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">
@@ -83,9 +91,9 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">CUSTOMER</span>
                         </div>
-                        <button class="custom-select text-left rounded-right" data-toggle="dropdown">
-                            <template v-if="all_customer">
-                                All selected ( {{ customer_selected.length }} )
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id, 'input-warning': modal_warning && !customer_selected.length}" data-toggle="dropdown">
+                            <template v-if="all_customer || work_id">
+                                All selected ( {{ customer_list.length }} )
                             </template>
                             <template v-else-if="customer_selected.length>3">
                                 {{ customer_selected.length }} customers selected
@@ -116,9 +124,9 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">REMARK</span>
                         </div>
-                        <button class="custom-select text-left rounded-right" data-toggle="dropdown">
-                            <template v-if="all_remark">
-                                All selected ( {{ remark_selected.length }} )
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id, 'input-warning': modal_warning && !remark_selected.length}" data-toggle="dropdown">
+                            <template v-if="all_remark || work_id">
+                                All selected ( {{ remark_list.length }} )
                             </template>
                             <template v-else-if="remark_selected.length>3">
                                 {{ remark_selected.length }} remarks selected
@@ -148,8 +156,8 @@
                 </div>
 
                 <div class="modal-footer px-5">
-                    <button class="btn btn-outline-danger float-left mr-auto">Clear</button>
-                    <button class="btn btn-primary">OK</button>
+                    <button class="btn btn-outline-danger float-left mr-auto" @click="clearFilter">Clear</button>
+                    <button class="btn btn-primary" @click="filterExpenseReport">OK</button>
                 </div>
             </div>
         </div>

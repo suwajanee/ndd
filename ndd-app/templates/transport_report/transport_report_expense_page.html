@@ -28,19 +28,19 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">YEAR</span>
                     </div>
-                    <select class="custom-select"  v-model="year" @change="changeUrl(0)">
+                    <select class="custom-select" v-model="year" @change="changeUrl(0)" :disabled="filter_mode">
                         <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>></option>
                     </select>
                     <div class="input-group-append">
                         <span class="input-group-text">MONTH</span>
                     </div>
-                    <select class="custom-select" v-model="month" @change="changeUrl(0)">
+                    <select class="custom-select" v-model="month" @change="changeUrl(0)" :disabled="filter_mode">
                         <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
                     </select>
                     <div class="input-group-append">
                         <span class="input-group-text">#</span>
                     </div>
-                    <select class="custom-select col-2" v-model="period" @change="changeUrl(period)">
+                    <select class="custom-select col-2" v-model="period" @change="changeUrl(period)" :disabled="filter_mode">
                         <option value='0'>All</option>
                         <option v-for="(p, index) in period_list" :value="index+1">{{ index + 1 }}</option>
                         <!-- <option>2</option>
@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 <!-- <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button> -->
-                <button class="btn btn-outline-secondary my-3" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
+                <button class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
 
                 <div class="input-group my-3 col-3">
                     <div class="input-group-prepend">

@@ -23,6 +23,9 @@ var expense_page = new Vue ({
         truck_list: [],
 
         // filter
+        filter_mode: false,
+        modal_warning: false,
+
         search_driver: '',
         driver_data: {
             // co: ''
@@ -39,6 +42,7 @@ var expense_page = new Vue ({
         all_customer: true,
         all_remark: true,
 
+        work_id: '',
         customer_selected: [],
         remark_selected: [],
         
@@ -106,12 +110,67 @@ var expense_page = new Vue ({
                 this.loading = false
             })
         },
+        checkFilterMode() {
+            if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {
+                this.filter_mode = true
+            }
+            else {
+                this.filter_mode = false
+            }
+        },
 
         filterExpenseReport() {
-            this.loading = true
-            api("report/api/filter-expense-report/", "POST", {}).then((data) => {
-                this.report_list = data
-            })
+            this.modal_warning = false
+            if(! this.customer_selected.length || ! this.remark_selected.length) {
+                this.modal_warning = true
+            }
+            else {
+                this.loading = true
+
+                this.checkFilterMode()
+                var data = {
+                    pk_list: this.pk_list,
+                    work: this.work_id.trim(),
+                    driver: this.driver_id,
+                    truck: this.truck_id,
+                }
+
+                if(this.all_customer) {
+                    data.customer_list = []
+                }
+                else {
+                    data.customer_list = this.customer_selected
+                }
+
+                if(this.all_remark) {
+                    data.remark_list = []
+                }
+                else {
+                    data.remark_list = this.remark_selected
+                }
+                
+                api("/report/api/filter-expense-report/", "POST", data).then((data) => {
+                    this.report_list = data
+                    this.loading = false
+                })
+            }
+            
+        },
+        clearFilter() {
+            this.work_id = ''
+
+            this.driver_id = ''
+            this.driver_data = {}
+            this.truck_id = ''
+            this.truck_data = {}
+
+            this.all_customer = true
+            this.customer_selected = this.customer_list
+            this.all_remark = true
+            this.remark_selected = this.remark_list
+
+            this.filterExpenseReport()
+
         },
 
         getActiveDriver() {

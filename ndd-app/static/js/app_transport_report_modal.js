@@ -287,7 +287,7 @@ var report_modal = new Vue ({
                 }
             }
             else {
-                expense_page.getExpenseReport()
+                expense_page.filterExpenseReport()
             }
         }
     }
