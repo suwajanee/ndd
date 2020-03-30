@@ -35,7 +35,7 @@ var expense_page = new Vue ({
         truck_id: '',
 
         pk_list: [],
-        work_list: [],
+        // work_list: [],
         customer_list: [],
         remark_list: [],
 
@@ -103,7 +103,7 @@ var expense_page = new Vue ({
                 this.period_list = data.period
 
                 this.pk_list = data.pk_list
-                this.work_list = data.work_list
+                // this.work_list = data.work_list
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
 

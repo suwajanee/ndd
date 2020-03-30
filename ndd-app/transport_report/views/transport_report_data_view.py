@@ -100,6 +100,7 @@ def api_filter_expense_report(request):
         if request.method == "POST":
             req = json.loads(request.body.decode('utf- 8'))
             
+            print(req['pk_list'])
             pk_list = req['pk_list']
             work = req['work']
             driver = req['driver']
@@ -108,12 +109,7 @@ def api_filter_expense_report(request):
             remark_list = req['remark_list']
 
             if work:
-                # filter_dict = {}
-
                 condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
-
-                # set_if_not_none(filter_dict, 'work_order__work_normal__work_id', work)
-                # set_if_not_none(filter_dict, 'work_order__work_agent_transport__work_id', work)
                 filtered_report = Expense.objects.filter(condition)
             else:
 
@@ -131,10 +127,6 @@ def api_filter_expense_report(request):
                 set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
                 set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
 
-                # set_if_not_none(filter_dict, 'work_order__work_normal__principal__name__in', customer_list)
-                # set_if_not_none(filter_dict, 'work_order__work_agent_transport__principal__name__in', customer_list)
-                # set_if_not_none(filter_dict, 'work_order__detail__customer_name__in', customer_list)
-
                 set_if_not_none(filter_dict, 'work_order__detail__remark__in', remark_list)
 
                 filtered_report = expense_report.filter(**filter_dict)
@@ -150,6 +142,35 @@ def order_expense_report(report):
     return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
                     'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
+def get_start_and_end_date(co, year, month, period):
+    if co == 'ndd':
+        period_num = 3
+    else:
+        period_num = 2
+
+    summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
+    selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
+
+    if period == 0:
+        from_date = get_last_month_date(summary_date_list, month, year)
+
+        if selected_month:
+            to_date = selected_month.first().date
+
+            if len(selected_month) < period_num:
+                to_date = check_next_date(summary_date_list, to_date)
+        else:
+            to_date = check_next_date(summary_date_list, from_date)
+    else:
+        to_date = selected_month.order_by('date')[period-1].date
+
+        if period == 1:
+            from_date = get_last_month_date(summary_date_list, month, year)
+        else:
+            from_date = summary_date_list.filter(date__lt=to_date).first().date
+    
+    return selected_month, from_date, to_date
+
 @csrf_exempt
 def api_get_expense_report(request):
     if request.user.is_authenticated:
@@ -160,33 +181,7 @@ def api_get_expense_report(request):
             period = int(req['period'])
             co = req['co']
 
-            if co == 'ndd':
-                period_num = 3
-            else:
-                period_num = 2
-
-            summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
-
-            selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
-            
-            if period == 0:
-                from_date = get_last_month_date(summary_date_list, month, year)
-
-                if selected_month:
-                    to_date = selected_month.first().date
-
-                    if len(selected_month) < period_num:
-                        to_date = check_next_date(summary_date_list, to_date)    
-                else:
-                    to_date = check_next_date(summary_date_list, from_date)    
-            else:
-                to_date = selected_month.order_by('date')[period-1].date
-
-                if period == 1:
-                    from_date = get_last_month_date(summary_date_list, month, year)
-                else:
-                    from_date = summary_date_list.filter(date__lt=to_date).first().date
-
+            selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
 
             expense = Expense.objects.filter(work_order__truck__owner=co)
 
@@ -194,17 +189,11 @@ def api_get_expense_report(request):
                 expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
             else:
                 expense = expense.filter(work_order__clear_date__gte=from_date)
-            
-
-            # expense = expense.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
-            #         'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
             expense = order_expense_report(expense)
 
             pk_list = expense.values_list('pk', flat=True).distinct()
             remark_list = get_values_list(expense, 'work_order__detail__remark')
-            work_normal_list = get_values_list(expense, 'work_order__work_normal__work_id')
-            work_agent_list = get_values_list(expense, 'work_order__work_agent_transport__work_id')
 
             detail_customer_list = get_values_list(expense, 'work_order__detail__customer_name')
 
@@ -212,7 +201,6 @@ def api_get_expense_report(request):
             normal_customer_list = get_values_list(customer, 'work_order__work_normal__principal__name')
             agent_customer_list = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
 
-            work_list = sorted(work_normal_list + work_agent_list)
             customer_list = sorted(detail_customer_list + normal_customer_list + agent_customer_list)
 
             expense_serializer = ExpenseSerializer(expense, many=True)
@@ -223,7 +211,6 @@ def api_get_expense_report(request):
                 'period': period_serializer.data,
                 'expense': expense_serializer.data,
                 'pk_list': list(pk_list),
-                'work_list': work_list,
                 'remark_list': remark_list,
                 'customer_list': customer_list
             }

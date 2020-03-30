@@ -143,41 +143,41 @@
                         <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
                         <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
                         <tr>
-                        {% verbatim %}
-                            <td>{{ report.work_order.work_date|formatDate }}</td>
-                            <td class="text-left">
-                                {{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}
-                            </td>
-                            <td>{{ report.work_order.truck.number }}</td>
-                            <td>
-                                {{ report.work_order.work.work_id }}
-                                <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
-                            </td>
-                            <td class="right-thick">
-                                <template v-if="report.work_order.detail.customer_name">
-                                    {{ report.work_order.detail.customer_name }}
+                            {% verbatim %}
+                                <td>{{ report.work_order.work_date|formatDate }}</td>
+                                <td class="text-left">
+                                    {{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}
+                                </td>
+                                <td>{{ report.work_order.truck.number }}</td>
+                                <td>
+                                    {{ report.work_order.work.work_id }}
+                                    <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
+                                </td>
+                                <td class="right-thick">
+                                    <template v-if="report.work_order.detail.customer_name">
+                                        {{ report.work_order.detail.customer_name }}
+                                    </template>
+                                    <template v-else>
+                                        {{ report.work_order.work.principal.name }}
+                                    </template>
+                                </td>
+
+                                <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
+                                    {{ report.work_order.detail.remark }}
+                                </td>
+
+                                <td v-if="col_price" class="right-thick alert-info">
+                                    {{ eval(report.work_order.price.work)|currencyCommas }}
+                                </td>
+
+                                <template v-if="col_allowance">
+                                    <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                    <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currnecyCommas }}</td>
                                 </template>
-                                <template v-else>
-                                    {{ report.work_order.work.principal.name }}
-                                </template>
-                            </td>
+                            {% endverbatim %}
 
-                            <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
-                                {{ report.work_order.detail.remark }}
-                            </td>
-
-                            <td v-if="col_price" class="right-thick alert-info">
-                                {{ eval(report.work_order.price.work)|currencyCommas }}
-                            </td>
-
-                            <template v-if="col_allowance">
-                                <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currnecyCommas }}</td>
-                            </template>
-                        {% endverbatim %}
-
-                        {% include 'transport_report/transport_report_expense_table.html' %}
-                    </tr>
+                            {% include 'transport_report/transport_report_expense_table.html' %}
+                        </tr>
                     </template>
                     
                     
