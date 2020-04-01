@@ -100,7 +100,6 @@ def api_filter_expense_report(request):
         if request.method == "POST":
             req = json.loads(request.body.decode('utf- 8'))
             
-            print(req['pk_list'])
             pk_list = req['pk_list']
             work = req['work']
             driver = req['driver']
@@ -123,7 +122,6 @@ def api_filter_expense_report(request):
 
                 filter_dict = {}
                 
-
                 set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
                 set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
 
@@ -132,44 +130,17 @@ def api_filter_expense_report(request):
                 filtered_report = expense_report.filter(**filter_dict)
 
             filtered_report = order_expense_report(filtered_report)
-
             serializer = ExpenseSerializer(filtered_report, many=True)
 
-            return JsonResponse(serializer.data, safe=False)
+            total_list = get_total_list(filtered_report)
+
+            data = {
+                'expense': serializer.data,
+                'total': total_list
+            }
+
+            return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
-
-def order_expense_report(report):
-    return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
-                    'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
-
-def get_start_and_end_date(co, year, month, period):
-    if co == 'ndd':
-        period_num = 3
-    else:
-        period_num = 2
-
-    summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
-    selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
-
-    if period == 0:
-        from_date = get_last_month_date(summary_date_list, month, year)
-
-        if selected_month:
-            to_date = selected_month.first().date
-
-            if len(selected_month) < period_num:
-                to_date = check_next_date(summary_date_list, to_date)
-        else:
-            to_date = check_next_date(summary_date_list, from_date)
-    else:
-        to_date = selected_month.order_by('date')[period-1].date
-
-        if period == 1:
-            from_date = get_last_month_date(summary_date_list, month, year)
-        else:
-            from_date = summary_date_list.filter(date__lt=to_date).first().date
-    
-    return selected_month, from_date, to_date
 
 @csrf_exempt
 def api_get_expense_report(request):
@@ -204,19 +175,86 @@ def api_get_expense_report(request):
             customer_list = sorted(detail_customer_list + normal_customer_list + agent_customer_list)
 
             expense_serializer = ExpenseSerializer(expense, many=True)
-
             period_serializer = ExpenseSummaryDateSerializer(selected_month, many=True)
+
+            total_list = get_total_list(expense)            
 
             data = {
                 'period': period_serializer.data,
                 'expense': expense_serializer.data,
                 'pk_list': list(pk_list),
                 'remark_list': remark_list,
-                'customer_list': customer_list
+                'customer_list': customer_list,
+                'total': total_list
             }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+# Methods
+def order_expense_report(report):
+    return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
+                    'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
+
+def get_start_and_end_date(co, year, month, period):
+    if co == 'ndd':
+        period_num = 3
+    else:
+        period_num = 2
+
+    summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
+    selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
+
+    if period == 0:
+        from_date = get_last_month_date(summary_date_list, month, year)
+
+        if selected_month:
+            to_date = selected_month.first().date
+
+            if len(selected_month) < period_num:
+                to_date = check_next_date(summary_date_list, to_date)
+        else:
+            to_date = check_next_date(summary_date_list, from_date)
+    else:
+        to_date = selected_month.order_by('date')[period-1].date
+
+        if period == 1:
+            from_date = get_last_month_date(summary_date_list, month, year)
+        else:
+            from_date = summary_date_list.filter(date__lt=to_date).first().date
+    
+    return selected_month, from_date, to_date
+
+def get_total_list(report_list):
+    price_key = ['work_order__price__work', 'work_order__price__allowance', 'work_order__price__overnight']
+    co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
+    cus_expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
+
+    total_price_list = sum_expense_list(report_list, price_key)
+    
+    co_expense_list = sum_expense_list(report_list, co_expense_key)
+    co_total = sum(co_expense_list)
+    co_expense_list.append(co_total)
+
+    cus_expense_list = sum_expense_list(report_list, cus_expense_key)
+    cus_total = sum(cus_expense_list)
+    cus_expense_list.append(cus_total)
+
+    total_expense_list = co_expense_list + cus_expense_list
+    total_expense_list.append(co_total + cus_total)
+
+    return [total_price_list, total_expense_list]
+
+def sum_expense_list(report_list, key_list):
+    total_list = []
+    for key in key_list:
+        price_list = report_list.values_list(key, flat=True)
+        price_list = list(filter(None, price_list))
+        sum_of_price = eval("+".join(price_list) + '+ 0')
+        total_list.append(sum_of_price)
+
+    return total_list
+
 
 def get_values_list(expense_list, col):
     query_set = expense_list.order_by(col).values_list(col, flat=True).distinct()

@@ -178,7 +178,28 @@
 
                             {% include 'transport_report/transport_report_expense_table.html' %}
                         </tr>
+                        
                     </template>
+                    {% verbatim %}
+                        <tr class="bg-dark">
+                            <td colspan=23></td>
+                        </tr>
+                        <tr class="wed-color font-weight-bold">
+                            <td colspan=5 class="right-thick"></td>
+                            <td v-if="col_remark" class="right-thick"></td>
+                            <td v-if="col_price" class="right-thick alert-info">
+                                {{ total_price_list[0]|currencyCommas }}
+                            </td>
+                            <template v-if="col_allowance">
+                                <td class="alert-warning">{{ total_price_list[1]|currencyCommas }}</td>
+                                <td class="right-thick alert-warning">{{ total_price_list[2]|currencyCommas }}</td>
+                            </template>
+                            <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index)}">
+                                {{ total|currencyCommas }}
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endverbatim %}
                     
                     
                 </tbody>

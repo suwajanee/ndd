@@ -18,6 +18,8 @@ var expense_page = new Vue ({
 
         report_list: [],
         period_list: [],
+        total_price_list: [],
+        total_expense_list: [],
 
         driver_list: [],
         truck_list: [],
@@ -102,6 +104,9 @@ var expense_page = new Vue ({
                 this.report_list = data.expense
                 this.period_list = data.period
 
+                this.total_price_list = data.total[0]
+                this.total_expense_list = data.total[1]
+
                 this.pk_list = data.pk_list
                 // this.work_list = data.work_list
                 this.customer_list = this.customer_selected = data.customer_list
@@ -150,7 +155,9 @@ var expense_page = new Vue ({
                 }
                 
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
-                    this.report_list = data
+                    this.report_list = data.expense
+                    this.total_price_list = data.total[0]
+                    this.total_expense_list = data.total[1]
                     this.loading = false
                 })
             }
