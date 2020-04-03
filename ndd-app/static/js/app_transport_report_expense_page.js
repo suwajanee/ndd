@@ -126,7 +126,7 @@ var expense_page = new Vue ({
 
         filterExpenseReport() {
             this.modal_warning = false
-            if(! this.customer_selected.length || ! this.remark_selected.length) {
+            if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
                 this.modal_warning = true
             }
             else {
@@ -141,27 +141,42 @@ var expense_page = new Vue ({
                 }
 
                 if(this.all_customer) {
-                    data.customer_list = []
+                    data.customers = []
                 }
                 else {
-                    data.customer_list = this.customer_selected
+                    data.customers = this.customer_selected
                 }
 
                 if(this.all_remark) {
-                    data.remark_list = []
+                    data.remarks = []
                 }
                 else {
-                    data.remark_list = this.remark_selected
+                    data.remarks = this.remark_selected
                 }
                 
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
                     this.report_list = data.expense
                     this.total_price_list = data.total[0]
                     this.total_expense_list = data.total[1]
+
+                    if(this.all_customer) {
+                        this.customer_list = this.customer_selected = data.customer_list
+                    }
+                    else {
+                        this.customer_list = data.customer_list
+                        this.customer_selected = this.customer_list.filter(customer => this.customer_selected.includes(customer))
+                    }
+
+                    if(this.all_remark) {
+                        this.remark_list = this.remark_selected = data.remark_list
+                    }
+                    else {
+                        this.remark_list = data.remark_list
+                        this.remark_selected = this.remark_list.filter(remark => this.remark_selected.includes(remark))
+                    }
                     this.loading = false
                 })
-            }
-            
+            }     
         },
         clearFilter() {
             this.work_id = ''

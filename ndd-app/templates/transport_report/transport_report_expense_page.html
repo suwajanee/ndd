@@ -13,11 +13,13 @@
         <ol class="breadcrumb m-0 bg-white">
             <li class="breadcrumb-item">Expense</li>
             <li class="breadcrumb-item">{{ year }}</li>
-            <li class="breadcrumb-item active" aria-current="page">
-                {% verbatim %}
+            {% verbatim %}
+                <li class="breadcrumb-item" :class="{'active': period == 0}">
                     {{ month_list[month-1] }}
-                {% endverbatim %}
-            </li>
+                </li>
+                <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
+                <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
+            {% endverbatim %}
         </ol>
     </nav>
 
@@ -172,7 +174,7 @@
 
                                 <template v-if="col_allowance">
                                     <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                    <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currnecyCommas }}</td>
+                                    <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
                                 </template>
                             {% endverbatim %}
 

@@ -104,28 +104,32 @@ def api_filter_expense_report(request):
             work = req['work']
             driver = req['driver']
             truck = req['truck']
-            customer_list = req['customer_list']
-            remark_list = req['remark_list']
+            customers = req['customers']
+            remarks = req['remarks']
+
+            expense_report = Expense.objects.filter(pk__in=pk_list)
+            customer_list, remark_list = get_filter_choices(expense_report)
 
             if work:
                 condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
                 filtered_report = Expense.objects.filter(condition)
             else:
-
-                expense_report = Expense.objects.filter(pk__in=pk_list)
-
-                if customer_list:
-                    condition = Q(work_order__work_normal__principal__name__in=customer_list) | Q(work_order__work_agent_transport__principal__name__in=customer_list) | \
-                                Q(work_order__detail__customer_name__in=customer_list)
+                if customers:
+                    condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
+                                Q(work_order__detail__customer_name__in=customers)
                     
                     expense_report = expense_report.filter(condition)
 
                 filter_dict = {}
+
+                if "(empty)" in remarks:
+                    expense_report = expense_report.filter(~Q(work_order__detail__has_key='remark') | Q(work_order__detail__remark__in=remarks))
+                else:
+                    set_if_not_none(filter_dict, 'work_order__detail__remark__in', remarks)
+
                 
                 set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
                 set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
-
-                set_if_not_none(filter_dict, 'work_order__detail__remark__in', remark_list)
 
                 filtered_report = expense_report.filter(**filter_dict)
 
@@ -136,7 +140,10 @@ def api_filter_expense_report(request):
 
             data = {
                 'expense': serializer.data,
-                'total': total_list
+                'total': total_list,
+
+                'customer_list': customer_list,
+                'remark_list': ['(empty)'] + remark_list,
             }
 
             return JsonResponse(data, safe=False)
@@ -162,34 +169,40 @@ def api_get_expense_report(request):
                 expense = expense.filter(work_order__clear_date__gte=from_date)
 
             expense = order_expense_report(expense)
-
             pk_list = expense.values_list('pk', flat=True).distinct()
-            remark_list = get_values_list(expense, 'work_order__detail__remark')
-
-            detail_customer_list = get_values_list(expense, 'work_order__detail__customer_name')
-
-            customer = expense.filter(~Q(work_order__detail__has_key='customer_name'))
-            normal_customer_list = get_values_list(customer, 'work_order__work_normal__principal__name')
-            agent_customer_list = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
-
-            customer_list = sorted(detail_customer_list + normal_customer_list + agent_customer_list)
 
             expense_serializer = ExpenseSerializer(expense, many=True)
             period_serializer = ExpenseSummaryDateSerializer(selected_month, many=True)
 
+            customer_list, remark_list = get_filter_choices(expense)
             total_list = get_total_list(expense)            
 
             data = {
                 'period': period_serializer.data,
                 'expense': expense_serializer.data,
                 'pk_list': list(pk_list),
-                'remark_list': remark_list,
+
                 'customer_list': customer_list,
+                'remark_list': ['(empty)'] + remark_list,
+
                 'total': total_list
             }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+def get_filter_choices(report):
+    remark_choices = get_values_list(report, 'work_order__detail__remark')
+
+    detail_customer_choices = get_values_list(report, 'work_order__detail__customer_name')
+
+    customer = report.filter(~Q(work_order__detail__has_key='customer_name'))
+    normal_customer_choices = get_values_list(customer, 'work_order__work_normal__principal__name')
+    agent_customer_choices = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
+
+    customer_choices = sorted(detail_customer_choices + normal_customer_choices + agent_customer_choices)
+
+    return customer_choices, remark_choices
 
 # Methods
 def order_expense_report(report):

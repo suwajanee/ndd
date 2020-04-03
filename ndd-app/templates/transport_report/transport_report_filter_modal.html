@@ -120,9 +120,9 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">REMARK</span>
                         </div>
-                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id, 'input-warning': modal_warning && !remark_selected.length}" data-toggle="dropdown">
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id || ! remark_list.length, 'input-warning': modal_warning && !remark_selected.length}" data-toggle="dropdown">
                             <template v-if="all_remark || work_id">
-                                All selected ( {{ remark_list.length }} )
+                                All selected <template v-if="remark_list.length">( {{ remark_list.length }} )</template> 
                             </template>
                             <template v-else-if="remark_selected.length>3">
                                 {{ remark_selected.length }} remarks selected
