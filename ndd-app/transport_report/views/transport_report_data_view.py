@@ -12,6 +12,7 @@ from ..models import Expense
 from ..models import ExpenseSummaryDate
 from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
+from ..serializers import ExpenseThcSerializer
 from ..serializers import ExpenseSummaryDateSerializer
 from ..serializers import TruckSerializer
 from booking.views.utility.functions import set_if_not_none
@@ -26,7 +27,6 @@ def api_get_daily_expense(request):
         if request.method == "GET":
             date = datetime.today()
             co = 'ndd'
-
         elif request.method == "POST":  
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
@@ -35,7 +35,6 @@ def api_get_daily_expense(request):
                 date = datetime.strptime(date, '%Y-%m-%d')
             except:
                 return JsonResponse(False, safe=False)
-
         else:
             return JsonResponse('Error', safe=False)
 
@@ -126,15 +125,14 @@ def api_filter_expense_report(request):
                     expense_report = expense_report.filter(~Q(work_order__detail__has_key='remark') | Q(work_order__detail__remark__in=remarks))
                 else:
                     set_if_not_none(filter_dict, 'work_order__detail__remark__in', remarks)
-
-                
+           
                 set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
                 set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
 
                 filtered_report = expense_report.filter(**filter_dict)
 
             filtered_report = order_expense_report(filtered_report)
-            serializer = ExpenseSerializer(filtered_report, many=True)
+            serializer = ExpenseThcSerializer(filtered_report, many=True)
 
             total_list = get_total_list(filtered_report)
 
@@ -169,9 +167,10 @@ def api_get_expense_report(request):
                 expense = expense.filter(work_order__clear_date__gte=from_date)
 
             expense = order_expense_report(expense)
+
             pk_list = expense.values_list('pk', flat=True).distinct()
 
-            expense_serializer = ExpenseSerializer(expense, many=True)
+            expense_serializer = ExpenseThcSerializer(expense, many=True)
             period_serializer = ExpenseSummaryDateSerializer(selected_month, many=True)
 
             customer_list, remark_list = get_filter_choices(expense)
@@ -191,18 +190,6 @@ def api_get_expense_report(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
-def get_filter_choices(report):
-    remark_choices = get_values_list(report, 'work_order__detail__remark')
-
-    detail_customer_choices = get_values_list(report, 'work_order__detail__customer_name')
-
-    customer = report.filter(~Q(work_order__detail__has_key='customer_name'))
-    normal_customer_choices = get_values_list(customer, 'work_order__work_normal__principal__name')
-    agent_customer_choices = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
-
-    customer_choices = sorted(detail_customer_choices + normal_customer_choices + agent_customer_choices)
-
-    return customer_choices, remark_choices
 
 # Methods
 def order_expense_report(report):
@@ -238,6 +225,7 @@ def get_start_and_end_date(co, year, month, period):
     
     return selected_month, from_date, to_date
 
+
 def get_total_list(report_list):
     price_key = ['work_order__price__work', 'work_order__price__allowance', 'work_order__price__overnight']
     co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
@@ -246,6 +234,10 @@ def get_total_list(report_list):
     total_price_list = sum_expense_list(report_list, price_key)
     
     co_expense_list = sum_expense_list(report_list, co_expense_key)
+    
+    co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
+    co_expense_list[4] = co_thc_count * 150
+
     co_total = sum(co_expense_list)
     co_expense_list.append(co_total)
 
@@ -268,6 +260,19 @@ def sum_expense_list(report_list, key_list):
 
     return total_list
 
+
+def get_filter_choices(report):
+    remark_choices = get_values_list(report, 'work_order__detail__remark')
+
+    detail_customer_choices = get_values_list(report, 'work_order__detail__customer_name')
+
+    customer = report.filter(~Q(work_order__detail__has_key='customer_name'))
+    normal_customer_choices = get_values_list(customer, 'work_order__work_normal__principal__name')
+    agent_customer_choices = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
+
+    customer_choices = sorted(detail_customer_choices + normal_customer_choices + agent_customer_choices)
+
+    return customer_choices, remark_choices
 
 def get_values_list(expense_list, col):
     query_set = expense_list.order_by(col).values_list(col, flat=True).distinct()

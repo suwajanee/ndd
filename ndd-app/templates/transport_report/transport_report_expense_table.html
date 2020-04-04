@@ -47,7 +47,12 @@
             </div>
             <div class="note-alert"></div>
         </template>
-        {{ eval(report.co_expense.co_thc)|currencyCommas }}
+        <template v-if="report.co_expense.thc_rate">
+            {{ report.co_expense.thc_rate|currencyCommas }}
+        </template>
+        <template v-else>
+            {{ eval(report.co_expense.co_thc)|currencyCommas }}
+        </template>
     </td>
 
     <td @mousedown="show_note" @mouseup="hide_note">

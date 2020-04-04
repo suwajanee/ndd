@@ -27,6 +27,28 @@ class ExpenseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ExpenseThcSerializer(serializers.ModelSerializer):
+    work_order = WorkOrderSerializer()
+    total_expense = serializers.SerializerMethodField()
+    co_expense = serializers.SerializerMethodField()
+
+    def get_co_expense(self, obj):
+        if 'co_thc' in obj.co_expense:
+            obj.co_expense['thc_rate'] = 150
+            return obj.co_expense
+        return obj.co_expense
+    
+    def get_total_expense(self, obj):
+        if 'co_thc' in obj.co_expense:
+            obj.total_expense['company'] = obj.total_expense['company'] - eval(obj.co_expense['co_thc']) + 150
+            return obj.total_expense
+        return obj.total_expense
+    
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+
 class ExpenseSummaryDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpenseSummaryDate

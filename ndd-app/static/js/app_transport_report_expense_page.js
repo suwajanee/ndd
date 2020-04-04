@@ -108,7 +108,7 @@ var expense_page = new Vue ({
                 this.total_expense_list = data.total[1]
 
                 this.pk_list = data.pk_list
-                // this.work_list = data.work_list
+
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
 
