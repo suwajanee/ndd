@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from .views import cheque_data_view
 from .views import commission_view
-from .views import summary_apll_invoice
+# from .views import summary_apll_invoice
 from .views import summary_chart_data
 from .views import summary_customer_custom_view
 from .views import summary_customer_view
@@ -101,7 +101,7 @@ urlpatterns = [
     url(r'^export/damco-invoice/$', summary_damco_invoice.damco_invoice, name='summary-damco-invoice'),
 
     # Beautiful Soup
-    url(r'^export/apll-invoice/$', summary_apll_invoice.apll_invoice, name='summary-apll-invoice'),
+    # url(r'^export/apll-invoice/$', summary_apll_invoice.apll_invoice, name='summary-apll-invoice'),
 
     # Chart
     url(r'^api/get-summary-year-data/$', summary_chart_data.api_summary_year_total_chart, name='api-get-summary-year-data'),

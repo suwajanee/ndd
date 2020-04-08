@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail, InvoiceSetting
+from .models import Year, FormDetail, CustomerCustom, SummaryWeek, SummaryCustomer, Invoice, InvoiceDetail
 
 
 class YearAdmin(admin.ModelAdmin):
@@ -45,11 +45,6 @@ class InvoiceDetailAdmin(admin.ModelAdmin):
     search_fields = ['invoice__invoice_no', 'work_normal__booking_no', 'work_agent_transport__booking_no', 'work_normal__work_id', 'work_agent_transport__work_id']
 
 
-class InvoiceSettingAdmin(admin.ModelAdmin):
-    list_display = ('primary', 'data')
-    ordering = ('primary', )
-
-
 admin.site.register(Year, YearAdmin)
 admin.site.register(FormDetail, FormDetailAdmin)
 admin.site.register(CustomerCustom, CustomerCustomAdmin)
@@ -57,4 +52,3 @@ admin.site.register(SummaryWeek, SummaryWeekAdmin)
 admin.site.register(SummaryCustomer, SummaryCustomerAdmin)
 admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(InvoiceDetail, InvoiceDetailAdmin)
-admin.site.register(InvoiceSetting, InvoiceSettingAdmin)
