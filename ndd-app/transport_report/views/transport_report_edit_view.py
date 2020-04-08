@@ -52,6 +52,9 @@ def api_edit_expense_report(request):
 
             expense = Expense.objects.get(pk=order_data['expense_pk'])
             
+            if 'thc_rate' in co_expense:
+                co_expense.pop('thc_rate')
+                total_expense['company'] -= 150
             expense.co_expense = co_expense
             expense.cus_expense = cus_expense
             expense.total_expense = total_expense

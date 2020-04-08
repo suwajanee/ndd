@@ -34,7 +34,7 @@ class ExpenseThcSerializer(serializers.ModelSerializer):
 
     def get_co_expense(self, obj):
         if 'co_thc' in obj.co_expense:
-            obj.co_expense['thc_rate'] = 150
+            obj.co_expense['thc_rate'] = '150'
             return obj.co_expense
         return obj.co_expense
     
