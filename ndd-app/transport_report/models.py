@@ -74,3 +74,11 @@ class ExpenseSummaryDate(models.Model):
         else:
             return str(self.date) + ' / ' + self.month + '/' + ' (' + self.co + ')'
 
+
+class Variable(models.Model):
+    key = models.CharField(max_length=10, blank=True, null=True)
+    value = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return self.key
+

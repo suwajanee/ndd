@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import WorkOrder
 from .models import Expense
 from .models import ExpenseSummaryDate
+from .models import Variable
 
 
 class WorkOrderAdmin(admin.ModelAdmin):
@@ -24,6 +25,12 @@ class ExpenseSummaryDateAdmin(admin.ModelAdmin):
     ordering = ('-date', 'co')
 
 
+class VariableAdmin(admin.ModelAdmin):
+    list_display = ('key', 'value')
+    ordering = ('key',)
+
+
 admin.site.register(WorkOrder, WorkOrderAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(ExpenseSummaryDate, ExpenseSummaryDateAdmin)
+admin.site.register(Variable, VariableAdmin)
