@@ -8,233 +8,201 @@
 {% endblock %}
 
 {% block content %}
-<div id="expense-page">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb m-0 bg-white">
-            <li class="breadcrumb-item">Expense</li>
-            <li class="breadcrumb-item">{{ year }}</li>
+    <div id="expense-page">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Expense</li>
+                <li class="breadcrumb-item">{{ year }}</li>
+                {% verbatim %}
+                    <li class="breadcrumb-item" :class="{'active': period == 0}">
+                        {{ month_list[month-1] }}
+                    </li>
+                    <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
+                    <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
+                {% endverbatim %}
+            </ol>
+        </nav>
+
+        <div>
             {% verbatim %}
-                <li class="breadcrumb-item" :class="{'active': period == 0}">
-                    {{ month_list[month-1] }}
-                </li>
-                <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
-                <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
-            {% endverbatim %}
-        </ol>
-    </nav>
-
-    <div>
-        {% verbatim %}
-            <div class="row m-0" style="width: 100vw;">
-                <div class="input-group my-3 col-4">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">YEAR</span>
+                <div class="row m-0" style="width: 100vw;">
+                    <div class="input-group my-3 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">YEAR</span>
+                        </div>
+                        <select class="custom-select" v-model="year" @change="changeUrl(0)" :disabled="filter_mode">
+                            <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>></option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">MONTH</span>
+                        </div>
+                        <select class="custom-select" v-model="month" @change="changeUrl(0)" :disabled="filter_mode">
+                            <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">#</span>
+                        </div>
+                        <select class="custom-select col-2" v-model="period" @change="changeUrl(period)" :disabled="filter_mode">
+                            <option value='0'>All</option>
+                            <option v-for="(p, index) in period_list" :value="index+1">{{ index + 1 }}</option>
+                            <!-- <option>2</option>
+                            <option>3</option> -->
+                        </select>
                     </div>
-                    <select class="custom-select" v-model="year" @change="changeUrl(0)" :disabled="filter_mode">
-                        <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>></option>
-                    </select>
-                    <div class="input-group-append">
-                        <span class="input-group-text">MONTH</span>
-                    </div>
-                    <select class="custom-select" v-model="month" @change="changeUrl(0)" :disabled="filter_mode">
-                        <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
-                    </select>
-                    <div class="input-group-append">
-                        <span class="input-group-text">#</span>
-                    </div>
-                    <select class="custom-select col-2" v-model="period" @change="changeUrl(period)" :disabled="filter_mode">
-                        <option value='0'>All</option>
-                        <option v-for="(p, index) in period_list" :value="index+1">{{ index + 1 }}</option>
-                        <!-- <option>2</option>
-                        <option>3</option> -->
-                    </select>
-                </div>
-                <!-- <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button> -->
-                <button class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
+                    <!-- <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button> -->
+                    <button class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
 
-                <div class="input-group my-3 col-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">COL</span>
-                    </div>
-                    <div class="btn-group">
-                        <button class="custom-select text-left rounded-right multi-select" style="max-width: 160px;" data-toggle="dropdown">
-                            <template v-if="col_price || col_allowance || col_remark">
-                                <template v-if="col_price">ราคา; </template>
-                                <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                <template v-if="col_remark">Remark; </template>
-                            </template>
-                            <template v-else>
-                                Non selected
-                            </template>
-                        </button>
-                        <ul class="multiselect-container dropdown-menu">
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_price"> ราคา
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_remark"> Remark
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="p-0 float-right">
-                    <div class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl(0)">
-                        <input type="radio" id="work_ndd" v-model="co" value="ndd" />
-                        <label for="work_ndd">NDD</label>
-                        <input type="radio" id="work_vts" v-model="co" value="vts" />
-                        <label for="work_vts">VTS</label>
-                    </div>
-                </div>
-            </div>
-
-            <h4 class="text-center">{{ full_month_list[month-1] }} {{ year }}</h4>
-        {% endverbatim %}
-
-        <div v-if="loading" class="container position-relative">
-            <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
-                <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
-            </div>
-        </div>
-        <div v-else class="table-fix-head p-0 head-date">
-            <table class="table table-hover table-bordered text-center report-table m-0 w-100">
-                <thead>
-                    <tr>
-                        <th rowspan=2 class="align-middle" style="max-width: 95px">วันที่</th>
-                        <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
-                        <th rowspan=2 class="align-middle">เบอร์รถ</th>
-                        <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
-                        <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
-                        <th v-if="col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
-                        <th v-if="col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
-                        <th v-if="col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
-                        
-                        <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
-                        <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
-
-                        <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
-                        <th rowspan=2 class="align-middle">Edit</th>
-                    </tr>
-                    <tr class="second-header">
-                        <th class="align-middle">ทางด่วน</th>
-                        <th class="align-middle">ผ่านท่า</th>
-                        <th class="align-middle">ทำยาง</th>
-                        <th class="align-middle">ตำรวจ</th>
-                        <th class="align-middle">ช, ค่ายก</th>
-                        <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
-                        <th class="align-middle">อื่นๆ</th>
-                        <th class="align-middle right-thick">รวม</th>
-
-                        <th class="align-middle">ค่าคืนตู้</th>
-                        <th class="align-middle">ผ่านท่า</th>
-                        <th class="align-middle">อื่นๆ</th>
-                        <th class="align-middle right-thick">รวม</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody" v-if="report_list.length" class="bg-white">
-                    <template v-for="(report, index) in report_list">
-                        <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
-                        <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
-                        <tr>
-                            {% verbatim %}
-                                <td>{{ report.work_order.work_date|formatDate }}</td>
-                                <td class="text-left">
-                                    {{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}
-                                </td>
-                                <td>{{ report.work_order.truck.number }}</td>
-                                <td>
-                                    {{ report.work_order.work.work_id }}
-                                    <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
-                                </td>
-                                <td class="right-thick">
-                                    <template v-if="report.work_order.detail.customer_name">
-                                        {{ report.work_order.detail.customer_name }}
-                                    </template>
-                                    <template v-else>
-                                        {{ report.work_order.work.principal.name }}
-                                    </template>
-                                </td>
-
-                                <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
-                                    {{ report.work_order.detail.remark }}
-                                </td>
-
-                                <td v-if="col_price" class="right-thick alert-info">
-                                    {{ eval(report.work_order.price.work)|currencyCommas }}
-                                </td>
-
-                                <template v-if="col_allowance">
-                                    <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                    <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+                    <div class="input-group my-3 col-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">COL</span>
+                        </div>
+                        <div class="btn-group">
+                            <button class="custom-select text-left rounded-right multi-select" style="max-width: 160px;" data-toggle="dropdown">
+                                <template v-if="col_price || col_allowance || col_remark">
+                                    <template v-if="col_price">ราคา; </template>
+                                    <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                    <template v-if="col_remark">Remark; </template>
                                 </template>
-                            {% endverbatim %}
+                                <template v-else>
+                                    Non selected
+                                </template>
+                            </button>
+                            <ul class="multiselect-container dropdown-menu">
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_price"> ราคา
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_remark"> Remark
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                            {% include 'transport_report/transport_report_expense_table.html' %}
-                        </tr>
-                        
-                    </template>
-                    {% verbatim %}
-                        <tr class="bg-dark">
-                            <td colspan=23></td>
-                        </tr>
-                        <tr class="wed-color font-weight-bold">
-                            <td colspan=5 class="right-thick"></td>
-                            <td v-if="col_remark" class="right-thick"></td>
-                            <td v-if="col_price" class="right-thick alert-info">
-                                {{ total_price_list[0]|currencyCommas }}
+                    <div class="p-0 float-right">
+                        <div class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl(0)">
+                            <input type="radio" id="work_ndd" v-model="co" value="ndd" />
+                            <label for="work_ndd">NDD</label>
+                            <input type="radio" id="work_vts" v-model="co" value="vts" />
+                            <label for="work_vts">VTS</label>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-center">{{ full_month_list[month-1] }} {{ year }}</h4>
+            {% endverbatim %}
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0 head-date">
+                <table class="table table-hover table-bordered text-center report-table m-0 w-100">
+                    <thead>
+                        {% include 'transport_report/transport_report_expense_thead.html' %}
+                    </thead>
+                    <tbody id="tbody" v-if="report_list.length" class="bg-white">
+                        <template v-for="(report, index) in report_list">
+                            <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
+                            <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)"><td colspan=23></td></tr>
+                            <tr>
+                                {% verbatim %}
+                                    <td>{{ report.work_order.work_date|formatDate }}</td>
+                                    <td class="text-left">
+                                        {{ report.work_order.driver.employee.name_title }} {{ report.work_order.driver.employee.first_name }} {{ report.work_order.driver.employee.last_name }}
+                                    </td>
+                                    <td>{{ report.work_order.truck.number }}</td>
+                                    <td>
+                                        {{ report.work_order.work.work_id }}
+                                        <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
+                                    </td>
+                                    <td class="right-thick">
+                                        <template v-if="report.work_order.detail.customer_name">
+                                            {{ report.work_order.detail.customer_name }}
+                                        </template>
+                                        <template v-else>
+                                            {{ report.work_order.work.principal.name }}
+                                        </template>
+                                    </td>
+
+                                    <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
+                                        {{ report.work_order.detail.remark }}
+                                    </td>
+
+                                    <td v-if="col_price" class="right-thick alert-info">
+                                        {{ eval(report.work_order.price.work)|currencyCommas }}
+                                    </td>
+
+                                    <template v-if="col_allowance">
+                                        <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                        <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+                                    </template>
+                                {% endverbatim %}
+
+                                {% include 'transport_report/transport_report_expense_table.html' %}
+                            </tr>
+                            
+                        </template>
+                        {% verbatim %}
+                            <tr class="bg-dark">
+                                <td colspan=23></td>
+                            </tr>
+                            <tr class="wed-color font-weight-bold">
+                                <td colspan=5 class="right-thick"></td>
+                                <td v-if="col_remark" class="right-thick"></td>
+                                <td v-if="col_price" class="right-thick alert-info">
+                                    {{ total_price_list[0]|currencyCommas }}
+                                </td>
+                                <template v-if="col_allowance">
+                                    <td class="alert-warning">{{ total_price_list[1]|currencyCommas }}</td>
+                                    <td class="right-thick alert-warning">{{ total_price_list[2]|currencyCommas }}</td>
+                                </template>
+                                <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index)}">
+                                    {{ total|currencyCommas }}
+                                </td>
+                                <td></td>
+                            </tr>
+                        {% endverbatim %}     
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan=23 class="text-center text-secondary">
+                                ไม่พบข้อมูล
                             </td>
-                            <template v-if="col_allowance">
-                                <td class="alert-warning">{{ total_price_list[1]|currencyCommas }}</td>
-                                <td class="right-thick alert-warning">{{ total_price_list[2]|currencyCommas }}</td>
-                            </template>
-                            <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index)}">
-                                {{ total|currencyCommas }}
-                            </td>
-                            <td></td>
                         </tr>
-                    {% endverbatim %}     
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan=23 class="text-center text-secondary">
-                            ไม่พบข้อมูล
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+
+            </div>
 
         </div>
 
+        {% include 'transport_report/transport_report_filter_modal.html' %}
+        
     </div>
 
-    {% include 'transport_report/transport_report_filter_modal.html' %}
+    {% include 'transport_report/transport_report_expense_modal.html' %}
+
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
+
+
+    <script type="application/javascript">
+        window.addEventListener("load", function() {
+            expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+        })
+    </script>
     
-</div>
-
-
-
-{% include 'transport_report/transport_report_expense_modal.html' %}
-
-
-
-<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
-
-
-<script type="application/javascript">
-    window.addEventListener("load", function() {
-        expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
-    })
-</script>
 {% endblock %}

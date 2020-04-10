@@ -27,12 +27,6 @@
         <div>
             {% verbatim %}
                 <div class="row m-0" style="width: 100vw;">
-                    <!-- <div class="input-group my-3 col-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">DATE</span>
-                        </div>
-                        <input type="date" class="form-control" v-model="date" @change="urlFormat(driver_id)" required>
-                    </div> -->
                     <div class="input-group my-3 col-5" style="max-height: 40px;" >
                         <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
 
@@ -64,55 +58,40 @@
                     </div>
 
                     <div class="input-group my-3  col-3">
-  
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">COL</span>
-                            </div>
-                            <div class="btn-group">
-                                <!-- <button class="custom-select text-left rounded-right" data-toggle="dropdown" style="height: 40px; border-bottom-left-radius: 0; border-top-left-radius: 0; max-width: 160px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; "> -->
-                                <button class="custom-select text-left rounded-right multi-select" style="height: 40px; max-width: 160px;" data-toggle="dropdown">
-                                    <template v-if="col_price || col_allowance || col_remark">
-                                        <template v-if="col_price">ราคา; </template>
-                                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                        <template v-if="col_remark">Remark; </template>
-                                    </template>
-                                    <template v-else>
-                                        Non selected
-                                    </template>
-                                </button>
-                                <ul class="multiselect-container dropdown-menu">
-                                    <li>
-                                        <a>
-                                            <label class="checkbox">
-                                                <input type="checkbox" v-model="col_price"> ราคา
-                                            </label>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <label class="checkbox">
-                                                <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                            </label>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <label class="checkbox">
-                                                <input type="checkbox" v-model="col_remark"> Remark
-                                            </label>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">COL</span>
                         </div>
-                    <!-- <div class="custom-control custom-checkbox mx-2">
-                        <input id="showPrice" type="checkbox" class="custom-control-input" v-model="show_price">
-                        <label class="custom-control-label" for="showPrice">ราคา</label>
-                    </div> -->
-                    <!-- <div class="custom-control custom-checkbox m-2">
-                        <input id="doubleCheck" type="checkbox" class="custom-control-input" v-model="report_order.double_container">
-                        <label class="custom-control-label" for="doubleCheck"><b>(+)</b></label>
-                    </div> -->
+                        <div class="btn-group">
+                            <button class="custom-select text-left rounded-right multi-select" style="height: 40px; max-width: 160px;" data-toggle="dropdown">
+                                <template v-if="col_price || col_allowance || col_remark">
+                                    <template v-if="col_price">ราคา; </template>
+                                    <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                    <template v-if="col_remark">Remark; </template>
+                                </template>
+                                <template v-else>
+                                    Non selected
+                                </template>
+                            </button>
+                            <ul class="multiselect-container dropdown-menu">
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_price"> ราคา
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="col_remark"> Remark
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <div class="p-0 float-right">
                         <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
                         <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl()">
@@ -139,39 +118,7 @@
             <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
                 <table class="table table-hover table-bordered text-center report-table m-0 w-100">
                     <thead>
-                        <tr>
-                            <th rowspan=2 class="align-middle" style="max-width: 95px;">วันที่</th>
-                            <th rowspan=2 class="align-middle">ชื่อ - นามสกุล</th>
-                            <th rowspan=2 class="align-middle">เบอร์รถ</th>
-                            <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
-                            <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
-                            <th v-if="col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
-                
-                            <th v-if="col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
-                            <th v-if="col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
-                
-                            <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
-                            <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
-                
-                            <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
-                
-                            <th rowspan=2 class="align-middle">Edit</th>
-                        </tr>
-                        <tr class="second-header">
-                            <th class="align-middle">ทางด่วน</th>
-                            <th class="align-middle">ผ่านท่า</th>
-                            <th class="align-middle">ทำยาง</th>
-                            <th class="align-middle">ตำรวจ</th>
-                            <th class="align-middle">ช, ค่ายก</th>
-                            <th class="align-middle">ค่าบริการ<br>รับ-คืนตู้ฯ</th>
-                            <th class="align-middle">อื่นๆ</th>
-                            <th class="align-middle right-thick">รวม</th>
-                
-                            <th class="align-middle">ค่าคืนตู้</th>
-                            <th class="align-middle">ผ่านท่า</th>
-                            <th class="align-middle">อื่นๆ</th>
-                            <th class="align-middle right-thick">รวม</th>
-                        </tr>
+                        {% include 'transport_report/transport_report_expense_thead.html' %}
                     </thead>
                     <tbody id="tbody" class="bg-white">
                         {% if driver %}
@@ -191,7 +138,7 @@
                                             <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
 
                                             <td>{{ report.work_order.truck.number }}</td>
-                                            <td style="max-width: 140px;">
+                                            <td>
                                                 {{ report.work_order.work.work_id }}
                                                 <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
                                             </td>
@@ -218,17 +165,7 @@
                                             </template>
                                         {% endverbatim %}
 
-                                        <!-- Expense Fields -->
                                         {% include 'transport_report/transport_report_expense_table.html' %}
-                                                
-                                        <!-- {% verbatim %}
-                                            <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
-
-                                            <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
-                                            <td >
-                                                <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
-                                            </td>
-                                        {% endverbatim %} -->
                                     </tr>       
                                 </template>
                             </template>
@@ -242,12 +179,14 @@
 
                                     <td v-for="i in 2"></td>
                                     <td class="right-thick"></td>
+
                                     <td v-if="col_remark" class="right-thick"></td>
                                     <td v-if="col_price" class="right-thick"></td>
                                     <template v-if="col_allowance">
                                         <td></td>
                                         <td class="right-thick"></td>
                                     </template>
+
                                     <td v-for="i in 7"></td>
                                     <td class="right-thick"></td>
                                     <td v-for="i in 3"></td>
@@ -257,9 +196,11 @@
 
                                 <tr class="bg-light">
                                     <td colspan=5 class="right-thick"></td>
+
                                     <td v-if="col_remark" class="right-thick"></td>
                                     <td v-if="col_price" class="right-thick"></td>
                                     <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+
                                     <td colspan=8 class="right-thick"></td>
                                     <td colspan=4 class="right-thick"></td>
 
@@ -268,7 +209,6 @@
 
                                     <td></td>
                                 </tr>
-
                             {% endverbatim %}
 
                             <tr v-if="driver_id" class="table-secondary">
@@ -276,53 +216,24 @@
                             </tr>
 
                         </template>
-                        
                     </tbody>
-
-                    <!-- <tbody v-else>
-                        {% verbatim %}
-                            <template v-if="!driver_id" >
-                                <template v-if="driver_report_list.length" v-for="driver in driver_report_list">
-                                    <tr class="bg-light">
-                                        <td></td>
-                                        <td class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
-                                        <td v-for="i in 17"></td>
-                                    </tr>
-                                    <tr class="bg-light">
-                                        <td colspan=17></td>
-                                        <td class="table-danger"> - </td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                            </template>
-                        {% endverbatim %}
-                    </tbody> -->
                 </table>
             </div>
         </div>
-
     </div>
 
     {% include 'transport_report/transport_report_expense_modal.html' %}
 
+    
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>    
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
 
 
-    <script type="application/javascript">
-        
+    <script type="application/javascript">     
         window.addEventListener("load", function() {
-            // if("{{ co }}") {
-            //     daily_expense_page.date_reload("{{ date }}", "{{ co }}")
-            // }
-            // else if("{{ driver }}") {
-            //     daily_expense_page.driver_reload("{{ date }}", "{{ co }}", "{{ driver }}")
-            // }
-
             daily_expense_page.reload("{{ date }}", "{{ co }}", "{{ driver }}")
         })
-
     </script>
 
 {% endblock %}

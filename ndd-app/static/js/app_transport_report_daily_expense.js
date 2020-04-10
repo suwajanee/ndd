@@ -16,7 +16,7 @@ var daily_expense_page = new Vue ({
         driver_report_list: [],
         expense_list: [],
         
-        transport_list: [],
+        // transport_list: [],
 
         col_price: true,
         col_allowance: true,
@@ -47,7 +47,6 @@ var daily_expense_page = new Vue ({
                 this.getDailyDriverExpense()
             }
             else {
-                this.getAllDriver()
                 this.getDailyExpense()
             }
         },
@@ -72,31 +71,16 @@ var daily_expense_page = new Vue ({
                     }
                     this.date = data.date
                     this.expense_list = data.work_expense
-                    this.matchDriverReport()
-                    this.loading = false 
+                    this.getAllDriver()
                 })
             }
         },
-        getDailyDriverExpense() {
-            this.loading = true
-            api("/report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
-                if(! data) {
-                    window.location.replace("/dashboard")
-                    return false
-                }
-                this.driver_data = report_modal.driver_data = data.driver
-                report_modal.default_truck = data.truck
-                this.expense_list = data.report
-                
-                this.driver_data['total'] = []
-                this.driver_data['total'][0] = this.calcTotalExpense(this.expense_list[0])
-                this.driver_data['total'][1] = this.calcTotalExpense(this.expense_list[1])
-
-                this.loading = false
+        getAllDriver() {
+            api("/employee/api/get-all-driver/", "POST", {co: this.co}).then((data) => {
+                this.driver_report_list = data
+                this.matchDriverReport()
             })
         },
-
-
         matchDriverReport() {
             var not_active_index = []
             this.driver_report_list.forEach((driver, index) => {
@@ -115,7 +99,28 @@ var daily_expense_page = new Vue ({
                 this.driver_report_list.splice(item, 1)
             })
 
+            this.loading = false 
         },
+        
+        getDailyDriverExpense() {
+            this.loading = true
+            api("/report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
+                if(! data) {
+                    window.location.replace("/dashboard")
+                    return false
+                }
+                this.driver_data = report_modal.driver_data = data.driver
+                report_modal.default_truck = data.truck
+                this.expense_list = data.report
+                
+                this.driver_data['total'] = []
+                this.driver_data['total'][0] = this.calcTotalExpense(this.expense_list[0])
+                this.driver_data['total'][1] = this.calcTotalExpense(this.expense_list[1])
+
+                this.loading = false
+            })
+        },
+        
         calcTotalExpense(array) {
             var co_total = sumObjectArray(array, 'total_expense', 'company')
             var cus_total = sumObjectArray(array, 'total_expense', 'customer')
@@ -125,11 +130,6 @@ var daily_expense_page = new Vue ({
         getActiveDriver() {
             api("/employee/api/get-active-driver/", "POST", {co: this.co}).then((data) => {
                 this.driver_list = report_modal.driver_list = data
-            })
-        },
-        getAllDriver() {
-            api("/employee/api/get-all-driver/", "POST", {co: this.co}).then((data) => {
-                this.driver_report_list = data
             })
         },
 
