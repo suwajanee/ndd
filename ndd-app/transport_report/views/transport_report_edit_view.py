@@ -10,7 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import WorkOrder
 from ..models import Expense
 from ..models import ExpenseSummaryDate
-from ..models import Variable
 from agent_transport.models import AgentTransport
 from booking.models import Booking
 from employee.models import Driver
@@ -53,14 +52,6 @@ def api_edit_expense_report(request):
 
             expense = Expense.objects.get(pk=order_data['expense_pk'])
 
-            try:
-                thc_rate = int(Variable.objects.get(key='thc').value)
-            except Variable.DoesNotExist:
-                thc_rate = 0
-
-            if 'thc_rate' in co_expense:
-                co_expense.pop('thc_rate')
-                total_expense['company'] -= thc_rate
             expense.co_expense = co_expense
             expense.cus_expense = cus_expense
             expense.total_expense = total_expense
