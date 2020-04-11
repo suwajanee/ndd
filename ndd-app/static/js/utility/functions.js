@@ -7,9 +7,13 @@ const api = (endpoint, method, data) => {
       }
   }
 
-  return fetch(endpoint, config)
-      .then((response) => response.json())
-      .catch((error) => console.log(error))
+    // return fetch(endpoint, config)
+    //     .then((response) => response.json())
+    //     .catch((error) => console.log(error))
+
+return fetch(endpoint, config)
+    .then((response) => response.json())
+      .catch((error) => {throw Error(error);})
 }
 
 

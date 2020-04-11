@@ -260,6 +260,9 @@ var report_modal = new Vue ({
                             $('#modalExpenseReport').modal('hide');
                             this.pageReload()
                         }
+                    }).catch((error) => {
+                        alert('Save again')
+                        console.error(error)
                     })
                 }
 
