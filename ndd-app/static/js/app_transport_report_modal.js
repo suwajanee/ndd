@@ -50,7 +50,7 @@ var report_modal = new Vue ({
             if(this.search_driver === '') return this.driver_list
             var search = this.search_driver.trim().toLowerCase()
             return this.driver_list.filter(driver => {
-                var driver_name = driver.employee.first_name + ' ' + driver.employee.last_name
+                var driver_name = driver.employee.detail.full_name
                 return driver_name.toLowerCase().includes(search)
             })
         }

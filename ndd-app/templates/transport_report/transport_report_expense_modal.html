@@ -25,7 +25,7 @@
 
                         <button id="driverDropdown" class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <template v-if="work_driver_data">
-                                {{ work_driver_data.name_title }} {{ work_driver_data.first_name }} {{ work_driver_data.last_name }}
+                                {{ work_driver_data.detail.full_name }}
                                 <span class="badge badge-pill badge-primary float-right m-1">{{ work_driver_data.co.toUpperCase() }}</span>
                             </template>
                             <template v-else>
@@ -40,7 +40,7 @@
                             <div class="dropdown-divider"></div>
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
                                 <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
-                                    {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                                    {{ driver.employee.detail.full_name }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
                             </div>

@@ -16,7 +16,9 @@
                 {% if driver %}
                     {% verbatim %}
                         <li class="breadcrumb-item"><a :href="'/report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ driver_data.first_name }} {{ driver_data.last_name }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ driver_data.detail.full_name }}
+                        </li>
                     {% endverbatim %}
                 {% else %}
                     <li class="breadcrumb-item active" aria-current="page">{% verbatim %}{{ date|formatDate }} ({{ co.toUpperCase() }}){% endverbatim %}</li>
@@ -35,7 +37,7 @@
                             <span class="input-group-text">DRIVER</span>
                         </div>
                         <button v-if="driver_id" class="custom-select text-left rounded-right" style="min-height: 40px; overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}
+                            {{ driver_data.detail.full_name }}
                             <span class="badge badge-pill badge-primary float-right m-1">{{ co.toUpperCase() }}</span>
                         </button>
                         <button v-else class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,7 +52,7 @@
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
                                 <button class="dropdown-item" @click="changeUrl()"> -------- </button>
                                 <button v-for="driver in filterDriver" class="dropdown-item" @click="changeUrl(driver.employee.id)">
-                                    {{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}
+                                    {{ driver.employee.detail.full_name }}
                                     <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co }">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
                             </div>
@@ -106,7 +108,7 @@
                 </div>
                 
                 <h4 class="text-center">{{ date|formatDate }}</h4>
-                <h5 v-if="driver_id" class="text-primary text-center">{{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}</h5>
+                <h5 v-if="driver_id" class="text-primary text-center">{{ driver_data.detail.full_name }}</h5>
 
             {% endverbatim %}
 
@@ -134,8 +136,8 @@
                                         {% verbatim %}
                                             <td>{{ report.work_order.work_date|formatDate }}</td>
 
-                                            <td v-if="driver_id" class="text-left">{{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}</td>
-                                            <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
+                                            <td v-if="driver_id" class="text-left">{{ driver_data.detail.full_name }}</td>
+                                            <td v-else class="text-left">{{ driver.employee.detail.full_name }}</td>
 
                                             <td>{{ report.work_order.truck.number }}</td>
                                             <td>
@@ -174,8 +176,8 @@
                                 <tr v-else class="bg-light">
                                     <td></td>
 
-                                    <td v-if="driver_id" class="text-left">{{ driver_data.name_title }} {{ driver_data.first_name }} {{ driver_data.last_name }}</td>
-                                    <td v-else class="text-left">{{ driver.employee.name_title }} {{ driver.employee.first_name }} {{ driver.employee.last_name }}</td>
+                                    <td v-if="driver_id" class="text-left">{{ driver_data.detail.full_name }}</td>
+                                    <td v-else class="text-left">{{ driver.employee.detail.full_name }}</td>
 
                                     <td v-for="i in 2"></td>
                                     <td class="right-thick"></td>

@@ -25,8 +25,8 @@ def api_add_employee(request):
             
             data = {
                 'name_title': emp_data['name_title'],
-                'first_name': emp_data['first_name'],
-                'last_name': emp_data['last_name'],
+                'first_name': emp_data['first_name'].strip(),
+                'last_name': emp_data['last_name'].strip(),
                 'birth_date': emp_data['birth_date'] or None,
                 'detail': {
                     'tel': emp_data['tel'],

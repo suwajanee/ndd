@@ -15,6 +15,12 @@ class JobSerializer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     job = JobSerializer()
+    detail = serializers.SerializerMethodField()
+
+    def get_detail(self, obj):
+        obj.detail['full_name'] = obj.name_title + ' ' + obj.first_name + ' ' + obj.last_name
+        return obj.detail
+
     class Meta:
         model = Employee
         fields = '__all__'
@@ -33,3 +39,4 @@ class SalarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Salary
         fields = '__all__'
+    

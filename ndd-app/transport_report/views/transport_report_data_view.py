@@ -94,60 +94,6 @@ def api_get_daily_driver_expense(request):
 
 
 @csrf_exempt
-def api_filter_expense_report(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            req = json.loads(request.body.decode('utf- 8'))
-            
-            pk_list = req['pk_list']
-            work = req['work']
-            driver = req['driver']
-            truck = req['truck']
-            customers = req['customers']
-            remarks = req['remarks']
-
-            expense_report = Expense.objects.filter(pk__in=pk_list)
-            customer_list, remark_list = get_filter_choices(expense_report)
-
-            if work:
-                condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
-                filtered_report = Expense.objects.filter(condition)
-            else:
-                if customers:
-                    condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
-                                Q(work_order__detail__customer_name__in=customers)
-                    
-                    expense_report = expense_report.filter(condition)
-
-                filter_dict = {}
-
-                if "(empty)" in remarks:
-                    expense_report = expense_report.filter(~Q(work_order__detail__has_key='remark') | Q(work_order__detail__remark__in=remarks))
-                else:
-                    set_if_not_none(filter_dict, 'work_order__detail__remark__in', remarks)
-           
-                set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
-                set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
-
-                filtered_report = expense_report.filter(**filter_dict)
-
-            filtered_report = order_expense_report(filtered_report)
-            serializer = ExpenseThcSerializer(filtered_report, many=True)
-
-            total_list = get_total_list(filtered_report)
-
-            data = {
-                'expense': serializer.data,
-                'total': total_list,
-
-                'customer_list': customer_list,
-                'remark_list': ['(empty)'] + remark_list,
-            }
-
-            return JsonResponse(data, safe=False)
-    return JsonResponse('Error', safe=False)
-
-@csrf_exempt
 def api_get_expense_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -190,11 +136,90 @@ def api_get_expense_report(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+@csrf_exempt
+def api_filter_expense_report(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            
+            pk_list = req['pk_list']
+            work = req['work']
+            driver = req['driver']
+            truck = req['truck']
+            customers = req['customers']
+            remarks = req['remarks']
+
+            expense_report = Expense.objects.filter(pk__in=pk_list)
+            customer_list, remark_list = get_filter_choices(expense_report)
+
+            if work:
+                condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
+                filtered_report = Expense.objects.filter(condition)
+            else:
+                if customers:
+                    condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
+                                Q(work_order__detail__customer_name__in=customers)
+                    
+                    expense_report = expense_report.filter(condition)
+
+                filter_dict = {}
+
+                if "(empty)" in remarks:
+                    expense_report = expense_report.filter(~Q(work_order__detail__has_key='remark') | Q(work_order__detail__remark__in=remarks))
+                else:
+                    set_if_not_none(filter_dict, 'work_order__detail__remark__in', remarks)
+           
+                set_if_not_none(filter_dict, 'work_order__driver__pk', driver)
+                set_if_not_none(filter_dict, 'work_order__truck__pk', truck)
+
+                filtered_report = expense_report.filter(**filter_dict)
+
+            filtered_report = order_expense_report(filtered_report)
+            serializer = ExpenseThcSerializer(filtered_report, many=True)
+
+            total_list = get_total_list(filtered_report)
+            data = {
+                'expense': serializer.data,
+                'total': total_list,
+
+                'customer_list': customer_list,
+                'remark_list': ['(empty)'] + remark_list,
+            }
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+
+# Hereeeeeee
+# @csrf_exempt
+# def api_get_summary_expense(request):
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             req = json.loads(request.body.decode('utf-8'))
+
+#             year = int(req['year'])
+#             month = int(req['month'])
+#             period = int(req['period'])
+#             co = req['co']
+
+#             if co == 'ndd':
+#                 driver_order = 'employee__co'
+#             else:
+#                 driver_order = '-employee__co'
+
+#             selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
+
+#             expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
+
+#             all_driver = Driver.objects.all().order_by(driver_order, 'truck__number', 'employee__first_name', 'employee__last_name')
+
+
 
 # Methods
 def order_expense_report(report):
     return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
                     'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
+
 
 def get_start_and_end_date(co, year, month, period):
     if co == 'ndd':
@@ -224,6 +249,24 @@ def get_start_and_end_date(co, year, month, period):
             from_date = summary_date_list.filter(date__lt=to_date).first().date
     
     return selected_month, from_date, to_date
+
+def get_last_month_date(date_list, month, year):
+    if month == 1:
+        last_month = date_list.filter(Q(year__year_label=year-1) & Q(month=12))
+    else:
+        last_month = date_list.filter(Q(year__year_label=year) & Q(month=month-1))
+
+    if last_month:
+        return last_month.first().date
+    else:
+        return datetime(year, month, 1)
+
+def check_next_date(date_list, date):
+    next_date = date_list.filter(date__gt=date)
+    if next_date:
+        return next_date.last().date
+    else:
+        return datetime.now()
 
 
 def get_total_list(report_list):
@@ -278,21 +321,3 @@ def get_values_list(expense_list, col):
     query_set = expense_list.order_by(col).values_list(col, flat=True).distinct()
 
     return list(filter(None, query_set))
-
-def get_last_month_date(date_list, month, year):
-    if month == 1:
-        last_month = date_list.filter(Q(year__year_label=year-1) & Q(month=12))
-    else:
-        last_month = date_list.filter(Q(year__year_label=year) & Q(month=month-1))
-
-    if last_month:
-        return last_month.first().date
-    else:
-        return datetime(year, month, 1)
-
-def check_next_date(date_list, date):
-    next_date = date_list.filter(date__gt=date)
-    if next_date:
-        return next_date.last().date
-    else:
-        return datetime.now()
