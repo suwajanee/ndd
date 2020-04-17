@@ -44,7 +44,7 @@ def expense_year_page(request, year):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def monthly_expense_page(request):
+def re_expense_page(request):
     date = datetime.now().strftime('%Y/%m/ndd/')
     return HttpResponseRedirect('/report/expense/' + date)
 
@@ -68,6 +68,21 @@ def period_expense_page(request, year, month, co, period):
     else:
         return HttpResponseRedirect('/dashboard')
 
+
+@login_required(login_url=reverse_lazy('login'))
+def re_summary_expense_page(request):
+    date = datetime.now().strftime('%Y/%m/ndd')
+    return HttpResponseRedirect('/report/summary-expense/' + date) 
+
+@login_required(login_url=reverse_lazy('login'))
+def summary_expense_page(request, year, month, co):
+    month = int(month)
+    check_return = check_url_format(year, month, co)
+
+    if check_return:
+        return render(request, 'transport_report/transport_report_summary_expense_page.html', {'nbar': 'report-page', 'title': 'Summary Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
+    else:
+        return HttpResponseRedirect('/dashboard')
 
 def check_url_format(year, month, co):
     try:

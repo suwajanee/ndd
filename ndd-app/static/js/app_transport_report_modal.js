@@ -25,7 +25,8 @@ var report_modal = new Vue ({
 
         work_data: {},
         work_driver_data: {
-            co: ''
+            co: '',
+            detail: {}
         },
         work_truck_data: {
             owner: ''
@@ -85,7 +86,6 @@ var report_modal = new Vue ({
 
                 this.modal_type = work.principal.work_type
                 this.report_work_id = this.search_work_id = work.work_id
-
                 this.work_driver_data = work_order.driver.employee
                 this.work_truck_data = work_order.truck
 

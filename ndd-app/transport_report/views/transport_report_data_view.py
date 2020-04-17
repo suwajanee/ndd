@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
+from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models import FloatField
+from django.db.models.functions import Cast
+from django.db.models import Func, F, Value
+from django.db.models import Sum, Count
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,15 +24,16 @@ from booking.views.utility.functions import set_if_not_none
 from employee.models import Driver
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
+from employee.serializers import DriverSerializer
 
 
 @csrf_exempt
 def api_get_daily_expense(request):
     if request.user.is_authenticated:
-        if request.method == "GET":
-            date = datetime.today()
-            co = 'ndd'
-        elif request.method == "POST":  
+        # if request.method == "GET":
+        #     date = datetime.today()
+        #     co = 'ndd'
+        if request.method == "POST":  
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
             co = req['co']
@@ -35,18 +41,20 @@ def api_get_daily_expense(request):
                 date = datetime.strptime(date, '%Y-%m-%d')
             except:
                 return JsonResponse(False, safe=False)
-        else:
-            return JsonResponse('Error', safe=False)
+        # else:
+        #     return JsonResponse('Error', safe=False)
 
-        work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date', 'pk')
-        serializer = ExpenseSerializer(work_expense, many=True)
+            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date', 'pk')
+            serializer = ExpenseSerializer(work_expense, many=True)
 
-        data = {
-            'date': date.date(),
-            'work_expense': serializer.data
-        }
+            driver_list = get_driver_list(work_expense, co)
+            data = {
+                'date': date.date(),
+                'work_expense': serializer.data,
+                'driver_list': driver_list
+            }
 
-        return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False)
 
     return JsonResponse('Error', safe=False)
 
@@ -191,29 +199,79 @@ def api_filter_expense_report(request):
 
 
 # Hereeeeeee
-# @csrf_exempt
-# def api_get_summary_expense(request):
-#     if request.user.is_authenticated:
-#         if request.method == "POST":
-#             req = json.loads(request.body.decode('utf-8'))
+@csrf_exempt
+def api_get_summary_expense(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
 
-#             year = int(req['year'])
-#             month = int(req['month'])
-#             period = int(req['period'])
-#             co = req['co']
+            year = int(req['year'])
+            month = int(req['month'])
+            period = int(req['period'])
+            co = req['co']
 
-#             if co == 'ndd':
-#                 driver_order = 'employee__co'
-#             else:
-#                 driver_order = '-employee__co'
+            selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
 
-#             selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
+            date_list = get_date_range(from_date, to_date)
 
-#             expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
+            expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
 
-#             all_driver = Driver.objects.all().order_by(driver_order, 'truck__number', 'employee__first_name', 'employee__last_name')
+            driver_list = get_driver_list(expense, co)
+
+            total_expense_list = []
+            for driver in driver_list:
+                summary_data = {}
+                summary_data['driver'] = driver['employee']['detail']['full_name']
+                driver_expense = expense.filter(work_order__driver__pk=driver['id'])
+
+                summary_list = []
+                for date in date_list:
+                    total_expense = 0
+
+                    date_expense = driver_expense.filter(work_order__clear_date=date)
+                    total_expense = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
+                                customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+
+                    summary_list.append(total_expense)
+                summary_data['total'] = summary_list
+
+                total_expense_list.append(summary_data)
+
+            thc_count_list = []
+            for date in date_list:
+                thc = expense.filter(work_order__clear_date=date, co_expense__has_key='co_thc').count()
+                thc_count_list.append(thc*110)
+
+            data = {
+                'total': total_expense_list,
+                'date': date_list,
+                'thc': thc_count_list
+            }
+                
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
 
 
+def get_date_range(from_date, to_date):
+    date_list = []
+    while from_date < to_date:
+        date_list.append(from_date)
+        from_date = from_date + timedelta(days=1)
+    return date_list
+
+
+def get_driver_list(report, co):
+    if co == 'ndd':
+        order = 'employee__co'
+    else:
+        order = '-employee__co'
+
+    driver_report_pk = report.values_list('work_order__driver__pk')
+
+    driver = Driver.objects.filter((Q(employee__co=co) & Q(employee__status='a')) | Q(pk__in=driver_report_pk)).order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
+    serializer = DriverSerializer(driver, many=True)
+
+    return serializer.data
 
 # Methods
 def order_expense_report(report):
@@ -259,14 +317,14 @@ def get_last_month_date(date_list, month, year):
     if last_month:
         return last_month.first().date
     else:
-        return datetime(year, month, 1)
+        return datetime(year, month, 1).date()
 
 def check_next_date(date_list, date):
     next_date = date_list.filter(date__gt=date)
     if next_date:
         return next_date.last().date
     else:
-        return datetime.now()
+        return datetime.now().date()
 
 
 def get_total_list(report_list):

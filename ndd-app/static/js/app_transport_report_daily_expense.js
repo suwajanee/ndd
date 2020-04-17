@@ -71,16 +71,18 @@ var daily_expense_page = new Vue ({
                     }
                     this.date = data.date
                     this.expense_list = data.work_expense
-                    this.getAllDriver()
+                    this.driver_report_list = data.driver_list
+                    // this.getAllDriver()
+                    this.matchDriverReport()
                 })
             }
         },
-        getAllDriver() {
-            api("/employee/api/get-all-driver/", "POST", {co: this.co}).then((data) => {
-                this.driver_report_list = data
-                this.matchDriverReport()
-            })
-        },
+        // getAllDriver() {
+        //     api("/employee/api/get-all-driver/", "POST", {co: this.co}).then((data) => {
+        //         this.driver_report_list = data
+        //         this.matchDriverReport()
+        //     })
+        // },
         matchDriverReport() {
             var not_active_index = []
             this.driver_report_list.forEach((driver, index) => {
@@ -89,15 +91,15 @@ var daily_expense_page = new Vue ({
 
                 driver['total'] = this.calcTotalExpense(report_result)
 
-                if((driver.employee.status === 't' || driver.employee.co != this.co) && driver.report_list.length == 0) {
-                    not_active_index.push(index)
-                }
+                // if((driver.employee.status === 't' || driver.employee.co != this.co) && driver.report_list.length == 0) {
+                //     not_active_index.push(index)
+                // }
             })
 
-            not_active_index.forEach((item, index) => {
-                item = item - index
-                this.driver_report_list.splice(item, 1)
-            })
+            // not_active_index.forEach((item, index) => {
+            //     item = item - index
+            //     this.driver_report_list.splice(item, 1)
+            // })
 
             this.loading = false 
         },

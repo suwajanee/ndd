@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary Expense {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_summary_expense_page.js' %}"></script>
+
+    <script type="application/javascript">
+        window.addEventListener("load", function() {
+            summary_expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+        })
+    </script>
+{% endblock %}
