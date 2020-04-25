@@ -157,13 +157,13 @@
                                                 {{ report.work_order.detail.remark }}
                                             </td>
 
-                                            <td v-if="col_price" class="right-thick alert-info">
+                                            <td v-if="col_price" class="right-thick blue-color">
                                                 {{ eval(report.work_order.price.work)|currencyCommas }}
                                             </td>
 
                                             <template v-if="col_allowance">
-                                                <td class="alert-warning">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                                <td class="right-thick alert-warning">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+                                                <td class="yellow-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                                <td class="right-thick yellow-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
                                             </template>
                                         {% endverbatim %}
 

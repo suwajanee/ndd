@@ -17,7 +17,7 @@ var expense_page = new Vue ({
         col_remark: true,
 
         report_list: [],
-        period_list: [],
+        period_num: [],
         total_price_list: [],
         total_expense_list: [],
 
@@ -102,7 +102,7 @@ var expense_page = new Vue ({
             }
             api("/report/api/get-expense-report/", "POST", filter).then((data) => {
                 this.report_list = data.expense
-                this.period_list = data.period
+                this.period_num = data.period
 
                 this.total_price_list = data.total[0]
                 this.total_expense_list = data.total[1]

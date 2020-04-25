@@ -84,8 +84,9 @@ var daily_expense_page = new Vue ({
         //     })
         // },
         matchDriverReport() {
-            var not_active_index = []
-            this.driver_report_list.forEach((driver, index) => {
+            // var not_active_index = []
+            // this.driver_report_list.forEach((driver, index) => {
+            this.driver_report_list.forEach((driver) => {
                 var report_result = this.expense_list.filter(report => report.work_order.driver.id === driver.id)
                 driver['report_list'] = report_result
 
