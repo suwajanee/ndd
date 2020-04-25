@@ -7,8 +7,170 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
 {% endblock %}
 
+<!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb m-0 bg-white">
+        <li class="breadcrumb-item">Expense</li>
+        <li class="breadcrumb-item">{{ year }}</li>
+        {% verbatim %}
+            <li class="breadcrumb-item" :class="{'active': period == 0}">
+                {{ month_list[month-1] }}
+            </li>
+            <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
+            <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
+        {% endverbatim %}
+    </ol>
+</nav> -->
 {% block content %}
+    <div id="summary-expense-page">
 
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Total Expense</li>
+                <li class="breadcrumb-item">{{ year }}</li>
+                {% verbatim %}
+                    <li class="breadcrumb-item" :class="{'active': period == 0}">{{ month_list[month-1] }}</li>
+                    <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
+                    <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
+                {% endverbatim %}
+            </ol>
+        </nav>
+
+        {% verbatim %}
+
+            <div class="row m-0" style="width: 100vw;">
+                <div class="input-group my-3 col-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">YEAR</span>
+                    </div>
+                    <select class="custom-select" v-model="year" @change="changeUrl(0)">
+                        <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text">MONTH</span>
+                    </div>
+                    <select class="custom-select" v-model="month" @change="changeUrl(0)">
+                        <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text">#</span>
+                    </div>
+                    <select class="custom-select col-2" v-model="period" @change="changeUrl(period)">
+                        <option value='0'>All</option>
+                        <option v-for="p in period_num" :value="p">{{ p }}</option>
+                    </select>
+                </div>
+
+                <div class="p-0 float-right">
+                    <div class="switch-field m-3 position-absolute" style="right: 0;">
+                        <input type="radio" id="work_ndd" v-model="co" value="ndd" />
+                        <label for="work_ndd">NDD</label>
+
+                        <input type="radio" id="work_vts" v-model="co" value="vts" />
+                        <label for="work_vts">VTS</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4 class="text-center">{{ full_month_list[month-1] }} {{ year }}</h4>
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0 head-date">
+                <table class="table table-hover table-bordered m-0 w-100">
+                    <thead class="text-center">
+                        <tr>
+                            <th>
+                                Truck
+                            </th>
+                            <th>
+                                License
+                            </th>
+                            <th>
+                                Driver
+                            </th>
+                            <template v-if="date_list.length">
+                                <th v-if="date_list.length" v-for="date in date_list" :class="getDayColor(date)" style="min-width: 100px;">
+                                    {{ date|formatDate }}
+                                </th>
+                            </template>
+                            <th v-else style="min-width: 20vw;"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white text-right">
+                        <tr v-for="summary in summary_list">
+                            <template v-if="summary.truck">
+                                <td class="text-center px-3">{{ summary.truck.number }}</td>
+                                <td class="text-nowrap text-center px-3">{{ summary.truck.license_plate }}</td>
+                            </template>
+                            <template v-else>
+                                <td></td>
+                                <td></td>
+                            </template>
+
+                            <td class="text-nowrap text-left px-3">
+                                {{ summary.driver }}
+                            </td>
+                            <template v-if="date_list.length">
+                                <td v-for="total in summary.total">
+                                    {{ total|currencyCommas }}
+                                </td>
+                            </template>
+                            <td v-else></td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="text-right">
+                        <tr class="tfoot-total-4 font-weight-bold mon-color">
+                            <td></td>
+                            <td></td>
+                            <td class="text-center">Total</td>
+                            <template v-if="date_list.length">
+                                <td v-for="date_total in date_total_list">
+                                    {{ date_total|currencyCommas }}
+                                </td>
+                            </template>
+                            <td v-else></td>
+                        </tr>
+
+                        <tr class="tfoot-total-3">
+                            <td :colspan="date_list.length + 4" class="bg-white"></td>
+                        </tr>
+
+                        <tr class="tfoot-total-2 fri-color">
+                            <td></td>
+                            <td></td>
+                            <td class="text-center">ชอ</td>
+                            <template v-if="date_list.length">
+                                <td v-for="thc in thc_list">
+                                    {{ thc|currencyCommas }}
+                                </td>
+                            </template>
+                            <td v-else></td>
+                        </tr>
+
+                        <tr class="tfoot-total-1">
+                            <td :colspan="date_list.length + 4" class="bg-dark"></td>
+                        </tr>
+
+                        <tr class="font-weight-bold wed-color">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <template v-if="date_list.length">
+                                <td v-for="total_with_thc in total_with_thc_list">
+                                    {{ total_with_thc|currencyCommas }}
+                                </td>
+                            </template>
+                            <td v-else></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% endverbatim %}
+    </div>
 
 
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>

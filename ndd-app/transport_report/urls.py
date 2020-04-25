@@ -20,6 +20,7 @@ urlpatterns = [
 
     url(r'^summary-expense/$', transport_report_page_view.re_summary_expense_page, name='re-summary-expense-page'),
     url(r'^summary-expense/(?P<year>\d+)/(?P<month>\d+)/(?P<co>[a-z]{3})/$', transport_report_page_view.summary_expense_page, name='summary-expense-page'),
+    url(r'^summary-expense/(?P<year>\d+)/(?P<month>\d+)/(?P<co>[a-z]{3})/(?P<period>[123]{1})/$', transport_report_page_view.period_summary_expense_page, name='period-summary-expense-page'),
 
 
     url(r'^api/get-daily-expense/$', transport_report_data_view.api_get_daily_expense, name='api-get-daily-expense'),

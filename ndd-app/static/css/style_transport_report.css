@@ -86,11 +86,36 @@ tr.text-small td {
     border-top: 1px solid silver;
 }
 .head-date {
-    height: calc(100vh - 221px);
+    height: calc(100vh - 220px);
 }
 .head-driver {
     height: calc(100vh - 253px);
 }
+
+/* .table-fix-head tfoot, */
+/* .table-scroll tfoot th, */
+.table-fix-head tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  /* background: #e1e6ea; */
+  box-shadow: 0 -1px 3px 0 silver;
+}
+
+tfoot tr.tfoot-total-1 td {
+    bottom: 32px;
+}
+tfoot tr.tfoot-total-2 td {
+    bottom: 45px;
+}
+tfoot tr.tfoot-total-3 td {
+    bottom: 77px;
+}
+tfoot tr.tfoot-total-4 td {
+    bottom: 90px;
+}
+
+
   
 .table-fix-head table {
     border-collapse: collapse;
@@ -101,9 +126,8 @@ tr.text-small td {
     position: sticky;
     top: -1;
     background: #e1e6ea;
-    box-shadow: 0 2px 3px 0 silver;
+    box-shadow: 0 1px 3px 0 silver;
     padding: 5px;
-    /* padding-left: 5px; */
 }
 
 .table-fix-head tr td {
@@ -175,53 +199,58 @@ button.multi-select {
 }
 
 /* Day color */
-.sun-color {
-    background-color: #ffcccc;
+.sun-color td {
+    background-color: #ffcccc !important;
 }
-.table-hover .sun-color:hover, input.sun-color {
-    background-color: #ffb3b3;
+.table-hover .sun-color td:hover, input.sun-color {
+    background-color: #ffb3b3 !important;
 }
-.mon-color, input.mon-color {
-    background-color: #ffffcc;
+.mon-color td, input.mon-color {
+    background-color: #ffffcc !important;
 }
-.table-hover .mon-color:hover {
-    background-color: #ffffb3;
-}
-
-.tue-color, input.tue-color {
-    background-color: #ffcce6;
-}
-.table-hover .tue-color:hover {
-    background-color: #ffb3da;
+.table-hover .mon-color td:hover {
+    background-color: #ffffb3 !important;
 }
 
-.wed-color, input.wed-color {
-    background-color: #d9ffcc;
+.tue-color td, input.tue-color {
+    background-color: #ffcce6 !important;
 }
-.table-hover .wed-color:hover {
-    background-color: #c6ffb3;
-}
-
-.thu-color, input.thu-color {
-    background-color: #ffe6cc;
-}
-.table-hover .thu-color:hover {
-    background-color: #ffdab3;
+.table-hover .tue-color td:hover {
+    background-color: #ffb3da !important;
 }
 
-.fri-color, input.fri-color {
-    background-color: #ccffff;
+.wed-color td, input.wed-color {
+    background-color: #d9ffcc !important;
 }
-.table-hover .fri-color:hover {
-    background-color: #b3ffff;
-}
-
-.sat-color, input.sat-color {
-    background-color: #e0ccff;
-}
-.table-hover .sat-color:hover {
-    background-color: #d1b3ff;
+.table-hover .wed-color td:hover {
+    background-color: #c6ffb3 !important;
 }
 
+.thu-color td, input.thu-color {
+    background-color: #ffe6cc !important;
+}
+.table-hover .thu-color td:hover {
+    background-color: #ffdab3 !important;
+}
+
+.fri-color td, input.fri-color {
+    background-color: #ccffff !important;
+}
+.table-hover .fri-color td:hover {
+    background-color: #b3ffff !important;
+}
+
+.sat-color td, input.sat-color {
+    background-color: #e0ccff !important;
+}
+.table-hover .sat-color td:hover {
+    background-color: #d1b3ff !important;
+}
 
 
+td.yellow-color {
+    background-color: #FFF3CD !important;
+}
+td.blue-color {
+    background-color: #e6f2ff !important;
+}

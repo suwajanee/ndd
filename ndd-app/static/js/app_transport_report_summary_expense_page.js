@@ -7,6 +7,18 @@ var summary_expense_page = new Vue ({
         month: '',
         period: '',
         co: '',
+
+        year_list: [],
+        month_list: [],
+        full_month_list: [],
+        period_num: [],
+
+        summary_list: [],
+        date_list: [],
+        thc_list: [],
+
+        date_total_list: [],
+        total_with_thc_list: [],
     },
     methods: {
         reload(year, month, co, period) {
@@ -15,7 +27,26 @@ var summary_expense_page = new Vue ({
             this.co = co
             this.period = period
 
+            this.getYear()
+            this.month_list = _month
+            this.full_month_list = _full_month
+
             this.getSummaryExpenseReport()
+        },
+
+        getYear() {
+            api("/summary/api/get-year/").then((data) => {
+                this.year_list = data
+            })
+        },
+
+        changeUrl(period) {
+            if(period > 0) {
+                window.open("/report/summary-expense/" + this.year + "/" + this.month + "/" + this.co + "/" + period, "_self")
+            }
+            else {
+                window.open("/report/summary-expense/" + this.year + "/" + this.month + "/" + this.co, "_self")
+            }
         },
 
         getSummaryExpenseReport() {
@@ -28,7 +59,16 @@ var summary_expense_page = new Vue ({
             }
             api("/report/api/get-summary-expense/", "POST", filter).then((data) => {
                 console.log(data)
+                this.period_num = data.period
+
+                this.summary_list = data.summary
+                this.date_list = data.date
+                this.thc_list = data.thc
+
+                this.date_total_list = data.date_total
+                this.total_with_thc_list = data.total_with_thc
                 
+                this.loading = false
             })
         }
     }
