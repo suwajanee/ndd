@@ -8,6 +8,9 @@ var summary_expense_page = new Vue ({
         period: '',
         co: '',
 
+        from_date: '',
+        to_date: '',
+
         year_list: [],
         month_list: [],
         full_month_list: [],
@@ -59,6 +62,10 @@ var summary_expense_page = new Vue ({
             }
             api("/report/api/get-summary-expense/", "POST", filter).then((data) => {
                 console.log(data)
+
+                this.from_date = data.from_date
+                this.to_date = data.to_date
+                
                 this.period_num = data.period
 
                 this.summary_list = data.summary

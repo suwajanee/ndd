@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="p-0 float-right">
-                    <div class="switch-field m-3 position-absolute" style="right: 0;">
+                    <div class="switch-field m-3 position-absolute" style="right: 0;" @change="changeUrl(0)">
                         <input type="radio" id="work_ndd" v-model="co" value="ndd" />
                         <label for="work_ndd">NDD</label>
 
@@ -72,7 +72,7 @@
 
             </div>
 
-            <h4 class="text-center">{{ full_month_list[month-1] }} {{ year }}</h4>
+            <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
 
             <div v-if="loading" class="container position-relative">
                 <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
@@ -114,12 +114,12 @@
                             <td class="text-nowrap text-left px-3">
                                 {{ summary.driver }}
                             </td>
-                            <template v-if="date_list.length">
-                                <td v-for="total in summary.total">
+                            <template v-if="date_list.length" >
+                                <td v-for="total in summary.total" :class="{'bg-light': ! total}">
                                     {{ total|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else></td>
+                            <td v-else class="bg-light">-</td>
                         </tr>
                     </tbody>
                     <tfoot class="text-right">
@@ -132,7 +132,7 @@
                                     {{ date_total|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else></td>
+                            <td v-else>-</td>
                         </tr>
 
                         <tr class="tfoot-total-3">
@@ -148,7 +148,7 @@
                                     {{ thc|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else></td>
+                            <td v-else>-</td>
                         </tr>
 
                         <tr class="tfoot-total-1">
@@ -164,7 +164,7 @@
                                     {{ total_with_thc|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else></td>
+                            <td v-else>-</td>
                         </tr>
                     </tfoot>
                 </table>

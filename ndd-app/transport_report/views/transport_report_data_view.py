@@ -114,33 +114,51 @@ def api_get_expense_report(request):
 
             selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
 
-            expense = Expense.objects.filter(work_order__truck__owner=co)
+            if from_date < to_date:
+                expense = Expense.objects.filter(work_order__truck__owner=co)
 
-            if to_date:
-                expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
+                if to_date:
+                    expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
+                else:
+                    expense = expense.filter(work_order__clear_date__gte=from_date)
+
+                expense = order_expense_report(expense)
+
+                pk_list = expense.values_list('pk', flat=True).distinct()
+
+                expense_serializer = ExpenseThcSerializer(expense, many=True)
+                period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
+
+                customer_list, remark_list = get_filter_choices(expense)
+                total_list = get_total_list(expense)   
+
+                data = {
+                    'from_date': from_date,
+                    'to_date': to_date,
+
+                    'period': period_num,
+                    'expense': expense_serializer.data,
+                    'pk_list': list(pk_list),
+
+                    'customer_list': customer_list,
+                    'remark_list': ['(empty)'] + remark_list,
+
+                    'total': total_list
+                }
             else:
-                expense = expense.filter(work_order__clear_date__gte=from_date)
+                data = {
+                    'from_date': None,
+                    'to_date': None,
 
-            expense = order_expense_report(expense)
+                    'period': 0,
+                    'expense': [],
+                    'pk_list': [],
 
-            pk_list = expense.values_list('pk', flat=True).distinct()
+                    'customer_list': [],
+                    'remark_list': [],
 
-            expense_serializer = ExpenseThcSerializer(expense, many=True)
-            period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
-
-            customer_list, remark_list = get_filter_choices(expense)
-            total_list = get_total_list(expense)            
-
-            data = {
-                'period': period_num,
-                'expense': expense_serializer.data,
-                'pk_list': list(pk_list),
-
-                'customer_list': customer_list,
-                'remark_list': ['(empty)'] + remark_list,
-
-                'total': total_list
-            }
+                    'total': [0, 0]
+                }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -213,65 +231,94 @@ def api_get_summary_expense(request):
 
             selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
 
-            date_list = get_date_range(from_date, to_date)
+            if from_date < to_date:
+                date_list = get_date_range(from_date, to_date)
 
-            expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lt=to_date))
+                expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
 
-            driver_list = get_driver_list(expense, co)
+                driver_list = get_driver_list(expense, co)
 
-            summary_list = []
-            for driver in driver_list:
-                summary_data = {}
-                summary_data['truck'] = driver['truck']
-                summary_data['driver'] = driver['employee']['detail']['full_name']
-                driver_expense = expense.filter(work_order__driver__pk=driver['id'])
+                summary_list = []
+                for driver in driver_list:
+                    summary_data = {}
+                    summary_data['truck'] = driver['truck']
+                    summary_data['driver'] = driver['employee']['detail']['full_name']
+                    driver_expense = expense.filter(work_order__driver__pk=driver['id'])
 
-                daily_total_list = []
+                    daily_total_list = []
+                    for date in date_list:
+                        daily_expense = driver_expense.filter(work_order__clear_date=date)
+                        daily_total = daily_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
+                                    customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+
+                        daily_total_list.append(daily_total)
+                    summary_data['total'] = daily_total_list
+
+                    summary_list.append(summary_data)
+
+                thc_total_list = []
+                date_total_list = []
+                total_with_thc_list = []
+
+                try:
+                    thc_add = Variable.objects.get(key='thc_add').value
+                    thc_add = int(thc_add)
+                except Variable.DoesNotExist:
+                    thc_add = 0
+
                 for date in date_list:
-                    # total_expense = 0
-
-                    daily_expense = driver_expense.filter(work_order__clear_date=date)
-                    daily_total = daily_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
+                    date_expense = expense.filter(work_order__clear_date=date)
+                    date_total = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
                                 customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+                    thc_count = date_expense.filter(co_expense__has_key='co_thc').count()
+                    thc_total = thc_count * thc_add
+                    thc_total_list.append(thc_total)
+                    date_total_list.append(date_total)
 
-                    daily_total_list.append(daily_total)
-                summary_data['total'] = daily_total_list
+                    total_with_thc_list.append(date_total + thc_total)
 
-                summary_list.append(summary_data)
+                period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
 
-            thc_total_list = []
-            date_total_list = []
-            total_with_thc_list = []
+                data = {
+                    'from_date': from_date,
+                    'to_date': to_date,
 
-            try:
-                thc_add = Variable.objects.get(key='thc_add').value
-                thc_add = int(thc_add)
-            except Variable.DoesNotExist:
-                thc_add = 0
+                    'period': period_num,
 
-            for date in date_list:
-                date_expense = expense.filter(work_order__clear_date=date)
-                date_total = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
-                            customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
-                thc_count = date_expense.filter(co_expense__has_key='co_thc').count()
-                thc_total = thc_count * thc_add
-                thc_total_list.append(thc_total)
-                date_total_list.append(date_total)
+                    'summary': summary_list,
+                    'date': date_list,
+                    'thc': thc_total_list,
 
-                total_with_thc_list.append(date_total + thc_total)
+                    'date_total': date_total_list,
+                    'total_with_thc': total_with_thc_list
+                }
+            
+            else:
+                empty_report = Expense.objects.none()
+                driver_list = get_driver_list(empty_report, co)
 
-            period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
+                summary_list = []
+                for driver in driver_list:
+                    summary_data = {
+                        'truck': driver['truck'],
+                        'driver': driver['employee']['detail']['full_name'],
+                        'total': []
+                    }
+                    summary_list.append(summary_data)
 
-            data = {
-                'period': period_num,
+                data = {
+                    'from_date': None,
+                    'to_date': None,
 
-                'summary': summary_list,
-                'date': date_list,
-                'thc': thc_total_list,
+                    'period': 0,
 
-                'date_total': date_total_list,
-                'total_with_thc': total_with_thc_list
-            }
+                    'summary': summary_list,
+                    'date': [],
+                    'thc': [],
+
+                    'date_total': [],
+                    'total_with_thc': []
+                }
                 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -279,7 +326,7 @@ def api_get_summary_expense(request):
 
 def get_date_range(from_date, to_date):
     date_list = []
-    while from_date < to_date:
+    while from_date <= to_date:
         date_list.append(from_date)
         from_date = from_date + timedelta(days=1)
     return date_list
@@ -290,7 +337,7 @@ def get_driver_list(report, co):
         order = 'employee__co'
     else:
         order = '-employee__co'
-
+    
     driver_report_pk = report.values_list('work_order__driver__pk')
 
     driver = Driver.objects.filter((Q(employee__co=co) & Q(employee__status='a')) | Q(pk__in=driver_report_pk)).order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
@@ -331,6 +378,8 @@ def get_start_and_end_date(co, year, month, period):
         else:
             from_date = summary_date_list.filter(date__lt=to_date).first().date
     
+    to_date = to_date - timedelta(days=1)
+    
     return selected_month, from_date, to_date
 
 def get_last_month_date(date_list, month, year):
@@ -350,6 +399,7 @@ def check_next_date(date_list, date):
         return next_date.last().date
     else:
         return datetime.now().date()
+        # return date + timedelta(days=1)
 
 
 def get_total_list(report_list):

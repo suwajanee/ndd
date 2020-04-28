@@ -99,7 +99,7 @@ tr.text-small td {
   position: sticky;
   bottom: 0;
   /* background: #e1e6ea; */
-  box-shadow: 0 -1px 3px 0 silver;
+  box-shadow: 0 -1px 2px 0 silver;
 }
 
 tfoot tr.tfoot-total-1 td {
@@ -199,58 +199,59 @@ button.multi-select {
 }
 
 /* Day color */
-.sun-color td {
+.sun-color, .sun-color td {
     background-color: #ffcccc !important;
 }
-.table-hover .sun-color td:hover, input.sun-color {
+.table-hover .sun-color:hover, input.sun-color {
     background-color: #ffb3b3 !important;
 }
-.mon-color td, input.mon-color {
+
+.mon-color, .mon-color td, input.mon-color {
     background-color: #ffffcc !important;
 }
-.table-hover .mon-color td:hover {
+.table-hover .mon-color:hover {
     background-color: #ffffb3 !important;
 }
 
-.tue-color td, input.tue-color {
+.tue-color, .tue-color td, input.tue-color {
     background-color: #ffcce6 !important;
 }
-.table-hover .tue-color td:hover {
+.table-hover .tue-color:hover {
     background-color: #ffb3da !important;
 }
 
-.wed-color td, input.wed-color {
+.wed-color, .wed-color td, input.wed-color {
     background-color: #d9ffcc !important;
 }
-.table-hover .wed-color td:hover {
+.table-hover .wed-color:hover {
     background-color: #c6ffb3 !important;
 }
 
-.thu-color td, input.thu-color {
+.thu-color, .thu-color td, input.thu-color {
     background-color: #ffe6cc !important;
 }
-.table-hover .thu-color td:hover {
+.table-hover .thu-color:hover {
     background-color: #ffdab3 !important;
 }
 
-.fri-color td, input.fri-color {
+.fri-color, .fri-color td, input.fri-color {
     background-color: #ccffff !important;
 }
-.table-hover .fri-color td:hover {
+.table-hover .fri-color:hover {
     background-color: #b3ffff !important;
 }
 
-.sat-color td, input.sat-color {
+.sat-color, .sat-color td, input.sat-color {
     background-color: #e0ccff !important;
 }
-.table-hover .sat-color td:hover {
+.table-hover .sat-color:hover {
     background-color: #d1b3ff !important;
 }
 
 
-td.yellow-color {
+td.yellow-color, .table-hover .yellow-color:hover {
     background-color: #FFF3CD !important;
 }
-td.blue-color {
+td.blue-color, .table-hover .blue-color:hover {
     background-color: #e6f2ff !important;
 }

@@ -8,6 +8,9 @@ var expense_page = new Vue ({
         co: '',
         period: '',
 
+        from_date: '',
+        to_date: '',
+
         year_list: [],
         month_list: [],
         full_month_list: [],
@@ -101,6 +104,9 @@ var expense_page = new Vue ({
                 period: this.period
             }
             api("/report/api/get-expense-report/", "POST", filter).then((data) => {
+                this.from_date = data.from_date
+                this.to_date = data.to_date
+                
                 this.report_list = data.expense
                 this.period_num = data.period
 
