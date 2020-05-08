@@ -41,22 +41,22 @@
                     
                     <tbody>  
                         <tr v-for="(ndd_date, month_index) in ndd_list">
-                            <td><b>{{ month[month_index] }}</b></td>
+                            <td class="align-middle font-weight-bold">{{ month[month_index] }}</td>
                             <template v-if="ndd_date.length">
-                                <td v-for="(date, phase) in ndd_date">
-                                    <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, phase+1, date.date, date.id)">{{ date.date|formatDate }}</button>
+                                <td v-for="(date, period) in ndd_date">
+                                    <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, period+1, date.date, date.id)">{{ date.date|formatDate }}</button>
                                 </td>
                                 <template v-if="ndd_date.length == 1">
-                                    <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 2, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                    <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                    <td class="align-middle"><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 2, '')"><i class="far fa-calendar-alt"></i></button></td>
+                                    <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                                 </template>
-                                <td v-else-if="ndd_date.length == 2">
+                                <td v-else-if="ndd_date.length == 2" class="align-middle">
                                     <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 3, '')"><i class="far fa-calendar-alt"></i></button>
                                 </td>
                             </template>
                             <template v-else>
-                                <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 1, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                <td v-for="i in 2"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td class="align-middle"><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('ndd', month_index, 1, '')"><i class="far fa-calendar-alt"></i></button></td>
+                                <td v-for="i in 2" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>
@@ -73,18 +73,18 @@
                     </thead>
                     <tbody>
                         <tr v-for="(vts_date, month_index) in vts_list">
-                            <td><b>{{ month[month_index] }}</b></td>
+                            <td class="align-middle font-weight-bold">{{ month[month_index] }}</td>
                             <template v-if="vts_date.length">
-                                <td v-for="(date, phase) in vts_date">
-                                    <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('vts', month_index, phase+1, date.date, date.id)">{{ date.date|formatDate }}</button>
+                                <td v-for="(date, period) in vts_date">
+                                    <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('vts', month_index, period+1, date.date, date.id)">{{ date.date|formatDate }}</button>
                                 </td>
-                                <td v-if="vts_date.length == 1">
+                                <td v-if="vts_date.length == 1" class="align-middle">
                                     <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('vts', month_index, 2, '')"><i class="far fa-calendar-alt"></i></button>
                                 </td>
                             </template>
                             <template v-else>
                                 <td><button class="btn btn-link p-0" data-toggle="modal" data-target="#modalSummaryDate" @click="getModalSummaryDate('vts', month_index, 1, '')"><i class="far fa-calendar-alt"></i></button></td>
-                                <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>
@@ -120,7 +120,7 @@
                         <input class="form-control" v-model="month[modal_data.month]" disabled>
                         <div class="input-group-append">
                             {% verbatim %}
-                                <span class="input-group-text"># {{ modal_data.phase }}</span>
+                                <span class="input-group-text"># {{ modal_data.period }}</span>
                             {% endverbatim %}
                         </div>
                     </div>

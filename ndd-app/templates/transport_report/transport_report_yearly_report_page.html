@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Expense {% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block extra_head %}
 {% endblock %}
 
 {% block content %}
-<div id="summary-date-page">
+<div id="yearly-report-page">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb m-0 bg-white">
-            <li class="breadcrumb-item">รายงานการวิ่งงาน</li>
+            <li class="breadcrumb-item">{{ title }}</li>
             <li class="breadcrumb-item active" aria-current="page">{{ year }}</li>
         </ol>
     </nav>
@@ -20,7 +20,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">YEAR</span>
             </div>
-            <select class="custom-select" v-model="year">
+            <select class="custom-select" v-model="year" @change="changeYear(year)">
                 <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
             </select>
         </div>
@@ -39,18 +39,19 @@
 
                     <tbody>
                         <tr v-for="(ndd_date, month_index) in ndd_list">
-                            <td><a href="#">{{ month[month_index] }}</a></td>
+                            <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate('ndd', month_index+1, 0)">{{ month_list[month_index] }}</a></td>
                             <template v-if="ndd_date.length">
-                                <td v-for="(date, phase) in ndd_date">
-                                    <button class="btn btn-link p-0">{{ date.date|formatDate }}</button>
+                                <td v-for="(date, period) in ndd_date">
+                                    <button v-if="period==0" class="btn btn-link p-0" @click="selectDate('ndd', month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                                    <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == ndd_date[period-1].date}" @click="selectDate('ndd', month_index+1, period+1)">{{ date.date|formatDate }}</button>
                                 </td>
                                 <template v-if="ndd_date.length < 3">
-                                    <td><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                                    <td v-if="ndd_date.length == 1"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                    <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                    <td v-if="ndd_date.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                                 </template>
                             </template>
                             <template v-else>
-                                <td v-for="i in 3"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-for="i in 3" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>
@@ -67,15 +68,16 @@
                     </thead>
                     <tbody>
                         <tr v-for="(vts_date, month_index) in vts_list">
-                            <td><a href="#">{{ month[month_index] }}</a></td>
+                            <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate('vts', month_index+1, 0)">{{ month_list[month_index] }}</button></td>
                             <template v-if="vts_date.length">
-                                <td v-for="(date, phase) in vts_date">
-                                    <button class="btn btn-link p-0">{{ date.date|formatDate }}</button>
+                                <td v-for="(date, period) in vts_date">
+                                    <button v-if="period==0" class="btn btn-link p-0" @click="selectDate('vts', month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                                    <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == vts_date[period-1].date}" @click="selectDate('vts', month_index+1, period+1)">{{ date.date|formatDate }}</button>
                                 </td>
-                                <td v-if="vts_date.length == 1"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-if="vts_date.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                             <template v-else>
-                                <td v-for="i in 2"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-for="i in 2" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
                         </tr>
                     </tbody>
@@ -89,7 +91,7 @@
 </div>
 
 
-<script type="application/javascript" src="{% static 'js/app_transport_report_summary_date.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/app_transport_report_yearly_report_page.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
@@ -97,7 +99,7 @@
 <script type="application/javascript">
 
     window.addEventListener("load", function() {
-        summary_date_page.reload("{{ year }}")
+        yearly_report_page.reload("{{ page }}", "{{ year }}")
     })
 </script>
 

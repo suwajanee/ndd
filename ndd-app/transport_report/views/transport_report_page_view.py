@@ -35,12 +35,20 @@ def driver_expense_page(request, date, driver):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def expense_year_page(request, year):
+def yearly_expense_page(request, year):
     try:
         get_year = Year.objects.get(year_label=year)
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_expense_year_page.html', {'nbar': 'report-page', 'title': 'Expense', 'year': year})
+    return render(request, 'transport_report/transport_report_yearly_report_page.html', {'nbar': 'report-page', 'title': 'Expense', 'page': 'expense', 'year': year})
+
+@login_required(login_url=reverse_lazy('login'))
+def yearly_total_expense_page(request, year):
+    try:
+        get_year = Year.objects.get(year_label=year)
+    except:
+        return HttpResponseRedirect('/dashboard')
+    return render(request, 'transport_report/transport_report_yearly_report_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'page': 'total-expense', 'year': year})
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -70,27 +78,27 @@ def period_expense_page(request, year, month, co, period):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def re_summary_expense_page(request):
+def re_total_expense_page(request):
     date = datetime.now().strftime('%Y/%m/ndd')
-    return HttpResponseRedirect('/report/summary-expense/' + date) 
+    return HttpResponseRedirect('/report/total-expense/' + date) 
 
 @login_required(login_url=reverse_lazy('login'))
-def summary_expense_page(request, year, month, co):
+def total_expense_page(request, year, month, co):
     month = int(month)
     check_return = check_url_format(year, month, co)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_summary_expense_page.html', {'nbar': 'report-page', 'title': 'Summary Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
+        return render(request, 'transport_report/transport_report_total_expense_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'year': year, 'month': month, 'co': co, 'period': '0'})
     else:
         return HttpResponseRedirect('/dashboard')
 
 @login_required(login_url=reverse_lazy('login'))
-def period_summary_expense_page(request, year, month, co, period):
+def period_total_expense_page(request, year, month, co, period):
     month = int(month)
     check_return = check_url_format(year, month, co)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_summary_expense_page.html', {'nbar': 'report-page', 'title': 'Summary Expense', 'year': year, 'month': month, 'co': co, 'period': period})
+        return render(request, 'transport_report/transport_report_total_expense_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'year': year, 'month': month, 'co': co, 'period': period})
     else:
         return HttpResponseRedirect('/dashboard')
         
@@ -103,5 +111,5 @@ def check_url_format(year, month, co):
 
     if (month < 1 or month > 12) or (co != 'ndd' and co != 'vts'):
         return HttpResponseRedirect('/dashboard')
-        return False
+        # return False
     return True

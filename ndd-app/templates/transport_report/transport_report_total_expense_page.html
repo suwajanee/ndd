@@ -21,16 +21,22 @@
     </ol>
 </nav> -->
 {% block content %}
-    <div id="summary-expense-page">
+    <div id="total-expense-page">
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
                 <li class="breadcrumb-item">Total Expense</li>
-                <li class="breadcrumb-item">{{ year }}</li>
+                <li class="breadcrumb-item"><a href="{% url 'yearly-total-expense-page' year=year %}">{{ year }}</a></li>
                 {% verbatim %}
-                    <li class="breadcrumb-item" :class="{'active': period == 0}">{{ month_list[month-1] }}</li>
-                    <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
-                    <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
+                    <template v-if="period == 0">
+                        <li class="breadcrumb-item active">{{ month_list[month-1] }} ( {{ co.toUpperCase() }} )</li>
+                    </template>
+                    <template v-else>
+                        <li class="breadcrumb-item">
+                            <a :href="'/report/total-expense/' + year + '/' + month + '/' + co">{{ month_list[month-1] }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ period }} ( {{ co.toUpperCase() }} )</li>
+                    </template>
                 {% endverbatim %}
             </ol>
         </nav>
@@ -176,11 +182,11 @@
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/app_transport_report_summary_expense_page.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_total_expense_page.js' %}"></script>
 
     <script type="application/javascript">
         window.addEventListener("load", function() {
-            summary_expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+            total_expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
         })
     </script>
 {% endblock %}

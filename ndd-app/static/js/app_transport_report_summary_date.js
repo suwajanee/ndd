@@ -38,12 +38,12 @@ var summary_date_page = new Vue ({
             })
         },
 
-        getModalSummaryDate(co, month, phase, date, id) {
+        getModalSummaryDate(co, month, period, date, id) {
             this.modal_data = {
                 pk: id,
                 year: this.year,
                 month: month,
-                phase: phase,
+                period: period,
                 co: co,
                 date: date
             }
@@ -56,12 +56,12 @@ var summary_date_page = new Vue ({
                     var co_list = this.vts_list
                 }
 
-                if(phase==1) {
+                if(period==1) {
                     var before = co_list[month-1]
                     this.min_date = before[before.length-1].date
                 }
                 else {
-                    this.min_date = co_list[month][phase-2].date
+                    this.min_date = co_list[month][period-2].date
                 }
             }
             catch {

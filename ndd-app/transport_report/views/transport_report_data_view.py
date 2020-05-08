@@ -217,9 +217,8 @@ def api_filter_expense_report(request):
     return JsonResponse('Error', safe=False)
 
 
-# Hereeeeeee
 @csrf_exempt
-def api_get_summary_expense(request):
+def api_get_total_expense(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
@@ -362,7 +361,6 @@ def get_start_and_end_date(co, year, month, period):
 
     if period == 0:
         from_date = get_last_month_date(summary_date_list, month, year)
-
         if selected_month:
             to_date = selected_month.first().date
 
@@ -394,12 +392,15 @@ def get_last_month_date(date_list, month, year):
         return datetime(year, month, 1).date()
 
 def check_next_date(date_list, date):
-    next_date = date_list.filter(date__gt=date)
+    next_month = date + timedelta(days=30)
+    today = datetime.now().date()
+    next_date = date_list.filter(Q(date__gt=date) & Q(date__lte=next_month))
     if next_date:
         return next_date.last().date
+    elif today < next_month:
+        return today
     else:
-        return datetime.now().date()
-        # return date + timedelta(days=1)
+        return next_month
 
 
 def get_total_list(report_list):
