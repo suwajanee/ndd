@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'summary',
     'employee',
     'truck',
+    'transport_report'
 ]
 
 MIDDLEWARE = [
