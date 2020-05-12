@@ -100,6 +100,7 @@
                                     <template v-else>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
+                                        <option value="3">3</option>
                                         <option disabled> -------- </option>
                                         <option value="4">4</option>
                                         <option value="5">5</option>
@@ -146,20 +147,6 @@
                             </div>
                             <input class="form-control" v-model="report_detail.remark" id="1-2" @keydown="keyDownArrow(1, 2)">
                         </div>
-                        
-                        <!-- <div class="input-group my-3 container">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">PRICE</span>
-                            </div>
-                            <div class="input-group-append bg-light">
-                                <span class="input-group-text">{{ sumString(report_price.work)|currencyCommas }}</span>
-                            </div>
-                            <input class="form-control" v-model="report_price.work">
-
-                            <div class="input-group-append">
-                                <span class=""></span>
-                            </div>
-                        </div> -->
 
                         <div class="col-lg-9 container">
                             <div class="row">
@@ -218,13 +205,84 @@
                                 </thead>
                                 <tbody>
                                     <tr class="bg-light text-center text-small">
-                                        <td :class="{'table-warning': ! expense_format_status[0]}">{{ sumString(report_co_expense.co_toll)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[1]}">{{ sumString(report_co_expense.co_gate)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[2]}">{{ sumString(report_co_expense.co_tire)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[3]}">{{ sumString(report_co_expense.co_fine)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[4]}">{{ sumString(report_co_expense.co_thc)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[5]}">{{ sumString(report_co_expense.co_service)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[6]}">{{ sumString(report_co_expense.co_other)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[0]}">
+                                            {{ sumString(report_co_expense.co_toll)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_toll_note, 'far': !report_detail.co_toll_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_toll_note"></textarea>
+                                                </div>
+                                            </div>
+                                            <!-- <button class="btn btn-sm p-0 float-right"><i class="far fa-comment-dots"></i></button> -->
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[1]}">
+                                            {{ sumString(report_co_expense.co_gate)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_gate_note, 'far': !report_detail.co_gate_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_gate_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[2]}">
+                                            {{ sumString(report_co_expense.co_tire)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_tire_note, 'far': !report_detail.co_tire_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_tire_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[3]}">
+                                            {{ sumString(report_co_expense.co_fine)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_fine_note, 'far': !report_detail.co_fine_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_fine_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[4]}">
+                                            {{ sumString(report_co_expense.co_thc)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_thc_note, 'far': !report_detail.co_thc_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_thc_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[5]}">
+                                            {{ sumString(report_co_expense.co_service)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_service_note, 'far': !report_detail.co_service_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_service_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[6]}">
+                                            {{ sumString(report_co_expense.co_other)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.co_other_note, 'far': !report_detail.co_other_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.co_other_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control p-1" v-model="report_co_expense.co_toll" id="4-3" @keydown="keyDownArrow(4, 3)" @change="checkExpenseFormat(report_co_expense.co_toll, 0)"></td>
@@ -234,15 +292,6 @@
                                         <td><input class="form-control p-1" v-model="report_co_expense.co_thc" id="8-3" @keydown="keyDownArrow(8, 3)" @change="checkExpenseFormat(report_co_expense.co_thc, 4)"></td>
                                         <td><input class="form-control p-1" v-model="report_co_expense.co_service" id="9-3" @keydown="keyDownArrow(9, 3)" @change="checkExpenseFormat(report_co_expense.co_service, 5)"></td>
                                         <td><input class="form-control p-1" v-model="report_co_expense.co_other" id="10-3" @keydown="keyDownArrow(10, 3)" @change="checkExpenseFormat(report_co_expense.co_other, 6)"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="form-control p-1" placeholder="Note" id="4-4" @keydown="keyDownArrow(4, 4)" v-model="report_detail.co_toll_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="5-4" @keydown="keyDownArrow(5, 4)" v-model="report_detail.co_gate_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="6-4" @keydown="keyDownArrow(6, 4)" v-model="report_detail.co_tire_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="7-4" @keydown="keyDownArrow(7, 4)" v-model="report_detail.co_fine_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="8-4" @keydown="keyDownArrow(8, 4)" v-model="report_detail.co_thc_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="9-4" @keydown="keyDownArrow(9, 4)" v-model="report_detail.co_service_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="10-4" @keydown="keyDownArrow(10, 4)" v-model="report_detail.co_other_note"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -258,19 +307,44 @@
                                 </thead>
                                 <tbody>
                                     <tr class="bg-light text-center text-small">
-                                        <td :class="{'table-warning': ! expense_format_status[7]}">{{ sumString(report_cus_expense.cus_return)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[8]}">{{ sumString(report_cus_expense.cus_gate)|currencyCommas }}</td>
-                                        <td :class="{'table-warning': ! expense_format_status[9]}">{{ sumString(report_cus_expense.cus_other)|currencyCommas }}</td>
+                                        <td :class="{'table-warning': ! expense_format_status[7]}">
+                                            {{ sumString(report_cus_expense.cus_return)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.cus_return_note, 'far': !report_detail.cus_return_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.cus_return_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[8]}">
+                                            {{ sumString(report_cus_expense.cus_gate)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.cus_gate_note, 'far': !report_detail.cus_gate_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.cus_gate_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td :class="{'table-warning': ! expense_format_status[9]}">
+                                            {{ sumString(report_cus_expense.cus_other)|currencyCommas }}
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-sm btn-note" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-comment-dots" :class="{'fas': report_detail.cus_other_note, 'far': !report_detail.cus_other_note}"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right note-input">
+                                                    <textarea class="form-control" v-model="report_detail.cus_other_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" id="11-3" @keydown="keyDownArrow(11, 3)" @change="checkExpenseFormat(report_cus_expense.cus_return, 7)"></td>
                                         <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" id="12-3" @keydown="keyDownArrow(12, 3)" @change="checkExpenseFormat(report_cus_expense.cus_gate, 8)"></td>
                                         <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" id="13-3" @keydown="keyDownArrow(13, 3)" @change="checkExpenseFormat(report_cus_expense.cus_other, 9)"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="form-control p-1" placeholder="Note" id="11-4" @keydown="keyDownArrow(11, 4)" v-model="report_detail.cus_return_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="12-4" @keydown="keyDownArrow(12, 4)" v-model="report_detail.cus_gate_note"></td>
-                                        <td><input class="form-control p-1" placeholder="Note" id="13-4" @keydown="keyDownArrow(13, 4)" v-model="report_detail.cus_other_note"></td>
                                     </tr>
                                 </tbody>
                             </table>

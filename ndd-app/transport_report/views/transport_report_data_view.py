@@ -184,10 +184,12 @@ def api_filter_expense_report(request):
                 filtered_report = Expense.objects.filter(condition)
             else:
                 if customers:
-                    condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
-                                Q(work_order__detail__customer_name__in=customers)
+                    condition1 = ~Q(work_order__detail__has_key='customer_name') & (Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers))
+                    condition2 = Q(work_order__detail__has_key='customer_name') & Q(work_order__detail__customer_name__in=customers)
+                    # condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
+                    #             Q(work_order__detail__customer_name__in=customers)
                     
-                    expense_report = expense_report.filter(condition)
+                    expense_report = expense_report.filter(condition1 | condition2)
 
                 filter_dict = {}
 
@@ -293,8 +295,8 @@ def api_get_total_expense(request):
                 }
             
             else:
-                empty_report = Expense.objects.none()
-                driver_list = get_driver_list(empty_report, co)
+                # empty_report = Expense.objects.none()
+                driver_list = get_driver_list([], co)
 
                 summary_list = []
                 for driver in driver_list:
@@ -337,7 +339,10 @@ def get_driver_list(report, co):
     else:
         order = '-employee__co'
     
-    driver_report_pk = report.values_list('work_order__driver__pk')
+    if report:
+        driver_report_pk = report.values_list('work_order__driver__pk')
+    else:
+        driver_report_pk = []
 
     driver = Driver.objects.filter((Q(employee__co=co) & Q(employee__status='a')) | Q(pk__in=driver_report_pk)).order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
     serializer = DriverSerializer(driver, many=True)

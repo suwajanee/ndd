@@ -145,33 +145,48 @@ tr.second-header th {
     top: 30px;
 }
 
-div.note-msg {
+/* Notes */
+button.btn-note {
+    padding: 0;
+    background-color: transparent;
+}
+div.note-input {
+    background: #FFF3CD;
+    padding: 0;
+}
+div.note-input textarea {
+    font-size: 12px;
+    background-color: transparent;
+}
+div.note-input textarea:focus {
+    background: #FFF3CD
+}
+
+div.note-msg{
     display: none;
 
     position: absolute;
     margin-top: -30px;
     margin-left: 20px;
+
+    padding: 4px;
     
     border: 1px solid DimGray ;
     box-shadow: 2px 2px 0 0 DimGray;
-
     background: #FFF3CD;
-    color: DimGray ;
-
-    padding: 4px;
+}
+div.note-msg pre {
+    margin: 0;
+    text-align: left;
     font-size: 12px;
+    color: DimGray;
 }
 
 div.note-alert {
     float: right;
     border-radius: 50%;
     background: red;
-    padding: 4px;
-}
-
-
-.table-sm input::placeholder {
-    color: lightgray;
+    padding: 3px;
 }
 
 
@@ -249,8 +264,8 @@ button.multi-select {
 }
 
 
-td.yellow-color, .table-hover .yellow-color:hover {
-    background-color: #FFF3CD !important;
+td.green-color, .table-hover .green-color:hover {
+    background-color: #f2ffe6 !important;
 }
 td.blue-color, .table-hover .blue-color:hover {
     background-color: #e6f2ff !important;

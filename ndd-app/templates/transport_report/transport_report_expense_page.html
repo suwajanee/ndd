@@ -159,8 +159,8 @@
                                         </td>
 
                                         <template v-if="col_allowance">
-                                            <td class="yellow-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                            <td class="right-thick yellow-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+                                            <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+                                            <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
                                         </template>
                                     {% endverbatim %}
 
@@ -181,8 +181,8 @@
                                         {{ total_price_list[0]|currencyCommas }}
                                     </td>
                                     <template v-if="col_allowance">
-                                        <td class="yellow-color">{{ total_price_list[1]|currencyCommas }}</td>
-                                        <td class="right-thick yellow-color">{{ total_price_list[2]|currencyCommas }}</td>
+                                        <td class="green-color">{{ total_price_list[1]|currencyCommas }}</td>
+                                        <td class="right-thick green-color">{{ total_price_list[2]|currencyCommas }}</td>
                                     </template>
                                     <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index)}">
                                         {{ total|currencyCommas }}
