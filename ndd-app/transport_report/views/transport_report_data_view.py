@@ -243,7 +243,7 @@ def api_get_total_expense(request):
                 for driver in driver_list:
                     summary_data = {}
                     summary_data['truck'] = driver['truck']
-                    summary_data['driver'] = driver['employee']['detail']['full_name']
+                    summary_data['driver'] = driver['employee']['full_name']
                     driver_expense = expense.filter(work_order__driver__pk=driver['id'])
 
                     daily_total_list = []
@@ -302,7 +302,7 @@ def api_get_total_expense(request):
                 for driver in driver_list:
                     summary_data = {
                         'truck': driver['truck'],
-                        'driver': driver['employee']['detail']['full_name'],
+                        'driver': driver['employee']['full_name'],
                         'total': []
                     }
                     summary_list.append(summary_data)

@@ -132,16 +132,16 @@
                                 {% endverbatim %}
                                 <tr>
                                     {% verbatim %}
-                                        <td>{{ report.work_order.work_date|formatDate }}</td>
-                                        <td class="text-left">
-                                            {{ report.work_order.driver.employee.detail.full_name }}
+                                        <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
+                                        <td class="text-nowrap text-left">
+                                            {{ report.work_order.driver.employee.full_name }}
                                         </td>
                                         <td>{{ report.work_order.truck.number }}</td>
-                                        <td>
+                                        <td class="text-nowrap">
                                             {{ report.work_order.work.work_id }}
                                             <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
                                         </td>
-                                        <td class="right-thick">
+                                        <td class="right-thick" style="max-width: 160px;">
                                             <template v-if="report.work_order.detail.customer_name">
                                                 {{ report.work_order.detail.customer_name }}
                                             </template>

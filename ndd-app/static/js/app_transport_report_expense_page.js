@@ -57,7 +57,7 @@ var expense_page = new Vue ({
             if(this.search_driver === '') return this.driver_list
             var search = this.search_driver.trim().toLowerCase()
             return this.driver_list.filter(driver => {
-                var driver_name = driver.employee.detail.full_name
+                var driver_name = driver.employee.full_name
                 return driver_name.toLowerCase().includes(search)
             })
         }
@@ -109,7 +109,7 @@ var expense_page = new Vue ({
                 
                 this.report_list = data.expense
                 this.period_num = data.period
-
+                
                 this.total_price_list = data.total[0]
                 this.total_expense_list = data.total[1]
 
@@ -117,9 +117,10 @@ var expense_page = new Vue ({
 
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
-
+                
                 this.loading = false
             })
+            
         },
         checkFilterMode() {
             if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {

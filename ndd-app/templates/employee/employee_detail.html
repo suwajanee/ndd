@@ -51,7 +51,7 @@
                         </template>
                     </td>
                     <td class="text-left">
-                        {{ driver.employee.detail.full_name }}
+                        {{ driver.employee.full_name }}
                     </td>
                     <td>
                         {{ driver.employee.detail.tel|formatTel }}
@@ -85,7 +85,7 @@
                         {{ index+1 }}
                     </td>
                     <td class="text-left">
-                        {{ emp.employee.detail.full_name }}
+                        {{ emp.employee.full_name }}
                     </td>
                     <td class="text-capitalize">
                         {{ emp.employee.job.job_title }}
@@ -116,7 +116,7 @@
                         {{ index+1 }}
                     </td>
                     <td class="text-left">
-                        {{ emp.detail.full_name }}
+                        {{ emp.full_name }}
                     </td>
                     <td v-if="! job" class="text-capitalize">
                         {{ emp.job.job_title }}
@@ -151,7 +151,7 @@
                         </template>
                     </td>
                     <td class="text-left">
-                        {{ driver.employee.detail.full_name }}
+                        {{ driver.employee.full_name }}
                     </td>
                     <td v-if="! job" class="text-capitalize">
                         {{ driver.employee.job.job_title }}

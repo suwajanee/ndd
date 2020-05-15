@@ -15,11 +15,10 @@ class JobSerializer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     job = JobSerializer()
-    detail = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField()
 
-    def get_detail(self, obj):
-        obj.detail['full_name'] = obj.name_title + ' ' + obj.first_name + ' ' + obj.last_name
-        return obj.detail
+    def get_full_name(self, obj):
+        return obj.name_title + ' ' + obj.first_name + ' ' + obj.last_name
 
     class Meta:
         model = Employee
