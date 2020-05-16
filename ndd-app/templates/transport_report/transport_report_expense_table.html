@@ -1,6 +1,6 @@
 {% verbatim %}
 
-    <td @mousedown="show_note" @mouseup="hide_note">      
+    <td @mousedown="show_note" @mouseup="hide_note" class="position-relative">      
         <template v-if="report.work_order.detail.co_toll_note">
             <div class="note-msg">
                 <pre>{{ report.work_order.detail.co_toll_note }}</pre>
@@ -47,8 +47,8 @@
             </div>
             <div class="note-alert"></div>
         </template>
-        <template v-if="report.total_expense.thc_rate">
-            {{ report.total_expense.thc_rate|currencyCommas }}
+        <template v-if="report.thc_rate">
+            {{ report.thc_rate|currencyCommas }}
         </template>
         <template v-else>
             {{ eval(report.co_expense.co_thc)|currencyCommas }}
@@ -75,7 +75,7 @@
         {{ eval(report.co_expense.co_other)|currencyCommas }}
     </td>
 
-    <td class="font-weight-bold right-thick">{{ report.total_expense.company|currencyCommas }}</td>
+    <td class="font-weight-bold right-thick">{{ report.co_total|currencyCommas }}</td>
 
     <td @mousedown="show_note" @mouseup="hide_note">
         <template v-if="report.work_order.detail.cus_return_note">
@@ -107,8 +107,8 @@
         {{ eval(report.cus_expense.cus_other)|currencyCommas }}
     </td>
 
-    <td class="font-weight-bold right-thick">{{ report.total_expense.customer|currencyCommas }}</td>
-    <td class="font-weight-bold">{{ report.total_expense.company + report.total_expense.customer|currencyCommas }}</td>
+    <td class="font-weight-bold right-thick">{{ report.cus_total|currencyCommas }}</td>
+    <td class="font-weight-bold">{{ eval(report.co_total) + eval(report.cus_total)|currencyCommas }}</td>
     <td>
         <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
     </td>

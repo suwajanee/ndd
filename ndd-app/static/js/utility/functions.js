@@ -88,11 +88,10 @@ const sumStringArray = (arr) => {
 const sumObjectArray = (arr, key1, key2) => {
     if(arr){
         return arr.reduce(function (total, value) {
-            value = value[key1]
+            value = eval(value[key1])
             if(key2) {
-                value = value[key2]
+                value = eval(value[key2])
             }
-            // console.log(value)
             if(! value) {
                 value = 0
             }

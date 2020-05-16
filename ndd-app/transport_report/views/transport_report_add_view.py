@@ -30,7 +30,8 @@ def api_add_expense_report(request):
 
             co_expense = req['co_expense']
             cus_expense = req['cus_expense']
-            total_expense = req['total_expense']
+            co_total = req['co_total']
+            cus_total = req['cus_total']
 
             if work_type == 'normal':
                 order_data['work_normal'] = Booking.objects.get(work_id=work_id)
@@ -49,7 +50,8 @@ def api_add_expense_report(request):
                 'work_order': work_order,
                 'co_expense': co_expense,
                 'cus_expense': cus_expense,
-                'total_expense': total_expense
+                'co_total': co_total,
+                'cus_total': cus_total
             }
 
             expense = Expense(**expense_data)

@@ -123,10 +123,11 @@ def api_get_expense_report(request):
                     expense = expense.filter(work_order__clear_date__gte=from_date)
 
                 expense = order_expense_report(expense)
-
+            
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
                 expense_serializer = ExpenseThcSerializer(expense, many=True)
+                
                 period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
 
                 customer_list, remark_list = get_filter_choices(expense)
@@ -233,9 +234,11 @@ def api_get_total_expense(request):
             selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
 
             if from_date < to_date:
-                date_list = get_date_range(from_date, to_date)
+                # date_list = get_date_range(from_date, to_date)
 
                 expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
+
+                date_list = get_values_list(expense, 'work_order__clear_date')
 
                 driver_list = get_driver_list(expense, co)
 
@@ -244,17 +247,18 @@ def api_get_total_expense(request):
                     summary_data = {}
                     summary_data['truck'] = driver['truck']
                     summary_data['driver'] = driver['employee']['full_name']
+
                     driver_expense = expense.filter(work_order__driver__pk=driver['id'])
 
                     daily_total_list = []
-                    for date in date_list:
+                    
+                    for index, date in enumerate(date_list):
                         daily_expense = driver_expense.filter(work_order__clear_date=date)
-                        daily_total = daily_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
-                                    customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+                        daily_total = daily_expense.aggregate(total=Sum('co_total') + Sum('cus_total'))['total'] or 0
 
                         daily_total_list.append(daily_total)
-                    summary_data['total'] = daily_total_list
 
+                    summary_data['total'] = daily_total_list
                     summary_list.append(summary_data)
 
                 thc_total_list = []
@@ -269,8 +273,9 @@ def api_get_total_expense(request):
 
                 for date in date_list:
                     date_expense = expense.filter(work_order__clear_date=date)
-                    date_total = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
-                                customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+                    date_total = date_expense.aggregate(total=Sum('co_total') + Sum('cus_total'))['total'] or 0
+                #     date_total = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
+                #                 customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
                     thc_count = date_expense.filter(co_expense__has_key='co_thc').count()
                     thc_total = thc_count * thc_add
                     thc_total_list.append(thc_total)
@@ -325,12 +330,12 @@ def api_get_total_expense(request):
     return JsonResponse('Error', safe=False)
 
 
-def get_date_range(from_date, to_date):
-    date_list = []
-    while from_date <= to_date:
-        date_list.append(from_date)
-        from_date = from_date + timedelta(days=1)
-    return date_list
+# def get_date_range(from_date, to_date):
+#     date_list = []
+#     while from_date <= to_date:
+#         date_list.append(from_date)
+#         from_date = from_date + timedelta(days=1)
+#     return date_list
 
 
 def get_driver_list(report, co):

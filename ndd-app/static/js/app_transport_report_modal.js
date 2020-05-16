@@ -231,10 +231,10 @@ var report_modal = new Vue ({
                 remove_empty_key(this.report_co_expense)
                 remove_empty_key(this.report_cus_expense)
 
-                var total = {
-                    company: this.totalExpense(this.report_co_expense),
-                    customer: this.totalExpense(this.report_cus_expense)
-                }
+                
+                co_total = this.totalExpense(this.report_co_expense),
+                cus_total = this.totalExpense(this.report_cus_expense)
+                
                 var work_data = {
                     work_type: this.modal_type,
                     work_id: this.report_work_id,
@@ -243,7 +243,8 @@ var report_modal = new Vue ({
                     price: this.report_price,
                     co_expense: this.report_co_expense,
                     cus_expense: this.report_cus_expense,
-                    total_expense: total
+                    co_total: co_total,
+                    cus_total: cus_total
                 }
 
                 if(this.modal_add_mode) {

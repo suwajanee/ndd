@@ -125,8 +125,8 @@ var daily_expense_page = new Vue ({
         },
         
         calcTotalExpense(array) {
-            var co_total = sumObjectArray(array, 'total_expense', 'company')
-            var cus_total = sumObjectArray(array, 'total_expense', 'customer')
+            var co_total = sumObjectArray(array, 'co_total')
+            var cus_total = sumObjectArray(array, 'cus_total')
             return co_total + cus_total
         },
 

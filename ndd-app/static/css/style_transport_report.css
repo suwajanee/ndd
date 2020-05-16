@@ -128,13 +128,16 @@ tfoot tr.tfoot-total-4 td {
     background: #e1e6ea;
     box-shadow: 0 1px 3px 0 silver;
     padding: 5px;
+    z-index: 1;
 }
 
 .table-fix-head tr td {
-    /* padding-right: 5px;
-    padding-left: 5px; */
     padding: 6px;
     vertical-align: middle;
+}
+
+.table-fix-head tbody tr td {
+    position: relative;
 }
 
 tr td.right-thick, tr th.right-thick {
@@ -174,6 +177,8 @@ div.note-msg{
     border: 1px solid DimGray ;
     box-shadow: 2px 2px 0 0 DimGray;
     background: #FFF3CD;
+
+    z-index:2;
 }
 div.note-msg pre {
     margin: 0;
@@ -183,7 +188,10 @@ div.note-msg pre {
 }
 
 div.note-alert {
-    float: right;
+    position: absolute;
+    top: 5px;
+    right:5px;
+
     border-radius: 50%;
     background: red;
     padding: 3px;

@@ -14,7 +14,7 @@ class WorkOrderAdmin(admin.ModelAdmin):
 
 
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ('work_order', 'co_expense', 'cus_expense', 'total_expense')
+    list_display = ('work_order', 'co_expense', 'cus_expense', 'co_total', 'cus_total')
     ordering = ('work_order__clear_date', 'work_order__truck__owner', 'work_order__truck__number', 'work_order__work_date')
 
     search_fields = ['work_order__clear_date', 'work_order__work_normal__work_id', 'work_order__work_agent_transport__work_id', 'work_order__driver__employee__first_name']

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import decimal
 from datetime import datetime
 import json
 
@@ -30,7 +31,8 @@ def api_edit_expense_report(request):
 
             co_expense = req['co_expense']
             cus_expense = req['cus_expense']
-            total_expense = req['total_expense']
+            co_total = req['co_total']
+            cus_total = req['cus_total']
 
             work_order = WorkOrder.objects.get(pk=order_data['pk'])
             if work_type == 'normal':
@@ -54,7 +56,9 @@ def api_edit_expense_report(request):
 
             expense.co_expense = co_expense
             expense.cus_expense = cus_expense
-            expense.total_expense = total_expense
+            expense.co_total = co_total
+            expense.cus_total = cus_total
+
             expense.save()
 
             return JsonResponse('Success', safe=False)

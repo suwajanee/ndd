@@ -61,8 +61,6 @@ var total_expense_page = new Vue ({
                 period: this.period
             }
             api("/report/api/get-total-expense/", "POST", filter).then((data) => {
-                console.log(data)
-
                 this.from_date = data.from_date
                 this.to_date = data.to_date
                 

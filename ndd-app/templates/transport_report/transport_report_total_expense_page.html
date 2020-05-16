@@ -1,25 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Summary Expense {% endblock %}
+{% block title %} Total Expense {% endblock %}
 
 {% block extra_head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
 {% endblock %}
 
-<!-- <nav aria-label="breadcrumb">
-    <ol class="breadcrumb m-0 bg-white">
-        <li class="breadcrumb-item">Expense</li>
-        <li class="breadcrumb-item">{{ year }}</li>
-        {% verbatim %}
-            <li class="breadcrumb-item" :class="{'active': period == 0}">
-                {{ month_list[month-1] }}
-            </li>
-            <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
-            <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span>
-        {% endverbatim %}
-    </ol>
-</nav> -->
 {% block content %}
     <div id="total-expense-page">
 
@@ -78,7 +65,42 @@
 
             </div>
 
-            <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
+            <h4 v-if="! loading" class="text-center">
+                {{ full_month_list[month-1] }} {{ year }} 
+                <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small>
+                <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalTotalExpense"><i class="fas fa-lg fa-star"></i></button>
+            </h4>
+
+            <div class="modal fade" id="modalTotalExpense" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">
+                                {{ full_month_list[month-1] }} <small v-if="period>0" class="text-muted"># {{ period }}</small>
+                            </h4>
+                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <table class="table table-borderless m-0 font-weight-bold">
+                                <tr class="table-warning">
+                                    <td class="text-center">ยอดรวม</td>
+                                    <td class="text-right">{{ sumStringArray(date_total_list)|currencyCommas }}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid black;">
+                                    <td class="text-center">ชอ</td>
+                                    <td class="text-right">{{ sumStringArray(thc_list)|currencyCommas }}</td>
+                                </tr>
+                                <tr class="table-success" style="border-bottom: double black;">
+                                    <td class="text-center">ยอดเบิก</td>
+                                    <td class="text-right">{{ sumStringArray(total_with_thc_list)|currencyCommas }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div v-if="loading" class="container position-relative">
                 <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
@@ -99,33 +121,33 @@
                                 Driver
                             </th>
                             <template v-if="date_list.length">
-                                <th v-if="date_list.length" v-for="date in date_list" :class="getDayColor(date)" style="min-width: 100px;">
+                                <th v-if="date_list.length" v-for="date in date_list" :class="getDayColor(date)">
                                     {{ date|formatDate }}
                                 </th>
                             </template>
-                            <th v-else style="min-width: 20vw;"></th>
+                            <th style="width:100%;"></th>
                         </tr>
                     </thead>
                     <tbody class="bg-white text-right">
                         <tr v-for="summary in summary_list">
                             <template v-if="summary.truck">
-                                <td class="text-center px-3">{{ summary.truck.number }}</td>
-                                <td class="text-nowrap text-center px-3">{{ summary.truck.license_plate }}</td>
+                                <td class="text-center px-3" style="min-width: 80px;">{{ summary.truck.number }}</td>
+                                <td class="text-nowrap text-center px-3" style="min-width: 100px;">{{ summary.truck.license_plate }}</td>
                             </template>
                             <template v-else>
-                                <td></td>
-                                <td></td>
+                                <td style="min-width: 80px;"></td>
+                                <td style="min-width: 100px;"></td>
                             </template>
 
-                            <td class="text-nowrap text-left px-3">
+                            <td class="text-nowrap text-left px-3" style="min-width: 200px;">
                                 {{ summary.driver }}
                             </td>
-                            <template v-if="date_list.length" >
-                                <td v-for="total in summary.total" :class="{'bg-light': ! total}">
+                            <template v-if="date_list.length">
+                                <td v-for="total in summary.total" :class="{'bg-light': ! total}" style="min-width: 120px; width: 120px;">
                                     {{ total|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else class="bg-light">-</td>
+                            <td class="bg-light"></td>
                         </tr>
                     </tbody>
                     <tfoot class="text-right">
@@ -138,14 +160,14 @@
                                     {{ date_total|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else>-</td>
+                            <td></td>
                         </tr>
 
                         <tr class="tfoot-total-3">
                             <td :colspan="date_list.length + 4" class="bg-white"></td>
                         </tr>
 
-                        <tr class="tfoot-total-2 fri-color">
+                        <tr class="tfoot-total-2 table-light">
                             <td></td>
                             <td></td>
                             <td class="text-center">ชอ</td>
@@ -154,7 +176,7 @@
                                     {{ thc|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else>-</td>
+                            <td></td>
                         </tr>
 
                         <tr class="tfoot-total-1">
@@ -170,7 +192,7 @@
                                     {{ total_with_thc|currencyCommas }}
                                 </td>
                             </template>
-                            <td v-else>-</td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
