@@ -68,7 +68,7 @@
             <h4 v-if="! loading" class="text-center">
                 {{ full_month_list[month-1] }} {{ year }} 
                 <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small>
-                <button class="btn btn-link p-0" data-toggle="modal" data-target="#modalTotalExpense"><i class="fas fa-lg fa-star"></i></button>
+                <button class="btn btn-link p-0 pb-1" data-toggle="modal" data-target="#modalTotalExpense"><i class="fas fa-lg fa-star"></i></button>
             </h4>
 
             <div class="modal fade" id="modalTotalExpense" tabindex="-1" role="dialog" aria-hidden="true">

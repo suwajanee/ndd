@@ -28,12 +28,10 @@ from employee.serializers import EmployeeSerializer
 from employee.serializers import DriverSerializer
 
 
+# Daily Expense & Daily Driver Expense
 @csrf_exempt
 def api_get_daily_expense(request):
     if request.user.is_authenticated:
-        # if request.method == "GET":
-        #     date = datetime.today()
-        #     co = 'ndd'
         if request.method == "POST":  
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
@@ -42,17 +40,18 @@ def api_get_daily_expense(request):
                 date = datetime.strptime(date, '%Y-%m-%d')
             except:
                 return JsonResponse(False, safe=False)
-        # else:
-        #     return JsonResponse('Error', safe=False)
 
             work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date', 'pk')
             serializer = ExpenseSerializer(work_expense, many=True)
+
+            total = work_expense.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             driver_list = get_driver_list(work_expense, co)
             data = {
                 'date': date.date(),
                 'work_expense': serializer.data,
-                'driver_list': driver_list
+                'driver_list': driver_list,
+                'total': total
             }
 
             return JsonResponse(data, safe=False)
@@ -92,16 +91,20 @@ def api_get_daily_driver_expense(request):
             co_work = ExpenseSerializer(co_work_expense, many=True)
             not_co_work = ExpenseSerializer(not_co_work_expense, many=True)
 
+            total = work_expense.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
+
             data = {
-                "driver": driver_serializer.data,
-                "truck": truck_data,
-                "report": [co_work.data, not_co_work.data]
+                'driver': driver_serializer.data,
+                'truck': truck_data,
+                'report': [co_work.data, not_co_work.data],
+                'total': total
             }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
 
+# Expense page & Filter
 @csrf_exempt
 def api_get_expense_report(request):
     if request.user.is_authenticated:
@@ -117,12 +120,11 @@ def api_get_expense_report(request):
             if from_date < to_date:
                 expense = Expense.objects.filter(work_order__truck__owner=co)
 
-                if to_date:
-                    expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
-                else:
-                    expense = expense.filter(work_order__clear_date__gte=from_date)
+                expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
 
                 expense = order_expense_report(expense)
+
+                date_list = get_values_list(expense, 'work_order__clear_date')
             
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
@@ -139,6 +141,8 @@ def api_get_expense_report(request):
 
                     'period': period_num,
                     'expense': expense_serializer.data,
+                    'date_list': date_list,
+
                     'pk_list': list(pk_list),
 
                     'customer_list': customer_list,
@@ -153,6 +157,7 @@ def api_get_expense_report(request):
 
                     'period': 0,
                     'expense': [],
+                    'date_list': [],
                     'pk_list': [],
 
                     'customer_list': [],
@@ -187,9 +192,7 @@ def api_filter_expense_report(request):
                 if customers:
                     condition1 = ~Q(work_order__detail__has_key='customer_name') & (Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers))
                     condition2 = Q(work_order__detail__has_key='customer_name') & Q(work_order__detail__customer_name__in=customers)
-                    # condition = Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers) | \
-                    #             Q(work_order__detail__customer_name__in=customers)
-                    
+      
                     expense_report = expense_report.filter(condition1 | condition2)
 
                 filter_dict = {}
@@ -204,12 +207,16 @@ def api_filter_expense_report(request):
 
                 filtered_report = expense_report.filter(**filter_dict)
 
+            date_list = get_values_list(filtered_report, 'work_order__clear_date')
+
             filtered_report = order_expense_report(filtered_report)
             serializer = ExpenseThcSerializer(filtered_report, many=True)
 
             total_list = get_total_list(filtered_report)
             data = {
                 'expense': serializer.data,
+                'date_list': date_list,
+
                 'total': total_list,
 
                 'customer_list': customer_list,
@@ -220,6 +227,7 @@ def api_filter_expense_report(request):
     return JsonResponse('Error', safe=False)
 
 
+# Total Expense
 @csrf_exempt
 def api_get_total_expense(request):
     if request.user.is_authenticated:
@@ -274,8 +282,7 @@ def api_get_total_expense(request):
                 for date in date_list:
                     date_expense = expense.filter(work_order__clear_date=date)
                     date_total = date_expense.aggregate(total=Sum('co_total') + Sum('cus_total'))['total'] or 0
-                #     date_total = date_expense.annotate(company=Cast(KeyTextTransform('company', 'total_expense'), FloatField()), \
-                #                 customer=Cast(KeyTextTransform('customer', 'total_expense'), FloatField())).aggregate(total=Sum('company') + Sum('customer'))['total'] or 0
+
                     thc_count = date_expense.filter(co_expense__has_key='co_thc').count()
                     thc_total = thc_count * thc_add
                     thc_total_list.append(thc_total)
@@ -300,7 +307,6 @@ def api_get_total_expense(request):
                 }
             
             else:
-                # empty_report = Expense.objects.none()
                 driver_list = get_driver_list([], co)
 
                 summary_list = []
@@ -328,14 +334,6 @@ def api_get_total_expense(request):
                 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
-
-
-# def get_date_range(from_date, to_date):
-#     date_list = []
-#     while from_date <= to_date:
-#         date_list.append(from_date)
-#         from_date = from_date + timedelta(days=1)
-#     return date_list
 
 
 def get_driver_list(report, co):

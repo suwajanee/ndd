@@ -23,13 +23,6 @@
                         </li>
                         <li class="breadcrumb-item active">{{ period }} ( {{ co.toUpperCase() }} )</li>
                     </template>
-                    <!-- <li class="breadcrumb-item" :class="{'active': period == 0}">
-                        <a :href="'/report/expense/' + year">
-                            {{ month_list[month-1] }}
-                        </a>
-                    </li>
-                    <li v-if="period > 0" class="breadcrumb-item active">{{ period }}</li>
-                    <span class="text-secondary">&nbsp;( {{ co.toUpperCase() }} )</span> -->
                 {% endverbatim %}
             </ol>
         </nav>
@@ -56,11 +49,8 @@
                         <select class="custom-select col-2" v-model="period" @change="changeUrl(period)" :disabled="filter_mode">
                             <option value='0'>All</option>
                             <option v-for="p in period_num" :value="p">{{ p }}</option>
-                            <!-- <option>2</option>
-                            <option>3</option> -->
                         </select>
                     </div>
-                    <!-- <button class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-filter"></i></button> -->
                     <button class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
 
                     <div class="input-group my-3 col-3">
@@ -123,14 +113,13 @@
                     </thead>
                     <template v-if="report_list.length">
                         <tbody id="tbody" v-if="report_list.length" class="bg-white">
-                            <template v-for="(report, index) in report_list">
+                            <template v-for="date_report in date_report_list">
                                 {% verbatim %}
-                                <tr v-if="index==0" :class="getDayColor(report.work_order.clear_date)"><td colspan=23 class="py-0 text-left text-muted"><small>{{ report.work_order.clear_date|formatDate }}</small></td></tr>
-                                <tr v-else-if="report.work_order.clear_date!=report_list[index-1].work_order.clear_date" :class="getDayColor(report.work_order.clear_date)">
-                                    <td colspan=23 class="py-0 text-left text-muted"><small>{{ report.work_order.clear_date|formatDate }}</small></td>
-                                </tr>
+                                    <tr :class="getDayColor(date_report.clear_date)">
+                                        <td colspan=23 class="py-0 text-left text-muted"><small>{{ date_report.clear_date|formatDate }}</small></td>
+                                    </tr>
                                 {% endverbatim %}
-                                <tr>
+                                <tr v-for="report in date_report.report_list">
                                     {% verbatim %}
                                         <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
                                         <td class="text-nowrap text-left">
@@ -167,12 +156,26 @@
                                     {% include 'transport_report/transport_report_expense_table.html' %}
                                 </tr>
                                 
+                                <tr>
+                                    {% verbatim %}
+                                        <td colspan=5 class="right-thick"></td>
+                                        <td v-if="col_remark" class="right-thick"></td>
+                                        <td v-if="col_price" class="right-thick"></td>
+                                        <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+                                        <td colspan=8 class="right-thick"></td>
+                                        <td colspan=4 class="right-thick"></td>
+                                         
+                                        <td class="font-weight-bold cyan-color">{{ date_report.total|currencyCommas }}</td>
+                                        <td></td>
+                                    {% endverbatim %}
+                                </tr>
+                                
                             </template>
                         </tbody>
                         <tfoot>
                             {% verbatim %}
                                 <tr class="tfoot-total-1">
-                                    <td colspan=23 class="bg-dark"></td>
+                                    <td colspan=23 class="table-secondary"></td>
                                 </tr>
                                 <tr class="wed-color font-weight-bold">
                                     <td colspan=5 class="right-thick"></td>
@@ -184,7 +187,7 @@
                                         <td class="green-color">{{ total_price_list[1]|currencyCommas }}</td>
                                         <td class="right-thick green-color">{{ total_price_list[2]|currencyCommas }}</td>
                                     </template>
-                                    <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index)}">
+                                    <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index), 'lime-color': index==total_expense_list.length-1}">
                                         {{ total|currencyCommas }}
                                     </td>
                                     <td></td>
@@ -200,9 +203,7 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
-
         </div>
 
         {% include 'transport_report/transport_report_filter_modal.html' %}
@@ -216,7 +217,6 @@
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
-
 
     <script type="application/javascript">
         window.addEventListener("load", function() {

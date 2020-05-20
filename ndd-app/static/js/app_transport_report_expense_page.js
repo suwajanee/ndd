@@ -20,6 +20,8 @@ var expense_page = new Vue ({
         col_remark: true,
 
         report_list: [],
+        date_list: [],
+        date_report_list: [],
         period_num: [],
         total_price_list: [],
         total_expense_list: [],
@@ -108,6 +110,7 @@ var expense_page = new Vue ({
                 this.to_date = data.to_date
                 
                 this.report_list = data.expense
+                this.date_list = data.date_list
                 this.period_num = data.period
                 
                 this.total_price_list = data.total[0]
@@ -117,20 +120,11 @@ var expense_page = new Vue ({
 
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
-                
-                this.loading = false
+
+                this.setDateReport()
             })
             
         },
-        checkFilterMode() {
-            if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {
-                this.filter_mode = true
-            }
-            else {
-                this.filter_mode = false
-            }
-        },
-
         filterExpenseReport() {
             this.modal_warning = false
             if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
@@ -163,6 +157,7 @@ var expense_page = new Vue ({
                 
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
                     this.report_list = data.expense
+                    this.date_list = data.date_list
                     this.total_price_list = data.total[0]
                     this.total_expense_list = data.total[1]
 
@@ -181,10 +176,39 @@ var expense_page = new Vue ({
                         this.remark_list = data.remark_list
                         this.remark_selected = this.remark_list.filter(remark => this.remark_selected.includes(remark))
                     }
-                    this.loading = false
+
+                    this.setDateReport()
+                    // this.loading = false
                 })
             }     
         },
+        checkFilterMode() {
+            if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {
+                this.filter_mode = true
+            }
+            else {
+                this.filter_mode = false
+            }
+        },
+        setDateReport() {
+            this.date_report_list = []
+            this.date_list.forEach((date) => {
+                var report_result = this.report_list.filter(report => report.work_order.clear_date === date)
+
+                var co_total = sumObjectArray(report_result, 'co_total')
+                var cus_total = sumObjectArray(report_result, 'cus_total')
+
+                var report = {
+                    clear_date: date,
+                    report_list: report_result,
+                    total: co_total + cus_total
+                }
+                this.date_report_list.push(report)
+
+            })
+            this.loading = false
+        },
+
         clearFilter() {
             this.work_id = ''
 
@@ -212,7 +236,6 @@ var expense_page = new Vue ({
                 this.truck_list = report_modal.truck_list = data
             })
         },
-
 
         selectDriver(driver) {
             if(driver) {

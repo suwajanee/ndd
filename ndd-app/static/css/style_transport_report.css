@@ -1,4 +1,4 @@
-/* Switch input */
+/* Switch Input */
 .switch-field {
     overflow: hidden;
 }
@@ -39,10 +39,10 @@
 .switch-field label:last-of-type {
     border-radius: 0 4px 4px 0;
 }
+/* End Switch Input */
 
 
-
-/* scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -68,17 +68,11 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
+/* End Scrollbar */
 
 
-
-.table-fix-head td, .table-fix-head th {
-    font-size: 14px;
-}
-tr.text-small td {
-    font-size: 12px;
-}
-
-/* Table fix head */
+/* Table Style */
+/* div fix head */
 .table-fix-head {
     overflow-y: auto;
     overflow-x: auto;
@@ -92,36 +86,32 @@ tr.text-small td {
     height: calc(100vh - 253px);
 }
 
-/* .table-fix-head tfoot, */
-/* .table-scroll tfoot th, */
-.table-fix-head tfoot td {
-  position: -webkit-sticky;
-  position: sticky;
-  bottom: 0;
-  /* background: #e1e6ea; */
-  box-shadow: 0 -1px 2px 0 silver;
-}
-
-tfoot tr.tfoot-total-1 td {
-    bottom: 32px;
-}
-tfoot tr.tfoot-total-2 td {
-    bottom: 45px;
-}
-tfoot tr.tfoot-total-3 td {
-    bottom: 77px;
-}
-tfoot tr.tfoot-total-4 td {
-    bottom: 90px;
-}
-
-
-  
+/* body + head */
 .table-fix-head table {
     border-collapse: collapse;
     width: 100vw;
 }
 
+.table-fix-head tr td {
+    padding: 6px;
+    vertical-align: middle;
+}
+.table-fix-head tbody tr td {
+    position: relative;
+}
+
+.table-fix-head td, .table-fix-head th {
+    font-size: 14px;
+}
+tr.text-small td {
+    font-size: 12px;
+}
+
+tr td.right-thick, tr th.right-thick {
+    border-right: 2px solid lightgray;
+}
+
+/* thead */
 .table-fix-head tr th {
     position: sticky;
     top: -1;
@@ -130,29 +120,39 @@ tfoot tr.tfoot-total-4 td {
     padding: 5px;
     z-index: 1;
 }
-
-.table-fix-head tr td {
-    padding: 6px;
-    vertical-align: middle;
-}
-
-.table-fix-head tbody tr td {
-    position: relative;
-}
-
-tr td.right-thick, tr th.right-thick {
-    border-right: 2px solid lightgray;
-}
-
 tr.second-header th {
     top: 30px;
 }
 
+/* tfoot */
+.table-fix-head tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0 -1px 2px 0 silver;
+}
+tfoot tr.tfoot-total-1 td {
+    bottom: 30px;
+}
+tfoot tr.tfoot-total-2 td {
+    bottom: 43px;
+}
+tfoot tr.tfoot-total-3 td {
+    bottom: 75px;
+}
+tfoot tr.tfoot-total-4 td {
+    bottom: 88px;
+}
+/* End Table Style */
+
+
 /* Notes */
+/* Button */
 button.btn-note {
     padding: 0;
     background-color: transparent;
 }
+/* Add */
 div.note-input {
     background: #FFF3CD;
     padding: 0;
@@ -164,7 +164,7 @@ div.note-input textarea {
 div.note-input textarea:focus {
     background: #FFF3CD
 }
-
+/* Message Box */
 div.note-msg{
     display: none;
 
@@ -186,7 +186,7 @@ div.note-msg pre {
     font-size: 12px;
     color: DimGray;
 }
-
+/* Alert */
 div.note-alert {
     position: absolute;
     top: 5px;
@@ -196,19 +196,15 @@ div.note-alert {
     background: red;
     padding: 3px;
 }
+/* End Notes */
 
 
 /* Multiselect */
-.input-warning {
-    background-color: #ffffcc!important;
-}
-
 ul.multiselect-container {
     padding: 10px;
     max-height: 50vh;
     overflow-y: auto;
 }
-
 button.multi-select {
     /* border: 1px solid lightgray;
     background: white; */
@@ -220,7 +216,10 @@ button.multi-select {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+/* End Multiselect */
 
+
+/* Color */
 /* Day color */
 .sun-color, .sun-color td {
     background-color: #ffcccc !important;
@@ -271,10 +270,22 @@ button.multi-select {
     background-color: #d1b3ff !important;
 }
 
-
+/* Other Warning */
+td.cyan-color {
+    background-color: Cyan !important;
+}
+td.lime-color {
+    background-color: Lime !important;
+}
 td.green-color, .table-hover .green-color:hover {
     background-color: #f2ffe6 !important;
 }
 td.blue-color, .table-hover .blue-color:hover {
     background-color: #e6f2ff !important;
 }
+
+/* Input */
+.input-warning {
+    background-color: #ffffcc!important;
+}
+/* End Color */

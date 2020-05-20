@@ -15,13 +15,11 @@ var daily_expense_page = new Vue ({
 
         driver_report_list: [],
         expense_list: [],
+        total: 0,
         
-        // transport_list: [],
-
         col_price: true,
         col_allowance: true,
         col_remark: false,
-
     },
 
     computed: {
@@ -72,36 +70,19 @@ var daily_expense_page = new Vue ({
                     this.date = data.date
                     this.expense_list = data.work_expense
                     this.driver_report_list = data.driver_list
-                    // this.getAllDriver()
+                    this.total = data.total
+
                     this.matchDriverReport()
                 })
             }
         },
-        // getAllDriver() {
-        //     api("/employee/api/get-all-driver/", "POST", {co: this.co}).then((data) => {
-        //         this.driver_report_list = data
-        //         this.matchDriverReport()
-        //     })
-        // },
         matchDriverReport() {
-            // var not_active_index = []
-            // this.driver_report_list.forEach((driver, index) => {
             this.driver_report_list.forEach((driver) => {
                 var report_result = this.expense_list.filter(report => report.work_order.driver.id === driver.id)
                 driver['report_list'] = report_result
 
                 driver['total'] = this.calcTotalExpense(report_result)
-
-                // if((driver.employee.status === 't' || driver.employee.co != this.co) && driver.report_list.length == 0) {
-                //     not_active_index.push(index)
-                // }
             })
-
-            // not_active_index.forEach((item, index) => {
-            //     item = item - index
-            //     this.driver_report_list.splice(item, 1)
-            // })
-
             this.loading = false 
         },
         
@@ -115,6 +96,7 @@ var daily_expense_page = new Vue ({
                 this.driver_data = report_modal.driver_data = data.driver
                 report_modal.default_truck = data.truck
                 this.expense_list = data.report
+                this.total = data.total
                 
                 this.driver_data['total'] = []
                 this.driver_data['total'][0] = this.calcTotalExpense(this.expense_list[0])
