@@ -51,12 +51,14 @@ var daily_expense_page = new Vue ({
     
 
         changeUrl(driver) {
+            var url = "/report/daily-expense/" + this.date + "/"
             if(driver){
-                window.open("/report/daily-expense/" + this.date + "/" + driver, "_self")
+                url += driver
             }
             else {
-                window.open("/report/daily-expense/" + this.date + "/" + this.co, "_self")
+                url += this.co
             }
+            window.open(url, "_self")
         },
 
         getDailyExpense() {

@@ -28,76 +28,9 @@
         </nav>
 
         <div>
+            {% include 'transport_report/transport_report_expense_header.html' %}
+
             {% verbatim %}
-                <div class="row m-0" style="width: 100vw;">
-                    <div class="input-group my-3 col-4">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">YEAR</span>
-                        </div>
-                        <select class="custom-select" v-model="year" @change="changeUrl(0)" :disabled="filter_mode">
-                            <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
-                        </select>
-                        <div class="input-group-append">
-                            <span class="input-group-text">MONTH</span>
-                        </div>
-                        <select class="custom-select" v-model="month" @change="changeUrl(0)" :disabled="filter_mode">
-                            <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
-                        </select>
-                        <div class="input-group-append">
-                            <span class="input-group-text">#</span>
-                        </div>
-                        <select class="custom-select col-2" v-model="period" @change="changeUrl(period)" :disabled="filter_mode">
-                            <option value='0'>All</option>
-                            <option v-for="p in period_num" :value="p">{{ p }}</option>
-                        </select>
-                    </div>
-                    <button class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
-
-                    <div class="input-group my-3 col-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">COL</span>
-                        </div>
-                        <div class="btn-group">
-                            <button class="custom-select text-left rounded-right multi-select" style="max-width: 160px;" data-toggle="dropdown">
-                                <template v-if="col_price || col_allowance || col_remark">
-                                    <template v-if="col_price">ราคา; </template>
-                                    <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                    <template v-if="col_remark">Remark; </template>
-                                </template>
-                                <template v-else>
-                                    Non selected
-                                </template>
-                            </button>
-                            <ul class="multiselect-container dropdown-menu">
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_price"> ราคา
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_remark"> Remark
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="p-0 float-right">
-                        <div class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl(0)">
-                            <input type="radio" id="work_ndd" v-model="co" value="ndd" />
-                            <label for="work_ndd">NDD</label>
-                            <input type="radio" id="work_vts" v-model="co" value="vts" />
-                            <label for="work_vts">VTS</label>
-                        </div>
-                    </div>
-                </div>
-
                 <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
             {% endverbatim %}
 

@@ -115,25 +115,27 @@ def api_get_expense_report(request):
             period = int(req['period'])
             co = req['co']
 
-            selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
+            selected_month, from_date, to_date = get_from_to_date(co, year, month, period)
 
             if from_date < to_date:
                 expense = Expense.objects.filter(work_order__truck__owner=co)
 
                 expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
-
                 expense = order_expense_report(expense)
 
                 date_list = get_values_list(expense, 'work_order__clear_date')
-            
-                pk_list = expense.values_list('pk', flat=True).distinct()
 
                 expense_serializer = ExpenseThcSerializer(expense, many=True)
                 
                 period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
 
-                customer_list, remark_list = get_filter_choices(expense)
-                total_list = get_total_list(expense)   
+                pk_list = expense.values_list('pk', flat=True).distinct()
+
+                remark_list = get_values_list(expense, 'work_order__detail__remark')
+                customer_list = get_customer_options_filter(expense)
+
+                total_price_list = get_total_price_list(expense)
+                total_expense_list = get_total_expense_list(expense)  
 
                 data = {
                     'from_date': from_date,
@@ -148,7 +150,8 @@ def api_get_expense_report(request):
                     'customer_list': customer_list,
                     'remark_list': ['(empty)'] + remark_list,
 
-                    'total': total_list
+                    'total_price_list': total_price_list,
+                    'total_expense_list': total_expense_list,
                 }
             else:
                 data = {
@@ -183,7 +186,6 @@ def api_filter_expense_report(request):
             remarks = req['remarks']
 
             expense_report = Expense.objects.filter(pk__in=pk_list)
-            customer_list, remark_list = get_filter_choices(expense_report)
 
             if work:
                 condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
@@ -212,15 +214,14 @@ def api_filter_expense_report(request):
             filtered_report = order_expense_report(filtered_report)
             serializer = ExpenseThcSerializer(filtered_report, many=True)
 
-            total_list = get_total_list(filtered_report)
+            total_price_list = get_total_price_list(filtered_report)
+            total_expense_list = get_total_expense_list(filtered_report)
             data = {
                 'expense': serializer.data,
                 'date_list': date_list,
 
-                'total': total_list,
-
-                'customer_list': customer_list,
-                'remark_list': ['(empty)'] + remark_list,
+                'total_price_list': total_price_list,
+                'total_expense_list': total_expense_list,
             }
 
             return JsonResponse(data, safe=False)
@@ -239,7 +240,7 @@ def api_get_total_expense(request):
             period = int(req['period'])
             co = req['co']
 
-            selected_month, from_date, to_date = get_start_and_end_date(co, year, month, period)
+            selected_month, from_date, to_date = get_from_to_date(co, year, month, period)
 
             if from_date < to_date:
                 # date_list = get_date_range(from_date, to_date)
@@ -250,28 +251,28 @@ def api_get_total_expense(request):
 
                 driver_list = get_driver_list(expense, co)
 
-                summary_list = []
+                total_report = []
                 for driver in driver_list:
-                    summary_data = {}
-                    summary_data['truck'] = driver['truck']
-                    summary_data['driver'] = driver['employee']['full_name']
+                    total_data = {}
+                    total_data['truck'] = driver['truck']
+                    total_data['driver'] = driver['employee']['full_name']
 
                     driver_expense = expense.filter(work_order__driver__pk=driver['id'])
 
                     daily_total_list = []
                     
-                    for index, date in enumerate(date_list):
+                    for date in date_list:
                         daily_expense = driver_expense.filter(work_order__clear_date=date)
                         daily_total = daily_expense.aggregate(total=Sum('co_total') + Sum('cus_total'))['total'] or 0
 
                         daily_total_list.append(daily_total)
 
-                    summary_data['total'] = daily_total_list
-                    summary_list.append(summary_data)
+                    total_data['total'] = daily_total_list
+                    total_report.append(total_data)
 
                 thc_total_list = []
                 date_total_list = []
-                total_with_thc_list = []
+                all_total_list = []
 
                 try:
                     thc_add = Variable.objects.get(key='thc_add').value
@@ -285,10 +286,11 @@ def api_get_total_expense(request):
 
                     thc_count = date_expense.filter(co_expense__has_key='co_thc').count()
                     thc_total = thc_count * thc_add
+
                     thc_total_list.append(thc_total)
                     date_total_list.append(date_total)
 
-                    total_with_thc_list.append(date_total + thc_total)
+                    all_total_list.append(date_total + thc_total)
 
                 period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
 
@@ -298,25 +300,25 @@ def api_get_total_expense(request):
 
                     'period': period_num,
 
-                    'summary': summary_list,
+                    'total_report': total_report,
                     'date': date_list,
-                    'thc': thc_total_list,
 
-                    'date_total': date_total_list,
-                    'total_with_thc': total_with_thc_list
+                    'thc_total_list': thc_total_list,
+                    'date_total_list': date_total_list,
+                    'all_total_list': all_total_list
                 }
             
             else:
                 driver_list = get_driver_list([], co)
 
-                summary_list = []
+                total_report = []
                 for driver in driver_list:
-                    summary_data = {
+                    total_data = {
                         'truck': driver['truck'],
                         'driver': driver['employee']['full_name'],
                         'total': []
                     }
-                    summary_list.append(summary_data)
+                    total_report.append(total_data)
 
                 data = {
                     'from_date': None,
@@ -324,12 +326,12 @@ def api_get_total_expense(request):
 
                     'period': 0,
 
-                    'summary': summary_list,
+                    'total_report': total_report,
                     'date': [],
-                    'thc': [],
 
-                    'date_total': [],
-                    'total_with_thc': []
+                    'thc_total_list': [],
+                    'date_total_list': [],
+                    'all_total_list': []
                 }
                 
             return JsonResponse(data, safe=False)
@@ -358,7 +360,7 @@ def order_expense_report(report):
                     'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
 
-def get_start_and_end_date(co, year, month, period):
+def get_from_to_date(co, year, month, period):
     if co == 'ndd':
         period_num = 3
     else:
@@ -411,31 +413,38 @@ def check_next_date(date_list, date):
         return next_month
 
 
-def get_total_list(report_list):
+def get_total_price_list(report_list):
     price_key = ['work_order__price__work', 'work_order__price__allowance', 'work_order__price__overnight']
+    total_price_list = sum_from_key_list(report_list, price_key)
+    return total_price_list
+
+def get_total_expense_list(report_list):
     co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
     cus_expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
 
-    total_price_list = sum_expense_list(report_list, price_key)
+    co_expense_list = sum_from_key_list(report_list, co_expense_key)
     
-    co_expense_list = sum_expense_list(report_list, co_expense_key)
-    
+    try:
+        thc = Variable.objects.get(key='thc').value
+        thc = int(thc)
+    except Variable.DoesNotExist:
+        thc = 0
     co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
-    co_expense_list[4] = co_thc_count * 150
+    co_expense_list[4] = co_thc_count * thc
 
     co_total = sum(co_expense_list)
     co_expense_list.append(co_total)
 
-    cus_expense_list = sum_expense_list(report_list, cus_expense_key)
+    cus_expense_list = sum_from_key_list(report_list, cus_expense_key)
     cus_total = sum(cus_expense_list)
     cus_expense_list.append(cus_total)
 
     total_expense_list = co_expense_list + cus_expense_list
     total_expense_list.append(co_total + cus_total)
 
-    return [total_price_list, total_expense_list]
+    return total_expense_list
 
-def sum_expense_list(report_list, key_list):
+def sum_from_key_list(report_list, key_list):
     total_list = []
     for key in key_list:
         price_list = report_list.values_list(key, flat=True)
@@ -446,18 +455,16 @@ def sum_expense_list(report_list, key_list):
     return total_list
 
 
-def get_filter_choices(report):
-    remark_choices = get_values_list(report, 'work_order__detail__remark')
-
-    detail_customer_choices = get_values_list(report, 'work_order__detail__customer_name')
+def get_customer_options_filter(report):
+    detail_customer_options = get_values_list(report, 'work_order__detail__customer_name')
 
     customer = report.filter(~Q(work_order__detail__has_key='customer_name'))
-    normal_customer_choices = get_values_list(customer, 'work_order__work_normal__principal__name')
-    agent_customer_choices = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
+    normal_customer_options = get_values_list(customer, 'work_order__work_normal__principal__name')
+    agent_customer_options = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
 
-    customer_choices = sorted(detail_customer_choices + normal_customer_choices + agent_customer_choices)
+    customer_options = sorted(detail_customer_options + normal_customer_options + agent_customer_options)
 
-    return customer_choices, remark_choices
+    return customer_options
 
 def get_values_list(expense_list, col):
     query_set = expense_list.order_by(col).values_list(col, flat=True).distinct()

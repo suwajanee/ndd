@@ -3,10 +3,14 @@ var expense_page = new Vue ({
     el: '#expense-page',
     data: {
         loading: false,
+        
         year: '',
         month: '',
         co: '',
         period: '',
+
+        show_filter_btn: true,
+        show_col_select: true,
 
         from_date: '',
         to_date: '',
@@ -89,12 +93,12 @@ var expense_page = new Vue ({
         },
 
         changeUrl(period) {
+            var url = "/report/expense/" + this.year + "/" + this.month + "/" + this.co
             if(period > 0) {
-                window.open("/report/expense/" + this.year + "/" + this.month + "/" + this.co + "/" + period, "_self")
+                url += "/" + period
             }
-            else {
-                window.open("/report/expense/" + this.year + "/" + this.month + "/" + this.co, "_self")
-            }
+
+            window.open(url, "_self")
         },
 
         getExpenseReport() {
@@ -113,8 +117,8 @@ var expense_page = new Vue ({
                 this.date_list = data.date_list
                 this.period_num = data.period
                 
-                this.total_price_list = data.total[0]
-                this.total_expense_list = data.total[1]
+                this.total_price_list = data.total_price_list
+                this.total_expense_list = data.total_expense_list
 
                 this.pk_list = data.pk_list
 
@@ -158,23 +162,16 @@ var expense_page = new Vue ({
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
                     this.report_list = data.expense
                     this.date_list = data.date_list
-                    this.total_price_list = data.total[0]
-                    this.total_expense_list = data.total[1]
+
+                    this.total_price_list = data.total_price_list
+                    this.total_expense_list = data.total_expense_list
 
                     if(this.all_customer) {
-                        this.customer_list = this.customer_selected = data.customer_list
-                    }
-                    else {
-                        this.customer_list = data.customer_list
-                        this.customer_selected = this.customer_list.filter(customer => this.customer_selected.includes(customer))
+                        this.customer_selected = this.customer_list
                     }
 
                     if(this.all_remark) {
-                        this.remark_list = this.remark_selected = data.remark_list
-                    }
-                    else {
-                        this.remark_list = data.remark_list
-                        this.remark_selected = this.remark_list.filter(remark => this.remark_selected.includes(remark))
+                        this.remark_selected = this.remark_list
                     }
 
                     this.setDateReport()

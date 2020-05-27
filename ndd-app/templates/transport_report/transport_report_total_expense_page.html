@@ -90,11 +90,11 @@
                                 </tr>
                                 <tr style="border-bottom: 1px solid black;">
                                     <td class="text-center">ชอ</td>
-                                    <td class="text-right">{{ sumStringArray(thc_list)|currencyCommas }}</td>
+                                    <td class="text-right">{{ sumStringArray(thc_total_list)|currencyCommas }}</td>
                                 </tr>
                                 <tr class="table-success" style="border-bottom: double black;">
                                     <td class="text-center">ยอดเบิก</td>
-                                    <td class="text-right">{{ sumStringArray(total_with_thc_list)|currencyCommas }}</td>
+                                    <td class="text-right">{{ sumStringArray(all_total_list)|currencyCommas }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -117,7 +117,7 @@
                             <th>
                                 License
                             </th>
-                            <th>
+                            <th class="right-thick">
                                 Driver
                             </th>
                             <template v-if="date_list.length">
@@ -129,21 +129,21 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white text-right">
-                        <tr v-for="summary in summary_list">
-                            <template v-if="summary.truck">
-                                <td class="text-center px-3" style="min-width: 80px;">{{ summary.truck.number }}</td>
-                                <td class="text-nowrap text-center px-3" style="min-width: 100px;">{{ summary.truck.license_plate }}</td>
+                        <tr v-for="total in total_report">
+                            <template v-if="total.truck">
+                                <td class="text-center px-3" style="min-width: 80px;">{{ total.truck.number }}</td>
+                                <td class="text-nowrap text-center px-3" style="min-width: 100px;">{{ total.truck.license_plate }}</td>
                             </template>
                             <template v-else>
                                 <td style="min-width: 80px;"></td>
                                 <td style="min-width: 100px;"></td>
                             </template>
 
-                            <td class="text-nowrap text-left px-3" style="min-width: 200px;">
-                                {{ summary.driver }}
+                            <td class="text-nowrap text-left right-thick px-3" style="min-width: 200px;">
+                                {{ total.driver }}
                             </td>
                             <template v-if="date_list.length">
-                                <td v-for="total in summary.total" :class="{'bg-light': ! total}" style="min-width: 120px; width: 120px;">
+                                <td v-for="total in total.total" :class="{'bg-light': ! total}" style="min-width: 120px; width: 120px;">
                                     {{ total|currencyCommas }}
                                 </td>
                             </template>
@@ -154,7 +154,7 @@
                         <tr class="tfoot-total-4 font-weight-bold mon-color">
                             <td></td>
                             <td></td>
-                            <td class="text-center">Total</td>
+                            <td class="text-center right-thick">Total</td>
                             <template v-if="date_list.length">
                                 <td v-for="date_total in date_total_list">
                                     {{ date_total|currencyCommas }}
@@ -167,13 +167,13 @@
                             <td :colspan="date_list.length + 4" class="bg-white"></td>
                         </tr>
 
-                        <tr class="tfoot-total-2 table-light">
+                        <tr class="tfoot-total-2 fri-color">
                             <td></td>
                             <td></td>
-                            <td class="text-center">ชอ</td>
+                            <td class="text-center right-thick">ชอ</td>
                             <template v-if="date_list.length">
-                                <td v-for="thc in thc_list">
-                                    {{ thc|currencyCommas }}
+                                <td v-for="thc_total in thc_total_list">
+                                    {{ thc_total|currencyCommas }}
                                 </td>
                             </template>
                             <td></td>
@@ -186,10 +186,10 @@
                         <tr class="font-weight-bold wed-color">
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td class="text-center right-thick">TOTAL</td>
                             <template v-if="date_list.length">
-                                <td v-for="total_with_thc in total_with_thc_list">
-                                    {{ total_with_thc|currencyCommas }}
+                                <td v-for="all_total in all_total_list">
+                                    {{ all_total|currencyCommas }}
                                 </td>
                             </template>
                             <td></td>

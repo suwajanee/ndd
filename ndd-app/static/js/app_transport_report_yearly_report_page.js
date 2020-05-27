@@ -25,12 +25,11 @@ var yearly_report_page = new Vue ({
             window.open("/report/" + this.page + "/" + this.year + "/", "_self")
         },
         selectDate(co, month, period) {
+            var url = "/report/" + this.page + "/" + this.year + "/" + month + "/" + co
             if(period > 0) {
-                window.open("/report/" + this.page + "/" + this.year + "/" + month + "/" + co + "/" + period + "/", "_self")
+                url += "/" + period
             }
-            else {
-                window.open("/report/" + this.page + "/" + this.year + "/" + month + "/" + co + "/", "_self")
-            }
+            window.open(url, "_self")
         },
         getYear() {
             api("/summary/api/get-year/").then((data) => {

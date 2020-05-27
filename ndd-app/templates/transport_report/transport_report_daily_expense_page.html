@@ -11,8 +11,7 @@
     <div id="expense-page">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
-                <li class="breadcrumb-item">Report</li>
-                <li class="breadcrumb-item"><a href="{% url 'daily-expense-page' %}">Daily Expense</a></li>
+                <li class="breadcrumb-item">Daily Expense</li>
                 {% if driver %}
                     {% verbatim %}
                         <li class="breadcrumb-item"><a :href="'/report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
@@ -59,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="input-group my-3  col-3">
+                    <div class="input-group my-3 col-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">COL</span>
                         </div>
@@ -94,16 +93,12 @@
                         </div>
                     </div>
 
-                    <div class="p-0 float-right">
-                        <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
-                        <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl()">
-                            <input type="radio" id="work_ndd" v-model="co" value="ndd" />
-                            <label for="work_ndd">NDD</label>
-                            <input type="radio" id="work_vts" v-model="co" value="vts" />
-                            <label for="work_vts">VTS</label>
-                        </div>
-                        
-                        
+                    <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
+                    <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl()">
+                        <input type="radio" id="work_ndd" v-model="co" value="ndd" />
+                        <label for="work_ndd">NDD</label>
+                        <input type="radio" id="work_vts" v-model="co" value="vts" />
+                        <label for="work_vts">VTS</label>
                     </div>
                 </div>
                 

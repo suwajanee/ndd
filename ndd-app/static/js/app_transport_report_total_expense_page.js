@@ -16,12 +16,12 @@ var total_expense_page = new Vue ({
         full_month_list: [],
         period_num: [],
 
-        summary_list: [],
+        total_report: [],
         date_list: [],
-        thc_list: [],
 
+        thc_total_list: [],
         date_total_list: [],
-        total_with_thc_list: [],
+        all_total_list: [],
     },
     methods: {
         reload(year, month, co, period) {
@@ -66,12 +66,12 @@ var total_expense_page = new Vue ({
                 
                 this.period_num = data.period
 
-                this.summary_list = data.summary
+                this.total_report = data.total_report
                 this.date_list = data.date
-                this.thc_list = data.thc
 
-                this.date_total_list = data.date_total
-                this.total_with_thc_list = data.total_with_thc
+                this.thc_total_list = data.thc_total_list
+                this.date_total_list = data.date_total_list
+                this.all_total_list = data.all_total_list
                 
                 this.loading = false
             })
