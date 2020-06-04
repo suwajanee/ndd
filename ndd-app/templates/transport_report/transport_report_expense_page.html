@@ -28,7 +28,7 @@
         </nav>
 
         <div>
-            {% include 'transport_report/transport_report_expense_header.html' %}
+            {% include 'transport_report/transport_report_expense_upper.html' %}
 
             {% verbatim %}
                 <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
@@ -39,11 +39,11 @@
                     <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
                 </div>
             </div>
-            <div v-else class="table-fix-head p-0 head-date">
+            <div v-else class="table-fix-head p-0 head-normal">
                 <table class="table table-hover table-bordered text-center report-table m-0 w-100">
-                    <thead>
-                        {% include 'transport_report/transport_report_expense_thead.html' %}
-                    </thead>
+                    <!-- Thead -->
+                    {% include 'transport_report/transport_report_expense_thead.html' %}
+
                     <template v-if="report_list.length">
                         <tbody id="tbody" v-if="report_list.length" class="bg-white">
                             <template v-for="date_report in date_report_list">
@@ -53,39 +53,6 @@
                                     </tr>
                                 {% endverbatim %}
                                 <tr v-for="report in date_report.report_list">
-                                    {% verbatim %}
-                                        <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
-                                        <td class="text-nowrap text-left">
-                                            {{ report.work_order.driver.employee.full_name }}
-                                        </td>
-                                        <td>{{ report.work_order.truck.number }}</td>
-                                        <td class="text-nowrap">
-                                            {{ report.work_order.work.work_id }}
-                                            <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
-                                        </td>
-                                        <td class="right-thick" style="max-width: 160px;">
-                                            <template v-if="report.work_order.detail.customer_name">
-                                                {{ report.work_order.detail.customer_name }}
-                                            </template>
-                                            <template v-else>
-                                                {{ report.work_order.work.principal.name }}
-                                            </template>
-                                        </td>
-
-                                        <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
-                                            {{ report.work_order.detail.remark }}
-                                        </td>
-
-                                        <td v-if="col_price" class="right-thick blue-color">
-                                            {{ eval(report.work_order.price.work)|currencyCommas }}
-                                        </td>
-
-                                        <template v-if="col_allowance">
-                                            <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                            <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
-                                        </template>
-                                    {% endverbatim %}
-
                                     {% include 'transport_report/transport_report_expense_table.html' %}
                                 </tr>
                                 
@@ -143,7 +110,7 @@
         
     </div>
 
-    {% include 'transport_report/transport_report_expense_modal.html' %}
+    {% include 'transport_report/transport_report_modal.html' %}
 
 
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
@@ -153,7 +120,7 @@
 
     <script type="application/javascript">
         window.addEventListener("load", function() {
-            expense_page.reload("{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+            expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
         })
     </script>
     

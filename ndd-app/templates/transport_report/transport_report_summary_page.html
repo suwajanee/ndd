@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Summary {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="expense-page">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Summary</li>
+                <li class="breadcrumb-item"><a href="{% url 'yearly-summary-page' year=year %}">{{ year }}</a></li>
+                {% verbatim %}
+                    <template v-if="period == 0">
+                        <li class="breadcrumb-item active">{{ month_list[month-1] }}</li>
+                    </template>
+                    <template v-else>
+                        <li class="breadcrumb-item">
+                            <a :href="'/report/summary/' + year + '/' + month + '/' + co">{{ month_list[month-1] }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ period }}</li>
+                    </template>
+                {% endverbatim %}
+            </ol>
+        </nav>
+
+        {% include 'transport_report/transport_report_expense_upper.html' %}
+
+        {% verbatim %}
+            <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0 head-normal">
+                <table class="table table-hover table-bordered text-center report-table m-0 w-100">
+                    <thead class="text-nowrap">
+                        <tr>
+                            <th rowspan=2 class="align-middle" style="max-width: 95px;">Date</th>
+                            <th rowspan=2 class="align-middle">Truck No</th>
+                            <th rowspan=2 class="align-middle">Order No</th>
+                            <th rowspan=2 class="align-middle">Customer</th>
+                            <th rowspan=2 class="align-middle">Remark</th>
+                            <th rowspan=2 class="align-middle right-thick">Booking No</th>
+
+                            <th colspan=3 class="align-middle right-thick">Forward Trip</th>
+                            <th colspan=3 class="align-middle right-thick">Backward Trip</th>
+
+                            <th class="align-middle right-thick">Price</th>
+                            <th class="align-middle">ค่ายกตู้</th>
+                            <th class="align-middle right-thick">ค่าผ่านท่า</th>
+                            <th rowspan=2 class="align-middle">Inv.</th>
+                            <!-- Hereeeeee -->
+                        </tr>
+                        <tr class="second-header">
+                            <th class="align-middle">Container No</th>
+                            <th class="align-middle">Size</th>
+                            <th class="align-middle">Status</th>
+                            <th class="align-middle">Container No</th>
+                            <th class="align-middle">Size</th>
+                            <th class="align-middle">Status</th>
+
+                            <th class="align-middle">//</th>
+                            <th class="align-middle">NDD</th>
+                            <th class="align-middle">NDD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+        {% endverbatim %}
+
+        {% include 'transport_report/transport_report_filter_modal.html' %}
+
+    </div>
+
+    {% include 'transport_report/transport_report_modal.html' %}
+
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
+
+    <script type="application/javascript">
+        window.addEventListener("load", function() {
+            expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+        })
+    </script>
+
+{% endblock %}

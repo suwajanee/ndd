@@ -112,11 +112,10 @@
                     <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
                 </div>
             </div>
-            <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-date': !driver_id}">
+            <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-normal': !driver_id}">
                 <table class="table table-hover table-bordered text-center report-table m-0 w-100">
-                    <thead>
-                        {% include 'transport_report/transport_report_expense_thead.html' %}
-                    </thead>
+                    <!-- Thead -->
+                    {% include 'transport_report/transport_report_expense_thead.html' %}
                     <tbody id="tbody" class="bg-white">
                         {% if driver %}
                             <template v-for="(co_expense_list, index) in expense_list">
@@ -127,45 +126,11 @@
                                 <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
                         {% endif %}
-                                <tr>
-                                        {% verbatim %}
-                                            <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
-
-                                            <td v-if="driver_id" class="text-left text-nowrap">{{ driver_data.full_name }}</td>
-                                            <td v-else class="text-left text-nowrap">{{ driver.employee.full_name }}</td>
-
-                                            <td>{{ report.work_order.truck.number }}</td>
-                                            <td class="text-nowrap">
-                                                {{ report.work_order.work.work_id }}
-                                                <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
-                                            </td>
-                                            <td class="right-thick" style="max-width: 160px;">
-                                                <template v-if="report.work_order.detail.customer_name">
-                                                    {{ report.work_order.detail.customer_name }}
-                                                </template>
-                                                <template v-else>
-                                                    {{ report.work_order.work.principal.name }}
-                                                </template>
-                                            </td>
-
-                                            <td  v-if="col_remark" class="right-thick" style="max-width: 160px;">
-                                                {{ report.work_order.detail.remark }}
-                                            </td>
-
-                                            <td v-if="col_price" class="right-thick blue-color">
-                                                {{ eval(report.work_order.price.work)|currencyCommas }}
-                                            </td>
-
-                                            <template v-if="col_allowance">
-                                                <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-                                                <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
-                                            </template>
-                                        {% endverbatim %}
-
-                                        {% include 'transport_report/transport_report_expense_table.html' %}
-                                    </tr>
+                                        <tr>
+                                            {% include 'transport_report/transport_report_expense_table.html' %}
+                                        </tr>
+                                    </template>
                                 </template>
-                            </template>
 
                             {% verbatim %}
                                 <tr v-else class="bg-light">
@@ -207,19 +172,7 @@
                                     <td></td>
                                 </tr>
                             {% endverbatim %}
-
-                        </template>
-                        <!-- <tr>
-                            <td colspan=23 class="table-secondary"></td>
-                        </tr>
-                        <tr>
-                            {% verbatim %}
-                                <td colspan=20 class="right-thick"></td>
-                                <td class="font-weight-bold lime-color">{{ total|currencyCommas }}</td>
-                                <td></td>
-                            {% endverbatim %}
-                        </tr> -->
-                        
+                        </template>                      
                     </tbody>
                     <tfoot>
                         <tr class="tfoot-total-1 table-secondary">
@@ -244,7 +197,7 @@
         </div>
     </div>
 
-    {% include 'transport_report/transport_report_expense_modal.html' %}
+    {% include 'transport_report/transport_report_modal.html' %}
 
     
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>    

@@ -1,5 +1,36 @@
 {% verbatim %}
 
+    <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
+    <td class="text-nowrap text-left">
+        {{ report.work_order.driver.employee.full_name }}
+    </td>
+    <td>{{ report.work_order.truck.number }}</td>
+    <td class="text-nowrap">
+        {{ report.work_order.work.work_id }}
+        <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template>
+    </td>
+    <td class="right-thick" style="max-width: 160px;">
+        <template v-if="report.work_order.detail.customer_name">
+            {{ report.work_order.detail.customer_name }}
+        </template>
+        <template v-else>
+            {{ report.work_order.work.principal.name }}
+        </template>
+    </td>
+
+    <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
+        {{ report.work_order.detail.remark }}
+    </td>
+
+    <td v-if="col_price" class="right-thick blue-color">
+        {{ eval(report.work_order.price.work)|currencyCommas }}
+    </td>
+
+    <template v-if="col_allowance">
+        <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+        <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+    </template>
+
     <td @mousedown="show_note" @mouseup="hide_note" class="position-relative">      
         <template v-if="report.work_order.detail.co_toll_note">
             <div class="note-msg">

@@ -4,6 +4,7 @@ var expense_page = new Vue ({
     data: {
         loading: false,
         
+        page: '',
         year: '',
         month: '',
         co: '',
@@ -69,7 +70,8 @@ var expense_page = new Vue ({
         }
     },
     methods: {
-        reload(year, month, co, period) {
+        reload(page, year, month, co, period) {
+            this.page = page.toLowerCase()
             this.year = year
             this.month = month
             this.co = report_modal.co = co
@@ -81,7 +83,11 @@ var expense_page = new Vue ({
 
             this.getActiveDriver()
             this.getActiveTruck()
-            this.getExpenseReport()
+            this.getReport()
+
+            if(this.page == 'summary') {
+                this.show_col_select = false
+            }
 
             report_modal.daily_page = false
         },
@@ -93,7 +99,7 @@ var expense_page = new Vue ({
         },
 
         changeUrl(period) {
-            var url = "/report/expense/" + this.year + "/" + this.month + "/" + this.co
+            var url = "/report/" + this.page + "/" + this.year + "/" + this.month + "/" + this.co
             if(period > 0) {
                 url += "/" + period
             }
@@ -101,35 +107,42 @@ var expense_page = new Vue ({
             window.open(url, "_self")
         },
 
-        getExpenseReport() {
+        getReport() {
             this.loading = true
-            var filter = {
+            var params = {
+                page: this.page,
                 year: this.year,
                 month: this.month,
                 co: this.co,
                 period: this.period
             }
-            api("/report/api/get-expense-report/", "POST", filter).then((data) => {
+            api("/report/api/get-expense-report/", "POST", params).then((data) => {
                 this.from_date = data.from_date
                 this.to_date = data.to_date
                 
-                this.report_list = data.expense
-                this.date_list = data.date_list
+                this.report_list = data.report_list
+                // this.date_list = data.date_list
                 this.period_num = data.period
                 
                 this.total_price_list = data.total_price_list
-                this.total_expense_list = data.total_expense_list
+                // this.total_expense_list = data.total_expense_list
 
                 this.pk_list = data.pk_list
 
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
 
-                this.setDateReport()
+                if(this.page == 'expense') {
+                    this.date_list = data.date_list
+                    this.total_expense_list = data.total_expense_list
+                    this.setDateReport()
+                }
+
+                this.loading = false
             })
             
         },
-        filterExpenseReport() {
+        filterReport() {
             this.modal_warning = false
             if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
                 this.modal_warning = true
@@ -139,6 +152,7 @@ var expense_page = new Vue ({
 
                 this.checkFilterMode()
                 var data = {
+                    page: this.page,
                     pk_list: this.pk_list,
                     work: this.work_id.trim(),
                     driver: this.driver_id,
@@ -160,11 +174,11 @@ var expense_page = new Vue ({
                 }
                 
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
-                    this.report_list = data.expense
-                    this.date_list = data.date_list
+                    this.report_list = data.report_list
+                    // this.date_list = data.date_list
 
                     this.total_price_list = data.total_price_list
-                    this.total_expense_list = data.total_expense_list
+                    // this.total_expense_list = data.total_expense_list
 
                     if(this.all_customer) {
                         this.customer_selected = this.customer_list
@@ -174,8 +188,14 @@ var expense_page = new Vue ({
                         this.remark_selected = this.remark_list
                     }
 
-                    this.setDateReport()
-                    // this.loading = false
+                    if(this.page == 'expense') {
+                        this.date_list = data.date_list
+                        this.total_expense_list = data.total_expense_list
+                        this.setDateReport()
+                    }
+
+                    this.loading = false
+
                 })
             }     
         },
@@ -203,7 +223,6 @@ var expense_page = new Vue ({
                 this.date_report_list.push(report)
 
             })
-            this.loading = false
         },
 
         clearFilter() {
@@ -219,7 +238,7 @@ var expense_page = new Vue ({
             this.all_remark = true
             this.remark_selected = this.remark_list
 
-            this.filterExpenseReport()
+            this.filterReport()
 
         },
 

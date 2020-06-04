@@ -79,7 +79,7 @@
     /* height: calc(100vh - 221px); */
     border-top: 1px solid silver;
 }
-.head-date {
+.head-normal {
     height: calc(100vh - 220px);
 }
 .head-driver {

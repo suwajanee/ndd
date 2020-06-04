@@ -22,7 +22,7 @@
                 <option v-for="p in period_num" :value="p">{{ p }}</option>
             </select>
         </div>
-        <button v-if="show_filter_btn" class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterExpense"><i class="fas fa-filter"></i></button>
+        <button v-if="show_filter_btn" class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterReport"><i class="fas fa-filter"></i></button>
 
         <div v-if="show_col_select" class="input-group my-3 col-3">
             <div class="input-group-prepend">

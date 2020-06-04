@@ -110,12 +110,13 @@ def api_get_expense_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
+            page = req['page']
             year = int(req['year'])
             month = int(req['month'])
             period = int(req['period'])
             co = req['co']
 
-            selected_month, from_date, to_date = get_from_to_date(co, year, month, period)
+            period_num, from_date, to_date = get_from_to_date(co, year, month, period)
 
             if from_date < to_date:
                 expense = Expense.objects.filter(work_order__truck__owner=co)
@@ -127,8 +128,6 @@ def api_get_expense_report(request):
 
                 expense_serializer = ExpenseThcSerializer(expense, many=True)
                 
-                period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
-
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
                 remark_list = get_values_list(expense, 'work_order__detail__remark')
@@ -142,8 +141,8 @@ def api_get_expense_report(request):
                     'to_date': to_date,
 
                     'period': period_num,
-                    'expense': expense_serializer.data,
-                    'date_list': date_list,
+                    'report_list': expense_serializer.data,
+                    # 'date_list': date_list,
 
                     'pk_list': list(pk_list),
 
@@ -151,22 +150,28 @@ def api_get_expense_report(request):
                     'remark_list': ['(empty)'] + remark_list,
 
                     'total_price_list': total_price_list,
-                    'total_expense_list': total_expense_list,
+                    # 'total_expense_list': total_expense_list,
                 }
+
+                if page == 'expense':
+                    data['date_list'] = date_list
+                    data['total_expense_list'] = total_expense_list
+
             else:
                 data = {
                     'from_date': None,
                     'to_date': None,
 
                     'period': 0,
-                    'expense': [],
+                    'report_list': [],
                     'date_list': [],
                     'pk_list': [],
 
                     'customer_list': [],
                     'remark_list': [],
 
-                    'total': [0, 0]
+                    'total_price_list': [],
+                    'total_expense_list': [],
                 }
 
             return JsonResponse(data, safe=False)
@@ -178,6 +183,7 @@ def api_filter_expense_report(request):
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
             
+            page = req['page']
             pk_list = req['pk_list']
             work = req['work']
             driver = req['driver']
@@ -217,12 +223,16 @@ def api_filter_expense_report(request):
             total_price_list = get_total_price_list(filtered_report)
             total_expense_list = get_total_expense_list(filtered_report)
             data = {
-                'expense': serializer.data,
-                'date_list': date_list,
+                'report_list': serializer.data,
+                # 'date_list': date_list,
 
                 'total_price_list': total_price_list,
-                'total_expense_list': total_expense_list,
+                # 'total_expense_list': total_expense_list,
             }
+
+            if page == 'expense':
+                data['date_list'] = date_list
+                data['total_expense_list'] = total_expense_list
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -240,7 +250,7 @@ def api_get_total_expense(request):
             period = int(req['period'])
             co = req['co']
 
-            selected_month, from_date, to_date = get_from_to_date(co, year, month, period)
+            period_num, from_date, to_date = get_from_to_date(co, year, month, period)
 
             if from_date < to_date:
                 # date_list = get_date_range(from_date, to_date)
@@ -291,8 +301,6 @@ def api_get_total_expense(request):
                     date_total_list.append(date_total)
 
                     all_total_list.append(date_total + thc_total)
-
-                period_num = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
 
                 data = {
                     'from_date': from_date,
@@ -387,8 +395,10 @@ def get_from_to_date(co, year, month, period):
             from_date = summary_date_list.filter(date__lt=to_date).first().date
     
     to_date = to_date - timedelta(days=1)
+
+    period_count = selected_month.order_by('date').values_list('date', flat=True).distinct().count()
     
-    return selected_month, from_date, to_date
+    return period_count, from_date, to_date
 
 def get_last_month_date(date_list, month, year):
     if month == 1:

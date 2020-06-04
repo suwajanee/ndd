@@ -109,7 +109,7 @@
                                 </select>
                             </div>
 
-                            <div v-if="double_show.includes(report_order.order_type) && work_data.size >= 0 && modal_type=='normal'" class="col px-2">
+                            <div v-if="double_show.includes(report_order.order_type) && work_data.size_20 && ! work_data.size_2_container && modal_type=='normal'" class="col px-2">
                                 <div class="custom-control custom-checkbox m-2">
                                     <input id="doubleCheck" type="checkbox" class="custom-control-input" v-model="report_order.double_container">
                                     <label class="custom-control-label" for="doubleCheck"><b>(+)</b></label>
@@ -132,6 +132,15 @@
                                 <span class="input-group-text">DATE</span>
                             </div>
                             <input type="date" class="form-control" v-model="report_order.work_date" >
+                        </div>
+
+                        <div class="input-group my-3 container">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">CONTAINER</span>
+                            </div>
+                            <input class="form-control" v-model="work_data.container_1" readonly>
+                            <input v-if="work_data.size_2_container" class="form-control" v-model="work_data.container_2" readonly>
+                            <input v-if="report_order.double_container" class="form-control" v-model="report_detail.container_2" placeholder="Container No">
                         </div>
 
                         <div class="input-group my-3 container">

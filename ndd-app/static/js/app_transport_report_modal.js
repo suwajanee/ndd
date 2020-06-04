@@ -82,8 +82,13 @@ var report_modal = new Vue ({
                 this.search_work_id = ''
 
                 var work_order = report.work_order
-                var work = work_order.work
-
+                if(work_order.work_normal) {
+                    var work = work_order.work_normal
+                }
+                else {
+                    var work = work_order.work_agent_transport
+                }
+                
                 this.modal_type = work.principal.work_type
                 this.report_work_id = this.search_work_id = work.work_id
                 this.work_driver_data = work_order.driver.employee
@@ -102,8 +107,11 @@ var report_modal = new Vue ({
                 }
 
                 this.work_data = {
-                    size: work.size.indexOf('20'),
+                    size_20: work.size.startsWith('20'),
+                    size_2_container: work.size.startsWith('2X'),
                     customer: work.principal.name,
+                    container_1: work.container_no || work.container_1,
+                    container_2: work.seal_no || work.container_2
                 }
 
                 this.report_detail = Object.assign({}, work_order.detail)
@@ -152,8 +160,11 @@ var report_modal = new Vue ({
                         this.report_work_id = data.work_id
                         this.report_order.work_date = data.date
                         this.work_data = {
-                            size: data.size.indexOf('20'),
+                            size_20: data.size.startsWith('20'),
+                            size_2_container: data.size.startsWith('2X'),
                             customer: data.principal.name,
+                            container_1: data.container_1,
+                            container_2: data.container_2,
                         }
                     }
                 })
@@ -165,8 +176,11 @@ var report_modal = new Vue ({
                         this.report_work_id = data.work_id
                         this.report_order.work_date = data.date
                         this.work_data = {
-                            size: data.size.indexOf('20'),
+                            size_20: data.size.startsWith('20'),
+                            size_2_container: data.size.startsWith('2X'),
                             customer: data.principal.name,
+                            container_1: data.container_no,
+                            container_2: data.seal_no
                         }
                     }
                 })
@@ -226,6 +240,10 @@ var report_modal = new Vue ({
                 this.modal_warning = true
             }
             else {
+
+                if(! this.report_order.double_container) {
+                    this.report_detail.container_2 = ''
+                }
                 remove_empty_key(this.report_detail)
                 remove_empty_key(this.report_price)
                 remove_empty_key(this.report_co_expense)
@@ -291,7 +309,7 @@ var report_modal = new Vue ({
                 }
             }
             else {
-                expense_page.filterExpenseReport()
+                expense_page.filterReport()
             }
         }
     }
