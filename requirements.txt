@@ -1,4 +1,4 @@
-django==2.2
+django==2.2.13
 gunicorn==19.9.0
 django-suit==0.2.26
 html5lib==1.0.1
