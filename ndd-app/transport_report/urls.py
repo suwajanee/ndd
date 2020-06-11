@@ -9,9 +9,9 @@ from .views import transport_report_page_view
 
 urlpatterns = [
 
-    url(r'^daily-expense/$', transport_report_page_view.daily_expense_page, name='daily-expense-page'),
-    url(r'^daily-expense/(?P<date>\d[-\w]+)/(?P<co>[a-z]{3})', transport_report_page_view.date_expense_page, name='date-expense-page'),
-    url(r'^daily-expense/(?P<date>\d[-\w]+)/(?P<driver>\d+)/$', transport_report_page_view.driver_expense_page, name='driver-expense-page'),
+    url(r'^daily-report/$', transport_report_page_view.re_daily_report_page, name='re-daily-report-page'),
+    url(r'^daily-report/(?P<date>\d[-\w]+)/(?P<co>[a-z]{3})', transport_report_page_view.daily_report_page, name='daily-report-page'),
+    url(r'^daily-report/(?P<date>\d[-\w]+)/(?P<driver>\d+)/$', transport_report_page_view.driver_report_page, name='driver-report-page'),
 
     url(r'^expense/(?P<year>\d+)/$', transport_report_page_view.yearly_expense_page, name='yearly-expense-page'),
     url(r'^summary/(?P<year>\d+)/$', transport_report_page_view.yearly_summary_page, name='yearly-summary-page'),
@@ -30,8 +30,8 @@ urlpatterns = [
     url(r'^total-expense/(?P<year>\d+)/(?P<month>\d+)/(?P<co>[a-z]{3})/(?P<period>[123]{1})/$', transport_report_page_view.period_total_expense_page, name='period-total-expense-page'),
 
 
-    url(r'^api/get-daily-expense/$', transport_report_data_view.api_get_daily_expense, name='api-get-daily-expense'),
-    url(r'^api/get-daily-driver-expense/$', transport_report_data_view.api_get_daily_driver_expense, name='api-get-daily-driver-expense'),
+    url(r'^api/get-daily-report/$', transport_report_data_view.api_get_daily_report, name='api-get-daily-report'),
+    url(r'^api/get-daily-driver-report/$', transport_report_data_view.api_get_daily_driver_report, name='api-get-daily-driver-report'),
 
     url(r'^api/get-expense-report/$', transport_report_data_view.api_get_expense_report, name='api-get-expense-report'),
     url(r'^api/filter-expense-report/$', transport_report_data_view.api_filter_expense_report, name='api-filter-expense-report'),

@@ -12,26 +12,26 @@ from summary.models import Year
 
 
 @login_required(login_url=reverse_lazy('login'))
-def daily_expense_page(request):
+def re_daily_report_page(request):
     date = datetime.now() - timedelta(days=1)
     if date.strftime('%w') == '0':
         date = date - timedelta(days=1)
     date = date.strftime('%Y-%m-%d/ndd')
-    return HttpResponseRedirect('/report/daily-expense/' + date )
+    return HttpResponseRedirect('/report/daily-report/' + date )
 
 @login_required(login_url=reverse_lazy('login'))
-def date_expense_page(request, date, co):
+def daily_report_page(request, date, co):
     if co != 'ndd' and co != 'vts':
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'Daily Expense', 'date': date, 'co': co})
+    return render(request, 'transport_report/transport_report_daily_report_page.html', {'nbar': 'report-page', 'title': 'Daily Report', 'date': date, 'co': co})
 
 @login_required(login_url=reverse_lazy('login'))
-def driver_expense_page(request, date, driver):
+def driver_report_page(request, date, driver):
     try:
         co = Employee.objects.get(pk=driver).co
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_daily_expense_page.html', {'nbar': 'report-page', 'title': 'Daily Expense', 'date': date, 'co': co, 'driver': driver})
+    return render(request, 'transport_report/transport_report_daily_report_page.html', {'nbar': 'report-page', 'title': 'Daily Report', 'date': date, 'co': co, 'driver': driver})
 
 
 @login_required(login_url=reverse_lazy('login'))

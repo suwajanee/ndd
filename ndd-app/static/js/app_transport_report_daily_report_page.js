@@ -1,4 +1,4 @@
-var daily_expense_page = new Vue ({
+var daily_report_page = new Vue ({
 
     el: '#expense-page',
     data: {
@@ -51,7 +51,7 @@ var daily_expense_page = new Vue ({
     
 
         changeUrl(driver) {
-            var url = "/report/daily-expense/" + this.date + "/"
+            var url = "/report/daily-report/" + this.date + "/"
             if(driver){
                 url += driver
             }
@@ -64,7 +64,7 @@ var daily_expense_page = new Vue ({
         getDailyExpense() {
             this.loading = true
             if(this.date && this.co) {
-                api("/report/api/get-daily-expense/", "POST", {date: this.date, co: this.co}).then((data) => {
+                api("/report/api/get-daily-report/", "POST", {date: this.date, co: this.co}).then((data) => {
                     if(! data) {
                         window.location.replace("/dashboard")
                         return false
@@ -90,7 +90,7 @@ var daily_expense_page = new Vue ({
         
         getDailyDriverExpense() {
             this.loading = true
-            api("/report/api/get-daily-driver-expense/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
+            api("/report/api/get-daily-driver-report/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
                 if(! data) {
                     window.location.replace("/dashboard")
                     return false

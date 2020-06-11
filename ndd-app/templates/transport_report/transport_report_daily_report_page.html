@@ -14,7 +14,7 @@
                 <li class="breadcrumb-item">Daily Expense</li>
                 {% if driver %}
                     {% verbatim %}
-                        <li class="breadcrumb-item"><a :href="'/report/daily-expense/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
+                        <li class="breadcrumb-item"><a :href="'/report/daily-report/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{ driver_data.full_name }}
                         </li>
@@ -202,12 +202,12 @@
     
     <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>    
     <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/app_transport_report_daily_expense.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_daily_report_page.js' %}"></script>
 
 
     <script type="application/javascript">     
         window.addEventListener("load", function() {
-            daily_expense_page.reload("{{ date }}", "{{ co }}", "{{ driver }}")
+            daily_report_page.reload("{{ date }}", "{{ co }}", "{{ driver }}")
         })
     </script>
 

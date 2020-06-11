@@ -59,6 +59,7 @@ var report_modal = new Vue ({
 
     methods: {
         getModalExpenseReport(report) {
+            this.modal_warning = false
             this.expense_format_status = {
                 0: true,
                 1: true,
@@ -118,6 +119,9 @@ var report_modal = new Vue ({
                 this.report_price = Object.assign({}, work_order.price)
                 this.report_co_expense = Object.assign({}, report.co_expense)
                 this.report_cus_expense = Object.assign({}, report.cus_expense)
+
+                this.report_detail.status_fw = this.report_detail.status_fw || ''
+                this.report_detail.status_bw = this.report_detail.status_bw || ''
             }
             else {
                 this.modal_add_mode = true
@@ -137,7 +141,10 @@ var report_modal = new Vue ({
                     double_container: false,
                 }
 
-                this.report_detail = {}
+                this.report_detail = {
+                    status_fw: '',
+                    status_bw: ''
+                }
                 this.report_price = {}
                 this.report_co_expense = {}
                 this.report_cus_expense = {}
@@ -269,7 +276,7 @@ var report_modal = new Vue ({
                     api("/report/api/add-expense-report/", "POST", work_data).then((data) => {
                         if(data=='Success') {
                             $('#modalExpenseReport').modal('hide');
-                            daily_expense_page.getDailyDriverExpense()
+                            daily_report_page.getDailyDriverExpense()
                         }
                     })
                 }
@@ -302,10 +309,10 @@ var report_modal = new Vue ({
         pageReload() {
             if(this.daily_page) {
                 if(this.driver_id) {
-                    daily_expense_page.getDailyDriverExpense()
+                    daily_report_page.getDailyDriverExpense()
                 }
                 else {
-                    daily_expense_page.getDailyExpense()
+                    daily_report_page.getDailyExpense()
                 }
             }
             else {

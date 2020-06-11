@@ -30,7 +30,7 @@ from employee.serializers import DriverSerializer
 
 # Daily Expense & Daily Driver Expense
 @csrf_exempt
-def api_get_daily_expense(request):
+def api_get_daily_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":  
             req = json.loads(request.body.decode('utf-8'))
@@ -41,12 +41,13 @@ def api_get_daily_expense(request):
             except:
                 return JsonResponse(False, safe=False)
 
-            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co)).order_by('work_order__driver__truck__number', 'work_order__driver__employee__first_name', 'work_order__work_date', 'pk')
-            serializer = ExpenseSerializer(work_expense, many=True)
+            report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co))
+            report = order_expense_report(report)
+            serializer = ExpenseSerializer(report, many=True)
 
-            total = work_expense.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
+            total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
-            driver_list = get_driver_list(work_expense, co)
+            driver_list = get_driver_list(report, co)
             data = {
                 'date': date.date(),
                 'work_expense': serializer.data,
@@ -59,7 +60,7 @@ def api_get_daily_expense(request):
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
-def api_get_daily_driver_expense(request):
+def api_get_daily_driver_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
@@ -83,15 +84,15 @@ def api_get_daily_driver_expense(request):
             except:
                 truck_data = {}
 
-            work_expense = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
+            report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
 
-            co_work_expense = work_expense.filter(work_order__truck__owner=co)
-            not_co_work_expense = work_expense.filter(~Q(work_order__truck__owner=co))
+            co_report = report.filter(work_order__truck__owner=co)
+            not_co_report = report.filter(~Q(work_order__truck__owner=co))
 
-            co_work = ExpenseSerializer(co_work_expense, many=True)
-            not_co_work = ExpenseSerializer(not_co_work_expense, many=True)
+            co_work = ExpenseSerializer(co_report, many=True)
+            not_co_work = ExpenseSerializer(not_co_report, many=True)
 
-            total = work_expense.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
+            total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             data = {
                 'driver': driver_serializer.data,

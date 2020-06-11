@@ -79,7 +79,10 @@
 
                         <template v-if="report_work_id">
                             <div class="col-2 px-0">
-                                <select class="custom-select" v-model="report_order.order_type" @change="report_order.double_container=false">
+                                <select 
+                                    class="custom-select" v-model="report_order.order_type" 
+                                    @change="report_order.double_container=false, report_detail.status_fw='', report_detail.status_bw=''"
+                                >
                                     <option value="">-</option>
                                     <template v-if="modal_type=='normal'">
                                         <option value="1.1">1.1</option>
@@ -127,34 +130,58 @@
                             <template v-if="report_order.order_type"> / {{ report_order.order_type }}<template v-if="report_order.double_container"> +</template></template>
                         </h4>
 
-                        <div class="input-group my-3 col-6">
+                        <div class="input-group col-6">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">DATE</span>
                             </div>
                             <input type="date" class="form-control" v-model="report_order.work_date" >
                         </div>
 
-                        <div class="input-group my-3 container">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">CONTAINER</span>
-                            </div>
-                            <input class="form-control" v-model="work_data.container_1" readonly>
-                            <input v-if="work_data.size_2_container" class="form-control" v-model="work_data.container_2" readonly>
-                            <input v-if="report_order.double_container" class="form-control" v-model="report_detail.container_2" placeholder="Container No">
-                        </div>
-
-                        <div class="input-group my-3 container">
+                        <div class="input-group my-3 col-9">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">CUSTOMER</span>
                             </div>
                             <input class="form-control" v-model="work_data.customer" readonly>
                             <input class="form-control" v-model="report_detail.customer_name" id="1-1" @keydown="keyDownArrow(1, 1)" >
                         </div>
-                        <div class="input-group my-3 container">
+                        <div class="input-group my-3 col-9">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">REMARK</span>
                             </div>
                             <input class="form-control" v-model="report_detail.remark" id="1-2" @keydown="keyDownArrow(1, 2)">
+                        </div>
+
+                        <div class="row container my-3 mx-0 p-0">
+                            <div class="input-group col-7 pr-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">CONTAINER</span>
+                                </div>
+                                <input class="form-control" v-model="work_data.container_1" id="1-3" @keydown="keyDownArrow(1, 3)" readonly>
+                                <input v-if="work_data.size_2_container" class="form-control" v-model="work_data.container_2" id="2-3" @keydown="keyDownArrow(2, 3)" readonly>
+                                <input v-if="report_order.double_container" class="form-control" v-model="report_detail.container_2" placeholder="Container 2" id="2-3" @keydown="keyDownArrow(2, 3)">
+                            </div>
+
+                            <div class="input-group col pl-0">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">STATUS</span>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">FW</span>
+                                </div>
+                                <select class="custom-select" v-model="report_detail.status_fw">
+                                    <option value="">-</option>
+                                    <option value="e">E</option>
+                                    <option value="f">F</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">BW</span>
+                                </div>
+                                <select class="custom-select" v-model="report_detail.status_bw">
+                                    <option value="">-</option>
+                                    <option value="e">E</option>
+                                    <option value="f">F</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="col-lg-9 container">
@@ -170,7 +197,7 @@
                                             <td :class="{'table-warning': ! expense_format_status[10]}">{{ sumString(report_price.work)|currencyCommas }}</td>
                                         </tr>
                                         <tr>
-                                            <td><input class="form-control p-1" v-model="report_price.work" id="1-3" @keydown="keyDownArrow(1, 3)" @change="checkExpenseFormat(report_price.work, 10)"></td>
+                                            <td><input class="form-control p-1" v-model="report_price.work" id="1-4" @keydown="keyDownArrow(1, 4)" @change="checkExpenseFormat(report_price.work, 10)"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -187,8 +214,8 @@
                                             <td :class="{'table-warning': ! expense_format_status[12]}">{{ sumString(report_price.overnight)|currencyCommas }}</td>
                                         </tr>
                                         <tr>
-                                            <td><input class="form-control p-1" v-model="report_price.allowance" id="2-3" @keydown="keyDownArrow(2, 3)" @change="checkExpenseFormat(report_price.allowance, 11)"></td>
-                                            <td><input class="form-control p-1" v-model="report_price.overnight" id="3-3" @keydown="keyDownArrow(3, 3)" @change="checkExpenseFormat(report_price.overnight, 12)"></td>
+                                            <td><input class="form-control p-1" v-model="report_price.allowance" id="2-4" @keydown="keyDownArrow(2, 4)" @change="checkExpenseFormat(report_price.allowance, 11)"></td>
+                                            <td><input class="form-control p-1" v-model="report_price.overnight" id="3-4" @keydown="keyDownArrow(3, 4)" @change="checkExpenseFormat(report_price.overnight, 12)"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -294,13 +321,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll" id="4-3" @keydown="keyDownArrow(4, 3)" @change="checkExpenseFormat(report_co_expense.co_toll, 0)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate" id="5-3" @keydown="keyDownArrow(5, 3)" @change="checkExpenseFormat(report_co_expense.co_gate, 1)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire" id="6-3" @keydown="keyDownArrow(6, 3)" @change="checkExpenseFormat(report_co_expense.co_tire, 2)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine" id="7-3" @keydown="keyDownArrow(7, 3)" @change="checkExpenseFormat(report_co_expense.co_fine, 3)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc" id="8-3" @keydown="keyDownArrow(8, 3)" @change="checkExpenseFormat(report_co_expense.co_thc, 4)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service" id="9-3" @keydown="keyDownArrow(9, 3)" @change="checkExpenseFormat(report_co_expense.co_service, 5)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other" id="10-3" @keydown="keyDownArrow(10, 3)" @change="checkExpenseFormat(report_co_expense.co_other, 6)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll" id="4-4" @keydown="keyDownArrow(4, 4)" @change="checkExpenseFormat(report_co_expense.co_toll, 0)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate" id="5-4" @keydown="keyDownArrow(5, 4)" @change="checkExpenseFormat(report_co_expense.co_gate, 1)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire" id="6-4" @keydown="keyDownArrow(6, 4)" @change="checkExpenseFormat(report_co_expense.co_tire, 2)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine" id="7-4" @keydown="keyDownArrow(7, 4)" @change="checkExpenseFormat(report_co_expense.co_fine, 3)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc" id="8-4" @keydown="keyDownArrow(8, 4)" @change="checkExpenseFormat(report_co_expense.co_thc, 4)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service" id="9-4" @keydown="keyDownArrow(9, 4)" @change="checkExpenseFormat(report_co_expense.co_service, 5)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other" id="10-4" @keydown="keyDownArrow(10, 4)" @change="checkExpenseFormat(report_co_expense.co_other, 6)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -351,9 +378,9 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" id="11-3" @keydown="keyDownArrow(11, 3)" @change="checkExpenseFormat(report_cus_expense.cus_return, 7)"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" id="12-3" @keydown="keyDownArrow(12, 3)" @change="checkExpenseFormat(report_cus_expense.cus_gate, 8)"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" id="13-3" @keydown="keyDownArrow(13, 3)" @change="checkExpenseFormat(report_cus_expense.cus_other, 9)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" id="11-4" @keydown="keyDownArrow(11, 4)" @change="checkExpenseFormat(report_cus_expense.cus_return, 7)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" id="12-4" @keydown="keyDownArrow(12, 4)" @change="checkExpenseFormat(report_cus_expense.cus_gate, 8)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" id="13-4" @keydown="keyDownArrow(13, 4)" @change="checkExpenseFormat(report_cus_expense.cus_other, 9)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -363,7 +390,6 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                <!-- <div class="modal-footer "> -->
                     <template v-if="! modal_add_mode">
                         <button class="btn btn-link text-danger float-left mr-auto mx-3" @click="deleteExpenseReport(report_order.pk)">Delete Report</button>
                         <button class="btn btn-primary mx-3" @click="addOrEditExpenseReport">Save</button>
@@ -371,7 +397,6 @@
                     <template v-else>
                         <button class="btn btn-primary" @click="addOrEditExpenseReport">Add</button>
                     </template>
-
                 </div>
             </div>
         </div>
