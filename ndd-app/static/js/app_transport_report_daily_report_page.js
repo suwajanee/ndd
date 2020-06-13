@@ -37,6 +37,10 @@ var daily_report_page = new Vue ({
         reload(date, co, driver) {
             this.date = report_modal.date = date
             this.co = report_modal.co = co
+
+            report_modal.trip_color = trip_color
+            report_modal.not_fw_trip = not_fw_trip
+            report_modal.not_bw_trip = not_bw_trip
             
             this.getActiveDriver()
             this.getActiveTruck()

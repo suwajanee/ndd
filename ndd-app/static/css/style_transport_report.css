@@ -270,17 +270,29 @@ button.multi-select {
     background-color: #d1b3ff !important;
 }
 
-/* Other Warning */
-td.cyan-color {
+/* Other Color */
+.cyan-color:not([disabled]) {
     background-color: Cyan !important;
 }
-td.lime-color {
+.pink-color:not([disabled]) {
+    background-color: HotPink !important;
+}
+.yellow-color:not([disabled]) {
+    background-color: Yellow !important;
+}
+.lime-color:not([disabled]), td.lime-color {
     background-color: Lime !important;
 }
-td.green-color, .table-hover .green-color:hover {
+/* td.green-color, .table-hover .green-color:hover {
+    background-color: #f2ffe6 !important;
+} */
+.green-color, td.green-color {
     background-color: #f2ffe6 !important;
 }
-td.blue-color, .table-hover .blue-color:hover {
+/* td.blue-color, .table-hover .blue-color:hover {
+    background-color: #e6f2ff !important;
+} */
+td.blue-color, td.blue-color {
     background-color: #e6f2ff !important;
 }
 
@@ -288,4 +300,5 @@ td.blue-color, .table-hover .blue-color:hover {
 .input-warning {
     background-color: #ffffcc!important;
 }
+
 /* End Color */

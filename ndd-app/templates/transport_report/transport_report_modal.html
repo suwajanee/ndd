@@ -168,7 +168,11 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">FW</span>
                                 </div>
-                                <select class="custom-select" v-model="report_detail.status_fw">
+                                <select 
+                                    class="custom-select" v-model="report_detail.status_fw" 
+                                    :class="report_order.order_type?trip_color[report_order.order_type]:'lime-color'"
+                                    :disabled="not_fw_trip.includes(report_order.order_type) || modal_type=='agent-transport'"
+                                >
                                     <option value="">-</option>
                                     <option value="e">E</option>
                                     <option value="f">F</option>
@@ -176,7 +180,11 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">BW</span>
                                 </div>
-                                <select class="custom-select" v-model="report_detail.status_bw">
+                                <select 
+                                    class="custom-select" v-model="report_detail.status_bw"
+                                    :class="report_order.order_type?trip_color[report_order.order_type]:'lime-color'"
+                                    :disabled="not_bw_trip.includes(report_order.order_type)"
+                                >
                                     <option value="">-</option>
                                     <option value="e">E</option>
                                     <option value="f">F</option>

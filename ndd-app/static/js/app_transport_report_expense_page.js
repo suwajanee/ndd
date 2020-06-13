@@ -76,6 +76,10 @@ var expense_page = new Vue ({
             this.month = month
             this.co = report_modal.co = co
             this.period = period
+
+            report_modal.trip_color = trip_color
+            report_modal.not_fw_trip = not_fw_trip
+            report_modal.not_bw_trip = not_bw_trip
             
             this.getYear()
             this.month_list = _month

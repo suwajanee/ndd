@@ -23,6 +23,10 @@ var report_modal = new Vue ({
         search_work_id: '',
         double_show: ['1.1', '3.1', '4.1', '4.2', '5.1', '5.2'],
 
+        trip_color: {},
+        not_fw_trip: [],
+        not_bw_trip: [],
+
         work_data: {},
         work_driver_data: {
             co: '',
@@ -163,7 +167,7 @@ var report_modal = new Vue ({
             if(['EP', 'FC'].includes(work_id_substr)) {
                 api("/agent-transport/api/get-agent-transport-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
                     if(data) {
-                        this.modal_type = 'agent-transprot'
+                        this.modal_type = 'agent-transport'
                         this.report_work_id = data.work_id
                         this.report_order.work_date = data.date
                         this.work_data = {
