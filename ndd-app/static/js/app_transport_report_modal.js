@@ -85,7 +85,7 @@ var report_modal = new Vue ({
             if(report) {
                 this.modal_add_mode = false
                 this.search_work_id = ''
-
+                
                 var work_order = report.work_order
                 if(work_order.work_normal) {
                     var work = work_order.work_normal
@@ -93,6 +93,7 @@ var report_modal = new Vue ({
                 else {
                     var work = work_order.work_agent_transport
                 }
+                // var work = work_order.work
                 
                 this.modal_type = work.principal.work_type
                 this.report_work_id = this.search_work_id = work.work_id

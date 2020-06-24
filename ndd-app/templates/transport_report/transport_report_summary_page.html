@@ -11,7 +11,7 @@
     <div id="expense-page">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
-                <li class="breadcrumb-item">Summary</li>
+                <li class="breadcrumb-item">SUMMARY</li>
                 <li class="breadcrumb-item"><a href="{% url 'yearly-summary-page' year=year %}">{{ year }}</a></li>
                 {% verbatim %}
                     <template v-if="period == 0">
@@ -55,23 +55,75 @@
                             <th class="align-middle">ค่ายกตู้</th>
                             <th class="align-middle right-thick">ค่าผ่านท่า</th>
                             <th rowspan=2 class="align-middle">Inv.</th>
-                            <!-- Hereeeeee -->
+                            <th rowspan=2 class="align-middle">Edit</th>
                         </tr>
                         <tr class="second-header">
                             <th class="align-middle">Container No</th>
                             <th class="align-middle">Size</th>
-                            <th class="align-middle">Status</th>
+                            <th class="align-middle right-thick">Status</th>
                             <th class="align-middle">Container No</th>
                             <th class="align-middle">Size</th>
-                            <th class="align-middle">Status</th>
+                            <th class="align-middle right-thick">Status</th>
 
-                            <th class="align-middle">//</th>
+                            <th class="align-middle right-thick">//</th>
                             <th class="align-middle">NDD</th>
-                            <th class="align-middle">NDD</th>
+                            <th class="align-middle right-thick">NDD</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody if="report_list.length">
+                        <tr v-for="report in report_list">
+                            <td class="text-nowrap">{{ report.work_order.work_date|formatDate }}</td>
+                            <td class="text-nowrap">{{ report.work_order.truck.number }}</td>
+                            <td class="text-nowrap">
+                                {{ report.work_order.work.work_id }}
+                                <!-- <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template> -->
+                                <template v-if="report.work_order.order_type"> / {{ report.work_order.full_order }}</template>
+                            </td>
+                            <td style="max-width: 160px;">
+                                <template v-if="report.work_order.detail.customer_name">
+                                    {{ report.work_order.detail.customer_name }}
+                                </template>
+                                <template v-else>
+                                    {{ report.work_order.work.principal.name }}
+                                </template>
+                            </td>
+                            <td style="max-width: 160px;">{{ report.work_order.detail.remark }}</td>
+                            <td class="text-nowrap right-thick">
+                                {{ report.work_order.work.booking_no}}
+                            </td>
+
+                            <template v-if="not_fw_trip.includes(report.work_order.order_type) || report.work_detail.work_type=='agent-transport'">
+                                <td></td>
+                                <td></td>
+                                <td class="right-thick"></td>
+                            </template>
+                            <template v-else>
+                                <td :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_detail.container }}</td>
+                                <td :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_detail.size }}</td>
+                                <td class="text-uppercase right-thick" :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_order.detail.status_fw }}</td>
+                            </template>
+
+                            <template v-if="not_bw_trip.includes(report.work_order.order_type)">
+                                <td></td>
+                                <td></td>
+                                <td class="right-thick"></td>
+                            </template>
+                            <template v-else>
+                                <td :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_detail.container }}</td>
+                                <td :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_detail.size }}</td>
+                                <td class="text-uppercase right-thick" :class="report.work_order.order_type?trip_color[report.work_order.order_type]:'lime-color'">{{ report.work_order.detail.status_bw }}</td>
+                            </template>
+
+                            <td class="text-right right-thick">
+                                {{ report.work_order.price.work|currencyCommas }}
+                            </td>
+                            <td class="text-right right-thick">{{ report.cus_expense.cus_return|currencyCommas }}</td>
+                            <td class="text-right right-thick">{{ report.cus_expense.cus_gate|currencyCommas }}</td>
+
+                            <td v-if="report.work_order.work.summary_status>0" class="text-success"><i class="fas fa-check-circle"></i></td>
+                            <td v-else class="text-danger"><i class="fas fa-times-circle"></i></td>
+
+                            <td><button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button></td>
                             
                         </tr>
                     </tbody>

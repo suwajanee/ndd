@@ -24,6 +24,10 @@ var expense_page = new Vue ({
         col_allowance: true,
         col_remark: true,
 
+        trip_color: {},
+        not_fw_trip: [],
+        not_bw_trip: [],
+
         report_list: [],
         date_list: [],
         date_report_list: [],
@@ -77,9 +81,9 @@ var expense_page = new Vue ({
             this.co = report_modal.co = co
             this.period = period
 
-            report_modal.trip_color = trip_color
-            report_modal.not_fw_trip = not_fw_trip
-            report_modal.not_bw_trip = not_bw_trip
+            this.trip_color = report_modal.trip_color = trip_color
+            this.not_fw_trip = report_modal.not_fw_trip = not_fw_trip
+            this.not_bw_trip = report_modal.not_bw_trip = not_bw_trip
             
             this.getYear()
             this.month_list = _month

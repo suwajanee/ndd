@@ -19,6 +19,7 @@ from ..models import Variable
 from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
 from ..serializers import ExpenseThcSerializer
+from ..serializers import ExpenseContainerSerializer
 from ..serializers import ExpenseSummaryDateSerializer
 from ..serializers import TruckSerializer
 from booking.views.utility.functions import set_if_not_none
@@ -127,7 +128,8 @@ def api_get_expense_report(request):
 
                 date_list = get_values_list(expense, 'work_order__clear_date')
 
-                expense_serializer = ExpenseThcSerializer(expense, many=True)
+                # expense_serializer = ExpenseThcSerializer(expense, many=True)
+                # expense_serializer = ExpenseSerializer(expense, many=True)
                 
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
@@ -142,7 +144,7 @@ def api_get_expense_report(request):
                     'to_date': to_date,
 
                     'period': period_num,
-                    'report_list': expense_serializer.data,
+                    # 'report_list': expense_serializer.data,
                     # 'date_list': date_list,
 
                     'pk_list': list(pk_list),
@@ -155,8 +157,14 @@ def api_get_expense_report(request):
                 }
 
                 if page == 'expense':
+                    serializer = ExpenseThcSerializer(expense, many=True)
+                    data['report_list'] = serializer.data
+
                     data['date_list'] = date_list
                     data['total_expense_list'] = total_expense_list
+                else:
+                    serializer = ExpenseContainerSerializer(expense, many=True)
+                    data['report_list'] = serializer.data
 
             else:
                 data = {
@@ -219,12 +227,12 @@ def api_filter_expense_report(request):
             date_list = get_values_list(filtered_report, 'work_order__clear_date')
 
             filtered_report = order_expense_report(filtered_report)
-            serializer = ExpenseThcSerializer(filtered_report, many=True)
+            # serializer = ExpenseThcSerializer(filtered_report, many=True)
 
             total_price_list = get_total_price_list(filtered_report)
             total_expense_list = get_total_expense_list(filtered_report)
             data = {
-                'report_list': serializer.data,
+                # 'report_list': serializer.data,
                 # 'date_list': date_list,
 
                 'total_price_list': total_price_list,
@@ -232,8 +240,14 @@ def api_filter_expense_report(request):
             }
 
             if page == 'expense':
+                serializer = ExpenseThcSerializer(filtered_report, many=True)
+                data['report_list'] = serializer.data
+
                 data['date_list'] = date_list
                 data['total_expense_list'] = total_expense_list
+            else:
+                serializer = ExpenseContainerSerializer(filtered_report, many=True)
+                data['report_list'] = serializer.data
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)

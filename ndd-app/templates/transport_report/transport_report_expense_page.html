@@ -45,7 +45,7 @@
                     {% include 'transport_report/transport_report_expense_thead.html' %}
 
                     <template v-if="report_list.length">
-                        <tbody id="tbody" v-if="report_list.length" class="bg-white">
+                        <tbody id="tbody" class="bg-white">
                             <template v-for="date_report in date_report_list">
                                 {% verbatim %}
                                     <tr :class="getDayColor(date_report.clear_date)">

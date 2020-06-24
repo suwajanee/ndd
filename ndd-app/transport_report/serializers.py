@@ -16,6 +16,14 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     driver = DriverSerializer()
     truck = TruckSerializer()
     work = BookingSerializer() or AgentTransportSerializer()
+    full_order = serializers.SerializerMethodField()
+
+    def get_full_order(self, obj):
+        order = obj.order_type
+        if obj.double_container:
+            order += ' +'
+        return order
+
     class Meta:
         model = WorkOrder
         fields = '__all__'
@@ -23,6 +31,46 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 
 class ExpenseSerializer(serializers.ModelSerializer):
     work_order = WorkOrderSerializer()
+    
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+    
+class ExpenseContainerSerializer(serializers.ModelSerializer):
+    work_order = WorkOrderSerializer()
+    work_detail = serializers.SerializerMethodField()
+
+    def get_work_detail(self, obj):
+        work_order = obj.work_order
+        if work_order.work_normal:
+            work_type = 'normal'
+            work = work_order.work_normal
+            size = work.size
+            container = work.container_no
+
+            if '2X' in size:
+                container += '-' + work.seal_no
+            elif 'container_2' in work_order.detail:
+                size = '2X' + size
+                container += '-' + work_order.detail['container_2']
+
+        elif work_order.work_agent_transport:
+            work_type = 'agent-transport'
+            work = work_order.work_agent_transport
+            size = work.size
+            container = work.container_1
+
+            if '2X' in size:
+                container += '-' + work.container_2
+        
+        data = {
+            'work_type': work_type,
+            'size': size,
+            'container': container,
+            'booking_no': work.booking_no
+        }
+        return data
 
     class Meta:
         model = Expense
