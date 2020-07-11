@@ -14,21 +14,21 @@
                 <li class="breadcrumb-item">Daily Expense</li>
                 {% if driver %}
                     {% verbatim %}
-                        <li class="breadcrumb-item"><a :href="'/report/daily-report/' + date + '/' + co + '/'">{{ date|formatDate }}</a></li>
+                        <li class="breadcrumb-item"><a :href="'/report/daily-report/' + date">{{ date|formatDate }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{ driver_data.full_name }}
                         </li>
                     {% endverbatim %}
                 {% else %}
-                    <li class="breadcrumb-item active" aria-current="page">{% verbatim %}{{ date|formatDate }} ({{ co.toUpperCase() }}){% endverbatim %}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{% verbatim %}{{ date|formatDate }}{% endverbatim %}</li>
                 {% endif %}
             </ol>
         </nav>
 
         <div>
             {% verbatim %}
-                <div class="row m-0" style="width: 100vw;">
-                    <div class="input-group my-3 col-5" style="max-height: 40px;" >
+                <div class="row m-0 py-3">
+                    <div class="input-group col-5" style="max-height: 40px;" >
                         <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
 
                     
@@ -37,7 +37,6 @@
                         </div>
                         <button v-if="driver_id" class="custom-select text-left rounded-right" style="min-height: 40px; overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ driver_data.full_name }}
-                            <span class="badge badge-pill badge-primary float-right m-1">{{ co.toUpperCase() }}</span>
                         </button>
                         <button v-else class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             --------
@@ -52,53 +51,47 @@
                                 <button class="dropdown-item" @click="changeUrl()"> -------- </button>
                                 <button v-for="driver in filterDriver" class="dropdown-item" @click="changeUrl(driver.employee.id)">
                                     {{ driver.employee.full_name }}
-                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co }">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
                             </div>
                         </div>
                     </div>
+                    <div class="col-7">
+                        <button v-if="driver_id" class="btn btn-success ml-3 float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
 
-                    <div class="input-group my-3 col-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">COL</span>
+                        <div class="float-right">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">COL</span>
+                                </div>
+                                <button class="custom-select text-left rounded-right multi-select" style="height: 40px; min-width: 150px;" data-toggle="dropdown">
+                                    <template v-if="col_price || col_allowance || col_remark">
+                                        <template v-if="col_price">ราคา; </template>
+                                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                        <template v-if="col_remark">Remark; </template>
+                                    </template>
+                                    <template v-else>
+                                        Non selected
+                                    </template>
+                                </button>
+                                <ul class="multiselect-container dropdown-menu">
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_price"> ราคา
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_remark"> Remark
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="btn-group">
-                            <button class="custom-select text-left rounded-right multi-select" style="height: 40px; max-width: 160px;" data-toggle="dropdown">
-                                <template v-if="col_price || col_allowance || col_remark">
-                                    <template v-if="col_price">ราคา; </template>
-                                    <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                    <template v-if="col_remark">Remark; </template>
-                                </template>
-                                <template v-else>
-                                    Non selected
-                                </template>
-                            </button>
-                            <ul class="multiselect-container dropdown-menu">
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_price"> ราคา
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="col_remark"> Remark
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <button v-if="driver_id" class="btn btn-success m-3 position-absolute" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" style="right:0;" @click="report_modal.getModalExpenseReport()">Add Expense</button>
-                    <div v-else class="switch-field m-3 position-absolute" style="right:0;" @change="changeUrl()">
-                        <input type="radio" id="work_ndd" v-model="co" value="ndd" />
-                        <label for="work_ndd">NDD</label>
-                        <input type="radio" id="work_vts" v-model="co" value="vts" />
-                        <label for="work_vts">VTS</label>
                     </div>
                 </div>
                 
@@ -118,10 +111,11 @@
                     {% include 'transport_report/transport_report_expense_thead.html' %}
                     <tbody id="tbody" class="bg-white">
                         {% if driver %}
-                            <template v-for="(co_expense_list, index) in expense_list">
-                                <template v-if="co_expense_list && co_expense_list.length">
-                                    <template v-for="report in co_expense_list">
+                            <template v-if="driver_id">
+                                <template v-if="expense_list && expense_list.length">
+                                    <template v-for="report in expense_list">
                         {% else %}
+                            
                             <template v-for="driver in driver_report_list">
                                 <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
@@ -156,7 +150,7 @@
                                     <td v-for="i in 2"></td>
                                 </tr>
 
-                                <tr class="bg-light">
+                                <tr v-if="! driver_id" class="bg-light">
                                     <td colspan=5 class="right-thick"></td>
 
                                     <td v-if="col_remark" class="right-thick"></td>
@@ -166,9 +160,8 @@
                                     <td colspan=8 class="right-thick"></td>
                                     <td colspan=4 class="right-thick"></td>
 
-                                    <td v-if="driver_id" class="cyan-color font-weight-bold">{{ driver_data.total[index]|currencyCommas }}</td>
-                                    <td v-else class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
-
+                                    <td class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
+                                    
                                     <td></td>
                                 </tr>
                             {% endverbatim %}
@@ -208,7 +201,7 @@
 
     <script type="application/javascript">     
         window.addEventListener("load", function() {
-            daily_report_page.reload("{{ date }}", "{{ co }}", "{{ driver }}")
+            daily_report_page.reload("{{ date }}", "{{ driver }}")
         })
     </script>
 

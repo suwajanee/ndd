@@ -1,7 +1,7 @@
 {% verbatim %}
 
-    <div class="row m-0" style="width: 100vw;">
-        <div class="input-group my-3 col-4">
+    <div class="row m-0 py-3">
+        <div class="input-group col-5">
             <div class="input-group-prepend">
                 <span class="input-group-text">YEAR</span>
             </div>
@@ -22,49 +22,44 @@
                 <option v-for="p in period_num" :value="p">{{ p }}</option>
             </select>
         </div>
-        <button v-if="show_filter_btn" class="btn my-3" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterReport"><i class="fas fa-filter"></i></button>
+        <button v-if="show_filter_btn" class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterReport"><i class="fas fa-filter"></i></button>
 
-        <div v-if="show_col_select" class="input-group my-3 col-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">COL</span>
-            </div>
-            <div class="btn-group">
-                <button class="custom-select text-left rounded-right multi-select" style="max-width: 160px;" data-toggle="dropdown">
-                    <template v-if="col_price || col_allowance || col_remark">
-                        <template v-if="col_price">ราคา; </template>
-                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                        <template v-if="col_remark">Remark; </template>
-                    </template>
-                    <template v-else>
-                        Non selected
-                    </template>
-                </button>
-                <ul class="multiselect-container dropdown-menu">
-                    <li>
-                        <label class="checkbox">
-                            <input type="checkbox" v-model="col_price"> ราคา
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox">
-                            <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox">
-                            <input type="checkbox" v-model="col_remark"> Remark
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="p-0 float-right">
-            <div class="switch-field m-3 position-absolute" style="right: 0;" @change="changeUrl(0)">
-                <input type="radio" id="work_ndd" v-model="co" value="ndd">
-                <label for="work_ndd">NDD</label>
-                <input type="radio" id="work_vts" v-model="co" value="vts">
-                <label for="work_vts">VTS</label>
+        <div v-if="show_col_select" class="col">
+            <div class="float-right">
+                <div class="input-group" >
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">COL</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown">
+                            <template v-if="col_price || col_allowance || col_remark">
+                                <template v-if="col_price">ราคา; </template>
+                                <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                <template v-if="col_remark">Remark; </template>
+                            </template>
+                            <template v-else>
+                                Non selected
+                            </template>
+                        </button>
+                        <ul class="multiselect-container dropdown-menu">
+                            <li>
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="col_price"> ราคา
+                                </label>
+                            </li>
+                            <li>
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                </label>
+                            </li>
+                            <li>
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="col_remark"> Remark
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -6,7 +6,6 @@
 
         {% block extra_head %}{% endblock %}
         
-        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
         
@@ -30,11 +29,12 @@
         </style>
     </head>
 
-    <body class="bg-light" style="min-width:1000px;">
+    <body class="bg-light" style="min-width:900px;">
         {% load random_icon %}
         {% load has_group %}
         <nav id="nbar"
-            class="navbar navbar-expand navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}">
+            class="navbar navbar-expand navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}"
+        >
             <a class="navbar-brand" href="{% url 'dashboard-page' %}">
                 <img class="logo my-1" src="{% static 'images/logo.png' %}" height="30">
             </a>

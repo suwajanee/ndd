@@ -34,31 +34,17 @@ def api_get_summary_date(request):
             year_label = req['year']
 
             year = Year.objects.get(year_label=year_label)
-            summary_date_list = ExpenseSummaryDate.objects.filter(year=year)
+            year_date = ExpenseSummaryDate.objects.filter(year=year)
 
-
-            ndd_summary = summary_date_list.filter(co='ndd')
-            vts_summary = summary_date_list.filter(co='vts')
-
-            ndd_list = []
-            vts_list = []
+            summary_date_list = []
 
             for month in range(1, 13):
-                ndd = ndd_summary.filter(month=month).order_by('date')
-                ndd_serializer = ExpenseSummaryDateSerializer(ndd, many=True)
+                month_date = year_date.filter(month=month).order_by('date')
+                serializer = ExpenseSummaryDateSerializer(month_date, many=True)
 
-                vts = vts_summary.filter(month=month).order_by('date')
-                vts_serializer = ExpenseSummaryDateSerializer(vts, many=True)
+                summary_date_list.append(serializer.data)
 
-                ndd_list.append(ndd_serializer.data)
-                vts_list.append(vts_serializer.data)
-            
-            data = {
-                'ndd': ndd_list,
-                'vts': vts_list
-            }
-            
-            return JsonResponse(data, safe=False)
+            return JsonResponse(summary_date_list, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
@@ -68,13 +54,11 @@ def api_add_summary_date(request):
             req = json.loads(request.body.decode('utf-8'))
             year = req['year']
             month = req['month']
-            co = req['co']
             date = req['date']
 
             data = {
                 'year': Year.objects.get(year_label=year),
                 'month': month + 1,
-                'co': co,
                 'date': date
             }
 

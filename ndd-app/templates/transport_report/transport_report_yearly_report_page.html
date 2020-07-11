@@ -25,68 +25,35 @@
             </select>
         </div>
 
-        <div class="row w-100">
-            <div class="col"></div>
-            <div class="col-4">
-                <h5 class="text-center mb-3">NDD</h5>
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <th>MONTH</th>
-                        <th>#1</th>
-                        <th>#2</th>
-                        <th>#3</th>
-                    </thead>
+        <div class="col-6 container">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <th>MONTH</th>
+                    <th>#1</th>
+                    <th>#2</th>
+                    <th>#3</th>
+                </thead>
 
-                    <tbody>
-                        <tr v-for="(ndd_date, month_index) in ndd_list">
-                            <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate('ndd', month_index+1, 0)">{{ month_list[month_index] }}</a></td>
-                            <template v-if="ndd_date.length">
-                                <td v-for="(date, period) in ndd_date">
-                                    <button v-if="period==0" class="btn btn-link p-0" @click="selectDate('ndd', month_index+1, period+1)">{{ date.date|formatDate }}</button>
-                                    <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == ndd_date[period-1].date}" @click="selectDate('ndd', month_index+1, period+1)">{{ date.date|formatDate }}</button>
-                                </td>
-                                <template v-if="ndd_date.length < 3">
-                                    <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                                    <td v-if="ndd_date.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                                </template>
+                <tbody>
+                    <tr v-for="(month, month_index) in date_list">
+                        <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate(month_index+1, 0)">{{ month_list[month_index] }}</a></td>
+                        <template v-if="month.length">
+                            <td v-for="(date, period) in month">
+                                <button v-if="period==0" class="btn btn-link p-0" @click="selectDate(month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                                <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == month[period-1].date}" @click="selectDate(month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                            </td>
+                            <template v-if="month.length < 3">
+                                <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-if="month.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
                             </template>
-                            <template v-else>
-                                <td v-for="i in 3" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                            </template>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col"></div>
-            <div class="col-3">
-                <h5 class="text-center mb-3">VTS</h5>
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <th>MONTH</th>
-                        <th>#1</th>
-                        <th>#2</th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(vts_date, month_index) in vts_list">
-                            <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate('vts', month_index+1, 0)">{{ month_list[month_index] }}</button></td>
-                            <template v-if="vts_date.length">
-                                <td v-for="(date, period) in vts_date">
-                                    <button v-if="period==0" class="btn btn-link p-0" @click="selectDate('vts', month_index+1, period+1)">{{ date.date|formatDate }}</button>
-                                    <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == vts_date[period-1].date}" @click="selectDate('vts', month_index+1, period+1)">{{ date.date|formatDate }}</button>
-                                </td>
-                                <td v-if="vts_date.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                            </template>
-                            <template v-else>
-                                <td v-for="i in 2" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
-                            </template>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="col"></div>
+                        </template>
+                        <template v-else>
+                            <td v-for="i in 3" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                        </template>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
     {% endverbatim %}
 </div>
 

@@ -8,8 +8,7 @@ var yearly_report_page = new Vue ({
         
         month_list: [],
 
-        ndd_list: [],
-        vts_list: []
+        date_list: [],
     },
     methods: {
         reload(page, year) {
@@ -24,8 +23,8 @@ var yearly_report_page = new Vue ({
         changeYear() {
             window.open("/report/" + this.page + "/" + this.year + "/", "_self")
         },
-        selectDate(co, month, period) {
-            var url = "/report/" + this.page + "/" + this.year + "/" + month + "/" + co
+        selectDate(month, period) {
+            var url = "/report/" + this.page + "/" + this.year + "/" + month
             if(period > 0) {
                 url += "/" + period
             }
@@ -42,8 +41,7 @@ var yearly_report_page = new Vue ({
                     window.location.replace("/dashboard")
                     return false
                 }
-                this.ndd_list = data.ndd
-                this.vts_list = data.vts
+                this.date_list = data
             })
         }
     }

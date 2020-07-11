@@ -6,7 +6,10 @@ var total_expense_page = new Vue ({
         year: '',
         month: '',
         period: '',
-        co: '',
+
+        show_filter_btn: false,
+        show_col_select: false,
+        filter_mode: false,
 
         from_date: '',
         to_date: '',
@@ -24,10 +27,9 @@ var total_expense_page = new Vue ({
         all_total_list: [],
     },
     methods: {
-        reload(year, month, co, period) {
+        reload(year, month, period) {
             this.year = year
             this.month = month
-            this.co = co
             this.period = period
 
             this.getYear()
@@ -44,12 +46,11 @@ var total_expense_page = new Vue ({
         },
 
         changeUrl(period) {
-            if(period > 0) {
-                window.open("/report/total-expense/" + this.year + "/" + this.month + "/" + this.co + "/" + period, "_self")
+            var url = "/report/total-expense/" + this.year + "/" + this.month
+            if (period > 0) {
+                url += "/" + period
             }
-            else {
-                window.open("/report/total-expense/" + this.year + "/" + this.month + "/" + this.co, "_self")
-            }
+            window.open(url, "_self")
         },
 
         getSummaryExpenseReport() {
@@ -57,7 +58,6 @@ var total_expense_page = new Vue ({
             var filter = {
                 year: this.year,
                 month: this.month,
-                co: this.co,
                 period: this.period
             }
             api("/report/api/get-total-expense/", "POST", filter).then((data) => {

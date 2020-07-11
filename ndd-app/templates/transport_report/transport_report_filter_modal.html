@@ -29,9 +29,6 @@
                         <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
                             <template v-if="driver_id && ! work_id">
                                 {{ driver_data.full_name }}
-                                <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver_data.co != co}">
-                                    {{ driver_data.co.toUpperCase() }}
-                                </span>
                             </template>
                             <template v-else>
                                 --- All drivers ---
@@ -47,9 +44,6 @@
                                 <button class="dropdown-item" @click="selectDriver('')"> --- All --- </button>
                                 <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
                                     {{ driver.employee.full_name }}
-                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">
-                                        {{ driver.employee.co.toUpperCase() }}
-                                    </span>
                                 </button>
                             </div>
                         </div>
@@ -62,9 +56,6 @@
                         <button class="custom-select text-left rounded-right col-6" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
                             <template v-if="truck_id && ! work_id">
                                 {{ truck_data.number || '--- All trucks ---' }}
-                                <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck_data.owner != co}">
-                                    {{ truck_data.owner.toUpperCase() }}
-                                </span>
                             </template>
                             <template v-else>
                                 --- All trucks ---
@@ -75,9 +66,6 @@
                                 <button class="dropdown-item" @click="selectTruck('')"> --- All --- </button>
                                 <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
                                     {{ truck.number }}
-                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">
-                                        {{ truck.owner.toUpperCase() }}
-                                    </span>
                                 </button>
                             </div>
                         </div>

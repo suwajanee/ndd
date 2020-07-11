@@ -15,13 +15,13 @@
                 <li class="breadcrumb-item"><a href="{% url 'yearly-expense-page' year=year %}">{{ year }}</a></li>
                 {% verbatim %}
                     <template v-if="period == 0">
-                        <li class="breadcrumb-item active">{{ month_list[month-1] }} ( {{ co.toUpperCase() }} )</li>
+                        <li class="breadcrumb-item active">{{ month_list[month-1] }}</li>
                     </template>
                     <template v-else>
                         <li class="breadcrumb-item">
-                            <a :href="'/report/expense/' + year + '/' + month + '/' + co">{{ month_list[month-1] }}</a>
+                            <a :href="'/report/expense/' + year + '/' + month">{{ month_list[month-1] }}</a>
                         </li>
-                        <li class="breadcrumb-item active">{{ period }} ( {{ co.toUpperCase() }} )</li>
+                        <li class="breadcrumb-item active">{{ period }}</li>
                     </template>
                 {% endverbatim %}
             </ol>
@@ -120,7 +120,7 @@
 
     <script type="application/javascript">
         window.addEventListener("load", function() {
-            expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ co }}", "{{ period }}")
+            expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ period }}")
         })
     </script>
     

@@ -36,22 +36,21 @@ def api_get_daily_report(request):
         if request.method == "POST":  
             req = json.loads(request.body.decode('utf-8'))
             date = req['date']
-            co = req['co']
             try:
                 date = datetime.strptime(date, '%Y-%m-%d')
             except:
                 return JsonResponse(False, safe=False)
 
-            report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__truck__owner=co))
+            report = Expense.objects.filter(work_order__clear_date=date)
             report = order_expense_report(report)
             serializer = ExpenseSerializer(report, many=True)
 
             total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
-            driver_list = get_driver_list(report, co)
+            driver_list = get_driver_list(report)
             data = {
                 'date': date.date(),
-                'work_expense': serializer.data,
+                'expense_list': serializer.data,
                 'driver_list': driver_list,
                 'total': total
             }
@@ -75,8 +74,6 @@ def api_get_daily_driver_report(request):
             except:
                 return JsonResponse(False, safe=False)
 
-            co = driver.co
-
             try:
                 truck = Driver.objects.get(employee=driver).truck
                 truck_serializer = TruckSerializer(truck, many=False)
@@ -87,18 +84,14 @@ def api_get_daily_driver_report(request):
 
             report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
 
-            co_report = report.filter(work_order__truck__owner=co)
-            not_co_report = report.filter(~Q(work_order__truck__owner=co))
-
-            co_work = ExpenseSerializer(co_report, many=True)
-            not_co_work = ExpenseSerializer(not_co_report, many=True)
+            serializer = ExpenseSerializer(report, many=True)
 
             total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             data = {
                 'driver': driver_serializer.data,
                 'truck': truck_data,
-                'report': [co_work.data, not_co_work.data],
+                'expense_list': serializer.data,
                 'total': total
             }
 
@@ -116,20 +109,14 @@ def api_get_expense_report(request):
             year = int(req['year'])
             month = int(req['month'])
             period = int(req['period'])
-            co = req['co']
 
-            period_num, from_date, to_date = get_from_to_date(co, year, month, period)
+            period_num, from_date, to_date = get_from_to_date(year, month, period)
 
             if from_date < to_date:
-                expense = Expense.objects.filter(work_order__truck__owner=co)
-
-                expense = expense.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
+                expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
                 expense = order_expense_report(expense)
 
                 date_list = get_values_list(expense, 'work_order__clear_date')
-
-                # expense_serializer = ExpenseThcSerializer(expense, many=True)
-                # expense_serializer = ExpenseSerializer(expense, many=True)
                 
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
@@ -144,8 +131,6 @@ def api_get_expense_report(request):
                     'to_date': to_date,
 
                     'period': period_num,
-                    # 'report_list': expense_serializer.data,
-                    # 'date_list': date_list,
 
                     'pk_list': list(pk_list),
 
@@ -153,7 +138,6 @@ def api_get_expense_report(request):
                     'remark_list': ['(empty)'] + remark_list,
 
                     'total_price_list': total_price_list,
-                    # 'total_expense_list': total_expense_list,
                 }
 
                 if page == 'expense':
@@ -227,27 +211,25 @@ def api_filter_expense_report(request):
             date_list = get_values_list(filtered_report, 'work_order__clear_date')
 
             filtered_report = order_expense_report(filtered_report)
-            # serializer = ExpenseThcSerializer(filtered_report, many=True)
 
             total_price_list = get_total_price_list(filtered_report)
             total_expense_list = get_total_expense_list(filtered_report)
-            data = {
-                # 'report_list': serializer.data,
-                # 'date_list': date_list,
-
-                'total_price_list': total_price_list,
-                # 'total_expense_list': total_expense_list,
-            }
 
             if page == 'expense':
                 serializer = ExpenseThcSerializer(filtered_report, many=True)
-                data['report_list'] = serializer.data
+                data = {
+                    'report_list': serializer.data,
+                    'total_price_list': total_price_list,
 
-                data['date_list'] = date_list
-                data['total_expense_list'] = total_expense_list
+                    'date_list': date_list,
+                    'total_expense_list': total_expense_list
+                }
             else:
                 serializer = ExpenseContainerSerializer(filtered_report, many=True)
-                data['report_list'] = serializer.data
+                data = {
+                    'report_list': serializer.data,
+                    'total_price_list': total_price_list
+                }
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -263,18 +245,15 @@ def api_get_total_expense(request):
             year = int(req['year'])
             month = int(req['month'])
             period = int(req['period'])
-            co = req['co']
 
-            period_num, from_date, to_date = get_from_to_date(co, year, month, period)
+            period_num, from_date, to_date = get_from_to_date(year, month, period)
 
             if from_date < to_date:
-                # date_list = get_date_range(from_date, to_date)
-
-                expense = Expense.objects.filter(Q(work_order__truck__owner=co) & Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
+                expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
 
                 date_list = get_values_list(expense, 'work_order__clear_date')
 
-                driver_list = get_driver_list(expense, co)
+                driver_list = get_driver_list(expense)
 
                 total_report = []
                 for driver in driver_list:
@@ -332,7 +311,7 @@ def api_get_total_expense(request):
                 }
             
             else:
-                driver_list = get_driver_list([], co)
+                driver_list = get_driver_list([])
 
                 total_report = []
                 for driver in driver_list:
@@ -361,18 +340,13 @@ def api_get_total_expense(request):
     return JsonResponse('Error', safe=False)
 
 
-def get_driver_list(report, co):
-    if co == 'ndd':
-        order = 'employee__co'
-    else:
-        order = '-employee__co'
-    
+def get_driver_list(report):
     if report:
         driver_report_pk = report.values_list('work_order__driver__pk')
     else:
         driver_report_pk = []
 
-    driver = Driver.objects.filter((Q(employee__co=co) & Q(employee__status='a')) | Q(pk__in=driver_report_pk)).order_by(order, 'truck__number', 'employee__first_name', 'employee__last_name')
+    driver = Driver.objects.filter(Q(employee__status='a') | Q(pk__in=driver_report_pk)).order_by('truck__number', 'employee__first_name', 'employee__last_name')
     serializer = DriverSerializer(driver, many=True)
 
     return serializer.data
@@ -383,24 +357,18 @@ def order_expense_report(report):
                     'work_order__driver__employee__last_name', 'work_order__work_date', 'pk')
 
 
-def get_from_to_date(co, year, month, period):
-    if co == 'ndd':
-        period_num = 3
-    else:
-        period_num = 2
-
-    summary_date_list = ExpenseSummaryDate.objects.filter(co=co).order_by('-date')
+def get_from_to_date(year, month, period):
+    summary_date_list = ExpenseSummaryDate.objects.all().order_by('-date')
     selected_month = summary_date_list.filter(Q(year__year_label=year) & Q(month=month))
-
     if period == 0:
         from_date = get_last_month_date(summary_date_list, month, year)
         if selected_month:
             to_date = selected_month.first().date
-
-            if len(selected_month) < period_num:
-                to_date = check_next_date(summary_date_list, to_date)
+            next_date = summary_date_list.filter(date__gt=to_date)
+            if not next_date:
+                to_date = get_next_date(summary_date_list, to_date)
         else:
-            to_date = check_next_date(summary_date_list, from_date)
+            to_date = get_next_date(summary_date_list, from_date)
     else:
         to_date = selected_month.order_by('date')[period-1].date
 
@@ -426,7 +394,7 @@ def get_last_month_date(date_list, month, year):
     else:
         return datetime(year, month, 1).date()
 
-def check_next_date(date_list, date):
+def get_next_date(date_list, date):
     next_month = date + timedelta(days=30)
     today = datetime.now().date()
     next_date = date_list.filter(Q(date__gt=date) & Q(date__lte=next_month))

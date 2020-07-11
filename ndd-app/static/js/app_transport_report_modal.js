@@ -4,7 +4,6 @@ var report_modal = new Vue ({
     data: {
         daily_page: true,
 
-        co: '',
         date: '',
         driver_id: '',
 
@@ -93,7 +92,6 @@ var report_modal = new Vue ({
                 else {
                     var work = work_order.work_agent_transport
                 }
-                // var work = work_order.work
                 
                 this.modal_type = work.principal.work_type
                 this.report_work_id = this.search_work_id = work.work_id

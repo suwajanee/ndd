@@ -11,7 +11,7 @@
                         <template v-else>
                             Edit Report:
                         </template>
-                        <span class="text-primary">{{ date|formatDate }}</span>
+                        <span class="text-primary">{{ report_order.clear_date|formatDate }}</span>
                     </h4>
                     <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
                         <span aria-hidden="true">&times;</span>
@@ -26,7 +26,6 @@
                         <button id="driverDropdown" class="custom-select text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <template v-if="work_driver_data">
                                 {{ work_driver_data.full_name }}
-                                <span class="badge badge-pill badge-primary float-right m-1">{{ work_driver_data.co.toUpperCase() }}</span>
                             </template>
                             <template v-else>
                                 --------
@@ -41,7 +40,6 @@
                             <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
                                 <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
                                     {{ driver.employee.full_name }}
-                                    <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': driver.employee.co != co}">{{ driver.employee.co.toUpperCase() }}</span>
                                 </button>
                             </div>
                         </div>
@@ -50,16 +48,13 @@
                             <span class="input-group-text">TRUCK NO</span>
                         </div>
                         <div>
-                            <!-- <button id="truckDropdown"  class="custom-select text-left rounded-right" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px; border-bottom-left-radius: 0; border-top-left-radius: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
                             <button id="truckDropdown"  class="custom-select text-left multi-select" :class="{'alert-warning': modal_warning && ! report_order.truck}" style="min-width: 150px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ work_truck_data.number || '--------' }}
-                                <span v-if="work_truck_data.number" class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': work_truck_data.owner != co}">{{ work_truck_data.owner.toUpperCase() }}</span>
                             </button>
                             <div class="dropdown-menu w-25">
                                 <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
                                     <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
                                         {{ truck.number }}
-                                        <span class="badge badge-pill badge-primary float-right m-1" :class="{'badge-secondary': truck.owner != co}">{{ truck.owner.toUpperCase() }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -259,7 +254,6 @@
                                                     <textarea class="form-control" v-model="report_detail.co_toll_note"></textarea>
                                                 </div>
                                             </div>
-                                            <!-- <button class="btn btn-sm p-0 float-right"><i class="far fa-comment-dots"></i></button> -->
                                         </td>
                                         <td :class="{'table-warning': ! expense_format_status[1]}">
                                             {{ sumString(report_co_expense.co_gate)|currencyCommas }}
@@ -410,17 +404,6 @@
         </div>
     </div>
 
-
-    <script>
-        // const sumString = (arr) => {
-        //     try {
-        //         return eval(arr)
-        //     }
-        //     catch {
-        //         return 0
-        //     }
-        // }
-    </script>
 
 {% endverbatim %}
 
