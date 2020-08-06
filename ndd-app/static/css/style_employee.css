@@ -28,7 +28,7 @@
     min-width: 180px;
 }
 .sidebar-heading{
-    padding: 1rem;
+    padding: 10px;
     margin-top: 1rem;
     background-color: #eee;
     color: #7d7a7a;
@@ -69,6 +69,10 @@ td input[type="date"] {
     padding: 2px 4px;
     font-size: 12px;
      /* max-width: 300px; */
+}
+
+td.text-danger input[type="date"] {
+    color: red;
 }
 
 

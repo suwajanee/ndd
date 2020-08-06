@@ -7,7 +7,12 @@ from .models import Salary
 from truck.serializers import TruckSerializer
 
 
-class JobSerializer(serializers.ModelSerializer):   
+class JobSerializer(serializers.ModelSerializer):
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, obj):
+        return Employee.objects.filter(status='a', job__job_title=obj.job_title).count()
+
     class Meta:
         model = Job
         fields = '__all__'

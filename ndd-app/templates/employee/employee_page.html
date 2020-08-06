@@ -15,39 +15,25 @@
             <aside class="col-2 d-block bg-light sidebar px-0">
                 <div class="sidebar-sticky px-3">
                     <h6 class="sidebar-heading">
-                        <span>NDD</span>
+                        <span>Employee List</span>
                     </h6>
                     <a class="nav-link {% if not job and not page %}active{% endif %}" href="{% url 'employee-page' %}">
                         All
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
                     </a>
-                    <a class="nav-link {% if job == 'officer' %}active{% endif %}" href="{% url 'employee-officer-page' %}">
-                        <i class="fas fa-angle-right"></i>&nbsp; Officer
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="officer_count" />
-                    </a>
-                    <a class="nav-link {% if job == 'driver' and co == 'ndd' %}active{% endif %}" href="{% url 'employee-driver-page' %}">
-                        <i class="fas fa-angle-right"></i>&nbsp; Driver
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="driver_count" />
-                    </a>
-                    <a class="nav-link {% if job == 'mechanic' %}active{% endif %}" href="{% url 'employee-mechanic-page' %}">
-                        <i class="fas fa-angle-right"></i>&nbsp; Mechanic
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="mechanic_count" />
-                    </a>
-
-                    <h6 class="sidebar-heading">
-                        <span>VTS</span>
-                    </h6>
-                    <a class="nav-link {% if job == 'driver' and co == 'vts' %}active{% endif %}" href="{% url 'sup-driver-page' %}">
-                        <i class="fas fa-angle-right"></i>&nbsp; Driver
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="sup_driver_count" />
-                    </a>
-
-                    <hr class="my-4"> 
+                    {% verbatim %}
+                        <a v-for="j in job_list" class="nav-link text-capitalize" :class="{'active': j==job}" :href="'/employee/:' + j.job_title">
+                            
+                            <i class="fas fa-angle-right"></i>&nbsp; {{ j.job_title }}
+                            <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="j.count" />
+                            
+                        </a>
+                    {% endverbatim %}
 
                     <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
-                    <a class="nav-link {% if page == 'terminated' %}active{% endif %}" href="{% url 'employee-not-active-page' %}">
+                    <a class="nav-link {% if page == 'terminated' %}active{% endif %}" href="{% url 'former-employee-page' %}">
                         Former Employee
                     </a>
                     {% if request.user|has_group:'salary_change' %}
@@ -65,36 +51,27 @@
             </aside>
 
             <main class="col bg-white" style="overflow-y: auto; height: calc(100vh - 70px);">
+                
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 bg-white border-bottom">
                         <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                        {% if job or page %}
+                        <template v-if="job || page">
                             <li class="breadcrumb-item"><a href="{% url 'employee-page' %}">Employee</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ title }} <template v-if="co=='vts'">(VTS)</template></li>
-                        {% else %}
-                            <li class="breadcrumb-item active" aria-current="page">Employee</li>
-                        {% endif %}
-                    </ol>
-                </nav>
-                {% if not page %}
-                    <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> Add</button>
-                {% else %}
-                    <div class="switch-field m-3 position-absolute" style="right:0;">
-                        <template v-if="page=='terminated'">
-                            <input type="radio" id="work_ndd" v-model="co" value="ndd" @change="getNotActiveEmployee" />
-                            <label for="work_ndd">NDD</label>
-                            <input type="radio" id="work_vts" v-model="co" value="vts" @change="getNotActiveEmployee" />
-                            <label for="work_vts">VTS</label>
+                            {% verbatim %}
+                                <li class="breadcrumb-item active text-capitalize">{{ job || page }}</li>
+                            {% endverbatim %}
                         </template>
                         <template v-else>
-                            <input type="radio" id="work_ndd" v-model="co" value="ndd" @change="getEmployeeSalary" />
-                            <label for="work_ndd">NDD</label>
-                            <input type="radio" id="work_vts" v-model="co" value="vts" @change="getEmployeeSalary" />
-                            <label for="work_vts">VTS</label>
+                            <li class="breadcrumb-item active" aria-current="page">Employee</li>
                         </template>
-                    </div>
+                    </ol>
+                </nav>
+                
+                {% if not page %}
+                    <button class="btn btn-success m-3 position-absolute" style="right:0;" data-toggle="modal" data-target="#modalEmployee" @click="employeeModal()"><i class="fa fa-plus"></i> New</button>
                 {% endif %}
-                <h2 class="mt-5 text-center">{{ title }} <template v-if="co=='vts'">(VTS)</template></h2>
+                
+                <h2 class="mt-5 text-center">{{ title }}</h2>
                 <div class="mt-4 row">
                     {% include 'employee/employee_detail.html' %}
                 </div>
@@ -110,7 +87,7 @@
     <script type="application/javascript">
 
         window.addEventListener("load", function() {   
-            employee_page.reload("{{ job }}", "{{ co }}", "{{ page }}")
+            employee_page.reload("{{ job }}", "{{ page }}")
         });
 
     </script>

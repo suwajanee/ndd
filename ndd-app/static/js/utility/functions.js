@@ -151,6 +151,21 @@ const remove_empty_key = (obj) => {
 
 }
 
+const diff_months = (dt1, dt2) => {
+    var date1 = new Date(dt1)
+
+    if(dt2) {
+        var date2 = new Date(dt2)
+    }
+    else {
+        var date2 = new Date()
+    }
+    var diff = (date2.getTime() - date1.getTime()) / 1000
+    diff /= 2630880
+    return Math.abs(Math.round(diff))
+}
+
+
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',
     data: {

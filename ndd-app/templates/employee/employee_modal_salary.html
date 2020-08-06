@@ -18,7 +18,7 @@
                         </div>
                         <div class="input-group-append">
                             {% verbatim %}
-                                <span class="input-group-text">{{ salary_data.name_title }} {{ salary_data.first_name }} {{ salary_data.last_name }}</span>
+                                <span class="input-group-text">{{ salary_data.full_name }}</span>
                             {% endverbatim %}
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     
-                    <table class="table table-bordered text-center">
+                    <table class="table text-center col-lg-7">
                         <thead>
                             <th class="align-middle">
                                 Salary
@@ -57,11 +57,12 @@
                             <th class="align-middle">
                                 To
                             </th>
+                            <th></th>
                         </thead>
                         <tbody>
                             <tr if="salary_history.length" v-for="(salary, index) in salary_history">
                                 {% verbatim %}
-                                    <td class="text-right" :class="{'table-primary': index == 0}">
+                                    <td class="text-right" :class="{'text-primary font-weight-bold': index == 0}">
                                         {{ salary.salary|currencyCommas }}
                                     </td>
                                     <td>
@@ -69,6 +70,14 @@
                                     </td>
                                     <td>
                                         {{ salary.to_date|formatDate }}
+                                    </td>
+                                    <td>
+                                        <button v-if="salary_history.length>1 && index==0" 
+                                            class="btn btn-link text-danger p-0"
+                                            @click="deleteLatestSalary(salary.id, salary_history[index+1].id)"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     </td>
                                 {% endverbatim %}
                             </tr>

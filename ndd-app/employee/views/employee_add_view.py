@@ -34,11 +34,8 @@ def api_add_employee(request):
                 },
                 'hire_date': emp_data['hire_date'] or None,
                 'job': job,
-                'co': 'ndd',
                 'status': 'a'
             }
-            if job_title == 'driver':
-                data['co'] = emp_data['co']
 
             employee = Employee(**data)
             employee.save()
@@ -46,7 +43,6 @@ def api_add_employee(request):
             add_employee_starting_salary(employee)
 
             if job_title == 'driver':
-
                 add_employee_driver(employee, emp_data)
 
             return JsonResponse('Success', safe=False)
