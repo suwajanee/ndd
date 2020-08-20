@@ -72,69 +72,110 @@
                 </tr>
             </table>
             <table class="table-bordered">
-                <tr>
-                    <td rowspan=2>
-                        Item
-                    </td>
-                    <td rowspan=2>
-                        Customer Name 
-                    </td>
-                    <td rowspan=2>
-                        {{ form.0 | booking_field_text }}
-                    </td>
-                    <td colspan=2>
-                        Vessel/Truck Routing 
-                    </td>
-                    <td rowspan=2>
-                        Date
-                    </td>
-                    <td rowspan=2>
-                        Container No. 1
-                    </td>
-                    {% if 'container_2' in form %}
-                        <td rowspan=2>
-                            Container No. 2
+                {% if option == 'apll' %}
+                    <tr>
+                        <td>
+                            Item
                         </td>
-                    {% endif %}
-                    <td rowspan=2>
-                        Size
-                    </td>
-                    <td rowspan=2>
-                        Drayage Charge
-                    </td>
-
-                    {% if form.3 == '3_gate_charge' %}
-                        {% if option != '2_inv' %}
+                        <td>
+                            Customer Name 
+                        </td>
+                        
+                        <td>
+                            Truck Routing
+                        </td>
+                        
+                        <td>
+                            Booking
+                        </td>
+                        <td>
+                            Date
+                        </td>
+                        <td>
+                            Container
+                        </td>
+                        <td>
+                            Size
+                        </td>
+                        <td>
+                            Drayage Charge
+                        </td>
+                        <td>
+                            Gate Charge
+                        </td>
+                        <td>
+                            Vat
+                        </td>
+                        <td>
+                            Remark
+                        </td>     
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td rowspan=2>
+                            Item
+                        </td>
+                        <td rowspan=2>
+                            Customer Name 
+                        </td>
+                        <td rowspan=2>
+                            {{ form.0 | booking_field_text }}
+                        </td>
+                        
+                        <td colspan=2>
+                            Vessel/Truck Routing 
+                        </td>
+                        <td rowspan=2>
+                            Date
+                        </td>
+                        <td rowspan=2>
+                            Container No. 1
+                        </td>
+                        {% if 'container_2' in form %}
                             <td rowspan=2>
-                                Gate Charge
+                                Container No. 2
                             </td>
                         {% endif %}
-                    {% endif %}
-
-                    {% if form.3 == '3_agent' %}
                         <td rowspan=2>
-                            Agent
+                            Size
                         </td>
-                    {% endif %}
+                        <td rowspan=2>
+                            Drayage Charge
+                        </td>
 
-                    <td rowspan=2>
-                        {% if form.2 == '2_remark' %}
-                            Remark
-                        {% elif form.2 == '2_job_no' %}
-                            Job No.
-                        {% elif form.2 == '2_truck' %}
-                            TRUCK
+                        {% if form.3 == '3_gate_charge' %}
+                            {% if option != '2_inv' %}
+                                <td rowspan=2>
+                                    Gate Charge
+                                </td>
+                            {% endif %}
                         {% endif %}
-                    </td>     
-                </tr>
-                <tr>
-                    <td>
-                        From
-                    </td>
-                    <td>
-                        To
-                    </td>
-                </tr>
+
+                        {% if form.3 == '3_agent' %}
+                            <td rowspan=2>
+                                Agent
+                            </td>
+                        {% endif %}
+
+                        <td rowspan=2>
+                            {% if form.2 == '2_remark' %}
+                                Remark
+                            {% elif form.2 == '2_job_no' %}
+                                Job No.
+                            {% elif form.2 == '2_truck' %}
+                                TRUCK
+                            {% endif %}
+                        </td>     
+                    </tr>
+                    <tr>
+                        <td>
+                            From
+                        </td>
+                        <td>
+                            To
+                        </td>
+                    </tr>
+                {% endif %}
 
                 {% for inv_detail in invoice_details %}
                     <tr>
@@ -158,6 +199,12 @@
                             {% endif %}
                         </td>
 
+                        {% if option == 'apll' %}
+                            <td class="px-3" style="min-width: 4in">
+                                {{ inv_detail.detail.routing }}
+                            </td>
+                        {% endif %}
+
                         {% if invoice.detail.customer_len > 22 %}
                             <td class="px-3">
                         {% elif invoice.detail.customer_len < 22 and invoice.detail.booking_len < 15 %}
@@ -172,12 +219,15 @@
                             {{ inv_detail.work.booking_no }}
                         </td>
 
-                        <td style="width: 2.5in">
-                            {{ inv_detail.work.pickup_from }}
-                        </td>
-                        <td style="width: 2.5in">
-                            {{ inv_detail.work.return_to }}
-                        </td>
+                        {% if option != 'apll' %}
+                            <td style="width: 2.5in">
+                                {{ inv_detail.work.pickup_from }}
+                            </td>
+                            <td style="width: 2.5in">
+                                {{ inv_detail.work.return_to }}
+                            </td>
+                        {% endif %}
+
                         <td style="width: 1.6in;"> 
                             {{ inv_detail.work.date|parse_date }}
                         </td>
@@ -205,7 +255,14 @@
                         <td class="text-right px-3" style="width: 2.4in">
                             {{ inv_detail.drayage_charge.drayage|result }}
                         </td>
-                        {% if option != '2_inv' %}
+                        {% if option == 'apll' %}
+                            <td class="text-right px-3" style="width: 2.4in">
+                                {{ inv_detail.gate_charge.gate|result }}
+                            </td>
+                            <td class="text-right px-3" style="width: 2.4in">
+                                {{ inv_detail.gate_charge.vat|result }}
+                            </td>
+                        {% elif option != '2_inv' %}
                             {% if form.3 == '3_gate_charge' %}
                                 <td class="text-right px-3" style="width: 2.4in">
                                     {{ inv_detail.gate_charge.gate|result }}
@@ -298,7 +355,7 @@
                                 <td class="text-right px-3" style="width: 2.4in">
                                     {{ other.other_charge|result }}
                                 </td>
-
+                                
                                 {% if option != '2_inv' %}
                                     {% if form.3 == '3_gate_charge' %}
                                         <td class="text-right px-3" style="width: 2.4in">
@@ -320,8 +377,10 @@
                     {% endif %} 
                 {% endfor %}
                 
-                <tr class="h-30">
-                    {% if 'container_2' in form %}
+                <tr class="h-30">  
+                    {% if option == 'apll' %}
+                        <td colspan=7 class="bg-whitesmoke font-125 bold">
+                    {% elif 'container_2' in form %}
                         <td colspan=9 class="bg-whitesmoke font-125 bold">
                     {% else %}
                         <td colspan=8 class="bg-whitesmoke font-125 bold">
@@ -331,7 +390,11 @@
 
                     <td class="text-right px-3 bg-whitesmoke font-110 bold">{{ invoice.drayage_total|result }}</td>
 
-                    {% if option != '2_inv' %}
+                    {% if option == 'apll' %}
+                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-110 bold">
+                            {{ invoice.gate_total|result }}
+                        </td>
+                    {% elif option != '2_inv' %}
                         <td class="text-right px-3 bg-whitesmoke font-110 bold">
                             {% if form.3 == '3_gate_charge' %}
                                 {{ invoice.gate_total|result }}
@@ -346,14 +409,27 @@
 
                 {% if option != '2_inv' %}
                     <tr class="h-30">
-                        {% if 'container_2' in form %}
+                        {% if option == 'apll' %}
+                            <td colspan=7 class="bg-whitesmoke font-125 bold">
+                        {% elif 'container_2' in form %}
                             <td colspan=9 class="bg-whitesmoke font-125 bold">
                         {% else %}
                             <td colspan=8 class="bg-whitesmoke font-125 bold">
                         {% endif %}
                             G.Total
                         </td>
-                        <td colspan=2 class="text-right px-3 bg-whitesmoke font-125 bold">{{ invoice.drayage_total|add_float:invoice.gate_total | result }}</td>
+
+                        <td 
+                            {% if option == 'apll' %}
+                                colspan=3
+                            {% else %}
+                                colspan=2
+                            {% endif %}
+                            
+                            class="text-right px-3 bg-whitesmoke font-125 bold"
+                        >
+                            {{ invoice.drayage_total|add_float:invoice.gate_total | result }}
+                        </td>
                         <td class="bg-whitesmoke"></td>
                     </tr>
                 {% endif %}
