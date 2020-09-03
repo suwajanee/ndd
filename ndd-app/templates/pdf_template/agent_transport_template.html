@@ -135,7 +135,7 @@
                             <td colspan=2 class="pl-5">ผู้ว่าจ้าง / Principal</td>
                             <td colspan=2 class="center text-blue">{% if 1 in trip %}{{ agent_transport.principal }}{% endif %}</td>
                             <td class="center">จาก</td>
-                            <td class="center text-blue">{% if 1 in trip %}{{ agent_transport.pickup_from }}{% endif %}</td>
+                            <td class="center text-blue">{% if 1 in trip %}{% if 1 in ndd %}NDD{% else %}{{ agent_transport.pickup_from }}{% endif %}{% endif %}</td>
                             <td class="center">ถึง</td>
                             <td class="text-blue">{% if 1 in trip %}{% if 2 in ndd %}NDD{% else %}{{ agent_transport.return_to }}{% endif %}{% endif %}</td>
                         </tr>

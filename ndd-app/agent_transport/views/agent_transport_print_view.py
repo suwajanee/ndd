@@ -36,24 +36,30 @@ class AgentTransportPrintView(TemplateView):
 
             template_name = 'pdf_template/agent_transport_template.html'
 
-            if template == 'yard_ndd_f':
+            if template == 'forward':
+                context['trip'] = [1]
+                context['work_type'] = '/10'
+            elif template == 'yard_ndd_f':
                 context['trip'] = [1]
                 context['ndd'] = [2]
-                context['work_type'] = '/1'
-            elif template == 'ndd_return':
+                context['work_type'] = '/11'
+            elif template == 'ndd_return_f':
+                context['trip'] = [1]
+                context['ndd'] = [1]
+                context['work_type'] = '/12'
+
+            elif template == 'backward':
                 context['trip'] = [2]
-                context['ndd'] = [3]
-                context['work_type'] = '/2'
+                context['work_type'] = '/20'
             elif template == 'yard_ndd_b':
                 context['trip'] = [2]
                 context['ndd'] = [4]
-                context['work_type'] = '/3'
-            elif template == 'forward':
-                context['trip'] = [1]
-                context['work_type'] = '/4'
-            elif template == 'backward':
+                context['work_type'] = '/21'
+            elif template == 'ndd_return_b':
                 context['trip'] = [2]
-                context['work_type'] = '/5'
+                context['ndd'] = [3]
+                context['work_type'] = '/22'
+
             else:
                 context['trip'] = [1, 2]
 

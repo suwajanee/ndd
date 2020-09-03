@@ -207,15 +207,34 @@
 
                         <div class="row">
                             <div class="col-md-3">
-                                ซอยตู้
+                                Forward
                             </div>
+                            <div class="col custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="template-forward" name="template" v-model="print.template" value="forward">
+                                <label class="custom-control-label" for="template-forward">Forward</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
                             <div class="col custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" id="template-yard_ndd_f" name="template" v-model="print.template" value="yard_ndd_f">
                                 <label class="custom-control-label" for="template-yard_ndd_f">Yard - NDD (F)</label>
                             </div>
                             <div class="col custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="template-ndd_return" name="template" v-model="print.template" value="ndd_return">
-                                <label class="custom-control-label" for="template-ndd_return">NDD - Return</label>
+                                <input type="radio" class="custom-control-input" id="template-ndd_return_f" name="template" v-model="print.template" value="ndd_return_f">
+                                <label class="custom-control-label" for="template-ndd_return_f">NDD - Return (F)</label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                Backward
+                            </div>
+                            <div class="col custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="template-backward" name="template" v-model="print.template" value="backward">
+                                <label class="custom-control-label" for="template-backward">Backward</label>
                             </div>
                         </div>
                         <div class="row">
@@ -224,23 +243,12 @@
                                 <input type="radio" class="custom-control-input" id="template-yard_ndd_b" name="template" v-model="print.template" value="yard_ndd_b">
                                 <label class="custom-control-label" for="template-yard_ndd_b">Yard - NDD (B)</label>
                             </div>
-                        </div>
-
-                        <hr>
-
-                        <div class="row">
-                            <div class="col-md-3">
-                                ตัดหาง
-                            </div>
                             <div class="col custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="template-forward" name="template" v-model="print.template" value="forward">
-                                <label class="custom-control-label" for="template-forward">Forward</label>
-                            </div>
-                            <div class="col custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="template-backward" name="template" v-model="print.template" value="backward">
-                                <label class="custom-control-label" for="template-backward">Backward</label>
+                                <input type="radio" class="custom-control-input" id="template-ndd_return_b" name="template" v-model="print.template" value="ndd_return_b">
+                                <label class="custom-control-label" for="template-ndd_return_b">NDD - Return (B)</label>
                             </div>
                         </div>
+                        
 
                         <hr style="border-width: 3px;">
 
