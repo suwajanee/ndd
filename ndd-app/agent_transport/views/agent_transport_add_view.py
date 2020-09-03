@@ -41,6 +41,11 @@ def api_save_add_agent_transports(request):
 
             if agent_transports['price'] == 'NaN':
                 agent_transports['price'] = 0
+
+            if agent_transports['operation_type'] == 'export_empty' or agent_transports['operation_type'] == 'import_empty':
+                work_type = 'ep'
+            else:
+                work_type = 'fc'
             
             for detail in details:
                 agent_transports['date'] = detail['date']
@@ -54,7 +59,7 @@ def api_save_add_agent_transports(request):
 
                 if detail['container_input'] == False:
                     for i in range(int(detail['quantity'])):
-                        work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+                        work_id, work_number = run_work_id(detail['date'], work_type)
 
                         agent_transports['work_id'] = work_id
                         agent_transports['work_number'] = work_number
@@ -66,7 +71,7 @@ def api_save_add_agent_transports(request):
                         agent_transports['container_1'] = cont_detail['container_1']
                         agent_transports['container_2'] = cont_detail['container_2']
 
-                        work_id, work_number = run_work_id(detail['date'], agent_transports['work_type'])
+                        work_id, work_number = run_work_id(detail['date'], work_type)
 
                         agent_transports['work_id'] = work_id
                         agent_transports['work_number'] = work_number
