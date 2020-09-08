@@ -27,9 +27,8 @@ var agent_transport_add = new Vue( {
             shipper: '',
             agent: '',
             booking_no: '',
-            work_type: 'ep',
 
-            operation_type: '',
+            operation_type: 'export_empty',
             price: 0,
             
             pickup_from: '',
