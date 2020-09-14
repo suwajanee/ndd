@@ -54,7 +54,6 @@ def api_get_employee(request):
                 data = {
                     'other': serializer.data,
                     'driver': [],
-                    'date_compare': ''
                 }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)

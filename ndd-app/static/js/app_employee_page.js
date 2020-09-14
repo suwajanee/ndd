@@ -60,8 +60,8 @@ var employee_page = new Vue( {
             })
         },
         getTruckList() {
-            api("/truck-chassis/api/get-truck/").then((data) => {
-                this.truck_list = data.truck
+            api("/truck-chassis/api/get-active-truck/").then((data) => {
+                this.truck_list = data
             })
         },
 
@@ -228,6 +228,7 @@ var employee_page = new Vue( {
                 api("/employee/api/edit-pat-expired-driver/", "POST", {job: this.job, drivers: this.edit_data}).then((data) => {
                     if(data) {
                         this.nested_employees = data.driver
+                        this.edit_data = []
                     }
                 })
             }

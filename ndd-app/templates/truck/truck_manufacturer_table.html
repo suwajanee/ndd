@@ -1,0 +1,134 @@
+<div class="col"></div>
+
+<div class="col-3">
+    <h5 class="text-center">Truck</h5>
+    <table class="table table-hover text-center">
+        <thead>
+            <th class="align-middle">
+                #
+            </th>
+            <th class="align-middle">
+                Name
+            </th>
+            <th class="align-middle"></th>
+        </thead>
+        <tbody>
+            <tr class="bg-light">
+                <td></td>
+                <td class="p-1"><input class="form-control" :class="{'alert-warning': truck_manu_add_warning}" v-model="truck_manu_add"></td>
+                <td>
+                    <button class="btn btn-lg btn-link text-success p-0" @click="addManufacturer('truck')">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            <template v-if="truck_manu_list.length">
+                <tr v-for="(manu, index) in truck_manu_list">
+                    {% verbatim %}
+                        <td style="width: 60px;">
+                            {{ index + 1 }}
+                        </td>
+                        <template v-if="truck_manu_edit[index]">
+                            <td class="p-1">
+                                <input class="form-control" :class="{'alert-warning': truck_manu_edit_warning[index]}" v-model="manu.name">
+                            </td>
+                            <td style="width: 60px;">
+                                <button class="btn btn-link p-0" @click="editManufacturer('truck', index, manu)">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </td>
+                        </template>
+                        <template v-else>
+                            <td class="text-left">
+                                {{ manu.name }}
+                            </td>
+                            <td style="width: 60px;">
+                                <button class="btn btn-sm btn-link p-0" @click="editManuStatus('truck', index)">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="btn btn-sm btn-link text-danger p-0" @click="deleteManufacturer(manu.id)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </template>
+                    {% endverbatim %}
+                </tr>
+            </template>
+            <tr v-else>
+                <td colspan=3 class="text-center text-secondary">
+                    <small>ไม่พบข้อมูล</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="col"></div>
+
+<div class="col-3">
+    <h5 class="text-center">Chassis</h5>
+    <table class="table table-hover text-center">
+        <thead>
+            <th class="align-middle">
+                #
+            </th>
+            <th class="align-middle">
+                Name
+            </th>
+            <th class="align-middle"></th>
+        </thead>
+        <tbody>
+            <tr class="bg-light">
+                <td></td>
+                <td class="p-1"><input class="form-control" :class="{'alert-warning': chassis_manu_add_warning}" v-model="chassis_manu_add"></td>
+                <td>
+                    <button class="btn btn-lg btn-link text-success p-0" @click="addManufacturer('chassis')">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            
+            <template v-if="chassis_manu_list.length">
+                <tr v-for="(manu, index) in chassis_manu_list">
+                    {% verbatim %}
+                        <td style="width: 60px;">
+                            {{ index + 1 }}
+                        </td>
+
+                        <template v-if="chassis_manu_edit[index]">
+                            <td class="p-1">
+                                <input class="form-control" :class="{'alert-warning': chassis_manu_edit_warning[index]}" v-model="manu.name">
+                            </td>
+                            <td style="width: 60px;">
+                                <button class="btn btn-link p-0" @click="editManufacturer('chassis', index, manu)">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </td>
+                        </template>
+                        <template v-else>
+                            <td class="text-left">
+                                {{ manu.name }}
+                            </td>
+                            <td style="width: 60px;">
+                                <button class="btn btn-sm btn-link p-0" @click="editManuStatus('chassis', index)">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="btn btn-sm btn-link text-danger p-0" @click="deleteManufacturer(manu.id)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </template>
+                    {% endverbatim %}
+                </tr>
+            </template>
+            <tr v-else>
+                <td colspan=3 class="text-center text-secondary">
+                    <small>ไม่พบข้อมูล</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="col"></div>
+

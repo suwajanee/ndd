@@ -1,0 +1,89 @@
+<table class="table table-hover col-8 container text-center">
+    <thead>
+        <th class="align-middle" style="width: 60px;">
+            #
+        </th>
+        <th class="align-middle">
+            No.
+        </th>
+        <th class="align-middle">
+            License Plate
+        </th>
+        <th class="align-middle">
+            Manufacturer
+        </th>
+        <th v-if="page == 'truck'" class="align-middle">
+            PAT Expired
+        </th>
+        <th class="align-middle">
+            Tax Expired
+            <button v-if="! edit_table" class="btn btn-sm btn-link text-danger p-0 float-right" @click="edit_table = true">
+                <i class="fas fa-pen"></i>
+            </button>
+            <button v-else class="btn btn-sm btn-link text-success p-0 float-right" @click="editExpiredDate">
+                <i class="fas fa-save"></i>
+            </button>
+        </th>
+        <th></th>
+    </thead>
+    <tbody v-if="truck_list.length || chassis_list.length">
+        {% if page == 'truck' %}
+            <tr v-for="(item, index) in truck_list">
+        {% else %}
+            <tr v-for="(item, index) in chassis_list">
+        {% endif %}
+            
+            {% verbatim %}
+
+                <td>
+                    {{ index + 1 }}
+                </td>
+                <td>
+                    {{ item.number }}
+                </td>
+                <td>
+                    {{ item.license_plate }}
+                </td>
+                <td>
+                    <template v-if="item.manufacturer">
+                        {{ item.manufacturer.name }}
+                    </template>
+                </td>
+                <td v-if="page == 'truck'" :class="{'text-danger': date_compare > item.pat_pass_expired_date}">
+                    <input v-if="edit_table" type="date" class="form-control" v-model="item.pat_pass_expired_date" @change="pushEditList(item)">
+                    <template v-else>
+                        {{ item.pat_pass_expired_date|formatDate }}
+                    </template>
+                </td>
+                <td :class="{'text-danger': date_compare > item.tax_expired_date}">
+                    <input v-if="edit_table" type="date" class="form-control" v-model="item.tax_expired_date" @change="pushEditList(item)">
+                    <template v-else>
+                        {{ item.tax_expired_date|formatDate }}
+                    </template>
+                </td>
+                <td style="width: 60px;">
+                    <button 
+                        class="btn btn-sm btn-link p-0" :class="item.status=='m' ? 'text-danger': ''"
+                        data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis(item)"
+                    >
+                        <i class="fas fa-edit"></i> 
+                    </button>
+                </td>
+            {% endverbatim %}
+        </tr>
+    </tbody>
+    <tbody v-else>
+        <td 
+            {% if page == 'truck' %} colspan=6 {% else %} colspan=5 {% endif %}
+            class="text-center text-secondary"
+        >
+            ไม่มีข้อมูล
+        </td>
+            
+
+    </tbody>
+</table>
+
+
+
+{% include 'truck/truck_modal.html' %}
