@@ -66,6 +66,7 @@ def api_get_former_employee(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+# Salary
 @csrf_exempt
 def api_get_employee_salary(request):
     if request.user.is_authenticated:
@@ -88,7 +89,7 @@ def api_get_salary_history(request):
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
-
+# Get Driver
 @csrf_exempt
 def api_get_all_driver(request):
     if request.user.is_authenticated:

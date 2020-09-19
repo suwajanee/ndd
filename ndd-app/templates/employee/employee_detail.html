@@ -97,7 +97,7 @@
                     <template v-if="job=='driver'">
                         <td>{{ emp.license_type }}</td>
                         <td :class="{'text-danger': date_compare > emp.pat_pass_expired_date}" style="max-width: 100px;">
-                            <input v-if="edit_table" type="date" class="form-control" v-model="emp.pat_pass_expired_date" @change="editData(emp)">
+                            <input v-if="edit_table" type="date" class="form-control" v-model="emp.pat_pass_expired_date" @change="pushEditList(emp)">
                             <template v-else>{{ emp.pat_pass_expired_date|formatDate }}</template>
                         </td>
                     </template>

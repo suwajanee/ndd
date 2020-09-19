@@ -36,14 +36,8 @@
                         </template>
                     </td>
                     <td style="width: 60px;">
-                        <!-- <button
-                            class="btn btn-link p-0"
-                            data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis(true, truck)"
-                        >
-                            <i class="fas fa-edit"></i>
-                        </button> -->
                         <button class="btn btn-link p-0" @click="editStatus('t', truck.id)">
-                            <i class="fas fa-undo"></i>
+                            <i class="fas fa-undo-alt"></i>
                         </button>
                     </td>
                 {% endverbatim %}
@@ -97,14 +91,8 @@
                         </template>
                     </td>
                     <td style="width: 60px;">
-                    <!-- <button
-                        class="btn btn-link p-0"
-                        data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis(false, chassis)"
-                    >
-                        <i class="fas fa-edit"></i>
-                    </td> -->
                     <button class="btn btn-link p-0" @click="editStatus('c', chassis.id)">
-                        <i class="fas fa-undo"></i>
+                        <i class="fas fa-undo-alt"></i>
                     </button>
                 {% endverbatim %}
             </tr>

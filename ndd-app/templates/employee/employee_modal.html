@@ -49,12 +49,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">DATE OF BIRTH</span>
                         </div>
-                        <input type="date" class="form-control" v-model="emp_data.birth_date" @change="calcAge(emp_data.birth_date)">
+                        <input type="date" class="form-control" v-model="emp_data.birth_date" >
 
                         <div class="input-group-prepend">
                             <span class="input-group-text">AGE</span>
                         </div>
-                        <input class="form-control col-2" v-model="emp_data.age" readonly>
+                        <input class="form-control col-2" :value="calcAge(emp_data.birth_date)" readonly>
                     </div>
 
                     <div class="input-group my-3 col-lg-7">
@@ -77,12 +77,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">DATE OF HIRE</span>
                         </div>
-                        <input type="date" class="form-control" v-model="emp_data.hire_date" @change="calcExp(emp_data.hire_date, emp_data.fire_date)">
+                        <input type="date" class="form-control" v-model="emp_data.hire_date">
 
                         <div class="input-group-prepend">
                             <span class="input-group-text">EXP</span>
                         </div>
-                        <input class="form-control col-2" v-model="emp_data.exp" readonly>
+                        <input class="form-control col-2" :value="calcExp(emp_data.hire_date, emp_data.fire_date)" readonly>
                     </div>
 
                         <div class="input-group my-3 col-lg-6">
@@ -90,9 +90,8 @@
                                 <span class="input-group-text">JOB TITLE</span>
                             </div>
                             <select class="custom-select" v-model="emp_data.job" :class="{'alert-danger': input_required && ! emp_data.job}" :disabled="emp_data.id">
-                                <option value="">--------</option>
                                 {% verbatim %}
-                                <option v-for="job in job_list" :value="job.job_title">{{ job.job_title.toUpperCase() }}</option>
+                                    <option v-for="job in job_list" :value="job.job_title">{{ job.job_title.toUpperCase() }}</option>
                                 {% endverbatim %}
                             </select>
                         </div>
@@ -145,7 +144,7 @@
                                 </div>
                                 <input type="date" 
                                     class="form-control" :class="{'alert-danger': input_required && ! emp_data.fire_date}" 
-                                    v-model="emp_data.fire_date" @change="calcExp(emp_data.hire_date, emp_data.fire_date)"
+                                    v-model="emp_data.fire_date"
                                 >
                             </template>
                         </div>
@@ -154,8 +153,8 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">    
-                <button v-if="modal_add_mode" class="btn btn-primary" @click="addEmployees">Add</button>
-                <button v-else class="btn btn-primary" @click="editEmployees">Save</button>
+                <button v-if="modal_add_mode" class="btn btn-primary" @click="actionEmployees('add')">Add</button>
+                <button v-else class="btn btn-primary" @click="actionEmployees('edit')">Save</button>
             </div>
         </div>
     </div>

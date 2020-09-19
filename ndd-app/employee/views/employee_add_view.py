@@ -25,8 +25,8 @@ def api_add_employee(request):
             
             data = {
                 'name_title': emp_data['name_title'],
-                'first_name': emp_data['first_name'].strip(),
-                'last_name': emp_data['last_name'].strip(),
+                'first_name': emp_data['first_name'],
+                'last_name': emp_data['last_name'],
                 'birth_date': emp_data['birth_date'] or None,
                 'detail': {
                     'tel': emp_data['tel'],
@@ -48,7 +48,7 @@ def api_add_employee(request):
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
 
-
+# Salary
 def add_employee_starting_salary(emp):  
     data = {
         'employee': emp,
@@ -61,6 +61,7 @@ def add_employee_starting_salary(emp):
 
     return salary
 
+# Driver
 def add_employee_driver(emp, emp_data):
     truck_id = emp_data['truck'] or ''
 

@@ -22,7 +22,7 @@
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="emp_count" />
                     </a>
                     {% verbatim %}
-                        <a v-for="j in job_list" class="nav-link text-capitalize" :class="{'active': j==job}" :href="'/employee/:' + j.job_title">
+                        <a v-for="j in job_list" class="nav-link text-capitalize" :class="{'active': j.job_title==job}" :href="'/employee/:' + j.job_title">
                             
                             <i class="fas fa-angle-right"></i>&nbsp; {{ j.job_title }}
                             <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="j.count" />
@@ -33,7 +33,7 @@
                     <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
-                    <a class="nav-link {% if page == 'terminated' %}active{% endif %}" href="{% url 'former-employee-page' %}">
+                    <a class="nav-link {% if page == 'former' %}active{% endif %}" href="{% url 'former-employee-page' %}">
                         Former Employee
                     </a>
                     {% if request.user|has_group:'salary_change' %}

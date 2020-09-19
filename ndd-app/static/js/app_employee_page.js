@@ -18,7 +18,7 @@ var employee_page = new Vue( {
         driver_start_index: 1,
 
         edit_table: false,
-        edit_data: [],
+        edit_list: [],
 
         modal_add_mode: true,
         input_required: false,
@@ -35,7 +35,7 @@ var employee_page = new Vue( {
 
             this.getJobList()
             this.getTruckList()
-            this.edit_data = []
+            this.edit_list = []
             this.input_required = false
 
             if(! page) {
@@ -49,10 +49,8 @@ var employee_page = new Vue( {
                 else if(page == 'salary') {
                     this.getEmployeeSalary()
                 }
-
             }
         },
-
         getJobList() {
             api("/employee/api/get-job/").then((data) => {
                 this.job_list = data
@@ -65,6 +63,7 @@ var employee_page = new Vue( {
             })
         },
 
+        // Employee
         getEmployees(job) {
             if(job) {
                 this.job = job
@@ -92,37 +91,24 @@ var employee_page = new Vue( {
                 this.driver_start_index = this.employees.length + 1
             })
         },
-        getEmployeeSalary(){
-            api("/employee/api/get-employee-salary/").then((data) => {
-                this.nested_employees = data
-            })
-        },
-
-        calcAge(date) {
-            this.emp_data.age = ''
-            if(date) {
-                var diff_month = diff_months(date)
-                var year = Math.floor(diff_month / 12)
-
-                this.emp_data.age = year
+        // Edit Date
+        pushEditList(driver) {
+            if(this.edit_list.indexOf(driver) === -1) {
+                this.edit_list.push(driver)
             }
         },
-        calcExp(date1, date2) {
-            this.emp_data.exp = ''
-            if(date1) {
-                if(date2) {
-                    var diff_month = diff_months(date1, date2)
-                }
-                else {
-                    var diff_month = diff_months(date1)
-                }
-                var year = Math.floor(diff_month / 12)
-                var month = diff_month % 12
-
-                this.emp_data.exp = year + 'Y' + month + 'M'
+        editPatExpiredDriver() {
+            if(this.edit_list.length){
+                api("/employee/api/edit-pat-expired-driver/", "POST", {job: this.job, drivers: this.edit_list}).then((data) => {
+                    if(data) {
+                        this.nested_employees = data.driver
+                        this.edit_list = []
+                    }
+                })
             }
+            this.edit_table = false
         },
-
+        // Add & Edit Popup
         employeeModal(emp, driver) {
             this.input_required = false
             this.warning_truck_driver = false
@@ -140,11 +126,8 @@ var employee_page = new Vue( {
                     job: emp.job.job_title,
                     status: emp.status,
                     fire_date: emp.detail.fire_date || '',
-                    co: emp.co,
                 }
 
-                this.calcAge(emp.birth_date)
-                this.calcExp(emp.hire_date, emp.detail.fire_date || '')
                 if(driver) {
                     var truck = ''
                     if(driver.truck) {
@@ -166,7 +149,7 @@ var employee_page = new Vue( {
                     tel: '',
                     account: '',
                     hire_date: '',
-                    job: this.job,
+                    job: this.job || 'driver',
                     license_type: '3',
                     pat_pass_expired_date: '',
                     truck: '',
@@ -188,14 +171,17 @@ var employee_page = new Vue( {
                 })
             }
         },
-        addEmployees() {
+        actionEmployees(action) {
             this.input_required = false
-            if(! this.emp_data.first_name.trim() || ! this.emp_data.last_name.trim() || ! this.emp_data.job || this.warning_truck_driver){
+            this.emp_data.first_name = this.emp_data.first_name.trim()
+            this.emp_data.last_name = this.emp_data.last_name.trim()
+            if(! this.emp_data.first_name || ! this.emp_data.last_name || this.warning_truck_driver || (this.emp_data.status == 't' && ! this.emp_data.fire_date)) {
                 this.input_required = true
                 return false
             }
             else {
-                api("/employee/api/add-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
+                var url = `/employee/api/${action}-employee/`
+                api(url, "POST", {emp_data: this.emp_data}).then((data) => {
                     if(data == 'Success') {
                         this.reload(this.job, this.page)
                         $('#modalEmployee').modal('hide')
@@ -203,38 +189,36 @@ var employee_page = new Vue( {
                 })
             }
         },
-        editEmployees() {
-            this.input_required = false
-            if(! this.emp_data.first_name.trim() || ! this.emp_data.last_name.trim() || this.warning_truck_driver || (this.emp_data.status == 't' && ! this.emp_data.fire_date)){
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/employee/api/edit-employee/", "POST", {emp_data: this.emp_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.job, this.page)
-                        $('#modalEmployee').modal('hide')
-                    }
-                })
+        // Calculate AGE & EXP
+        calcAge(date) {
+            if(date) {
+                var diff_month = diff_months(date)
+                var year = Math.floor(diff_month / 12)
+
+                return year
             }
         },
-        editData(driver) {
-            if(this.edit_data.indexOf(driver) === -1) {
-                this.edit_data.push(driver)
+        calcExp(date1, date2) {
+            if(date1) {
+                if(date2) {
+                    var diff_month = diff_months(date1, date2)
+                }
+                else {
+                    var diff_month = diff_months(date1)
+                }
+                var year = Math.floor(diff_month / 12)
+                var month = diff_month % 12
+
+                return year + 'Y' + month + 'M'
             }
-        },
-        editPatExpiredDriver() {
-            if(this.edit_data.length){
-                api("/employee/api/edit-pat-expired-driver/", "POST", {job: this.job, drivers: this.edit_data}).then((data) => {
-                    if(data) {
-                        this.nested_employees = data.driver
-                        this.edit_data = []
-                    }
-                })
-            }
-            this.edit_table = false
         },
 
+        // Salary
+        getEmployeeSalary(){
+            api("/employee/api/get-employee-salary/").then((data) => {
+                this.nested_employees = data
+            })
+        },
         salaryModal(emp, salary) {
             this.input_required = false
             var emp_id = emp.id
@@ -280,17 +264,5 @@ var employee_page = new Vue( {
                 })
             }
         },
-
-        deleteEmployees(emp_id) {
-            if (confirm('Are you sure?')){
-                api("/employee/api/delete-employee/", "POST", {emp_id: emp_id}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.job, this.page)
-                        $('#modalEmployee').modal('hide')
-                    }
-                })
-            }
-        },
-
     }
 })
