@@ -3,28 +3,34 @@ var total_expense_page = new Vue ({
     data: {
         loading: false,
 
+        // Initial
         year: '',
         month: '',
         period: '',
+        // End Initial
 
+        // Upper Part
         show_filter_btn: false,
         show_col_select: false,
         filter_mode: false,
-
-        from_date: '',
-        to_date: '',
-
+        // option
         year_list: [],
         month_list: [],
         full_month_list: [],
         period_num: [],
+        // End Upper Part
 
+        // Report Data
+        from_date: '',
+        to_date: '',
+        // report list
         total_report: [],
         date_list: [],
-
+        // total
         thc_total_list: [],
         date_total_list: [],
         all_total_list: [],
+        // End Report Data
     },
     methods: {
         reload(year, month, period) {

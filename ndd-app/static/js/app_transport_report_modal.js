@@ -4,38 +4,51 @@ var report_modal = new Vue ({
     data: {
         daily_page: true,
 
+        // Initial
         date: '',
         driver_id: '',
 
         year: '',
         month: '',
         period: '',
+        // End Initial
 
-        search_driver: '',
-        driver_list: [],
-        truck_list: [],
-        driver_data: {},
-        default_truck: {},
-
+        // Warning
         modal_warning: false,
-        modal_add_mode: false,
-        search_work_id: '',
+        expense_format_status: new Array(13),
+        // End Warning
+        
+        // Order Type
         double_show: ['1.1', '3.1', '4.1', '4.2', '5.1', '5.2'],
 
+        order_type_list: [],
+        used_order_type_list: [],
         trip_color: {},
         not_fw_trip: [],
         not_bw_trip: [],
+        // End Order Type
 
+        // Driver & Truck Select
+        search_driver: '',
+        driver_list: [],
+        truck_list: [],
+        // default
+        driver_data: {},
+        default_truck: {},
+        // selected data
+        work_driver_data: {},
+        work_truck_data: {},
+        // End Driver & Truck Select
+
+        // Work Data
+        search_work_id: '',
         work_data: {},
-        work_driver_data: {
-            co: '',
-            detail: {}
-        },
-        work_truck_data: {
-            owner: ''
-        },
+        // End Work Data
 
+        // Report Data
         modal_type: 'normal',
+        modal_add_mode: false,
+
         report_work_id: '',
         report_order: {
             driver: '',
@@ -45,8 +58,7 @@ var report_modal = new Vue ({
         report_price: {},
         report_co_expense: {},
         report_cus_expense: {},
-
-        expense_format_status: {},
+        // End Report Data
 
     },
     computed: {
@@ -62,24 +74,8 @@ var report_modal = new Vue ({
 
     methods: {
         getModalExpenseReport(report) {
-            this.modal_warning = false
-            this.expense_format_status = {
-                0: true,
-                1: true,
-                2: true,
-                3: true,
-                4: true,
-                5: true,
-                6: true,
-
-                7: true,
-                8: true,
-                9: true,
-
-                10: true,
-                11: true,
-                12: true,
-            }
+            this.modal_warning = false     
+            this.expense_format_status.fill(true)
 
             if(report) {
                 this.modal_add_mode = false
@@ -94,6 +90,9 @@ var report_modal = new Vue ({
                 }
                 
                 this.modal_type = work.principal.work_type
+                this.order_type_list = order_type_list[this.modal_type]
+                this.getUsedOrderTypeByWorkId(work.work_id, work_order.order_type)
+
                 this.report_work_id = this.search_work_id = work.work_id
                 this.work_driver_data = work_order.driver.employee
                 this.work_truck_data = work_order.truck
@@ -133,14 +132,14 @@ var report_modal = new Vue ({
                 this.modal_type = ''
                 this.report_work_id = ''
 
-                this.work_driver_data = this.driver_data
-                this.work_truck_data = this.default_truck
+                this.work_driver_data = this.driver_data || {}
+                this.work_truck_data = this.default_truck || {}
 
                 this.report_order = {
                     clear_date: this.date,
-                    driver: this.driver_id,
+                    driver: this.driver_id || '',
                     truck: this.default_truck.id || '',
-                    order_type: '',
+                    order_type: null,
                     double_container: false,
                 }
 
@@ -161,40 +160,62 @@ var report_modal = new Vue ({
             work_id = work_id.trim().toUpperCase()
             var work_id_substr = work_id.substr(0, 2)
 
-            this.report_order.order_type = ''
             this.report_order.double_container = false
-            if(['EP', 'FC'].includes(work_id_substr)) {
-                api("/agent-transport/api/get-agent-transport-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
-                    if(data) {
-                        this.modal_type = 'agent-transport'
-                        this.report_work_id = data.work_id
-                        this.report_order.work_date = data.date
-                        this.work_data = {
-                            size_20: data.size.startsWith('20'),
-                            size_2_container: data.size.startsWith('2X'),
-                            customer: data.principal.name,
-                            container_1: data.container_1,
-                            container_2: data.container_2,
+
+            if(work_id != this.report_work_id) {
+                if(['EP', 'FC'].includes(work_id_substr)) {
+                    api("/agent-transport/api/get-agent-transport-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
+                        if(data) {
+                            this.modal_type = 'agent-transport'
+                            this.order_type_list = order_type_list[this.modal_type]
+                            this.getUsedOrderTypeByWorkId(work_id, this.report_order.order_type)
+                            this.report_order.order_type = null
+
+                            this.report_work_id = data.work_id
+                            this.report_order.work_date = data.date
+                            this.work_data = {
+                                size_20: data.size.startsWith('20'),
+                                size_2_container: data.size.startsWith('2X'),
+                                customer: data.principal.name,
+                                container_1: data.container_1,
+                                container_2: data.container_2,
+                            }
                         }
-                    }
-                })
-            }
-            else {
-                api("/booking/api/get-normal-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
-                    if(data) {
-                        this.modal_type = 'normal'
-                        this.report_work_id = data.work_id
-                        this.report_order.work_date = data.date
-                        this.work_data = {
-                            size_20: data.size.startsWith('20'),
-                            size_2_container: data.size.startsWith('2X'),
-                            customer: data.principal.name,
-                            container_1: data.container_no,
-                            container_2: data.seal_no
+                    })
+                }
+                else {
+                    api("/booking/api/get-normal-work-by-work-id/", "POST", {work_id: work_id}).then((data) => {
+                        if(data) {
+                            this.modal_type = 'normal'
+                            this.order_type_list = order_type_list[this.modal_type]
+                            this.getUsedOrderTypeByWorkId(work_id, this.report_order.order_type)
+                            this.report_order.order_type = null
+
+                            this.report_work_id = data.work_id
+                            this.report_order.work_date = data.date
+                            this.work_data = {
+                                size_20: data.size.startsWith('20'),
+                                size_2_container: data.size.startsWith('2X'),
+                                customer: data.principal.name,
+                                container_1: data.container_no,
+                                container_2: data.seal_no
+                            }
                         }
-                    }
-                })
+                    })
+                }
             }
+        },
+        getUsedOrderTypeByWorkId(work_id, order_type) {
+            api("/report/api/get-used-order-type-by-work-id/", "POST", {work_id: work_id}).then((data) => {
+                if(data) {
+                    this.used_order_type_list = data
+
+                    if(order_type != null) {
+                        var index = this.used_order_type_list.indexOf(order_type)
+                        this.used_order_type_list.splice(index, 1)
+                    }
+                }
+            })
         },
 
         selectDriver(driver) {
@@ -219,13 +240,14 @@ var report_modal = new Vue ({
         checkExpenseFormat(str, index) {
             try {
                 eval(str)
-                this.expense_format_status[index] = true
+                this.$set(this.expense_format_status, index, true)
             }
             catch {
-                this.expense_format_status[index] = false
+                this.$set(this.expense_format_status, index, false)
             }
         },
 
+        // ใช้ใน HTML
         sumString(str) {
             try {
                 return eval(str)
@@ -240,13 +262,12 @@ var report_modal = new Vue ({
             return sumStringArray(array)
         },
 
-        addOrEditExpenseReport() {
+        actionExpenseReport(action) {
             this.modal_warning = false
+            
+            var expense_status = this.expense_format_status.every(Boolean)
 
-            var status_array = Object.values(this.expense_format_status)
-            var expense_status = status_array.every(Boolean)
-
-            if(!this.report_order.driver || !this.report_order.truck || !this.modal_type || !this.report_work_id || !expense_status) {
+            if(!this.report_order.driver || !this.report_order.truck || !this.modal_type || !this.report_work_id || this.report_order.order_type == null || ! expense_status) {
                 this.modal_warning = true
             }
             else {
@@ -275,26 +296,17 @@ var report_modal = new Vue ({
                     cus_total: cus_total
                 }
 
-                if(this.modal_add_mode) {
-                    api("/report/api/add-expense-report/", "POST", work_data).then((data) => {
-                        if(data=='Success') {
-                            $('#modalExpenseReport').modal('hide');
-                            daily_report_page.getDailyDriverExpense()
-                        }
-                    })
-                }
-                else {
-                    api("/report/api/edit-expense-report/", "POST", work_data).then((data) => {
-                        if(data=='Success') {
-                            $('#modalExpenseReport').modal('hide');
-                            this.pageReload()
-                        }
-                    }).catch((error) => {
-                        alert('Save again')
-                        console.error(error)
-                    })
-                }
+                var url = `/report/api/${action}-expense-report/`
 
+                api(url, "POST", work_data).then((data) => {
+                    if(data=='Success') {
+                        $('#modalExpenseReport').modal('hide')
+                        this.pageReload()
+                    }
+                }).catch((error) => {
+                    alert('Save again')
+                    console.error(error)
+                })
             }
         },
 
@@ -325,4 +337,3 @@ var report_modal = new Vue ({
     }
 
 })
-

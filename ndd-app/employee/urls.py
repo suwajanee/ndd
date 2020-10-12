@@ -29,8 +29,5 @@ urlpatterns = [
     url(r'^api/get-salary-history/$', employee_data_view.api_get_salary_history, name='api-get-salary-history'),
     url(r'^api/edit-salary/$', employee_edit_view.api_edit_employee_salary, name='api-edit-salary'),
     url(r'^api/delete-latest-salary/$', employee_delete_view.api_delete_latest_salary, name='api-delete-latest-salary'),
-
-    # Get Driver
-    url(r'api/get-all-driver/$', employee_data_view.api_get_all_driver, name='api-get-all-driver'),
-    url(r'api/get-active-driver/$', employee_data_view.api_get_active_driver, name='api-get-active-driver'),
+    
 ]

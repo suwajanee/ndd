@@ -89,24 +89,6 @@ def api_get_salary_history(request):
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
-# Get Driver
-@csrf_exempt
-def api_get_all_driver(request):
-    if request.user.is_authenticated:
-        if request.method == "GET":
-            driver = Driver.objects.all().order_by('truck__number', 'employee__first_name', 'employee__last_name')
-            serializer = DriverSerializer(driver, many=True)
-            return JsonResponse(serializer.data, safe=False)
-    return JsonResponse('Error', safe=False)
-
-@csrf_exempt
-def api_get_active_driver(request):
-    if request.user.is_authenticated:
-        if request.method == "GET":
-            driver = Driver.objects.filter(employee__status='a').order_by('truck__number', 'employee__first_name', 'employee__last_name')
-            serializer = DriverSerializer(driver, many=True)
-            return JsonResponse(serializer.data, safe=False)
-    return JsonResponse('Error', safe=False)
 
 # Methods
 def get_employee_list(status):

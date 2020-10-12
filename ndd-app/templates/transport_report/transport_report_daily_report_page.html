@@ -56,14 +56,14 @@
                         </div>
                     </div>
                     <div class="col-7">
-                        <button v-if="driver_id" class="btn btn-success ml-3 float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
+                        <button class="btn btn-success ml-3 float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
 
                         <div class="float-right">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">COL</span>
                                 </div>
-                                <button class="custom-select text-left rounded-right multi-select" style="height: 40px; min-width: 150px;" data-toggle="dropdown">
+                                <button class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown">
                                     <template v-if="col_price || col_allowance || col_remark">
                                         <template v-if="col_price">ราคา; </template>
                                         <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
@@ -116,7 +116,7 @@
                                     <template v-for="report in expense_list">
                         {% else %}
                             
-                            <template v-for="driver in driver_report_list">
+                            <template v-for="driver in driver_list">
                                 <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
                         {% endif %}

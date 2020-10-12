@@ -213,8 +213,8 @@ button.multi-select {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     /* max-width: 160px; */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
     white-space: nowrap;
 }
 /* End Multiselect */

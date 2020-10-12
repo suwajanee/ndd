@@ -4,21 +4,28 @@ var daily_report_page = new Vue ({
     data: {
         loading: false,
 
+        // Initial
         date: '',
         driver_id: '',
+        // End Initial
 
-        driver_data: {},
-        search_driver: '',
-        driver_list: [],
-        truck_list: [],
-
-        driver_report_list: [],
-        expense_list: [],
-        total: 0,
-        
+        // Upper Part
         col_price: true,
         col_allowance: true,
         col_remark: false,
+        // End Upper Part
+
+        // Driver Select
+        driver_data: {}, // selected data
+        search_driver: '',
+        driver_list: [],
+        // End Driver Select
+
+        // Report Data
+        expense_list: [],
+        total: 0,
+        // End Report Data
+        
     },
 
     computed: {
@@ -40,8 +47,6 @@ var daily_report_page = new Vue ({
             report_modal.not_fw_trip = not_fw_trip
             report_modal.not_bw_trip = not_bw_trip
             
-            this.getActiveDriver()
-            this.getActiveTruck()
             if(driver) {
                 this.driver_id = report_modal.driver_id = driver
                 this.getDailyDriverExpense()
@@ -50,16 +55,12 @@ var daily_report_page = new Vue ({
                 this.getDailyExpense()
             }
         },
-    
 
         changeUrl(driver) {
             var url = "/report/daily-report/" + this.date + "/"
             if(driver){
                 url += driver
             }
-            // else {
-            //     url += this.co
-            // }
             window.open(url, "_self")
         },
 
@@ -72,14 +73,15 @@ var daily_report_page = new Vue ({
                 }
                 this.date = data.date
                 this.expense_list = data.expense_list
-                this.driver_report_list = data.driver_list
+                this.driver_list = report_modal.driver_list = data.driver_list
+                report_modal.truck_list = data.truck_list
                 this.total = data.total
 
                 this.matchDriverReport()
             })
         },
         matchDriverReport() {
-            this.driver_report_list.forEach((driver) => {
+            this.driver_list.forEach((driver) => {
                 var report_result = this.expense_list.filter(report => report.work_order.driver.id === driver.id)
                 driver['report_list'] = report_result
 
@@ -96,7 +98,16 @@ var daily_report_page = new Vue ({
                     return false
                 }
                 this.driver_data = report_modal.driver_data = data.driver
+                this.driver_list = report_modal.driver_list = data.driver_list
+                report_modal.truck_list = data.truck_list
+
+                var active_driver = this.driver_list.filter(driver => driver.employee.id == this.driver_data.id)
+                if(active_driver.length == 0) {
+                    this.changeUrl()
+                }
+
                 report_modal.default_truck = data.truck
+                
                 this.expense_list = data.expense_list
                 this.total = this.calcTotalExpense(this.expense_list)
 
@@ -108,21 +119,6 @@ var daily_report_page = new Vue ({
             var co_total = sumObjectArray(array, 'co_total')
             var cus_total = sumObjectArray(array, 'cus_total')
             return co_total + cus_total
-        },
-
-        getActiveDriver() {
-            api("/employee/api/get-active-driver/").then((data) => {
-                this.driver_list = report_modal.driver_list = data
-            })
-        },
-
-        getActiveTruck() {
-            api("/truck-chassis/api/get-active-truck/").then((data) => {
-                this.truck_list = report_modal.truck_list = data
-            })
-        },
-
-        
-        
+        },         
     }
 })

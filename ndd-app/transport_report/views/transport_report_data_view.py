@@ -27,6 +27,25 @@ from employee.models import Driver
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
 from employee.serializers import DriverSerializer
+from truck.models import Truck
+from truck.serializers import TruckSerializer
+
+
+# Get Order Type by Work ID
+@csrf_exempt
+def api_get_used_order_type_by_work_id(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            work_id = req['work_id']
+            try:
+                order_type_list = WorkOrder.objects.filter(Q(work_normal__work_id=work_id) | Q(work_agent_transport__work_id=work_id)).values_list('order_type', flat=True)
+                order_type_list = list(order_type_list)
+            except:
+                order_type_list = []
+
+            return JsonResponse(order_type_list, safe=False)
+    return JsonResponse('Error', safe=False)
 
 
 # Daily Expense & Daily Driver Expense
@@ -48,15 +67,16 @@ def api_get_daily_report(request):
             total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             driver_list = get_driver_list(report)
+            truck_list = get_truck_list(report)
             data = {
                 'date': date.date(),
                 'expense_list': serializer.data,
                 'driver_list': driver_list,
+                'truck_list': truck_list,
                 'total': total
             }
 
             return JsonResponse(data, safe=False)
-
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
@@ -82,7 +102,12 @@ def api_get_daily_driver_report(request):
             except:
                 truck_data = {}
 
-            report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
+            # report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
+            report = Expense.objects.filter(work_order__clear_date=date)
+            driver_list = get_driver_list(report)
+            truck_list = get_truck_list(report)
+
+            report = report.filter(work_order__driver__employee=driver).order_by('work_order__work_date', 'pk')
 
             serializer = ExpenseSerializer(report, many=True)
 
@@ -92,6 +117,8 @@ def api_get_daily_driver_report(request):
                 'driver': driver_serializer.data,
                 'truck': truck_data,
                 'expense_list': serializer.data,
+                'driver_list': driver_list,
+                'truck_list': truck_list,
                 'total': total
             }
 
@@ -124,7 +151,10 @@ def api_get_expense_report(request):
                 customer_list = get_customer_options_filter(expense)
 
                 total_price_list = get_total_price_list(expense)
-                total_expense_list = get_total_expense_list(expense)  
+                total_expense_list = get_total_expense_list(expense)
+
+                driver_list = get_driver_list(expense)
+                truck_list = get_truck_list(expense)
 
                 data = {
                     'from_date': from_date,
@@ -133,6 +163,9 @@ def api_get_expense_report(request):
                     'period': period_num,
 
                     'pk_list': list(pk_list),
+
+                    'driver_list': driver_list,
+                    'truck_list': truck_list,
 
                     'customer_list': customer_list,
                     'remark_list': ['(empty)'] + remark_list,
@@ -151,6 +184,9 @@ def api_get_expense_report(request):
                     data['report_list'] = serializer.data
 
             else:
+                driver_list = get_driver_list([])
+                truck_list = get_truck_list([])
+
                 data = {
                     'from_date': None,
                     'to_date': None,
@@ -159,6 +195,9 @@ def api_get_expense_report(request):
                     'report_list': [],
                     'date_list': [],
                     'pk_list': [],
+
+                    'driver_list': driver_list,
+                    'truck_list': truck_list,
 
                     'customer_list': [],
                     'remark_list': [],
@@ -351,6 +390,18 @@ def get_driver_list(report):
 
     return serializer.data
 
+def get_truck_list(report):
+    if report:
+        truck_report_pk = report.values_list('work_order__truck__pk')
+    else:
+        truck_report_pk = []
+    
+    truck = Truck.objects.filter(~Q(status='s') | Q(pk__in=truck_report_pk)).order_by('number')
+    serializer = TruckSerializer(truck, many=True)
+
+    return serializer.data
+
+
 # Methods
 def order_expense_report(report):
     return report.order_by('work_order__clear_date', 'work_order__driver__truck__number', 'work_order__driver__employee__first_name', \
@@ -365,7 +416,7 @@ def get_from_to_date(year, month, period):
         if selected_month:
             to_date = selected_month.first().date
             next_date = summary_date_list.filter(date__gt=to_date)
-            if not next_date:
+            if not next_date and len(selected_month) < 3:
                 to_date = get_next_date(summary_date_list, to_date)
         else:
             to_date = get_next_date(summary_date_list, from_date)

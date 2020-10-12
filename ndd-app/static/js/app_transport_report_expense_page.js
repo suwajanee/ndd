@@ -4,59 +4,68 @@ var expense_page = new Vue ({
     data: {
         loading: false,
         
+        // Initial
         page: '',
         year: '',
         month: '',
         period: '',
+        // End Initial
 
+        // Upper Part
         show_filter_btn: true,
         show_col_select: true,
-
-        from_date: '',
-        to_date: '',
 
         year_list: [],
         month_list: [],
         full_month_list: [],
+        period_num: [],
 
         col_price: true,
         col_allowance: true,
         col_remark: true,
+        // End Upper Part
 
+        // Trip Color
         trip_color: {},
         not_fw_trip: [],
         not_bw_trip: [],
+        // End Trip Color
 
+        // Report Data
+        from_date: '',
+        to_date: '',
+        // data list
         report_list: [],
+        pk_list: [],
         date_list: [],
         date_report_list: [],
-        period_num: [],
+        // total
         total_price_list: [],
         total_expense_list: [],
-
-        driver_list: [],
-        truck_list: [],
-
-        // filter
+        // End Report Data
+        
+        // Filter
         filter_mode: false,
         modal_warning: false,
-
+        // work id input
+        work_id: '',
+        // driver & truck select
+        driver_list: [],
+        truck_list: [],
         search_driver: '',
         driver_data: {},
         driver_id: '',
         truck_data: {},
         truck_id: '',
-
-        pk_list: [],
-        customer_list: [],
-        remark_list: [],
-
+        // select all
         all_customer: true,
         all_remark: true,
-
-        work_id: '',
+        // multiselect
+        customer_list: [],
+        remark_list: [],
         customer_selected: [],
         remark_selected: [],
+        // End Filter
         
     },
     computed: {
@@ -84,8 +93,6 @@ var expense_page = new Vue ({
             this.month_list = _month
             this.full_month_list = _full_month
 
-            this.getActiveDriver()
-            this.getActiveTruck()
             this.getReport()
 
             if(this.page == 'summary') {
@@ -128,6 +135,9 @@ var expense_page = new Vue ({
                 this.total_price_list = data.total_price_list
 
                 this.pk_list = data.pk_list
+
+                this.driver_list = report_modal.driver_list = data.driver_list
+                this.truck_list = report_modal.truck_list = data.truck_list
 
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
@@ -232,18 +242,6 @@ var expense_page = new Vue ({
             this.remark_selected = this.remark_list
 
             this.filterReport()
-
-        },
-
-        getActiveDriver() {
-            api("/employee/api/get-active-driver/").then((data) => {
-                this.driver_list = report_modal.driver_list = data
-            })
-        },
-        getActiveTruck() {
-            api("/truck-chassis/api/get-active-truck/").then((data) => {
-                this.truck_list = report_modal.truck_list = data
-            })
         },
 
         selectDriver(driver) {
@@ -284,6 +282,5 @@ var expense_page = new Vue ({
                 this['all_' + input] = false
             }
         },
-        
     }
 })

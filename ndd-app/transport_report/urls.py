@@ -38,6 +38,8 @@ urlpatterns = [
 
     url(r'^api/get-total-expense/$', transport_report_data_view.api_get_total_expense, name='api-get-total-expense'),
 
+    url(r'^api/get-used-order-type-by-work-id/$', transport_report_data_view.api_get_used_order_type_by_work_id, name='api-get-used-order-type-by-work-id'),
+
     # Add
     url(r'^api/add-expense-report/$', transport_report_add_view.api_add_expense_report, name='api-add-expense-report'),
 
