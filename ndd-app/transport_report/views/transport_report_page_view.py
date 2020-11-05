@@ -164,6 +164,21 @@ def period_total_expense_page(request, year, month, period):
         return render(request, 'transport_report/transport_report_total_expense_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'year': year, 'month': month, 'period': period})
     else:
         return HttpResponseRedirect('/dashboard')
+
+@login_required(login_url=reverse_lazy('login'))
+def re_total_truck_page(request):
+    date = datetime.now().strftime('%Y/%m')
+    return HttpResponseRedirect('/report/total-truck/' + date)
+
+@login_required(login_url=reverse_lazy('login'))
+def total_truck_page(request, year, month):
+    month = int(month)
+    check_return = check_url_format(year, month)
+
+    if check_return:
+        return render(request, 'transport_report/transport_report_total_truck.html', {'nbar': 'report-page', 'title': 'Total Truck Expense', 'year': year, 'month': month})
+    else:
+        return HttpResponseRedirect('/dashboard')
         
 
 def check_url_format(year, month):

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Total Truck Expense {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="total-truck-page">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Total Truck Expense</li>
+                <li class="breadcrumb-item">{{ year }}</li>
+                {% verbatim %}
+                    <li class="breadcrumb-item active">{{ month_list[month-1] }}</li>
+                {% endverbatim %}
+            </ol>
+        </nav>
+
+        {% verbatim %}
+            <div class="row m-0 py-3">
+                <div class="input-group col-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">YEAR</span>
+                    </div>
+                    <select class="custom-select" v-model="year" @change="changeUrl">
+                        <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text">MONTH</span>
+                    </div>
+                    <select class="custom-select" v-model="month" @change="changeUrl">
+                        <option v-for="(month, index) in month_list" :value="index+1">{{ month }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <h4 class="text-center">
+                {{ full_month_list[month-1] }} {{ year }}
+                <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small>
+            </h4>
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0 head-normal">
+                <table class="table table-bordered m-0 w-100">
+                    <thead class="text-center">
+                        <tr>
+                            <th class="right-thick"></th>
+                            <template v-for="truck in truck_list">
+                                <th colspan=2>{{ truck.number }}</th>
+                            </template>
+                            <th colspan=2>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-right">
+                        <tr class="fri-color">
+                            <td class="text-center right-thick font-weight-bold" style="min-width: 150px; width: 150px;">วิ่งงาน</td>
+                            <template v-for="(price, index) in price_list">
+                                <td style="min-width: 120px; width: 120px;" :class="{'font-weight-bold': list_count == index}">
+                                    {{ price|currencyCommas }}
+                                </td>
+                                <td style="min-width: 55px; width: 55px;"></td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td class="right-thick"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center right-thick font-weight-bold">ค่าเที่ยว</td>
+                            <template v-for="(allowance, index) in allowance_list">
+                                <td :class="{'font-weight-bold': list_count == index}">{{ allowance|currencyCommas }}</td>
+                                <td class="wed-color">{{ getPercentage(allowance, index) }}</td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td class="text-center right-thick font-weight-bold">ค่าใช้จ่าย</td>
+                            <template v-for="(co_expense, index) in co_expense_list">
+                                <td :class="{'font-weight-bold': list_count == index}">{{ co_expense|currencyCommas }}</td>
+                                <td class="wed-color">{{ getPercentage(co_expense, index) }}</td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td class="right-thick"></td>
+                        </tr>
+
+                        <tr class="table-warning font-weight-bold">
+                            <td class="text-center right-thick font-weight-bold">เหลือ</td>
+                            <template v-for="(total, index) in total_list">
+                                <td>{{ total|currencyCommas }}</td>
+                                <td class="wed-color">{{ getPercentage(total, index) }}</td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% endverbatim %}
+    </div>
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_total_truck_page.js' %}"></script>
+
+    <script type="application/javascript">
+        window.addEventListener("load", function() {
+            total_truck_page.reload("{{ year }}", "{{ month }}")
+        })
+    </script>
+
+{% endblock %}

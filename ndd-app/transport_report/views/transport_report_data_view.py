@@ -378,6 +378,74 @@ def api_get_total_expense(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+# Total Truck
+@csrf_exempt
+def api_get_total_truck(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+
+            year = int(req['year'])
+            month = int(req['month'])
+
+            period_num, from_date, to_date = get_from_to_date(year, month, 0)
+
+            if from_date < to_date:
+                expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
+
+                truck_list = get_truck_list(expense)
+                try:
+                    thc = Variable.objects.get(key='thc').value
+                    thc = int(thc)
+                except Variable.DoesNotExist:
+                    thc = 0
+
+                price_list = []
+                allowance_list = []
+                co_expense_list = []
+                for truck in truck_list:
+                    truck_expense = expense.filter(work_order__truck__pk=truck['id'])
+
+                    total_price = get_total_price_list(truck_expense)
+                    price_list.append(total_price[0])
+                    allowance_list.append(total_price[1] + total_price[2])
+
+                    total_co_expense = truck_expense.aggregate(total_co_expense=Sum('co_total'))['total_co_expense'] or 0
+
+                    if thc > 0:
+                        total_thc = sum_from_key_list(truck_expense, ['co_expense__co_thc'])[0]
+                        thc_count = truck_expense.filter(co_expense__has_key='co_thc').count()
+                        total_co_expense += (thc_count * thc) - total_thc
+                    
+                    co_expense_list.append(float(total_co_expense))
+                
+                data = {
+                    'from_date': from_date,
+                    'to_date': to_date,
+
+                    'truck': truck_list,
+                    'price': price_list,
+                    'allowance': allowance_list,
+                    'co_expense': co_expense_list
+                }
+            
+            else:
+                truck_list = get_truck_list([])
+                init_list = [0] * len(truck_list)
+
+                data = {
+                    'from_date': None,
+                    'to_date': None,
+
+                    'truck': truck_list,
+                    'price': init_list,
+                    'allowance': init_list,
+                    'co_expense': init_list
+                }
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse(False, safe=False)
+
 
 def get_driver_list(report):
     if report:
@@ -463,30 +531,64 @@ def get_total_price_list(report_list):
     return total_price_list
 
 def get_total_expense_list(report_list):
-    co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
-    cus_expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
+    # co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
+    # cus_expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
 
-    co_expense_list = sum_from_key_list(report_list, co_expense_key)
+    # co_expense_list = sum_from_key_list(report_list, co_expense_key)
     
-    try:
-        thc = Variable.objects.get(key='thc').value
-        thc = int(thc)
-    except Variable.DoesNotExist:
-        thc = 0
-    co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
-    co_expense_list[4] = co_thc_count * thc
+    # try:
+    #     thc = Variable.objects.get(key='thc').value
+    #     thc = int(thc)
+    # except Variable.DoesNotExist:
+    #     thc = 0
+    # co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
+    # co_expense_list[4] = co_thc_count * thc
 
-    co_total = sum(co_expense_list)
+    # co_total = sum(co_expense_list)
+    # co_expense_list.append(co_total)
+
+    # cus_expense_list = sum_from_key_list(report_list, cus_expense_key)
+    # cus_total = sum(cus_expense_list)
+    # cus_expense_list.append(cus_total)
+
+    # total_expense_list = co_expense_list + cus_expense_list
+    # total_expense_list.append(co_total + cus_total)
+    co_expense_list, co_total = total_co_expense(report_list)
+    # co_total = sum(co_expense_list)
     co_expense_list.append(co_total)
 
-    cus_expense_list = sum_from_key_list(report_list, cus_expense_key)
-    cus_total = sum(cus_expense_list)
+    cus_expense_list, cus_total = total_cus_expense(report_list)
+    # cus_total = sum(cus_expense_list)
     cus_expense_list.append(cus_total)
 
     total_expense_list = co_expense_list + cus_expense_list
     total_expense_list.append(co_total + cus_total)
 
     return total_expense_list
+
+def total_co_expense(report_list):
+    expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
+    expense_list = sum_from_key_list(report_list, expense_key)
+
+    try:
+        thc = Variable.objects.get(key='thc').value
+        thc = int(thc)
+    except Variable.DoesNotExist:
+        thc = 0
+    
+    if thc > 0:
+        co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
+        expense_list[4] = co_thc_count * thc
+
+    total = sum(expense_list)
+
+    return expense_list, total
+
+def total_cus_expense(report_list):
+    expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
+    expense_list = sum_from_key_list(report_list, expense_key)
+    total = sum(expense_list)
+    return expense_list, total
 
 def sum_from_key_list(report_list, key_list):
     total_list = []
