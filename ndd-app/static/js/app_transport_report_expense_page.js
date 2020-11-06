@@ -109,7 +109,7 @@ var expense_page = new Vue ({
         },
 
         changeUrl(period) {
-            var url = "/report/" + this.page + "/" + this.year + "/" + this.month
+            var url = `/report/${this.page}/${this.year}/${this.month}`
             if(period > 0) {
                 url += "/" + period
             }

@@ -21,11 +21,22 @@ def re_daily_report_page(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def daily_report_page(request, date):
-    return render(request, 'transport_report/transport_report_daily_report_page.html', {'nbar': 'report-page', 'title': 'Daily Report', 'date': date})
+    params = {
+        'nbar': 'report-page',
+        'title': 'Daily Report',
+        'date': date
+    }
+    return render(request, 'transport_report/transport_report_daily_report_page.html', params)
 
 @login_required(login_url=reverse_lazy('login'))
 def driver_report_page(request, date, driver):
-    return render(request, 'transport_report/transport_report_daily_report_page.html', {'nbar': 'report-page', 'title': 'Daily Report', 'date': date, 'driver': driver})
+    params = {
+        'nbar': 'report-page',
+        'title': 'Daily Report',
+        'date': date,
+        'driver': driver
+    }
+    return render(request, 'transport_report/transport_report_daily_report_page.html', params)
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -34,7 +45,14 @@ def yearly_expense_page(request, year):
         get_year = Year.objects.get(year_label=year)
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_yearly_report_page.html', {'nbar': 'report-page', 'title': 'Expense', 'page': 'expense', 'year': year})
+
+    params = {
+        'nbar': 'report-page',
+        'title': 'Expense',
+        'page': 'expense',
+        'year': year
+    }
+    return render(request, 'transport_report/transport_report_yearly_report_page.html', params)
 
 @login_required(login_url=reverse_lazy('login'))
 def yearly_summary_page(request, year):
@@ -57,7 +75,14 @@ def yearly_total_expense_page(request, year):
         get_year = Year.objects.get(year_label=year)
     except:
         return HttpResponseRedirect('/dashboard')
-    return render(request, 'transport_report/transport_report_yearly_report_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'page': 'total-expense', 'year': year})
+
+    params = {
+        'nbar': 'report-page',
+        'title': 'Total Expense',
+        'page': 'total-expense',
+        'year': year
+    }
+    return render(request, 'transport_report/transport_report_yearly_report_page.html', params)
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -151,7 +176,14 @@ def total_expense_page(request, year, month):
     check_return = check_url_format(year, month)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_total_expense_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'year': year, 'month': month, 'period': '0'})
+        params = {
+            'nbar': 'report-page',
+            'title': 'Total Expense',
+            'year': year,
+            'month': month,
+            'period': '0'
+        }
+        return render(request, 'transport_report/transport_report_total_expense_page.html', params)
     else:
         return HttpResponseRedirect('/dashboard')
 
@@ -161,7 +193,14 @@ def period_total_expense_page(request, year, month, period):
     check_return = check_url_format(year, month)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_total_expense_page.html', {'nbar': 'report-page', 'title': 'Total Expense', 'year': year, 'month': month, 'period': period})
+        params = {
+            'nbar': 'report-page',
+            'title': 'Total Expense',
+            'year': year,
+            'month': month,
+            'period': period
+        }
+        return render(request, 'transport_report/transport_report_total_expense_page.html', params)
     else:
         return HttpResponseRedirect('/dashboard')
 
@@ -176,7 +215,13 @@ def total_truck_page(request, year, month):
     check_return = check_url_format(year, month)
 
     if check_return:
-        return render(request, 'transport_report/transport_report_total_truck.html', {'nbar': 'report-page', 'title': 'Total Truck Expense', 'year': year, 'month': month})
+        params = {
+            'nbar': 'report-page',
+            'title': 'Total Truck',
+            'year': year,
+            'month': month
+        }
+        return render(request, 'transport_report/transport_report_total_truck_page.html', params)
     else:
         return HttpResponseRedirect('/dashboard')
         

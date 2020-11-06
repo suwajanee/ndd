@@ -57,7 +57,7 @@ var daily_report_page = new Vue ({
         },
 
         changeUrl(driver) {
-            var url = "/report/daily-report/" + this.date + "/"
+            var url = `/report/daily-report/${this.date}/`
             if(driver){
                 url += driver
             }

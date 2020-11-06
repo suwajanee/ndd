@@ -202,6 +202,9 @@
                                             <td><input class="form-control p-1" v-model="report_price.overnight" id="3-4" @keydown="keyDownArrow(3, 4)" @change="checkExpenseFormat(report_price.overnight, 2)"></td>
                                         </tr>
                                     </tbody>
+                                    <tr v-if="work_data.time" class="text-primary bg-light">
+                                        <td colspan=2># Time: {{ work_data.time }}</td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

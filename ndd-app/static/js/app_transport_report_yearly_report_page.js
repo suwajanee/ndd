@@ -21,10 +21,11 @@ var yearly_report_page = new Vue ({
             this.getSummaryDate(year)
         },
         changeYear() {
-            window.open("/report/" + this.page + "/" + this.year + "/", "_self")
+            var url = `/report/${this.page}/${this.year}/`
+            window.open(url, "_self")
         },
         selectDate(month, period) {
-            var url = "/report/" + this.page + "/" + this.year + "/" + month
+            var url =`/report/${this.page}/${this.year}/${month}`
             if(period > 0) {
                 url += "/" + period
             }

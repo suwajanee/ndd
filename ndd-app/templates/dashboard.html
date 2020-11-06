@@ -78,10 +78,13 @@
                             <i class="fas fa-receipt"></i>&nbsp; Expense
                         </a>
                         <a class="nav-link" href="{% url 're-summary-page' %}">
-                            <i class="fas fa-file"></i>&nbsp; Summary
+                            <i class="fas fa-file-alt"></i>&nbsp; Summary
                         </a>
                         <a class="nav-link" href="{% url 're-total-expense-page' %}">
-                            <i class="fas fa-calculator"></i>&nbsp; Total Expense
+                            <i class="fas fa-plus"></i>&nbsp; Total Expense
+                        </a>
+                        <a class="nav-link" href="{% url 're-total-truck-page' %}">
+                            <i class="fas fa-percentage"></i>&nbsp; Total Truck
                         </a>
                         <!-- <a class="nav-link" href="#">
                             <i class="fas fa-file"></i>&nbsp; Summary Truck
@@ -193,7 +196,7 @@
                                                 
                                                 <div class="">
                                                     <h1 class="font-light my-0 text-dark">{{ truck_active }}</h1>
-                                                    <p class="my-0">Daily Trucks</p>
+                                                    <p class="my-0">Trucks</p>
                                                 </div>
                                                 <div class="my-1 ml-auto">
                                                     <i class="fa fa-truck fa-3x"></i> 
@@ -212,7 +215,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted text-right">
-                                    <a href="/truck" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="/truck-chassis/truck" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
                                 </div>    
                             </div>
                         </div>

@@ -11,10 +11,9 @@
     <div id="total-truck-page">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb m-0 bg-white">
-                <li class="breadcrumb-item">Total Truck Expense</li>
-                <li class="breadcrumb-item">{{ year }}</li>
+                <li class="breadcrumb-item">Total Truck</li>
                 {% verbatim %}
-                    <li class="breadcrumb-item active">{{ month_list[month-1] }}</li>
+                    <li class="breadcrumb-item active">{{ month_list[month-1] }} {{ year }}</li>
                 {% endverbatim %}
             </ol>
         </nav>

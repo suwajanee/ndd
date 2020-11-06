@@ -110,6 +110,7 @@ var report_modal = new Vue ({
                 }
 
                 this.work_data = {
+                    time: work.time || '',
                     size_20: work.size.startsWith('20'),
                     size_2_container: work.size.startsWith('2X'),
                     customer: work.principal.name,
