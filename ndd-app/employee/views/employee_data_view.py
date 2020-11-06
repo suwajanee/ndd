@@ -39,7 +39,7 @@ def api_get_employee(request):
 
             if job == 'driver':
                 today = datetime.now()
-                date_compare = today + timedelta(days=7)
+                date_compare = today + timedelta(days=30)
 
                 employee = Driver.objects.filter(employee__status='a').order_by('truck__number', 'employee__hire_date', 'employee__first_name', 'employee__last_name')
                 serializer = DriverSerializer(employee, many=True)

@@ -83,7 +83,7 @@ def api_get_truck(request):
 
             data = {
                 'truck': serializer.data,
-                'date_compare': get_date_compare(7)
+                'date_compare': get_date_compare(30)
             }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
@@ -97,7 +97,7 @@ def api_get_chassis(request):
 
             data = {
                 'chassis': serializer.data,
-                'date_compare': get_date_compare(7)
+                'date_compare': get_date_compare(30)
             }
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
