@@ -23,7 +23,6 @@ class Truck(models.Model):
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
     pat_pass_expired_date = models.DateField(blank=True, null=True, default=None)
 
-    owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
     status = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):
@@ -37,7 +36,6 @@ class Chassis(models.Model):
     
     tax_expired_date = models.DateField(blank=True, null=True, default=None)
 
-    owner = models.CharField(max_length=5, blank=True, null=True, default='ndd')
     status = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):

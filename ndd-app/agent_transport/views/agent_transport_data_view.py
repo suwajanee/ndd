@@ -70,3 +70,24 @@ def api_get_agent_transport_daily_works(request):
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_agent_transport_work_by_work_id(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            work_id = req['work_id']
+
+            try:
+                work = AgentTransport.objects.get(work_id=work_id)
+                serializer = AgentTransportSerializer(work, many=False)
+                data = serializer.data
+
+            except AgentTransport.DoesNotExist:
+                data = None
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+
+

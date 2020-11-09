@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Expense {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="expense-page">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Expense</li>
+                <li class="breadcrumb-item"><a href="{% url 'yearly-expense-page' year=year %}">{{ year }}</a></li>
+                {% verbatim %}
+                    <template v-if="period == 0">
+                        <li class="breadcrumb-item active">{{ month_list[month-1] }}</li>
+                    </template>
+                    <template v-else>
+                        <li class="breadcrumb-item">
+                            <a :href="'/report/expense/' + year + '/' + month">{{ month_list[month-1] }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ period }}</li>
+                    </template>
+                {% endverbatim %}
+            </ol>
+        </nav>
+
+        <div>
+            {% include 'transport_report/transport_report_expense_upper.html' %}
+
+            {% verbatim %}
+                <h4 v-if="! loading" class="text-center">{{ full_month_list[month-1] }} {{ year }} <small v-if="from_date" class="text-muted">( {{ from_date|formatDate }} - {{ to_date|formatDate }} )</small></h4>
+            {% endverbatim %}
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left: 50%; transform: translate(-50%, 10%); color: lightgrey;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0 head-normal">
+                <table class="table table-hover table-bordered text-center report-table m-0 w-100">
+                    <!-- Thead -->
+                    {% include 'transport_report/transport_report_expense_thead.html' %}
+
+                    <template v-if="report_list.length">
+                        <tbody id="tbody" class="bg-white">
+                            <template v-for="date_report in date_report_list">
+                                {% verbatim %}
+                                    <tr :class="getDayColor(date_report.clear_date)">
+                                        <td colspan=23 class="py-0 text-left text-muted"><small>{{ date_report.clear_date|formatDate }}</small></td>
+                                    </tr>
+                                {% endverbatim %}
+                                <tr v-for="report in date_report.report_list">
+                                    {% include 'transport_report/transport_report_expense_table.html' %}
+                                </tr>
+                                
+                                <tr>
+                                    {% verbatim %}
+                                        <td colspan=5 class="right-thick"></td>
+                                        <td v-if="col_remark" class="right-thick"></td>
+                                        <td v-if="col_price" class="right-thick"></td>
+                                        <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+                                        <td colspan=8 class="right-thick"></td>
+                                        <td colspan=4 class="right-thick"></td>
+                                         
+                                        <td class="font-weight-bold cyan-color">{{ date_report.total|currencyCommas }}</td>
+                                        <td></td>
+                                    {% endverbatim %}
+                                </tr>
+                                
+                            </template>
+                        </tbody>
+                        <tfoot>
+                            {% verbatim %}
+                                <tr class="tfoot-total-1">
+                                    <td colspan=23 class="table-secondary"></td>
+                                </tr>
+                                <tr class="wed-color font-weight-bold">
+                                    <td colspan=5 class="right-thick"></td>
+                                    <td v-if="col_remark" class="right-thick"></td>
+                                    <td v-if="col_price" class="right-thick blue-color">
+                                        {{ total_price_list[0]|currencyCommas }}
+                                    </td>
+                                    <template v-if="col_allowance">
+                                        <td class="green-color">{{ total_price_list[1]|currencyCommas }}</td>
+                                        <td class="right-thick green-color">{{ total_price_list[2]|currencyCommas }}</td>
+                                    </template>
+                                    <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index), 'lime-color': index==total_expense_list.length-1}">
+                                        {{ total|currencyCommas }}
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            {% endverbatim %}    
+                        </tfoot>
+                    </template>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan=23 class="text-center text-secondary">
+                                ไม่พบข้อมูล
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% include 'transport_report/transport_report_filter_modal.html' %}
+        
+    </div>
+
+    {% include 'transport_report/transport_report_modal.html' %}
+
+
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_expense_page.js' %}"></script>
+
+    <script type="application/javascript">
+        window.addEventListener("load", function() {
+            expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ period }}")
+        })
+    </script>
+    
+{% endblock %}

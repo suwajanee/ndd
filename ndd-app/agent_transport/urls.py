@@ -28,8 +28,11 @@ urlpatterns = [
     # Summary
     url(r'^api/get-work-list/$', agent_transport_data_view.api_get_work_list, name='api-get-agent-transport-work-list'),
 
-
+    # Dashboard
     url(r'^api/get-agent-transport-daily-works/$', agent_transport_data_view.api_get_agent_transport_daily_works, name='api-get-agent-transport-daily-works'),
+
+    # Transport Report
+    url(r'^api/get-agent-transport-work-by-work-id/$', agent_transport_data_view.api_get_agent_transport_work_by_work_id, name='api-get-agent-transport-work-by-work-id'),
 
     
 ]

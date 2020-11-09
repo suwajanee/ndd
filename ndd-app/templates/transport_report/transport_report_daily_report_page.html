@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Daily Expense {% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_transport_report.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="expense-page">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 bg-white">
+                <li class="breadcrumb-item">Daily Expense</li>
+                {% if driver %}
+                    {% verbatim %}
+                        <li class="breadcrumb-item"><a :href="'/report/daily-report/' + date">{{ date|formatDate }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ driver_data.full_name }}
+                        </li>
+                    {% endverbatim %}
+                {% else %}
+                    <li class="breadcrumb-item active" aria-current="page">{% verbatim %}{{ date|formatDate }}{% endverbatim %}</li>
+                {% endif %}
+            </ol>
+        </nav>
+
+        <div>
+            {% verbatim %}
+                <div class="row m-0 py-3">
+                    <div class="input-group col-5" style="max-height: 40px;" >
+                        <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
+
+                    
+                        <div class="input-group-append">
+                            <span class="input-group-text">DRIVER</span>
+                        </div>
+                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="min-height: 40px; overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ driver_data.full_name }}
+                        </button>
+                        <button v-else class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            --------
+                        </button>
+
+                        <div class="dropdown-menu w-50">                    
+                            <div class="dropdown-item">
+                                <input class="form-control" v-model="search_driver" placeholder="search">
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                <button class="dropdown-item" @click="changeUrl()"> -------- </button>
+                                <button v-for="driver in filterDriver" class="dropdown-item" @click="changeUrl(driver.employee.id)">
+                                    {{ driver.employee.full_name }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <button class="btn btn-success ml-3 float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
+
+                        <div class="float-right">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">COL</span>
+                                </div>
+                                <button class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown">
+                                    <template v-if="col_price || col_allowance || col_remark">
+                                        <template v-if="col_price">ราคา; </template>
+                                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
+                                        <template v-if="col_remark">Remark; </template>
+                                    </template>
+                                    <template v-else>
+                                        Non selected
+                                    </template>
+                                </button>
+                                <ul class="multiselect-container dropdown-menu">
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_price"> ราคา
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="col_remark"> Remark
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="text-center">{{ date|formatDate }}</h4>
+                <h5 v-if="driver_id" class="text-primary text-center">{{ driver_data.full_name }}</h5>
+
+            {% endverbatim %}
+
+            <div v-if="loading" class="container position-relative">
+                <div class="position-absolute" style="top: -10%; left:50%; transform: translate(-50%, 10%); color: lightgray;">
+                    <h1 class="text-center" style="font-size: 300%;"><i class="fa fa-spinner fa-pulse fa-4x mb-5"></i></h1>
+                </div>
+            </div>
+            <div v-else class="table-fix-head p-0" :class="{'head-driver': driver_id, 'head-normal': !driver_id}">
+                <table class="table table-hover table-bordered text-center report-table m-0 w-100">
+                    <!-- Thead -->
+                    {% include 'transport_report/transport_report_expense_thead.html' %}
+                    <tbody id="tbody" class="bg-white">
+                        {% if driver %}
+                            <template v-if="driver_id">
+                                <template v-if="expense_list && expense_list.length">
+                                    <template v-for="report in expense_list">
+                        {% else %}
+                            
+                            <template v-for="driver in driver_list">
+                                <template v-if="driver.report_list && driver.report_list.length">
+                                    <template v-for="report in driver.report_list">
+                        {% endif %}
+                                        <tr>
+                                            {% include 'transport_report/transport_report_expense_table.html' %}
+                                        </tr>
+                                    </template>
+                                </template>
+
+                            {% verbatim %}
+                                <tr v-else class="bg-light">
+                                    <td></td>
+
+                                    <td v-if="driver_id" class="text-left">{{ driver_data.full_name }}</td>
+                                    <td v-else class="text-left">{{ driver.employee.full_name }}</td>
+
+                                    <td v-for="i in 2"></td>
+                                    <td class="right-thick"></td>
+
+                                    <td v-if="col_remark" class="right-thick"></td>
+                                    <td v-if="col_price" class="right-thick"></td>
+                                    <template v-if="col_allowance">
+                                        <td></td>
+                                        <td class="right-thick"></td>
+                                    </template>
+
+                                    <td v-for="i in 7"></td>
+                                    <td class="right-thick"></td>
+                                    <td v-for="i in 3"></td>
+                                    <td class="right-thick"></td>
+                                    <td v-for="i in 2"></td>
+                                </tr>
+
+                                <tr v-if="! driver_id" class="bg-light">
+                                    <td colspan=5 class="right-thick"></td>
+
+                                    <td v-if="col_remark" class="right-thick"></td>
+                                    <td v-if="col_price" class="right-thick"></td>
+                                    <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+
+                                    <td colspan=8 class="right-thick"></td>
+                                    <td colspan=4 class="right-thick"></td>
+
+                                    <td class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
+                                    
+                                    <td></td>
+                                </tr>
+                            {% endverbatim %}
+                        </template>                      
+                    </tbody>
+                    <tfoot>
+                        <tr class="tfoot-total-1 table-secondary">
+                            <td colspan=23></td>
+                        </tr>
+                        <tr class="table-light">
+                            {% verbatim %}
+                                <td colspan=5 class="right-thick"></td>
+                                <td v-if="col_remark" class="right-thick"></td>
+                                <td v-if="col_price" class="right-thick"></td>
+                                <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+                                <td colspan=8 class="right-thick"></td>
+                                <td colspan=4 class="right-thick"></td>
+
+                                <td class="font-weight-bold lime-color">{{ total|currencyCommas }}</td>
+                                <td></td>
+                            {% endverbatim %}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% include 'transport_report/transport_report_modal.html' %}
+
+    
+    <script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>    
+    <script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app_transport_report_daily_report_page.js' %}"></script>
+
+
+    <script type="application/javascript">     
+        window.addEventListener("load", function() {
+            daily_report_page.reload("{{ date }}", "{{ driver }}")
+        })
+    </script>
+
+{% endblock %}

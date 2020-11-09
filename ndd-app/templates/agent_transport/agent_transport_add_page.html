@@ -85,7 +85,7 @@
                             </div>
 
                             <fieldset class="add_form">
-                                <legend class="add_form">DETAILS</legend>
+                                <legend class="add_form">DETAILS <button class="btn btn-link text-warning pt-0 px-0" @click.prevent="getContainerSize"><i class="fas fa-star"></i></button></legend>
                                 <div v-for="(detail, index) in details">
                                     <hr v-if="index != 0" class="my-4">
                                     <div class="input-group mb-2 col-md-12">

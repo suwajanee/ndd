@@ -3,272 +3,242 @@ var truck_page = new Vue ({
     el: '#truck-page',
     data: {
         page: '',
-        owner_mode: '',
+        truck_count: 0,
+        chassis_count: 0,
 
+        // Manufacturer
         truck_manu_list: [],
         chassis_manu_list: [],
+
+        truck_manu_add: '',
+        chassis_manu_add: '',
+        truck_manu_add_warning: false,
+        chassis_manu_add_warning: false,
+
+        truck_manu_edit: [],
+        chassis_manu_edit: [],
+        truck_manu_edit_warning: [],
+        chassis_manu_edit_warning: [],
+
+        // Truck & Chassis
         truck_list: [],
         chassis_list: [],
 
         date_compare: '',
 
-        drivers: [],
-
-        truck_count: 0,
-        chassis_count: 0,
-        sup_truck_count: 0,
-        sup_chassis_count: 0,
-
         edit_table: false,
-        edit_data: [],
+        edit_list: [],
         
-        modal_truck_mode: '',
         modal_add_mode: true,
         input_required: false,
-
-        truck_chassis_data: {},
-        manufacturer_data: ''
-
-
+        modal_data: {},
     },
 
     methods: {
-        reload(page, owner) {
+        reload(page) {
             this.page = page
-            this.edit_data = []
+            this.edit_list = []
             this.getTruckChassisCount()
-            this.getManufacturer()
 
-            if(owner) {
-                this.owner_mode = owner
+            if(page == 'manufacturer') {
+                this.getManufacturer(true)
             }
-            
-            if(page == 'truck') {
-                this.getTruck()
-            }
-            else if(page == 'chassis') {
-                this.getChassis()
-            }
-            else {
+            else if(page == 'sold') {
                 this.getSold()
             }
-        },
+            else {
+                this.getManufacturer(false)
 
+                if(page == 'truck') {
+                    this.getTruck()
+                }
+                else if(page == 'chassis') {
+                    this.getChassis()
+                }
+            }
+        },
         getTruckChassisCount() {
             api("/truck-chassis/api/get-truck-chassis-count/").then((data) => {
                 this.truck_count = data.truck
                 this.chassis_count = data.chassis
-                this.sup_truck_count = data.sub_truck
-                this.sup_chassis_count = data.sub_chassis
             })
         },
-        getManufacturer() {
+
+        // Manufacturer
+        getManufacturer(init_manu_page) {
             api("/truck-chassis/api/get-manufacturer/").then((data) => {
                 this.truck_manu_list = data.truck_manu
                 this.chassis_manu_list = data.chassis_manu
+
+                if(init_manu_page) {
+                    this.truck_manu_edit = new Array(this.truck_manu_list.length)
+                    this.truck_manu_edit.fill(false)
+                    this.truck_manu_edit_warning = [...this.truck_manu_edit]
+
+                    this.chassis_manu_edit = new Array(this.chassis_manu_list.length)
+                    this.chassis_manu_edit.fill(false)
+                    this.chassis_manu_edit_warning = [...this.chassis_manu_edit]
+                }
             })
         },
+        addManufacturer(category) {
+            this[category + '_manu_add_warning'] = false
+            var manu_add = this[category + '_manu_add']
+            var name_exist = this[category + '_manu_list'].filter(manu => manu.name.toLowerCase().trim() == manu_add.toLowerCase().trim())
+            if(! manu_add.trim() || name_exist.length > 0) {
+                this[category + '_manu_add_warning'] = true
+                return false
+            }
+            else {
+                var data = {
+                    name: manu_add,
+                    category: category[0]
+                }
+                api("/truck-chassis/api/add-manufacturer/", "POST", data).then((data) => {
+                    if(data == 'Success') {
+                        this.getManufacturer(true)
+                        this[category + '_manu_add'] = ''
+                    }
+                })
+            }
+        },
+        editManuStatus(category, index) {
+            this.$set(this[category + '_manu_edit_warning'], index, false)
+            this.$set(this[category + '_manu_edit'], index, ! this[category + '_manu_edit'][index])
+        },
+        editManufacturer(category, index, manufacturer) {
+            this.input_required = false
+            var name_exist = this[category + '_manu_list'].filter(manu => 
+                    (manu.name.toLowerCase().trim() == manufacturer.name.toLowerCase().trim()) && (manu.id != manufacturer.id)
+                )
+            if(! manufacturer.name.trim() || name_exist.length > 0) {
+                this.$set(this[category + '_manu_edit_warning'], index, true)
+                return false
+            }
+            else {
+                api("/truck-chassis/api/edit-manufacturer/", "POST", {manufacturer: manufacturer}).then((data) => {
+                    if(data == 'Success') {
+                        this.getManufacturer(false)
+                        this.editManuStatus(category, index)
+                    }
+                })
+            }
+        },
+        deleteManufacturer(id) {
+            if(confirm('Are you sure?')) {
+                api("/truck-chassis/api/delete-manufacturer/", "POST", {id: id}).then((data) => {
+                    if(data == 'Success') {
+                        this.getManufacturer(true)
+                    }
+                })
+            }
+        },
+
+        // Truck & Chassis
         getTruck() {
-            api("/truck-chassis/api/get-truck/", "POST", {owner: this.owner_mode}).then((data) => {
+            api("/truck-chassis/api/get-truck/").then((data) => {
                 this.truck_list = data.truck
                 this.date_compare = data.date_compare
             })
         },
         getChassis() {
-            api("/truck-chassis/api/get-chassis/", "POST", {owner: this.owner_mode}).then((data) => {
+            api("/truck-chassis/api/get-chassis/").then((data) => {
                 this.chassis_list = data.chassis
                 this.date_compare = data.date_compare
             })
         },
-        getSold() {
-            api("/truck-chassis/api/get-sold/", "POST", {owner: this.owner_mode}).then((data) => {
-                this.truck_list = data.truck
-                this.chassis_list = data.chassis
-            })
-        },
-
-        editData(data) {
-            if(this.edit_data.indexOf(data) === -1) {
-                this.edit_data.push(data)
+        // Edit Date
+        pushEditList(data) {
+            if(this.edit_list.indexOf(data) === -1) {
+                this.edit_list.push(data)
             }
         },
         editExpiredDate() {
-            if(this.edit_data.length) {
-                api("/truck-chassis/api/edit-expired-date/", "POST", {category: this.page, details: this.edit_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                    }
+            if(this.edit_list.length) {
+                var category = this.page
+                api("/truck-chassis/api/edit-expired-date/", "POST", {category: category, details: this.edit_list}).then((data) => {
+                    this[category + '_list'] = data[category]
+                    this.edit_list = []
                 })
             }
             this.edit_table = false
         },
-
-        modalManufacturer(mode, data) {
-            this.input_required = false
-            if(data) {
-                this.modal_add_mode = false
-                this.manufacturer_data = {
-                    id: data.id,
-                    name: data.name,
-                    category: mode
-                }
-            }
-            else {
-                this.modal_add_mode = true
-                this.manufacturer_data = {
-                    name: '',
-                    category: mode
-                }
-            }
-        },
-
-        modalTruckChassis(mode, data) {
-            this.input_required = false
-            this.modal_truck_mode = mode
+        // Add & Edit Popup
+        modalTruckChassis(data) {
+            this.input_required = false            
             if(data) {
                 this.modal_add_mode = false
                 var manufacturer = ''
                 if(data.manufacturer) {
                     manufacturer = data.manufacturer.id
                 }
-                this.truck_chassis_data = {
+                this.modal_data = {
                     id: data.id,
                     number: data.number,
                     license_plate: data.license_plate,
                     manufacturer: manufacturer,
-
                     tax_expired_date: data.tax_expired_date,
 
-                    owner: data.owner,
                     status: data.status
                 }
-                if(mode) {
-                    this.truck_chassis_data.pat_pass_expired_date = data.pat_pass_expired_date
+                if(this.page == 'truck') {
+                    this.modal_data.pat_pass_expired_date = data.pat_pass_expired_date
                 }
             }
             else {
                 this.modal_add_mode = true
-                this.truck_chassis_data = {
+                this.modal_data = {
                     number: '',
                     license_plate: '',
                     manufacturer: '',
                     
                     tax_expired_date: '',
                     pat_pass_expired_date: '',
-
-                    owner: this.owner_mode
                 }
             }
         },
-        addTruck() {
+        actionTruckChassis(action) {
             this.input_required = false
-            if(! this.truck_chassis_data.number.trim()) {
+            var category = this.page
+
+            this.modal_data.number = this.modal_data.number.trim()
+            var number_exist = this[category + '_list'].filter(item => 
+                    (item.number.toLowerCase() == this.modal_data.number.toLowerCase()) && (item.id != this.modal_data.id)
+                )
+            if((! this.modal_data.number || number_exist.length > 0) && this.modal_data.status != 's') {
                 this.input_required = true
                 return false
             }
             else {
-                api("/truck-chassis/api/add-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalTruckChassis').modal('hide')
-                    }
-                })
-            }
-        },
-        addChassis() {
-            this.input_required = false
-            if(! this.truck_chassis_data.number.trim()) {
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/truck-chassis/api/add-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalTruckChassis').modal('hide')
-                    }
-                })
-            }
-        },
-        addManufacturer() {
-            this.input_required = false
-            if(! this.manufacturer_data.name.trim()) {
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/truck-chassis/api/add-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalManufacturer').modal('hide')
-                    }
+                var url = `/truck-chassis/api/${action}-${category}/`
+                api(url, "POST", {data: this.modal_data}).then((data) => {
+                    this[category + '_list'] = data[category]
+                    this.getTruckChassisCount()
+                    $('#modalTruckChassis').modal('hide')
                 })
             }
         },
 
-        editTruck() {
-            this.input_required = false
-            if(! this.truck_chassis_data.number.trim()) {
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/truck-chassis/api/edit-truck/", "POST", {truck: this.truck_chassis_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalTruckChassis').modal('hide')
-                    }
-                })
-            }
+        // Sold
+        getSold() {
+            api("/truck-chassis/api/get-sold/").then((data) => {
+                this.truck_list = data.truck
+                this.chassis_list = data.chassis
+            })
         },
-        editChassis() {
-            this.input_required = false
-            if(! this.truck_chassis_data.number.trim()) {
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/truck-chassis/api/edit-chassis/", "POST", {chassis: this.truck_chassis_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalTruckChassis').modal('hide')
-                    }
-                })
-            }
-        },
-
-        editManufacturer() {
-            this.input_required = false
-            if(! this.manufacturer_data.name.trim()) {
-                this.input_required = true
-                return false
-            }
-            else {
-                api("/truck-chassis/api/edit-manufacturer/", "POST", {manufacturer: this.manufacturer_data}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalManufacturer').modal('hide')
-                    }
-                })
-            }
-        },
-
-        deleteManufacturer(id) {
+        editStatus(category, id) {
             if(confirm('Are you sure?')) {
-                api("/truck-chassis/api/delete-manufacturer/", "POST", {id: id}).then((data) => {
-                    if(data == 'Success') {
-                        this.reload(this.page)
-                        $('#modalManufacturer').modal('hide')
-                    }
+                var data = {
+                    category: category,
+                    id: id
+                }
+                api("/truck-chassis/api/edit-status/", "POST", data).then((data) => { 
+                    this.truck_list = data.truck
+                    this.chassis_list = data.chassis
+    
+                    this.getTruckChassisCount()
                 })
             }
-        }
-
-        
-      
-
-
-
-
+        },
     }
 })

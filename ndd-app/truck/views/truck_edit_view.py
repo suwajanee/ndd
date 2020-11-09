@@ -12,6 +12,8 @@ from ..models import Truck
 from ..serializers import ChassisSerializer
 from ..serializers import ManufacturerSerializer
 from ..serializers import TruckSerializer
+from .truck_data_view import api_get_chassis, api_get_truck
+from .truck_data_view import api_get_sold
 
 
 @csrf_exempt
@@ -28,14 +30,17 @@ def api_edit_expired_date(request):
                     truck.tax_expired_date = detail['tax_expired_date'] or None
                     truck.pat_pass_expired_date = detail['pat_pass_expired_date'] or None
                     truck.save()
-                return JsonResponse('Success', safe=False)
+                
+                request.method = "GET"
+                return api_get_truck(request)
             elif category == 'chassis':
                 for detail in details:
                     chassis = Chassis.objects.get(pk=detail['id'])
                     chassis.tax_expired_date = detail['tax_expired_date'] or None
                     chassis.save()
-                return JsonResponse('Success', safe=False)
-    
+                
+                request.method = "GET"
+                return api_get_chassis(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
@@ -43,7 +48,7 @@ def api_edit_truck(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
-            data = req['truck']
+            data = req['data']
 
             manufacturer = None
             if data['manufacturer']:
@@ -55,11 +60,12 @@ def api_edit_truck(request):
             truck.manufacturer = manufacturer 
             truck.tax_expired_date = data['tax_expired_date'] or None
             truck.pat_pass_expired_date = data['pat_pass_expired_date'] or None
-            truck.owner = data['owner']
             truck.status = data['status']
             truck.save()
 
-            return JsonResponse('Success', safe=False)
+            request.method = "GET"
+
+            return api_get_truck(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt
@@ -67,7 +73,7 @@ def api_edit_chassis(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
-            data = req['chassis']
+            data = req['data']
 
             manufacturer = None
             if data['manufacturer']:
@@ -78,11 +84,32 @@ def api_edit_chassis(request):
             chassis.license_plate = data['license_plate']
             chassis.manufacturer = manufacturer
             chassis.tax_expired_date = data['tax_expired_date'] or None
-            chassis.owner = data['owner']
             chassis.status = data['status']
             chassis.save()
 
-            return JsonResponse('Success', safe=False)
+            request.method = "GET"
+
+            return api_get_chassis(request)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_edit_status(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            category = req['category']
+            data_id = req['id']
+            
+            if category == 't':
+                data = Truck.objects.get(pk=data_id)
+            elif category == 'c':
+                data = Chassis.objects.get(pk=data_id)
+            data.status = 'a'
+            data.save()
+
+            request.method = "GET"
+
+            return api_get_sold(request)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

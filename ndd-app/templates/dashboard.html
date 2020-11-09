@@ -40,7 +40,7 @@
                             <span>Home</span>
                         </h6>
                         <a class="nav-link active" href="#">
-                            <i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard
+                            <i class="fas fa-home"></i>&nbsp; Dashboard
                         </a>
 
                         <h6 class="sidebar-heading">
@@ -69,6 +69,32 @@
                         {% endif %}
 
                         <h6 class="sidebar-heading">
+                            <span>Report</span>
+                        </h6>
+                        <a class="nav-link" href="{% url 're-daily-report-page' %}">
+                            <i class="fas fa-calendar-plus"></i>&nbsp; Daily Report
+                        </a>
+                        <a class="nav-link" href="{% url 're-expense-page' %}">
+                            <i class="fas fa-receipt"></i>&nbsp; Expense
+                        </a>
+                        <a class="nav-link" href="{% url 're-summary-page' %}">
+                            <i class="fas fa-file-alt"></i>&nbsp; Summary
+                        </a>
+                        <a class="nav-link" href="{% url 're-total-expense-page' %}">
+                            <i class="fas fa-plus"></i>&nbsp; Total Expense
+                        </a>
+                        <a class="nav-link" href="{% url 're-total-truck-page' %}">
+                            <i class="fas fa-percentage"></i>&nbsp; Total Truck
+                        </a>
+                        <!-- <a class="nav-link" href="#">
+                            <i class="fas fa-file"></i>&nbsp; Summary Truck
+                        </a> -->
+                        <hr class="my-0 mx-1">
+                        <a class="nav-link" :href="'/summary-date/' + year + '/'">
+                            <i class="fas fa-calendar-alt"></i>&nbsp; วันปิดค่าใช้จ่าย
+                        </a>                        
+
+                        <h6 class="sidebar-heading">
                             <span>Database</span>
                         </h6>
                         <a class="nav-link" href="{% url 'customer-page' %}">
@@ -86,7 +112,7 @@
                 {% verbatim %}
                     <main class="col" style="overflow-y: auto; height: calc(100vh - 80px);">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 my-3 border-bottom">
-                            <h1 class="h2"><i class="fa fa-tachometer-alt"></i>&nbsp; Dashboard</h1>
+                            <h1 class="h2"><i class="fas fa-home"></i>&nbsp; Dashboard</h1>
                             <div class="mb-2 mb-md-0">
                                 <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalExportTime">
                                     Time Export
@@ -170,7 +196,7 @@
                                                 
                                                 <div class="">
                                                     <h1 class="font-light my-0 text-dark">{{ truck_active }}</h1>
-                                                    <p class="my-0">Daily Trucks</p>
+                                                    <p class="my-0">Trucks</p>
                                                 </div>
                                                 <div class="my-1 ml-auto">
                                                     <i class="fa fa-truck fa-3x"></i> 
@@ -189,7 +215,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted text-right">
-                                    <a href="/truck" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="/truck-chassis/truck" style="text-decoration:none;">View Details &nbsp;<i class="fa fa-arrow-circle-right"></i></a>
                                 </div>    
                             </div>
                         </div>

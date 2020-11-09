@@ -8,8 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..models import Driver
 from ..models import Employee
-from ..models import Job
 from ..models import Salary
+from .employee_data_view import api_get_employee
+from .employee_data_view import api_get_employee_salary
 from truck.models import Truck
 
 
@@ -24,6 +25,7 @@ def api_edit_employee(request):
             job_title = emp_data['job']
 
             emp = Employee.objects.get(id=emp_data['id'])
+            emp.name_title = emp_data['name_title']
             emp.first_name = emp_data['first_name']
             emp.last_name = emp_data['last_name']
             emp.birth_date = emp_data['birth_date'] or None
@@ -32,15 +34,13 @@ def api_edit_employee(request):
                 'account': emp_data['account']
             }
             emp.hire_date = emp_data['hire_date'] or None
-
-            emp.co = emp_data['co']
             emp.status = status
 
             if status == 'a':
-                emp.detail.pop("fire_date", None)
+                emp.detail.pop('fire_date', None)
             else:
                 emp.detail['fire_date'] = emp_data['fire_date'] or None
-
+                emp_data['truck'] = None
             emp.save()
 
             if job_title == 'driver':
@@ -70,21 +70,21 @@ def edit_employee_driver(emp_data):
         truck.save()
     return driver
 
+# Edit Date
 @csrf_exempt
 def api_edit_pat_expired_driver(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads( request.body.decode('utf-8') )
             drivers = req['drivers']
-
             for driver in drivers:
                 driver_data = Driver.objects.get(pk=driver['id'])
                 driver_data.pat_pass_expired_date = driver['pat_pass_expired_date'] or None
                 driver_data.save()
-
-            return JsonResponse('Success', safe=False)
+            return api_get_employee(request)
     return JsonResponse('Error', safe=False)
 
+# Salary
 @csrf_exempt
 def api_edit_employee_salary(request):
     if request.user.is_authenticated:
@@ -105,10 +105,9 @@ def api_edit_employee_salary(request):
                 'salary': float(new_salary),
                 'from_date': today
             }
-
             salary = Salary(**data)
             salary.save()
 
-
-            return JsonResponse('Success', safe=False)
+            request.method = "GET"
+            return api_get_employee_salary(request)
     return JsonResponse('Error', safe=False)

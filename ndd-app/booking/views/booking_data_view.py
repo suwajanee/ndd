@@ -99,3 +99,20 @@ def api_get_container_size(request):
 
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_get_normal_work_by_work_id(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            work_id = req['work_id']
+
+            try:
+                work = Booking.objects.get(work_id=work_id)
+                serializer = BookingSerializer(work, many=False)
+                data = serializer.data
+            except Booking.DoesNotExist:
+                data = None
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)

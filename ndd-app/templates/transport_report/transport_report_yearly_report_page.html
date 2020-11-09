@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+<div id="yearly-report-page">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb m-0 bg-white">
+            <li class="breadcrumb-item">{{ title }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ year }}</li>
+        </ol>
+    </nav>
+
+    {% verbatim %}
+        <div class="input-group mt-5 mb-4 col-2 container">
+            <div class="input-group-prepend">
+                <span class="input-group-text">YEAR</span>
+            </div>
+            <select class="custom-select" v-model="year" @change="changeYear(year)">
+                <option v-for="year in year_list" :value="year.year_label">{{ year.year_label }}</option>
+            </select>
+        </div>
+
+        <div class="col-6 container">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <th>MONTH</th>
+                    <th>#1</th>
+                    <th>#2</th>
+                    <th>#3</th>
+                </thead>
+
+                <tbody>
+                    <tr v-for="(month, month_index) in date_list">
+                        <td><button class="btn btn-link p-0 font-weight-bold" @click="selectDate(month_index+1, 0)">{{ month_list[month_index] }}</a></td>
+                        <template v-if="month.length">
+                            <td v-for="(date, period) in month">
+                                <button v-if="period==0" class="btn btn-link p-0" @click="selectDate(month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                                <button v-else class="btn btn-link p-0" :class="{'disabled': date.date == month[period-1].date}" @click="selectDate(month_index+1, period+1)">{{ date.date|formatDate }}</button>
+                            </td>
+                            <template v-if="month.length < 3">
+                                <td class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                                <td v-if="month.length == 1" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                            </template>
+                        </template>
+                        <template v-else>
+                            <td v-for="i in 3" class="align-middle"><div class="text-secondary"><i class="far fa-calendar-alt"></i></div></td>
+                        </template>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endverbatim %}
+</div>
+
+
+<script type="application/javascript" src="{% static 'js/app_transport_report_yearly_report_page.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/functions.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/filters.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/utility/variables.js' %}"></script>
+
+<script type="application/javascript">
+
+    window.addEventListener("load", function() {
+        yearly_report_page.reload("{{ page }}", "{{ year }}")
+    })
+</script>
+
+{% endblock %}
+

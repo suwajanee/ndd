@@ -1,0 +1,305 @@
+/* Switch Input */
+.switch-field {
+    overflow: hidden;
+}
+.switch-field input {
+    height: 0px;
+    width: 0px;
+    border: 0;
+    overflow: hidden;
+}
+.switch-field label {
+    float: left;
+    margin: 0;
+} 
+.switch-field label {
+    display: inline-block;
+    width: 100px;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    text-align: center;
+    padding: 7px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.switch-field label:hover {
+    cursor: pointer;
+}
+.switch-field input:checked + label {
+    /* background-color: #E9ECEF; */
+    background-color: rgba(0, 0, 0, 0.2);
+    /* color: rgba(0, 0, 0, 0.6); */
+    color: black;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.switch-field label:last-of-type {
+    border-radius: 0 4px 4px 0;
+}
+/* End Switch Input */
+
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+.options-list::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    /* border-radius: 5px; */
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    /* border-radius: 5px; */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+/* End Scrollbar */
+
+
+/* Table Style */
+/* div fix head */
+.table-fix-head {
+    overflow-y: auto;
+    overflow-x: auto;
+    /* height: calc(100vh - 221px); */
+    border-top: 1px solid silver;
+}
+.head-normal {
+    height: calc(100vh - 220px);
+}
+.head-driver {
+    height: calc(100vh - 253px);
+}
+
+/* body + head */
+.table-fix-head table {
+    border-collapse: collapse;
+    width: 100vw;
+}
+
+.table-fix-head tr td {
+    padding: 6px;
+    vertical-align: middle;
+}
+.table-fix-head tbody tr td {
+    position: relative;
+}
+
+.table-fix-head td, .table-fix-head th {
+    font-size: 14px;
+}
+tr.text-small td {
+    font-size: 12px;
+}
+
+tr td.right-thick, tr th.right-thick {
+    border-right: 2px solid lightgray;
+}
+
+/* thead */
+.table-fix-head tr th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1;
+    background: #e1e6ea;
+    box-shadow: 0 1px 3px 0 silver;
+    padding: 5px;
+    z-index: 1;
+}
+tr.second-header th {
+    top: 30px;
+}
+
+/* tfoot */
+.table-fix-head tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0 -1px 2px 0 silver;
+}
+tfoot tr.tfoot-total-1 td {
+    bottom: 30px;
+}
+tfoot tr.tfoot-total-2 td {
+    bottom: 43px;
+}
+tfoot tr.tfoot-total-3 td {
+    bottom: 75px;
+}
+tfoot tr.tfoot-total-4 td {
+    bottom: 88px;
+}
+/* End Table Style */
+
+
+/* Notes */
+/* Button */
+button.btn-note {
+    padding: 0;
+    background-color: transparent;
+}
+/* Add */
+div.note-input {
+    background: #FFF3CD;
+    padding: 0;
+}
+div.note-input textarea {
+    font-size: 12px;
+    background-color: transparent;
+}
+div.note-input textarea:focus {
+    background: #FFF3CD
+}
+/* Message Box */
+div.note-msg{
+    display: none;
+
+    position: absolute;
+    margin-top: -30px;
+    margin-left: 20px;
+
+    padding: 4px;
+    
+    border: 1px solid DimGray ;
+    box-shadow: 2px 2px 0 0 DimGray;
+    background: #FFF3CD;
+
+    z-index:2;
+}
+div.note-msg pre {
+    margin: 0;
+    text-align: left;
+    font-size: 12px;
+    color: DimGray;
+}
+/* Alert */
+div.note-alert {
+    position: absolute;
+    top: 5px;
+    right:5px;
+
+    border-radius: 50%;
+    background: red;
+    padding: 3px;
+}
+/* End Notes */
+
+
+/* Multiselect */
+ul.multiselect-container {
+    padding: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+button.multi-select {
+    /* border: 1px solid lightgray;
+    background: white; */
+    /* height: 40px; */
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    /* max-width: 160px; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    white-space: nowrap;
+}
+/* End Multiselect */
+
+
+/* Color */
+/* Day color */
+.sun-color, .sun-color td {
+    background-color: #ffcccc !important;
+}
+.table-hover .sun-color:hover, input.sun-color {
+    background-color: #ffb3b3 !important;
+}
+
+.mon-color, .mon-color td, input.mon-color {
+    background-color: #ffffcc !important;
+}
+.table-hover .mon-color:hover {
+    background-color: #ffffb3 !important;
+}
+
+.tue-color, .tue-color td, input.tue-color {
+    background-color: #ffcce6 !important;
+}
+.table-hover .tue-color:hover {
+    background-color: #ffb3da !important;
+}
+
+.wed-color, .wed-color td, input.wed-color {
+    background-color: #d9ffcc !important;
+}
+.table-hover .wed-color:hover {
+    background-color: #c6ffb3 !important;
+}
+
+.thu-color, .thu-color td, input.thu-color {
+    background-color: #ffe6cc !important;
+}
+.table-hover .thu-color:hover {
+    background-color: #ffdab3 !important;
+}
+
+.fri-color, .fri-color td, input.fri-color {
+    background-color: #ccffff !important;
+}
+.table-hover .fri-color:hover {
+    background-color: #b3ffff !important;
+}
+
+.sat-color, .sat-color td, input.sat-color {
+    background-color: #e0ccff !important;
+}
+.table-hover .sat-color:hover {
+    background-color: #d1b3ff !important;
+}
+
+/* Other Color */
+.cyan-color:not([disabled]) {
+    background-color: Cyan !important;
+}
+.pink-color:not([disabled]) {
+    background-color: HotPink !important;
+}
+.yellow-color:not([disabled]) {
+    background-color: Yellow !important;
+}
+.lime-color:not([disabled]), td.lime-color {
+    background-color: Lime !important;
+}
+/* td.green-color, .table-hover .green-color:hover {
+    background-color: #f2ffe6 !important;
+} */
+.green-color, td.green-color {
+    background-color: #f2ffe6 !important;
+}
+/* td.blue-color, .table-hover .blue-color:hover {
+    background-color: #e6f2ff !important;
+} */
+td.blue-color, td.blue-color {
+    background-color: #e6f2ff !important;
+}
+
+/* Input */
+.input-warning {
+    background-color: #ffffcc!important;
+}
+
+/* End Color */

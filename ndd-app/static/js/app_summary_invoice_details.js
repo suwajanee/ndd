@@ -201,7 +201,7 @@ var summary_invoice_details = new Vue( {
             })
         },
         getYears() {
-            api("/summary/api/get-summary-year/").then((data) => {
+            api("/summary/api/get-year/").then((data) => {
                 this.year_list = data
                 this.getWeeks()
             })

@@ -1,0 +1,149 @@
+{% verbatim %}
+    <div class="modal fade" id="modalFilterReport" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">
+                        Filter Report
+                    </h4>
+                    <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">WORK ID</span>
+                        </div>
+                        <input 
+                            class="form-control col-6" placeholder="--- All works ---" v-model="work_id"
+                            :disabled="driver_id || truck_id || ! all_customer || ! all_remark"
+                        >
+                    </div>
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">DRIVER</span>
+                        </div>
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
+                            <template v-if="driver_id && ! work_id">
+                                {{ driver_data.full_name }}
+                            </template>
+                            <template v-else>
+                                --- All drivers ---
+                            </template>
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-right col-9">
+                            <div class="dropdown-item">
+                                <input class="form-control" v-model="search_driver" placeholder="Search Driver">
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                <button class="dropdown-item" @click="selectDriver('')"> --- All --- </button>
+                                <button class="dropdown-item" v-for="driver in filterDriver" @click="selectDriver(driver)">
+                                    {{ driver.employee.full_name }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">TRUCK NO</span>
+                        </div>
+                        <button class="custom-select text-left rounded-right col-6" :class="{'disabled bg-light': work_id}" data-toggle="dropdown">
+                            <template v-if="truck_id && ! work_id">
+                                {{ truck_data.number || '--- All trucks ---' }}
+                            </template>
+                            <template v-else>
+                                --- All trucks ---
+                            </template>   
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right col-5">
+                            <div class="options-list" style="overflow-y: scroll; max-height: 250px;">
+                                <button class="dropdown-item" @click="selectTruck('')"> --- All --- </button>
+                                <button class="dropdown-item" v-for="truck in truck_list" @click="selectTruck(truck)">
+                                    {{ truck.number }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">CUSTOMER</span>
+                        </div>
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id, 'input-warning': modal_warning && !customer_selected.length}" data-toggle="dropdown">
+                            <template v-if="all_customer || work_id">
+                                All selected ( {{ customer_list.length }} )
+                            </template>
+                            <template v-else-if="customer_selected.length>3">
+                                {{ customer_selected.length }} customers selected
+                            </template>
+                            <template v-else-if="customer_selected.length">
+                                {{ customer_selected.toString() }}
+                            </template>
+                            <template v-else>
+                                None selected
+                            </template>
+                        </button>
+                        <ul class="multiselect-container dropdown-menu dropdown-menu-right col-9">
+                            <li>
+                                <label class="checkbox mb-0">
+                                    <input type="checkbox" v-model="all_customer" @change="multiSelectAll('customer')"> Select all ( {{ customer_list.length }} )
+                                </label>
+                            </li>
+                            <hr class="my-2">
+                            <li v-for="customer in customer_list">
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck('customer')"> {{ customer }}
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">REMARK</span>
+                        </div>
+                        <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id || ! remark_list.length, 'input-warning': modal_warning && !remark_selected.length}" data-toggle="dropdown">
+                            <template v-if="all_remark || work_id">
+                                All selected <template v-if="remark_list.length">( {{ remark_list.length }} )</template> 
+                            </template>
+                            <template v-else-if="remark_selected.length>3">
+                                {{ remark_selected.length }} remarks selected
+                            </template>
+                            <template v-else-if="remark_selected.length">
+                                {{ remark_selected.toString() }}
+                            </template>
+                            <template v-else>
+                                None selected
+                            </template>
+                        </button>
+                        <ul class="multiselect-container dropdown-menu dropdown-menu-right col-9">
+                            <li>
+                                <label class="checkbox mb-0">
+                                    <input type="checkbox" v-model="all_remark" @change="multiSelectAll('remark')"> Select all ( {{ remark_list.length }} )
+                                </label>
+                            </li>
+                            <hr class="my-2">
+                            <li v-for="remark in remark_list">
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="remark_selected" :value="remark" @change="multiSelectCheck('remark')"> {{ remark }}
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer px-5">
+                    <button class="btn btn-outline-danger float-left mr-auto" @click="clearFilter">Clear</button>
+                    <button class="btn btn-primary" @click="filterReport">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endverbatim %}

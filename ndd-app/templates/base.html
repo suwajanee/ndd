@@ -6,7 +6,6 @@
 
         {% block extra_head %}{% endblock %}
         
-        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
         
@@ -30,11 +29,12 @@
         </style>
     </head>
 
-    <body class="bg-light" style="min-width:1000px;">
+    <body class="bg-light" style="min-width:900px;">
         {% load random_icon %}
         {% load has_group %}
         <nav id="nbar"
-            class="navbar navbar-expand navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}">
+            class="navbar navbar-expand navbar-dark sticky-top {% if nbar == 'database-page' %}bg-primary{% else %}bg-dark{% endif %}"
+        >
             <a class="navbar-brand" href="{% url 'dashboard-page' %}">
                 <img class="logo my-1" src="{% static 'images/logo.png' %}" height="30">
             </a>
@@ -42,12 +42,10 @@
                 <li class="nav-item">
                     <a class="nav-link my-1" href="{% url 'dashboard-page' %}"><i class="fa fa-home"></i></a>
                 </li>
-                <li class="nav-item dropdown {% if nbar == 'booking-page' or nbar == 'agent-transport-page' %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar == 'operation' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarOperation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if nbar == 'booking-page' %}
-                            Booking
-                        {% elif nbar == 'agent-transport-page' %}
-                            สายเรือ
+                        {% if nbar == 'operation' %}
+                            {{ title }}
                         {% else %}
                             Operation
                         {% endif %}
@@ -57,14 +55,10 @@
                         <a class="dropdown-item" href="{% url 'agent-transport-page' %}">สายเรือ</a>
                     </div>
                 </li>
-                <li class="nav-item dropdown {% if nbar == 'summary-page' or nbar == 'cheque-page' or nbar == 'commission-page' %}active{% endif %}">
+                <li class="nav-item dropdown {% if nbar == 'finance' %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarFinance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if nbar == 'summary-page' %}
-                            Summary
-                        {% elif nbar == 'cheque-page' %}
-                            Cheque
-                        {% elif nbar == 'commission-page' %}
-                            ค่าชอ.
+                        {% if nbar == 'finance' %}
+                            {{ title }}
                         {% else %}
                             Finance
                         {% endif %}
@@ -75,6 +69,22 @@
                         {% if request.user|has_group:'salary_change' %}
                             <a class="dropdown-item" href="{% url 'summary-commission-page' %}">ค่าชอ.</a>
                         {% endif %}
+                    </div>
+                </li>
+                <li class="nav-item dropdown {% if nbar == 'report-page' %}active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarReport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if nbar == 'report-page' %}
+                            {{ title }}
+                        {% else %}
+                            Report
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarReport">
+                        <a class="dropdown-item" href="{% url 're-daily-report-page' %}">Daily Report</a>
+                        <a class="dropdown-item" href="{% url 're-expense-page' %}">Expense</a>
+                        <a class="dropdown-item" href="{% url 're-summary-page' %}">Summary</a>
+                        <a class="dropdown-item" href="{% url 're-total-expense-page' %}">Total Expense</a>
+                        <a class="dropdown-item" href="{% url 're-total-truck-page' %}">Total Truck</a>
                     </div>
                 </li>
             </ul>
@@ -93,10 +103,15 @@
 
         {% endblock %}
 
-
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+
+        <script>
+            $('.multiselect').multiselect()
+        </script>
         
     </body>
 </html>

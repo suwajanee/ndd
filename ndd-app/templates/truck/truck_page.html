@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} {{ title }} {% endblock %}
+{% block title %} {{ page|title }} {% endblock %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/style_employee.css' %}" />
@@ -13,45 +13,30 @@
             <aside class="col-2 d-block bg-light sidebar px-0">
                 <div class="sidebar-sticky px-3">
                     <h6 class="sidebar-heading">
-                        <!-- <span>Details</span> -->
-                        <span>NDD</span>
+                        <span>Truck & Chassis List</span>
                     </h6>
-                    <a class="nav-link {% if page == 'truck' and owner == 'ndd' %}active{% endif %}" href="{% url 'truck-page' %}">
+                    <a class="nav-link" :class="{'active': page=='truck'}" href="{% url 'truck-page' %}">
                         Truck
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="truck_count" />
                     </a>
-                    <a class="nav-link {% if page == 'chassis' and owner == 'ndd' %}active{% endif %}" href="{% url 'chassis-page' %}">
+                    <a class="nav-link" :class="{'active': page=='chassis'}" href="{% url 'chassis-page' %}">
                         Chassis
                         <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="chassis_count" />
                     </a>
 
                     <h6 class="sidebar-heading">
-                        <span>VTS</span>
-                    </h6>
-                    <a class="nav-link {% if page == 'truck' and owner == 'vts' %}active{% endif %}" href="{% url 'sup-truck-page' %}">
-                        Truck
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="sup_truck_count" />
-                    </a>
-                    <a class="nav-link {% if page == 'chassis' and owner == 'vts' %}active{% endif %}" href="{% url 'sup-chassis-page' %}">
-                        Chassis
-                        <input type="button" class="btn btn-sm badge-pill badge-primary py-0 float-right small-font" :value="sup_chassis_count" />
-                    </a>
-
-                    <hr class="my-4">
-
-                    <h6 class="sidebar-heading">
                         <span>Other</span>
                     </h6>
-                    <a class="nav-link {% if page == 'manufacturer' %}active{% endif %}" href="{% url 'manufacturer-page' %}">
+                    <a class="nav-link" :class="{'active': page=='manufacturer'}" href="{% url 'manufacturer-page' %}">
                         Manufacturer
                     </a>
-                    <a class="nav-link {% if page == 'sold' %}active{% endif %}" href="{% url 'sold-page' %}">
+                    <a class="nav-link" :class="{'active': page=='sold'}" href="{% url 'sold-page' %}">
                         Sold
                     </a>
                     
                     <hr class="my-4">
 
-                    <a class="nav-link" href="{% url 'employee-driver-page' %}">
+                    <a class="nav-link" href="{% url 'employee-job-page' job='driver' %}">
                         <i class="fa fa-user-alt"></i>&nbsp; Driver
                     </a>
                 </div>
@@ -61,34 +46,25 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 bg-white border-bottom">
                         <li class="breadcrumb-item"><a href="{% url 'dashboard-page' %}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ title }} <template v-if="owner_mode=='vts'">(VTS)</template></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ page|title }}</li>
                     </ol>
                 </nav>
 
-                {% if page == 'truck' %}
-                    <button class="btn btn-success m-3 position-absolute" style="right:0;" 
-                        data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis(true)"
-                    >
-                        <i class="fa fa-plus"></i> Add
-                    </button>
-                {% elif page == 'chassis' %}
-                    <button class="btn btn-success m-3 position-absolute" style="right:0;"
-                        data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis(false)"
-                    >
-                        <i class="fa fa-plus"></i> Add
-                    </button>
-                {% elif page == 'sold' %}
-                    <div class="switch-field m-3 position-absolute" style="right:0;">
-                        <input type="radio" id="work_ndd" v-model="owner_mode" value="ndd" @change="getSold" />
-                        <label for="work_ndd">NDD</label>
-                        <input type="radio" id="work_vts" v-model="owner_mode" value="vts" @change="getSold" />
-                        <label for="work_vts">VTS</label>
-                    </div>
-                {% endif %}
+                <button v-if="page == 'truck' || page == 'chassis'" class="btn btn-success m-3 position-absolute" style="right:0;" 
+                    data-toggle="modal" data-target="#modalTruckChassis" @click="modalTruckChassis()"
+                >
+                    <i class="fa fa-plus"></i> New
+                </button>
                 
-                <h2 class="text-center mt-5">{{ title }} <template v-if="owner_mode=='vts'">(VTS)</template></h2>
+                <h2 class="text-center mt-5">{{ page|title }}</h2>
                 <div class="mt-4 row">
-                    {% include 'truck/truck_detail.html' %}
+                    {% if page == 'manufacturer' %}
+                        {% include 'truck/truck_manufacturer_table.html' %}
+                    {% elif page == 'sold' %}
+                        {% include 'truck/truck_sold_table.html' %}
+                    {% else %}
+                        {% include 'truck/truck_chassis_table.html' %}
+                    {% endif %}
                 </div>
             
             </main>
@@ -102,7 +78,7 @@
     <script type="application/javascript">
 
         window.addEventListener("load", function() {   
-            truck_page.reload("{{ page }}", "{{ owner }}")
+            truck_page.reload("{{ page }}")
         });
 
     </script>

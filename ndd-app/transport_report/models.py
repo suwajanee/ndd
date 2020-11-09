@@ -51,7 +51,9 @@ class Expense(models.Model):
     work_order = models.ForeignKey(WorkOrder, on_delete=models.CASCADE, blank=True, null=True)
     co_expense = JSONField(blank=True, null=True, default=dict)
     cus_expense = JSONField(blank=True, null=True, default=dict)
-    total_expense = JSONField(blank=True, null=True, default=dict)
+
+    co_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    cus_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         if self.work_order.work_normal:

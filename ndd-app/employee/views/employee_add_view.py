@@ -24,6 +24,7 @@ def api_add_employee(request):
             job = Job.objects.get(job_title=job_title)
             
             data = {
+                'name_title': emp_data['name_title'],
                 'first_name': emp_data['first_name'],
                 'last_name': emp_data['last_name'],
                 'birth_date': emp_data['birth_date'] or None,
@@ -33,11 +34,8 @@ def api_add_employee(request):
                 },
                 'hire_date': emp_data['hire_date'] or None,
                 'job': job,
-                'co': 'ndd',
                 'status': 'a'
             }
-            if job_title == 'driver':
-                data['co'] = emp_data['co']
 
             employee = Employee(**data)
             employee.save()
@@ -45,13 +43,12 @@ def api_add_employee(request):
             add_employee_starting_salary(employee)
 
             if job_title == 'driver':
-
                 add_employee_driver(employee, emp_data)
 
             return JsonResponse('Success', safe=False)
     return JsonResponse('Error', safe=False)
 
-
+# Salary
 def add_employee_starting_salary(emp):  
     data = {
         'employee': emp,
@@ -64,6 +61,7 @@ def add_employee_starting_salary(emp):
 
     return salary
 
+# Driver
 def add_employee_driver(emp, emp_data):
     truck_id = emp_data['truck'] or ''
 

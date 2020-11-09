@@ -18,7 +18,7 @@ from booking.views.utility.functions import set_if_not_none
 
 @login_required(login_url=reverse_lazy('login'))
 def agent_transport_page(request):
-    return render(request, 'agent_transport/agent_transport_page.html', {'nbar': 'agent-transport-page'})
+    return render(request, 'agent_transport/agent_transport_page.html', {'nbar': 'operation', 'title': 'สายเรือ'})
 
 @csrf_exempt
 def api_get_agent_transports(request):

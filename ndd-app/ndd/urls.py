@@ -24,6 +24,7 @@ from booking.views import dashboard_view
 from booking.views import export_xls_view
 from booking.views.response_server import error_404, error_500
 from summary.views import summary_page_view
+from transport_report.views import expense_summary_date_view
 
 
 urlpatterns = [
@@ -36,6 +37,7 @@ urlpatterns = [
     path('summary/', include('summary.urls')),
     path('employee/', include('employee.urls')),
     path('truck-chassis/', include('truck.urls')),
+    path('report/', include('transport_report.urls')),
 
     url(r'^dashboard/$', dashboard_view.dashboard_page, name='dashboard-page'),
     url(r'^staff/$', authentication_view.login, name='login'),
@@ -52,7 +54,15 @@ urlpatterns = [
     url(r'^api/get-weekly-works/$', dashboard_view.api_get_weekly_works, name='api-get-weekly-works'),
     url(r'^api/get-yearly-income/$', dashboard_view.api_get_income, name='api-get-yearly-income'),
 
+    # Expense Summary Date
+    url(r'^summary-date/(?P<year>\d+)/$', expense_summary_date_view.summary_date_page, name='summary-date-page'),
+    url(r'^summary-date/api/get-summary-date/$', expense_summary_date_view.api_get_summary_date, name='api-get-summary-date'),
+    url(r'^summary-date/api/add-summary-date/$', expense_summary_date_view.api_add_summary_date, name='api-add-summary-date'),
+    url(r'^summary-date/api/edit-summary-date/$', expense_summary_date_view.api_edit_summary_date, name='api-edit-summary-date'),
+    url(r'^summary-date/api/delete-summary-date/$', expense_summary_date_view.api_delete_summary_date, name='api-delete-summary-date'),
+
 ]
+
 
 handler404 = error_404
 handler500 = error_500

@@ -18,7 +18,7 @@ from customer.models import Principal, Shipper
 
 @login_required(login_url=reverse_lazy('login'))
 def booking_add_page(request):
-    return render(request, 'booking/booking_add_page.html', {'nbar': 'booking-page'})
+    return render(request, 'booking/booking_add_page.html', {'nbar': 'operation', 'title': 'Booking'})
 
 @csrf_exempt
 def api_save_add_bookings(request):

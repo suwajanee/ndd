@@ -17,7 +17,7 @@ from .utility.functions import set_if_not_none
 
 @login_required(login_url=reverse_lazy('login'))
 def booking_page(request):
-    return render(request, 'booking/booking_page.html', {'nbar': 'booking-page'})
+    return render(request, 'booking/booking_page.html', {'nbar': 'operation', 'title': 'Booking'})
 
 @csrf_exempt
 def api_get_bookings(request):

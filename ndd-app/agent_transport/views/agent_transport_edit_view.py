@@ -44,7 +44,7 @@ def api_save_edit_agent_transport(request):
                     operation = False
                 else:
                     operation = True
-                
+
                 if str(agent_transport_save.date) != agent_transport['date'] or operation:
                     work_id, work_number = run_work_id(agent_transport['date'], work_type)
 

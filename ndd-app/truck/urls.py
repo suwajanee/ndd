@@ -13,9 +13,6 @@ urlpatterns = [
     url(r'^manufacturer/$', truck_page_view.manufacturer_page, name='manufacturer-page'),
     url(r'^sold/$', truck_page_view.sold_page, name='sold-page'),
 
-    url(r'^vts/truck/$', truck_page_view.sup_truck_page, name='sup-truck-page'),
-    url(r'^vts/chassis/$', truck_page_view.sup_chassis_page, name='sup-chassis-page'),
-
     url(r'^api/get-truck-chassis-count/$', truck_data_view.api_get_truck_chassis_count, name='api-get-truck-chassis-count'),
 
     url(r'^api/get-manufacturer/$', truck_data_view.api_get_manufacturer, name='api-get-manufacturer'),
@@ -32,6 +29,7 @@ urlpatterns = [
     url(r'^api/edit-chassis/$', truck_edit_view.api_edit_chassis, name='api-edit-chassis'),
     url(r'^api/edit-manufacturer/$', truck_edit_view.api_edit_manufacturer, name='api-edit-manufacturer'),
     url(r'^api/edit-expired-date/$', truck_edit_view.api_edit_expired_date, name='api-edit-expired-date'),
+    url(r'^api/edit-status/$', truck_edit_view.api_edit_status, name='api-edit-status'),
 
     url(r'^api/delete-manufacturer/$', truck_delete_view.api_delete_manufacturer, name='api-delete-manufacturer'),
 
@@ -39,7 +37,8 @@ urlpatterns = [
     url(r'^api/get-daily-trucks/$', truck_data_view.api_get_daily_trucks, name='api-get-daily-trucks'),
 
     # Driver page
-    # url(r'^api/get-truck-choices/$', truck_data_view.api_get_truck_choices, name='api-get-truck-choices'),
     url(r'^api/check-truck-driver/$', truck_data_view.api_check_truck_driver, name='api-check-truck-driver'),
 
+    # Transport Report & Employee page
+    url(r'^api/get-active-truck/$', truck_data_view.api_get_active_truck, name='api-active-truck'),
 ]
