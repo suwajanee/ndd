@@ -22,7 +22,7 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 class ExpenseSummaryDateAdmin(admin.ModelAdmin):
     list_display = ('date', 'month', 'year')
-    ordering = ('-date')
+    ordering = ('-date',)
 
 
 class VariableAdmin(admin.ModelAdmin):
