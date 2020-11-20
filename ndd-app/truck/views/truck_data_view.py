@@ -3,7 +3,10 @@
 from datetime import datetime, timedelta
 import json
 
+from django.db.models import Case, When
+from django.db.models import FloatField
 from django.db.models import Q
+from django.db.models.functions import Cast
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -92,7 +95,8 @@ def api_get_truck(request):
 def api_get_chassis(request):
     if request.user.is_authenticated:
         if request.method == "GET":
-            chassis = Chassis.objects.filter(~Q(status='s')).order_by('number')
+            chassis = Chassis.objects.filter(~Q(status='s'))
+            chassis = order_by_number_value(chassis)
             serializer = ChassisSerializer(chassis, many=True)
 
             data = {
@@ -107,7 +111,8 @@ def api_get_sold(request):
     if request.user.is_authenticated:
         if request.method == "GET":
             truck = Truck.objects.filter(status='s').order_by('number')
-            chassis = Chassis.objects.filter(status='s').order_by('number')
+            chassis = Chassis.objects.filter(status='s')
+            chassis = order_by_number_value(chassis)
 
             truck_serializer = TruckSerializer(truck, many=True)
             chassis_serializer = ChassisSerializer(chassis, many=True)
@@ -119,12 +124,6 @@ def api_get_sold(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
-def get_date_compare(date):
-    today = datetime.now()
-    date_compare = today + timedelta(days=date)
-    return date_compare
-
-
 @csrf_exempt
 def api_get_active_truck(request):
     if request.user.is_authenticated:
@@ -133,3 +132,17 @@ def api_get_active_truck(request):
             serializer = TruckSerializer(truck, many=True)
             return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
+
+
+# Methods
+def get_date_compare(date):
+    today = datetime.now()
+    date_compare = today + timedelta(days=date)
+    return date_compare
+
+def order_by_number_value(data):
+    data = data.annotate(number_float=Case(
+        When(number__regex=r'^([\d]+)$', then=Cast('number', FloatField()))
+    ))
+    data = data.order_by('number_float', 'number')
+    return data
