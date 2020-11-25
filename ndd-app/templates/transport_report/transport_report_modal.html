@@ -76,7 +76,7 @@
                                     class="custom-select" 
                                     :class="{'alert-warning': modal_warning && report_order.order_type==null, 'text-secondary': report_order.order_type==null}"
                                     v-model="report_order.order_type" 
-                                    @change="report_order.double_container=false, report_detail.status_fw='', report_detail.status_bw=''"
+                                    @change="setStatusTrip"
                                 >
                                     <option value=null disabled>- Select -</option>
                                     <option :disabled="used_order_type_list.includes('')" value="">-</option>
