@@ -144,10 +144,6 @@ var report_modal = new Vue ({
                     double_container: false,
                 }
 
-                this.report_detail = {
-                    status_fw: '',
-                    status_bw: ''
-                }
                 this.report_price = {}
                 this.report_co_expense = {}
                 this.report_cus_expense = {}
@@ -181,6 +177,12 @@ var report_modal = new Vue ({
                                 container_1: data.container_1,
                                 container_2: data.container_2,
                             }
+
+                            this.report_detail.status_fw = ''
+                            this.report_detail.status_bw = work_id_substr == 'EP' ? 'e':'f'
+                        }
+                        else {
+                            this.report_work_id = ''
                         }
                     })
                 }
@@ -201,6 +203,12 @@ var report_modal = new Vue ({
                                 container_1: data.container_no,
                                 container_2: data.seal_no
                             }
+
+                            this.report_detail.status_fw = 'e'
+                            this.report_detail.status_bw = 'f'
+                        }
+                        else {
+                            this.report_work_id = ''
                         }
                     })
                 }
@@ -217,6 +225,21 @@ var report_modal = new Vue ({
                     }
                 }
             })
+        },
+        setStatusTrip() {
+            if(this.modal_type == 'normal') {
+                this.report_order.double_container = false
+
+                this.report_detail.status_fw = 'e'
+                this.report_detail.status_bw = 'f'
+
+                if(this.not_fw_trip.includes(this.report_order.order_type)) {
+                    this.report_detail.status_fw = ''
+                }
+                else if(this.not_bw_trip.includes(this.report_order.order_type)) {
+                    this.report_detail.status_bw = ''
+                }
+            }
         },
 
         selectDriver(driver) {
