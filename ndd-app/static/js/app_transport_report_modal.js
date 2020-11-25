@@ -143,7 +143,7 @@ var report_modal = new Vue ({
                     order_type: null,
                     double_container: false,
                 }
-
+                this.report_detail = {}
                 this.report_price = {}
                 this.report_co_expense = {}
                 this.report_cus_expense = {}
