@@ -48,7 +48,7 @@
                         <tbody id="tbody" class="bg-white">
                             <template v-for="date_report in date_report_list">
                                 {% verbatim %}
-                                    <tr :class="getDayColor(date_report.clear_date)">
+                                    <tr class="clear-date-row" :class="getDayColor(date_report.clear_date)">
                                         <td colspan=23 class="py-0 text-left text-muted"><small>{{ date_report.clear_date|formatDate }}</small></td>
                                     </tr>
                                 {% endverbatim %}
