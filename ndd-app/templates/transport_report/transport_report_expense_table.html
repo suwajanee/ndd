@@ -7,7 +7,6 @@
     <td>{{ report.work_order.truck.number }}</td>
     <td class="text-nowrap">
         {{ report.work_order.work.work_id }}
-        <!-- <template v-if="report.work_order.order_type"> / {{ report.work_order.order_type }} <template v-if="report.work_order.double_container">+</template></template> -->
         <template v-if="report.work_order.order_type"> / {{ report.work_order.full_order }}</template>
     </td>
     <td class="right-thick" style="max-width: 160px;">
@@ -141,8 +140,8 @@
 
     <td class="font-weight-bold right-thick">{{ report.cus_total|currencyCommas }}</td>
     <td class="font-weight-bold">{{ eval(report.co_total) + eval(report.cus_total)|currencyCommas }}</td>
-    <td>
-        <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button>
+    <td v-if="col_edit">
+        <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-pen"></i></button>
     </td>
     
 {% endverbatim %}

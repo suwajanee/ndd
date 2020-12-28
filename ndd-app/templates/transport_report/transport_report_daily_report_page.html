@@ -28,17 +28,16 @@
         <div>
             {% verbatim %}
                 <div class="row m-0 py-3">
-                    <div class="input-group col-5" style="max-height: 40px;" >
-                        <input type="date" class="form-control col-4" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
-
+                    <div class="input-group col-5 pr-0" style="height: 38px;">
+                        <input type="date" class="form-control col-4" style="height: 38px;" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
                     
                         <div class="input-group-append">
                             <span class="input-group-text">DRIVER</span>
                         </div>
-                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="min-height: 40px; overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ driver_data.full_name }}
                         </button>
-                        <button v-else class="custom-select text-left rounded-right" style="height: 40px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button v-else class="custom-select text-left rounded-right"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             --------
                         </button>
 
@@ -55,43 +54,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-7">
-                        <button class="btn btn-success ml-3 float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
 
-                        <div class="float-right">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">COL</span>
-                                </div>
-                                <button class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown">
-                                    <template v-if="col_price || col_allowance || col_remark">
-                                        <template v-if="col_price">ราคา; </template>
-                                        <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                        <template v-if="col_remark">Remark; </template>
-                                    </template>
-                                    <template v-else>
-                                        Non selected
-                                    </template>
-                                </button>
-                                <ul class="multiselect-container dropdown-menu">
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox" v-model="col_price"> ราคา
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox" v-model="col_remark"> Remark
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <button 
+                        class="btn btn-light mx-2" :class="{'active': col_edit}" style="height: 38px;"
+                        @click="col_edit=!col_edit" title="Edit"
+                    >
+                        <i class="fa fa-pen"></i>
+                    </button>
+                    <div>
+                        <button class="btn btn-light" style="height: 38px;" title="Column" data-toggle="dropdown"><i class="fas fa-th-list"></i></button>
+                        <ul id="colDropdownMenu" class="multiselect-container dropdown-menu" >
+                            <li><label class="checkbox"><input type="checkbox" v-model="col_price"> ราคา</label></li>
+                            <li><label class="checkbox"><input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน</label></li>
+                            <li><label class="checkbox"><input type="checkbox" v-model="col_remark"> Remark</label></li>
+                        </ul>
+                    </div>
+
+                    <div class="col">
+                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
                     </div>
                 </div>
                 
@@ -147,7 +127,8 @@
                                     <td class="right-thick"></td>
                                     <td v-for="i in 3"></td>
                                     <td class="right-thick"></td>
-                                    <td v-for="i in 2"></td>
+                                    <td></td>
+                                    <td v-if="col_edit"></td>
                                 </tr>
 
                                 <tr v-if="! driver_id" class="bg-light">
@@ -162,7 +143,7 @@
 
                                     <td class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
                                     
-                                    <td></td>
+                                    <td v-if="col_edit"></td>
                                 </tr>
                             {% endverbatim %}
                         </template>                      
@@ -181,7 +162,7 @@
                                 <td colspan=4 class="right-thick"></td>
 
                                 <td class="font-weight-bold lime-color">{{ total|currencyCommas }}</td>
-                                <td></td>
+                                <td v-if="col_edit"></td>
                             {% endverbatim %}
                         </tr>
                     </tfoot>
@@ -203,6 +184,9 @@
         window.addEventListener("load", function() {
             daily_report_page.reload("{{ date }}", "{{ driver }}")
         })
+
+        preventHideMenu('colDropdownMenu')
+
     </script>
 
 {% endblock %}

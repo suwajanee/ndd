@@ -66,7 +66,7 @@
                                         <td colspan=4 class="right-thick"></td>
                                          
                                         <td class="font-weight-bold cyan-color">{{ date_report.total|currencyCommas }}</td>
-                                        <td></td>
+                                        <td v-if="col_edit"></td>
                                     {% endverbatim %}
                                 </tr>
                                 
@@ -90,7 +90,7 @@
                                     <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index), 'lime-color': index==total_expense_list.length-1}">
                                         {{ total|currencyCommas }}
                                     </td>
-                                    <td></td>
+                                    <td v-if="col_edit"></td>
                                 </tr>
                             {% endverbatim %}    
                         </tfoot>
@@ -122,6 +122,11 @@
         window.addEventListener("load", function() {
             expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ period }}")
         })
+
+        preventHideMenu('colDropdownMenu')
+        preventHideMenu('customerDropdownMenu')
+        preventHideMenu('remarkDropdownMenu')
+        
     </script>
     
 {% endblock %}

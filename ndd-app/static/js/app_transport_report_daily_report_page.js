@@ -12,7 +12,8 @@ var daily_report_page = new Vue ({
         // Upper Part
         col_price: true,
         col_allowance: true,
-        col_remark: false,
+        col_remark: true,
+        col_edit: true,
         // End Upper Part
 
         // Driver Select

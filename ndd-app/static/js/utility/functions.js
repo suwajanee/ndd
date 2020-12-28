@@ -165,6 +165,15 @@ const diff_months = (dt1, dt2) => {
     return Math.abs(Math.round(diff))
 }
 
+// Dropdown menu
+const preventHideMenu = (id) => {
+    var menu = document.getElementById(id)
+    if(menu) {
+        menu.addEventListener("click", function(e) {
+            e.stopPropagation()
+        })
+    }
+}
 
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',

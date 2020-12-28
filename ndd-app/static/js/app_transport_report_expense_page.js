@@ -20,9 +20,10 @@ var expense_page = new Vue ({
         full_month_list: [],
         period_num: [],
 
-        col_price: true,
+        col_price: false,
         col_allowance: true,
         col_remark: true,
+        col_edit: false,
         // End Upper Part
 
         // Trip Color
@@ -150,7 +151,7 @@ var expense_page = new Vue ({
                 this.loading = false
             })
         },
-        filterReport() {
+        filterReport(modal_action) {
             this.modal_warning = false
             if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
                 this.modal_warning = true
@@ -184,6 +185,10 @@ var expense_page = new Vue ({
                 api("/report/api/filter-expense-report/", "POST", data).then((data) => {
                     this.report_list = data.report_list
                     this.total_price_list = data.total_price_list
+
+                    if(modal_action) {
+                        $('#modalFilterReport').modal('hide')
+                    }
 
                     if(this.all_customer) {
                         this.customer_selected = this.customer_list

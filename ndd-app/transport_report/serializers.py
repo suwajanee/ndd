@@ -46,6 +46,7 @@ class ExpenseContainerSerializer(serializers.ModelSerializer):
         if work_order.work_normal:
             work_type = 'normal'
             work = work_order.work_normal
+            booking = work.booking_no
             size = work.size
             container = work.container_no
 
@@ -54,10 +55,14 @@ class ExpenseContainerSerializer(serializers.ModelSerializer):
             elif 'container_2' in work_order.detail:
                 size = '2X' + size
                 container += '-' + work_order.detail['container_2']
+            
+            if 'booking_2' in work_order.detail:
+                booking += '-' + work_order.detail['booking_2']
 
         elif work_order.work_agent_transport:
             work_type = 'agent-transport'
             work = work_order.work_agent_transport
+            booking = work.booking_no
             size = work.size
             container = work.container_1
 
@@ -68,7 +73,7 @@ class ExpenseContainerSerializer(serializers.ModelSerializer):
             'work_type': work_type,
             'size': size,
             'container': container,
-            'booking_no': work.booking_no
+            'booking_no': booking
         }
         return data
 
