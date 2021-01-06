@@ -139,7 +139,7 @@ def api_get_expense_report(request):
 
             period_num, from_date, to_date = get_from_to_date(year, month, period)
 
-            if from_date < to_date:
+            if from_date <= to_date:
                 expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
                 expense = order_expense_report(expense)
 
@@ -287,7 +287,7 @@ def api_get_total_expense(request):
 
             period_num, from_date, to_date = get_from_to_date(year, month, period)
 
-            if from_date < to_date:
+            if from_date <= to_date:
                 expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
 
                 date_list = get_values_list(expense, 'work_order__clear_date')
@@ -390,7 +390,7 @@ def api_get_total_truck(request):
 
             period_num, from_date, to_date = get_from_to_date(year, month, 0)
 
-            if from_date < to_date:
+            if from_date <= to_date:
                 expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
 
                 truck_list = get_truck_list(expense)
