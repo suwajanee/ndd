@@ -168,47 +168,6 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-9 container">
-                            <div class="row">
-                                <table class="col-lg-4 mx-4 table table-sm table-bordered">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>ราคา</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-light text-center text-small">
-                                            <td :class="{'table-warning': ! expense_format_status[0]}">{{ sumString(report_price.work)|currencyCommas }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-control p-1" v-model="report_price.work" id="1-4" @keydown="keyDownArrow(1, 4)" @change="checkExpenseFormat(report_price.work, 0)"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table class="col-lg mx-4 table table-sm table-bordered">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>เบี้ยเลี้ยง</th>
-                                            <th>ค้างคืน</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-light text-center text-small">
-                                            <td :class="{'table-warning': ! expense_format_status[1]}">{{ sumString(report_price.allowance)|currencyCommas }}</td>
-                                            <td :class="{'table-warning': ! expense_format_status[2]}">{{ sumString(report_price.overnight)|currencyCommas }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-control p-1" v-model="report_price.allowance" id="2-4" @keydown="keyDownArrow(2, 4)" @change="checkExpenseFormat(report_price.allowance, 1)"></td>
-                                            <td><input class="form-control p-1" v-model="report_price.overnight" id="3-4" @keydown="keyDownArrow(3, 4)" @change="checkExpenseFormat(report_price.overnight, 2)"></td>
-                                        </tr>
-                                    </tbody>
-                                    <tr v-if="work_data.time" class="text-primary bg-light">
-                                        <td colspan=2># Time: {{ work_data.time }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
                         <hr class="my-4">
 
                         <h5 class="text-center my-3"><u>ค่าใช้จ่าย</u></h5>
@@ -307,13 +266,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll" id="4-4" @keydown="keyDownArrow(4, 4)" @change="checkExpenseFormat(report_co_expense.co_toll, 3)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate" id="5-4" @keydown="keyDownArrow(5, 4)" @change="checkExpenseFormat(report_co_expense.co_gate, 4)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire" id="6-4" @keydown="keyDownArrow(6, 4)" @change="checkExpenseFormat(report_co_expense.co_tire, 5)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine" id="7-4" @keydown="keyDownArrow(7, 4)" @change="checkExpenseFormat(report_co_expense.co_fine, 6)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc" id="8-4" @keydown="keyDownArrow(8, 4)" @change="checkExpenseFormat(report_co_expense.co_thc, 7)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service" id="9-4" @keydown="keyDownArrow(9, 4)" @change="checkExpenseFormat(report_co_expense.co_service, 8)"></td>
-                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other" id="10-4" @keydown="keyDownArrow(10, 4)" @change="checkExpenseFormat(report_co_expense.co_other, 9)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_toll" id="1-4" @keydown="keyDownArrow(1, 4)" @change="checkExpenseFormat(report_co_expense.co_toll, 3)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_gate" id="2-4" @keydown="keyDownArrow(2, 4)" @change="checkExpenseFormat(report_co_expense.co_gate, 4)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_tire" id="3-4" @keydown="keyDownArrow(3, 4)" @change="checkExpenseFormat(report_co_expense.co_tire, 5)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_fine" id="4-4" @keydown="keyDownArrow(4, 4)" @change="checkExpenseFormat(report_co_expense.co_fine, 6)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_thc" id="5-4" @keydown="keyDownArrow(5, 4)" @change="checkExpenseFormat(report_co_expense.co_thc, 7)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_service" id="6-4" @keydown="keyDownArrow(6, 4)" @change="checkExpenseFormat(report_co_expense.co_service, 8)"></td>
+                                        <td><input class="form-control p-1" v-model="report_co_expense.co_other" id="7-4" @keydown="keyDownArrow(7, 4)" @change="checkExpenseFormat(report_co_expense.co_other, 9)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -364,13 +323,56 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" id="11-4" @keydown="keyDownArrow(11, 4)" @change="checkExpenseFormat(report_cus_expense.cus_return, 10)"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" id="12-4" @keydown="keyDownArrow(12, 4)" @change="checkExpenseFormat(report_cus_expense.cus_gate, 11)"></td>
-                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" id="13-4" @keydown="keyDownArrow(13, 4)" @change="checkExpenseFormat(report_cus_expense.cus_other, 12)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_return" id="8-4" @keydown="keyDownArrow(8, 4)" @change="checkExpenseFormat(report_cus_expense.cus_return, 10)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_gate" id="9-4" @keydown="keyDownArrow(9, 4)" @change="checkExpenseFormat(report_cus_expense.cus_gate, 11)"></td>
+                                        <td><input class="form-control p-1" v-model="report_cus_expense.cus_other" id="10-4" @keydown="keyDownArrow(10, 4)" @change="checkExpenseFormat(report_cus_expense.cus_other, 12)"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="col-lg-9 container">
+                            <div class="row">
+                                <table class="col-lg-4 mx-4 table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>ราคา</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-light text-center text-small">
+                                            <td :class="{'table-warning': ! expense_format_status[0]}">{{ sumString(report_price.work)|currencyCommas }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="form-control p-1" v-model="report_price.work" id="11-4" @keydown="keyDownArrow(11, 4)" @change="checkExpenseFormat(report_price.work, 0)"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="col-lg mx-4 table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>เบี้ยเลี้ยง</th>
+                                            <th>ค้างคืน</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-light text-center text-small">
+                                            <td :class="{'table-warning': ! expense_format_status[1]}">{{ sumString(report_price.allowance)|currencyCommas }}</td>
+                                            <td :class="{'table-warning': ! expense_format_status[2]}">{{ sumString(report_price.overnight)|currencyCommas }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="form-control p-1" v-model="report_price.allowance" id="12-4" @keydown="keyDownArrow(12, 4)" @change="checkExpenseFormat(report_price.allowance, 1)"></td>
+                                            <td><input class="form-control p-1" v-model="report_price.overnight" id="13-4" @keydown="keyDownArrow(13, 4)" @change="checkExpenseFormat(report_price.overnight, 2)"></td>
+                                        </tr>
+                                    </tbody>
+                                    <tr v-if="work_data.time" class="text-primary bg-light">
+                                        <td colspan=2># Time: {{ work_data.time }}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </template>
                 </div>
