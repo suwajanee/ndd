@@ -55,7 +55,7 @@
                             <th class="align-middle">ค่ายกตู้</th>
                             <th class="align-middle right-thick">ค่าผ่านท่า</th>
                             <th rowspan=2 class="align-middle">Inv.</th>
-                            <th rowspan=2 class="align-middle">Edit</th>
+                            <th v-if="col_edit" rowspan=2 class="align-middle">Edit</th>
                         </tr>
                         <tr class="second-header">
                             <th class="align-middle">Container No</th>
@@ -65,7 +65,7 @@
                             <th class="align-middle">Size</th>
                             <th class="align-middle right-thick">Status</th>
 
-                            <th class="align-middle right-thick">//</th>
+                            <th class="align-middle right-thick">{{ total_price_list[0]|currencyCommas }}</th>
                             <th class="align-middle">NDD</th>
                             <th class="align-middle right-thick">NDD</th>
                         </tr>
@@ -87,8 +87,8 @@
                                 </template>
                             </td>
                             <td style="max-width: 160px;">{{ report.work_order.detail.remark }}</td>
-                            <td class="text-nowrap right-thick">
-                                {{ report.work_order.work.booking_no}}
+                            <td class="right-thick">
+                                {{ report.work_detail.booking_no }}
                             </td>
 
                             <template v-if="not_fw_trip.includes(report.work_order.order_type) || report.work_detail.work_type=='agent-transport'">
@@ -116,13 +116,13 @@
                             <td class="text-right right-thick">
                                 {{ report.work_order.price.work|currencyCommas }}
                             </td>
-                            <td class="text-right right-thick">{{ report.cus_expense.cus_return|currencyCommas }}</td>
+                            <td class="text-right">{{ report.cus_expense.cus_return|currencyCommas }}</td>
                             <td class="text-right right-thick">{{ report.cus_expense.cus_gate|currencyCommas }}</td>
 
                             <td v-if="report.work_order.work.summary_status>0" class="text-success"><i class="fas fa-check-circle"></i></td>
                             <td v-else class="text-danger"><i class="fas fa-times-circle"></i></td>
 
-                            <td><button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-edit"></i></button></td>
+                            <td v-if="col_edit"><button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-pen"></i></button></td>
                             
                         </tr>
                     </tbody>
@@ -154,6 +154,11 @@
         window.addEventListener("load", function() {
             expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ period }}")
         })
+
+        preventHideMenu('colDropdownMenu')
+        preventHideMenu('customerDropdownMenu')
+        preventHideMenu('remarkDropdownMenu')
+
     </script>
 
 {% endblock %}

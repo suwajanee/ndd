@@ -1,7 +1,7 @@
 {% verbatim %}
 
     <div class="row m-0 py-3">
-        <div class="input-group col-5">
+        <div class="input-group col-5 pr-0">
             <div class="input-group-prepend">
                 <span class="input-group-text">YEAR</span>
             </div>
@@ -22,46 +22,54 @@
                 <option v-for="p in period_num" :value="p">{{ p }}</option>
             </select>
         </div>
-        <button v-if="show_filter_btn" class="btn" :class="filter_mode ? 'btn-secondary' : 'btn-outline-secondary'" data-toggle="modal" data-target="#modalFilterReport"><i class="fas fa-filter"></i></button>
 
-        <div v-if="show_col_select" class="col">
-            <div class="float-right">
-                <div class="input-group" >
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">COL</span>
-                    </div>
-                    <div class="btn-group">
-                        <button class="custom-select text-left rounded-right multi-select" style="min-width: 150px;" data-toggle="dropdown">
-                            <template v-if="col_price || col_allowance || col_remark">
-                                <template v-if="col_price">ราคา; </template>
-                                <template v-if="col_allowance">เบี้ยเลี้ยง; </template>
-                                <template v-if="col_remark">Remark; </template>
-                            </template>
-                            <template v-else>
-                                Non selected
-                            </template>
-                        </button>
-                        <ul class="multiselect-container dropdown-menu">
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_price"> ราคา
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="col_remark"> Remark
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <button v-if="show_filter_btn" class="btn btn-light mx-2" :class="{'active': filter_mode}" title="Filter" data-toggle="modal" data-target="#modalFilterReport"><i class="fas fa-filter"></i></button>
+
+        <button v-if="show_filter_btn || show_col_select"
+            class="btn btn-light" :class="{'active': col_edit}" @click="col_edit=!col_edit" title="Edit"
+        >
+            <i class="fa fa-pen"></i>
+        </button>
+
+        <template v-if="show_col_select">
+            <button class="btn btn-light mx-2" title="Column" data-toggle="dropdown"><i class="fas fa-th-list"></i></button>
+            <ul id="colDropdownMenu" class="multiselect-container dropdown-menu" >
+                <li><label class="checkbox"><input type="checkbox" v-model="col_price"> ราคา</label></li>
+                <li><label class="checkbox"><input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน</label></li>
+                <li><label class="checkbox"><input type="checkbox" v-model="col_remark"> Remark</label></li>
+            </ul>
+        </template>
+        
+        <div v-if="show_filter_btn && page_range.length > 1" class="col d-flex align-items-center">
+            <ul class="pagination ml-auto my-0">
+                <template v-if="page_num == 1">
+                    <button class="btn btn-light py-1 disabled"><i class="fas fa-angle-double-left"></i></button>
+                    <button class="btn btn-light py-1 disabled"><i class="fas fa-angle-left"></i></button>
+                </template>
+                <template v-else>
+                    <button class="btn btn-light py-1" @click="getReportByIdList(1)"><i class="fas fa-angle-double-left"></i></button>
+                    <button class="btn btn-light py-1" @click="getReportByIdList(page_num - 1)"><i class="fas fa-angle-left"></i></button>
+                </template>
+                
+                <button v-if="page_num > 3" class="btn btn-light p-1 disabled">...</button>
+                <button v-for="page in setPageRange()" @click="getReportByIdList(page)" class="btn btn-light py-1" :class="{'active': page_num == page}">{{ page }}</button>
+
+                <button v-if="page_num + 3 <= page_range.length" class="btn btn-light p-1 disabled">...</button>
+
+                <template v-if="page_num == page_range.length">
+                    <button class="btn btn-light py-1 disabled"><i class="fas fa-angle-right"></i></button>
+                    <button class="btn btn-light py-1 disabled"><i class="fas fa-angle-double-right"></i></button>
+                </template>
+                <template v-else>
+                    <button class="btn btn-light py-1" @click="getReportByIdList(page_num+1)"><i class="fas fa-angle-right"></i></button>
+                    <button class="btn btn-light py-1" @click="getReportByIdList(page_range.length)"><i class="fas fa-angle-double-right"></i></button>
+                </template>
+
+            </ul>   
         </div>
+
+        
     </div>
+
 
 {% endverbatim %}

@@ -113,24 +113,33 @@ tr td.right-thick, tr th.right-thick {
 
 /* thead */
 .table-fix-head tr th {
-    position: -webkit-sticky;
     position: sticky;
     top: -1;
     background: #e1e6ea;
-    box-shadow: 0 1px 3px 0 silver;
+    /* box-shadow: 0 1px 3px 0 silver; */
+    box-shadow: 0px 2px 3px 1px silver; 
     padding: 5px;
-    z-index: 1;
+    height: 30px;
+    z-index: 3;
 }
 tr.second-header th {
     top: 30px;
+    height: 50px;
+}
+/* clear date row */
+tbody tr.clear-date-row td {
+    position: sticky;
+    top: 80px;
+    box-shadow: 0px 1px 0px 0px lightgray;
+    z-index: 1;
 }
 
 /* tfoot */
 .table-fix-head tfoot td {
-  position: -webkit-sticky;
   position: sticky;
   bottom: 0;
   box-shadow: 0 -1px 2px 0 silver;
+  z-index: 2;
 }
 tfoot tr.tfoot-total-1 td {
     bottom: 30px;

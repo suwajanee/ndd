@@ -18,9 +18,11 @@
                         </div>
                         <input 
                             class="form-control col-6" placeholder="--- All works ---" v-model="work_id"
-                            :disabled="driver_id || truck_id || ! all_customer || ! all_remark"
+                            :disabled="booking || driver_id || truck_id || ! all_customer || ! all_remark"
                         >
                     </div>
+
+                    <hr>
 
                     <div class="input-group my-3 col-8 container">
                         <div class="input-group-prepend">
@@ -73,6 +75,13 @@
 
                     <div class="input-group my-3 col-8 container">
                         <div class="input-group-prepend">
+                            <span class="input-group-text">BOOKING</span>
+                        </div>
+                        <input class="form-control" v-model="booking" placeholder="--- All bookings ---" :disabled="work_id.length>0">
+                    </div>
+
+                    <div class="input-group my-3 col-8 container">
+                        <div class="input-group-prepend">
                             <span class="input-group-text">CUSTOMER</span>
                         </div>
                         <button class="custom-select text-left rounded-right" :class="{'disabled bg-light': work_id, 'input-warning': modal_warning && !customer_selected.length}" data-toggle="dropdown">
@@ -89,7 +98,7 @@
                                 None selected
                             </template>
                         </button>
-                        <ul class="multiselect-container dropdown-menu dropdown-menu-right col-9">
+                        <ul id="customerDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
                             <li>
                                 <label class="checkbox mb-0">
                                     <input type="checkbox" v-model="all_customer" @change="multiSelectAll('customer')"> Select all ( {{ customer_list.length }} )
@@ -122,7 +131,7 @@
                                 None selected
                             </template>
                         </button>
-                        <ul class="multiselect-container dropdown-menu dropdown-menu-right col-9">
+                        <ul id="remarkDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
                             <li>
                                 <label class="checkbox mb-0">
                                     <input type="checkbox" v-model="all_remark" @change="multiSelectAll('remark')"> Select all ( {{ remark_list.length }} )
@@ -141,7 +150,7 @@
 
                 <div class="modal-footer px-5">
                     <button class="btn btn-outline-danger float-left mr-auto" @click="clearFilter">Clear</button>
-                    <button class="btn btn-primary" @click="filterReport">OK</button>
+                    <button class="btn btn-primary" @click="filterReport(true)">OK</button>
                 </div>
             </div>
         </div>

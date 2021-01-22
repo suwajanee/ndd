@@ -5,7 +5,10 @@ var expense_page = new Vue ({
         loading: false,
         
         // Initial
-        page: '',
+        page_range: [],
+        page_num: '',
+
+        page_name: '',
         year: '',
         month: '',
         period: '',
@@ -20,9 +23,10 @@ var expense_page = new Vue ({
         full_month_list: [],
         period_num: [],
 
-        col_price: true,
+        col_price: false,
         col_allowance: true,
         col_remark: true,
+        col_edit: false,
         // End Upper Part
 
         // Trip Color
@@ -37,7 +41,7 @@ var expense_page = new Vue ({
         // data list
         report_list: [],
         pk_list: [],
-        date_list: [],
+        filtered_pk_list: [],
         date_report_list: [],
         // total
         total_price_list: [],
@@ -49,6 +53,7 @@ var expense_page = new Vue ({
         modal_warning: false,
         // work id input
         work_id: '',
+        booking: '',
         // driver & truck select
         driver_list: [],
         truck_list: [],
@@ -79,8 +84,8 @@ var expense_page = new Vue ({
         }
     },
     methods: {
-        reload(page, year, month, period) {
-            this.page = page.toLowerCase()
+        reload(page_name, year, month, period) {
+            this.page_name = page_name.toLowerCase()
             this.year = year
             this.month = month
             this.period = period
@@ -93,9 +98,14 @@ var expense_page = new Vue ({
             this.month_list = _month
             this.full_month_list = _full_month
 
-            this.getReport()
+            var page_num = window.location.hash.slice(1)
+            if(page_num) {
+                this.page_num = page_num
+            }
 
-            if(this.page == 'summary') {
+            this.getReport(page_num)
+
+            if(this.page_name == 'summary') {
                 this.show_col_select = false
             }
 
@@ -109,18 +119,45 @@ var expense_page = new Vue ({
         },
 
         changeUrl(period) {
-            var url = `/report/${this.page}/${this.year}/${this.month}`
+            var url = `/report/${this.page_name}/${this.year}/${this.month}`
             if(period > 0) {
                 url += "/" + period
             }
-
             window.open(url, "_self")
         },
+        setPageRange() { // ใช้ใน HTML
+            if(this.page_num > 3) {
+                var first = this.page_num - 2
+            }
+            else {
+                var first = 1
+            }
 
-        getReport() {
+            if(this.page_num + 3 <= this.page_range.length) {
+                var last = this.page_num + 2
+            }
+            else {
+                var last = this.page_range.length
+            }
+
+            if(this.page_range.length > 5) {
+                if(first == 1) {
+                    last = 5
+                }
+                if(last == this.page_range.length) {
+                    first = last - 4
+                }
+            }
+            var page_list = this.page_range.slice(first - 1, last)
+            return page_list
+        },
+
+        getReport(num) {
             this.loading = true
             var params = {
-                page: this.page,
+                page_num: num || 0,
+
+                page_name: this.page_name,
                 year: this.year,
                 month: this.month,
                 period: this.period
@@ -135,6 +172,7 @@ var expense_page = new Vue ({
                 this.total_price_list = data.total_price_list
 
                 this.pk_list = data.pk_list
+                this.filtered_pk_list = data.pk_list
 
                 this.driver_list = report_modal.driver_list = data.driver_list
                 this.truck_list = report_modal.truck_list = data.truck_list
@@ -142,15 +180,39 @@ var expense_page = new Vue ({
                 this.customer_list = this.customer_selected = data.customer_list
                 this.remark_list = this.remark_selected = data.remark_list
 
-                if(this.page == 'expense') {
-                    this.date_list = data.date_list
+                this.page_range = data.page_range
+                this.page_num = data.page_num
+                window.location.hash = this.page_num
+
+                if(this.page_name == 'expense') {
                     this.total_expense_list = data.total_expense_list
-                    this.setDateReport()
                 }
                 this.loading = false
             })
         },
-        filterReport() {
+        getReportByIdList(num) {
+            this.loading = true
+            var params = {
+                page_num: num || 0,
+                page_name: this.page_name,
+                pk_list: this.filtered_pk_list,
+            }
+            api("/report/api/get-expense-report-by-id-list", "POST", params).then((data) => {
+                this.report_list = data.report_list
+                this.total_price_list = data.total_price_list
+
+                this.page_range = data.page_range
+                this.page_num = data.page_num
+                window.location.hash = this.page_num
+
+
+                if(this.page_name == 'expense') {
+                    this.total_expense_list = data.total_expense_list
+                }
+                this.loading = false
+            })
+        },
+        filterReport(modal_action) {
             this.modal_warning = false
             if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
                 this.modal_warning = true
@@ -159,12 +221,15 @@ var expense_page = new Vue ({
                 this.loading = true
 
                 this.checkFilterMode()
+
                 var data = {
-                    page: this.page,
+                    page_name: this.page_name,
+                    page_num: this.filter_mode ? 1:0,
                     pk_list: this.pk_list,
                     work: this.work_id.trim(),
                     driver: this.driver_id,
                     truck: this.truck_id,
+                    booking: this.booking
                 }
 
                 if(this.all_customer) {
@@ -185,51 +250,42 @@ var expense_page = new Vue ({
                     this.report_list = data.report_list
                     this.total_price_list = data.total_price_list
 
+                    this.filtered_pk_list = data.pk_list
+
+                    if(modal_action) {
+                        $('#modalFilterReport').modal('hide')
+                    }
+
                     if(this.all_customer) {
-                        this.customer_selected = this.customer_list
+                        this.customer_selected = [...this.customer_list]
                     }
 
                     if(this.all_remark) {
-                        this.remark_selected = this.remark_list
+                        this.remark_selected = [...this.remark_list]
                     }
 
-                    if(this.page == 'expense') {
-                        this.date_list = data.date_list
+                    this.page_range = data.page_range
+                    this.page_num = data.page_num
+                    window.location.hash = this.page_num
+
+                    if(this.page_name == 'expense') {
                         this.total_expense_list = data.total_expense_list
-                        this.setDateReport()
                     }
                     this.loading = false
                 })
             }     
         },
         checkFilterMode() {
-            if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {
+            if(this.work_id || this.driver_id || this.truck_id || this.booking || ! this.all_customer || ! this.all_remark) {
                 this.filter_mode = true
             }
             else {
                 this.filter_mode = false
             }
         },
-        setDateReport() {
-            this.date_report_list = []
-            this.date_list.forEach((date) => {
-                var report_result = this.report_list.filter(report => report.work_order.clear_date === date)
-
-                var co_total = sumObjectArray(report_result, 'co_total')
-                var cus_total = sumObjectArray(report_result, 'cus_total')
-
-                var report = {
-                    clear_date: date,
-                    report_list: report_result,
-                    total: co_total + cus_total
-                }
-                this.date_report_list.push(report)
-
-            })
-        },
-
         clearFilter() {
             this.work_id = ''
+            this.booking = ''
 
             this.driver_id = ''
             this.driver_data = {}
@@ -237,11 +293,15 @@ var expense_page = new Vue ({
             this.truck_data = {}
 
             this.all_customer = true
-            this.customer_selected = this.customer_list
+            this.customer_selected = [...this.customer_list]
             this.all_remark = true
-            this.remark_selected = this.remark_list
+            this.remark_selected = [...this.remark_list]
 
-            this.filterReport()
+            if(this.filter_mode) {
+                this.filter_mode = false
+                this.filtered_pk_list = [...this.pk_list]
+                this.getReportByIdList()
+            }
         },
 
         selectDriver(driver) {

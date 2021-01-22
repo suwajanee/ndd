@@ -34,10 +34,11 @@ urlpatterns = [
 
     # Get
     url(r'^api/get-daily-report/$', transport_report_data_view.api_get_daily_report, name='api-get-daily-report'),
-    url(r'^api/get-daily-driver-report/$', transport_report_data_view.api_get_daily_driver_report, name='api-get-daily-driver-report'),
+    url(r'^api/get-default-driver-truck/$', transport_report_data_view.api_get_default_driver_truck, name='api-get-default-driver-truck'),
 
     url(r'^api/get-expense-report/$', transport_report_data_view.api_get_expense_report, name='api-get-expense-report'),
     url(r'^api/filter-expense-report/$', transport_report_data_view.api_filter_expense_report, name='api-filter-expense-report'),
+    url(r'^api/get-expense-report-by-id-list', transport_report_data_view.api_get_expense_report_by_id_list, name='api-get-expense-report-by-id-list'),
 
     url(r'^api/get-total-expense/$', transport_report_data_view.api_get_total_expense, name='api-get-total-expense'),
 

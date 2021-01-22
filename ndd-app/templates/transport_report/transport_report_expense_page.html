@@ -46,30 +46,17 @@
 
                     <template v-if="report_list.length">
                         <tbody id="tbody" class="bg-white">
-                            <template v-for="date_report in date_report_list">
+                            <template v-for="(report, index) in report_list">
                                 {% verbatim %}
-                                    <tr :class="getDayColor(date_report.clear_date)">
-                                        <td colspan=23 class="py-0 text-left text-muted"><small>{{ date_report.clear_date|formatDate }}</small></td>
-                                    </tr>
+                                    <template v-if="index == 0 || report.work_order.clear_date != report_list[index-1].work_order.clear_date">
+                                        <tr class="clear-date-row" :class="getDayColor(report.work_order.clear_date)">
+                                            <td colspan=23 class="py-0 text-left text-muted"><small>{{ report.work_order.clear_date|formatDate }}</small></td>
+                                        </tr>
+                                    </template>
                                 {% endverbatim %}
-                                <tr v-for="report in date_report.report_list">
+                                <tr>
                                     {% include 'transport_report/transport_report_expense_table.html' %}
                                 </tr>
-                                
-                                <tr>
-                                    {% verbatim %}
-                                        <td colspan=5 class="right-thick"></td>
-                                        <td v-if="col_remark" class="right-thick"></td>
-                                        <td v-if="col_price" class="right-thick"></td>
-                                        <td v-if="col_allowance" colspan=2 class="right-thick"></td>
-                                        <td colspan=8 class="right-thick"></td>
-                                        <td colspan=4 class="right-thick"></td>
-                                         
-                                        <td class="font-weight-bold cyan-color">{{ date_report.total|currencyCommas }}</td>
-                                        <td></td>
-                                    {% endverbatim %}
-                                </tr>
-                                
                             </template>
                         </tbody>
                         <tfoot>
@@ -90,7 +77,7 @@
                                     <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index), 'lime-color': index==total_expense_list.length-1}">
                                         {{ total|currencyCommas }}
                                     </td>
-                                    <td></td>
+                                    <td v-if="col_edit"></td>
                                 </tr>
                             {% endverbatim %}    
                         </tfoot>
@@ -122,6 +109,11 @@
         window.addEventListener("load", function() {
             expense_page.reload("{{ title }}", "{{ year }}", "{{ month }}", "{{ period }}")
         })
+
+        preventHideMenu('colDropdownMenu')
+        preventHideMenu('customerDropdownMenu')
+        preventHideMenu('remarkDropdownMenu')
+        
     </script>
     
 {% endblock %}
