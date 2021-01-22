@@ -20,7 +20,7 @@ from ..models import Variable
 from ..serializers import WorkOrderSerializer
 from ..serializers import ExpenseSerializer
 from ..serializers import ExpenseThcSerializer
-from ..serializers import ExpenseContainerSerializer
+from ..serializers import ExpenseSummarySerializer
 from ..serializers import ExpenseSummaryDateSerializer
 from ..serializers import TruckSerializer
 from booking.views.utility.functions import set_if_not_none
@@ -97,6 +97,9 @@ def api_get_daily_report(request):
                 driver_id = req['driver']
                 report = report.filter(work_order__driver__employee__pk=driver_id)
 
+            total_price_list = get_total_price_list(report)
+            total_expense_list = get_total_expense_list(report)
+
             expense_serializer = ExpenseSerializer(report, many=True)
             total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
@@ -104,6 +107,9 @@ def api_get_daily_report(request):
                 'driver_list': driver_list,
                 'truck_list': truck_list,
                 'expense_list': expense_serializer.data,
+
+                'total_price_list': total_price_list,
+                'total_expense_list': total_expense_list,
                 'total': total
             }
 
@@ -134,7 +140,7 @@ def api_get_expense_report(request):
                 customer_list = get_customer_options_filter(expense)
 
                 total_price_list = get_total_price_list(expense)
-                total_expense_list = get_total_expense_list(expense)
+                total_expense_list = get_total_expense_list(expense, True)
 
                 driver_list = get_driver_list(expense)
                 truck_list = get_truck_list(expense)
@@ -166,7 +172,7 @@ def api_get_expense_report(request):
                     data['report_list'] = serializer.data
                     data['total_expense_list'] = total_expense_list
                 else:
-                    serializer = ExpenseContainerSerializer(report_page, many=True)
+                    serializer = ExpenseSummarySerializer(report_page, many=True)
                     data['report_list'] = serializer.data
 
             else:
@@ -224,7 +230,7 @@ def api_get_expense_report_by_id_list(request):
             expense_report = order_expense_report(expense_report)
 
             total_price_list = get_total_price_list(expense_report)
-            total_expense_list = get_total_expense_list(expense_report)
+            total_expense_list = get_total_expense_list(expense_report, True)
 
             report_page, page_range = paginate_report(expense_report, page_num)
 
@@ -239,7 +245,7 @@ def api_get_expense_report_by_id_list(request):
                     'page_num': report_page.number
                 }
             else:
-                serializer = ExpenseContainerSerializer(report_page, many=True)
+                serializer = ExpenseSummarySerializer(report_page, many=True)
                 data = {
                     'report_list': serializer.data,
                     'total_price_list': total_price_list,
@@ -264,6 +270,7 @@ def api_filter_expense_report(request):
             work = req['work']
             driver = req['driver']
             truck = req['truck']
+            booking = req['booking']
             customers = req['customers']
             remarks = req['remarks']
 
@@ -273,6 +280,11 @@ def api_filter_expense_report(request):
                 condition = Q(work_order__work_normal__work_id=work) | Q(work_order__work_agent_transport__work_id=work)
                 filtered_report = Expense.objects.filter(condition)
             else:
+                if booking:
+                    condition1 = Q(work_order__work_normal__booking_no=booking) | Q(work_order__work_agent_transport__booking_no=booking)
+                    condition2 = Q(work_order__detail__has_key='booking_2') & Q(work_order__detail__booking_2=booking)        
+                    expense_report = expense_report.filter(condition1 | condition2)
+                    
                 if customers:
                     condition1 = ~Q(work_order__detail__has_key='customer_name') & (Q(work_order__work_normal__principal__name__in=customers) | Q(work_order__work_agent_transport__principal__name__in=customers))
                     condition2 = Q(work_order__detail__has_key='customer_name') & Q(work_order__detail__customer_name__in=customers)
@@ -295,7 +307,7 @@ def api_filter_expense_report(request):
             filtered_pk_list = filtered_report.values_list('pk', flat=True).distinct()
 
             total_price_list = get_total_price_list(filtered_report)
-            total_expense_list = get_total_expense_list(filtered_report)
+            total_expense_list = get_total_expense_list(filtered_report, True)
 
             report_page, page_range = paginate_report(filtered_report, page_num)
 
@@ -312,7 +324,7 @@ def api_filter_expense_report(request):
                     'page_num': report_page.number
                 }
             else:
-                serializer = ExpenseContainerSerializer(report_page, many=True)
+                serializer = ExpenseSummarySerializer(report_page, many=True)
                 data = {
                     'report_list': serializer.data,
                     'total_price_list': total_price_list,
@@ -582,14 +594,12 @@ def get_total_price_list(report_list):
     total_price_list = sum_from_key_list(report_list, price_key)
     return total_price_list
 
-def get_total_expense_list(report_list):
+def get_total_expense_list(report_list, thc=False):
 
-    co_expense_list, co_total = total_co_expense(report_list)
-    # co_total = sum(co_expense_list)
+    co_expense_list, co_total = total_co_expense(report_list, thc)
     co_expense_list.append(co_total)
 
     cus_expense_list, cus_total = total_cus_expense(report_list)
-    # cus_total = sum(cus_expense_list)
     cus_expense_list.append(cus_total)
 
     total_expense_list = co_expense_list + cus_expense_list
@@ -597,19 +607,20 @@ def get_total_expense_list(report_list):
 
     return total_expense_list
 
-def total_co_expense(report_list):
+def total_co_expense(report_list, thc):
     expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
     expense_list = sum_from_key_list(report_list, expense_key)
 
-    try:
-        thc = Variable.objects.get(key='thc').value
-        thc = int(thc)
-    except Variable.DoesNotExist:
-        thc = 0
-    
-    if thc > 0:
-        co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
-        expense_list[4] = co_thc_count * thc
+    if thc:
+        try:
+            thc = Variable.objects.get(key='thc').value
+            thc = int(thc)
+        except Variable.DoesNotExist:
+            thc = 0
+        
+        if thc > 0:
+            co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
+            expense_list[4] = co_thc_count * thc
 
     total = sum(expense_list)
 

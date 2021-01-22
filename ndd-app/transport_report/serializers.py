@@ -37,7 +37,7 @@ class ExpenseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     
-class ExpenseContainerSerializer(serializers.ModelSerializer):
+class ExpenseSummarySerializer(serializers.ModelSerializer):
     work_order = WorkOrderSerializer()
     work_detail = serializers.SerializerMethodField()
 

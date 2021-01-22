@@ -53,6 +53,7 @@ var expense_page = new Vue ({
         modal_warning: false,
         // work id input
         work_id: '',
+        booking: '',
         // driver & truck select
         driver_list: [],
         truck_list: [],
@@ -228,6 +229,7 @@ var expense_page = new Vue ({
                     work: this.work_id.trim(),
                     driver: this.driver_id,
                     truck: this.truck_id,
+                    booking: this.booking
                 }
 
                 if(this.all_customer) {
@@ -274,7 +276,7 @@ var expense_page = new Vue ({
             }     
         },
         checkFilterMode() {
-            if(this.work_id || this.driver_id || this.truck_id || ! this.all_customer || ! this.all_remark) {
+            if(this.work_id || this.driver_id || this.truck_id || this.booking || ! this.all_customer || ! this.all_remark) {
                 this.filter_mode = true
             }
             else {
@@ -283,6 +285,7 @@ var expense_page = new Vue ({
         },
         clearFilter() {
             this.work_id = ''
+            this.booking = ''
 
             this.driver_id = ''
             this.driver_data = {}

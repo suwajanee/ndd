@@ -152,16 +152,20 @@
                         <tr class="tfoot-total-1 table-secondary">
                             <td colspan=23></td>
                         </tr>
-                        <tr class="table-light">
+                        <tr class="wed-color font-weight-bold">
                             {% verbatim %}
                                 <td colspan=5 class="right-thick"></td>
                                 <td v-if="col_remark" class="right-thick"></td>
-                                <td v-if="col_price" class="right-thick"></td>
-                                <td v-if="col_allowance" colspan=2 class="right-thick"></td>
-                                <td colspan=8 class="right-thick"></td>
-                                <td colspan=4 class="right-thick"></td>
-
-                                <td class="font-weight-bold lime-color">{{ total|currencyCommas }}</td>
+                                <td v-if="col_price" class="right-thick blue-color">
+                                    {{ total_price_list[0]|currencyCommas }}
+                                </td>
+                                <template v-if="col_allowance">
+                                    <td class="green-color">{{ total_price_list[1]|currencyCommas }}</td>
+                                    <td class="right-thick green-color">{{ total_price_list[2]|currencyCommas }}</td>
+                                </template>
+                                <td v-for="(total, index) in total_expense_list" :class="{'right-thick': [7, 11].includes(index), 'lime-color': index==total_expense_list.length-1}">
+                                    {{ total|currencyCommas }}
+                                </td>
                                 <td v-if="col_edit"></td>
                             {% endverbatim %}
                         </tr>

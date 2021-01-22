@@ -24,7 +24,9 @@ var daily_report_page = new Vue ({
 
         // Report Data
         expense_list: [],
-        total: 0,
+
+        total_price_list: [],
+        total_expense_list: [],
         // End Report Data
         
     },
@@ -76,7 +78,9 @@ var daily_report_page = new Vue ({
                 this.expense_list = data.expense_list
                 this.driver_list = report_modal.driver_list = data.driver_list
                 report_modal.truck_list = data.truck_list
-                this.total = data.total
+
+                this.total_expense_list = data.total_expense_list
+                this.total_price_list = data.total_price_list
 
                 this.matchDriverReport()
             })
@@ -111,7 +115,9 @@ var daily_report_page = new Vue ({
                 report_modal.truck_list = data.truck_list
                 
                 this.expense_list = data.expense_list
-                this.total = this.calcTotalExpense(this.expense_list)
+
+                this.total_price_list = data.total_price_list
+                this.total_expense_list = data.total_expense_list
 
                 this.loading = false
             })
