@@ -49,8 +49,9 @@ var daily_report_page = new Vue ({
             report_modal.not_bw_trip = not_bw_trip
             
             if(driver) {
-                this.driver_id = report_modal.driver_id = driver
+                this.driver_id = report_modal.driver_id = report_modal.default_driver_id = driver
                 this.getDailyDriverExpense()
+                this.getDefaultDriverTruck()
             }
             else {
                 this.getDailyExpense()
@@ -72,7 +73,6 @@ var daily_report_page = new Vue ({
                     window.location.replace("/dashboard")
                     return false
                 }
-                this.date = data.date
                 this.expense_list = data.expense_list
                 this.driver_list = report_modal.driver_list = data.driver_list
                 report_modal.truck_list = data.truck_list
@@ -91,23 +91,24 @@ var daily_report_page = new Vue ({
             this.loading = false 
         },
         
+        getDefaultDriverTruck() {
+            api("/report/api/get-default-driver-truck/", "POST", {driver_id: this.driver_id}).then((data) => {
+                if(! data) {
+                    this.changeUrl()
+                }
+                this.driver_data = report_modal.driver_data = report_modal.default_driver_data = data.driver
+                report_modal.default_truck = data.truck
+            })
+        },
         getDailyDriverExpense() {
             this.loading = true
-            api("/report/api/get-daily-driver-report/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
+            api("/report/api/get-daily-report/", "POST", {date: this.date, driver: this.driver_id}).then((data) => {
                 if(! data) {
                     window.location.replace("/dashboard")
                     return false
                 }
-                this.driver_data = report_modal.driver_data = data.driver
                 this.driver_list = report_modal.driver_list = data.driver_list
                 report_modal.truck_list = data.truck_list
-
-                var active_driver = this.driver_list.filter(driver => driver.employee.id == this.driver_data.id)
-                if(active_driver.length == 0) {
-                    this.changeUrl()
-                }
-
-                report_modal.default_truck = data.truck
                 
                 this.expense_list = data.expense_list
                 this.total = this.calcTotalExpense(this.expense_list)

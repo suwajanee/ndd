@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import json
 
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.core.paginator import Paginator
 from django.db.models import FloatField
 from django.db.models.functions import Cast
 from django.db.models import Func, F, Value
@@ -50,81 +51,64 @@ def api_get_used_order_type_by_work_id(request):
 
 # Daily Expense & Daily Driver Expense
 @csrf_exempt
-def api_get_daily_report(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":  
-            req = json.loads(request.body.decode('utf-8'))
-            date = req['date']
-            try:
-                date = datetime.strptime(date, '%Y-%m-%d')
-            except:
-                return JsonResponse(False, safe=False)
-
-            report = Expense.objects.filter(work_order__clear_date=date)
-            report = order_expense_report(report)
-            serializer = ExpenseSerializer(report, many=True)
-
-            total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
-
-            driver_list = get_driver_list(report)
-            truck_list = get_truck_list(report)
-            data = {
-                'date': date.date(),
-                'expense_list': serializer.data,
-                'driver_list': driver_list,
-                'truck_list': truck_list,
-                'total': total
-            }
-
-            return JsonResponse(data, safe=False)
-    return JsonResponse('Error', safe=False)
-
-@csrf_exempt
-def api_get_daily_driver_report(request):
+def api_get_default_driver_truck(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
-            date = req['date']
-            driver_id = req['driver']
-            
+            driver_id = req['driver_id']
             try:
-                date = datetime.strptime(date, '%Y-%m-%d')
                 driver = Employee.objects.get(pk=driver_id)
                 driver_serializer = EmployeeSerializer(driver, many=False)
             except:
                 return JsonResponse(False, safe=False)
-
+            
             try:
                 truck = Driver.objects.get(employee=driver).truck
                 truck_serializer = TruckSerializer(truck, many=False)
                 truck_data = truck_serializer.data
-
             except:
                 truck_data = {}
+            
+            data = {
+                'driver': driver_serializer.data,
+                'truck': truck_data
+            }
+            return JsonResponse(data, safe=False)
+    return JsonResponse(False, safe=False)
 
-            # report = Expense.objects.filter(Q(work_order__clear_date=date) & Q(work_order__driver__employee=driver)).order_by('work_order__work_date', 'pk')
+@csrf_exempt
+def api_get_daily_report(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            date = req['date']
+            try:
+                date = datetime.strptime(date, '%Y-%m-%d')
+            except:
+                return JsonResponse(False, safe=False)
+            
             report = Expense.objects.filter(work_order__clear_date=date)
+            report = order_expense_report(report)
+
             driver_list = get_driver_list(report)
             truck_list = get_truck_list(report)
 
-            report = report.filter(work_order__driver__employee=driver).order_by('work_order__work_date', 'pk')
+            if 'driver' in req:
+                driver_id = req['driver']
+                report = report.filter(work_order__driver__employee__pk=driver_id)
 
-            serializer = ExpenseSerializer(report, many=True)
-
+            expense_serializer = ExpenseSerializer(report, many=True)
             total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             data = {
-                'driver': driver_serializer.data,
-                'truck': truck_data,
-                'expense_list': serializer.data,
                 'driver_list': driver_list,
                 'truck_list': truck_list,
+                'expense_list': expense_serializer.data,
                 'total': total
             }
 
             return JsonResponse(data, safe=False)
-    return JsonResponse('Error', safe=False)
-
+    return JsonResponse(False, safe=False)
 
 # Expense page & Filter
 @csrf_exempt
@@ -132,7 +116,8 @@ def api_get_expense_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
-            page = req['page']
+            page_num = req['page_num']
+            page_name = req['page_name']
             year = int(req['year'])
             month = int(req['month'])
             period = int(req['period'])
@@ -142,8 +127,6 @@ def api_get_expense_report(request):
             if from_date <= to_date:
                 expense = Expense.objects.filter(Q(work_order__clear_date__gte=from_date) & Q(work_order__clear_date__lte=to_date))
                 expense = order_expense_report(expense)
-
-                date_list = get_values_list(expense, 'work_order__clear_date')
                 
                 pk_list = expense.values_list('pk', flat=True).distinct()
 
@@ -156,9 +139,14 @@ def api_get_expense_report(request):
                 driver_list = get_driver_list(expense)
                 truck_list = get_truck_list(expense)
 
+                report_page, page_range = paginate_report(expense, page_num)
+
                 data = {
                     'from_date': from_date,
                     'to_date': to_date,
+
+                    'page_range': page_range,
+                    'page_num': report_page.number,
 
                     'period': period_num,
 
@@ -173,14 +161,12 @@ def api_get_expense_report(request):
                     'total_price_list': total_price_list,
                 }
 
-                if page == 'expense':
-                    serializer = ExpenseThcSerializer(expense, many=True)
+                if page_name == 'expense':
+                    serializer = ExpenseThcSerializer(report_page, many=True)
                     data['report_list'] = serializer.data
-
-                    data['date_list'] = date_list
                     data['total_expense_list'] = total_expense_list
                 else:
-                    serializer = ExpenseContainerSerializer(expense, many=True)
+                    serializer = ExpenseContainerSerializer(report_page, many=True)
                     data['report_list'] = serializer.data
 
             else:
@@ -191,9 +177,11 @@ def api_get_expense_report(request):
                     'from_date': None,
                     'to_date': None,
 
+                    'page_range': [],
+                    'page_num': 0,
+
                     'period': 0,
                     'report_list': [],
-                    'date_list': [],
                     'pk_list': [],
 
                     'driver_list': driver_list,
@@ -209,13 +197,69 @@ def api_get_expense_report(request):
             return JsonResponse(data, safe=False)
     return JsonResponse('Error', safe=False)
 
+def paginate_report(report, page_num):
+    try:
+        row_limit = Variable.objects.get(key='row_limit').value
+    except:
+        row_limit = 150
+    paginator = Paginator(report, row_limit)
+    try:
+        report_page = paginator.page(page_num)
+    except:
+        report_page = paginator.page(paginator.num_pages)
+    
+    return report_page, list(paginator.page_range)
+
+@csrf_exempt
+def api_get_expense_report_by_id_list(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+
+            page_name = req['page_name']
+            page_num = req['page_num']
+            pk_list = req['pk_list']
+
+            expense_report = Expense.objects.filter(pk__in=pk_list)
+            expense_report = order_expense_report(expense_report)
+
+            total_price_list = get_total_price_list(expense_report)
+            total_expense_list = get_total_expense_list(expense_report)
+
+            report_page, page_range = paginate_report(expense_report, page_num)
+
+            if page_name == 'expense':
+                serializer = ExpenseThcSerializer(report_page, many=True)
+                data = {
+                    'report_list': serializer.data,
+                    'total_price_list': total_price_list,
+                    'total_expense_list': total_expense_list,
+
+                    'page_range': page_range,
+                    'page_num': report_page.number
+                }
+            else:
+                serializer = ExpenseContainerSerializer(report_page, many=True)
+                data = {
+                    'report_list': serializer.data,
+                    'total_price_list': total_price_list,
+
+                    'page_range': page_range,
+                    'page_num': report_page.number
+                }
+
+            return JsonResponse(data, safe=False)
+    return JsonResponse('Error', safe=False)
+
+
 @csrf_exempt
 def api_filter_expense_report(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             req = json.loads(request.body.decode('utf-8'))
             
-            page = req['page']
+            page_name = req['page_name']
+            page_num = req['page_num']
             pk_list = req['pk_list']
             work = req['work']
             driver = req['driver']
@@ -247,27 +291,35 @@ def api_filter_expense_report(request):
 
                 filtered_report = expense_report.filter(**filter_dict)
 
-            date_list = get_values_list(filtered_report, 'work_order__clear_date')
-
             filtered_report = order_expense_report(filtered_report)
+            filtered_pk_list = filtered_report.values_list('pk', flat=True).distinct()
 
             total_price_list = get_total_price_list(filtered_report)
             total_expense_list = get_total_expense_list(filtered_report)
 
-            if page == 'expense':
-                serializer = ExpenseThcSerializer(filtered_report, many=True)
+            report_page, page_range = paginate_report(filtered_report, page_num)
+
+            if page_name == 'expense':
+                serializer = ExpenseThcSerializer(report_page, many=True)
                 data = {
                     'report_list': serializer.data,
                     'total_price_list': total_price_list,
 
-                    'date_list': date_list,
-                    'total_expense_list': total_expense_list
+                    'total_expense_list': total_expense_list,
+                    'pk_list': list(filtered_pk_list),
+
+                    'page_range': page_range,
+                    'page_num': report_page.number
                 }
             else:
-                serializer = ExpenseContainerSerializer(filtered_report, many=True)
+                serializer = ExpenseContainerSerializer(report_page, many=True)
                 data = {
                     'report_list': serializer.data,
-                    'total_price_list': total_price_list
+                    'total_price_list': total_price_list,
+                    'pk_list': list(filtered_pk_list),
+
+                    'page_range': page_range,
+                    'page_num': report_page.number
                 }
 
             return JsonResponse(data, safe=False)
@@ -531,28 +583,7 @@ def get_total_price_list(report_list):
     return total_price_list
 
 def get_total_expense_list(report_list):
-    # co_expense_key = ['co_expense__co_toll', 'co_expense__co_gate', 'co_expense__co_tire', 'co_expense__co_fine', 'co_expense__co_thc', 'co_expense__co_service', 'co_expense__co_other']
-    # cus_expense_key = ['cus_expense__cus_return', 'cus_expense__cus_gate', 'cus_expense__cus_other']
 
-    # co_expense_list = sum_from_key_list(report_list, co_expense_key)
-    
-    # try:
-    #     thc = Variable.objects.get(key='thc').value
-    #     thc = int(thc)
-    # except Variable.DoesNotExist:
-    #     thc = 0
-    # co_thc_count = report_list.filter(co_expense__has_key='co_thc').count()
-    # co_expense_list[4] = co_thc_count * thc
-
-    # co_total = sum(co_expense_list)
-    # co_expense_list.append(co_total)
-
-    # cus_expense_list = sum_from_key_list(report_list, cus_expense_key)
-    # cus_total = sum(cus_expense_list)
-    # cus_expense_list.append(cus_total)
-
-    # total_expense_list = co_expense_list + cus_expense_list
-    # total_expense_list.append(co_total + cus_total)
     co_expense_list, co_total = total_co_expense(report_list)
     # co_total = sum(co_expense_list)
     co_expense_list.append(co_total)

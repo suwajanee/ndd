@@ -1,7 +1,7 @@
 var yearly_report_page = new Vue ({
     el: '#yearly-report-page',
     data: {
-        page: '',
+        page_name: '',
 
         year: '',
         year_list: [],
@@ -11,8 +11,8 @@ var yearly_report_page = new Vue ({
         date_list: [],
     },
     methods: {
-        reload(page, year) {
-            this.page = page
+        reload(page_name, year) {
+            this.page_name = page_name
             this.year = year
 
             this.month_list = _month
@@ -21,11 +21,11 @@ var yearly_report_page = new Vue ({
             this.getSummaryDate(year)
         },
         changeYear() {
-            var url = `/report/${this.page}/${this.year}/`
+            var url = `/report/${this.page_name}/${this.year}/`
             window.open(url, "_self")
         },
         selectDate(month, period) {
-            var url =`/report/${this.page}/${this.year}/${month}`
+            var url =`/report/${this.page_name}/${this.year}/${month}`
             if(period > 0) {
                 url += "/" + period
             }

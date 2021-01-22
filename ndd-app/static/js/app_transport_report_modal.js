@@ -34,6 +34,8 @@ var report_modal = new Vue ({
         truck_list: [],
         // default
         driver_data: {},
+        default_driver_id: '',
+        default_driver_data: {},
         default_truck: {},
         // selected data
         work_driver_data: {},
@@ -134,12 +136,12 @@ var report_modal = new Vue ({
                 this.modal_type = ''
                 this.report_work_id = ''
 
-                this.work_driver_data = this.driver_data || {}
+                this.work_driver_data = this.default_driver_data || {}
                 this.work_truck_data = this.default_truck || {}
 
                 this.report_order = {
                     clear_date: this.date,
-                    driver: this.driver_id || '',
+                    driver: this.default_driver_id || '',
                     truck: this.default_truck.id || '',
                     order_type: null,
                     double_container: false,
@@ -247,8 +249,8 @@ var report_modal = new Vue ({
         },
 
         selectDriver(driver) {
-            this.report_order.driver = driver.employee.id
-            this.work_driver_data = driver.employee
+            this.report_order.driver = this.default_driver_id = driver.employee.id
+            this.work_driver_data = this.default_driver_data = driver.employee          
 
             if(driver.truck) {
                 this.report_order.truck = driver.truck.id
@@ -262,6 +264,7 @@ var report_modal = new Vue ({
         selectTruck(truck) {
             this.report_order.truck = truck.id
             this.work_truck_data = truck
+            this.default_truck = truck
         },
 
         // เช็ค String Format (Expense)
@@ -360,7 +363,7 @@ var report_modal = new Vue ({
                 }
             }
             else {
-                expense_page.filterReport()
+                expense_page.getReportByIdList(expense_page.page_num)
             }
         }
     }
