@@ -135,12 +135,13 @@ const hide_note = () => {
 }
 
 // Remove unused key in object
-const remove_empty_key = (obj) => {
-    // Object.keys(obj).forEach(key => ! obj[key] && delete obj[key])
-
+const setObjectArray = (obj, number=false) => {
     Object.keys(obj).forEach(key => {
-        if(obj[key]) {
+        if (obj[key]) {
             obj[key] = obj[key].trim()
+            if (number) {
+                obj[key] = obj[key].replace(',', '')
+            }
         }
         else {
             delete obj[key]
@@ -148,7 +149,6 @@ const remove_empty_key = (obj) => {
     })
 
     return obj
-
 }
 
 const diff_months = (dt1, dt2) => {

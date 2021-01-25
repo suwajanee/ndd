@@ -270,6 +270,7 @@ var report_modal = new Vue ({
         // เช็ค String Format (Expense)
         checkExpenseFormat(str, index) {
             try {
+                str = str.replace(',', '')
                 eval(str)
                 this.$set(this.expense_format_status, index, true)
             }
@@ -281,6 +282,7 @@ var report_modal = new Vue ({
         // ใช้ใน HTML
         sumString(str) {
             try {
+                str = str.replace(',', '')
                 return eval(str)
             }
             catch {
@@ -307,10 +309,10 @@ var report_modal = new Vue ({
                     this.report_detail.container_2 = ''
                     this.report_detail.booking_2 = ''
                 }
-                remove_empty_key(this.report_detail)
-                remove_empty_key(this.report_price)
-                remove_empty_key(this.report_co_expense)
-                remove_empty_key(this.report_cus_expense)
+                setObjectArray(this.report_detail)
+                setObjectArray(this.report_price, true)
+                setObjectArray(this.report_co_expense, true)
+                setObjectArray(this.report_cus_expense, true)
 
                 
                 co_total = this.totalExpense(this.report_co_expense),
