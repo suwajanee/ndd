@@ -134,6 +134,31 @@ const hide_note = () => {
     }, false)
 }
 
+// Copy to Clipboard
+const copyToClipboard = (text) => {
+    if(window.clipboardData && window.clipboardData.setData) {
+        return clipboardData.setData("Test", text)
+    }
+    else if(document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea")
+        textarea.textContent = text
+        textarea.style.position = "fixed" // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea)
+        textarea.select()
+        try {
+            return document.execCommand("copy")
+        } catch(ex) {
+            console.warn("Copy to clipboard failed.", ex)
+            alert("Copy failed")
+            return false
+        } finally {
+            document.body.removeChild(textarea)
+            alert("Copied")
+        }
+
+    }
+}
+
 // Remove unused key in object
 const setObjectArray = (obj, number=false) => {
     Object.keys(obj).forEach(key => {

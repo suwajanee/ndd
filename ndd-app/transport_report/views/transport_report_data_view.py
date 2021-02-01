@@ -460,7 +460,7 @@ def api_get_total_truck(request):
                 truck_list = get_truck_list(expense)
                 try:
                     thc = Variable.objects.get(key='thc').value
-                    thc = int(thc)
+                    thc = float(thc)
                 except Variable.DoesNotExist:
                     thc = 0
 
@@ -475,13 +475,14 @@ def api_get_total_truck(request):
                     allowance_list.append(total_price[1] + total_price[2])
 
                     total_co_expense = truck_expense.aggregate(total_co_expense=Sum('co_total'))['total_co_expense'] or 0
-
+                    total_co_expense = float(total_co_expense)
                     if thc > 0:
                         total_thc = sum_from_key_list(truck_expense, ['co_expense__co_thc'])[0]
                         thc_count = truck_expense.filter(co_expense__has_key='co_thc').count()
+
                         total_co_expense += (thc_count * thc) - total_thc
                     
-                    co_expense_list.append(float(total_co_expense))
+                    co_expense_list.append(total_co_expense)
                 
                 data = {
                     'from_date': from_date,
