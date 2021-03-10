@@ -51,6 +51,7 @@ urlpatterns = [
 
     # Edit
     url(r'api/edit-expense-report/$', transport_report_edit_view.api_edit_expense_report, name='api-edit-expense-report'),
+    url(r'api/edit-price-list/$', transport_report_edit_view.api_edit_price_list, name='api-edit-price-list'),
 
     # Delete
     url(r'api/delete-expense-report/$', transport_report_delete_view.api_delete_expense_report, name='api-delete-expense-report'),

@@ -6,15 +6,15 @@
         <th rowspan=2 class="align-middle">เลขที่ใบงาน</th>
         <th rowspan=2 class="align-middle right-thick">ชื่อลูกค้า</th>
 
-        <th v-if="col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
-        <th v-if="col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
-        <th v-if="col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
+        <th v-if="edit_table || col_remark" rowspan=2 class="align-middle right-thick">Remark</th>
+        <th v-if="edit_table || col_price" rowspan=2 class="align-middle right-thick">ราคา</th>
+        <th v-if="edit_table || col_allowance" rowspan=2 colspan=2 class="align-middle right-thick">เบี้ยเลี้ยง/ค้างคืน</th>
 
         <th colspan=8 class="align-middle right-thick">ค่าใช้จ่ายของบริษัท</th>
         <th colspan=4 class="align-middle right-thick">สำรองจ่ายแทนลูกค้า</th>
 
         <th rowspan=2 class="align-middle">รวมค่าใช้จ่าย</th>
-        <th v-if="col_edit" rowspan=2 class="align-middle">Edit</th>
+        <th v-if="! edit_table && col_edit" rowspan=2 class="align-middle">Edit</th>
     </tr>
     <tr class="second-header">
         <th class="align-middle">ทางด่วน</th>

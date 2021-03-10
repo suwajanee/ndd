@@ -97,20 +97,19 @@ def api_get_daily_report(request):
                 driver_id = req['driver']
                 report = report.filter(work_order__driver__employee__pk=driver_id)
 
-            total_price_list = get_total_price_list(report)
+            customer_list = get_customer_options_filter(report)
+
             total_expense_list = get_total_expense_list(report)
 
             expense_serializer = ExpenseSerializer(report, many=True)
-            total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             data = {
                 'driver_list': driver_list,
                 'truck_list': truck_list,
                 'expense_list': expense_serializer.data,
 
-                'total_price_list': total_price_list,
+                'customer_list': customer_list,
                 'total_expense_list': total_expense_list,
-                'total': total
             }
 
             return JsonResponse(data, safe=False)
@@ -596,7 +595,6 @@ def get_total_price_list(report_list):
     return total_price_list
 
 def get_total_expense_list(report_list, thc=False):
-
     co_expense_list, co_total = total_co_expense(report_list, thc)
     co_expense_list.append(co_total)
 
@@ -605,7 +603,6 @@ def get_total_expense_list(report_list, thc=False):
 
     total_expense_list = co_expense_list + cus_expense_list
     total_expense_list.append(co_total + cus_total)
-
     return total_expense_list
 
 def total_co_expense(report_list, thc):

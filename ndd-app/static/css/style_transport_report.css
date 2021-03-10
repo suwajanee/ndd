@@ -1,47 +1,3 @@
-/* Switch Input */
-.switch-field {
-    overflow: hidden;
-}
-.switch-field input {
-    height: 0px;
-    width: 0px;
-    border: 0;
-    overflow: hidden;
-}
-.switch-field label {
-    float: left;
-    margin: 0;
-} 
-.switch-field label {
-    display: inline-block;
-    width: 100px;
-    color: rgba(0, 0, 0, 0.4);
-    font-size: 14px;
-    text-align: center;
-    padding: 7px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-.switch-field label:hover {
-    cursor: pointer;
-}
-.switch-field input:checked + label {
-    /* background-color: #E9ECEF; */
-    background-color: rgba(0, 0, 0, 0.2);
-    /* color: rgba(0, 0, 0, 0.6); */
-    color: black;
-    font-weight: 500;
-    box-shadow: none;
-}
-
-.switch-field label:first-of-type {
-    border-radius: 4px 0 0 4px;
-}
-.switch-field label:last-of-type {
-    border-radius: 0 4px 4px 0;
-}
-/* End Switch Input */
-
-
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
@@ -215,16 +171,9 @@ ul.multiselect-container {
     max-height: 50vh;
     overflow-y: auto;
 }
-button.multi-select {
-    /* border: 1px solid lightgray;
-    background: white; */
-    /* height: 40px; */
+button.left-radius-0 {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    /* max-width: 160px; */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    white-space: nowrap;
 }
 /* End Multiselect */
 
@@ -293,16 +242,11 @@ button.multi-select {
 .lime-color:not([disabled]), td.lime-color {
     background-color: Lime !important;
 }
-/* td.green-color, .table-hover .green-color:hover {
-    background-color: #f2ffe6 !important;
-} */
+
 .green-color, td.green-color {
     background-color: #f2ffe6 !important;
 }
-/* td.blue-color, .table-hover .blue-color:hover {
-    background-color: #e6f2ff !important;
-} */
-td.blue-color, td.blue-color {
+.blue-color, td.blue-color {
     background-color: #e6f2ff !important;
 }
 

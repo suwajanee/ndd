@@ -40,17 +40,17 @@ const keyDownArrow = (field, index) => {
         }
     }
     else if(event.key == 'ArrowRight') {
-        event.preventDefault()
         try {
             document.getElementById(right + '-' + index).focus()
+            event.preventDefault()
         }
         catch(err){
         }
     }
     else if(event.key == 'ArrowLeft') {
-        event.preventDefault()
         try {
             document.getElementById(left + '-' + index).focus()
+            event.preventDefault()
         }
         catch(err){
         }
@@ -84,17 +84,31 @@ const sumStringArray = (arr) => {
     return
 }
 
+const sumString = (str) => {
+    try {
+        str = str.replace(',', '')
+        return eval(str)
+    }
+    catch {
+        return 0
+    }
+}
+
 // รวม Object Array ที่ obj[key1] หรือ obj[key1][key2]
 const sumObjectArray = (arr, key1, key2) => {
     if(arr){
-        return arr.reduce(function (total, value) {
-            value = eval(value[key1])
+        return arr.reduce((total, value) => {
             if(key2) {
-                value = eval(value[key2])
+                value = eval(value[key1][key2])
             }
+            else {
+                value = eval(value[key1])
+            }
+
             if(! value) {
                 value = 0
             }
+
             return total + value
         }, 0)
     }
@@ -172,7 +186,6 @@ const setObjectArray = (obj, number=false) => {
             delete obj[key]
         }
     })
-
     return obj
 }
 
@@ -199,6 +212,30 @@ const preventHideMenu = (id) => {
         })
     }
 }
+
+// Multiselect
+const multiSelectAllGB = (a, input) => {
+    if(a['all_' + input]) {
+        a[input + '_selected'] = a[input + '_list']
+    }
+    else {
+        a[input + '_selected'] = []
+    }
+}
+const multiSelectCheckGB = (a, input) => {
+    if(a[input + '_selected'].length == a[input + '_list'].length) {
+        a['all_' + input] = true
+    }
+    else {
+        a['all_' + input] = false
+    }
+}
+
+// Clone Object (array) without ref
+const cloneObject = (obj) => {
+    return JSON.parse(JSON.stringify(obj))
+}
+
 
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',

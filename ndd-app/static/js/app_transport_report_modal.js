@@ -279,17 +279,6 @@ var report_modal = new Vue ({
             }
         },
 
-        // ใช้ใน HTML
-        sumString(str) {
-            try {
-                str = str.replace(',', '')
-                return eval(str)
-            }
-            catch {
-                return 0
-            }
-        },
-
         totalExpense(obj) {
             var array = Object.values(obj)
             return sumStringArray(array)
@@ -304,11 +293,11 @@ var report_modal = new Vue ({
                 this.modal_warning = true
             }
             else {
-
                 if(! this.report_order.double_container) {
                     this.report_detail.container_2 = ''
                     this.report_detail.booking_2 = ''
                 }
+                
                 setObjectArray(this.report_detail)
                 setObjectArray(this.report_price, true)
                 setObjectArray(this.report_co_expense, true)

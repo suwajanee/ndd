@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import decimal
 from datetime import datetime
 import json
 
@@ -11,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import WorkOrder
 from ..models import Expense
 from ..models import ExpenseSummaryDate
+from ..serializers import WorkOrderSerializer
 from agent_transport.models import AgentTransport
 from booking.models import Booking
 from employee.models import Driver
@@ -62,4 +62,27 @@ def api_edit_expense_report(request):
             expense.save()
 
             return JsonResponse('Success', safe=False)
+    return JsonResponse('Error', safe=False)
+
+@csrf_exempt
+def api_edit_price_list(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            req = json.loads(request.body.decode('utf-8'))
+            work_order_id_list = req['work_id_list']
+            work_order_data_list = req['work_data_list']
+
+            work_order_list = WorkOrder.objects.filter(pk__in=work_order_id_list)
+
+            saved_list = []
+            for data in work_order_data_list:
+                work = work_order_list.get(pk=data['id'])
+                work.price = data['price']
+                work.detail = data['detail']
+                work.save()
+
+                serializer = WorkOrderSerializer(work, many=False)
+                saved_list.append(serializer.data)
+
+            return JsonResponse(saved_list, safe=False)
     return JsonResponse('Error', safe=False)

@@ -3,6 +3,7 @@ var expense_page = new Vue ({
     el: '#expense-page',
     data: {
         loading: false,
+        edit_table: false,
         
         // Initial
         page_range: [],
@@ -23,7 +24,7 @@ var expense_page = new Vue ({
         full_month_list: [],
         period_num: [],
 
-        col_price: false,
+        col_price: true,
         col_allowance: true,
         col_remark: true,
         col_edit: false,
