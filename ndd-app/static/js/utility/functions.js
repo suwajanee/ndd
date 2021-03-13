@@ -214,20 +214,20 @@ const preventHideMenu = (id) => {
 }
 
 // Multiselect
-const multiSelectAllGB = (a, input) => {
-    if(a['all_' + input]) {
-        a[input + '_selected'] = a[input + '_list']
+const multiSelectAll = (app, input) => {
+    if(app['all_' + input]) {
+        app[input + '_selected'] = app[input + '_list']
     }
     else {
-        a[input + '_selected'] = []
+        app[input + '_selected'] = []
     }
 }
-const multiSelectCheckGB = (a, input) => {
-    if(a[input + '_selected'].length == a[input + '_list'].length) {
-        a['all_' + input] = true
+const multiSelectCheck = (app, input) => {
+    if(app[input + '_selected'].length == app[input + '_list'].length) {
+        app['all_' + input] = true
     }
     else {
-        a['all_' + input] = false
+        app['all_' + input] = false
     }
 }
 

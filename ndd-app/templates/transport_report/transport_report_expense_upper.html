@@ -52,7 +52,7 @@
                 </template>
                 
                 <button v-if="page_num > 3" class="btn btn-light p-1 disabled">...</button>
-                <button v-for="page in setPageRange()" @click="getReportByIdList(page)" class="btn btn-light py-1" :class="{'active': page_num == page}">{{ page }}</button>
+                <button v-for="page in setPageRange" @click="getReportByIdList(page)" class="btn btn-light py-1" :class="{'active': page_num == page}">{{ page }}</button>
 
                 <button v-if="page_num + 3 <= page_range.length" class="btn btn-light p-1 disabled">...</button>
 

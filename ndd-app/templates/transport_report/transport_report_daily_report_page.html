@@ -246,13 +246,13 @@
                                 <ul id="customerDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
                                     <li>
                                         <label class="checkbox mb-0">
-                                            <input type="checkbox" v-model="all_customer" @change="multiSelectAllGB(daily_report_page, 'customer')"> Select all ( {{ customer_list.length }} )
+                                            <input type="checkbox" v-model="all_customer" @change="multiSelectAll(daily_report_page, 'customer')"> Select all ( {{ customer_list.length }} )
                                         </label>
                                     </li>
                                     <hr class="my-2">
                                     <li v-for="customer in customer_list">
                                         <label class="checkbox">
-                                            <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheckGB(daily_report_page, 'customer')"> {{ customer }}
+                                            <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck(daily_report_page, 'customer')"> {{ customer }}
                                         </label>
                                     </li>
                                 </ul>

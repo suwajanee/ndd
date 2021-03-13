@@ -648,7 +648,8 @@ def get_customer_options_filter(report):
     normal_customer_options = get_values_list(customer, 'work_order__work_normal__principal__name')
     agent_customer_options = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
 
-    customer_options = sorted(detail_customer_options + normal_customer_options + agent_customer_options)
+    customer_list = list(set(detail_customer_options + normal_customer_options + agent_customer_options))
+    customer_options = sorted(customer_list)
 
     return customer_options
 

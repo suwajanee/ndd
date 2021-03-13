@@ -61,7 +61,9 @@ def api_edit_expense_report(request):
 
             expense.save()
 
-            return JsonResponse('Success', safe=False)
+            serializer = WorkOrderSerializer(work_order, many=False)
+
+            return JsonResponse(serializer.data, safe=False)
     return JsonResponse('Error', safe=False)
 
 @csrf_exempt

@@ -322,9 +322,9 @@ var report_modal = new Vue ({
                 var url = `/report/api/${action}-expense-report/`
 
                 api(url, "POST", work_data).then((data) => {
-                    if(data=='Success') {
+                    if(data) {
+                        this.pageReload(data)
                         $('#modalExpenseReport').modal('hide')
-                        this.pageReload()
                     }
                 }).catch((error) => {
                     alert('Save again')
@@ -337,14 +337,14 @@ var report_modal = new Vue ({
             if(confirm('Are you sure?')) {
                 api("/report/api/delete-expense-report/", "POST", {id: id}).then((data) => {
                     if(data=='Success') {
-                        $('#modalExpenseReport').modal('hide');
                         this.pageReload()
+                        $('#modalExpenseReport').modal('hide')
                     }
                 })
             }
         },
 
-        pageReload() {
+        pageReload(edited_data) {
             if(this.daily_page) {
                 if(this.driver_id) {
                     daily_report_page.getDailyDriverExpense()
@@ -354,6 +354,9 @@ var report_modal = new Vue ({
                 }
             }
             else {
+                if(edited_data) {
+                    expense_page.addOptionFilter(edited_data)
+                }
                 expense_page.getReportByIdList(expense_page.page_num)
             }
         }
