@@ -94,8 +94,10 @@ class ExpenseThcSerializer(serializers.ModelSerializer):
         thc = 0
 
     def get_co_total(self, obj, thc=thc):
+        co_total = float(obj.co_total)
         if 'co_thc' in obj.co_expense:
-            return obj.co_total - eval(obj.co_expense['co_thc']) + thc
+            co_thc = float(obj.co_expense['co_thc'])
+            return co_total - co_thc + thc
         return obj.co_total
     
     def get_thc_rate(self, obj, thc=thc):

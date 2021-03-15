@@ -101,13 +101,13 @@
                         <ul id="customerDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
                             <li>
                                 <label class="checkbox mb-0">
-                                    <input type="checkbox" v-model="all_customer" @change="multiSelectAll('customer')"> Select all ( {{ customer_list.length }} )
+                                    <input type="checkbox" v-model="all_customer" @change="multiSelectAll(expense_page, 'customer')"> Select all ( {{ customer_list.length }} )
                                 </label>
                             </li>
                             <hr class="my-2">
                             <li v-for="customer in customer_list">
                                 <label class="checkbox">
-                                    <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck('customer')"> {{ customer }}
+                                    <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck(expense_page, 'customer')"> {{ customer }}
                                 </label>
                             </li>
                         </ul>
@@ -134,13 +134,13 @@
                         <ul id="remarkDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
                             <li>
                                 <label class="checkbox mb-0">
-                                    <input type="checkbox" v-model="all_remark" @change="multiSelectAll('remark')"> Select all ( {{ remark_list.length }} )
+                                    <input type="checkbox" v-model="all_remark" @change="multiSelectAll(expense_page, 'remark')"> Select all ( {{ remark_list.length }} )
                                 </label>
                             </li>
                             <hr class="my-2">
                             <li v-for="remark in remark_list">
                                 <label class="checkbox">
-                                    <input type="checkbox" v-model="remark_selected" :value="remark" @change="multiSelectCheck('remark')"> {{ remark }}
+                                    <input type="checkbox" v-model="remark_selected" :value="remark" @change="multiSelectCheck(expense_page, 'remark')"> {{ remark }}
                                 </label>
                             </li>
                         </ul>
@@ -150,7 +150,7 @@
 
                 <div class="modal-footer px-5">
                     <button class="btn btn-outline-danger float-left mr-auto" @click="clearFilter">Clear</button>
-                    <button class="btn btn-primary" @click="filterReport(true)">OK</button>
+                    <button class="btn btn-primary" @click="filterReport">OK</button>
                 </div>
             </div>
         </div>

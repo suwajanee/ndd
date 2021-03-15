@@ -9,7 +9,7 @@
         {{ report.work_order.work.work_id }}
         <template v-if="report.work_order.order_type"> / {{ report.work_order.full_order }}</template>
     </td>
-    <td class="right-thick" style="max-width: 160px;">
+    <td class="right-thick" style="min-width: 160px;">
         <template v-if="report.work_order.detail.customer_name">
             {{ report.work_order.detail.customer_name }}
         </template>
@@ -18,17 +18,52 @@
         </template>
     </td>
 
-    <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
-        {{ report.work_order.detail.remark }}
-    </td>
+    <template v-if="edit_table">
+        <td class="right-thick">
+            <input
+                class="form-control p-1" style="min-width: 160px;" v-model="report.work_order.detail.remark"
+                :id="'1-' + index" @keydown="keyDownArrow(1, index)" @change="pushEditList(report.work_order)"
+            >
+        </td>
+        <td class="right-thick blue-color">
+            <small>{{ sumString(report.work_order.price.work)|currencyCommas }}</small>
+            <input
+                class="form-control p-1" style="min-width: 80px;" v-model="report.work_order.price.work"
+                :class="{'yellow-color text-danger': ! report.work_order.price_status[0] }"
+                :id="'2-' + index" @keydown="keyDownArrow(2, index)" @change="pushEditList(report.work_order, 0)"
+            >
+        </td>
 
-    <td v-if="col_price" class="right-thick blue-color">
-        {{ eval(report.work_order.price.work)|currencyCommas }}
-    </td>
+        <td class="green-color">
+            <small>{{ sumString(report.work_order.price.allowance)|currencyCommas }}</small>
+            <input
+                class="form-control p-1" style="min-width: 80px;" v-model="report.work_order.price.allowance"
+                :class="{'yellow-color text-danger': ! report.work_order.price_status[1] }"
+                :id="'3-' + index" @keydown="keyDownArrow(3, index)" @change="pushEditList(report.work_order, 1)"
+            >
+        </td>
+        <td class="right-thick green-color">
+            <small>{{ sumString(report.work_order.price.overnight)|currencyCommas }}</small>
+            <input
+                class="form-control p-1" style="min-width: 80px;" v-model="report.work_order.price.overnight"
+                :class="{'yellow-color text-danger': ! report.work_order.price_status[2] }"
+                :id="'4-' + index" @keydown="keyDownArrow(4, index)" @change="pushEditList(report.work_order, 2)"
+            >
+        </td>
+    </template>
+    <template v-else>
+        <td v-if="col_remark" class="right-thick" style="max-width: 160px;">
+            {{ report.work_order.detail.remark }}
+        </td>
 
-    <template v-if="col_allowance">
-        <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
-        <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+        <td v-if="col_price" class="right-thick blue-color">
+            {{ eval(report.work_order.price.work)|currencyCommas }}
+        </td>
+
+        <template v-if="col_allowance">
+            <td class="green-color">{{ eval(report.work_order.price.allowance)|currencyCommas }}</td>
+            <td class="right-thick green-color">{{ eval(report.work_order.price.overnight)|currencyCommas }}</td>
+        </template>
     </template>
 
     <td @mousedown="show_note" @mouseup="hide_note" class="position-relative">      
@@ -140,7 +175,7 @@
 
     <td class="font-weight-bold right-thick">{{ report.cus_total|currencyCommas }}</td>
     <td class="font-weight-bold">{{ eval(report.co_total) + eval(report.cus_total)|currencyCommas }}</td>
-    <td v-if="col_edit">
+    <td v-if="col_edit && ! edit_table">
         <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport(report)"><i class="fa fa-pen"></i></button>
     </td>
     

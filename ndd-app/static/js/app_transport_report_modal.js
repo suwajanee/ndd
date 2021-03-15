@@ -279,17 +279,6 @@ var report_modal = new Vue ({
             }
         },
 
-        // ใช้ใน HTML
-        sumString(str) {
-            try {
-                str = str.replace(',', '')
-                return eval(str)
-            }
-            catch {
-                return 0
-            }
-        },
-
         totalExpense(obj) {
             var array = Object.values(obj)
             return sumStringArray(array)
@@ -304,11 +293,11 @@ var report_modal = new Vue ({
                 this.modal_warning = true
             }
             else {
-
                 if(! this.report_order.double_container) {
                     this.report_detail.container_2 = ''
                     this.report_detail.booking_2 = ''
                 }
+                
                 setObjectArray(this.report_detail)
                 setObjectArray(this.report_price, true)
                 setObjectArray(this.report_co_expense, true)
@@ -333,9 +322,9 @@ var report_modal = new Vue ({
                 var url = `/report/api/${action}-expense-report/`
 
                 api(url, "POST", work_data).then((data) => {
-                    if(data=='Success') {
+                    if(data) {
+                        this.pageReload(data)
                         $('#modalExpenseReport').modal('hide')
-                        this.pageReload()
                     }
                 }).catch((error) => {
                     alert('Save again')
@@ -348,14 +337,14 @@ var report_modal = new Vue ({
             if(confirm('Are you sure?')) {
                 api("/report/api/delete-expense-report/", "POST", {id: id}).then((data) => {
                     if(data=='Success') {
-                        $('#modalExpenseReport').modal('hide');
                         this.pageReload()
+                        $('#modalExpenseReport').modal('hide')
                     }
                 })
             }
         },
 
-        pageReload() {
+        pageReload(edited_data) {
             if(this.daily_page) {
                 if(this.driver_id) {
                     daily_report_page.getDailyDriverExpense()
@@ -365,6 +354,9 @@ var report_modal = new Vue ({
                 }
             }
             else {
+                if(edited_data) {
+                    expense_page.addOptionFilter(edited_data)
+                }
                 expense_page.getReportByIdList(expense_page.page_num)
             }
         }

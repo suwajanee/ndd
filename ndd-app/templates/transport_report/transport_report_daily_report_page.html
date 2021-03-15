@@ -29,16 +29,22 @@
             {% verbatim %}
                 <div class="row m-0 py-3">
                     <div class="input-group col-5 pr-0" style="height: 38px;">
-                        <input type="date" class="form-control col-4" style="height: 38px;" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" required>
-                    
+                        <input type="date" class="form-control col-4" style="height: 38px;" :class="getDayColor(date)" v-model="date" @change="changeUrl(driver_id)" :disabled="edit_table" required>
+
                         <div class="input-group-append">
                             <span class="input-group-text">DRIVER</span>
                         </div>
-                        <button v-if="driver_id" class="custom-select text-left rounded-right" style="overflow: hidden; text-overflow:ellipsis;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ driver_data.full_name }}
-                        </button>
-                        <button v-else class="custom-select text-left rounded-right"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            --------
+                        <button
+                            class="custom-select text-left rounded-right"
+                            style="overflow: hidden; text-overflow: ellipsis;" :disabled="edit_table"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        >
+                            <template v-if="driver_id">
+                                {{ driver_data.full_name }}
+                            </template>
+                            <template v-else>
+                                --------
+                            </template>
                         </button>
 
                         <div class="dropdown-menu w-50">                    
@@ -55,29 +61,51 @@
                         </div>
                     </div>
 
-                    <button 
-                        class="btn btn-light mx-2" :class="{'active': col_edit}" style="height: 38px;"
-                        @click="col_edit=!col_edit" title="Edit"
-                    >
-                        <i class="fa fa-pen"></i>
-                    </button>
-                    <div>
+                    <template v-if="edit_table">
+                        <button
+                            class="btn btn-light mx-2" style="height: 38px;" title="Filter"
+                            :class="{'active': filter_mode}" title="Filter"
+                            data-toggle="modal" data-target="#modalFilterReport"
+                        >
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button
+                            class="btn btn-light mx-2" :class="{'active': col_edit}" style="height: 38px;"
+                            @click="col_edit=!col_edit" title="Edit"
+                        >
+                            <i class="fas fa-pen"></i>
+                        </button>
+                    </template>
+                    <div :class="{'d-none': edit_table}">
                         <button class="btn btn-light" style="height: 38px;" title="Column" data-toggle="dropdown"><i class="fas fa-th-list"></i></button>
-                        <ul id="colDropdownMenu" class="multiselect-container dropdown-menu" >
+                        <ul id="colDropdownMenu" class="multiselect-container dropdown-menu">
                             <li><label class="checkbox"><input type="checkbox" v-model="col_price"> ราคา</label></li>
                             <li><label class="checkbox"><input type="checkbox" v-model="col_allowance"> เบี้ยเลี้ยง/ค้างคืน</label></li>
                             <li><label class="checkbox"><input type="checkbox" v-model="col_remark"> Remark</label></li>
                         </ul>
                     </div>
 
-                    <div class="col">
-                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()">Add Expense</button>
+                    <div class="col d-flex">
+                        <button
+                            class="btn btn-light ml-auto mx-2 text-primary"
+                            :class="{'active text-danger': edit_table, 'disabled': expense_list.length == 0}" style="height: 38px;"
+                             @click="expense_list.length > 0 && toggleEditButton(edit_table)"
+                        >
+                            <i v-if="edit_table" class="fas fa-sign-out-alt"></i>
+                            <i v-else class="fas fa-edit"></i>
+                        </button>
+                        <button v-if="edit_table" class="btn btn-success" @click="saveEditTable" :disabled="edit_list.length == 0"><i class="fas fa-save mr-1"></i> SAVE</button>
+                        <button v-else class="btn btn-primary" data-toggle="modal" data-target="#modalExpenseReport" data-backdrop="static" @click="report_modal.getModalExpenseReport()"><i class="fas fa-plus mr-2"></i>ADD</button>
                     </div>
                 </div>
-                
+
                 <h4 class="text-center">{{ date|formatDate }}</h4>
                 <h5 v-if="driver_id" class="text-primary text-center">{{ driver_data.full_name }}</h5>
-
+                <!-- เปลี่ยนค่า key price_status ใน Object ต้องเรียกตัวแปร price_status ก่อน ทำไมวะ ?? -->
+                <span class="d-none">{{ price_status }}</span>
+                <!--  -->
             {% endverbatim %}
 
             <div v-if="loading" class="container position-relative">
@@ -90,65 +118,71 @@
                     <!-- Thead -->
                     {% include 'transport_report/transport_report_expense_thead.html' %}
                     <tbody id="tbody" class="bg-white">
-                        {% if driver %}
-                            <template v-if="driver_id">
-                                <template v-if="expense_list && expense_list.length">
-                                    <template v-for="report in expense_list">
-                        {% else %}
-                            
+                        <template v-if="driver_id || edit_table">
+                            <template v-if="filtered_expense_list && filtered_expense_list.length">
+                                <tr v-for="(report, index) in filtered_expense_list">
+                                    {% include 'transport_report/transport_report_expense_table.html' %}
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td colspan=23 class="text-center text-secondary">
+                                    ไม่พบข้อมูล
+                                </td>
+                            </tr>
+                        </template>
+                        <template v-else>
                             <template v-for="driver in driver_list">
                                 <template v-if="driver.report_list && driver.report_list.length">
                                     <template v-for="report in driver.report_list">
-                        {% endif %}
                                         <tr>
                                             {% include 'transport_report/transport_report_expense_table.html' %}
                                         </tr>
                                     </template>
                                 </template>
-
-                            {% verbatim %}
-                                <tr v-else class="bg-light">
-                                    <td></td>
-
-                                    <td v-if="driver_id" class="text-left">{{ driver_data.full_name }}</td>
-                                    <td v-else class="text-left">{{ driver.employee.full_name }}</td>
-
-                                    <td v-for="i in 2"></td>
-                                    <td class="right-thick"></td>
-
-                                    <td v-if="col_remark" class="right-thick"></td>
-                                    <td v-if="col_price" class="right-thick"></td>
-                                    <template v-if="col_allowance">
+                                {% verbatim %}
+                                    <tr v-else class="bg-light">
                                         <td></td>
+
+                                        <td v-if="driver_id" class="text-left">{{ driver_data.full_name }}</td>
+                                        <td v-else class="text-left">{{ driver.employee.full_name }}</td>
+
+                                        <td v-for="i in 2"></td>
                                         <td class="right-thick"></td>
-                                    </template>
 
-                                    <td v-for="i in 7"></td>
-                                    <td class="right-thick"></td>
-                                    <td v-for="i in 3"></td>
-                                    <td class="right-thick"></td>
-                                    <td></td>
-                                    <td v-if="col_edit"></td>
-                                </tr>
+                                        <td v-if="col_remark" class="right-thick"></td>
+                                        <td v-if="col_price" class="right-thick"></td>
+                                        <template v-if="col_allowance">
+                                            <td></td>
+                                            <td class="right-thick"></td>
+                                        </template>
 
-                                <tr v-if="! driver_id" class="bg-light">
-                                    <td colspan=5 class="right-thick"></td>
+                                        <td v-for="i in 7"></td>
+                                        <td class="right-thick"></td>
+                                        <td v-for="i in 3"></td>
+                                        <td class="right-thick"></td>
+                                        <td></td>
+                                        <td v-if="col_edit"></td>
+                                    </tr>
+                                    <tr class="bg-light">
+                                        <td colspan=5 class="right-thick"></td>
 
-                                    <td v-if="col_remark" class="right-thick"></td>
-                                    <td v-if="col_price" class="right-thick"></td>
-                                    <td v-if="col_allowance" colspan=2 class="right-thick"></td>
+                                        <td v-if="col_remark" class="right-thick"></td>
+                                        <td v-if="col_price" class="right-thick"></td>
+                                        <td v-if="col_allowance" colspan=2 class="right-thick"></td>
 
-                                    <td colspan=8 class="right-thick"></td>
-                                    <td colspan=4 class="right-thick"></td>
+                                        <td colspan=8 class="right-thick"></td>
+                                        <td colspan=4 class="right-thick"></td>
 
-                                    <td class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
-                                    
-                                    <td v-if="col_edit"></td>
-                                </tr>
-                            {% endverbatim %}
-                        </template>                      
+                                        <td class="cyan-color font-weight-bold">{{ driver.total|currencyCommas }}</td>
+
+                                        <td v-if="col_edit"></td>
+                                    </tr>
+                                {% endverbatim %}
+                            </template>
+                        </template>
                     </tbody>
-                    <tfoot>
+
+                    <tfoot v-if="! edit_table">
                         <tr class="tfoot-total-1 table-secondary">
                             <td colspan=23></td>
                         </tr>
@@ -173,6 +207,95 @@
                 </table>
             </div>
         </div>
+
+        {% verbatim %}
+            <div class="modal fade" id="modalFilterReport" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">
+                                Filter Report
+                            </h4>
+                            <button class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="input-group my-3 col-8 container">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">CUSTOMER</span>
+                                </div>
+                                <button
+                                    class="custom-select text-left rounded-right text-truncate" data-toggle="dropdown"
+                                    :class="{'input-warning': customer_selected.length == 0}"
+                                >
+                                    <template v-if="all_customer">
+                                        All selected ( {{ customer_list.length }} )
+                                    </template>
+                                    <template v-else-if="customer_selected.length>3">
+                                        {{ customer_selected.length }} customers selected
+                                    </template>
+                                    <template v-else-if="customer_selected.length">
+                                        {{ customer_selected.toString() }}
+                                    </template>
+                                    <template v-else>
+                                        None selected
+                                    </template>
+                                </button>
+                                <ul id="customerDropdownMenu" class="multiselect-container dropdown-menu dropdown-menu-right col-9">
+                                    <li>
+                                        <label class="checkbox mb-0">
+                                            <input type="checkbox" v-model="all_customer" @change="multiSelectAll(daily_report_page, 'customer')"> Select all ( {{ customer_list.length }} )
+                                        </label>
+                                    </li>
+                                    <hr class="my-2">
+                                    <li v-for="customer in customer_list">
+                                        <label class="checkbox">
+                                            <input type="checkbox" v-model="customer_selected" :value="customer" @change="multiSelectCheck(daily_report_page, 'customer')"> {{ customer }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-8 container mt-4">
+                                <div class="row col mx-0">
+                                    <label class="col-5 m-0">ราคา: </label>
+                                    <div class="col row" :class="{'text-danger': price_work_check.length == 0}">
+                                        <div class="custom-control custom-checkbox col">
+                                            <input id="workTrue" class="custom-control-input" type="checkbox" v-model="price_work_check" :value="true">
+                                            <label class="custom-control-label" for="workTrue">Empty</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox col">
+                                            <input id="workFalse" class="custom-control-input" type="checkbox" v-model="price_work_check" :value="false">
+                                            <label class="custom-control-label" for="workFalse">Not Empty</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col my-3 mx-0">
+                                    <label class="col-5 m-0">เบี้ยเลี้ยง/ค้างคืน</label>
+                                    <div class="col row" :class="{'text-danger': price_allowance_check.length == 0}">
+                                        <div class="custom-control custom-checkbox col">
+                                            <input id="allowanceTrue" class="custom-control-input" type="checkbox" v-model="price_allowance_check" :value="true">
+                                            <label class="custom-control-label" for="allowanceTrue">Empty</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox col">
+                                            <input id="allowanceFalse" class="custom-control-input" type="checkbox" v-model="price_allowance_check" :value="false">
+                                            <label class="custom-control-label" for="allowanceFalse">Not Empty</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer px-5">
+                            <button class="btn btn-outline-danger float-left mr-auto" @click="clearFilter">Clear</button>
+                            <button class="btn btn-primary" @click="filterReport">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endverbatim %}
     </div>
 
     {% include 'transport_report/transport_report_modal.html' %}
@@ -190,6 +313,7 @@
         })
 
         preventHideMenu('colDropdownMenu')
+        preventHideMenu('customerDropdownMenu')
 
     </script>
 

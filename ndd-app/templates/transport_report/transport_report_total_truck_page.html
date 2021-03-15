@@ -59,7 +59,13 @@
                     </thead>
                     <tbody class="text-right">
                         <tr class="fri-color">
-                            <td class="text-center right-thick font-weight-bold" style="min-width: 150px; width: 150px;">วิ่งงาน</td>
+                            <td class="text-center right-thick" style="min-width: 150px; width: 150px;">
+                                <button class="btn btn-sm btn-link text-dark font-weight-bold"
+                                    @click="!copying && copyRow(price_list)"
+                                >
+                                    วิ่งงาน
+                                </button>
+                            </td>
                             <template v-for="(price, index) in price_list">
                                 <td style="min-width: 120px; width: 120px;" :class="{'font-weight-bold': list_count == index}">
                                     {{ price|currencyCommas }}
@@ -71,14 +77,26 @@
                             <td class="right-thick"></td>
                         </tr>
                         <tr>
-                            <td class="text-center right-thick font-weight-bold">ค่าเที่ยว</td>
+                            <td class="text-center right-thick">
+                                <button class="btn btn-sm btn-link text-dark font-weight-bold"
+                                    @click="!copying && copyRow(allowance_list)"
+                                >
+                                    ค่าเที่ยว
+                                </button>
+                            </td>
                             <template v-for="(allowance, index) in allowance_list">
                                 <td :class="{'font-weight-bold': list_count == index}">{{ allowance|currencyCommas }}</td>
                                 <td class="wed-color">{{ getPercentage(allowance, index) }}</td>
                             </template>
                         </tr>
                         <tr>
-                            <td class="text-center right-thick font-weight-bold">ค่าใช้จ่าย</td>
+                            <td class="text-center right-thick">
+                                <button class="btn btn-sm btn-link text-dark font-weight-bold"
+                                    @click="!copying && copyRow(co_expense_list)"
+                                >
+                                    ค่าใช้จ่าย
+                                </button>
+                            </td>
                             <template v-for="(co_expense, index) in co_expense_list">
                                 <td :class="{'font-weight-bold': list_count == index}">{{ co_expense|currencyCommas }}</td>
                                 <td class="wed-color">{{ getPercentage(co_expense, index) }}</td>

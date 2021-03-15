@@ -40,7 +40,7 @@
             </ul>
         </template>
         
-        <div v-if="show_filter_btn && page_range.length > 1" class="col d-flex align-items-center">
+        <div v-if="show_filter_btn && page_range.length > 1" class="col d-flex">
             <ul class="pagination ml-auto my-0">
                 <template v-if="page_num == 1">
                     <button class="btn btn-light py-1 disabled"><i class="fas fa-angle-double-left"></i></button>
@@ -52,7 +52,7 @@
                 </template>
                 
                 <button v-if="page_num > 3" class="btn btn-light p-1 disabled">...</button>
-                <button v-for="page in setPageRange()" @click="getReportByIdList(page)" class="btn btn-light py-1" :class="{'active': page_num == page}">{{ page }}</button>
+                <button v-for="page in setPageRange" @click="getReportByIdList(page)" class="btn btn-light py-1" :class="{'active': page_num == page}">{{ page }}</button>
 
                 <button v-if="page_num + 3 <= page_range.length" class="btn btn-light p-1 disabled">...</button>
 

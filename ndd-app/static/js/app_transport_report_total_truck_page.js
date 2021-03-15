@@ -2,6 +2,7 @@ var total_truck_page = new Vue ({
     el: '#total-truck-page',
     data: {
         loading: false,
+        copying: false,
 
         // Initial
         year: '',
@@ -87,6 +88,17 @@ var total_truck_page = new Vue ({
                 return '-'
             }
             return percentage
+        },
+
+        copyRow(total_list) {
+            this.copying = true
+            var list_len = total_list.length - 1
+            var data = ""
+            for(var i=0; i < list_len; i++) {
+                data += total_list[i] + "\t\t"
+            }
+            copyToClipboard(data.trim())
+            this.copying = false
         }
 
     },

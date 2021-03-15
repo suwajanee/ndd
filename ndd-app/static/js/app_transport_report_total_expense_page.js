@@ -2,6 +2,7 @@ var total_expense_page = new Vue ({
     el: '#total-expense-page',
     data: {
         loading: false,
+        copying: false,
 
         // Initial
         year: '',
@@ -81,6 +82,34 @@ var total_expense_page = new Vue ({
                 
                 this.loading = false
             })
+        },
+
+        copyDriverData() {
+            this.copying = true
+            var data = ""
+
+            for(total of this.total_report) {
+                if(total.truck) {
+                    data += total.truck.number + "\t" + total.truck.license_plate + "\t"
+                }
+                else {
+                    data += "\t\t"
+                }
+                data += total.driver + "\n"
+            }
+            copyToClipboard(data.trim())
+            this.copying = false
+        },
+        copyTotalExpense(date_index) {
+            this.copying = true
+            var data = ""
+            for(total of this.total_report) {
+                data += total.total[date_index] + "\n"
+            }
+            copyToClipboard(data.trim())
+            this.copying = false
         }
+    
     }
 })
+

@@ -97,20 +97,19 @@ def api_get_daily_report(request):
                 driver_id = req['driver']
                 report = report.filter(work_order__driver__employee__pk=driver_id)
 
-            total_price_list = get_total_price_list(report)
+            customer_list = get_customer_options_filter(report)
+
             total_expense_list = get_total_expense_list(report)
 
             expense_serializer = ExpenseSerializer(report, many=True)
-            total = report.order_by('work_order__clear_date').aggregate(total=Sum('co_total') + Sum('cus_total'))['total']
 
             data = {
                 'driver_list': driver_list,
                 'truck_list': truck_list,
                 'expense_list': expense_serializer.data,
 
-                'total_price_list': total_price_list,
+                'customer_list': customer_list,
                 'total_expense_list': total_expense_list,
-                'total': total
             }
 
             return JsonResponse(data, safe=False)
@@ -460,7 +459,7 @@ def api_get_total_truck(request):
                 truck_list = get_truck_list(expense)
                 try:
                     thc = Variable.objects.get(key='thc').value
-                    thc = int(thc)
+                    thc = float(thc)
                 except Variable.DoesNotExist:
                     thc = 0
 
@@ -475,13 +474,14 @@ def api_get_total_truck(request):
                     allowance_list.append(total_price[1] + total_price[2])
 
                     total_co_expense = truck_expense.aggregate(total_co_expense=Sum('co_total'))['total_co_expense'] or 0
-
+                    total_co_expense = float(total_co_expense)
                     if thc > 0:
                         total_thc = sum_from_key_list(truck_expense, ['co_expense__co_thc'])[0]
                         thc_count = truck_expense.filter(co_expense__has_key='co_thc').count()
+
                         total_co_expense += (thc_count * thc) - total_thc
                     
-                    co_expense_list.append(float(total_co_expense))
+                    co_expense_list.append(total_co_expense)
                 
                 data = {
                     'from_date': from_date,
@@ -595,7 +595,6 @@ def get_total_price_list(report_list):
     return total_price_list
 
 def get_total_expense_list(report_list, thc=False):
-
     co_expense_list, co_total = total_co_expense(report_list, thc)
     co_expense_list.append(co_total)
 
@@ -604,7 +603,6 @@ def get_total_expense_list(report_list, thc=False):
 
     total_expense_list = co_expense_list + cus_expense_list
     total_expense_list.append(co_total + cus_total)
-
     return total_expense_list
 
 def total_co_expense(report_list, thc):
@@ -650,7 +648,8 @@ def get_customer_options_filter(report):
     normal_customer_options = get_values_list(customer, 'work_order__work_normal__principal__name')
     agent_customer_options = get_values_list(customer, 'work_order__work_agent_transport__principal__name')
 
-    customer_options = sorted(detail_customer_options + normal_customer_options + agent_customer_options)
+    customer_list = list(set(detail_customer_options + normal_customer_options + agent_customer_options))
+    customer_options = sorted(customer_list)
 
     return customer_options
 

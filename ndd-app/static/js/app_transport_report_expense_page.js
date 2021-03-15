@@ -3,6 +3,7 @@ var expense_page = new Vue ({
     el: '#expense-page',
     data: {
         loading: false,
+        edit_table: false,
         
         // Initial
         page_range: [],
@@ -23,7 +24,7 @@ var expense_page = new Vue ({
         full_month_list: [],
         period_num: [],
 
-        col_price: false,
+        col_price: true,
         col_allowance: true,
         col_remark: true,
         col_edit: false,
@@ -81,6 +82,32 @@ var expense_page = new Vue ({
                 var driver_name = driver.employee.full_name
                 return driver_name.toLowerCase().includes(search)
             })
+        },
+        setPageRange() { // ใช้ใน HTML
+            if(this.page_num > 3) {
+                var first = this.page_num - 2
+            }
+            else {
+                var first = 1
+            }
+
+            if(this.page_num + 3 <= this.page_range.length) {
+                var last = this.page_num + 2
+            }
+            else {
+                var last = this.page_range.length
+            }
+
+            if(this.page_range.length > 5) {
+                if(first == 1) {
+                    last = 5
+                }
+                if(last == this.page_range.length) {
+                    first = last - 4
+                }
+            }
+            var page_list = this.page_range.slice(first - 1, last)
+            return page_list
         }
     },
     methods: {
@@ -125,32 +152,6 @@ var expense_page = new Vue ({
             }
             window.open(url, "_self")
         },
-        setPageRange() { // ใช้ใน HTML
-            if(this.page_num > 3) {
-                var first = this.page_num - 2
-            }
-            else {
-                var first = 1
-            }
-
-            if(this.page_num + 3 <= this.page_range.length) {
-                var last = this.page_num + 2
-            }
-            else {
-                var last = this.page_range.length
-            }
-
-            if(this.page_range.length > 5) {
-                if(first == 1) {
-                    last = 5
-                }
-                if(last == this.page_range.length) {
-                    first = last - 4
-                }
-            }
-            var page_list = this.page_range.slice(first - 1, last)
-            return page_list
-        },
 
         getReport(num) {
             this.loading = true
@@ -177,8 +178,10 @@ var expense_page = new Vue ({
                 this.driver_list = report_modal.driver_list = data.driver_list
                 this.truck_list = report_modal.truck_list = data.truck_list
 
-                this.customer_list = this.customer_selected = data.customer_list
-                this.remark_list = this.remark_selected = data.remark_list
+                this.customer_list = data.customer_list
+                this.customer_selected = [...this.customer_list]
+                this.remark_list = data.remark_list
+                this.remark_selected = [...this.remark_list]
 
                 this.page_range = data.page_range
                 this.page_num = data.page_num
@@ -205,14 +208,13 @@ var expense_page = new Vue ({
                 this.page_num = data.page_num
                 window.location.hash = this.page_num
 
-
                 if(this.page_name == 'expense') {
                     this.total_expense_list = data.total_expense_list
                 }
                 this.loading = false
             })
         },
-        filterReport(modal_action) {
+        filterReport() {
             this.modal_warning = false
             if((this.customer_list.length && ! this.customer_selected.length) || (this.remark_list.length && ! this.remark_selected.length)) {
                 this.modal_warning = true
@@ -252,10 +254,6 @@ var expense_page = new Vue ({
 
                     this.filtered_pk_list = data.pk_list
 
-                    if(modal_action) {
-                        $('#modalFilterReport').modal('hide')
-                    }
-
                     if(this.all_customer) {
                         this.customer_selected = [...this.customer_list]
                     }
@@ -271,6 +269,8 @@ var expense_page = new Vue ({
                     if(this.page_name == 'expense') {
                         this.total_expense_list = data.total_expense_list
                     }
+                    
+                    $('#modalFilterReport').modal('hide')
                     this.loading = false
                 })
             }     
@@ -326,21 +326,32 @@ var expense_page = new Vue ({
             }
         },
 
-        multiSelectAll(input) {
-            if(this['all_' + input]) {
-                this[input + '_selected'] = this[input + '_list']
+        addOptionFilter(work_order) {
+            if('remark' in work_order.detail) {
+                var remark = work_order.detail.remark
+                if(this.remark_list.indexOf(remark) === -1) {
+                    this.remark_list.push(remark)
+                    this.remark_selected.push(remark)
+                    this.remark_list.sort()
+                }
+            }
+
+            if('customer_name' in work_order.detail) {
+                var customer = work_order.detail.customer_name
+            }
+            else if(work_order.work_normal) {
+                var customer = work_order.work_normal.principal.name
             }
             else {
-                this[input + '_selected'] = []
+                var customer = work_order.work_agent_transport.principal.name
             }
-        },
-        multiSelectCheck(input) {
-            if(this[input + '_selected'].length == this[input + '_list'].length) {
-                this['all_' + input] = true
+
+            if(this.customer_list.indexOf(customer) === -1) {
+                this.customer_list.push(customer)
+                this.customer_selected.push(customer)
+                this.customer_list.sort()
             }
-            else {
-                this['all_' + input] = false
-            }
-        },
+
+        }
     }
 })

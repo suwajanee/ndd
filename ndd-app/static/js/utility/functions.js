@@ -40,17 +40,17 @@ const keyDownArrow = (field, index) => {
         }
     }
     else if(event.key == 'ArrowRight') {
-        event.preventDefault()
         try {
             document.getElementById(right + '-' + index).focus()
+            event.preventDefault()
         }
         catch(err){
         }
     }
     else if(event.key == 'ArrowLeft') {
-        event.preventDefault()
         try {
             document.getElementById(left + '-' + index).focus()
+            event.preventDefault()
         }
         catch(err){
         }
@@ -84,17 +84,31 @@ const sumStringArray = (arr) => {
     return
 }
 
+const sumString = (str) => {
+    try {
+        str = str.replace(',', '')
+        return eval(str)
+    }
+    catch {
+        return 0
+    }
+}
+
 // รวม Object Array ที่ obj[key1] หรือ obj[key1][key2]
 const sumObjectArray = (arr, key1, key2) => {
     if(arr){
-        return arr.reduce(function (total, value) {
-            value = eval(value[key1])
+        return arr.reduce((total, value) => {
             if(key2) {
-                value = eval(value[key2])
+                value = eval(value[key1][key2])
             }
+            else {
+                value = eval(value[key1])
+            }
+
             if(! value) {
                 value = 0
             }
+
             return total + value
         }, 0)
     }
@@ -134,6 +148,31 @@ const hide_note = () => {
     }, false)
 }
 
+// Copy to Clipboard
+const copyToClipboard = (text) => {
+    if(window.clipboardData && window.clipboardData.setData) {
+        return clipboardData.setData("Test", text)
+    }
+    else if(document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea")
+        textarea.textContent = text
+        textarea.style.position = "fixed" // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea)
+        textarea.select()
+        try {
+            return document.execCommand("copy")
+        } catch(ex) {
+            console.warn("Copy to clipboard failed.", ex)
+            alert("Copy failed")
+            return false
+        } finally {
+            document.body.removeChild(textarea)
+            alert("Copied")
+        }
+
+    }
+}
+
 // Remove unused key in object
 const setObjectArray = (obj, number=false) => {
     Object.keys(obj).forEach(key => {
@@ -147,7 +186,6 @@ const setObjectArray = (obj, number=false) => {
             delete obj[key]
         }
     })
-
     return obj
 }
 
@@ -174,6 +212,30 @@ const preventHideMenu = (id) => {
         })
     }
 }
+
+// Multiselect
+const multiSelectAll = (app, input) => {
+    if(app['all_' + input]) {
+        app[input + '_selected'] = app[input + '_list']
+    }
+    else {
+        app[input + '_selected'] = []
+    }
+}
+const multiSelectCheck = (app, input) => {
+    if(app[input + '_selected'].length == app[input + '_list'].length) {
+        app['all_' + input] = true
+    }
+    else {
+        app['all_' + input] = false
+    }
+}
+
+// Clone Object (array) without ref
+const cloneObject = (obj) => {
+    return JSON.parse(JSON.stringify(obj))
+}
+
 
 var summary_breadcrumb = new Vue( {
     el: '#summary-breadcrumb',
