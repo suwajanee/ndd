@@ -96,7 +96,7 @@ def api_get_chassis(request):
     if request.user.is_authenticated:
         if request.method == "GET":
             chassis = Chassis.objects.filter(~Q(status='s'))
-            chassis = order_by_number_value(chassis)
+            chassis = order_by_number_value(chassis, 'number')
             serializer = ChassisSerializer(chassis, many=True)
 
             data = {
@@ -112,7 +112,7 @@ def api_get_sold(request):
         if request.method == "GET":
             truck = Truck.objects.filter(status='s').order_by('number')
             chassis = Chassis.objects.filter(status='s')
-            chassis = order_by_number_value(chassis)
+            chassis = order_by_number_value(chassis, 'number')
 
             truck_serializer = TruckSerializer(truck, many=True)
             chassis_serializer = ChassisSerializer(chassis, many=True)
@@ -140,9 +140,9 @@ def get_date_compare(date):
     date_compare = today + timedelta(days=date)
     return date_compare
 
-def order_by_number_value(data):
+def order_by_number_value(data, key):
     data = data.annotate(number_float=Case(
-        When(number__regex=r'^([\d]+)$', then=Cast('number', FloatField()))
+        When(**{key + '__regex': r'^([\d]+)$'}, then=Cast(key, FloatField()))
     ))
-    data = data.order_by('number_float', 'number')
+    data = data.order_by('number_float', key)
     return data

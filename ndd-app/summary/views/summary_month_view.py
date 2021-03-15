@@ -9,8 +9,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ..models import CustomerCustom, Invoice, SummaryWeek, Year
-from customer.models import Principal
 from ..serializers import SummaryWeekSerializer
+from customer.models import Principal
+from truck.views.truck_data_view import order_by_number_value
 
 
 @csrf_exempt
@@ -34,7 +35,8 @@ def api_get_summary_month_details(request):
             customers = Principal.objects.all().order_by('cancel', 'name')
 
             # get weeks data
-            week_details = SummaryWeek.objects.filter(Q(year=year_existing[0]) & Q(month=month)).order_by('week')
+            week_details = SummaryWeek.objects.filter(Q(year=year_existing[0]) & Q(month=month))
+            week_details = order_by_number_value(week_details, 'week')
             week_serializer = SummaryWeekSerializer(week_details, many=True)
             weeks = details['weeks'] = week_serializer.data
 
